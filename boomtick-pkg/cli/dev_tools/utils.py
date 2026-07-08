@@ -135,34 +135,55 @@ def ensure_dir(*parts: str) -> str:
 
 def safe_write_file(filepath: str, content: str):
     """
-    Writes content to a file while being symlink-aware.
+    Writes content to a file while being symlink-aware and security-conscious.
     If the filepath is a symlink, it resolves the real path and writes to the target,
-    preserving the symlink.
+    preserving the symlink, but ONLY if the target is within the repository root.
     """
     target_path = filepath
     if os.path.islink(filepath):
         target_path = os.path.realpath(filepath)
         log_info(f"Symlink detected: {filepath} -> {target_path}")
 
-    # Ensure parent directory exists for the target
-    os.makedirs(os.path.dirname(os.path.abspath(target_path)), exist_ok=True)
+    # Security: Ensure target path is within repo root
+    repo_root = os.getcwd()
+    abs_target = os.path.abspath(target_path)
+    try:
+        if os.path.commonpath([repo_root, abs_target]) != repo_root:
+             raise CLIError(f"Security Error: Target path {target_path} is outside of repository root.")
+    except ValueError:
+         raise CLIError(f"Security Error: Target path {target_path} is invalid or outside of repository root.")
 
-    with open(target_path, 'w', encoding='utf-8') as f:
+    # Ensure parent directory exists for the target
+    os.makedirs(os.path.dirname(abs_target), exist_ok=True)
+
+    with open(abs_target, 'w', encoding='utf-8') as f:
         f.write(content)
 
 def apply_patch(filepath: str, patch_content: str):
     """
     Applies a patch to a file using git apply with whitespace fixing.
-    This is more resilient than simple string replacement.
+    Restricts application to the specific filepath for security.
     """
     import tempfile
+
+    # Security: validate filepath
+    repo_root = os.getcwd()
+    abs_filepath = os.path.abspath(filepath)
+    try:
+        if os.path.commonpath([repo_root, abs_filepath]) != repo_root:
+             raise CLIError(f"Security Error: Path {filepath} is outside of repository root.")
+    except ValueError:
+         raise CLIError(f"Security Error: Path {filepath} is invalid or outside of repository root.")
 
     with tempfile.NamedTemporaryFile(mode='w', suffix=".patch", delete=False) as tmp:
         tmp.write(patch_content)
         tmp_path = tmp.name
 
     try:
-        run_command(["git", "apply", "--whitespace=fix", tmp_path])
+        # Use --include to restrict what git apply can touch
+        # filepath should be relative to repo root for --include
+        rel_path = os.path.relpath(abs_filepath, repo_root)
+        run_command(["git", "apply", "--whitespace=fix", "--include", rel_path, tmp_path])
         log_info(f"Successfully applied patch to {filepath}")
     finally:
         if os.path.exists(tmp_path):

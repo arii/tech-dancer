@@ -189,12 +189,24 @@ def logs(ctx, pr_number, grep):
 @click.pass_context
 def apply_patch(ctx, filepath, patch_file, patch_body):
     """Apply a patch to a file using resilient git apply."""
-    from dev_tools.utils import apply_patch as _apply
+    from dev_tools.utils import apply_patch as _apply, sanitize_path
+    orch = ctx.obj['ORCHESTRATOR']
+
+    # Security: sanitize inputs
+    filepath = sanitize_path(filepath)
+    if not filepath:
+        err(ctx, "Invalid filepath provided.")
 
     content = patch_body
     if patch_file:
-        with open(patch_file, 'r') as f:
-            content = f.read()
+        safe_patch_path = sanitize_path(patch_file)
+        if not safe_patch_path:
+             err(ctx, "Invalid patch-file path provided.")
+        try:
+             # Use Orchestrator helper for safe file reading
+             content = orch._read_safe_file(safe_patch_path)
+        except Exception as e:
+             err(ctx, f"Failed to read patch file: {str(e)}")
 
     if not content:
         err(ctx, "Provide either --patch-file or --patch-body")

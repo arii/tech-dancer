@@ -29,6 +29,9 @@ _REVIEW_MODEL = get_ai_review_model()
 # Model used for final summary synthesis
 _SYNTHESIS_MODEL = get_ai_model()
 
+# Maximum retries for AI generation and parsing
+_MAX_AI_RETRIES = 3
+
 # Combined review schema
 _REVIEW_SCHEMA = {
     "type": "object",
@@ -349,7 +352,7 @@ class AIClient:
         parsed = None
 
         # Retry loop for generation and parsing
-        for attempt in range(3):
+        for attempt in range(_MAX_AI_RETRIES):
             try:
                 raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=1)
                 if not raw:
@@ -585,7 +588,7 @@ class AIClient:
 
         raw = None
         res = None
-        for attempt in range(3):
+        for attempt in range(_MAX_AI_RETRIES):
             try:
                 # We don't use strict schema mode here because we want mixed markdown + json
                 raw = call_ai(prompt, model=_SYNTHESIS_MODEL, max_retries=1)
