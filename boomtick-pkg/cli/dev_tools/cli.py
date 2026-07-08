@@ -1090,10 +1090,20 @@ def messages(ctx, session_id):
 @click.argument('message')
 @click.pass_context
 def send(ctx, session_id, message):
-    """Send a message to an active Jules session."""
+    """Send a message to an active Jules session (supports comma-separated IDs)."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.jules.send_message(session_id, message)
-    out(ctx, f"✅ Message sent to session {session_id}", data=res)
+
+    # Support comma-separated IDs for batching
+    ids = [s.strip() for s in session_id.split(',')] if ',' in session_id else session_id
+
+    from dev_tools.models import JulesSendMessageInput
+    try:
+        JulesSendMessageInput(sessionId=ids, message=message)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "agent send", e)
+
+    res = orch.jules.send_message(ids, message)
+    out(ctx, f"✅ Message sent to session(s) {session_id}", data=res)
 
 @agent_group.command(name='plan-review')
 @click.option('--pr', 'pr_number', required=True, type=int, help='Pull Request number')

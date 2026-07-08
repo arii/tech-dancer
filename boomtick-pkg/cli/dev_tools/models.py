@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, model_validator, ConfigDict
-from typing import List, Optional, Any, Dict
+from typing import List, Optional, Any, Dict, Union
 
 class IssueSummary(BaseModel):
     number: int
@@ -193,7 +193,7 @@ class JulesSessionIdInput(BaseModel):
     sessionId: str = Field(..., description="The unique ID of the Jules session.")
 
 class JulesSendMessageInput(BaseModel):
-    sessionId: str = Field(..., description="The unique ID of the Jules session.")
+    sessionId: Union[str, List[str]] = Field(..., description="The unique ID or IDs of the Jules session(s).")
     message: str = Field(..., description="The message content to send.")
 
 class JulesListSessionsInput(BaseModel):
