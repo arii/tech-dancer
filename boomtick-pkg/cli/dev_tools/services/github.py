@@ -396,10 +396,17 @@ class GitHubClient:
         if not body:
              raise CLIError("Review body (Markdown section) is empty. Provide findings before the JSON block.")
 
-        # Merge extracted body into payload if not already present or if payload body is boilerplate/placeholder
+        # Combine extracted body (Markdown section) and payload body (JSON section)
         existing_body = payload.get("body", "").strip()
-        is_placeholder = any(p in existing_body for p in ["<findings>", "<summary>", "<feedback>"])
-        if not existing_body or is_placeholder:
+
+        if existing_body:
+            # Strip known placeholders out of the JSON body
+            for p in ["<findings>", "<summary>", "<feedback>", "## ANTI-AI-SLOP", "## FINDINGS", "## FINAL RECOMMENDATION"]:
+                existing_body = re.sub(rf"{p}\s*", "", existing_body, flags=re.IGNORECASE).strip()
+
+        if existing_body:
+            payload["body"] = f"{body}\n\n{existing_body}"
+        else:
             payload["body"] = body
 
         # Validate payload before proceeding
@@ -450,7 +457,8 @@ class GitHubClient:
                             fallback_body = review_body
                             fallback_body += "\n\n### Inline Comments (Fallback due to Github line resolution errors)\n"
                             for comment in review_comments:
-                                fallback_body += f"- **{comment.get('path')}:{comment.get('line')}**: {comment.get('body')}\n"
+                                if isinstance(comment, dict):
+                                    fallback_body += f"- **{comment.get('path')}:{comment.get('line')}**: {comment.get('body')}\n"
                             return try_create_review(fallback_body, [], review_event)
                     raise e
 
