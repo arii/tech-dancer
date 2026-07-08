@@ -18,7 +18,9 @@ TIERED SCOPE:
 - For Infra/Tooling (scripts/, boomtick-pkg/cli/, .github/): Focus on portability, idempotency, and error handling. Avoid UI-specific feedback for low-level scripts.
 
 REPO RULES: Prefer removal.
-ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.`;
+ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.
+
+- FILE NECESSITY: Question any added, moved, or removed files that look like temporary artifacts (e.g. .tmp, standalone .py in root, audit-*.md, .json dumps) or seem unrelated to the PR intent. Flag them for removal if they pollute the review context.`;
 
 export const REVIEW_PHILOSOPHY = `## 1. Philosophy
 - EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
