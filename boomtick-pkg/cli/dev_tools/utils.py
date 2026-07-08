@@ -241,15 +241,35 @@ def get_gemini_model() -> str:
     return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
 
 def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
-    # First try to extract from <findings> tags (used in code review prompts)
+    """
+    Removes markdown code blocks if present, or extracts from <findings> tags if present.
+    Attempts to be robust against mixed Markdown/JSON by finding JSON boundaries if needed.
+    """
+    if not text:
+        return ""
+
+    # 1. Extract from <findings> tags if present
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
-        
-    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
+
+    # 2. Extract from ```json or ``` code blocks
+    # Handle both ```json and ``` with optional newline
+    code_block_match = re.search(r"```(?:json|xml|tsx?|jsx?)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
+    if code_block_match:
+        text = code_block_match.group(1).strip()
+
+    # 3. Robust JSON boundary extraction for mixed text/JSON
+    # Only attempt if it looks like it contains a JSON object or array and is NOT source code
+    if "{" in text and "}" in text and "import " not in text and "export " not in text:
+        start = text.find('{')
+        end = text.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            candidate = text[start:end+1]
+            # Heuristic: if it contains ":" it's likely a JSON object or assignment
+            if ":" in candidate:
+                return candidate.strip()
+
     return text.strip()
 
 def is_ai_available() -> bool:

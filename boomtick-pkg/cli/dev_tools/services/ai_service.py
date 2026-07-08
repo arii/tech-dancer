@@ -370,14 +370,45 @@ class AIClient:
                 if not isinstance(parsed, dict):
                     raise ValueError(f"Expected dict, got {type(parsed).__name__}")
 
-                file_reviews = parsed.get("file_reviews", [])
-                if not isinstance(file_reviews, list):
-                    file_reviews = []
+                # ── Normalization & Schema Tolerance ──────────────────────────
+                raw_file_reviews = parsed.get("file_reviews", [])
+                if not isinstance(raw_file_reviews, list):
+                    raw_file_reviews = []
+
+                file_reviews = []
+                for fr in raw_file_reviews:
+                    if not isinstance(fr, dict):
+                        continue
+
+                    normalized_fr = {
+                        "file": str(fr.get("file", "unknown")),
+                        "verdict": str(fr.get("verdict", "ok")),
+                        "issues": []
+                    }
+
+                    raw_issues = fr.get("issues", [])
+                    if not isinstance(raw_issues, list):
+                        if isinstance(raw_issues, dict):
+                            raw_issues = [raw_issues]
+                        else:
+                            raw_issues = []
+
+                    for issue in raw_issues:
+                        if not isinstance(issue, dict):
+                            continue
+                        normalized_fr["issues"].append({
+                            "line": issue.get("line") if isinstance(issue.get("line"), int) else 1,
+                            "severity": str(issue.get("severity", "warn")),
+                            "comment": str(issue.get("comment", "No comment provided.")),
+                            "confidence": str(issue.get("confidence", "medium")),
+                            "counterexample": str(issue.get("counterexample", ""))
+                        })
+                    file_reviews.append(normalized_fr)
 
                 final = {
-                    "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
-                    "labels": parsed.get("labels", []),
-                    "recommendation": parsed.get("recommendation", "Unknown")
+                    "reviewComment": str(parsed.get("reviewComment") or f"Automated review of PR #{pr_num}."),
+                    "labels": list(parsed.get("labels") or []),
+                    "recommendation": str(parsed.get("recommendation") or "Unknown")
                 }
                 print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
             except Exception as e:

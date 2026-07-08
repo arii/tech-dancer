@@ -110,38 +110,75 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   const openTag = '<findings>';
   const closeTag = '</findings>';
 
+  let jsonText = '';
   const openIdx = feedback.lastIndexOf(openTag);
   const closeIdx = feedback.lastIndexOf(closeTag);
+  const isTruncated = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
 
-  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
-    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
-    return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
+  if (openIdx !== -1 && closeIdx !== -1 && closeIdx > openIdx) {
+    jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  } else if (isTruncated) {
+    // Handle truncated output: extract from openTag to the end
+    jsonText = feedback.slice(openIdx + openTag.length).trim();
+  } else {
+    // Robust fallback: if tags are missing, try to find the last JSON block in the entire text
+    if (feedback.includes('{') || feedback.includes('[')) {
+      jsonText = feedback.trim();
+    } else {
+      return { state: undefined, parseError: undefined };
+    }
   }
 
-  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
-
-  const startIdx = jsonText.indexOf('{');
+  // Robust extraction: find the boundaries of the last JSON object or array
+  const startIdx = jsonText.lastIndexOf('{');
   const endIdx = jsonText.lastIndexOf('}');
+
   if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
-    jsonText = jsonText.slice(startIdx, endIdx + 1);
+    // If we have mixed text, we need to find the START of this JSON block
+    // We search backwards from endIdx to find the matching opening brace
+    // For simplicity, we'll try to extract from the FIRST '{' after the openTag
+    const firstBrace = jsonText.indexOf('{');
+    if (firstBrace !== -1 && endIdx > firstBrace) {
+      jsonText = jsonText.slice(firstBrace, endIdx + 1);
+    }
   } else {
+    // Strip markdown code blocks if boundaries weren't found
     jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
   }
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
 
-    // Normalize properties before validation to avoid side-effects in validator
+    if (isTruncated) {
+      return { state, parseError: 'missing_closing_tag' };
+    }
+
+    // Normalize and inject defaults to be schema-tolerant
     if (state && state.findings && Array.isArray(state.findings)) {
-      state.findings = state.findings.map(f => {
-        if (f && typeof f === 'object' && typeof f.status === 'string') {
-          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
+      state.findings = state.findings.map((f, idx) => {
+        if (f && typeof f === 'object') {
+          return {
+            id: typeof f.id === 'string' ? f.id : `finding-${idx}`,
+            file: typeof f.file === 'string' ? f.file : 'unknown',
+            issue: typeof f.issue === 'string' ? f.issue : 'Unspecified issue',
+            status: (typeof f.status === 'string' && f.status.toLowerCase() === 'resolved') ? 'resolved' : 'open',
+            confidence: (typeof f.confidence === 'string' && ['high', 'medium', 'low'].includes(f.confidence.toLowerCase()))
+              ? f.confidence.toLowerCase() as 'high' | 'medium' | 'low'
+              : 'medium',
+            line: typeof f.line === 'number' ? f.line : undefined,
+            snippet: typeof f.snippet === 'string' ? f.snippet : undefined,
+            fixSummary: typeof f.fixSummary === 'string' ? f.fixSummary : undefined,
+            counterexample: typeof f.counterexample === 'string' ? f.counterexample : undefined,
+          };
         }
         return f;
       });
     }
 
     if (!validateFindingsSchema(state)) {
+      if (isTruncated) {
+        return { state, parseError: 'missing_closing_tag' };
+      }
       return { state, parseError: 'incomplete_findings' };
     }
     return { state };
