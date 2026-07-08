@@ -1661,15 +1661,32 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             # 3. Safety First: Attempt automated integration merge
             # Use 'ort' strategy implicitly by standard merge if git version supports it,
             # or just standard merge.
-            res = run_command(["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"], check=False)
+            merge_cmd = ["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"]
+            res = run_command(merge_cmd, check=False)
 
             if not isinstance(res, subprocess.CompletedProcess):
                 raise CLIError("Merge execution failed")
 
             if res.returncode != 0:
-                # Conflict encountered
-                run_command(["git", "merge", "--abort"])
-                raise CLIError(f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.", code=res.returncode)
+                # Detect "refusing to merge unrelated histories" and retry
+                # Safely handle potential None values if capture failed
+                output = (res.stdout or "") + (res.stderr or "")
+                if "unrelated histories" in output.lower():
+                    log_warn(f"Disjoint history detected for PR #{pr_num}. Retrying with --allow-unrelated-histories")
+                    res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
+                    if not isinstance(res, subprocess.CompletedProcess):
+                        raise CLIError("Retry merge with --allow-unrelated-histories failed execution")
+
+                if res.returncode != 0:
+                    # Conflict encountered
+                    run_command(["git", "merge", "--abort"])
+                    error_msg = f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}."
+                    error_msg += "\n\n### Fallback Strategy:\n"
+                    error_msg += "If native merging fails due to heavy conflicts or history divergence:\n"
+                    error_msg += f"1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`\n"
+                    error_msg += f"2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.\n"
+                    error_msg += f"3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`"
+                    raise CLIError(error_msg, code=res.returncode)
 
             # 4. Metadata Preservation
             successfully_merged.append(pr_num)
@@ -1850,6 +1867,14 @@ Agent may read:
 
 Agent may modify:
 `boomtick-pkg/cli/logs/reviews/pr-review-{pr_number}.md`
+
+---
+
+## Merge & Conflict Guidance
+
+If tasks require merging branches (e.g., during PR consolidation or rebase):
+- **Unrelated Histories**: If git fails with `fatal: refusing to merge unrelated histories`, use `git merge <branch> --allow-unrelated-histories`.
+- **Heavy Conflicts**: If standard merging is too complex, generate a patch using `git diff base...head` and apply it manually.
 
 ---
 
@@ -2172,6 +2197,9 @@ Examine the files listed in `aggregation-context-{sanitized_target}.md`.
 
 ### Step 2: Resolve Conflicts
 Perform the merge and resolve any structural or semantic conflicts.
+
+- **Edge Case: Unrelated Histories**: If you encounter `fatal: refusing to merge unrelated histories`, retry with `--allow-unrelated-histories`.
+- **Heavy Conflicts Fallback**: If standard merging creates excessive noise, use `git diff target...head > patch` to generate a clean patch and apply it manually.
 
 ### Step 3: Verify
 Run the validation suite to ensure the aggregated branch is stable.
