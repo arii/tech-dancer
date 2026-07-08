@@ -7,12 +7,13 @@ def check_shell_script(filepath):
     """Performs static analysis on a shell script."""
     findings = []
 
-    # 1. Syntax check
-    try:
-        subprocess.run(["bash", "-n", filepath], check=True, capture_output=True, text=True)
-    except subprocess.CalledProcessError as e:
-        findings.append(f"Syntax error: {e.stderr.strip()}")
-        return findings
+    # 1. Syntax check (only for .sh files)
+    if filepath.endswith('.sh'):
+        try:
+            subprocess.run(["bash", "-n", filepath], check=True, capture_output=True, text=True)
+        except subprocess.CalledProcessError as e:
+            findings.append(f"Syntax error: {e.stderr.strip()}")
+            return findings
 
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -47,12 +48,12 @@ def check_shell_script(filepath):
             if not re.search(r'[0-9]\s*/\s*[0-9]', line): # Avoid flagging division
                 findings.append(f"Line {i+1}: Potential hardcoded absolute path: {stripped}")
 
-        # Unquoted variables in risky commands - SIMPLIFIED per directive
+        # Unquoted variables in risky commands - SIMPLIFIED heuristic
         # We flag cases where a variable expansion ($VAR or ${VAR}) is used in a risky command
-        # without any visible surrounding quotes on that line.
+        # without any quotes on that line. This is a simple signal.
         if any(cmd in stripped for cmd in ['rm ', 'cp ', 'mv ', 'ls ']):
             if '$' in stripped and not any(q in stripped for q in ['"', "'"]):
-                findings.append(f"Line {i+1}: Unquoted variable expansion in risky command: {stripped}")
+                findings.append(f"Line {i+1}: Potential unquoted variable in risky command: {stripped}")
 
     if len(lines) > 20:
         findings.append("Note: For complex shell scripts, please run 'shellcheck' for deeper analysis.")
