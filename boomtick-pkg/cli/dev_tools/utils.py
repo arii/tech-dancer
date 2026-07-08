@@ -271,11 +271,7 @@ def clean_llm_output(text: str) -> str:
                 json.loads(candidate)
                 return candidate.strip()
             except json.JSONDecodeError:
-                # If direct parse fails, check if it's a JSON object with at least one key-value pair
-                if ":" in candidate:
-                     # This might still be a valid object but with surrounding text or minor formatting issues.
-                     # We return it to allow the caller's json.loads() to attempt parsing or fail gracefully.
-                     return candidate.strip()
+                pass
 
     return text.strip()
 

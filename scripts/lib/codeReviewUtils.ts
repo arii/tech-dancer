@@ -131,18 +131,30 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     }
   }
 
-  // Robust extraction: find the boundaries of the last JSON object or array
-  const startIdx = jsonText.lastIndexOf('{');
-  const endIdx = jsonText.lastIndexOf('}');
+  // Robust extraction: find the boundaries of the outermost JSON object or array
+  const firstBrace = jsonText.indexOf('{');
+  const firstBracket = jsonText.indexOf('[');
+  const lastBrace = jsonText.lastIndexOf('}');
+  const lastBracket = jsonText.lastIndexOf(']');
 
-  if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
-    // If we have mixed text, we need to find the START of this JSON block
-    // We search backwards from endIdx to find the matching opening brace
-    // For simplicity, we'll try to extract from the FIRST '{' after the openTag
-    const firstBrace = jsonText.indexOf('{');
-    if (firstBrace !== -1 && endIdx > firstBrace) {
-      jsonText = jsonText.slice(firstBrace, endIdx + 1);
-    }
+  // Determine starting point (first '{' or '[')
+  let startIdx = -1;
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    startIdx = firstBrace;
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+  }
+
+  // Determine ending point (last '}' or ']')
+  let endIdx = -1;
+  if (lastBrace !== -1 && lastBrace > lastBracket) {
+    endIdx = lastBrace;
+  } else if (lastBracket !== -1) {
+    endIdx = lastBracket;
+  }
+
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    jsonText = jsonText.slice(startIdx, endIdx + 1);
   } else {
     // Strip markdown code blocks if boundaries weren't found
     jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
