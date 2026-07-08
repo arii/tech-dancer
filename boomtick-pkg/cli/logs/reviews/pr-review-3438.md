@@ -30,7 +30,13 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe changes gracefully handle dependency loading via dynamic import and add a wrapper script for easier local testing.\n\n## FINDINGS\n<summary>\nThe creation of `scripts/verify-schemas.mjs` orchestrates schema syncing cleanly. The transition to `tsx` as a dev dependency allows scripts to use dynamic `import()` to bypass build failures when optional dependencies like `json-schema-to-zod` are missing.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe changes gracefully handle dependency loading via dynamic import and add a wrapper script for easier local testing.\n\n## FINDINGS\n\nThe creation of `scripts/verify-schemas.mjs` orchestrates schema syncing cleanly. The transition to `tsx` as a dev dependency allows scripts to use dynamic `import()` to bypass build failures when optional dependencies like `json-schema-to-zod` are missing.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "scripts/verify-schemas.mjs",
+      "line": 41,
+      "body": "Running `git diff --exit-code` here ensures drift is caught immediately during the build process, preventing mismatched schemas from being deployed."
+    }
+  ]
 }
 ```

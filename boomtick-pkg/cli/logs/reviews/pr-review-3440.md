@@ -30,7 +30,18 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe issue audit results reflect a thorough evaluation of the open issues, adhering strictly to the user instruction prohibiting boiler-plate or slop responses.\n\n## FINDINGS\n<summary>\nThe updated `docs/audits/issue-audit-results.md` introduces detailed, issue-specific reasoning for the recommendations (e.g., calling out specific roadmap alignment for CI tasks and platform relevance for content tasks) instead of using repetitive templates like 'Valid open task'. This addresses a critical guideline.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe issue audit results reflect a thorough evaluation of the open issues, adhering strictly to the user instruction prohibiting boiler-plate or slop responses.\n\n## FINDINGS\n\nThe updated `docs/audits/issue-audit-results.md` introduces detailed, issue-specific reasoning for the recommendations (e.g., calling out specific roadmap alignment for CI tasks and platform relevance for content tasks) instead of using repetitive templates like 'Valid open task'. This addresses a critical guideline.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "docs/audits/issue-audit-results.md",
+      "line": 714,
+      "body": "Great contextual update here noting that the AI review feature needs scope adjustments for token limits."
+    },
+    {
+      "path": "docs/audits/issue-audit-results.md",
+      "line": 896,
+      "body": "Thank you for noting the direct relevance to the blog platform rather than using boilerplate validation text."
+    }
+  ]
 }
 ```

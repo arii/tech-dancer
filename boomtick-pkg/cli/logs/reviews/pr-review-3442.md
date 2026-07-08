@@ -30,7 +30,18 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe changes successfully resolve Python environment pathing issues for Jules sessions.\n\n## FINDINGS\n<summary>\nThe injection of the explicit PYTHONPATH targeting the `boomtick-pkg/cli` directly ensures sub-processes run correctly without module resolution errors. The virtual environment management in `setup-agent.sh` and `install.sh` has also been significantly improved to protect the system Python environment.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe changes successfully resolve Python environment pathing issues for Jules sessions.\n\n## FINDINGS\n\nThe injection of the explicit PYTHONPATH targeting the `boomtick-pkg/cli` directly ensures sub-processes run correctly without module resolution errors. The virtual environment management in `setup-agent.sh` and `install.sh` has also been significantly improved to protect the system Python environment.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "boomtick-pkg/mcp/src/config.ts",
+      "line": 46,
+      "body": "Explicitly injecting the CLI path into PYTHONPATH here is exactly what is needed to resolve the module not found errors when the MCP server spawns subprocesses."
+    },
+    {
+      "path": "boomtick-pkg/install.sh",
+      "line": 77,
+      "body": "Creating an isolated virtual environment (`.venv`) for non-CI/worktree installs prevents pollution of the global python space."
+    }
+  ]
 }
 ```

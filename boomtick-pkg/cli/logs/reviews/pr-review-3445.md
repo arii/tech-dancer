@@ -31,7 +31,13 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nDependabot bumped setuptools requirement. Looks safe to merge.\n\n## FINDINGS\n<summary>\nThe dependency bump from setuptools<81.0.0 to <84.0.0 is straightforward.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nDependabot bumped setuptools requirement. Looks safe to merge.\n\n## FINDINGS\n\nThe dependency bump from setuptools<81.0.0 to <84.0.0 is straightforward.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "boomtick-pkg/cli/pyproject.toml",
+      "line": 22,
+      "body": "Standard dependency bump. This is safe to merge as it resolves dependabot alerts while keeping within the major version."
+    }
+  ]
 }
 ```

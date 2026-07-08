@@ -30,7 +30,13 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nDependabot bumped tqdm requirement. Looks safe to merge.\n\n## FINDINGS\n<summary>\nThe dependency bump from tqdm==4.68.3 to 4.68.4 in etl is straightforward.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nDependabot bumped tqdm requirement. Looks safe to merge.\n\n## FINDINGS\n\nThe dependency bump from tqdm==4.68.3 to 4.68.4 in etl is straightforward.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "etl/requirements.txt",
+      "line": 10,
+      "body": "Patch version bump for tqdm. Safe to merge."
+    }
+  ]
 }
 ```

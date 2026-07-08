@@ -30,7 +30,13 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe refactoring centrally applies standard a11y transitions without runtime overhead and correctly removes redundant explicit transitions.\n\n## FINDINGS\n<summary>\nThe introduction of `createTransitionVariants` enforces the `motion-safe` and `motion-reduce:transition-none` utility requirement globally for CVA factories. This cleans up variant definitions, improves performance by using string concatenation instead of dynamic `clsx` calls for the base string, and ensures all interactive elements respect user preferences for reduced motion.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe refactoring centrally applies standard a11y transitions without runtime overhead and correctly removes redundant explicit transitions.\n\n## FINDINGS\n\nThe introduction of `createTransitionVariants` enforces the `motion-safe` and `motion-reduce:transition-none` utility requirement globally for CVA factories. This cleans up variant definitions, improves performance by using string concatenation instead of dynamic `clsx` calls for the base string, and ensures all interactive elements respect user preferences for reduced motion.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "src/lib/variants.ts",
+      "line": 9,
+      "body": "Excellent refactor. Enforcing the transition utilities at the factory level ensures accessibility compliance is impossible to bypass by mistake in the design system."
+    }
+  ]
 }
 ```

@@ -30,7 +30,18 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe heuristic updates properly flag temporary/scratch files in both the PR summary and AI review prompt.\n\n## FINDINGS\n<summary>\nThe integration of `temp_file_patterns` within `ProjectConfig` and its implementation in `evaluate_pr_heuristics` successfully identifies PR pollution. The tests accurately capture the regex functionality. The addition of the FILE NECESSITY rule to `ReviewPromptConstants.ts` correctly operationalizes this for AI-assisted reviews.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe heuristic updates properly flag temporary/scratch files in both the PR summary and AI review prompt.\n\n## FINDINGS\n\nThe integration of `temp_file_patterns` within `ProjectConfig` and its implementation in `evaluate_pr_heuristics` successfully identifies PR pollution. The tests accurately capture the regex functionality. The addition of the FILE NECESSITY rule to `ReviewPromptConstants.ts` correctly operationalizes this for AI-assisted reviews.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "boomtick-pkg/cli/dev_tools/orchestrator.py",
+      "line": 149,
+      "body": "Applying `re.search` against `PROJECT_CONFIG.temp_file_patterns` is a clean way to flag PR pollution early."
+    },
+    {
+      "path": "scripts/lib/ReviewPromptConstants.ts",
+      "line": 23,
+      "body": "Adding the `FILE NECESSITY` prompt constraint will prevent AI reviewers from generating feedback on scratchpad files."
+    }
+  ]
 }
 ```

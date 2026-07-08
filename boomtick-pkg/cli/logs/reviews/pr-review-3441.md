@@ -30,7 +30,18 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe codebase search and audit tools now correctly ignore untracked agent scratchpad files.\n\n## FINDINGS\n<summary>\nThe integration of `git ls-files` across python and node code indexing and linting scripts ensures that temporary, untracked artifacts created by agents do not pollute review results.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe codebase search and audit tools now correctly ignore untracked agent scratchpad files.\n\n## FINDINGS\n\nThe integration of `git ls-files` across python and node code indexing and linting scripts ensures that temporary, untracked artifacts created by agents do not pollute review results.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "scripts/detect-antipatterns.mjs",
+      "line": 60,
+      "body": "Using `spawnSync` with an arguments array correctly prevents shell injection vulnerabilities when invoking git."
+    },
+    {
+      "path": "scripts/index-codebase.py",
+      "line": 23,
+      "body": "Falling back to git tracked files explicitly rather than walking the whole directory tree is a much safer way to index code and ignore scratchpads."
+    }
+  ]
 }
 ```

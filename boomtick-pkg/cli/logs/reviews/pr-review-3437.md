@@ -30,7 +30,18 @@ DO NOT REMOVE THE BACKTICKS.
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\nThe changes successfully introduce defensive parsing and type validation to prevent `TypeError` when dealing with potentially malformed LLM outputs.\n\n## FINDINGS\n<summary>\nThe parsing logic in `orchestrator.py`, `ai_service.py`, and `github.py` now explicitly validates types and handles double-encoded JSON, directly addressing the agent guideline regarding defensive JSON parsing.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
-  "comments": []
+  "body": "## ANTI-AI-SLOP\n\nThe changes successfully introduce defensive parsing and type validation to prevent `TypeError` when dealing with potentially malformed LLM outputs.\n\n## FINDINGS\n\nThe parsing logic in `orchestrator.py`, `ai_service.py`, and `github.py` now explicitly validates types and handles double-encoded JSON, directly addressing the agent guideline regarding defensive JSON parsing.\n\n## FINAL RECOMMENDATION\nApproved\n\n<!-- td-review-manager-comment -->",
+  "comments": [
+    {
+      "path": "boomtick-pkg/cli/dev_tools/orchestrator.py",
+      "line": 658,
+      "body": "Good catch for double-encoded JSON strings from the LLM. This prevents a lot of nasty runtime type errors downstream."
+    },
+    {
+      "path": "boomtick-pkg/cli/dev_tools/services/github.py",
+      "line": 453,
+      "body": "Safeguarding the `comment` iteration with `isinstance(comment, dict)` before accessing `.get()` prevents crashing when the LLM hallucinates list items."
+    }
+  ]
 }
 ```
