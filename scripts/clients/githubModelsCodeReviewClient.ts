@@ -61,7 +61,10 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     }
 
     const apiKey = process.env.GITHUB_TOKEN;
-    const url = 'https://models.inference.ai.azure.com/chat/completions';
+    if (!apiKey) {
+      throw new Error('Missing GITHUB_TOKEN environment variable required for GitHub Models Code Review API.');
+    }
+    const url = process.env.GITHUB_MODELS_API_URL || 'https://models.inference.ai.azure.com/chat/completions';
 
     let fetchResponse;
     let retries = 5;
@@ -85,11 +88,14 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
           throw new Error('RateLimitReached');
         }
         break;
-      } catch (e) {
+      } catch (e: any) {
         retries--;
-        if (retries === 0) throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
+        if (retries === 0) {
+          const statusMsg = fetchResponse?.status ? ` Status: ${fetchResponse.status}` : '';
+          throw new Error(`Failed to fetch from GitHub Models API after 5 retries.${statusMsg} Error: ${e.message}`, { cause: e });
+        }
         await new Promise(r => setTimeout(r, delay));
-        delay *= 2;
+        delay = Math.min(delay * 2, 16000); // Max delay of 16 seconds
       }
     }
 
