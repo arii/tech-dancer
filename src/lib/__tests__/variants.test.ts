@@ -71,7 +71,8 @@ describe("Variants Factory (createVariants)", () => {
 
     test("should handle undefined config", async () => {
       const { createVariants } = await import("../variants");
-      const variants = createVariants("base-class", undefined as any);
+      // @ts-expect-error - testing invalid input
+      const variants = createVariants("base-class", undefined);
       expect(variants()).toBe(`base-class ${defaultTransitions}`);
     });
   });
