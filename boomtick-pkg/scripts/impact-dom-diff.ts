@@ -3,7 +3,7 @@ import { diffLines } from 'diff';
 import fs from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
-import { logHeartbeat } from '../boomtick-pkg/lib/heartbeat';
+import { logHeartbeat } from '../lib/heartbeat';
 import {
   ARTIFACTS_DIR,
   DOM_REVIEW_DIR,
