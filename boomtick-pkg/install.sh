@@ -52,6 +52,9 @@ cd "$DIR"
 if [ "$FORCE" -eq 1 ] || ! command -v td-cli >/dev/null 2>&1; then
     echo "Installing BoomTick CLI..."
     timeout 600 pip install -e ./cli --break-system-packages
+    if [ -f "cli/requirements-dev.txt" ]; then
+        timeout 600 pip install -r cli/requirements-dev.txt --break-system-packages
+    fi
 else
     echo "BoomTick CLI already installed. Skipping (use --force to reinstall)."
 fi

@@ -214,6 +214,10 @@ install_python_deps() {
     STATUS_PYTHON="INSTALLED (minimal)"
   fi
 
+  if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
+    pip_install --root-user-action=ignore -r boomtick-pkg/cli/requirements-dev.txt
+  fi
+
   if [ -f "etl/requirements.txt" ] && [ "$SKIP_ETL_DEPS" != "1" ]; then
     pip_install --root-user-action=ignore -r etl/requirements.txt
     STATUS_PYTHON="${STATUS_PYTHON} + ETL"

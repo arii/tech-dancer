@@ -99,6 +99,10 @@ runs:
         echo "::group::Install dev-tools"
         pip install -e boomtick-pkg/cli/ --break-system-packages
 
+        if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
+          pip install -r boomtick-pkg/cli/requirements-dev.txt --break-system-packages
+        fi
+
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
