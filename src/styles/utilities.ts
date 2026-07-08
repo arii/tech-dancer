@@ -18,6 +18,8 @@ export const interaction = {
   hoverMuted: "hover:bg-line/10",
   hoverAccent: "hover:border-accent hover:bg-accent/5",
   hoverOpacity: "hover:opacity-90",
+  card: "group relative bg-surface",
+  cardHover: "hover:border-accent/40",
 };
 
 export const typography = {

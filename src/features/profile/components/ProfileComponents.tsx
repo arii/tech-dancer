@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { transitions, interaction } from '@/styles/utilities';
 import { isValidUrl } from '@/utils/url';
@@ -29,13 +29,13 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   if (!Array.isArray(cards)) return null;
 
   // Security: Explicitly validate input cards.
-  // We rely on React's automatic escaping for text content.
-  const validatedCards = cards.map(card => ({
+  // Performance: Memoize validation to prevent redundant work on re-renders.
+  const validatedCards = useMemo(() => cards.map(card => ({
     ...card,
     title: String(card.title || ''),
     content: String(card.content || ''),
     icon: card.icon && IconMap[card.icon] ? card.icon : undefined
-  }));
+  })), [cards]);
 
   return (
     <Stack gap="card" marginTop={4}>
@@ -141,11 +141,11 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           inset={0}
           zIndex="modal"
           className="bg-black/90 cursor-pointer"
-          align="start"
+          align="center"
           justify="center"
           onClick={() => setSelectedImage(null)}
         >
-          <Box maxWidth="full" padding={4} height="full" display="flex" align="start" justify="center">
+          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
             <img
               src={selectedImage}
               alt="Expanded view"
@@ -162,9 +162,11 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
  * Renders a collection of pill-style external links.
  */
 export function ProfileLinks({ links }: { links: ProfileLink[] }) {
+  const filteredLinks = useMemo(() => links.filter(link => isValidUrl(link.url)), [links]);
+
   return (
     <Box display="flex" gap={3} wrap marginTop={4}>
-      {links.filter(link => isValidUrl(link.url)).map((link) => (
+      {filteredLinks.map((link) => (
         <Box
           key={link.label}
           as="a"
@@ -177,7 +179,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={3}
           minHeight={11}
           border
-          radius="lg"
+          radius="md"
           className={`${interaction.hoverAccent} ${transitions.default} group ${interaction.active} focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none`}
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
