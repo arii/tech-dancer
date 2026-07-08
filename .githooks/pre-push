@@ -19,5 +19,5 @@ done
 CHANGED_TSX=$(git diff --name-only origin/main...HEAD | grep '\.tsx$' | head -20)
 if [ -n "$CHANGED_TSX" ]; then
   echo "🔍 Running targeted audit on changed files..."
-  node scripts/detect-antipatterns.mjs $CHANGED_TSX
+  node boomtick-pkg/scripts/detect-antipatterns.mjs $CHANGED_TSX
 fi

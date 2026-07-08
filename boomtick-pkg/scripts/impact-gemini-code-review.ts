@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ARTIFACTS_DIR } from '../boomtick-pkg/lib/visualReviewConstants';
-import { orchestrateCodeReview } from '../boomtick-pkg/lib/codeReviewOrchestrator';
+import { ARTIFACTS_DIR } from '../lib/visualReviewConstants';
+import { orchestrateCodeReview } from '../lib/codeReviewOrchestrator';
 import { githubModelsCodeReviewClient } from './clients/githubModelsCodeReviewClient';
 import { geminiCodeReviewClient } from './clients/geminiCodeReviewClient';
 

@@ -4,7 +4,7 @@ When upgrading dependencies like pnpm, node, or playwright, there are strict run
 
 ## Dependabot
 
-When Dependabot opens a PR to update versions, it typically only updates package.json and pnpm-lock.yaml. Since this repository has a strict runtime contract, a Dependabot PR updating pnpm or @playwright/test will fail the CI check (scripts/check-runtime-files.mjs or similar checks) until you manually add the changes in the other files.
+When Dependabot opens a PR to update versions, it typically only updates package.json and pnpm-lock.yaml. Since this repository has a strict runtime contract, a Dependabot PR updating pnpm or @playwright/test will fail the CI check (boomtick-pkg/scripts/check-runtime-files.mjs or similar checks) until you manually add the changes in the other files.
 
 If Dependabot fails CI because of actions/checkout or missing dependabot-specific workflow configurations, be mindful that Dependabot PRs run with read-only permissions by default unless configured properly, and they trigger pull_request events but from a fork context.
 
@@ -24,7 +24,7 @@ For workflows that checkout code using actions/checkout, to properly handle Depe
 When upgrading pnpm (e.g. via dependabot), you must update the version in all of the following files:
 
 - `package.json` (in the `packageManager` field, and `engines.pnpm`)
-- `scripts/check-runtime-files.mjs` (in `expectedPnpm`)
+- `boomtick-pkg/scripts/check-runtime-files.mjs` (in `expectedPnpm`)
 - `.github/actions/setup-workspace/action.yml` (in the `pnpm-version` input default)
 - `.devcontainer/Dockerfile` (in the `PNPM_VERSION` environment variable)
 
@@ -35,7 +35,7 @@ When upgrading node, you must update the version in all of the following files:
 - `.node-version`
 - `.nvmrc`
 - `package.json` (in `engines.node`)
-- `scripts/check-runtime-files.mjs` (in `expectedNodeExact` and `expectedNodeMajorForVercel`)
+- `boomtick-pkg/scripts/check-runtime-files.mjs` (in `expectedNodeExact` and `expectedNodeMajorForVercel`)
 - `.devcontainer/Dockerfile` (in the `NODE_MAJOR` environment variable, if the major version changed)
 
 ## Upgrading playwright
