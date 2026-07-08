@@ -59,6 +59,18 @@ runs:
       run: corepack prepare pnpm@"$PNPM_VERSION" --activate
       shell: bash
 
+    - name: Resolve CLI Root
+      id: resolve-cli
+      shell: bash
+      run: |
+        if [ -d "boomtick-pkg/cli" ]; then
+          CLI_ROOT="$(pwd)/boomtick-pkg/cli"
+        else
+          CLI_ROOT="$(pwd)/cli"
+        fi
+        echo "CLI_ROOT=$CLI_ROOT" >> "$GITHUB_ENV"
+        echo "cli_root=$CLI_ROOT" >> "$GITHUB_OUTPUT"
+
     - name: Get pip cache directory
       if: inputs.setup-python == 'true'
       id: pip-cache
@@ -79,16 +91,10 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         echo "::group::Install dev-tools"
-        if [ -d "boomtick-pkg/cli" ]; then
-          pip install -e boomtick-pkg/cli/ --break-system-packages
-          if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
-            pip install -r boomtick-pkg/cli/requirements-dev.txt --break-system-packages
-          fi
-        else
-          pip install -e cli/ --break-system-packages
-          if [ -f "cli/requirements-dev.txt" ]; then
-            pip install -r cli/requirements-dev.txt --break-system-packages
-          fi
+        pip install -e "${{ env.CLI_ROOT }}" --break-system-packages
+
+        if [ -f "${{ env.CLI_ROOT }}/requirements-dev.txt" ]; then
+          pip install -r "${{ env.CLI_ROOT }}/requirements-dev.txt" --break-system-packages
         fi
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
@@ -121,21 +127,12 @@ runs:
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
       run: |
-        # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
-        REPO_DIR=$(pwd)
-
-        if [ -d "$REPO_DIR/boomtick-pkg/cli" ]; then
-          CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
-        else
-          CLI_DIR="$REPO_DIR/cli"
-        fi
-
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
-          echo "PYTHONPATH=$CLI_DIR" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=${{ env.CLI_ROOT }}" >> "$GITHUB_ENV"
         else
-          echo "PYTHONPATH=$CLI_DIR:$PYTHONPATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=${{ env.CLI_ROOT }}:$PYTHONPATH" >> "$GITHUB_ENV"
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
@@ -143,5 +140,5 @@ runs:
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
-        echo "✅ Environment configured: PYTHONPATH includes $CLI_DIR"
+        echo "✅ Environment configured: PYTHONPATH includes ${{ env.CLI_ROOT }}"
       shell: bash

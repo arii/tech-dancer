@@ -27,6 +27,13 @@ find_repo_root() {
 REPO_ROOT="$(find_repo_root "$START_DIR" || find_repo_root "$SCRIPT_DIR" || pwd -P)"
 cd "$REPO_ROOT"
 
+if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
+  CLI_ROOT="${REPO_ROOT}/boomtick-pkg/cli"
+else
+  CLI_ROOT="${REPO_ROOT}/cli"
+fi
+export CLI_ROOT
+
 # -------- configuration --------
 PNPM_VERSION="${PNPM_VERSION:-10.28.2}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
@@ -203,7 +210,7 @@ install_python_deps() {
   # satisfy boomtick-cli requirement of setuptools < 81
   pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
 
-  if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
+  if [ -f "${CLI_ROOT}/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
     if ! have td-cli || ! have td; then
       err "td/td-cli not found on PATH after editable install. Path: $PATH"
@@ -214,8 +221,8 @@ install_python_deps() {
     STATUS_PYTHON="INSTALLED (minimal)"
   fi
 
-  if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
-    pip_install --root-user-action=ignore -r boomtick-pkg/cli/requirements-dev.txt
+  if [ -f "${CLI_ROOT}/requirements-dev.txt" ]; then
+    pip_install --root-user-action=ignore -r "${CLI_ROOT}/requirements-dev.txt"
   fi
 
   if [ -f "etl/requirements.txt" ] && [ "$SKIP_ETL_DEPS" != "1" ]; then

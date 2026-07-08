@@ -48,12 +48,22 @@ validate_env
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
+if [ -d "cli" ]; then
+    CLI_ROOT="$(pwd)/cli"
+elif [ -d "boomtick-pkg/cli" ]; then
+    CLI_ROOT="$(pwd)/boomtick-pkg/cli"
+else
+    # Fallback to current dir if we are already inside cli
+    CLI_ROOT="$(pwd)"
+fi
+export CLI_ROOT
+
 # Idempotency for CLI
 if [ "$FORCE" -eq 1 ] || ! command -v td-cli >/dev/null 2>&1; then
     echo "Installing BoomTick CLI..."
-    timeout 600 pip install -e ./cli --break-system-packages
-    if [ -f "cli/requirements-dev.txt" ]; then
-        timeout 600 pip install -r cli/requirements-dev.txt --break-system-packages
+    timeout 600 pip install -e "${CLI_ROOT}" --break-system-packages
+    if [ -f "${CLI_ROOT}/requirements-dev.txt" ]; then
+        timeout 600 pip install -r "${CLI_ROOT}/requirements-dev.txt" --break-system-packages
     fi
 else
     echo "BoomTick CLI already installed. Skipping (use --force to reinstall)."
