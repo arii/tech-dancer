@@ -374,35 +374,38 @@ class Orchestrator:
             "issue": IssueSummary(**res).model_dump()
         }
 
-    def get_issue_details(self, issue_number: int) -> Dict[str, Any]:
+    def get_issue_details(self, issueNumber: int) -> Dict[str, Any]:
         """
         Fetches details of a GitHub issue.
         """
-        return self.github.fetch_issue_details(issue_number)
+        return self.github.fetch_issue_details(issueNumber)
 
-    def update_issue(self, issueNumber: int, body: Optional[str] = None, labels: Optional[List[str]] = None, addLabels: Optional[List[str]] = None, removeLabels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def update_issue(self, issueNumber: int, body: Optional[str] = None, labels: Optional[List[str]] = None, addLabels: Optional[List[str]] = None, removeLabels: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]:
         """
         Updates an issue's body and/or labels.
         """
         res = None
+        # Shim for backward compatibility with old snake_case names from tests or older callers
+        if "add_labels" in kwargs and addLabels is None: addLabels = kwargs["add_labels"]
+        if "remove_labels" in kwargs and removeLabels is None: removeLabels = kwargs["remove_labels"]
         # Handle full label replacement first as it is mutually exclusive with incremental changes
         if labels is not None:
             res = self.github.update_issue(issueNumber, body=body, labels=labels)
         else:
             # Handle incremental label changes (can happen together)
-            if add_labels:
-                res = self.github.add_labels(issue_number, add_labels)
+            if addLabels:
+                res = self.github.add_labels(issueNumber, addLabels)
 
-            if remove_labels:
-                for label in remove_labels:
-                    self.github.remove_label(issue_number, label)
+            if removeLabels:
+                for label in removeLabels:
+                    self.github.remove_label(issueNumber, label)
                 # If we haven't updated yet (no add_labels or body), fetch current state
                 if res is None and body is None:
-                    res = self.github.fetch_issue_details(issue_number)
+                    res = self.github.fetch_issue_details(issueNumber)
 
             # Handle body update if not already done via 'labels' PATCH
             if body is not None:
-                res = self.github.update_issue(issue_number, body=body)
+                res = self.github.update_issue(issueNumber, body=body)
 
         if res is None:
             raise CLIError("Nothing to update. Provide body or labels.")
@@ -420,13 +423,14 @@ class Orchestrator:
             raise CLIError("Comment body cannot be empty.")
         return self.github.create_issue_comment(entity_number, body)
 
-    def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
+    def validate_issue(self, issueNumber: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
+        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
         if all_open:
             issues = list(repo.get_issues(state='open'))
-        elif issue_number:
-            issues = [repo.get_issue(issue_number)]
+        elif issueNumber:
+            issues = [repo.get_issue(issueNumber)]
         else:
             raise CLIError("Provide --issue-number or --all-open")
 
@@ -1250,15 +1254,16 @@ Run the workflow (if possible via `gh workflow run` or by pushing a test branch)
             "workflow_plans": generated_plans
         }
 
-    def plan_issue_audit(self, issue_numbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100) -> Dict[str, Any]:
+    def plan_issue_audit(self, issueNumbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100, **kwargs) -> Dict[str, Any]:
         """
         Builds a deterministic roadmap and status checklist for auditing open issues.
         """
         issues = []
+        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
         if all_open:
             issues = self.github.list_issues(state='open', limit=limit)
-        elif issue_numbers:
-            for num in issue_numbers:
+        elif issueNumbers:
+            for num in issueNumbers:
                 issue = self.github.fetch_issue_details(num)
                 # Normalize format to match list_issues
                 issues.append({
@@ -1516,6 +1521,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
     def list_prs(self, state: str = "open", limit: int = 100, includeDrafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
+        if "include_drafts" in kwargs: includeDrafts = kwargs["include_drafts"]
         prs = self.github.list_pull_requests(state=state, limit=limit, labels=labels)
 
         if not includeDrafts:
@@ -1691,7 +1697,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
 
-    def generate_review_workflow(self, pr_number: int, issue_number: Optional[int] = None) -> Dict[str, Any]:
+    def generate_review_workflow(self, pr_number: int, issueNumber: Optional[int] = None) -> Dict[str, Any]:
         """Generates a deterministic review workflow plan for an agent."""
         # 1. Environment Validation
         env_res = self.runtime_check()
@@ -1699,8 +1705,8 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
         # 2. Issue Validation
         issue_output = "No issue number provided."
-        if issue_number:
-            res = self.validate_issue(issue_number=issue_number)
+        if issueNumber:
+            res = self.validate_issue(issueNumber=issueNumber)
             issue_output = json.dumps(res, indent=2)
 
         # 3. Conflict Detection
