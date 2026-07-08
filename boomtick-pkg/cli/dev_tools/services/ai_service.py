@@ -104,12 +104,12 @@ def _get_review_prompt_constants() -> tuple[str, str, str]:
         return _REVIEW_CONSTANTS_CACHE
 
 class AIClient:
-    def __init__(self, ai_model: str = None):
+    def __init__(self, ai_model: Optional[str] = None):
         self.ai_model = ai_model or get_ai_model()
         self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
 
-        self._dependency_graph = None
-        self._vector_store = None
+        self._dependency_graph: Optional[DependencyGraph] = None
+        self._vector_store: Optional[VectorStore] = None
 
     @property
     def dependency_graph(self) -> DependencyGraph:
@@ -126,7 +126,7 @@ class AIClient:
     def is_ai_available(self) -> bool:
         return is_ai_available()
 
-    def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
+    def call_ai(self, prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
         return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
@@ -140,7 +140,7 @@ class AIClient:
             "x-goog-api-key": self.gemini_api_key
         }
 
-        payload = {
+        payload: Dict[str, Any] = {
             "contents": [{"parts": [{"text": prompt}]}]
         }
 
@@ -162,7 +162,7 @@ class AIClient:
             log_warn(f"Gemini API call failed: {e}")
             return None
 
-    def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
+    def generate(self, prompt: str, schema: Optional[Dict] = None, model: Optional[str] = None) -> str:
         if self.is_ai_available():
             res = self.call_ai(prompt, model=model, schema=schema)
             if res:
@@ -352,14 +352,14 @@ class AIClient:
             try:
                 cleaned = clean_llm_output(raw)
                 parsed_data, err = validate_with_model(cleaned, AIFullReview)
-                if err:
-                    raise ValueError(err)
+                if err or parsed_data is None:
+                    raise ValueError(err or "Validation failed")
 
                 file_reviews = parsed_data.get("file_reviews", [])
                 final = {
-                    "reviewComment": parsed_data.get("reviewComment", f"Automated review of PR #{pr_num}."),
-                    "labels": parsed_data.get("labels", []),
-                    "recommendation": parsed_data.get("recommendation", "Unknown")
+                    "reviewComment": str(parsed_data.get("reviewComment", f"Automated review of PR #{pr_num}.")),
+                    "labels": list(parsed_data.get("labels", [])),
+                    "recommendation": str(parsed_data.get("recommendation", "Unknown"))
                 }
                 print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
             except Exception as e:
@@ -375,7 +375,7 @@ class AIClient:
             final['recommendation'] = 'Not Approved'
             final['reviewComment'] = (
                 f"CI checks are failing ({failing_names}). Recommendation downgraded.\n\n"
-                + final.get('reviewComment', '')
+                + str(final.get('reviewComment', ''))
             )
 
         self._write_review_file(pr_num, pr, final, chunks, file_reviews)
@@ -383,7 +383,7 @@ class AIClient:
 
     def _get_context_for_chunk(self, chunk: Dict) -> str:
         """Retrieves dependency and semantic context for a code chunk."""
-        filepath = chunk.get('file')
+        filepath = str(chunk.get('file', ''))
         context_parts = []
 
         # 1. Dependency Context
@@ -594,8 +594,8 @@ class AIClient:
         try:
             cleaned = clean_llm_output(raw)
             res, err = validate_with_model(cleaned, AISynthesisReview)
-            if err:
-                raise ValueError(err)
+            if err or res is None:
+                raise ValueError(err or "Validation failed")
             return res
         except Exception as e:
             log_warn(f"Synthesis validation error: {e} | raw: {raw[:300]}")
@@ -673,7 +673,7 @@ class AIClient:
         ) if table_rows else "_No files reviewed._"
 
         # Build inline comments JSON block
-        all_issues = []
+        all_issues: List[Dict[str, Any]] = []
         for fr in file_reviews:
             if not isinstance(fr, dict):
                 continue
@@ -685,7 +685,7 @@ class AIClient:
                     continue
                 conf = str(issue.get('confidence', 'high')).upper()
                 # Support both 'issue' and 'comment' fields from the model
-                issue_text = issue.get('issue') or issue.get('comment') or ''
+                issue_text = str(issue.get('issue') or issue.get('comment') or '')
                 all_issues.append({
                     "path": str(fr.get('file', 'unknown')),
                     "line": issue.get('line', 1),
