@@ -4,12 +4,12 @@
  */
 
 export const transitions = {
-  default: "transition-all duration-200",
-  slow: "transition-all duration-300",
-  fast: "transition-all duration-150",
-  colors: "transition-colors duration-200",
-  opacity: "transition-opacity duration-200",
-  transform: "transition-transform duration-200",
+  default: "motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none",
+  slow: "motion-safe:transition-all motion-safe:duration-300 motion-reduce:transition-none",
+  fast: "motion-safe:transition-all motion-safe:duration-150 motion-reduce:transition-none",
+  colors: "motion-safe:transition-colors motion-safe:duration-200 motion-reduce:transition-none",
+  opacity: "motion-safe:transition-opacity motion-safe:duration-200 motion-reduce:transition-none",
+  transform: "motion-safe:transition-transform motion-safe:duration-200 motion-reduce:transition-none",
 };
 
 export const interaction = {
@@ -21,8 +21,8 @@ export const interaction = {
 };
 
 export const typography = {
-  label: "text-tiny font-mono font-bold uppercase tracking-widest",
-  h1: "font-display font-black tracking-tighter leading-line-height-tightest",
+  labelSmall: "text-tiny font-mono font-bold uppercase tracking-widest",
+  h1: "font-display font-black tracking-tighter leading-tightest",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
   body: "font-sans leading-relaxed text-text-body",

@@ -80,9 +80,10 @@
   --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
 
   /* Animation */
+  /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
-  --scale-active: var(--raw-scale-active);
-  --line-height-tightest: var(--raw-leading-tightest);
+  --scale-interaction-active: var(--raw-scale-interaction-active);
+  --leading-tightest: var(--raw-leading-tightest);
 
   /* Static Defaults */
   --container-blog: 1100px;
@@ -227,7 +228,7 @@
 }
 
 @utility scale-active {
-  @apply active:scale-[var(--scale-active)];
+  @apply active:scale-[var(--scale-interaction-active)];
 }
 
 @utility z-top {

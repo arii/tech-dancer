@@ -24,14 +24,29 @@ export const IconMap: Record<string, React.ElementType> = {
  * Renders a list of professional experience cards.
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
+/**
+ * Simple URL validation for security.
+ */
+const isValidUrl = (url: string) => {
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+};
+
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
+  // Security: Sanitize/Validate input if it were from an untrusted source.
+  // For this exercise, we assume ProfileCard data is trusted but we can still validate.
+
   return (
-    <Stack gap={6} marginTop={4}>
+    <Stack gap="card" marginTop={4}>
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="md" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
-            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
+          <Box key={index} padding={8} border radius="md" surface="default" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
+            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="center">
               {Icon && (
                 <Box 
                   width={12} 
@@ -152,7 +167,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
 export function ProfileLinks({ links }: { links: ProfileLink[] }) {
   return (
     <Box display="flex" gap={3} wrap marginTop={4}>
-      {links.map((link) => (
+      {links.filter(link => isValidUrl(link.url)).map((link) => (
         <Box
           key={link.label}
           as="a"
@@ -165,7 +180,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={3}
           minHeight={11}
           border
-          radius="full"
+          radius="lg"
           className={`${interaction.hoverAccent} ${transitions.default} group ${interaction.active} focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none`}
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
