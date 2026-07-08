@@ -10,6 +10,39 @@ import random
 import hashlib
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
+def sanitize_path(path: str) -> str:
+    """
+    Sanitizes a path to prevent traversal bugs and ensure it remains within the intended scope.
+    """
+    if not path:
+        return ""
+    # 1. Basic path traversal blocking
+    # Repeatedly remove '..' until no more remain to prevent nested traversal like '....//'
+    last_path = None
+    while path != last_path:
+        last_path = path
+        path = path.replace("..", ".")
+
+    # 2. Character Whitelisting: Allow only alphanumeric, dots, slashes, hyphens, and underscores
+    path = re.sub(r'[^a-zA-Z0-9\./\-_]', '', path)
+
+    # 3. Collapse multiple slashes
+    path = re.sub(r'/+', '/', path)
+
+    # 4. Remove leading/trailing slashes to ensure relative pathing if used that way
+    return path.strip('/')
+
+def sanitize_metadata(text: str) -> str:
+    """
+    Sanitizes metadata text (like PR titles or branch names) for safe use in filenames or markdown templates.
+    """
+    if not text:
+        return ""
+    # Replace non-alphanumeric characters (except - and _) with hyphens
+    sanitized = re.sub(r'[^a-zA-Z0-9\-_]+', '-', text)
+    # Collapse multiple hyphens and strip
+    return re.sub(r'-+', '-', sanitized).strip('-')
+
 def mask_sensitive_data(msg: str) -> str:
     """Redacts sensitive information like GitHub tokens from strings."""
     if not isinstance(msg, str):

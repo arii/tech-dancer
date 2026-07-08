@@ -43,6 +43,7 @@ class ProjectConfig:
         "github-actions[bot]"
     ])
     worktree_prefix: str = "bt-repair-"
+    pnpm_version: str = "10.28.2"
     spec_sections: List[str] = field(default_factory=lambda: [
         "Problem Statement",
         "Goal",
