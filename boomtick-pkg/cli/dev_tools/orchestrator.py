@@ -13,10 +13,12 @@ from dev_tools.ux_report import generate_report
 import tempfile
 
 from dev_tools.services.github import GitHubClient
-from dev_tools.services.ai_service import AIClient
 from dev_tools.services.jules import JulesClient
-from dev_tools.services.repair_service import RepairService
-from dev_tools.services.vision_service import VisionService
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from dev_tools.services.ai_service import AIClient
+    from dev_tools.services.repair_service import RepairService
+    from dev_tools.services.vision_service import VisionService
 from dev_tools.utils import verify_ci_metrics
 from dev_tools.utils import log_error, log_warn, get_or_create_log_dir, CLIError
 from dev_tools.handlers.command_handler import CommandHandler
@@ -73,20 +75,22 @@ class Orchestrator:
                     hunks[current_file].append((start, start + count - 1))
         return hunks
 
-    def __init__(self) -> None:
+    def __init__(self, no_cache: bool = False) -> None:
         self._github: Optional[GitHubClient] = None
         self._ai: Optional[AIClient] = None
         self._jules: Optional[JulesClient] = None
+        self.no_cache = no_cache
 
     @property
     def github(self) -> GitHubClient:
         if self._github is None:
-            self._github = GitHubClient()
+            self._github = GitHubClient(no_cache=self.no_cache)
         return self._github
 
     @property
-    def ai(self) -> AIClient:
+    def ai(self) -> 'AIClient':
         if self._ai is None:
+            from dev_tools.services.ai_service import AIClient
             self._ai = AIClient()
         return self._ai
 
@@ -100,7 +104,8 @@ class Orchestrator:
         self._jules = client
 
     @property
-    def vision(self) -> VisionService:
+    def vision(self) -> 'VisionService':
+        from dev_tools.services.vision_service import VisionService
         return VisionService()
 
     def _hash_content(self, content: str) -> str:
@@ -466,12 +471,21 @@ class Orchestrator:
             formatted.append({"prs": list(pr_pair), "files": files})
         return formatted
 
-    def handle_status_board(self) -> List[Dict[str, Any]]:
-        repo = get_github_client().get_repo(get_repo_name())
+    def handle_status_board(self, limit: int = 10) -> List[Dict[str, Any]]:
+        # Use our custom GitHubClient which implements disk caching
+        prs = self.github.list_pull_requests(state='open', limit=limit)
         prs_data = []
-        for pr in repo.get_pulls(state='open'):
-            m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
-            prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
+        for pr in prs:
+            branch = pr.get("headRefName") or ""
+            m = re.search(r'issue-(\d+)', branch)
+            issue = f"#{m.group(1)}" if m else "—"
+            status = "Draft" if pr.get("isDraft") else "Open"
+            prs_data.append({
+                "branch": branch,
+                "issue": issue,
+                "status": status,
+                "number": pr.get("number")
+            })
         return prs_data
 
     def ratchet_any(self, update: bool = False, baseline_file: Optional[str] = None, dry_run: bool = True) -> Dict[str, Any]:
@@ -928,9 +942,10 @@ Respond only after the PR is created or updated:
         if pr and not dry_run: pr.create_issue_comment(feedback)
         return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
-    def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True) -> List[Dict[str, Any]]:
+    def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True, limit: int = 10) -> List[Dict[str, Any]]:
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
-        for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):
+        # PyGithub get_pulls handles per_page internally. Directly slice the paginated list.
+        for pr in repo.get_pulls(state='open', sort='updated', direction='desc')[:limit]:
             last_review = next((r for r in pr.get_reviews().reversed if r.user.login == login), None)
             status = "ACTION: Needs Review" if not last_review else f"ACTION: Needs Re-Review" if last_review.commit_id != pr.head.sha else "STATE: Up-To-Date"
             item = {"number": pr.number, "title": pr.title, "status": status, "unaddressed": []}
@@ -967,7 +982,9 @@ Respond only after the PR is created or updated:
         return resolved
 
     def repair_context(self, log: Optional[str] = None, log_file: Optional[str] = None, pr_number: Optional[int] = None) -> List[str]:
-        pipeline = RepairService(); prompts = []
+        from dev_tools.services.repair_service import RepairService
+        pipeline = RepairService()
+        prompts = []
         if log: prompts.append(pipeline.generate_prompt(log))
         elif log_file:
             with open(log_file) as f:
@@ -1046,6 +1063,89 @@ Respond only after the PR is created or updated:
         """
         generate_report()
         return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
+
+    def plan_issue_audit(self, issue_numbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100) -> Dict[str, Any]:
+        """
+        Builds a deterministic roadmap and status checklist for auditing open issues.
+        """
+        issues = []
+        if all_open:
+            issues = self.github.list_issues(state='open', limit=limit)
+        elif issue_numbers:
+            for num in issue_numbers:
+                issue = self.github.fetch_issue_details(num)
+                # Normalize format to match list_issues
+                issues.append({
+                    "number": issue.get("number"),
+                    "title": issue.get("title"),
+                    "body": issue.get("body"),
+                    "state": issue.get("state"),
+                    "html_url": issue.get("html_url"),
+                    "labels": [l.get('name') if isinstance(l, dict) else l for l in issue.get('labels', [])],
+                    "updated_at": issue.get("updated_at")
+                })
+        else:
+            raise CLIError("Provide --issue or --all-open")
+
+        # 1. Summary Checklist Generation (issue-audit-status.md)
+        status_path = "issue-audit-status.md"
+        status_lines = [
+            "# Issue Audit Status",
+            f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            "\n## Open Issues Checklist\n"
+        ]
+        for issue in issues:
+            status_lines.append(f"- [ ] #{issue['number']}: {issue['title']}")
+
+        with open(status_path, "w") as f:
+            f.write("\n".join(status_lines) + "\n")
+
+        # 2. Individual Workflow Plan Generation
+        plan_dir = get_or_create_log_dir("workflows")
+        generated_plans = []
+
+        for issue in issues:
+            plan_path = os.path.join(plan_dir, f"workflow-plan-issue-{issue['number']}.md")
+
+            with open(plan_path, "w") as f:
+                f.write(f"""# Workflow Plan: Issue #{issue['number']}
+
+## Issue Context
+- **Title:** {issue['title']}
+- **URL:** {issue['html_url']}
+- **Labels:** {', '.join(issue['labels']) if issue['labels'] else '_None_'}
+
+## Audit Instructions
+
+Before auditing, read `docs/agent/issue-audit-rules.md`.
+
+### Step 1: Understand Intent
+Analyze the problem statement and goal in the issue description.
+
+### Step 2: Codebase Inspection
+Locate relevant files, components, or routes described in the issue.
+
+### Step 3: Verification
+Verify if the requested change is already implemented, partially addressed, or missing.
+
+### Step 4: Documentation & Closure Recommendation
+Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post your findings.
+
+---
+
+## Issue Body Excerpt
+```markdown
+{issue['body'] or '_No description provided._'}
+```
+""")
+            generated_plans.append(plan_path)
+
+        return {
+            "status": "success",
+            "issues_count": len(issues),
+            "status_file": status_path,
+            "workflow_plans": generated_plans
+        }
 
     def run_playwright(self, grep: Optional[str] = None, worktree_path: Optional[str] = None) -> Dict[str, Any]:
         """Runs Playwright tests and parses the JSON report."""
