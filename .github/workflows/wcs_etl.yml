@@ -26,7 +26,7 @@ jobs:
 
       - name: Run Pytest - Data Validation
         run: |
-          PYTHONPATH=. pytest etl/tests/
+          PYTHONPATH=. python3 -m pytest etl/tests/
 
       - name: Execute Extraction Script - Incremental Batching
         env:
@@ -39,7 +39,7 @@ jobs:
           # Run scraper in batches of 10 events
           for i in {1..10}; do
             echo "Starting Batch ${i}..."
-            PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
+            PYTHONPATH=. python3 etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
             EXIT_CODE=$?
             
             if [ $EXIT_CODE -eq 100 ]; then
@@ -58,7 +58,7 @@ jobs:
 
       - name: Validate Output
         run: |
-          python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
+          python3 -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
 
       - name: Commit via Git LFS
         run: |
