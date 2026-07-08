@@ -364,7 +364,15 @@ class AIClient:
             try:
                 cleaned = clean_llm_output(raw)
                 parsed = json.loads(cleaned)
+                if isinstance(parsed, str):
+                    parsed = json.loads(parsed)
+
+                if not isinstance(parsed, dict):
+                    raise ValueError(f"Expected dict, got {type(parsed).__name__}")
+
                 file_reviews = parsed.get("file_reviews", [])
+                if not isinstance(file_reviews, list):
+                    file_reviews = []
 
                 final = {
                     "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
@@ -598,7 +606,12 @@ class AIClient:
             }
 
         try:
-            return json.loads(clean_llm_output(raw))
+            res = json.loads(clean_llm_output(raw))
+            if isinstance(res, str):
+                res = json.loads(res)
+            if not isinstance(res, dict):
+                raise ValueError(f"Expected dict, got {type(res).__name__}")
+            return res
         except Exception as e:
             log_warn(f"Synthesis JSON parse error: {e} | raw: {raw[:300]}")
             return {
