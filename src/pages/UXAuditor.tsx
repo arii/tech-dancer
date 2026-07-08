@@ -223,7 +223,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-function HistoryItem({ report, active, onClick }: { report: UXReport;; active: boolean; onClick: () => void }) {
+function HistoryItem({ report, active, onClick }: { report: UXReport; active: boolean; onClick: () => void }) {
   return (
     <Stack
       as="button"
