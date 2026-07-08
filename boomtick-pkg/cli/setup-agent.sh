@@ -308,7 +308,20 @@ configure_git_hooks() {
 persist_environment() {
   log "Persisting environment settings to ~/.config/boomtick/env.sh..."
   local env_file="$HOME/.config/boomtick/env.sh"
-  local bashrc="$HOME/.bashrc"
+  local target_rc=""
+
+  # Detect user shell to determine appropriate RC file
+  local user_shell
+  user_shell=$(basename "${SHELL:-/bin/bash}")
+
+  case "$user_shell" in
+    bash) target_rc="$HOME/.bashrc" ;;
+    zsh)  target_rc="$HOME/.zshrc" ;;
+    *)
+      warn "Persistence not automatically supported for shell: $user_shell. Manual setup required."
+      target_rc="$HOME/.bashrc" # Fallback to bashrc
+      ;;
+  esac
 
   mkdir -p "$(dirname "$env_file")"
 
@@ -326,11 +339,16 @@ export PNPM_HOME="\$HOME/.local/share/pnpm"
 export PATH="\$PNPM_HOME:\$PATH"
 EOE
 
-  # Source the env file in .bashrc if not already present
-  if ! grep -Fq "source \"$env_file\"" "$bashrc"; then
-    echo "" >> "$bashrc"
-    echo "# Load BoomTick environment settings" >> "$bashrc"
-    echo "[ -f \"$env_file\" ] && source \"$env_file\"" >> "$bashrc"
+  # Source the env file in target RC if not already present
+  if [ -f "$target_rc" ]; then
+    if ! grep -Fq "source \"$env_file\"" "$target_rc"; then
+      echo "" >> "$target_rc"
+      echo "# Load BoomTick environment settings" >> "$target_rc"
+      echo "[ -f \"$env_file\" ] && source \"$env_file\"" >> "$target_rc"
+      log "Updated $target_rc with BoomTick environment loader."
+    fi
+  else
+    warn "RC file $target_rc not found. Environment may not persist across sessions."
   fi
 
   # Apply to current session
