@@ -62,7 +62,7 @@ audit:
     - run: pnpm install
     - name: UI Anti-Pattern Audit
       run: |
-        node scripts/detect-antipatterns.mjs || true
+        node boomtick-pkg/scripts/detect-antipatterns.mjs || true
         td-cli audit-gate
 ```
 

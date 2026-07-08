@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { mapPageToUrls } from '../../scripts/impact-review-utils';
+import { mapPageToUrls } from '../../boomtick-pkg/scripts/impact-review-utils';
 
 // Mock IMPACT_CONFIG
-vi.mock('../../scripts/impact-analysis.config', () => ({
+vi.mock('../../boomtick-pkg/scripts/impact-analysis.config', () => ({
   IMPACT_CONFIG: {
     PAGE_ROUTE_OVERRIDES: {
       'Home': '/',

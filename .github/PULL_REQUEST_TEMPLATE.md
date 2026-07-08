@@ -37,5 +37,5 @@ Please provide a summary of the changes and which content scope this PR covers.
 
 ## Technical Checks
 - [ ] `pnpm build` passes.
-- [ ] `node scripts/detect-antipatterns.mjs` shows no new UI anti-patterns.
+- [ ] `node boomtick-pkg/scripts/detect-antipatterns.mjs` shows no new UI anti-patterns.
 - [ ] PR touches only files relevant to the selected scope.
