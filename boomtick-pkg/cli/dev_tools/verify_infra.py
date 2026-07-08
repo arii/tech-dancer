@@ -17,35 +17,50 @@ def check_shell_script(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    # 2. Missing error handling in scripts (check first 10 lines for set -e, set -u, set -o pipefail)
-    # We use regex to ensure we don't match these in comments.
-    checks = {
-        "set -e": r"^\s*set\s+-e",
-        "set -u": r"^\s*set\s+-u",
-        "set -o pipefail": r"^\s*set\s+-o\s+pipefail"
-    }
+    # 2. Missing error handling in scripts (check first 15 lines for set -e, set -u, set -o pipefail)
+    # Combined flags like 'set -eu' are supported.
+    uncommented_first_lines = [re.sub(r'#.*', '', line) for line in lines[:15]]
+    settings_content = " ".join(uncommented_first_lines)
 
     missing_settings = []
-    for name, pattern in checks.items():
-        if not any(re.search(pattern, line) for line in lines[:10]):
-            missing_settings.append(name)
+    if not re.search(r'set\s+-[^ \n]*e', settings_content):
+        missing_settings.append("set -e (errexit)")
+    if not re.search(r'set\s+-[^ \n]*u', settings_content):
+        missing_settings.append("set -u (nounset)")
+    if "pipefail" not in settings_content:
+        missing_settings.append("set -o pipefail")
 
     if missing_settings and len(lines) > 5:
-        findings.append(f"Script lacks recommended settings in first 10 lines: {', '.join(missing_settings)}")
+        findings.append(f"Script lacks recommended settings in first 15 lines: {', '.join(missing_settings)}")
 
     # 3. Pattern checks
     for i, line in enumerate(lines):
-        # Hardcoded absolute paths (excluding common system ones like /bin, /usr/bin, /dev, /proc)
-        # Matches any path starting with / that isn't in a small allowlist
-        if re.search(r'(?<![a-zA-Z0-9_])/(?!bin|usr/bin|dev|proc|tmp|etc|lib|var/lib|sys|usr/sbin|sbin)[a-zA-Z0-9]', line):
-             # Heuristic check: ignore comment lines
-             if not line.strip().startswith('#'):
-                findings.append(f"Line {i+1}: Potential hardcoded absolute path: {line.strip()}")
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+
+        # Hardcoded absolute paths (excluding common system ones)
+        # Look for tokens starting with / that aren't in the allowlist
+        for match in re.finditer(r'(^|\s|["\'])(?P<full_path>/(?P<path>[a-zA-Z0-9._/-]*))', line):
+            full_path = match.group('full_path')
+            path = match.group('path')
+            # Allowlist common system directories
+            allowlist = ['bin/', 'usr/bin/', 'dev/', 'proc/', 'tmp/', 'etc/', 'lib/', 'var/lib/', 'sys/', 'usr/sbin/', 'sbin/', 'var/run/']
+            if not any(path.startswith(a) for a in allowlist) and path not in ['', '/']:
+                # Avoid flagging division in JS/Python or common single-char patterns
+                if '/' in path and not re.search(r'[0-9]\s*/\s*[0-9]', line):
+                    findings.append(f"Line {i+1}: Potential hardcoded absolute path: {full_path}")
 
         # Unquoted variables in risky commands (rm, cp, mv, ls)
-        # Matches $VAR or ${VAR} not preceded by a quote
-        if re.search(r'(rm|cp|mv|ls)\s+[^"\'\s]*\$[a-zA-Z0-9_{]', line):
-            findings.append(f"Line {i+1}: Unquoted variable in file operation (risk of word splitting): {line.strip()}")
+        if re.search(r'\b(rm|cp|mv|ls)\b', line):
+            # Matches $VAR or ${VAR}
+            for var_match in re.finditer(r'(?P<var>\$[a-zA-Z0-9_]+|\$\{[a-zA-Z0-9_]+\})', line):
+                pre = line[:var_match.start()]
+                # Check if it's inside double quotes (simplistic)
+                if (pre.count('"') - pre.count('\\"')) % 2 == 0:
+                    # Check if it's inside single quotes
+                    if (pre.count("'") - pre.count("\\'")) % 2 == 0:
+                        findings.append(f"Line {i+1}: Unquoted variable expansion in risky command: {var_match.group('var')}")
 
     return findings
 
