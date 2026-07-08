@@ -1,0 +1,1 @@
+import{j as e,B as u,b as i,an as d}from"./index-eI5VIAHZ.js";const m=({label:r,onClick:s,isActive:t,className:a,type:n="button",variant:o="default"})=>e.jsx(u,{as:"button",type:n,onClick:s,"aria-pressed":t,radius:"md",cursor:"pointer",className:i(d({variant:o,isActive:t,className:a})),children:r});export{m as F};
