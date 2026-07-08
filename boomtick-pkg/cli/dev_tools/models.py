@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
 from typing import List, Optional, Any, Dict
 
 class IssueSummary(BaseModel):
@@ -32,22 +32,21 @@ class CreateIssueInput(BaseModel):
         return self
 
 class SearchPRsInput(BaseModel):
-    state: str = "open"
-    limit: int = 100
-    includeDrafts: bool = Field(True, alias="includeDrafts")
-    labels: Optional[List[str]] = None
-
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
+    state: str = Field("open", description="The state of the PRs to search for (open, closed, all).")
+    limit: int = Field(100, description="The maximum number of PRs to return (default: 100, range: 1-100).")
+    includeDrafts: bool = Field(True, alias="includeDrafts", description="Whether to include draft PRs in the results.")
+    labels: Optional[List[str]] = Field(None, description="Filter PRs by labels.")
 
 class IssueUpdateInput(BaseModel):
-    issueNumber: int
-    body: Optional[str] = None
-    file: Optional[str] = None
-    labels: Optional[List[str]] = None
-    addLabels: Optional[List[str]] = None
-    removeLabels: Optional[List[str]] = None
-    state: Optional[str] = None
+    model_config = ConfigDict(populate_by_name=True)
+    issueNumber: int = Field(..., alias="issueNumber", description="The number of the issue to update.")
+    body: Optional[str] = Field(None, description="The new body content for the issue.")
+    file: Optional[str] = Field(None, description="Path to file containing new issue body.")
+    labels: Optional[List[str]] = Field(None, description="Comma-separated list of labels to set.")
+    addLabels: Optional[List[str]] = Field(None, alias="addLabels", description="Comma-separated list of labels to add.")
+    removeLabels: Optional[List[str]] = Field(None, alias="removeLabels", description="Comma-separated list of labels to remove.")
+    state: Optional[str] = Field(None, description="The state to set the issue to (open or closed).")
 
     @model_validator(mode='after')
     def check_updates(self) -> 'IssueUpdateInput':
@@ -72,7 +71,8 @@ class IssueUpdateResponse(CLIResponse):
     issue: Optional[IssueSummary] = None
 
 class ReadPRCommentsInput(BaseModel):
-    prNumber: int = Field(..., gt=0)
+    model_config = ConfigDict(populate_by_name=True)
+    prNumber: int = Field(..., alias="prNumber", gt=0, description="The PR number to fetch comments for.")
 
 class PRComment(BaseModel):
     user: str
@@ -154,7 +154,7 @@ class CommitPatchInput(BaseModel):
     writeMode: bool = Field(..., description="Safety gate: Must be true to perform the commit.")
 
 class OpenReplacementPrInput(BaseModel):
-    originalPrNumber: int = Field(..., description="The number of the original pull request being replaced.")
+    originalPrNumber: int = Field(..., description="The number of the pull request being replaced.")
     repairBranch: str = Field(..., description="The branch containing the fixes.")
     baseBranch: str = Field(..., description="The branch to merge the fixes into.")
     title: str = Field(..., description="The title of the new PR.")
