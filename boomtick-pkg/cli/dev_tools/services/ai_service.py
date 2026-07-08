@@ -546,9 +546,13 @@ class AIClient:
         # Build a compact findings summary (keep prompt small)
         findings_lines = []
         for fr in file_reviews:
+            if not isinstance(fr, dict):
+                continue
             for issue in fr.get('issues', []):
+                if not isinstance(issue, dict):
+                    continue
                 findings_lines.append(
-                    f'  - {fr["file"]}:{issue.get("line","?")} [{issue.get("severity","?")}] {issue.get("comment","")}'
+                    f'  - {fr.get("file","?")}:{issue.get("line","?")} [{issue.get("severity","?")}] {issue.get("comment","")}'
                 )
         findings_str = "\n".join(findings_lines[:60])  # cap at 60 lines
         if len(findings_lines) > 60:
@@ -650,7 +654,11 @@ class AIClient:
         # Per-file findings table
         file_data: Dict[str, Dict] = defaultdict(lambda: {"added_lines": 0, "issues": [], "verdict": "ok"})
         for fr in file_reviews:
-            f = fr['file']
+            if not isinstance(fr, dict):
+                continue
+            f = fr.get('file')
+            if not f:
+                continue
             file_data[f]['issues'].extend(fr.get('issues', []))
             # worst verdict wins: blocking > needs_changes > ok
             _rank = {"blocking": 3, "needs_changes": 2, "ok": 1, "error": 0, "parse_error": 0}
@@ -680,10 +688,14 @@ class AIClient:
         # Build inline comments JSON block
         all_issues = []
         for fr in file_reviews:
+            if not isinstance(fr, dict):
+                continue
             for issue in fr.get('issues', []):
+                if not isinstance(issue, dict):
+                    continue
                 conf = issue.get('confidence', 'high').upper()
                 all_issues.append({
-                    "path": fr['file'],
+                    "path": fr.get('file', 'unknown'),
                     "line": issue.get('line', 1),
                     "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
                 })
