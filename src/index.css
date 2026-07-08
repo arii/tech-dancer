@@ -82,6 +82,7 @@
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
   --scale-active: var(--raw-scale-active);
+  --line-height-tightest: var(--raw-leading-tightest);
 
   /* Static Defaults */
   --container-blog: 1100px;

@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
-import { transitions, interaction } from "@/styles/utilities";
+import { transitions, interaction, typography, layouts } from "@/styles/utilities";
 
 /**
  * Standardized Variant Contracts for BoomTick UI.
@@ -43,7 +43,7 @@ export const variants = {
 };
 
 export const buttonVariants = cva(
-  `inline-flex items-center justify-center font-sans tracking-normal ${transitions.default} disabled:opacity-50 disabled:cursor-not-allowed`,
+  `${layouts.inlineFlexCenter} font-sans tracking-normal ${transitions.default} disabled:opacity-50 disabled:cursor-not-allowed`,
   {
     variants: {
       variant: variants.emphasis,
@@ -123,7 +123,7 @@ export const cardVariants = cva(
  * Separates structural styles from state-specific styles.
  */
 export const filterButtonVariants = cva(
-  `inline-flex items-center justify-center border ${transitions.default} whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs`,
+  `${layouts.inlineFlexCenter} border ${transitions.default} whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs`,
   {
     variants: {
       variant: {
@@ -169,7 +169,7 @@ export const filterButtonVariants = cva(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = cva(
-  `inline-flex items-center rounded font-semibold uppercase tracking-wider border ${transitions.colors}`,
+  `${layouts.inlineFlexCenter} rounded ${typography.utility} border ${transitions.colors}`,
   {
     variants: {
       variant: {

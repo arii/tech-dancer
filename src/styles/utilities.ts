@@ -22,7 +22,7 @@ export const interaction = {
 
 export const typography = {
   label: "text-tiny font-mono font-bold uppercase tracking-widest",
-  h1: "font-display font-black tracking-tighter leading-[0.95]",
+  h1: "font-display font-black tracking-tighter leading-line-height-tightest",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
   body: "font-sans leading-relaxed text-text-body",

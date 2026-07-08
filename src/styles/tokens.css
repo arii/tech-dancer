@@ -60,6 +60,7 @@
   --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --raw-reveal-distance: 20px;
   --raw-scale-active: 0.98;
+  --raw-leading-tightest: 0.95;
 
   /* Icon Sizes */
   --raw-icon-xs: 12px;
