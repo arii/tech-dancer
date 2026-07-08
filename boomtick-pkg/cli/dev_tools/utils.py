@@ -243,7 +243,8 @@ def get_gemini_model() -> str:
 def clean_llm_output(text: str) -> str:
     """
     Removes markdown code blocks if present, or extracts from <findings> tags if present.
-    Attempts to be robust against mixed Markdown/JSON by finding JSON boundaries if needed.
+    This utility focuses on standard LLM formatting (tags/blocks).
+    Pipeline-specific robust extraction should be handled by the caller.
     """
     if not text:
         return ""
@@ -254,35 +255,9 @@ def clean_llm_output(text: str) -> str:
         text = findings_match.group(1).strip()
 
     # 2. Extract from ```json or ``` code blocks
-    # Handle both ```json and ``` with optional newline
     code_block_match = re.search(r"```(?:json|xml|tsx?|jsx?)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
     if code_block_match:
-        text = code_block_match.group(1).strip()
-
-    # 3. Robust JSON boundary extraction for mixed text/JSON
-    # Handles outermost object {...} or array [...]
-    first_brace = text.find('{')
-    first_bracket = text.find('[')
-    last_brace = text.rfind('}')
-    last_bracket = text.rfind(']')
-
-    # Determine starting point
-    start = -1
-    if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
-        start = first_brace
-        end = last_brace
-    elif first_bracket != -1:
-        start = first_bracket
-        end = last_bracket
-
-    if start != -1 and end != -1 and end > start:
-        candidate = text[start:end+1]
-        # Validate candidate is actual JSON before returning
-        try:
-            json.loads(candidate)
-            return candidate.strip()
-        except json.JSONDecodeError:
-            pass
+        return code_block_match.group(1).strip()
 
     return text.strip()
 

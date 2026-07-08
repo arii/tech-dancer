@@ -106,28 +106,53 @@ function validateFindingsSchema(state: CodeReviewState): boolean {
   );
 }
 
+/**
+ * Normalizes a list of findings by injecting default values for missing or malformed fields.
+ * Ensures the resulting objects adhere to the ReviewFinding interface.
+ */
+export function normalizeFindings(findings: unknown[]): ReviewFinding[] {
+  if (!Array.isArray(findings)) return [];
+  return findings.map((f, idx) => {
+    if (!f || typeof f !== 'object') return f;
+    return {
+      id: typeof f.id === 'string' ? f.id : `finding-${idx}`,
+      file: typeof f.file === 'string' ? f.file : 'unknown',
+      issue: typeof f.issue === 'string' ? f.issue : 'Unspecified issue',
+      status: (typeof f.status === 'string' && f.status.toLowerCase() === 'resolved') ? 'resolved' : 'open',
+      confidence: (typeof f.confidence === 'string' && ['high', 'medium', 'low'].includes(f.confidence.toLowerCase()))
+        ? f.confidence.toLowerCase() as 'high' | 'medium' | 'low'
+        : 'medium',
+      line: typeof f.line === 'number' ? f.line : undefined,
+      snippet: typeof f.snippet === 'string' ? f.snippet : undefined,
+      fixSummary: typeof f.fixSummary === 'string' ? f.fixSummary : undefined,
+      counterexample: typeof f.counterexample === 'string' ? f.counterexample : undefined,
+    };
+  });
+}
+
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
   const openTag = '<findings>';
   const closeTag = '</findings>';
 
   const openIdx = feedback.lastIndexOf(openTag);
   const closeIdx = feedback.lastIndexOf(closeTag);
+  const errors: CodeReviewParseError[] = [];
+
   const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
+  if (openedButNeverClosed) errors.push('missing_closing_tag');
 
   let jsonText: string;
   if (openIdx !== -1) {
     if (closeIdx !== -1 && closeIdx > openIdx) {
       jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
     } else {
-      // Handle truncated output or missing closing tag: extract from openTag to the end
       jsonText = feedback.slice(openIdx + openTag.length).trim();
     }
   } else {
-    // Robust fallback: if tags are missing, try to find the last JSON block in the entire text
     if (feedback.includes('{') || feedback.includes('[')) {
       jsonText = feedback.trim();
     } else {
-      return { state: undefined, parseError: undefined };
+      return { state: undefined };
     }
   }
 
@@ -137,7 +162,6 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   const lastBrace = jsonText.lastIndexOf('}');
   const lastBracket = jsonText.lastIndexOf(']');
 
-  // Determine starting point (first '{' or '[')
   let startIdx = -1;
   if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
     startIdx = firstBrace;
@@ -145,7 +169,6 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     startIdx = firstBracket;
   }
 
-  // Determine ending point (last '}' or ']')
   let endIdx = -1;
   if (lastBrace !== -1 && lastBrace > lastBracket) {
     endIdx = lastBrace;
@@ -154,6 +177,7 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 
   const isTruncated = startIdx !== -1 && endIdx === -1;
+  if (isTruncated) errors.push('truncated_json');
 
   if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     jsonText = jsonText.slice(startIdx, endIdx + 1);
@@ -167,48 +191,19 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
 
-    if (isTruncated) {
-      return { state, parseError: 'missing_closing_tag' };
-    }
-
-    // Normalize and inject defaults to be schema-tolerant
-    if (state && state.findings && Array.isArray(state.findings)) {
-      state.findings = state.findings.map((f, idx) => {
-        if (f && typeof f === 'object') {
-          return {
-            id: typeof f.id === 'string' ? f.id : `finding-${idx}`,
-            file: typeof f.file === 'string' ? f.file : 'unknown',
-            issue: typeof f.issue === 'string' ? f.issue : 'Unspecified issue',
-            status: (typeof f.status === 'string' && f.status.toLowerCase() === 'resolved') ? 'resolved' : 'open',
-            confidence: (typeof f.confidence === 'string' && ['high', 'medium', 'low'].includes(f.confidence.toLowerCase()))
-              ? f.confidence.toLowerCase() as 'high' | 'medium' | 'low'
-              : 'medium',
-            line: typeof f.line === 'number' ? f.line : undefined,
-            snippet: typeof f.snippet === 'string' ? f.snippet : undefined,
-            fixSummary: typeof f.fixSummary === 'string' ? f.fixSummary : undefined,
-            counterexample: typeof f.counterexample === 'string' ? f.counterexample : undefined,
-          };
-        }
-        return f;
-      });
+    if (state && state.findings) {
+      state.findings = normalizeFindings(state.findings);
     }
 
     if (!validateFindingsSchema(state)) {
-      // If validation failed, prioritize 'missing_closing_tag' if the tags were malformed.
-      // Then 'truncated_json' if the JSON boundaries were incomplete.
-      // Otherwise, it's a schema violation.
-      let error: 'missing_closing_tag' | 'truncated_json' | 'incomplete_findings' = 'incomplete_findings';
-      if (openedButNeverClosed) error = 'missing_closing_tag';
-      else if (isTruncated) error = 'truncated_json';
-
-      return { state, parseError: error };
+      errors.push('incomplete_findings');
     }
 
-    // Schema is valid, but if it was truncated, we still report it so the orchestrator knows.
-    if (openedButNeverClosed) return { state, parseError: 'missing_closing_tag' };
-    if (isTruncated) return { state, parseError: 'truncated_json' };
-
-    return { state };
+    return {
+      state,
+      parseError: errors[0],
+      errors: errors.length > 0 ? errors : undefined
+    };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON:', e, 'JSON snippet:', jsonText.slice(0, 100));
