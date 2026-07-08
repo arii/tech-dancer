@@ -110,11 +110,11 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   const openTag = '<findings>';
   const closeTag = '</findings>';
 
-  let jsonText = '';
   const openIdx = feedback.lastIndexOf(openTag);
   const closeIdx = feedback.lastIndexOf(closeTag);
   const isTruncated = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
 
+  let jsonText: string;
   if (openIdx !== -1 && closeIdx !== -1 && closeIdx > openIdx) {
     jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
   } else if (isTruncated) {
