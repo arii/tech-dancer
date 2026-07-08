@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { transitions, interaction } from '@/styles/utilities';
+import { isValidUrl } from '@/utils/url';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
@@ -24,18 +25,6 @@ export const IconMap: Record<string, React.ElementType> = {
  * Renders a list of professional experience cards.
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
-/**
- * Simple URL validation for security.
- */
-const isValidUrl = (url: string) => {
-  try {
-    const parsed = new URL(url);
-    return ['http:', 'https:'].includes(parsed.protocol);
-  } catch {
-    return false;
-  }
-};
-
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   // Security: Sanitize/Validate input if it were from an untrusted source.
   // For this exercise, we assume ProfileCard data is trusted but we can still validate.
