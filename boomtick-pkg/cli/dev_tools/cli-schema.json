@@ -46,7 +46,11 @@
             },
             "severity": {
               "description": "The severity level.",
-              "pattern": "^(error|warn|info)$",
+              "enum": [
+                "error",
+                "warn",
+                "info"
+              ],
               "title": "Severity",
               "type": "string"
             },
@@ -91,7 +95,11 @@
             },
             "confidence": {
               "description": "Confidence level of the AI.",
-              "pattern": "^(high|medium|low)$",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
               "title": "Confidence",
               "type": "string"
             },
@@ -230,7 +238,11 @@
             },
             "severity": {
               "description": "The severity level.",
-              "pattern": "^(error|warn|info)$",
+              "enum": [
+                "error",
+                "warn",
+                "info"
+              ],
               "title": "Severity",
               "type": "string"
             },
@@ -275,7 +287,11 @@
             },
             "confidence": {
               "description": "Confidence level of the AI.",
-              "pattern": "^(high|medium|low)$",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
               "title": "Confidence",
               "type": "string"
             },
@@ -392,7 +408,11 @@
         },
         "severity": {
           "description": "The severity level.",
-          "pattern": "^(error|warn|info)$",
+          "enum": [
+            "error",
+            "warn",
+            "info"
+          ],
           "title": "Severity",
           "type": "string"
         },
@@ -437,7 +457,11 @@
         },
         "confidence": {
           "description": "Confidence level of the AI.",
-          "pattern": "^(high|medium|low)$",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
           "title": "Confidence",
           "type": "string"
         },

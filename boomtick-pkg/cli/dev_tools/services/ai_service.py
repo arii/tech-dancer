@@ -7,7 +7,7 @@ import hashlib
 import re
 from collections import defaultdict
 from typing import Optional, Dict, Any, List, Set, Type, Tuple
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel
 from dev_tools.utils import log_info, log_error, log_warn, ensure_dir
 from dev_tools.verify_versions import parse_diff, verify_changes
 from dev_tools.review_read_pass import parse_diff_into_file_chunks
@@ -37,7 +37,7 @@ _REVIEW_SCHEMA = AIFullReview.model_json_schema()
 # Synthesis review schema
 _SYNTHESIS_SCHEMA = AISynthesisReview.model_json_schema()
 
-def validate_with_model(data: Any, model_class: Type) -> Tuple[Optional[Dict], Optional[str]]:
+def validate_with_model(data: Any, model_class: Type[BaseModel]) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
     """Validates data against a Pydantic model and returns (parsed_dict, error_message)."""
     try:
         # Handle cases where data might be double-encoded or stringified
@@ -141,7 +141,7 @@ class AIClient:
             "x-goog-api-key": self.gemini_api_key
         }
 
-        payload: Dict[str, Any] = {
+        payload = {
             "contents": [{"parts": [{"text": prompt}]}]
         }
 
@@ -686,11 +686,11 @@ class AIClient:
                     continue
                 conf = str(issue.get('confidence', 'high')).upper()
                 # Support both 'issue' and 'comment' fields from the model
-                issue_text = str(issue.get('issue') or issue.get('comment') or '')
+                issue_description = str(issue.get('issue') or issue.get('comment') or '')
                 all_issues.append({
                     "path": str(fr.get('file', 'unknown')),
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue_text}",
+                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue_description}",
                 })
         if not all_issues:
             # Always provide at least one comment to satisfy validator
