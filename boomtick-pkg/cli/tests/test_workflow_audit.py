@@ -54,20 +54,21 @@ def test_scan_workflows(tmp_path, monkeypatch):
     (workflow_dir / "deploy.yaml").write_text("name: Deploy")
     (workflow_dir / "README.md").write_text("Not a workflow")
 
+    # Mock run_command to simulate git ls-files
+    def mock_run_command(cmd, **kwargs):
+        if cmd[0] == "git" and cmd[1] == "ls-files":
+            return ".github/workflows/ci.yml\n.github/workflows/deploy.yaml\n.github/workflows/README.md"
+        return ""
+
+    monkeypatch.setattr("dev_tools.orchestrator.run_command", mock_run_command)
+
+    # Also need to mock os.path.exists for the files returned by git ls-files
     real_exists = os.path.exists
     def mock_exists(path):
-        if path == ".github/workflows":
+        if ".github/workflows/" in path:
             return True
         return real_exists(path)
-
-    real_listdir = os.listdir
-    def mock_listdir(path):
-        if path == ".github/workflows":
-            return real_listdir(str(workflow_dir))
-        return real_listdir(path)
-
     monkeypatch.setattr(os.path, "exists", mock_exists)
-    monkeypatch.setattr(os, "listdir", mock_listdir)
 
     orch = Orchestrator()
     workflows = orch._scan_workflows()

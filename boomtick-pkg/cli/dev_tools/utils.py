@@ -681,10 +681,26 @@ def fetch_latest_node() -> Optional[str]:
     return _fetch()
 
 def walk_tsx(root_dir='src'):
-    for root, dirs, files in os.walk(root_dir):
-        for file in files:
-            if file.endswith('.tsx'):
-                yield os.path.join(root, file)
+    """
+    Yields tracked .tsx files within the specified directory.
+    Uses 'git ls-files' to ensure untracked agent scratchpad files are ignored.
+    """
+    try:
+        # Get list of tracked files in root_dir
+        cmd = ["git", "ls-files", root_dir]
+        tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
+        for f in tracked_files:
+            if f.endswith('.tsx'):
+                # Ensure the path is relative to the current working directory
+                # git ls-files already returns relative paths from repo root
+                if os.path.exists(f):
+                    yield f
+    except Exception:
+        # Fallback to manual walk if git fails or is not a git repo
+        for root, dirs, files in os.walk(root_dir):
+            for file in files:
+                if file.endswith('.tsx'):
+                    yield os.path.join(root, file)
 
 def find_patterns_in_file(filepath, patterns):
     findings = []

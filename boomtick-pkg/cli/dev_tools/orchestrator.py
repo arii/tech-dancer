@@ -1089,15 +1089,30 @@ Respond only after the PR is created or updated:
         return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
 
     def _scan_workflows(self) -> List[str]:
-        """Lists all YAML files in .github/workflows/."""
+        """
+        Lists tracked YAML files in .github/workflows/.
+        Uses 'git ls-files' to ensure untracked agent scratchpad files are ignored.
+        """
         workflow_dir = ".github/workflows"
-        if not os.path.exists(workflow_dir):
-            return []
-        files = []
-        for f in os.listdir(workflow_dir):
-            if f.endswith(".yml") or f.endswith(".yaml"):
-                files.append(os.path.join(workflow_dir, f))
-        return sorted(files)
+        try:
+            # Get list of tracked files in .github/workflows/
+            cmd = ["git", "ls-files", workflow_dir]
+            tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
+            files = []
+            for f in tracked_files:
+                if f.endswith(".yml") or f.endswith(".yaml"):
+                    if os.path.exists(f):
+                        files.append(f)
+            return sorted(files)
+        except Exception:
+            # Fallback to manual listing if git fails
+            if not os.path.exists(workflow_dir):
+                return []
+            files = []
+            for f in os.listdir(workflow_dir):
+                if f.endswith(".yml") or f.endswith(".yaml"):
+                    files.append(os.path.join(workflow_dir, f))
+            return sorted(files)
 
     def _check_workflow_compliance(self, file_path: str) -> List[str]:
         """Parses a workflow file for compliance violations using a data-driven rule model."""

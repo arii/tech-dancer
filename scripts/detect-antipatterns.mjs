@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,6 +33,21 @@ function collectAuditFiles(targets) {
     return AUDIT_EXTENSIONS.some(ext => filepath.endsWith(ext));
   };
 
+  /**
+   * Discovers tracked files via git to ensure untracked agent scratchpad files are ignored.
+   */
+  const getTrackedFiles = (target) => {
+    try {
+      // --cached (default): files in the index
+      // --others --exclude-standard: untracked files not ignored by .gitignore
+      // We ONLY want tracked files (those in the index).
+      const output = execSync(`git ls-files "${target}"`, { encoding: 'utf-8', cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] });
+      return output.split('\n').filter(Boolean).map(f => path.resolve(ROOT, f));
+    } catch (e) {
+      return null;
+    }
+  };
+
   const walk = (dir) => {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
@@ -46,6 +62,15 @@ function collectAuditFiles(targets) {
   };
 
   for (const target of resolvedTargets) {
+    const tracked = getTrackedFiles(target);
+    if (tracked !== null) {
+      tracked.forEach(f => {
+        if (isAuditFile(f)) results.add(f);
+      });
+      continue;
+    }
+
+    // Fallback to manual walk if git is unavailable or fails
     const absoluteTarget = path.isAbsolute(target) ? target : path.join(ROOT, target);
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
