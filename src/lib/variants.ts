@@ -167,12 +167,12 @@ export const filterButtonVariants = createTransitionVariants(
       {
         variant: ["default", "compact"],
         isActive: true,
-        className: "bg-accent text-bg border-transparent hover:bg-accent/90",
+        className: "bg-accent text-bg border-transparent hover:bg-accent/10",
       },
       {
         variant: ["default", "compact"],
         isActive: false,
-        className: "border-line text-text-dim hover:border-accent hover:text-accent hover:bg-accent/5 transition-all",
+        className: "border-line text-text-dim hover:border-accent hover:text-accent hover:bg-accent/5 transition-colors",
       },
       {
         variant: "quiet",
