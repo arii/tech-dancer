@@ -214,6 +214,11 @@ def apply_patch(ctx, filepath, patch_file, patch_body):
         err(ctx, "Provide either --patch-file or --patch-body")
         return # Explicit return for security
 
+    # Basic diff format validation
+    if not any(marker in content for marker in ["--- ", "+++ ", "@@ "]):
+        err(ctx, "Invalid patch format. Content does not appear to be a unified diff.")
+        return
+
     try:
         _apply(filepath, content)
         out(ctx, f"✅ Applied patch to {filepath}")
