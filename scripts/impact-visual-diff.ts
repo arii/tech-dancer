@@ -3,7 +3,7 @@ import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { logHeartbeat } from './lib/heartbeat';
+import { logHeartbeat } from '../boomtick-pkg/lib/heartbeat';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import sharp from 'sharp';

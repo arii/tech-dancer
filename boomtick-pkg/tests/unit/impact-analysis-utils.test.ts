@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   buildReverseMap,
   type DependencyGraph,
-} from '../../../../scripts/lib/impact-analysis-utils';
+} from '../../lib/impact-analysis-utils';
 
 describe('impact-analysis-utils tests', () => {
     it('test buildReverseMap with CSS @import edges natively generated', () => {

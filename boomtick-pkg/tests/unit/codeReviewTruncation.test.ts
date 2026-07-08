@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getCodeDiffSummary } from '../../../scripts/lib/codeReviewOrchestrator';
+import { getCodeDiffSummary } from '../lib/codeReviewOrchestrator';
 
 const { mockExecFile, mockSpawn } = vi.hoisted(() => {
   const me = vi.fn();

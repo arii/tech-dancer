@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { IMPACT_CONFIG } from '../impact-analysis.config';
+import { IMPACT_CONFIG } from '../../scripts/impact-analysis.config';
 import { getAllRoutes } from '../../src/lib/routes-discovery';
-import { mapPageToUrls } from '../impact-review-utils';
+import { mapPageToUrls } from '../../scripts/impact-review-utils';
 import { loadProjectConfig } from './projectConfig';
 
 // Types for dependency-cruiser output

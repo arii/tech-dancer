@@ -9,7 +9,7 @@ The analysis works by generating a dependency graph of the application and ident
 ### Key Components
 
 - `scripts/impact-analysis.ts`: The main entry point for running the analysis.
-- `scripts/lib/impact-analysis-utils.ts`: Utility functions for dependency graph manipulation and URL resolution.
+- `boomtick-pkg/lib/impact-analysis-utils.ts`: Utility functions for dependency graph manipulation and URL resolution.
 - `scripts/impact-analysis.config.ts`: Configuration for impact levels, global triggers, and route mappings.
 
 ## Dependency Graph
