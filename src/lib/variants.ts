@@ -1,5 +1,6 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
+import { transitions, interaction, typography, layouts } from "@/styles/utilities";
 
 /**
  * Standardized Variant Contracts for BoomTick UI.
@@ -26,23 +27,25 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-[0.98]",
+    outline: `border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 ${transitions.colors} ${interaction.active}`,
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
-    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
-    fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
+    primary: `bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky ${transitions.colors} ${interaction.active} shadow-sm`,
+    professional: `bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 ${transitions.default} shadow-sm ${interaction.active} normal-case tracking-normal`,
+    fab: `bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg ${transitions.slow} rounded-none`,
     reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
+    sm: "rounded-sm",
+    md: "rounded-md",
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
 };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+  `${layouts.inlineFlexCenter} font-sans tracking-normal ${transitions.default} disabled:opacity-50 disabled:cursor-not-allowed`,
   {
     variants: {
       variant: variants.emphasis,
@@ -74,7 +77,7 @@ export const buttonVariants = cva(
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
 export const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  `font-bold ${transitions.default} text-sm shrink-0 flex items-center gap-2 disabled:opacity-50`,
   {
     variants: {
       variant: {
@@ -93,7 +96,7 @@ export const actionButtonVariants = cva(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = cva(
-  "bg-surface rounded-md shadow-sm card-border transition-all",
+  `bg-surface rounded-md shadow-sm card-border ${transitions.default}`,
   {
     variants: {
       interactive: {
@@ -122,7 +125,7 @@ export const cardVariants = cva(
  * Separates structural styles from state-specific styles.
  */
 export const filterButtonVariants = cva(
-  "inline-flex items-center justify-center border transition-all whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
+  `${layouts.inlineFlexCenter} border ${transitions.default} whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs`,
   {
     variants: {
       variant: {
@@ -168,7 +171,7 @@ export const filterButtonVariants = cva(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = cva(
-  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
+  `${layouts.inlineFlexCenter} rounded ${typography.utility} border ${transitions.colors}`,
   {
     variants: {
       variant: {
@@ -193,7 +196,7 @@ export const tagVariants = cva(
  * Journal/Blog specific variants for editorial consistency.
  */
 export const journalVariants = {
-  card: cva("transition-all", {
+  card: cva(transitions.default, {
     variants: {
       variant: {
         default: "bg-surface/30 border-line/30",
@@ -209,9 +212,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
-  tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("transition-colors group cursor-pointer", {
+  shareAction: cva(`text-text-dim hover:text-accent ${transitions.colors} group`),
+  tag: cva(`border-line/50 hover:border-accent ${transitions.colors} cursor-default`),
+  navLink: cva(`${transitions.colors} group cursor-pointer`, {
     variants: {
       active: {
         true: "text-accent",
@@ -228,7 +231,7 @@ export const journalVariants = {
  * List row variants for interactive lists (e.g., Audit History)
  */
 export const listRowVariants = cva(
-  "text-left transition-all border-l-4 w-full",
+  `text-left ${transitions.default} border-l-4 w-full`,
   {
     variants: {
       active: {

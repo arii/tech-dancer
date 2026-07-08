@@ -37,8 +37,8 @@
   --raw-radius-standard: 8px;
   --raw-radius-sm: 6px;
   --raw-radius-md: 12px;
-  --raw-radius-lg: 18px;
-  --raw-radius-xl: 24px;
+  --raw-radius-lg: 16px;
+  --raw-radius-xl: 16px;
   --raw-radius-full: 9999px;
 
   /* Spacing */
@@ -59,6 +59,7 @@
   --raw-duration-normal: 300ms;
   --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --raw-reveal-distance: 20px;
+  --raw-leading-tightest: 0.95;
 
   /* Icon Sizes */
   --raw-icon-xs: 12px;

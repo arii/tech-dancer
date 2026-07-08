@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { transitions, interaction } from '@/styles/utilities';
+import { isValidUrl } from '@/utils/url';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
@@ -24,13 +26,27 @@ export const IconMap: Record<string, React.ElementType> = {
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
+  // Security: Explicitly validate input cards.
+  // Performance: Memoize validation to prevent redundant work on re-renders.
+  const validatedCards = useMemo(() => {
+    if (!Array.isArray(cards)) return [];
+    return cards.map(card => ({
+      ...card,
+      title: card.title ?? '',
+      content: card.content ?? '',
+      icon: card.icon && IconMap[card.icon] ? card.icon : undefined
+    }));
+  }, [cards]);
+
+  if (!Array.isArray(cards)) return null;
+
   return (
-    <Stack gap={6} marginTop={4}>
-      {cards.map((card, index) => {
+    <Stack gap="card" marginTop={4}>
+      {validatedCards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="md" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
-            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
+          <Box key={index} padding={8} border radius="md" surface="default" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
+            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="center">
               {Icon && (
                 <Box 
                   width={12} 
@@ -38,7 +54,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   radius="md"
                   border 
                   display="flex" 
-                  align="center" 
+                  align="center"
                   justify="center" 
                   className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
                 >
@@ -149,9 +165,11 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
  * Renders a collection of pill-style external links.
  */
 export function ProfileLinks({ links }: { links: ProfileLink[] }) {
+  const filteredLinks = useMemo(() => links.filter(link => isValidUrl(link.url)), [links]);
+
   return (
     <Box display="flex" gap={3} wrap marginTop={4}>
-      {links.map((link) => (
+      {filteredLinks.map((link) => (
         <Box
           key={link.label}
           as="a"
@@ -164,8 +182,8 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={3}
           minHeight={11}
           border
-          radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          radius="md"
+          className={`${interaction.hoverAccent} ${transitions.default} group ${interaction.active} focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none`}
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}
