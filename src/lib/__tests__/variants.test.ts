@@ -74,7 +74,7 @@ describe("Variants Factory (createTransitionVariants)", () => {
     expect(classes).toContain("motion-reduce:transition-none");
   });
 
-  describe("factory edge cases", () => {
+  describe("factory logic and edge cases", () => {
     test("should handle empty base string", () => {
       const variants = createTransitionVariants("", {});
       expect(variants()).toBe(defaultTransitions);
@@ -89,6 +89,22 @@ describe("Variants Factory (createTransitionVariants)", () => {
     test("should ensure motion-reduce:transition-none is present", () => {
       const variants = createTransitionVariants("test", {});
       expect(variants()).toContain("motion-reduce:transition-none");
+    });
+
+    test("should memoize results", () => {
+      const base = "memo-test";
+      const variants = createTransitionVariants(base, {
+        variants: {
+          active: { true: "is-active", false: "is-inactive" }
+        }
+      });
+
+      const result1 = variants({ active: true });
+      const result2 = variants({ active: true });
+
+      expect(result1).toBe(result2);
+      expect(result1).toContain("is-active");
+      expect(result1).toContain(defaultTransitions);
     });
   });
 });

@@ -1,16 +1,30 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
-import { transitions, interaction, typography, layouts } from "@/styles/utilities";
+import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
- * Renamed to be more descriptive of its primary purpose.
+ * Includes basic memoization to prevent redundant class recomputations and re-renders.
  */
 export const createTransitionVariants: typeof cva = (base, config) => {
-  // Use simple concatenation to avoid runtime overhead for the base string.
-  // Assumes base is a string for optimization in this codebase's standard patterns.
+  // Inject transitions.default by default
   const baseClasses = base ? `${base} ${transitions.default}` : transitions.default;
-  return cva(baseClasses, config);
+  const variantFn = cva(baseClasses, config);
+
+  // Basic result caching to optimize performance for frequently called components
+  const cache = new Map<string, string>();
+
+  const memoizedVariantFn = (props?: unknown) => {
+    const key = JSON.stringify(props || {});
+    if (cache.has(key)) return cache.get(key)!;
+
+    const result = variantFn(props);
+    cache.set(key, result);
+    return result;
+  };
+
+  // Preserve the variant info for type safety and discovery if needed
+  return memoizedVariantFn as unknown as typeof variantFn;
 };
 
 /**
@@ -38,11 +52,11 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: `border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 ${interaction.active}`,
+    outline: `${buttons.outline} ${interaction.active}`,
     ghost: "bg-transparent hover:bg-line/10",
-    primary: `bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky ${interaction.active} shadow-sm`,
-    professional: `bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 shadow-sm ${interaction.active} normal-case tracking-normal`,
-    fab: `bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg rounded-none`,
+    primary: `${buttons.primary} ${interaction.active}`,
+    professional: `${buttons.professional} ${interaction.active}`,
+    fab: `${buttons.fab} rounded-none`,
     reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
@@ -56,7 +70,7 @@ export const variants = {
 };
 
 export const buttonVariants = createTransitionVariants(
-  `${layouts.inlineFlexCenter} font-sans tracking-normal disabled:opacity-50 disabled:cursor-not-allowed`,
+  `${layouts.inlineFlexCenter} ${buttons.base}`,
   {
     variants: {
       variant: variants.emphasis,
@@ -88,7 +102,7 @@ export const buttonVariants = createTransitionVariants(
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
 export const actionButtonVariants = createTransitionVariants(
-  `font-bold text-sm shrink-0 flex items-center gap-2 disabled:opacity-50`,
+  buttons.action,
   {
     variants: {
       variant: {
@@ -107,7 +121,7 @@ export const actionButtonVariants = createTransitionVariants(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = createTransitionVariants(
-  `bg-surface rounded-md shadow-sm card-border`,
+  layouts.cardBase,
   {
     variants: {
       interactive: {
@@ -136,7 +150,7 @@ export const cardVariants = createTransitionVariants(
  * Separates structural styles from state-specific styles.
  */
 export const filterButtonVariants = createTransitionVariants(
-  `${layouts.inlineFlexCenter} border whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs`,
+  `${layouts.inlineFlexCenter} ${layouts.filterBase}`,
   {
     variants: {
       variant: {
@@ -182,7 +196,7 @@ export const filterButtonVariants = createTransitionVariants(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = createTransitionVariants(
-  `${layouts.inlineFlexCenter} rounded ${typography.utility} border`,
+  `${layouts.inlineFlexCenter} ${layouts.tagBase} ${typography.utility}`,
   {
     variants: {
       variant: {
@@ -214,7 +228,7 @@ export const journalVariants = {
         hero: "bg-surface-alt border-line/30",
       },
       interactive: {
-        true: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
+        true: interaction.journalCard,
         false: ""
       }
     },
@@ -223,9 +237,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: createTransitionVariants(`text-text-dim hover:text-accent group`),
-  tag: createTransitionVariants(`border-line/50 hover:border-accent cursor-default`),
-  navLink: createTransitionVariants(`group cursor-pointer`, {
+  shareAction: createTransitionVariants(journal.share),
+  tag: createTransitionVariants(journal.tag),
+  navLink: createTransitionVariants(journal.nav, {
     variants: {
       active: {
         true: "text-accent",
@@ -242,7 +256,7 @@ export const journalVariants = {
  * List row variants for interactive lists (e.g., Audit History)
  */
 export const listRowVariants = createTransitionVariants(
-  `text-left border-l-4 w-full`,
+  lists.row,
   {
     variants: {
       active: {
