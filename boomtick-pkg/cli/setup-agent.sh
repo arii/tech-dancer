@@ -219,10 +219,12 @@ install_python_deps() {
     if ! have td-cli || ! have td; then
       warn "td/td-cli not immediately found on PATH. Attempting to locate..."
       # Fallback: find where pip installed them
-      local pip_bin
-      pip_bin=$(python3 -m pip show boomtick-cli 2>/dev/null | grep Location | cut -d' ' -f2 || true)
-      if [ -n "$pip_bin" ]; then
-         # Usually bin is at .../bin relative to site-packages or in ~/.local/bin
+      local pip_loc
+      pip_loc=$(python3 -m pip show boomtick-cli 2>/dev/null | grep Location | cut -d' ' -f2 || true)
+      if [ -n "$pip_loc" ]; then
+         # Usually bin is at ../bin relative to site-packages or in ~/.local/bin
+         local bin_guess="${pip_loc%/lib/python*}/bin"
+         [ -d "$bin_guess" ] && export PATH="$bin_guess:$PATH"
          export PATH="$HOME/.local/bin:$PATH"
       fi
     fi
@@ -324,27 +326,29 @@ persist_environment() {
     if ! grep -q "nvm use ${NODE_MAJOR}" "$bashrc"; then
       echo 'export NVM_DIR="$HOME/.nvm"' >> "$bashrc"
       echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "$bashrc"
-      echo "nvm use ${NODE_MAJOR} --silent || nvm install ${NODE_MAJOR} --silent" >> "$bashrc"
-      echo "nvm alias default ${NODE_MAJOR} >/dev/null" >> "$bashrc"
+      echo "nvm use ${NODE_MAJOR} >/dev/null 2>&1 || nvm install ${NODE_MAJOR} >/dev/null 2>&1" >> "$bashrc"
+      echo "nvm alias default ${NODE_MAJOR} >/dev/null 2>&1" >> "$bashrc"
     fi
 
     # Apply to current session
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install "${NODE_MAJOR}" --silent
-    nvm use "${NODE_MAJOR}" --silent
-    nvm alias default "${NODE_MAJOR}" >/dev/null
+    nvm install "${NODE_MAJOR}" >/dev/null 2>&1 || true
+    nvm use "${NODE_MAJOR}" >/dev/null 2>&1 || true
+    nvm alias default "${NODE_MAJOR}" >/dev/null 2>&1 || true
   fi
 
   # Ensure ~/.local/bin is in PATH for td/td-cli
-  if ! grep -q ".local/bin" "$bashrc"; then
+  if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$bashrc"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$bashrc"
   fi
 
   # Also ensure PNPM is on path if corepack didn't do it globally
   if ! grep -q "PNPM_HOME" "$bashrc"; then
-    echo 'export PNPM_HOME="$HOME/.local/share/pnpm"' >> "$bashrc"
-    echo 'export PATH="$PNPM_HOME:$PATH"' >> "$bashrc"
+    {
+      echo 'export PNPM_HOME="$HOME/.local/share/pnpm"'
+      echo 'export PATH="$PNPM_HOME:$PATH"'
+    } >> "$bashrc"
   fi
 }
 
