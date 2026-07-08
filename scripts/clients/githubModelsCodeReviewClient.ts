@@ -88,11 +88,11 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
           throw new Error('RateLimitReached');
         }
         break;
-      } catch (e: any) {
+      } catch (e: unknown) {
         retries--;
         if (retries === 0) {
           const statusMsg = fetchResponse?.status ? ` Status: ${fetchResponse.status}` : '';
-          throw new Error(`Failed to fetch from GitHub Models API after 5 retries.${statusMsg} Error: ${e.message}`, { cause: e });
+          throw new Error(`Failed to fetch from GitHub Models API after 5 retries.${statusMsg} Error: ${(e instanceof Error ? e.message : String(e))}`, { cause: e });
         }
         await new Promise(r => setTimeout(r, delay));
         delay = Math.min(delay * 2, 16000); // Max delay of 16 seconds
