@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
 import { clsx } from "clsx";
-import { transitions, interaction, typography, layouts } from "@/styles/utilities";
+import { interaction, typography, layouts } from "@/styles/utilities";
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
@@ -41,11 +41,11 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: `border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 ${transitions.colors} ${interaction.active}`,
+    outline: `border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 ${interaction.active}`,
     ghost: "bg-transparent hover:bg-line/10",
-    primary: `bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky ${transitions.colors} ${interaction.active} shadow-sm`,
-    professional: `bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 ${transitions.default} shadow-sm ${interaction.active} normal-case tracking-normal`,
-    fab: `bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg ${transitions.slow} rounded-none`,
+    primary: `bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky ${interaction.active} shadow-sm`,
+    professional: `bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 shadow-sm ${interaction.active} normal-case tracking-normal`,
+    fab: `bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg rounded-none`,
     reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
