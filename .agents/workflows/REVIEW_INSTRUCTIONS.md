@@ -1,57 +1,46 @@
 # Code Review Standards & Instructions
 
-When evaluating a Pull Request, you must read the generated diff context (pr-context-<PR_NUMBER>.md) and evaluate the code against the following rigorous standards.
+Read `pr-context-<PR_NUMBER>.md` and evaluate the code against these standards. Record findings in `pr-review-<PR_NUMBER>.md`.
 
-You will record your findings in the writeable `pr-review-<PR_NUMBER>.md` file.
+## 1. Output Protocol
 
-## 1. Output Protocol (CRITICAL)
+- **Target File**: Modify the existing `pr-review-{PR}.md`.
+- **No New Files**: Do not create temporary or JSON files.
+- **Checklist**: Mark every Audit Checklist item to indicate verification.
+- **JSON Block**: Fill the JSON block at the bottom of the file with findings.
 
-- **Target File**: You MUST modify the existing `pr-review-{PR}.md` file.
-- **NO New Files**: DO NOT create temporary files or new JSON files. The submission scripts ONLY read from the specified `pr-review-{PR}.md` file.
-- **Checklist Completion**: Every item in the Audit Checklist MUST be marked to indicate it was verified.
-- **JSON Block**: You MUST fill the JSON block at the bottom of the file with your findings.
+## 2. Audit Checklist
 
-## 2. Philosophy & Checklist
+Mark items as `[x]` (passed) or `[ ]` (failed). Provide detailed feedback for failed items.
 
-### Senior Engineer Mindset:
-- **Evidence Rule**: Point to exact line + explain runtime consequence. No speculation.
-- **Regression Scope**: Review ONLY PR changes. Ignore pre-existing issues unless worsened.
-- **Simplicity**: Prefer code removal. Flag unnecessary wrappers/hooks/abstractions.
-- **Filter**: Verify runtime impact + certainty. Design choices != bugs.
+### Anti-AI-Slop
+- **Dead abstractions**: No new classes/hooks where simpler primitives suffice.
+- **Unnecessary indirection**: No wrapping where a direct function call suffices.
+- **Responsibility creep**: Components should not manage logic belonging in parents/hooks.
+- **Import bloat**: No `import React from 'react'` in React 17+.
+- **Token compliance**: No raw Tailwind values or inline styles; use established design tokens.
 
-### Checklist (Mark `[x]` or `[ ]`):
-- **Dead abstractions**: Simplest primitive used?
-- **Unnecessary indirection**: Direct calls preferred over wrappers?
-- **Responsibility creep**: Logic in the correct place?
-- **Import bloat**: No redundant `import React`?
-- **Token compliance**: Standard tokens used (no raw Tailwind for layout)?
-- **Audit ratio**: 10 lines refactored per 100 added?
+## 3. Severity Standards
 
-## 3. CI Failure Handling
+- **High/Blocking**: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.
+- **No Speculation**: If it uses "could" or "might", it is non-blocking. Downgrade to "Approved with Minor Changes".
+- **Verification**: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.
+
+## 4. CI Failure Handling
 
 If the PR context indicates failing CI checks:
 - **Block Approvals**: You MUST NOT recommend "Approved" if there are failing CI checks that are related to the PR changes.
 - **Log Triage**: You must complete the "CI Log Triage" section in the review file. Use the "Detected Errors" and "Failure Logs Snippet" from the context file to perform a Root Cause Analysis and provide Remediation Steps.
 - **Prioritize Fixes**: Mention the CI failures prominently in your review body and prioritize their resolution.
 
-## 4. Severity & Confidence
-
-Every blocking issue MUST include a **Confidence Score**: **high**, **medium**, **low**.
-Only report blocking issues when confidence is **HIGH**.
-
-### Severity Definitions:
-- **error**: Incorrect behavior, data loss, security vulnerability, crash, broken API, build failure, deterministic bug.
-- **warn**: Maintainability regression, readability regression, unnecessary complexity, duplicated logic, performance issue.
-- **info**: Documentation, naming, formatting.
-
-Never label style preferences as errors.
+## 5. Review Status Mapping
 
 ### Review Status Mapping:
 - **Approved**: Zero violations AND all critical CI checks passing.
-- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage). Note: This maps to a "COMMENT" review to ensure feedback is reviewed.
-- **Not Approved**: Architectural regressions, breaking changes, major token violations, OR failing CI checks.
+- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage), or speculative concerns that lack concrete evidence of failure.
+- **Not Approved**: Architectural regressions, evidenced breaking changes (see Section 3), major token violations, OR failing CI checks.
 
-## 5. Formatting the Output (Markdown + JSON)
+## 6. Formatting the Output (Markdown + JSON)
 
 The review file uses a separated format to prevent JSON escaping issues. You must write standard Markdown at the top and a structured JSON block at the very bottom for metadata.
 
@@ -59,6 +48,7 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 
 ```json
 {
+  "body": "## ANTI-AI-SLOP\n- [x] No dead abstractions\n- [x] No unnecessary indirection\n- [x] No responsibility creep\n- [x] No import bloat\n- [x] Token compliance verified\n\n## FINDINGS\n<summary of key findings and observations>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
   "recommendation": "Approved | Approved with Minor Changes | Not Approved",
   "labels": ["lgtm", "needs-changes"],
   "comments": [
@@ -79,7 +69,7 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 - **Line Numbers**: Every inline comment MUST have a `line` number that exists within the **Valid Comment Ranges** for that file in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON.
 
-## 6. Infrastructure & Component Awareness
+## 7. Infrastructure & Component Awareness
 
 Before suggesting an implementation, verify if it already exists:
 
@@ -93,12 +83,12 @@ Before suggesting an implementation, verify if it already exists:
 - Building layout with `div` + flex when `<Stack>` or `<Box>` exists.
 - Adding `import React` in React 17+ files.
 
-## 7. Failure Modes (Avoid These)
+## 8. Failure Modes (Avoid These)
 
 - **hallucinating PR Numbers**: Always use the PR number provided in the prompt.
 - **Out-of-range comments**: Comments on lines not in the diff cause 422 errors.
 - **Empty payloads**: Never submit a review with empty findings or placeholders.
 
-## 8. Tooling Guidelines
+## 9. Tooling Guidelines
 
 Agents must not directly use git or gh commands but reuse existing tooling (`td-cli`).
