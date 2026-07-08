@@ -243,10 +243,10 @@ class AIClient:
             except Exception as e:
                 log_warn(f"Failed to post-process AI resolution for {file_path}: {e}")
 
-            with open(file_path, 'w') as f:
-                f.write(resolved)
-                if not resolved.endswith('\n'):
-                    f.write('\n')
+            from dev_tools.utils import safe_write_file
+            if not resolved.endswith('\n'):
+                resolved += '\n'
+            safe_write_file(file_path, resolved)
 
             return True
         except Exception as e:
@@ -346,47 +346,48 @@ class AIClient:
 
         raw = None
         file_reviews = []
-        try:
-            raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=2)
-        except Exception as e:
-            log_error(f"Review call failed for PR #{pr_num}: {e}")
+        parsed = None
+
+        # Retry loop for generation and parsing
+        for attempt in range(3):
+            try:
+                raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=1)
+                if not raw:
+                    continue
+
+                cleaned = clean_llm_output(raw)
+                parsed = json.loads(cleaned)
+
+                # Handle double-encoded JSON strings from LLM
+                if isinstance(parsed, str):
+                    parsed = json.loads(parsed)
+
+                if isinstance(parsed, dict):
+                    break # Success
+            except Exception as e:
+                log_warn(f"AI review attempt {attempt+1} failed: {e}")
+                time.sleep(1)
 
         elapsed = time.time() - t0
 
-        if not raw:
-            print(f" ❌ empty response ({elapsed:.1f}s)", flush=True, file=sys.stderr)
+        if not parsed:
+            print(f" ❌ failed to get valid response ({elapsed:.1f}s)", flush=True, file=sys.stderr)
             final = {
-                "reviewComment": f"Automated review of PR #{pr_num}.\n\nFailed to get a response from AI.",
+                "reviewComment": f"Automated review of PR #{pr_num}.\n\nFailed to get a parseable response from AI after retries.",
                 "labels": ["needs-changes"],
                 "recommendation": "Not Approved"
             }
         else:
-            try:
-                cleaned = clean_llm_output(raw)
-                parsed = json.loads(cleaned)
-                if isinstance(parsed, str):
-                    parsed = json.loads(parsed)
+            file_reviews = parsed.get("file_reviews", [])
+            if not isinstance(file_reviews, list):
+                file_reviews = []
 
-                if not isinstance(parsed, dict):
-                    raise ValueError(f"Expected dict, got {type(parsed).__name__}")
-
-                file_reviews = parsed.get("file_reviews", [])
-                if not isinstance(file_reviews, list):
-                    file_reviews = []
-
-                final = {
-                    "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
-                    "labels": parsed.get("labels", []),
-                    "recommendation": parsed.get("recommendation", "Unknown")
-                }
-                print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
-            except Exception as e:
-                print(f" ⚠️  parse error ({elapsed:.1f}s): {e}", flush=True, file=sys.stderr)
-                final = {
-                    "reviewComment": f"Review complete. (Parse error: {e})\n\nRaw: {raw[:800]}",
-                    "labels": [],
-                    "recommendation": "Not Approved"
-                }
+            final = {
+                "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
+                "labels": parsed.get("labels", []),
+                "recommendation": parsed.get("recommendation", "Unknown")
+            }
+            print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
 
         # CI guard: never approve if checks are failing
         if has_ci_failures and final.get('recommendation') == 'Approved':
@@ -583,13 +584,26 @@ class AIClient:
         )
 
         raw = None
-        try:
-            # We don't use strict schema mode here because we want mixed markdown + json
-            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, max_retries=2)
-        except Exception as e:
-            log_error(f"Synthesis call failed: {e}")
+        res = None
+        for attempt in range(3):
+            try:
+                # We don't use strict schema mode here because we want mixed markdown + json
+                raw = call_ai(prompt, model=_SYNTHESIS_MODEL, max_retries=1)
+                if not raw:
+                    continue
 
-        if not raw:
+                cleaned = clean_llm_output(raw)
+                res = json.loads(cleaned)
+                if isinstance(res, str):
+                    res = json.loads(res)
+
+                if isinstance(res, dict):
+                    break # Success
+            except Exception as e:
+                log_warn(f"Synthesis attempt {attempt+1} failed: {e}")
+                time.sleep(1)
+
+        if not res:
             # Fallback: construct a minimal result from the structured data
             if blocking_files:
                 rec = "Not Approved"
@@ -609,20 +623,7 @@ class AIClient:
                 "recommendation": rec,
             }
 
-        try:
-            res = json.loads(clean_llm_output(raw))
-            if isinstance(res, str):
-                res = json.loads(res)
-            if not isinstance(res, dict):
-                raise ValueError(f"Expected dict, got {type(res).__name__}")
-            return res
-        except Exception as e:
-            log_warn(f"Synthesis JSON parse error: {e} | raw: {raw[:300]}")
-            return {
-                "reviewComment": f"Review complete. {total_issues} issue(s) found. (Synthesis parse error: {e})\n\nRaw: {raw[:800]}",
-                "labels": [],
-                "recommendation": "Not Approved" if blocking_files else "Approved with Minor Changes",
-            }
+        return res
 
     # ── Output file ───────────────────────────────────────────────────────────
 

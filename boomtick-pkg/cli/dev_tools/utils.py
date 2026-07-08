@@ -133,6 +133,41 @@ def ensure_dir(*parts: str) -> str:
     os.makedirs(path, exist_ok=True)
     return path
 
+def safe_write_file(filepath: str, content: str):
+    """
+    Writes content to a file while being symlink-aware.
+    If the filepath is a symlink, it resolves the real path and writes to the target,
+    preserving the symlink.
+    """
+    target_path = filepath
+    if os.path.islink(filepath):
+        target_path = os.path.realpath(filepath)
+        log_info(f"Symlink detected: {filepath} -> {target_path}")
+
+    # Ensure parent directory exists for the target
+    os.makedirs(os.path.dirname(os.path.abspath(target_path)), exist_ok=True)
+
+    with open(target_path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+def apply_patch(filepath: str, patch_content: str):
+    """
+    Applies a patch to a file using git apply with whitespace fixing.
+    This is more resilient than simple string replacement.
+    """
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".patch", delete=False) as tmp:
+        tmp.write(patch_content)
+        tmp_path = tmp.name
+
+    try:
+        run_command(["git", "apply", "--whitespace=fix", tmp_path])
+        log_info(f"Successfully applied patch to {filepath}")
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+
 def get_or_create_log_dir(subdir: str) -> str:
     """Returns the path to a specific log subdirectory and ensures it exists."""
     log_dir = os.path.join(get_base_dir(), "logs", subdir)
@@ -242,14 +277,28 @@ def get_gemini_model() -> str:
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
-    # First try to extract from <findings> tags (used in code review prompts)
+    if not text:
+        return ""
+
+    # 1. Handle double-escaped newlines commonly found in AI generated JSON in markdown
+    text = text.replace('\\\\n', '\\n')
+
+    # 2. Extract from <findings> tags if present
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
-        
-    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
+
+    # 3. Extract from markdown code blocks
+    match = re.search(r"```(?:json|jsonc|[\w]*)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
     if match:
-        return match.group(1).strip()
+        text = match.group(1).strip()
+
+    # 4. Final safety strip of any leading/trailing non-JSON junk (like "Result: { ... }")
+    json_start = text.find('{')
+    json_end = text.rfind('}')
+    if json_start != -1 and json_end != -1 and json_end > json_start:
+        text = text[json_start:json_end+1]
+
     return text.strip()
 
 def is_ai_available() -> bool:

@@ -182,6 +182,29 @@ def logs(ctx, pr_number, grep):
     logs_content = orch.stream_ci_logs(pr_number, grep=grep)
     out(ctx, f"Fetched logs for PR #{pr_number}", data={"logs": logs_content})
 
+@repo.command()
+@click.argument('filepath')
+@click.option('--patch-file')
+@click.option('--patch-body')
+@click.pass_context
+def apply_patch(ctx, filepath, patch_file, patch_body):
+    """Apply a patch to a file using resilient git apply."""
+    from dev_tools.utils import apply_patch as _apply
+
+    content = patch_body
+    if patch_file:
+        with open(patch_file, 'r') as f:
+            content = f.read()
+
+    if not content:
+        err(ctx, "Provide either --patch-file or --patch-body")
+
+    try:
+        _apply(filepath, content)
+        out(ctx, f"✅ Applied patch to {filepath}")
+    except Exception as e:
+        err(ctx, f"Failed to apply patch: {str(e)}")
+
 # ==========================================
 # GH COMMAND GROUP
 # ==========================================
