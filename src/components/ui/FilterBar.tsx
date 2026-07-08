@@ -1,6 +1,6 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
-import { cn, formatCategory } from '@/lib/utils';
+import { formatCategory } from '@/lib/utils';
 import { FilterButton } from './FilterButton';
 
 interface FilterBarProps {
@@ -27,12 +27,7 @@ export function FilterBar({ categories }: FilterBarProps) {
             label={formatCategory(cat)}
             onClick={() => setActiveCategory(cat)}
             isActive={activeCategory === cat}
-            className={cn(
-              "transition-all duration-300 text-sm whitespace-nowrap px-3",
-              activeCategory === cat
-                ? "text-accent border-accent/60 bg-accent/10"
-                : "text-text-dim border-transparent hover:text-text-main hover:border-line"
-            )}
+            className="transition-all duration-300 text-sm whitespace-nowrap px-3"
           />
         ))}
       </Stack>

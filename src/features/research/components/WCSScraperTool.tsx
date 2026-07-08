@@ -363,10 +363,7 @@ export function WCSScraperTool() {
                         label={filter.replace('-', ' ')}
                         onClick={() => handleFilterChange(filter)}
                         isActive={filterPromoted === filter}
-                        className={cn(
-                          "w-full justify-center",
-                          filterPromoted === filter ? "bg-accent text-bg border-accent" : "bg-surface-alt text-text-dim border-line/50"
-                        )}
+                        className="w-full justify-center capitalize"
                       />
                     </Box>
                   ))}
