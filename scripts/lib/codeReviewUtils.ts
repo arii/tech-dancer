@@ -101,7 +101,8 @@ function validateFindingsSchema(state: CodeReviewState): boolean {
     typeof f.id === 'string' && f.id.trim() !== '' &&
     typeof f.file === 'string' && f.file.trim() !== '' &&
     typeof f.issue === 'string' && f.issue.trim() !== '' &&
-    (f.status === 'open' || f.status === 'resolved')
+    (f.status === 'open' || f.status === 'resolved') &&
+    (f.confidence === undefined || ['high', 'medium', 'low'].includes(f.confidence))
   );
 }
 
