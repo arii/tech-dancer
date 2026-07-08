@@ -1076,32 +1076,45 @@ Respond only after the PR is created or updated:
         return sorted(files)
 
     def _check_workflow_compliance(self, file_path: str) -> List[str]:
-        """Parses a workflow file for compliance violations using regex."""
+        """Parses a workflow file for compliance violations using a data-driven rule model."""
         violations = []
+
+        # Rule definition model: dictionaries with regex, message, and optional validator.
+        # Regexes are designed to be robust against varying whitespace and formatting.
+        rules = [
+            {
+                "regex": r"node-version\s*:\s*['\"]?\d+",
+                "message": "Hardcoded `node-version:`. Use `node-version-file: '.node-version'` instead."
+            },
+            {
+                "regex": r"\bnpm\s+(?:install|ci|run)\b",
+                "message": "`npm` usage detected. Use `pnpm` exclusively."
+            },
+            {
+                "regex": r"actions/checkout\s*@\s*v(\d+)",
+                "message": "Outdated `actions/checkout@v{ver}`. Use `@v4`.",
+                "validator": lambda m: int(m.group(1)) < 4
+            },
+            {
+                "regex": r"actions/setup-node\s*@\s*v(\d+)",
+                "message": "Outdated `actions/setup-node@v{ver}`. Use `@v4`.",
+                "validator": lambda m: int(m.group(1)) < 4
+            }
+        ]
+
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            # 1. Hardcoded Node version
-            if re.search(r"node-version:\s*['\"]?\d+", content):
-                violations.append("Hardcoded `node-version:`. Use `node-version-file: '.node-version'` instead.")
-
-            # 2. npm usage
-            if re.search(r"\bnpm\s+(install|ci|run)\b", content):
-                violations.append("`npm` usage detected. Use `pnpm` exclusively.")
-
-            # 3. Outdated Actions
-            # actions/checkout < v4
-            checkout_matches = re.findall(r"actions/checkout@v(\d+)", content)
-            for ver in checkout_matches:
-                if int(ver) < 4:
-                    violations.append(f"Outdated `actions/checkout@v{ver}`. Use `@v4`.")
-
-            # actions/setup-node < v4
-            setup_node_matches = re.findall(r"actions/setup-node@v(\d+)", content)
-            for ver in setup_node_matches:
-                if int(ver) < 4:
-                    violations.append(f"Outdated `actions/setup-node@v{ver}`. Use `@v4`.")
+            for rule in rules:
+                # Use re.IGNORECASE for robustness against mixed casing in YAML
+                pattern = re.compile(rule["regex"], re.IGNORECASE)
+                for match in pattern.finditer(content):
+                    validator = rule.get("validator")
+                    if validator is None or validator(match):
+                        # Support dynamic version reporting if the regex has a group
+                        ver = match.group(1) if match.lastindex and match.lastindex >= 1 else ""
+                        violations.append(rule["message"].format(ver=ver))
 
         except Exception as e:
             violations.append(f"Error parsing file: {e}")
@@ -1178,7 +1191,7 @@ Review `.github/workflows/` files to align them with `AGENTS.md` runtime policie
 Verify if the regex patterns missed any semantic violations (e.g., complex shell scripts using forbidden tools).
 
 ### Step 2: Version Alignment
-Ensure all GitHub Actions are pinned to their latest major versions (e.g. `actions/checkout@v7`).
+Ensure all GitHub Actions are pinned to their latest major versions (e.g. `actions/checkout@v4`).
 
 ### Step 3: Runtime Policy Alignment
 Confirm `actions/setup-node` uses `node-version-file: '.node-version'`.

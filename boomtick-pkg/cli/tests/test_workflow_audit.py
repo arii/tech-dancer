@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
@@ -40,7 +40,8 @@ jobs:
 """)
     orch = Orchestrator()
     violations = orch._check_workflow_compliance(str(workflow_file))
-    assert len(violations) == 4
+    # 1 node-version, 2 npm (install, run), 1 checkout, 1 setup-node = 5
+    assert len(violations) == 5
     assert any("node-version:" in v for v in violations)
     assert any("npm" in v for v in violations)
     assert any("checkout@v2" in v for v in violations)
