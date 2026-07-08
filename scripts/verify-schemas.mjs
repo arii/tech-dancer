@@ -1,0 +1,58 @@
+import { execSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+/**
+ * Orchestrates the schema verification and synchronization process.
+ */
+function verifySchemas() {
+  const root = process.cwd();
+
+  // 1. Check dependencies
+  console.log('🔍 Checking dependencies...');
+  const rootNodeModules = join(root, 'node_modules');
+  const mcpNodeModules = join(root, 'boomtick-pkg', 'mcp', 'node_modules');
+
+  if (!existsSync(rootNodeModules) && !existsSync(mcpNodeModules)) {
+    console.error('❌ Error: node_modules is missing.');
+    console.error('   Please run `pnpm install` in the root directory to set up dependencies.');
+    process.exit(1);
+  }
+
+  try {
+    // 2. Python Schema Generation
+    console.log('🐍 Generating CLI schema from Python models...');
+    execSync('PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/schema_gen.py', {
+      stdio: 'inherit',
+      env: { ...process.env, PYTHONPATH: 'boomtick-pkg/cli' }
+    });
+
+    // 3. Sync Contracts
+    console.log('🔄 Syncing contracts...');
+    execSync('npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts', { stdio: 'inherit' });
+
+    // 4. Sync MCP Schemas
+    console.log('🛠️  Syncing MCP schemas...');
+    execSync('pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas', { stdio: 'inherit' });
+
+    // 5. Check for drift
+    console.log('📊 Checking for schema/contract drift...');
+    try {
+      execSync('git diff --exit-code boomtick-pkg/cli/dev_tools/cli-schema.json boomtick-pkg/mcp/src/tools/contract.ts', { stdio: 'inherit' });
+    } catch (err) {
+      console.error('\n❌ Schema or Contract drift detected.');
+      console.error('   The generated files do not match the committed versions.');
+      console.error('   Run the following to regenerate and commit:');
+      console.error('   pnpm run verify:schemas');
+      process.exit(1);
+    }
+
+    console.log('\n✅ Schema verification complete.');
+  } catch (err) {
+    console.error('\n❌ Verification failed due to an error in the sub-tasks.');
+    // execSync with stdio: inherit already prints the error output
+    process.exit(1);
+  }
+}
+
+verifySchemas();

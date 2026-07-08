@@ -37,7 +37,7 @@
     "knip": "knip --exclude exports",
     "type-check": "pnpm run verify:schemas && tsc --noEmit",
     "audit:inventory": "node scripts/check-suppression-inventory.mjs",
-    "verify:schemas": "node scripts/check-mcp-deps.mjs && PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/schema_gen.py && npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts && pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas && (git diff --exit-code boomtick-pkg/cli/dev_tools/cli-schema.json boomtick-pkg/mcp/src/tools/contract.ts || (echo '❌ Schema or Contract drift detected. Run `python3 boomtick-pkg/cli/dev_tools/schema_gen.py && npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts && pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas` to regenerate.' && exit 1))",
+    "verify:schemas": "node scripts/verify-schemas.mjs",
     "review:ux:prep": "pnpm run setup:playwright && node scripts/detect-antipatterns.mjs",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
