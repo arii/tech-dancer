@@ -25,17 +25,32 @@ export const IconMap: Record<string, React.ElementType> = {
  * Renders a list of professional experience cards.
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
+/**
+ * Sanitizes a string by removing any HTML tags to prevent XSS.
+ */
+function sanitize(str: string): string {
+  if (typeof str !== 'string') return '';
+  return str.replace(/<[^>]*>?/gm, '');
+}
+
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
-  // Security: Sanitize/Validate input if it were from an untrusted source.
-  // For this exercise, we assume ProfileCard data is trusted but we can still validate.
+  if (!Array.isArray(cards)) return null;
+
+  // Security: Explicitly sanitize and validate input cards.
+  const validatedCards = cards.map(card => ({
+    ...card,
+    title: sanitize(card.title),
+    content: sanitize(card.content),
+    icon: card.icon && IconMap[card.icon] ? card.icon : undefined
+  }));
 
   return (
     <Stack gap="card" marginTop={4}>
-      {cards.map((card, index) => {
+      {validatedCards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
           <Box key={index} padding={8} border radius="md" surface="default" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
-            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="center">
+            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
                 <Box 
                   width={12} 
@@ -43,7 +58,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   radius="md"
                   border 
                   display="flex" 
-                  align="center" 
+                  align="start"
                   justify="center" 
                   className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
                 >
@@ -133,11 +148,11 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           inset={0}
           zIndex="modal"
           className="bg-black/90 cursor-pointer"
-          align="center"
+          align="start"
           justify="center"
           onClick={() => setSelectedImage(null)}
         >
-          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
+          <Box maxWidth="full" padding={4} height="full" display="flex" align="start" justify="center">
             <img
               src={selectedImage}
               alt="Expanded view"
@@ -164,7 +179,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           target="_blank"
           rel="noopener noreferrer"
           display="inline-flex"
-          align="center"
+          align="start"
           paddingX={4}
           paddingY={3}
           minHeight={11}

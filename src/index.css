@@ -80,9 +80,7 @@
   --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
 
   /* Animation */
-  /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
-  --scale-interaction-active: var(--raw-scale-interaction-active);
   --leading-tightest: var(--raw-leading-tightest);
 
   /* Static Defaults */
@@ -228,7 +226,7 @@
 }
 
 @utility scale-active {
-  @apply active:scale-[var(--scale-interaction-active)];
+  @apply active:opacity-80 active:brightness-95;
 }
 
 @utility z-top {
@@ -272,7 +270,7 @@
     @apply prose-strong:text-text-main prose-strong:font-black;
     @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
     @apply prose-li:text-text-body prose-li:text-lg prose-li:leading-relaxed;
-    @apply prose-img:rounded-2xl prose-img:border prose-img:border-line/30;
+    @apply prose-img:rounded-lg prose-img:border prose-img:border-line/30;
     @apply prose-table:block prose-table:overflow-x-auto prose-table:w-full prose-table:my-8;
     @apply prose-th:px-4 prose-th:py-3 prose-th:text-left prose-th:bg-surface-alt/50 prose-th:text-text-main;
     @apply prose-td:px-4 prose-td:py-3 prose-td:border-t prose-td:border-line/20;
