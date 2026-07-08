@@ -63,11 +63,7 @@ runs:
       id: resolve-cli
       shell: bash
       run: |
-        if [ -d "boomtick-pkg/cli" ]; then
-          CLI_ROOT="$(pwd)/boomtick-pkg/cli"
-        else
-          CLI_ROOT="$(pwd)/cli"
-        fi
+        CLI_ROOT="$(bash scripts/resolve-cli.sh)"
         echo "CLI_ROOT=$CLI_ROOT" >> "$GITHUB_ENV"
         echo "cli_root=$CLI_ROOT" >> "$GITHUB_OUTPUT"
 

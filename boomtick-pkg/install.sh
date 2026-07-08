@@ -48,13 +48,14 @@ validate_env
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
-if [ -d "cli" ]; then
-    CLI_ROOT="$(pwd)/cli"
-elif [ -d "boomtick-pkg/cli" ]; then
-    CLI_ROOT="$(pwd)/boomtick-pkg/cli"
+# Try to find resolve-cli.sh in standard locations
+if [ -f "../scripts/resolve-cli.sh" ]; then
+    CLI_ROOT="$(bash ../scripts/resolve-cli.sh)"
+elif [ -f "scripts/resolve-cli.sh" ]; then
+    CLI_ROOT="$(bash scripts/resolve-cli.sh)"
 else
-    # Fallback to current dir if we are already inside cli
-    CLI_ROOT="$(pwd)"
+    # Fallback if scripts are missing
+    if [ -d "cli" ]; then CLI_ROOT="$(pwd)/cli"; else CLI_ROOT="$(pwd)"; fi
 fi
 export CLI_ROOT
 

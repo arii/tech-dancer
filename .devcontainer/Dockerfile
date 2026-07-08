@@ -55,12 +55,10 @@ RUN corepack enable \
 # ── Workspace ──────────────────────────────────────────────────────────────────
 WORKDIR /workspace
 
-# ── Dev Tools ──────────────────────────────────────────────────────────────────
-# We copy the full boomtick-pkg/cli directory so that pip install -e can create the
-# necessary metadata/links during the image build.
-COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
+# ── Python packages (Pre-bake dependencies for caching) ────────────────────────
+# Copy only dependency definitions first to leverage Docker layer caching
+COPY boomtick-pkg/cli/pyproject.toml boomtick-pkg/cli/requirements-dev.txt /workspace/boomtick-pkg/cli/
 
-# ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
     PyGithub \
     click \
@@ -79,8 +77,12 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     duckduckgo-search>=6.0.0 \
     && if [ -f /workspace/boomtick-pkg/cli/requirements-dev.txt ]; then \
         pip3 install --no-cache-dir --break-system-packages -r /workspace/boomtick-pkg/cli/requirements-dev.txt; \
-    fi \
-    && pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
+    fi
+
+# ── Dev Tools ──────────────────────────────────────────────────────────────────
+# Now copy the rest of the CLI source and install in editable mode
+COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
+RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
 
 # ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
 # Copy lockfile and workspace config to pre-install dependencies

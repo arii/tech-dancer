@@ -27,11 +27,7 @@ find_repo_root() {
 REPO_ROOT="$(find_repo_root "$START_DIR" || find_repo_root "$SCRIPT_DIR" || pwd -P)"
 cd "$REPO_ROOT"
 
-if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
-  CLI_ROOT="${REPO_ROOT}/boomtick-pkg/cli"
-else
-  CLI_ROOT="${REPO_ROOT}/cli"
-fi
+CLI_ROOT="$(bash scripts/resolve-cli.sh)"
 export CLI_ROOT
 
 # -------- configuration --------
