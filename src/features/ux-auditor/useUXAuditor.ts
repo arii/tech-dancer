@@ -18,37 +18,6 @@ import {
 } from 'firebase/firestore';
 
 
-// --- Utilities ---
-
-/**
- * Exponential backoff wrapper for async operations.
- * Only retries on transient errors (network, timeout, etc.)
- */
-async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
-  const transientErrorCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'aborted'];
-
-  let lastError: unknown;
-  for (let i = 0; i <= maxRetries; i++) {
-    try {
-      return await fn();
-    } catch (error: unknown) {
-      lastError = error;
-
-      // Check if the error is transient
-      const errorCode = (error as { code?: string })?.code;
-      const isTransient = errorCode && transientErrorCodes.includes(errorCode);
-
-      if (isTransient && i < maxRetries) {
-        const delay = baseDelay * Math.pow(2, i) + (Math.random() * 100); // add jitter
-        await new Promise(resolve => setTimeout(resolve, delay));
-      } else {
-        throw error;
-      }
-    }
-  }
-  throw lastError;
-}
-
 // --- Configuration & Constants ---
 const env = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string>;
 const apiKey = env.VITE_OPENAI_API_KEY || env.VITE_GEMINI_API_KEY || (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('ux-auditor-api-key') : "") || "";
@@ -175,9 +144,7 @@ export function useUXAuditor() {
     // Update Firestore if available
     if (user && firebaseConfig) {
       const db = getFirestore();
-      await withRetry(() =>
-        updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updates)
-      );
+      await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updates);
     }
   }, [user, queryClient]);
 
@@ -199,9 +166,7 @@ export function useUXAuditor() {
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        await withRetry(() =>
-          setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
-        );
+        await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport);
       }
 
       for (const vp of VIEWPORTS) {
