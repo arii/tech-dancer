@@ -24,6 +24,10 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Install Python Dependencies
+        run: |
+          python3 -m pip install -r etl/requirements.txt --break-system-packages
+
       - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. python3 -m pytest etl/tests/
