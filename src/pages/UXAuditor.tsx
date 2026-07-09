@@ -14,9 +14,9 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import {
-  actionButtonVariants,
-  cardVariants,
-  listRowVariants
+  actionButtonVariants, type ActionButtonVariants,
+  cardVariants, type CardVariants,
+  listRowVariants, type ListRowVariants
 } from '@/lib/variants';
 
 const viewportIcons = {
@@ -87,7 +87,12 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
   </Stack>
 );
 
-function CopyPromptButton({ suggestion }: { suggestion: string }) {
+interface CopyPromptButtonProps {
+  suggestion: string;
+  variant?: ActionButtonVariants['variant'];
+}
+
+function CopyPromptButton({ suggestion }: CopyPromptButtonProps) {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
@@ -227,7 +232,14 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
+interface ViewportAnalysisCardProps {
+  vp: typeof VIEWPORTS[0];
+  data: ViewportAnalysis;
+  activeReportUrl?: string;
+  variant?: CardVariants['overflow'];
+}
+
+function ViewportAnalysisCard({ vp, data, activeReportUrl }: ViewportAnalysisCardProps) {
   return (
     <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
@@ -455,15 +467,17 @@ export default function UXAuditor() {
                 icon={<Icon icon={RefreshCw} size="sm" color="muted" />}
               />
             )}
-            {reports.map((report) => (
-              <Stack
-                key={report.id}
-                as="button"
-                direction="row"
-                onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={3} padding={4} 
-                className={listRowVariants({ active: activeReport?.id === report.id })}
-              >
+            {reports.map((report) => {
+              const rowProps: ListRowVariants = { active: activeReport?.id === report.id };
+              return (
+                <Stack
+                  key={report.id}
+                  as="button"
+                  direction="row"
+                  onClick={() => setActiveReport(report)}
+                  width="full" align="center" gap={3} padding={4}
+                  className={listRowVariants(rowProps)}
+                >
                 <Box
                   width={9}
                   height={9}

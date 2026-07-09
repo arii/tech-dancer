@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from dev_tools.services.repair_service import RepairService
     from dev_tools.services.vision_service import VisionService
 from dev_tools.utils import verify_ci_metrics
-from dev_tools.utils import log_error, log_warn, get_or_create_log_dir, CLIError
+from dev_tools.utils import log_info, log_error, log_warn, get_or_create_log_dir, CLIError
 from dev_tools.handlers.command_handler import CommandHandler
 from dev_tools.models import IssueSummary, PRSummary
 from dev_tools.utils import (
@@ -1534,7 +1534,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             if res.returncode != 0:
                 # Detect and retry unrelated histories
                 if "unrelated histories" in command_log.lower():
-                    log_warn(f"Disjoint history detected for conflict check of PR #{pr_number}. Retrying with --allow-unrelated-histories")
+                    log_warn(f"Disjoint history detected for conflict check of PR #{prNumber}. Retrying with --allow-unrelated-histories")
                     res = run_command(merge_cmd + ["--allow-unrelated-histories"], cwd=worktree_path, check=False)
                     command_log += "\n--- RETRY WITH --allow-unrelated-histories ---\n"
                     command_log += (res.stdout or "") + (res.stderr or "")
@@ -2169,7 +2169,7 @@ Overlapping functionality identified and resolved.
                 # Detect and retry unrelated histories even if not explicitly requested
                 merge_output = (res.stdout or "") + (res.stderr or "")
                 if "unrelated histories" in merge_output.lower():
-                    log_warn(f"Disjoint history detected for PR #{pr_number}. Retrying with --allow-unrelated-histories")
+                    log_warn(f"Disjoint history detected for PR #{prNumber}. Retrying with --allow-unrelated-histories")
                     res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
                     if not isinstance(res, subprocess.CompletedProcess):
                         raise CLIError("Retry merge with --allow-unrelated-histories failed execution")

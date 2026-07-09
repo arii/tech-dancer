@@ -287,7 +287,7 @@ def to_standard_schema(schema):
         return [to_standard_schema(item) for item in schema]
     return schema
 
-def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
 
     token = get_github_token()
@@ -303,14 +303,17 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         log_info("langchain_openai or langchain_core is not installed.")
         return None
 
+    model_kwargs = {}
+    if schema:
+        model_kwargs["response_format"] = {"type": "json_object"}
+
     llm = ChatOpenAI(
         base_url="https://models.inference.ai.azure.com",
         api_key=token,
         model=model,
         temperature=0.7,
-        max_tokens=2048,
         max_retries=max_retries,
-        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
+        model_kwargs=model_kwargs
     )
 
     try:
@@ -334,7 +337,7 @@ def log_ai_run(entry: dict):
         log_error(f"Failed to append to AI run log: {e}")
 
 
-def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_github_models(prompt: str, model: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
     token = get_github_token()
     if not token: return None
