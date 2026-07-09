@@ -1,0 +1,23 @@
+pip_install() {
+  # Ubuntu/Debian images may enable PEP 668.
+  # Use a 600s timeout to prevent hangs while allowing for slow networks.
+  local PIP_CMD="python3 -m pip"
+  local PIP_OPTS=""
+  if [ -n "${VENV_PATH:-}" ]; then
+    PIP_CMD="${VENV_PATH}/bin/pip"
+  else
+    PIP_OPTS="--break-system-packages"
+  fi
+
+  if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
+    return 0
+  fi
+  if [ -z "${VENV_PATH:-}" ]; then
+    timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"
+  else
+    return 1
+  fi
+}
+
+# -------- install steps --------
+install_apt_tools() {

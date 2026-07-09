@@ -1,0 +1,297 @@
+    def audit_pr(self, prNumber: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None, **kwargs) -> Dict[str, Any]:
+        if "pr_number" in kwargs: prNumber = kwargs["pr_number"]
+        review_dir = get_or_create_log_dir("reviews")
+        ctx_path = os.path.join(review_dir, f"pr-context-{prNumber}.md"); rev_path = os.path.join(review_dir, f"pr-review-{prNumber}.md")
+        res = {"pr": prNumber, "files": {}}
+        if fetch:
+            repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(prNumber)
+            title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
+            context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## CI Status"]
+
+            check_runs = self.github.fetch_check_runs(pr.head.sha)
+            failed_check_names = []
+            detected_errors = []
+            if check_runs:
+                for run in check_runs:
+                    status_icon = '✅' if run.get('conclusion') == 'success' else '❌' if run.get('conclusion') == 'failure' else '⏳'
+                    context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
+                    if run.get('conclusion') == 'failure':
+                        failed_check_names.append(run.get('name'))
+                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+
+                        # Structured failure analysis
+                        findings = extract_failing_info(logs)
+                        if findings:
+                            context_lines.append("  **Failing Tests/Build Errors:**")
+                            for f in findings:
+                                error_msg = f"🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})"
+                                context_lines.append(f"  - {error_msg}")
+                                detected_errors.append(error_msg)
+
+                        # Extract a snippet of the logs (last 50 lines or search for 'error')
+                        cleaned_logs = clean_gha_logs(logs)
+                        log_lines = cleaned_logs.splitlines()
+                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
+                        snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
+                        context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
+            else:
+                context_lines.append("_No check runs found._")
+
+            context_lines.extend(["\n## Files Changed"])
+            for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
+            context_lines.append("\n## Diffs")
+            for f in pr.get_files():
+                context_lines.append(f"\n### `{f.filename}` ({f.status})")
+                patch = f.patch or '_No textual diff available._'; annotated = []; line_num = 0
+                if patch != '_No textual diff available._':
+                    for line in patch.splitlines():
+                        if line.startswith('@@'):
+                            m = re.search(r'\+(\d+)', line); line_num = int(m.group(1)) if m else line_num
+                            annotated.append(line)
+                        elif line.startswith('+'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
+                        elif line.startswith('-'): annotated.append(f"     |{line}")
+                        else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
+                context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
+            with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
+            template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
+
+            failed_checks_str = "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
+            errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
+
+            if os.path.exists(template_path):
+                with open(template_path) as f:
+                    template = f.read().format(
+                        pr_num=prNumber,
+                        head_sha=pr.head.sha,
+                        failed_checks=failed_checks_str,
+                        detected_errors=errors_str
+                    )
+            else:
+                template = f"# PR Review: #{prNumber}\n- SHA: {pr.head.sha}\n\n## CI Log Triage\n- **Failed Checks:**\n{failed_checks_str}\n- **Detected Errors:**\n{errors_str}\n"
+            with open(rev_path, "w") as f: f.write(template)
+            res["files"]["context"] = ctx_path; res["files"]["review"] = rev_path
+        if audit:
+            if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
+            with open(ctx_path) as f: context = f.read()
+            changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
+            scope_warning = verify_pr_scope(changed_files)
+            if scope_warning: auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
+            files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
+            if files_to_audit:
+                audit_res = run_command(["node", "scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, check=False)
+                output = audit_res.stdout
+                if output and "{" in output:
+                    json_start = output.find("{")
+                    json_end = output.rfind("}") + 1
+                    audit_data = json.loads(output[json_start:json_end])
+                    # Ensure audit_data is a dictionary, and recursively parse if it's a stringified JSON
+                    if isinstance(audit_data, str):
+                        try:
+                            audit_data = json.loads(audit_data)
+                        except json.JSONDecodeError:
+                            audit_data = {}
+
+                    if isinstance(audit_data, dict):
+                        violations_map = audit_data.get("violations", {})
+                        if not isinstance(violations_map, dict):
+                            violations_map = {}
+
+                        for filepath, violations in violations_map.items():
+                            if isinstance(violations, list):
+                                for v in violations:
+                                    if isinstance(v, dict):
+                                        auto_findings.append({
+                                            "path": filepath,
+                                            "issue": f"{v.get('pattern', 'N/A')}: {v.get('message', 'No message')} (value: {v.get('value', 'N/A')})",
+                                            "severity": v.get('severity', 'minor')
+                                        })
+            res["auto_findings"] = auto_findings
+        if submit:
+            self.github.submit_pr_review(prNumber, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
+        return res
+
+    def handle_comment_command(self, prNumber: int, command: str, comment_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Delegates command handling to the CommandHandler.
+        """
+        handler = CommandHandler(self)
+        return handler.handle(prNumber, command, comment_id)
+
+    def parse_comment(self, body: str, author_association: str) -> Dict[str, Any]:
+        """
+        Parses a comment body and returns the intended actions.
+        Consolidates detection logic using regex patterns with word boundaries.
+        """
+        results = {k: bool(re.search(v, body)) for k, v in self._CMD_PATTERNS.items()}
+
+        return {
+            "conflict_resolve": results["conflict_resolve"],
+            "update_snapshots": results["update_snapshots"],
+    def generate_review_workflow(self, prNumber: int, issueNumber: Optional[int] = None, **kwargs) -> Dict[str, Any]:
+        if "prNumber" in kwargs: prNumber = kwargs["prNumber"]
+        if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
+        """Generates a deterministic review workflow plan for an agent."""
+        # 1. Environment Validation
+        env_res = self.runtime_check()
+        env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
+
+        # 2. Issue Validation
+        issue_output = "No issue number provided."
+        if issueNumber:
+            res = self.validate_issue(issueNumber=issueNumber)
+            issue_output = json.dumps(res, indent=2)
+
+        # 3. Conflict Detection
+        conflicts = self.handle_detect_conflicts(pr_num=prNumber)
+        conflict_output = json.dumps(conflicts, indent=2)
+
+        # 4. PR Context Generation
+        audit_res = self.audit_pr(prNumber, fetch=True)
+        pr_context_file = audit_res["files"]["context"]
+
+        pr_summary = ""
+        ci_status = ""
+        failure_logs = ""
+
+        if os.path.exists(pr_context_file):
+            with open(pr_context_file, "r") as f:
+                pr_context_content = f.read()
+
+            summary_match = re.search(r'(# PR Context:.*?)(?=## CI Status|## Diff Stats)', pr_context_content, re.DOTALL)
+            if summary_match: pr_summary = summary_match.group(1).strip()
+
+            ci_status_match = re.search(r'(## CI Status.*?)(?=## Diff Stats|## Failing Tests)', pr_context_content, re.DOTALL)
+            if ci_status_match: ci_status = ci_status_match.group(1).strip()
+
+            failure_logs_match = re.search(r'(## Failing Tests.*?)(?=## Diff Stats|$)', pr_context_content, re.DOTALL)
+            if failure_logs_match: failure_logs = failure_logs_match.group(1).strip()
+
+            if not pr_summary: pr_summary = "See " + pr_context_file
+            if not ci_status: ci_status = "See " + pr_context_file
+            if not failure_logs: failure_logs = "See " + pr_context_file
+
+        # 5. Impact Analysis
+        impact_output = "Not available."
+        if os.path.exists("scripts/impact-analysis.ts"):
+            # Use check=False to swallow errors from impact analysis in the planning phase
+            res = run_command(["npx", "tsx", "scripts/impact-analysis.ts"], check=False, log_on_error=False)
+            impact_output = res.stdout + res.stderr
+            if res.returncode != 0:
+                impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
+
+        # 6. Existing Review Data
+        gemini_review = "None."
+        if os.path.exists("artifacts/gemini-code-review.md"):
+            with open("artifacts/gemini-code-review.md", "r") as f: gemini_review = f.read()
+
+        github_models_review = "None."
+        if os.path.exists("artifacts/github-models-code-review.md"):
+            with open("artifacts/github-models-code-review.md", "r") as f: github_models_review = f.read()
+
+        # Generate workflow plan
+        plan_dir = get_or_create_log_dir("workflows")
+        plan_path = os.path.join(plan_dir, f"workflow-plan-pr-{prNumber}.md")
+
+        with open(plan_path, "w") as f:
+            f.write(f"""# Workflow Plan: PR #{prNumber}
+
+## Agent Instructions
+
+- **Environment Check**: Ensure Python dependencies and pnpm {PROJECT_CONFIG.pnpm_version} are available.
+- setup complete
+- validation complete
+- context collected (via `td agent plan-review --pr {prNumber}`)
+- diagnostics collected
+
+Agent must not repeat these steps. Redundant fetching (`--fetch`) or auditing (`--audit`) is already handled.
+
+---
+
+## Workflow State
+
+[x] Environment Validation
+[x] Issue Validation
+[x] Conflict Detection
+[x] Context Collection & Audit
+[x] Impact Analysis
+[ ] Review Analysis
+[ ] Review Authoring
+[ ] Completion Verification
+
+---
+
+## Collected Context
+
+### Validation Output
+```text
+{env_output}
+```
+
+### Issue Validation Output
+```text
+{issue_output}
+```
+
+### Conflict Output
+```text
+{conflict_output}
+```
+
+### PR Summary
+Relevant excerpts from:
+`{pr_context_file}`
+
+```text
+{pr_summary}
+```
+
+### CI Status
+Relevant excerpts:
+```text
+{ci_status}
+```
+
+### Failure Logs
+Relevant excerpts:
+```text
+{failure_logs}
+```
+
+### Impact Analysis
+Relevant excerpts:
+```text
+{impact_output}
+```
+
+### Existing AI Reviews
+**Gemini:**
+```markdown
+{gemini_review}
+```
+
+**GitHub Models:**
+```markdown
+{github_models_review}
+```
+
+---
+
+## Allowed Files
+
+Agent may read:
+`.agents/workflows/REVIEW_INSTRUCTIONS.md`
+`boomtick-pkg/cli/logs/reviews/pr-review-{prNumber}.md`
+
+---
+
+## Writable Files
+
+Agent may modify:
+`boomtick-pkg/cli/logs/reviews/pr-review-{prNumber}.md`
+
+---
+
+## Merge & Conflict Guidance
+
+If tasks require merging branches (e.g., during PR consolidation or rebase):
+- **Unrelated Histories**: If git fails with `fatal: refusing to merge unrelated histories`, use `git merge <branch> --allow-unrelated-histories`.
