@@ -106,45 +106,104 @@ function validateFindingsSchema(state: CodeReviewState): boolean {
   );
 }
 
+/**
+ * Normalizes a list of findings by injecting default values for missing or malformed fields.
+ * Ensures the resulting objects adhere to the ReviewFinding interface.
+ */
+export function normalizeFindings(findings: unknown[]): ReviewFinding[] {
+  if (!Array.isArray(findings)) return [];
+  return findings.map((f, idx) => {
+    if (!f || typeof f !== 'object') return f;
+    return {
+      id: typeof f.id === 'string' ? f.id : `finding-${idx}`,
+      file: typeof f.file === 'string' ? f.file : 'unknown',
+      issue: typeof f.issue === 'string' ? f.issue : 'Unspecified issue',
+      status: (typeof f.status === 'string' && f.status.toLowerCase() === 'resolved') ? 'resolved' : 'open',
+      confidence: (typeof f.confidence === 'string' && ['high', 'medium', 'low'].includes(f.confidence.toLowerCase()))
+        ? f.confidence.toLowerCase() as 'high' | 'medium' | 'low'
+        : 'medium',
+      line: typeof f.line === 'number' ? f.line : undefined,
+      snippet: typeof f.snippet === 'string' ? f.snippet : undefined,
+      fixSummary: typeof f.fixSummary === 'string' ? f.fixSummary : undefined,
+      counterexample: typeof f.counterexample === 'string' ? f.counterexample : undefined,
+    };
+  });
+}
+
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
   const openTag = '<findings>';
   const closeTag = '</findings>';
 
   const openIdx = feedback.lastIndexOf(openTag);
   const closeIdx = feedback.lastIndexOf(closeTag);
+  const errors: CodeReviewParseError[] = [];
 
-  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
-    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
-    return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
+  const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
+  if (openedButNeverClosed) errors.push('missing_closing_tag');
+
+  let jsonText: string;
+  if (openIdx !== -1) {
+    if (closeIdx !== -1 && closeIdx > openIdx) {
+      jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+    } else {
+      jsonText = feedback.slice(openIdx + openTag.length).trim();
+    }
+  } else {
+    if (feedback.includes('{') || feedback.includes('[')) {
+      jsonText = feedback.trim();
+    } else {
+      return { state: undefined };
+    }
   }
 
-  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  // Robust extraction: find the boundaries of the outermost JSON object or array
+  const firstBrace = jsonText.indexOf('{');
+  const firstBracket = jsonText.indexOf('[');
+  const lastBrace = jsonText.lastIndexOf('}');
+  const lastBracket = jsonText.lastIndexOf(']');
 
-  const startIdx = jsonText.indexOf('{');
-  const endIdx = jsonText.lastIndexOf('}');
-  if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+  let startIdx = -1;
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    startIdx = firstBrace;
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+  }
+
+  let endIdx = -1;
+  if (lastBrace !== -1 && lastBrace > lastBracket) {
+    endIdx = lastBrace;
+  } else if (lastBracket !== -1) {
+    endIdx = lastBracket;
+  }
+
+  const isTruncated = startIdx !== -1 && endIdx === -1;
+  if (isTruncated) errors.push('truncated_json');
+
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     jsonText = jsonText.slice(startIdx, endIdx + 1);
+  } else if (isTruncated) {
+    jsonText = jsonText.slice(startIdx);
   } else {
+    // Strip markdown code blocks if boundaries weren't found
     jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
   }
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
 
-    // Normalize properties before validation to avoid side-effects in validator
-    if (state && state.findings && Array.isArray(state.findings)) {
-      state.findings = state.findings.map(f => {
-        if (f && typeof f === 'object' && typeof f.status === 'string') {
-          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
-        }
-        return f;
-      });
+    if (state && state.findings) {
+      state.findings = normalizeFindings(state.findings);
     }
 
     if (!validateFindingsSchema(state)) {
-      return { state, parseError: 'incomplete_findings' };
+      errors.push('incomplete_findings');
     }
-    return { state };
+
+    return {
+      state,
+      parseError: errors[0],
+      errors: errors.length > 0 ? errors : undefined
+    };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON:', e, 'JSON snippet:', jsonText.slice(0, 100));

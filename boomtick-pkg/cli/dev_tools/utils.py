@@ -303,28 +303,26 @@ def get_gemini_model() -> str:
     return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
 
 def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
+    """
+    Removes markdown code blocks if present, or extracts from <findings> tags if present.
+    This utility focuses on standard LLM formatting (tags/blocks).
+    Pipeline-specific robust extraction should be handled by the caller.
+    """
     if not text:
         return ""
 
-    # 1. Handle double-escaped newlines commonly found in AI generated JSON in markdown
+    # Handle double-escaped newlines commonly found in AI generated JSON in markdown
     text = text.replace('\\\\n', '\\n')
 
-    # 2. Extract from <findings> tags if present
+    # 1. Extract from <findings> tags if present
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
 
-    # 3. Extract from markdown code blocks
-    match = re.search(r"```(?:json|jsonc|[\w]*)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
-    if match:
-        text = match.group(1).strip()
-
-    # 4. Final safety strip of any leading/trailing non-JSON junk (like "Result: { ... }")
-    json_start = text.find('{')
-    json_end = text.rfind('}')
-    if json_start != -1 and json_end != -1 and json_end > json_start:
-        text = text[json_start:json_end+1]
+    # 2. Extract from ```json or ``` code blocks
+    code_block_match = re.search(r"```(?:json|xml|tsx?|jsx?)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
+    if code_block_match:
+        return code_block_match.group(1).strip()
 
     return text.strip()
 
