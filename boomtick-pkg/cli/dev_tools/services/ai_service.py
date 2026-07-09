@@ -6,10 +6,12 @@ import json
 import hashlib
 import re
 from collections import defaultdict
-from typing import Optional, Dict, Any, List, Set
+from typing import Optional, Dict, Any, List, Set, Type, Tuple
+from pydantic import ValidationError, BaseModel
 from dev_tools.utils import log_info, log_error, log_warn, ensure_dir
 from dev_tools.verify_versions import parse_diff, verify_changes
 from dev_tools.review_read_pass import parse_diff_into_file_chunks
+from dev_tools.models import AIFullReview, AISynthesisReview
 
 from dev_tools.utils import (
     call_ai,
@@ -33,51 +35,38 @@ _SYNTHESIS_MODEL = get_ai_model()
 _MAX_AI_RETRIES = 3
 
 # Combined review schema
-_REVIEW_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "file_reviews": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "file": {"type": "string"},
-                    "issues": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "line": {"type": "integer"},
-                                "severity": {"type": "string"},
-                                "comment": {"type": "string"},
-                                "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
-                                "counterexample": {"type": "string"},
-                            },
-                            "required": ["line", "severity", "comment", "confidence"],
-                        }
-                    },
-                    "verdict": {"type": "string"},
-                },
-                "required": ["file", "issues", "verdict"],
-            }
-        },
-        "reviewComment": {"type": "string"},
-        "labels": {"type": "array", "items": {"type": "string"}},
-        "recommendation": {"type": "string"},
-    },
-    "required": ["file_reviews", "reviewComment", "labels", "recommendation"],
-}
+_REVIEW_SCHEMA = AIFullReview.model_json_schema()
 
 # Synthesis review schema
-_SYNTHESIS_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "reviewComment": {"type": "string"},
-        "labels": {"type": "array", "items": {"type": "string"}},
-        "recommendation": {"type": "string"},
-    },
-    "required": ["reviewComment", "labels", "recommendation"],
-}
+_SYNTHESIS_SCHEMA = AISynthesisReview.model_json_schema()
+
+def validate_with_model(data: Any, model_class: Type[BaseModel]) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Validates data against a Pydantic model and returns (parsed_dict, error_message)."""
+    try:
+        # Handle cases where data might be double-encoded or stringified
+        if isinstance(data, str):
+            try:
+                data = json.loads(data)
+                if isinstance(data, str):
+                    data = json.loads(data)
+            except json.JSONDecodeError:
+                pass
+
+        if not isinstance(data, dict):
+            return None, f"Expected dictionary for validation, got {type(data).__name__}"
+
+        parsed = model_class.model_validate(data)
+        return parsed.model_dump(), None
+    except ValidationError as e:
+        # Extract specific error details from Pydantic
+        errs = []
+        for err in e.errors():
+            loc = " -> ".join(str(x) for x in err.get('loc', []))
+            msg = err.get('msg')
+            errs.append(f"[{loc}]: {msg}")
+        return None, "Validation failed:\n  " + "\n  ".join(errs)
+    except Exception as e:
+        return None, str(e)
 
 
 
@@ -119,12 +108,12 @@ def _get_review_prompt_constants() -> tuple[str, str, str]:
         return _REVIEW_CONSTANTS_CACHE
 
 class AIClient:
-    def __init__(self, ai_model: str = None):
+    def __init__(self, ai_model: Optional[str] = None):
         self.ai_model = ai_model or get_ai_model()
         self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
 
-        self._dependency_graph = None
-        self._vector_store = None
+        self._dependency_graph: Optional[DependencyGraph] = None
+        self._vector_store: Optional[VectorStore] = None
 
     @property
     def dependency_graph(self) -> DependencyGraph:
@@ -141,7 +130,7 @@ class AIClient:
     def is_ai_available(self) -> bool:
         return is_ai_available()
 
-    def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
+    def call_ai(self, prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
         return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
@@ -177,7 +166,7 @@ class AIClient:
             log_warn(f"Gemini API call failed: {e}")
             return None
 
-    def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
+    def generate(self, prompt: str, schema: Optional[Dict] = None, model: Optional[str] = None) -> str:
         if self.is_ai_available():
             res = self.call_ai(prompt, model=model, schema=schema)
             if res:
@@ -359,11 +348,31 @@ class AIClient:
                     continue
 
                 cleaned = clean_llm_output(raw)
-                parsed = json.loads(cleaned)
 
-                # Handle double-encoded JSON strings from LLM
-                if isinstance(parsed, str):
-                    parsed = json.loads(parsed)
+                # Robust extraction fallback for mixed/malformed model output
+                candidate = cleaned
+                first_brace = candidate.find('{')
+                first_bracket = candidate.find('[')
+                last_brace = candidate.rfind('}')
+                last_bracket = candidate.rfind(']')
+
+                start = -1
+                if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+                    start, end = first_brace, last_brace
+                elif first_bracket != -1:
+                    start, end = first_bracket, last_bracket
+
+                if start != -1 and end != -1 and end > start:
+                    json_candidate = candidate[start:end+1]
+                    try:
+                        temp_parsed = json.loads(json_candidate)
+                        cleaned = json.dumps(temp_parsed)
+                    except json.JSONDecodeError:
+                        pass
+
+                parsed, err = validate_with_model(cleaned, AIFullReview)
+                if err or parsed is None:
+                    raise ValueError(err or "Validation failed")
 
                 if isinstance(parsed, dict):
                     break # Success
@@ -382,13 +391,10 @@ class AIClient:
             }
         else:
             file_reviews = parsed.get("file_reviews", [])
-            if not isinstance(file_reviews, list):
-                file_reviews = []
-
             final = {
-                "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
-                "labels": parsed.get("labels", []),
-                "recommendation": parsed.get("recommendation", "Unknown")
+                "reviewComment": str(parsed.get("reviewComment", f"Automated review of PR #{pr_num}.")),
+                "labels": list(parsed.get("labels", [])),
+                "recommendation": str(parsed.get("recommendation", "Unknown"))
             }
             print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
 
@@ -397,7 +403,7 @@ class AIClient:
             final['recommendation'] = 'Not Approved'
             final['reviewComment'] = (
                 f"CI checks are failing ({failing_names}). Recommendation downgraded.\n\n"
-                + final.get('reviewComment', '')
+                + str(final.get('reviewComment', ''))
             )
 
         self._write_review_file(pr_num, pr, final, chunks, file_reviews)
@@ -405,7 +411,7 @@ class AIClient:
 
     def _get_context_for_chunk(self, chunk: Dict) -> str:
         """Retrieves dependency and semantic context for a code chunk."""
-        filepath = chunk.get('file')
+        filepath = str(chunk.get('file', ''))
         context_parts = []
 
         # 1. Dependency Context
@@ -596,9 +602,9 @@ class AIClient:
                     continue
 
                 cleaned = clean_llm_output(raw)
-                res = json.loads(cleaned)
-                if isinstance(res, str):
-                    res = json.loads(res)
+                res, err = validate_with_model(cleaned, AISynthesisReview)
+                if err or res is None:
+                    raise ValueError(err or "Validation failed")
 
                 if isinstance(res, dict):
                     break # Success
@@ -696,7 +702,7 @@ class AIClient:
         ) if table_rows else "_No files reviewed._"
 
         # Build inline comments JSON block
-        all_issues = []
+        all_issues: List[Dict[str, Any]] = []
         for fr in file_reviews:
             if not isinstance(fr, dict):
                 continue
@@ -707,10 +713,12 @@ class AIClient:
                 if not isinstance(issue, dict):
                     continue
                 conf = str(issue.get('confidence', 'high')).upper()
+                # Support both 'issue' and 'comment' fields from the model
+                issue_description = str(issue.get('issue') or issue.get('comment') or '')
                 all_issues.append({
                     "path": str(fr.get('file', 'unknown')),
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
+                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue_description}",
                 })
         if not all_issues:
             # Always provide at least one comment to satisfy validator

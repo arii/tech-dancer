@@ -55,7 +55,8 @@ if (!expectedPnpm) {
 
 if (!actualPnpm) {
   console.error("❌ pnpm is not available");
-  console.error(`Run: corepack enable && corepack prepare pnpm@${expectedPnpm} --activate`);
+  console.error("   It might be disabled or missing from the PATH.");
+  console.error(`   Run: corepack enable && corepack prepare pnpm@${expectedPnpm} --activate`);
   failed = true;
 } else if (actualPnpm !== expectedPnpm) {
   console.error("❌ pnpm version mismatch");
