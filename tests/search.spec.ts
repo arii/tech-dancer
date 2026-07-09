@@ -16,6 +16,15 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
+  test('should auto-focus the search input when opened', async ({ page }) => {
+    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    await searchButton.click();
+
+    const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeFocused();
+  });
+
   test('should close search modal when pressing Escape', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
