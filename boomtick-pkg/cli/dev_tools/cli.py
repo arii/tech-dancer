@@ -668,6 +668,19 @@ def track_review(ctx, pr, status, auditor, dry_run):
     res = orch.track_review(pr, status, auditor, dry_run=dry_run)
     out(ctx, f"✅ Updated tracking for PR #{pr}", data=res)
 
+@cli.command(name='schema')
+@click.argument('command_path', required=False)
+@click.pass_context
+def schema_cmd(ctx, command_path):
+    """Retrieve the schema for a specific subcommand or all commands."""
+    from dev_tools.schema_utils import collect_commands, get_command_by_path
+    target_cmd = get_command_by_path(cli, command_path)
+    if not target_cmd:
+        err(ctx, f"Command path not found: {command_path}")
+
+    res = collect_commands(target_cmd, prefix=command_path or "")
+    out(ctx, f"Schema for {command_path or 'root'}", data={"schema": res})
+
 def _handle_gate(ctx, res, label):
     msg = f"{label}: Current={res.get('current', res.get('size_kb'))}, Baseline={res.get('baseline', res.get('baseline_kb'))}"
     if res['status'] == 'error':

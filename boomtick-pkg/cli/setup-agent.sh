@@ -395,6 +395,12 @@ EOE
 
   # Apply to current session
   source "$env_file"
+
+  # Inject feature flags for agent optimization
+  export TD_CLI_SCHEMA_QUERY_SUPPORTED="true"
+  if ! grep -Fq "export TD_CLI_SCHEMA_QUERY_SUPPORTED" "$env_file"; then
+    echo "export TD_CLI_SCHEMA_QUERY_SUPPORTED=\"true\"" >> "$env_file"
+  fi
 }
 
 run_validation() {
