@@ -674,13 +674,16 @@ class Orchestrator:
                 if output and "{" in output:
                     json_start = output.find("{")
                     json_end = output.rfind("}") + 1
-                    audit_data = json.loads(output[json_start:json_end])
-                    # Ensure audit_data is a dictionary, and recursively parse if it's a stringified JSON
-                    if isinstance(audit_data, str):
-                        try:
-                            audit_data = json.loads(audit_data)
-                        except json.JSONDecodeError:
-                            audit_data = {}
+                    try:
+                        audit_data = json.loads(output[json_start:json_end])
+                        # Ensure audit_data is a dictionary, and recursively parse if it's a stringified JSON
+                        if isinstance(audit_data, str):
+                            try:
+                                audit_data = json.loads(audit_data)
+                            except json.JSONDecodeError:
+                                audit_data = {}
+                    except json.JSONDecodeError:
+                        audit_data = {}
 
                     if isinstance(audit_data, dict):
                         violations_map = audit_data.get("violations", {})
@@ -692,9 +695,9 @@ class Orchestrator:
                                 for v in violations:
                                     if isinstance(v, dict):
                                         auto_findings.append({
-                                            "path": filepath,
+                                            "path": str(filepath),
                                             "issue": f"{v.get('pattern', 'N/A')}: {v.get('message', 'No message')} (value: {v.get('value', 'N/A')})",
-                                            "severity": v.get('severity', 'minor')
+                                            "severity": str(v.get('severity', 'minor'))
                                         })
             res["auto_findings"] = auto_findings
         if submit:
@@ -1034,7 +1037,8 @@ Respond only after the PR is created or updated:
             else: new_lines.append(line)
         if not found: new_lines.append(f"| #{pr_num} | {status} | {auditor} | {now} |")
         if not dry_run:
-            with open(tracking_file, "w") as f: f.write("\n".join(new_lines) + "\n")
+            from dev_tools.utils import safe_write_file
+            safe_write_file(tracking_file, "\n".join(new_lines) + "\n")
         return {"pr": pr_num, "status": status, "updated": not dry_run}
 
     def resolve_conflicts_headless(self) -> List[str]:
@@ -1534,7 +1538,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             if res.returncode != 0:
                 # Detect and retry unrelated histories
                 if "unrelated histories" in command_log.lower():
-                    log_warn(f"Disjoint history detected for conflict check of PR #{pr_number}. Retrying with --allow-unrelated-histories")
+                    log_warn(f"Disjoint history detected for conflict check of PR #{prNumber}. Retrying with --allow-unrelated-histories")
                     res = run_command(merge_cmd + ["--allow-unrelated-histories"], cwd=worktree_path, check=False)
                     command_log += "\n--- RETRY WITH --allow-unrelated-histories ---\n"
                     command_log += (res.stdout or "") + (res.stderr or "")
@@ -1634,32 +1638,44 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             ]
         }
 
+    def get_pr_for_session(self, session: Dict[str, Any]) -> Optional[int]:
+        """Optimized PR lookup for a session."""
+        session_id = session.get("name", "").replace("sessions/", "")
+
+        # 1. Try metadata/outputs first if available (fastest)
+        if session.get("outputs") and isinstance(session["outputs"], list):
+            for output in session["outputs"]:
+                if output.get("pullRequest") and output["pullRequest"].get("url"):
+                    match = re.search(r"/pull/(\d+)", output["pullRequest"]["url"])
+                    if match:
+                        return int(match.group(1))
+
+        # 2. Try branch name from sourceContext (fast - targeted search)
+        branch = None
+        if session.get("sourceContext"):
+            branch = session["sourceContext"].get("githubRepoContext", {}).get("startingBranch")
+
+        if branch:
+            # Use search API for targeted branch lookup
+            prs = self.github.search_pull_requests(f'head:{branch} state:open', limit=1)
+            if prs:
+                return prs[0]['number']
+
+        # 3. Fallback to session ID in body
+        safe_id = f'"{session_id}"'
+        prs = self.github.search_pull_requests(f'{safe_id} in:body,title state:open', limit=1)
+        if prs:
+            return prs[0]['number']
+
+        return None
+
     def trigger_jules_feedback(self, session_id: str) -> Dict[str, Any]:
         """Ports logic from trigger-feedback.ts to provide CI feedback to Jules."""
         session = self.jules.get_session(session_id)
         if not session:
             raise CLIError(f"Session {session_id} not found.")
 
-        prNumber = None
-        # Try to find PR in session outputs
-        if session.get("outputs") and isinstance(session["outputs"], list):
-            for output in session["outputs"]:
-                if output.get("pullRequest") and output["pullRequest"].get("url"):
-                    match = re.search(r"/pull/(\d+)", output["pullRequest"]["url"])
-                    if match:
-                        prNumber = int(match.group(1))
-                        break
-
-        # Search via gh for PRs mentioning session ID if not found
-        if not prNumber:
-            prs = self.github.list_pull_requests(state='open')
-            clean_id = session_id.replace("sessions/", "")
-            for pr in prs:
-                # Need full details for body
-                full_pr = self.github.fetch_pr_details(pr['number'])
-                if clean_id in (full_pr.get('title') or "") or clean_id in (full_pr.get('body') or ""):
-                    prNumber = pr['number']
-                    break
+        prNumber = self.get_pr_for_session(session)
 
         if not prNumber:
             return {
@@ -1864,6 +1880,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 - context collected (via `td agent plan-review --pr {prNumber}`)
 - diagnostics collected
 
+**IMPORTANT: Context collection and audit are COMPLETE. Do NOT run --fetch or --audit again.**
 Agent must not repeat these steps. Redundant fetching (`--fetch`) or auditing (`--audit`) is already handled.
 
 ---
@@ -2109,9 +2126,10 @@ Overlapping functionality identified and resolved.
 """)
         return {"status": "success", "plan_path": plan_path}
 
-    def resolve_pr_conflicts(self, prNumber: int, allow_unrelated: bool = False, strategy: Optional[str] = None, push: bool = False) -> Dict[str, Any]:
+    def resolve_pr_conflicts(self, prNumber: int, allow_unrelated: bool = False, strategy: Optional[str] = None, push: bool = False, continue_resolve: bool = False) -> Dict[str, Any]:
         """
         Sets up a worktree for a specific PR and attempts to merge the base branch.
+        If continue_resolve is True, it finalizes an in-progress resolution.
         """
         original_cwd = os.getcwd()
         # Use a path that is clearly temporary and matches existing patterns for ignored files
@@ -2128,44 +2146,76 @@ Overlapping functionality identified and resolved.
             if not head_ref:
                 raise CLIError(f"Could not determine head ref for PR #{prNumber}")
 
-            # 2. Clean up existing worktree if present
-            self._cleanup_worktree(worktree_path)
+            if continue_resolve:
+                if not os.path.exists(worktree_path):
+                    raise CLIError(f"No in-progress resolution found for PR #{prNumber} at {worktree_path}")
 
-            # 3. Fetch PR branch and create worktree directly on it
-            run_command(["git", "fetch", "origin", f"+pull/{prNumber}/head:{head_ref}"], check=True)
-            run_command(["git", "worktree", "add", worktree_path, head_ref], check=True)
+                changed_dir = True
+                os.chdir(worktree_path)
 
-            # 4. Switch to worktree and perform git operations
-            changed_dir = True
-            os.chdir(worktree_path)
+                # Check for unmerged paths
+                res_diff = run_command(["git", "diff", "--name-only", "--diff-filter=U"], check=False)
+                unmerged = res_diff.stdout.strip()
+                if unmerged:
+                    raise CLIError(f"Unresolved conflicts remain in PR #{prNumber}:\n{unmerged}\n\nPlease resolve them in {worktree_path} before continuing.")
 
-            # Ensure origin/base_branch is up-to-date
-            run_command(["git", "fetch", "origin", base_branch], check=True)
+                # Stage all changes
+                run_command(["git", "add", "."], check=True)
 
-            # Attempt merge from base branch.
-            merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{prNumber}"]
-            if allow_unrelated:
-                merge_cmd.append("--allow-unrelated-histories")
-            if strategy in ["ours", "theirs"]:
-                merge_cmd.extend(["-X", strategy])
+                # Check if there is anything to commit
+                status_res = run_command(["git", "status", "--porcelain"], check=False)
+                if status_res.stdout.strip():
+                    commit_msg = f"Merge {base_branch} into PR #{prNumber}"
+                    run_command(["git", "commit", "-m", commit_msg], check=True)
 
-            res = run_command(merge_cmd, check=False)
-            if not isinstance(res, subprocess.CompletedProcess):
-                raise CLIError("Failed to execute git merge command")
+                # We reuse the push logic below
+                res_code = 0
+            else:
+                # 2. Clean up existing worktree if present
+                self._cleanup_worktree(worktree_path)
 
-            if res.returncode != 0 and not allow_unrelated:
-                # Detect and retry unrelated histories even if not explicitly requested
-                merge_output = (res.stdout or "") + (res.stderr or "")
-                if "unrelated histories" in merge_output.lower():
-                    log_warn(f"Disjoint history detected for PR #{pr_number}. Retrying with --allow-unrelated-histories")
-                    res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
-                    if not isinstance(res, subprocess.CompletedProcess):
-                        raise CLIError("Retry merge with --allow-unrelated-histories failed execution")
+                # 3. Fetch PR branch and create worktree directly on it
+                run_command(["git", "fetch", "origin", f"+pull/{prNumber}/head:{head_ref}"], check=True)
+                run_command(["git", "worktree", "add", worktree_path, head_ref], check=True)
 
-            if res.returncode == 0:
-                message = f"✅ PR #{prNumber} merged successfully with {base_branch}.\nPath: {worktree_path}"
+                # 4. Switch to worktree and perform git operations
+                changed_dir = True
+                os.chdir(worktree_path)
+
+                # Ensure origin/base_branch is up-to-date
+                run_command(["git", "fetch", "origin", base_branch], check=True)
+
+                # Attempt merge from base branch.
+                merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{prNumber}"]
+                if allow_unrelated:
+                    merge_cmd.append("--allow-unrelated-histories")
+                if strategy in ["ours", "theirs"]:
+                    merge_cmd.extend(["-X", strategy])
+
+                res = run_command(merge_cmd, check=False)
+                if not isinstance(res, subprocess.CompletedProcess):
+                    raise CLIError("Failed to execute git merge command")
+
+                if res.returncode != 0 and not allow_unrelated:
+                    # Detect and retry unrelated histories even if not explicitly requested
+                    merge_output = (res.stdout or "") + (res.stderr or "")
+                    if "unrelated histories" in merge_output.lower():
+                        log_warn(f"Disjoint history detected for PR #{prNumber}. Retrying with --allow-unrelated-histories")
+                        res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
+                        if not isinstance(res, subprocess.CompletedProcess):
+                            raise CLIError("Retry merge with --allow-unrelated-histories failed execution")
+
+                res_code = res.returncode
+
+            if res_code == 0:
+                message = f"✅ PR #{prNumber} merged successfully with {base_branch}."
+                if not continue_resolve:
+                    message += f"\nPath: {worktree_path}"
+
                 status = "success"
-                if push:
+
+                # Always push if continue_resolve is True, or if push flag was set
+                if push or continue_resolve:
                     head_branch = pr_data.get('head', {}).get('ref')
                     if not head_branch:
                         raise CLIError(f"Cannot push: head branch is missing for PR #{prNumber}")
@@ -2180,6 +2230,13 @@ Overlapping functionality identified and resolved.
                     except Exception as push_err:
                         message += f"\n⚠️  Merge successful but push failed: {str(push_err)}"
                         status = "partial_success"
+
+                if continue_resolve and status == "success":
+                    # Cleanup worktree on success
+                    os.chdir(original_cwd)
+                    changed_dir = False
+                    self._cleanup_worktree(worktree_path)
+                    message += "\n🧹 Temporary worktree cleaned up."
             else:
                 message = f"⚠️  Conflicts detected in PR #{prNumber} when merging {base_branch}.\nAction Required: Resolve them manually in the worktree.\nCommand: cd {worktree_path}"
                 status = "conflict"

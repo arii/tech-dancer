@@ -134,6 +134,67 @@ def ensure_dir(*parts: str) -> str:
     path.mkdir(parents=True, exist_ok=True)
     return str(path)
 
+def safe_write_file(filepath: str, content: str):
+    """
+    Writes content to a file while being symlink-aware and security-conscious.
+    If the filepath is a symlink, it resolves the real path and writes to the target,
+    preserving the symlink, but ONLY if the target is within the repository root.
+    """
+    target_path = filepath
+    if os.path.islink(filepath):
+        target_path = os.path.realpath(filepath)
+        log_info(f"Symlink detected: {filepath} -> {target_path}")
+
+    # Security: Ensure target path is within repo root
+    repo_root = os.path.abspath(os.getcwd())
+    # Use realpath here to resolve symlinks and prevent escaping via symlink redirection
+    abs_target = os.path.realpath(target_path)
+    try:
+        # commonpath is the standard way to verify a subpath remains within a parent
+        if os.path.commonpath([repo_root, abs_target]) != repo_root:
+             raise CLIError(f"Security Error: Target path {target_path} (resolved: {abs_target}) is outside of repository root.")
+    except (ValueError, Exception) as e:
+         raise CLIError(f"Security Error: Target path {target_path} is invalid or outside of repository root: {e}")
+
+    # Ensure parent directory exists for the target
+    os.makedirs(os.path.dirname(abs_target), exist_ok=True)
+
+    try:
+        with open(abs_target, 'w', encoding='utf-8') as f:
+            f.write(content)
+    except Exception as e:
+        raise CLIError(f"Failed to write to {abs_target}: {e}")
+
+def apply_patch(filepath: str, patch_content: str):
+    """
+    Applies a patch to a file using git apply with whitespace fixing.
+    Restricts application to the specific filepath for security.
+    """
+    import tempfile
+
+    # Security: validate filepath - use realpath to resolve any symlink escapes
+    repo_root = os.path.abspath(os.getcwd())
+    abs_filepath = os.path.realpath(filepath)
+    try:
+        if os.path.commonpath([repo_root, abs_filepath]) != repo_root:
+             raise CLIError(f"Security Error: Path {filepath} is outside of repository root.")
+    except ValueError:
+         raise CLIError(f"Security Error: Path {filepath} is invalid or outside of repository root.")
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".patch", delete=False) as tmp:
+        tmp.write(patch_content)
+        tmp_path = tmp.name
+
+    try:
+        # Use --include to restrict what git apply can touch
+        # filepath should be relative to repo root for --include
+        rel_path = os.path.relpath(abs_filepath, repo_root)
+        run_command(["git", "apply", "--whitespace=fix", "--include", rel_path, tmp_path])
+        log_info(f"Successfully applied patch to {filepath}")
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+
 def get_or_create_log_dir(subdir: str) -> str:
     """Returns the path to a specific log subdirectory and ensures it exists."""
     log_dir = Path(get_base_dir()) / "logs" / subdir
@@ -242,15 +303,27 @@ def get_gemini_model() -> str:
     return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
 
 def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
-    # First try to extract from <findings> tags (used in code review prompts)
+    """
+    Removes markdown code blocks if present, or extracts from <findings> tags if present.
+    This utility focuses on standard LLM formatting (tags/blocks).
+    Pipeline-specific robust extraction should be handled by the caller.
+    """
+    if not text:
+        return ""
+
+    # Handle double-escaped newlines commonly found in AI generated JSON in markdown
+    text = text.replace('\\\\n', '\\n')
+
+    # 1. Extract from <findings> tags if present
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
-        
-    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
+
+    # 2. Extract from ```json or ``` code blocks
+    code_block_match = re.search(r"```(?:json|xml|tsx?|jsx?)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
+    if code_block_match:
+        return code_block_match.group(1).strip()
+
     return text.strip()
 
 def is_ai_available() -> bool:
@@ -287,26 +360,25 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
 
     model = model or get_ai_model()
 
-    try:
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        log_info("langchain_openai or langchain_core is not installed.")
-        return None
-
-    llm = ChatOpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=token,
-        model=model,
-        temperature=0.7,
-        max_tokens=2048,
-        max_retries=max_retries,
-        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
-    )
+    url_target = "https://models.inference.ai.azure.com/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7,
+        "max_tokens": 2048
+    }
+    if schema:
+        payload["response_format"] = {"type": "json_object"}
 
     try:
-        response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
+        response = _request("POST", url_target, headers=headers, json=payload, max_retries=max_retries, retry_status_codes=[429, 500, 502, 503, 504])
+        if not response:
+            return None
+        return response.json()["choices"][0]["message"]["content"]
     except Exception as e:
         log_error(f"AI Call failed: {e}")
         return None
@@ -451,28 +523,30 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
     if not api_key:
         return None
 
-    try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        log_info("langchain_google_genai or langchain_core is not installed.")
-        return None
-
-    llm = ChatGoogleGenerativeAI(
-        model=model or get_gemini_model(),
-        google_api_key=api_key,
-        temperature=0.7,
-        max_retries=max_retries,
-    )
-
     if schema:
         # Note: structured output handling varies by LangChain version/provider
         # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
         prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
+    url_target = f"https://generativelanguage.googleapis.com/v1beta/models/{model or get_gemini_model()}:generateContent?key={api_key}"
+    headers = {
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0.7,
+        }
+    }
+
     try:
-        response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
+        response = _request("POST", url_target, headers=headers, json=payload, max_retries=max_retries)
+        if not response:
+            return None
+        data = response.json()
+        if 'candidates' in data and len(data['candidates']) > 0:
+            return data['candidates'][0]['content']['parts'][0]['text']
+        return None
     except Exception as e:
         log_error(f"Gemini Call failed: {e}")
         return None

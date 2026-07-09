@@ -206,6 +206,49 @@ def logs(ctx, pr_number, grep):
     logs_content = orch.stream_ci_logs(pr_number, grep=grep)
     out(ctx, f"Fetched logs for PR #{pr_number}", data={"logs": logs_content})
 
+@repo.command()
+@click.argument('filepath')
+@click.option('--patch-file')
+@click.option('--patch-body')
+@click.pass_context
+def apply_patch(ctx, filepath, patch_file, patch_body):
+    """Apply a patch to a file using resilient git apply."""
+    from dev_tools.utils import apply_patch as _apply, sanitize_path
+    orch = ctx.obj['ORCHESTRATOR']
+
+    # Security: sanitize inputs
+    filepath = sanitize_path(filepath)
+    if not filepath:
+        err(ctx, "Invalid filepath provided.")
+        return # Explicit return for security
+
+    content = patch_body
+    if patch_file:
+        safe_patch_path = sanitize_path(patch_file)
+        if not safe_patch_path:
+             err(ctx, "Invalid patch-file path provided.")
+             return # Explicit return for security
+        try:
+             # Use Orchestrator helper for safe file reading
+             content = orch._read_safe_file(safe_patch_path)
+        except Exception as e:
+             err(ctx, f"Failed to read patch file: {str(e)}")
+
+    if not content:
+        err(ctx, "Provide either --patch-file or --patch-body")
+        return # Explicit return for security
+
+    # Basic diff format validation
+    if not any(marker in content for marker in ["--- ", "+++ ", "@@ "]):
+        err(ctx, "Invalid patch format. Content does not appear to be a unified diff.")
+        return
+
+    try:
+        _apply(filepath, content)
+        out(ctx, f"✅ Applied patch to {filepath}")
+    except Exception as e:
+        err(ctx, f"Failed to apply patch: {str(e)}")
+
 # ==========================================
 # GH COMMAND GROUP
 # ==========================================
@@ -474,12 +517,13 @@ def conflicts(ctx):
 @click.option('--allow-unrelated', is_flag=True, help="Allow merging unrelated histories.")
 @click.option('--strategy', type=click.Choice(['ours', 'theirs']), help="Merge strategy option (-X ours/theirs).")
 @click.option('--push', is_flag=True, help="Automatically push the resolution to origin.")
+@click.option('--continue', 'continue_resolve', is_flag=True, help="Finalize and push an in-progress conflict resolution.")
 @click.pass_context
-def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
+def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push, continue_resolve):
     """Resolve merge conflicts for a PR in a separate worktree."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated, strategy=strategy, push=push)
+        res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated, strategy=strategy, push=push, continue_resolve=continue_resolve)
         out(ctx, res['message'], data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
@@ -667,6 +711,42 @@ def track_review(ctx, pr, status, auditor, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.track_review(pr, status, auditor, dry_run=dry_run)
     out(ctx, f"✅ Updated tracking for PR #{pr}", data=res)
+
+@cli.command(name='schema')
+@click.argument('command_path', required=False)
+@click.pass_context
+def schema_cmd(ctx, command_path):
+    """Retrieve the schema for a specific subcommand or all commands."""
+    # Sanitize and validate command_path to prevent injection
+    # Allowed format: words separated by single spaces (no special shell characters)
+    if command_path:
+        import re
+        # Stricter regex: words containing only lowercase alphanumeric, hyphens, and underscores,
+        # separated by single spaces. No leading/trailing spaces.
+        # This prevents any shell character injection and restricts to valid command tokens.
+        word = r'[a-z0-9-_]+'
+        pattern = f'^{word}( {word})*$'
+        if not re.match(pattern, command_path):
+            err(ctx, "Invalid command path. Only lowercase alphanumeric, hyphens, and underscores separated by single spaces are allowed.")
+
+    from dev_tools.schema_utils import collect_commands, get_command_by_path
+    target_cmd = get_command_by_path(cli, command_path)
+
+    # If the path matches a group but not a leaf command, target_cmd will be the group.
+    # get_command_by_path returns None if not found at all.
+
+    if not target_cmd:
+        msg = "Command path not found."
+        if command_path and ' ' not in command_path:
+            # Provide a small hint for common top-level groups
+            if command_path in ['gh', 'repo', 'config', 'ux', 'agent', 'jules']:
+                 msg += f" Did you mean 'td-cli schema {command_path}' to see subcommands?"
+        err(ctx, msg)
+        return
+
+    # Use a safe depth limit (5) for granular lookups to maintain performance
+    res = collect_commands(target_cmd, prefix=command_path or "", max_depth=5)
+    out(ctx, f"Schema for {command_path or 'root'}", data={"schema": res})
 
 def _handle_gate(ctx, res, label):
     msg = f"{label}: Current={res.get('current', res.get('size_kb'))}, Baseline={res.get('baseline', res.get('baseline_kb'))}"
@@ -1095,14 +1175,35 @@ def messages(ctx, session_id):
     out(ctx, f"Messages retrieved for {session_id}", data={"messages": msgs})
 
 @agent_group.command()
-@click.argument('session_id')
+@click.argument('session_ids')
 @click.argument('message')
 @click.pass_context
-def send(ctx, session_id, message):
-    """Send a message to an active Jules session."""
+def send(ctx, session_ids, message):
+    """Send a message to active Jules session(s) (supports comma-separated IDs)."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.jules.send_message(session_id, message)
-    out(ctx, f"✅ Message sent to session {session_id}", data=res)
+
+    # Support comma-separated IDs for batching
+    target_ids = [s.strip() for s in session_ids.split(',')] if ',' in session_ids else session_ids
+
+    from dev_tools.models import JulesSendMessageInput
+    from pydantic import ValidationError
+    try:
+        JulesSendMessageInput(sessionId=target_ids, message=message)
+    except ValidationError as e:
+        # Extract specific error message for better feedback
+        msg = f"Validation failed: {e.errors()[0]['msg']}"
+        err(ctx, msg, code=1)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "agent send", e)
+
+    res = orch.jules.send_message(target_ids, message)
+
+    # Provide clear summary for batch operations
+    summary = res.get('message', f"Message sent to session(s) {session_ids}")
+    if not summary.startswith("✅"):
+        summary = f"✅ {summary}"
+
+    out(ctx, summary, data=res)
 
 @agent_group.command(name='plan-review')
 @click.option('--pr', 'pr_number', required=True, type=int, help='Pull Request number')
