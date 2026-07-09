@@ -37,4 +37,6 @@ td-cli build           # Build the project
 - **`--execute`**: Many `td-cli` commands default to `--dry-run`. You MUST append `--execute` (or use `--no-dry-run` if applicable) to commit changes.
 - **`--json`**: Use this for structured data parsing when calling Tier 2 directly.
 - **`--schema`**: Use `td-cli schema "subcommand"` to get only the relevant flags for a specific command instead of reading the entire `cli-schema.json`.
-- **Zero Fallback**: Avoid raw `git` or `gh` commands if a `td-cli` or MCP tool exists. See `AGENTS.md` §21.
+- **Zero Fallback**: Avoid raw `git` or `gh` commands if a `td-cli` or MCP tool exists.
+
+See the full [AGENTS.md](../AGENTS.md) for core principles and detailed protocols.

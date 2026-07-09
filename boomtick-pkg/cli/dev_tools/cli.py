@@ -673,12 +673,20 @@ def track_review(ctx, pr, status, auditor, dry_run):
 @click.pass_context
 def schema_cmd(ctx, command_path):
     """Retrieve the schema for a specific subcommand or all commands."""
+    # Sanitize and validate command_path to prevent injection
+    if command_path:
+        import re
+        if not re.match(r'^[a-zA-Z0-9-_ ]+$', command_path):
+            err(ctx, "Invalid command path. Only alphanumeric, hyphens, and underscores are allowed.")
+
     from dev_tools.schema_utils import collect_commands, get_command_by_path
     target_cmd = get_command_by_path(cli, command_path)
     if not target_cmd:
-        err(ctx, f"Command path not found: {command_path}")
+        # Use a generic error message to avoid leaking potentially sensitive input
+        err(ctx, "Command path not found.")
+        return
 
-    res = collect_commands(target_cmd, prefix=command_path or "")
+    res = collect_commands(target_cmd, prefix=command_path or "", max_depth=10)
     out(ctx, f"Schema for {command_path or 'root'}", data={"schema": res})
 
 def _handle_gate(ctx, res, label):

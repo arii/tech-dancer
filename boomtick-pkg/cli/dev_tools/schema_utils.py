@@ -5,9 +5,11 @@ def get_type_name(param):
     t = param.type
     if isinstance(t, click.Choice):
         return "choice"
-    if hasattr(t, "name"):
-        return t.name
+
     t_str = str(t).lower()
+    if hasattr(t, "name"):
+        t_str = t.name.lower()
+
     if "int" in t_str:
         return "integer"
     if "bool" in t_str:

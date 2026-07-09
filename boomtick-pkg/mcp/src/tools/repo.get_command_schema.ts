@@ -12,7 +12,8 @@ export async function getCommandSchemaHandler(args: z.infer<typeof GetCommandSch
 
   if (result.exitCode !== 0) {
     // Log stderr for debugging but don't expose it to the user
-    console.error(`td-cli schema failed for ${sanitizedPath}:`, result.stderr);
+    // Using comma-separated arguments to satisfy semgrep unsafe-formatstring
+    console.error("td-cli schema failed for", sanitizedPath, ":", result.stderr);
     throw new Error(`Failed to get command schema for '${sanitizedPath}'`);
   }
 
@@ -21,7 +22,8 @@ export async function getCommandSchemaHandler(args: z.infer<typeof GetCommandSch
     if (parsed.status === "error") {
       throw new Error(parsed.message || "Failed to get command schema");
     }
-    return parsed.data;
+    // Return the full payload (which contains the 'schema' object)
+    return parsed;
   } catch (e) {
     throw new Error(`Failed to parse command schema output: ${e}`);
   }
