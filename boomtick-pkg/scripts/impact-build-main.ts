@@ -1,8 +1,8 @@
 import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { loadProjectConfig } from './lib/projectConfig';
-import { logHeartbeat } from './lib/heartbeat';
+import { loadProjectConfig } from '../lib/projectConfig';
+import { logHeartbeat } from '../lib/heartbeat';
 
 const worktreePath = path.join(process.cwd(), '.tmp-main');
 const config = loadProjectConfig();

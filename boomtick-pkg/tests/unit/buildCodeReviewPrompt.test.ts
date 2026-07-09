@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildSystemPrompt } from '../../../scripts/lib/buildCodeReviewPrompt';
+import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
 
 describe('buildCodeReviewPrompt', () => {
   it('injects CI/CD guidance when .github/workflows file is changed', () => {
@@ -25,7 +25,7 @@ describe('buildCodeReviewPrompt', () => {
   it('injects LLM integration guidance when CodeReviewClient is changed', () => {
     const prompt = buildSystemPrompt({
       diffContext: 'some diff',
-      changedFiles: ['scripts/clients/githubModelsCodeReviewClient.ts']
+      changedFiles: ['boomtick-pkg/scripts/clients/githubModelsCodeReviewClient.ts']
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
     expect(prompt).toContain('LLM Clients:');

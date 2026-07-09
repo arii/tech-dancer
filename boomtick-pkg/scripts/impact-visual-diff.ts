@@ -3,7 +3,7 @@ import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { logHeartbeat } from './lib/heartbeat';
+import { logHeartbeat } from '../lib/heartbeat';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import sharp from 'sharp';
@@ -23,8 +23,8 @@ import {
   type LayoutMetrics,
   type LayoutValidation
 } from './impact-review-utils';
-import { whiteCanvas, copyImage } from './image-processing-utils';
-import { VIEWPORTS } from '../src/constants/visual-viewports';
+import { whiteCanvas, copyImage } from './image-processing-utils.ts';
+import { VIEWPORTS } from '../../src/constants/visual-viewports';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
@@ -302,7 +302,7 @@ async function main(): Promise<void> {
     if (failedLayouts.length > 0) {
       console.error(`❌ Visual regression detected by automated measurements in ${failedLayouts.length} route(s).`);
       try {
-        execSync('node scripts/detect-antipatterns.mjs', { stdio: 'inherit' });
+        execSync('node boomtick-pkg/scripts/detect-antipatterns.mjs', { stdio: 'inherit' });
       } catch {
         console.error('❌ Anti-pattern validation failed during visual review phase.');
       }

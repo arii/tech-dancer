@@ -7,15 +7,15 @@ import {
   buildReviewPayload,
   calculateEstimatedTokens,
   extractFeedbackText
-} from '../lib/codeReviewUtils';
+} from '../../boomtick-pkg/lib/codeReviewUtils';
 
-import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
+import { buildSystemPrompt } from '../../boomtick-pkg/lib/buildCodeReviewPrompt';
 
-import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
+import { pickGeminiModel, getGeminiPricing } from '../../boomtick-pkg/lib/geminiModelPicker';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../../boomtick-pkg/lib/geminiUtils';
 
-import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
-import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
+import type { CodeReviewSummary, CodeReviewResult } from '../../boomtick-pkg/lib/codeReviewTypes';
+import type { CodeReviewClientStrategy } from '../../boomtick-pkg/lib/codeReviewOrchestrator';
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'gemini-code-review',

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ARTIFACTS_DIR } from './lib/visualReviewConstants';
-import { orchestrateVisualReview } from './lib/visualReviewOrchestrator';
+import { ARTIFACTS_DIR } from '../lib/visualReviewConstants';
+import { orchestrateVisualReview } from '../lib/visualReviewOrchestrator';
 import { geminiVisualReviewClient } from './clients/geminiVisualReviewClient';
 import { githubModelsVisualReviewClient } from './clients/githubModelsVisualReviewClient';
 

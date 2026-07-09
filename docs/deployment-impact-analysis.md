@@ -8,9 +8,9 @@ The analysis works by generating a dependency graph of the application and ident
 
 ### Key Components
 
-- `scripts/impact-analysis.ts`: The main entry point for running the analysis.
-- `scripts/lib/impact-analysis-utils.ts`: Utility functions for dependency graph manipulation and URL resolution.
-- `scripts/impact-analysis.config.ts`: Configuration for impact levels, global triggers, and route mappings.
+- `boomtick-pkg/scripts/impact-analysis.ts`: The main entry point for running the analysis.
+- `boomtick-pkg/lib/impact-analysis-utils.ts`: Utility functions for dependency graph manipulation and URL resolution.
+- `boomtick-pkg/scripts/impact-analysis.config.ts`: Configuration for impact levels, global triggers, and route mappings.
 
 ## Dependency Graph
 
@@ -35,7 +35,7 @@ The tool identifies "Visual Review Required" routes by mapping affected componen
 To run the impact analysis locally:
 
 ```bash
-CHANGED_FILES=src/path/to/file.ts pnpm tsx scripts/impact-analysis.ts
+CHANGED_FILES=src/path/to/file.ts pnpm tsx boomtick-pkg/scripts/impact-analysis.ts
 ```
 
 The report will be generated in `artifacts/impact-analysis/`.

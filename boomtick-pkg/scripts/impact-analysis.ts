@@ -1,5 +1,5 @@
 import { IMPACT_CONFIG } from './impact-analysis.config';
-import { logHeartbeat } from './lib/heartbeat';
+import { logHeartbeat } from '../lib/heartbeat';
 import {
   exec,
   getChangedFiles,
@@ -10,7 +10,7 @@ import {
   generateReports,
   type DependencyGraph,
   type ImpactReport
-} from './lib/impact-analysis-utils';
+} from '../lib/impact-analysis-utils';
 
 async function main() {
   await logHeartbeat('Starting Deployment Impact Analysis');
