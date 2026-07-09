@@ -223,6 +223,7 @@ class Orchestrator:
         for run in check_runs:
             if run.get('conclusion') == 'failure':
                 run_id = run.get('id')
+                logs = ""
                 if run_id is not None:
                     logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
                     failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
@@ -611,26 +612,25 @@ class Orchestrator:
                     if run.get('conclusion') == 'failure':
                         failed_check_names.append(run.get('name'))
                     run_id = run.get('id')
+                    logs = ""
                     if run_id is not None:
                         logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
-                    else:
-                        logs = ""
 
-                        # Structured failure analysis
-                        findings = extract_failing_info(logs)
-                        if findings:
-                            context_lines.append("  **Failing Tests/Build Errors:**")
-                            for f in findings:
-                                error_msg = f"🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})"
-                                context_lines.append(f"  - {error_msg}")
-                                detected_errors.append(error_msg)
+                    # Structured failure analysis
+                    findings = extract_failing_info(logs)
+                    if findings:
+                        context_lines.append("  **Failing Tests/Build Errors:**")
+                        for f in findings:
+                            error_msg = f"🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})"
+                            context_lines.append(f"  - {error_msg}")
+                            detected_errors.append(error_msg)
 
-                        # Extract a snippet of the logs (last 50 lines or search for 'error')
-                        cleaned_logs = clean_gha_logs(logs)
-                        log_lines = cleaned_logs.splitlines()
-                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
-                        snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
-                        context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
+                    # Extract a snippet of the logs (last 50 lines or search for 'error')
+                    cleaned_logs = clean_gha_logs(logs)
+                    log_lines = cleaned_logs.splitlines()
+                    error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
+                    snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
+                    context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
             else:
                 context_lines.append("_No check runs found._")
 
