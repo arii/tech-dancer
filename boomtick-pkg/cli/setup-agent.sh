@@ -96,14 +96,26 @@ pip_install() {
     PIP_OPTS="--break-system-packages"
   fi
 
-  if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
-    return 0
-  fi
-  if [ -z "${VENV_PATH:-}" ]; then
-    timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"
-  else
-    return 1
-  fi
+  local attempt=1
+  local max_attempts=3
+  while [ $attempt -le $max_attempts ]; do
+    log "Attempt $attempt of $max_attempts: $PIP_CMD install $*"
+    if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
+      return 0
+    fi
+    if [ -z "${VENV_PATH:-}" ]; then
+      if timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"; then
+        return 0
+      fi
+    fi
+    warn "pip install attempt $attempt failed."
+    if [ $attempt -lt $max_attempts ]; then
+      log "Retrying in 5 seconds..."
+      sleep 5
+    fi
+    attempt=$((attempt + 1))
+  done
+  return 1
 }
 
 # -------- install steps --------
@@ -201,6 +213,7 @@ normalize_nvmrc_for_snapshot() {
 }
 
 ensure_corepack_pnpm() {
+  log "Ensuring corepack and pnpm..."
   ensure_node
   normalize_nvmrc_for_snapshot
   log "Ensuring pnpm ${PNPM_VERSION} is available..."
@@ -213,6 +226,7 @@ ensure_corepack_pnpm() {
 }
 
 install_python_deps() {
+  log "Installing Python dependencies..."
   have python3 || err "python3 is required."
 
   # Detect worktree or need for venv
@@ -269,6 +283,7 @@ install_python_deps() {
 }
 
 install_node_deps() {
+  log "Installing Node.js dependencies..."
   if [ "$SKIP_NODE_DEPS" = "1" ]; then
     STATUS_NODE="SKIPPED (SKIP_NODE_DEPS=1)"
     return 0
@@ -288,6 +303,7 @@ install_node_deps() {
 }
 
 install_playwright() {
+  log "Installing Playwright..."
   if [ "$SKIP_PLAYWRIGHT" = "1" ]; then
     STATUS_PLAYWRIGHT="SKIPPED (SKIP_PLAYWRIGHT=1)"
     return 0
@@ -395,6 +411,14 @@ EOE
 
   # Apply to current session
   source "$env_file"
+
+  # Ensure PATH is updated in the current session
+  export PATH="$HOME/.local/bin:$PATH"
+  if [ -n "${current_venv}" ]; then
+    export PATH="${current_venv}/bin:$PATH"
+  fi
+  export PNPM_HOME="$HOME/.local/share/pnpm"
+  export PATH="$PNPM_HOME:$PATH"
 }
 
 run_validation() {
