@@ -107,6 +107,15 @@ Before suggesting an implementation, verify if it already exists:
 - **Out-of-range comments**: Comments on lines not in the diff cause 422 errors.
 - **Empty payloads**: Never submit a review with empty findings or placeholders.
 
-## 10. Tooling Guidelines
+## 10. Git Merge & Conflict Resolution
+
+In scenarios involving branch orchestration or PR consolidation, agents may encounter complex merge states:
+- **Unrelated Histories**: If `git merge` fails with `fatal: refusing to merge unrelated histories`, agents should retry the merge using the `--allow-unrelated-histories` flag.
+- **Heavy Conflicts (Patch Fallback)**: For disjoint histories or heavy merge conflicts where standard git merging is fragile, utilize a patch-based approach:
+  1. Generate a clean patch from the source branch: `git diff base_branch...head_branch > changes.patch`
+  2. Apply the patch to the target branch: `git apply changes.patch`
+  3. Manually resolve any `.rej` (rejected) chunks.
+
+## 11. Tooling Guidelines
 
 Agents must not directly use git or gh commands but reuse existing tooling (`td-cli`).
