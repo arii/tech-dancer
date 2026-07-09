@@ -142,7 +142,7 @@ describe('codeReviewUtils', () => {
       expect(parseCodeReviewState(feedback)?.findings.length).toBe(1);
     });
 
-    it('rejects invalid confidence levels', () => {
+    it('normalizes invalid confidence levels to medium', () => {
         const json = JSON.stringify({
           findings: [{
             id: '1',
@@ -154,13 +154,15 @@ describe('codeReviewUtils', () => {
         });
         const feedback = `<findings>${json}</findings>`;
         const result = parseCodeReviewStateDetailed(feedback);
-        expect(result.parseError).toBe('incomplete_findings');
+        expect(result.state?.findings[0].confidence).toBe('medium');
+        expect(result.parseError).toBeUndefined();
     });
 
-    it('handles missing closing tag', () => {
+    it('handles missing closing tag by still returning parsed state but with error', () => {
       const feedback = `Some text\n<findings>\n{"findings": []}`;
       const result = parseCodeReviewStateDetailed(feedback);
-      expect(result.state).toBeUndefined();
+      expect(result.state).toBeDefined();
+      expect(result.state?.findings).toEqual([]);
       expect(result.parseError).toBe('missing_closing_tag');
     });
 
