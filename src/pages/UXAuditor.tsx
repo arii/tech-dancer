@@ -13,7 +13,11 @@ import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import {
+  actionButtonVariants, type ActionButtonVariants,
+  cardVariants, type CardVariants,
+  listRowVariants, type ListRowVariants
+} from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,

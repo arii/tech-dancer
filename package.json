@@ -34,7 +34,7 @@
     "audit:dead-code": "pnpm exec knip --exclude exports",
     "audit:duplication": "jscpd .",
     "ci:local": "run-s verify:schemas lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
-    "knip": "knip --exclude exports",
+    "knip": "knip --exclude exports --no-config-hints",
     "type-check": "pnpm run verify:schemas && tsc --noEmit",
     "audit:inventory": "node scripts/check-suppression-inventory.mjs",
     "verify:schemas": "node scripts/verify-schemas.mjs",

@@ -5,9 +5,7 @@ const config: KnipConfig = {
     ".": {
       entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'boomtick-pkg/cli/*.{ts,mjs}'],
       project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'boomtick-pkg/cli/**/*.{ts,mjs}'],
-      ignore: [
-        'src/components/Equalizer.tsx'
-      ],
+      ignore: [],
       ignoreDependencies: [
         'tw-animate-css',
         'vite-plugin-pwa',
@@ -24,6 +22,7 @@ const config: KnipConfig = {
   },
   ignoreBinaries: ['python3', 'semgrep', 'td-cli', 'pylint', 'mypy'],
   ignoreExportsUsedInFile: true,
+  ignore: ['**/*.js'],
 };
 
 export default config;
