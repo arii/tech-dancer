@@ -2,9 +2,9 @@ import { ReactNode, useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { journalVariants, type JournalNavLinkVariants } from '@/lib/variants';
+import { journalVariants } from '@/lib/variants';
 
-interface EditorialLayoutProps extends JournalNavLinkVariants {
+interface EditorialLayoutProps {
   onBack: () => void;
   backLabel: string;
   header: ReactNode;
@@ -20,7 +20,6 @@ export function EditorialLayout({
   children,
   sidebar,
   footer,
-  ...props
 }: EditorialLayoutProps) {
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -54,12 +53,11 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
-            className={journalVariants.navLink({ ...props })}
+            className={journalVariants.navLink()}
           >
             <Icon
               icon={ArrowLeft}
               size="sm"
-              className="transition-transform group-hover:-translate-x-1"
             />
             <Text variant="mono" size="xs" weight="font-bold" uppercase>
               {backLabel}

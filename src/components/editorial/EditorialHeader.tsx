@@ -1,10 +1,10 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants, type JournalShareActionVariants, type JournalTagVariants } from '@/lib/variants';
+import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
-interface EditorialHeaderProps extends JournalShareActionVariants, JournalTagVariants {
+interface EditorialHeaderProps {
   category: string;
   date: string;
   readTime: string;
@@ -30,7 +30,6 @@ export function EditorialHeader({
   onShare,
   isShared,
   hero,
-  ...props
 }: EditorialHeaderProps) {
   return (
     <Stack gap={12}>
@@ -39,12 +38,12 @@ export function EditorialHeader({
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
-        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
+        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="break-words">
           {title}
         </Text>
 
         {dek && (
-          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" className="text-pretty font-medium">
+          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" weight="font-medium" className="break-words">
             {dek}
           </Text>
         )}
