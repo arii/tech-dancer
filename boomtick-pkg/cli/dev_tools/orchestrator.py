@@ -222,8 +222,10 @@ class Orchestrator:
         structured_failures = []
         for run in check_runs:
             if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
+                run_id = run.get('id')
+                if run_id is not None:
+                    logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                    failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
                 findings = extract_failing_info(logs)
                 for f in findings:
                     structured_failures.append({
@@ -437,11 +439,11 @@ class Orchestrator:
             raise CLIError("Comment body cannot be empty.")
         return self.github.create_issue_comment(entity_number, body)
 
-    def validate_issue(self, issueNumber: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True, **kwargs) -> Dict[str, Any]:
+    def validate_issue(self, issueNumber: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True, issueNumbers: Optional[List[int]] = None, **kwargs) -> Dict[str, Any]:
         if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
+        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
-        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
         if "limit" in kwargs: limit = kwargs["limit"]
         if all_open:
             issues = list(repo.get_issues(state='open'))
@@ -1462,8 +1464,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             runs = self.github.fetch_check_runs_for_suite(suite['id'])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
-                    log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                    logs[run["name"]] = log_content[:10000]
+                    run_id = run.get('id')
+                    if run_id is not None:
+                        log_content = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                        logs[run["name"]] = log_content[:10000]
 
         return {
             "checks": checks,
@@ -1487,8 +1491,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         # Limit to latest 20 jobs to avoid extreme memory usage
         for run in check_runs[:20]:
             # Fetch logs via API to avoid terminal paging/buffering issues
-            log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-            header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
+            run_id = run.get('id')
+            if run_id is not None:
+                log_content = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
             all_logs.append(header)
             # Truncate each log to 20k chars to balance detail vs memory
             all_logs.append(log_content[-20000:])

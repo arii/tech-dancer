@@ -48,11 +48,9 @@ class VisionService:
             })
 
         try:
+            from dev_tools.utils import extract_llm_content
             response = llm.invoke([HumanMessage(content=message_content)]) # type: ignore
-            content = response.content
-            if isinstance(content, str):
-                return content
-            return str(content) if content else None
+            return extract_llm_content(response) or "No content returned from Vision."
         except Exception as e:
             return f"❌ Vision call failed: {e}"
 

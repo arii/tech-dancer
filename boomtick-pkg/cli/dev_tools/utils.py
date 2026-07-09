@@ -318,10 +318,7 @@ def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None,
 
     try:
         response = llm.invoke([HumanMessage(content=prompt)])
-        content = response.content
-        if isinstance(content, str):
-            return content
-        return str(content) if content else None
+        return extract_llm_content(response)
     except Exception as e:
         log_error(f"AI Call failed: {e}")
         return None
@@ -784,6 +781,13 @@ def verify_pr_scope(file_list=None):
     if has_content and len(code_files) > 2:
         return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
     return None
+
+def extract_llm_content(response: Any) -> Optional[str]:
+    """Helper to safely extract string content from an LLM response object."""
+    content = getattr(response, 'content', None)
+    if isinstance(content, str):
+        return content
+    return str(content) if content else None
 
 def extract_semantic_context(filepath: str, diff_text: str, store: Any, n_results: int = 3) -> List[Dict[str, Any]]:
     """Helper to extract semantic context from vector store for a given file and diff."""
