@@ -20,22 +20,32 @@ function verifySchemas() {
   }
 
   try {
-    // 2. Python Schema Generation
+    // 2. Python Dependency Check
+    console.log('🐍 Checking Python dependencies...');
+    try {
+      execSync('python3 -c "import pydantic"', { stdio: 'pipe' });
+    } catch {
+      console.error('❌ Error: Python dependency `pydantic` is missing.');
+      console.error('   Please run `pip install -e boomtick-pkg/cli/` to install CLI dependencies.');
+      process.exit(1);
+    }
+
+    // 3. Python Schema Generation
     console.log('🐍 Generating CLI schema from Python models...');
     execSync('PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/schema_gen.py', {
       stdio: 'inherit',
       env: { ...process.env, PYTHONPATH: 'boomtick-pkg/cli' }
     });
 
-    // 3. Sync Contracts
+    // 4. Sync Contracts
     console.log('🔄 Syncing contracts...');
-    execSync('npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts', { stdio: 'inherit' });
+    execSync('pnpm exec tsx boomtick-pkg/mcp/scripts/sync-contracts.ts', { stdio: 'inherit' });
 
-    // 4. Sync MCP Schemas
+    // 5. Sync MCP Schemas
     console.log('🛠️  Syncing MCP schemas...');
     execSync('pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas', { stdio: 'inherit' });
 
-    // 5. Check for drift
+    // 6. Check for drift
     console.log('📊 Checking for schema/contract drift...');
     try {
       execSync('git diff --exit-code boomtick-pkg/cli/dev_tools/cli-schema.json boomtick-pkg/mcp/src/tools/contract.ts', { stdio: 'inherit' });

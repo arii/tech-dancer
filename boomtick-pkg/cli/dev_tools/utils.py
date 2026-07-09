@@ -94,7 +94,8 @@ def _call_api_with_retry(method: str, url: str, **kwargs) -> requests.Response:
     from requests.adapters import HTTPAdapter
     from urllib3.util import Retry
 
-    timeout = kwargs.pop('timeout', 30)
+    # Default to 60s for standard calls, 300s for large downloads/logs
+    timeout = kwargs.pop('timeout', 60)
     max_retries = kwargs.pop('max_retries', 3)
 
     session = requests.Session()
@@ -129,15 +130,15 @@ def get_base_dir() -> str:
 
 def ensure_dir(*parts: str) -> str:
     """Joins path parts, ensures the directory exists, and returns the absolute path."""
-    path = os.path.join(get_base_dir(), *parts)
-    os.makedirs(path, exist_ok=True)
-    return path
+    path = Path(get_base_dir()).joinpath(*parts)
+    path.mkdir(parents=True, exist_ok=True)
+    return str(path)
 
 def get_or_create_log_dir(subdir: str) -> str:
     """Returns the path to a specific log subdirectory and ensures it exists."""
-    log_dir = os.path.join(get_base_dir(), "logs", subdir)
-    os.makedirs(log_dir, exist_ok=True)
-    return log_dir
+    log_dir = Path(get_base_dir()) / "logs" / subdir
+    log_dir.mkdir(parents=True, exist_ok=True)
+    return str(log_dir)
 
 
 class DiskCache:
@@ -241,15 +242,24 @@ def get_gemini_model() -> str:
     return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
 
 def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
-    # First try to extract from <findings> tags (used in code review prompts)
+    """
+    Removes markdown code blocks if present, or extracts from <findings> tags if present.
+    This utility focuses on standard LLM formatting (tags/blocks).
+    Pipeline-specific robust extraction should be handled by the caller.
+    """
+    if not text:
+        return ""
+
+    # 1. Extract from <findings> tags if present
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
-        
-    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
+
+    # 2. Extract from ```json or ``` code blocks
+    code_block_match = re.search(r"```(?:json|xml|tsx?|jsx?)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL | re.IGNORECASE)
+    if code_block_match:
+        return code_block_match.group(1).strip()
+
     return text.strip()
 
 def is_ai_available() -> bool:

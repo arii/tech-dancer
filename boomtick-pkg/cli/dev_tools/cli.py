@@ -67,7 +67,30 @@ def limit_option(default_val=DEFAULT_GH_API_LIMIT, help_text='Limit the number o
         return click.option('--limit', type=int, default=default_val, help=help_text)(f)
     return decorator
 
-CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+def json_option(f):
+    """
+    Decorator to add --json option to subcommands.
+    Allows --json to be placed after the command (e.g., 'td command --json').
+    Automatically updates ctx.obj['JSON'] if the option is provided.
+    """
+    import functools
+    f = click.option('--json/--no-json', 'json_output', default=None, help='Output results in JSON format')(f)
+
+    @click.pass_context
+    @functools.wraps(f)
+    def wrapper(ctx, *args, **kwargs):
+        json_output = kwargs.pop('json_output', None)
+        if json_output is not None and ctx.obj is not None:
+            ctx.obj['JSON'] = json_output
+        return ctx.invoke(f, *args, **kwargs)
+
+    return wrapper
+
+CONTEXT_SETTINGS = dict(
+    help_option_names=["-h", "--help"],
+    ignore_unknown_options=True,
+    allow_extra_args=True
+)
 
 # CLI Group
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -134,6 +157,7 @@ def config():
     pass
 
 @config.command(name='view')
+@json_option
 @click.pass_context
 def config_view(ctx):
     """View the current project configuration as JSON."""
@@ -191,6 +215,7 @@ def gh():
     pass
 
 @gh.command()
+@json_option
 @click.option('--state', default='open')
 @limit_option(help_text='Limit the number of PRs to process')
 @click.option('--include-drafts/--no-include-drafts', default=True)
@@ -217,6 +242,15 @@ def merge_conflicts(ctx, pr_number, base):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.get_merge_conflicts(pr_number, base_branch=base)
     out(ctx, f"Checked merge conflicts for PR #{pr_number}", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def sync_pr(ctx, pr_number):
+    """Reliably pull the latest remote PR state to local, overwriting messy rebases."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.sync_pr(pr_number)
+    out(ctx, res['message'], data=res)
 
 @gh.command()
 @click.argument('pr_number', type=int)
@@ -268,6 +302,7 @@ def audit(ctx, check_dirs):
     out(ctx, "Headless audit complete.", data=res)
 
 @gh.command()
+@json_option
 @click.argument('pr_number', type=int)
 @click.option('--fetch', is_flag=True)
 @click.option('--audit', 'run_audit', is_flag=True)
@@ -1060,14 +1095,35 @@ def messages(ctx, session_id):
     out(ctx, f"Messages retrieved for {session_id}", data={"messages": msgs})
 
 @agent_group.command()
-@click.argument('session_id')
+@click.argument('session_ids')
 @click.argument('message')
 @click.pass_context
-def send(ctx, session_id, message):
-    """Send a message to an active Jules session."""
+def send(ctx, session_ids, message):
+    """Send a message to active Jules session(s) (supports comma-separated IDs)."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.jules.send_message(session_id, message)
-    out(ctx, f"✅ Message sent to session {session_id}", data=res)
+
+    # Support comma-separated IDs for batching
+    target_ids = [s.strip() for s in session_ids.split(',')] if ',' in session_ids else session_ids
+
+    from dev_tools.models import JulesSendMessageInput
+    from pydantic import ValidationError
+    try:
+        JulesSendMessageInput(sessionId=target_ids, message=message)
+    except ValidationError as e:
+        # Extract specific error message for better feedback
+        msg = f"Validation failed: {e.errors()[0]['msg']}"
+        err(ctx, msg, code=1)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "agent send", e)
+
+    res = orch.jules.send_message(target_ids, message)
+
+    # Provide clear summary for batch operations
+    summary = res.get('message', f"Message sent to session(s) {session_ids}")
+    if not summary.startswith("✅"):
+        summary = f"✅ {summary}"
+
+    out(ctx, summary, data=res)
 
 @agent_group.command(name='plan-review')
 @click.option('--pr', 'pr_number', required=True, type=int, help='Pull Request number')
@@ -1096,6 +1152,7 @@ def plan_aggregation(ctx, pr_numbers, target):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='plan-issue-audit')
+@json_option
 @click.option('--issue', '--issues', 'issue_numbers', multiple=True, type=int, help='Issue number(s) to audit (e.g. --issue 1 --issue 2)')
 @click.option('--all-open', is_flag=True, help='Audit all open issues')
 @limit_option(help_text='Limit the number of open issues to process')
