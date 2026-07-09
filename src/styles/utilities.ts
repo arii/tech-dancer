@@ -21,6 +21,9 @@ export const interaction = {
   card: "group relative bg-surface",
   cardHover: "hover:border-accent/40",
   journalCard: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
+  muted: "bg-line/50 text-text-dim",
+  accent: "bg-accent/5 border-accent/20 text-accent",
+  warning: "bg-accent-purple/5 border-accent-purple/20 text-accent-purple",
 };
 
 export const typography = {
@@ -40,6 +43,12 @@ export const layouts = {
   cardBase: "bg-surface rounded-md shadow-sm card-border",
   filterBase: "border whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
   tagBase: "rounded border",
+  surface: "bg-surface text-text-main",
+  surfaceAlt: "bg-surface-alt text-text-main",
+  surfaceCard: "bg-card-bg border-line",
+  surfaceContrast: "bg-text-main text-bg",
+  surfaceError: "bg-error-surface border-error/20 text-error",
+  surfaceBg: "bg-bg text-text-body",
 };
 
 export const buttons = {
@@ -50,7 +59,8 @@ export const buttons = {
   outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50",
   primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky shadow-sm",
   professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 shadow-sm normal-case tracking-normal",
-  fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg",
+  fab: "bg-accent text-white hover:bg-accent-sky shadow-lg",
+  reminder: "bg-accent text-white font-semibold",
 };
 
 export const journal = {

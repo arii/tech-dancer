@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
@@ -33,16 +33,16 @@ export const createTransitionVariants: typeof cva = (base, config) => {
  */
 export const variants = {
   surface: {
-    default: "bg-surface text-text-main",
-    muted: "bg-line/50 text-text-dim",
-    accent: "bg-accent/5 border-accent/20 text-accent",
-    alt: "bg-surface-alt text-text-main",
-    card: "bg-card-bg border-line",
-    contrast: "bg-text-main text-bg",
-    success: "bg-accent/5 border-accent/20 text-accent",
-    warning: "bg-accent-purple/5 border-accent-purple/20 text-accent-purple",
-    error: "bg-error-surface border-error/20 text-error",
-    bg: "bg-bg text-text-body",
+    default: layouts.surface,
+    muted: interaction.muted,
+    accent: interaction.accent,
+    alt: layouts.surfaceAlt,
+    card: layouts.surfaceCard,
+    contrast: layouts.surfaceContrast,
+    success: interaction.accent,
+    warning: interaction.warning,
+    error: layouts.surfaceError,
+    bg: layouts.surfaceBg,
   },
   intent: {
     default: "text-text-main",
@@ -56,8 +56,6 @@ export const variants = {
     ghost: "bg-transparent hover:bg-line/10",
     primary: `${buttons.primary} ${interaction.active}`,
     professional: `${buttons.professional} ${interaction.active}`,
-    fab: `${buttons.fab} rounded-none`,
-    reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
     none: "rounded-none",
@@ -69,11 +67,16 @@ export const variants = {
   }
 };
 
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
 export const buttonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${buttons.base}`,
   {
     variants: {
-      variant: variants.emphasis,
+      variant: {
+        ...variants.emphasis,
+        fab: `${buttons.fab} fixed bottom-6 right-6 rounded-full p-4 z-50`,
+        reminder: buttons.reminder,
+      },
       intent: {
         default: "text-text-main",
         success: "text-accent",
@@ -101,6 +104,7 @@ export const buttonVariants = createTransitionVariants(
 /**
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
+export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
 export const actionButtonVariants = createTransitionVariants(
   buttons.action,
   {
@@ -120,6 +124,7 @@ export const actionButtonVariants = createTransitionVariants(
 /**
  * Card variants for reports, tools, and callout blocks
  */
+export type CardVariants = VariantProps<typeof cardVariants>;
 export const cardVariants = createTransitionVariants(
   layouts.cardBase,
   {
@@ -149,6 +154,7 @@ export const cardVariants = createTransitionVariants(
  * FilterButton variants for collection and category filtering.
  * Separates structural styles from state-specific styles.
  */
+export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
 export const filterButtonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${layouts.filterBase}`,
   {
@@ -195,6 +201,7 @@ export const filterButtonVariants = createTransitionVariants(
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
+export type TagVariants = VariantProps<typeof tagVariants>;
 export const tagVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${layouts.tagBase} ${typography.utility}`,
   {
@@ -255,6 +262,7 @@ export const journalVariants = {
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
+export type ListRowVariants = VariantProps<typeof listRowVariants>;
 export const listRowVariants = createTransitionVariants(
   lists.row,
   {

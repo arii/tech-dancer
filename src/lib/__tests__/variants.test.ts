@@ -74,6 +74,21 @@ describe("Variants Factory (createTransitionVariants)", () => {
     expect(classes).toContain("motion-reduce:transition-none");
   });
 
+  describe("buttonVariants localized emphasis", () => {
+    test("buttonVariants should support localized fab emphasis", () => {
+      const classes = buttonVariants({ variant: "fab" });
+      expect(classes).toContain("fixed bottom-6 right-6");
+      expect(classes).toContain("rounded-full p-4");
+      expect(classes).toContain("shadow-lg");
+      expect(classes).toContain("z-50");
+    });
+
+    test("buttonVariants should support localized reminder emphasis", () => {
+      const classes = buttonVariants({ variant: "reminder" });
+      expect(classes).toContain("bg-accent text-white font-semibold");
+    });
+  });
+
   describe("factory logic and edge cases", () => {
     test("should handle empty base string", () => {
       const variants = createTransitionVariants("", {});
