@@ -22,8 +22,15 @@ def sync_deps():
     try:
         # Using --no-cache-dir to avoid disk space issues in some environments
         # and --upgrade to ensure latest specified versions
+        # --break-system-packages is needed for some CI environments where the system python is managed
+        cmd = [str(venv_python), "-m", "pip", "install", "--upgrade", "--no-cache-dir", "-r", str(req_file)]
+
+        # Check if we are in a CI environment that might need --break-system-packages
+        if os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true':
+            cmd.append("--break-system-packages")
+
         subprocess.run(
-            [str(venv_python), "-m", "pip", "install", "--upgrade", "--no-cache-dir", "-r", str(req_file)],
+            cmd,
             check=True,
             capture_output=True,
             text=True,

@@ -14,9 +14,9 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import {
-  actionButtonVariants, type ActionButtonVariants,
-  cardVariants, type CardVariants,
-  listRowVariants, type ListRowVariants
+  actionButtonVariants,
+  cardVariants,
+  listRowVariants
 } from '@/lib/variants';
 
 const viewportIcons = {
