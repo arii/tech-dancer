@@ -59,7 +59,7 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 
 - **Standard Markdown Body**: Write your findings, checklist, and triage as standard Markdown at the top of the file.
 - **Flattened Schema**: The JSON block must ONLY contain metadata (`recommendation`, `labels`, `comments`). Do NOT nest the review body inside JSON.
-- **Always provide at least one comment** in the `comments` array. If no inline issues are found, add a summary comment with path `"SUMMARY"`.
+- **Comments**: Provide inline comments in the `comments` array. If no inline issues are found, use an empty array `[]`.
 - **Line Numbers**: Every inline comment MUST have a `line` number that exists within the **Valid Comment Ranges** for that file in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON.
 
