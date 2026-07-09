@@ -31,11 +31,11 @@ export function PageHeader({
       paddingBottom={paddingBottom}
       border={border}
     >
-      <Stack gap={4}>
-        <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+      <Stack gap={0}>
+        <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase marginBottom={title ? 4 : 0}>
           {label}
         </Text>
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">
+        <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight" marginBottom={(description || cta) ? 6 : 0}>
           {title}
         </Text>
         {description && (
@@ -44,14 +44,14 @@ export function PageHeader({
             size={{ base: "lg", lg: "xl" }}
             color="dim"
             maxWidth={descriptionMaxWidth}
-            marginTop={4}
+            marginBottom={cta ? 8 : 0}
             className="leading-relaxed text-pretty"
           >
             {description}
           </Text>
         )}
         {cta && (
-          <Box marginTop={6}>
+          <Box>
             {cta}
           </Box>
         )}
