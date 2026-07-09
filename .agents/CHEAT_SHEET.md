@@ -1,42 +1,28 @@
-# ⚡ Agent Cheat Sheet
+# ⚡ Agent Cheat Sheet (Optimized)
 
-This document provides a condensed overview of the Tier 1 MCP tools and their Tier 2 CLI equivalents. Use these tools to minimize token usage and ensure consistent execution.
+This condensed guide maps common operations to their most efficient Tier 1 (MCP) or Tier 2 (CLI) tools. For full protocols and core principles, always consult the main [AGENTS.md](../AGENTS.md).
 
-## 🛠️ Tier 1 (MCP) -> Tier 2 (CLI) Mapping
+## 🛠️ Efficient Tool Selection
 
-| Tier 1 MCP Tool | Tier 2 CLI Command Equivalent | Purpose |
+| Action | Primary Tool (Tier 1 / MCP) | CLI Equivalent (Tier 2) |
 | :--- | :--- | :--- |
-| `repo.get_command_schema` | `td-cli schema "<path>"` | **Primary Schema Discovery** (Token Efficient) |
-| `github.get_pr` | `td-cli gh view <PR>` | View PR details |
-| `github.get_pr_diff` | `td-cli gh pr-diff <PR>` | Get PR diff |
-| `github.search_open_prs` | `td-cli gh search-prs` | List/Search PRs |
-| `github.issue_view` | `td-cli gh issue-view <ISSUE>` | View issue details |
-| `github.create_pull_request`| `td-cli gh create-pr` | Create a new PR |
-| `repo.run_playwright` | `td-cli repo run-playwright` | Run E2E tests |
-| `repo.read_ci_logs` | `td-cli repo ci-logs <PR>` | Fetch CI logs |
-| `boomtick.health` | `td-cli doctor` | Verify runtime environment |
+| **Discover Args** | `repo.get_command_schema` | `td-cli schema "<path>"` |
+| **PR View** | `github.get_pr` | `td-cli gh view <PR>` |
+| **PR Diff** | `github.get_pr_diff` | `td-cli gh pr-diff <PR>` |
+| **Search PRs** | `github.search_open_prs` | `td-cli gh search-prs` |
+| **Create PR** | `github.create_pull_request`| `td-cli gh create-pr` |
+| **Issue View** | `github.issue_view` | `td-cli gh issue-view <ID>` |
+| **Tests/CI** | `repo.run_playwright` | `td-cli repo run-playwright`|
+| **Health Check** | `boomtick.health` | `td-cli doctor` |
 
-## 🚀 Common CLI Workflows & Overrides
+## 🚀 Key Overrides & Flags
 
-### PR Audit & Submission
-If the standard MCP tools are insufficient, use the specialized audit command:
-```bash
-# Full audit flow: fetch, audit, and submit (Tier 2)
-td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute
-```
+- **Full PR Audit**: `td-cli gh audit-pr <PR> --fetch --audit --submit --execute`
+- **Context Refresh**: `td-cli context-warm` (updates `.agent-context.json`)
+- **Execution**: Many CLI commands require `--execute` to commit changes; otherwise, they default to `--dry-run`.
+- **Structured Data**: Use `--json` with Tier 2 commands for machine-readable output.
 
-### Environment Consistency
-```bash
-td-cli doctor         # Verify Node/pnpm versions
-td-cli context-warm    # Refresh .agent-context.json
-td-cli build           # Build the project
-```
+## ⚠️ Reminders
 
-## ⚠️ Key Flags & Reminders
-
-- **`--execute`**: Many `td-cli` commands default to `--dry-run`. You MUST append `--execute` (or use `--no-dry-run` if applicable) to commit changes.
-- **`--json`**: Use this for structured data parsing when calling Tier 2 directly.
-- **`--schema`**: Use `td-cli schema "subcommand"` to get only the relevant flags for a specific command instead of reading the entire `cli-schema.json`.
-- **Zero Fallback**: Avoid raw `git` or `gh` commands if a `td-cli` or MCP tool exists.
-
-See the full [AGENTS.md](../AGENTS.md) for core principles and detailed protocols.
+- **Token Efficiency**: Use `repo.get_command_schema` instead of reading the full `cli-schema.json`.
+- **Zero Fallback**: Avoid raw `git` or `gh` commands if a specialized tool exists.

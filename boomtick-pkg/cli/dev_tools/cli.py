@@ -674,16 +674,25 @@ def track_review(ctx, pr, status, auditor, dry_run):
 def schema_cmd(ctx, command_path):
     """Retrieve the schema for a specific subcommand or all commands."""
     # Sanitize and validate command_path to prevent injection
+    # Allowed characters: alphanumeric, hyphens (-), underscores (_), and spaces.
     if command_path:
         import re
         if not re.match(r'^[a-zA-Z0-9-_ ]+$', command_path):
-            err(ctx, "Invalid command path. Only alphanumeric, hyphens, and underscores are allowed.")
+            err(ctx, "Invalid command path. Allowed characters: alphanumeric, hyphens (-), underscores (_), and spaces.")
 
     from dev_tools.schema_utils import collect_commands, get_command_by_path
     target_cmd = get_command_by_path(cli, command_path)
+
+    # If the path matches a group but not a leaf command, target_cmd will be the group.
+    # get_command_by_path returns None if not found at all.
+
     if not target_cmd:
-        # Use a generic error message to avoid leaking potentially sensitive input
-        err(ctx, "Command path not found.")
+        msg = "Command path not found."
+        if command_path and ' ' not in command_path:
+            # Provide a small hint for common top-level groups
+            if command_path in ['gh', 'repo', 'config', 'ux', 'agent', 'jules']:
+                 msg += f" Did you mean '{command_path} <subcommand>'?"
+        err(ctx, msg)
         return
 
     res = collect_commands(target_cmd, prefix=command_path or "", max_depth=10)
