@@ -252,7 +252,21 @@ jobs:
         run: |
           # Pin to a specific version and commit for security
           # Current commit for v1.7.12 as of 2026-06-26
-          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+          # Using a retry loop to mitigate transient 429 (Too Many Requests) errors
+          # from raw.githubusercontent.com.
+          URL="https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash"
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          until curl -fsSL "$URL" > download-actionlint.sh || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            SLEEP_TIME=$((2 ** RETRY_COUNT))
+            echo "Attempt $RETRY_COUNT failed. Retrying in ${SLEEP_TIME} seconds..."
+            sleep $SLEEP_TIME
+          done
+          if [ ! -f download-actionlint.sh ]; then
+            echo "Error: Failed to download actionlint script after $MAX_RETRIES attempts."
+            exit 1
+          fi
           bash download-actionlint.sh 1.7.12
           rm download-actionlint.sh
         shell: bash

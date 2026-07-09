@@ -396,14 +396,12 @@ EOE
   # Apply to current session
   source "$env_file"
 
-  # Inject feature flags for agent optimization
-  # Used to signal that targeted CLI schema lookups are available.
-  if [ "${TD_CLI_SCHEMA_QUERY_SUPPORTED:-}" != "true" ]; then
-    export TD_CLI_SCHEMA_QUERY_SUPPORTED="true"
-  fi
+  # Inject feature flags for agent optimization (idempotent)
+  # Signals that the 'td-cli schema' optimization is available.
   if ! grep -Fq "export TD_CLI_SCHEMA_QUERY_SUPPORTED" "$env_file"; then
     echo "export TD_CLI_SCHEMA_QUERY_SUPPORTED=\"true\"" >> "$env_file"
   fi
+  export TD_CLI_SCHEMA_QUERY_SUPPORTED="true"
 }
 
 run_validation() {

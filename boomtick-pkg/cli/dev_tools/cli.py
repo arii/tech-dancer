@@ -674,11 +674,15 @@ def track_review(ctx, pr, status, auditor, dry_run):
 def schema_cmd(ctx, command_path):
     """Retrieve the schema for a specific subcommand or all commands."""
     # Sanitize and validate command_path to prevent injection
-    # Allowed characters: alphanumeric, hyphens (-), underscores (_), and spaces.
+    # Allowed format: words separated by single spaces (no special shell characters)
     if command_path:
         import re
-        if not re.match(r'^[a-zA-Z0-9-_ ]+$', command_path):
-            err(ctx, "Invalid command path. Allowed characters: alphanumeric, hyphens (-), underscores (_), and spaces.")
+        # Stricter regex: words containing only alphanumeric, hyphens, and underscores,
+        # separated by single spaces. No leading/trailing spaces.
+        word = r'[a-zA-Z0-9-_]+'
+        pattern = f'^{word}( {word})*$'
+        if not re.match(pattern, command_path):
+            err(ctx, "Invalid command path. Allowed: alphanumeric, hyphens, and underscores, separated by single spaces.")
 
     from dev_tools.schema_utils import collect_commands, get_command_by_path
     target_cmd = get_command_by_path(cli, command_path)

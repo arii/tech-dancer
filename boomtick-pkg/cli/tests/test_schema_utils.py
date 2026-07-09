@@ -62,7 +62,7 @@ def test_schema_command_integration():
     assert '"status": "success"' in result.output
     assert "config view" in result.output
 
-    # Test invalid path with suggestion
+    # Test invalid path
     result = runner.invoke(cli, ["schema", "nonexistent"])
     assert result.exit_code == 1
     assert "Command path not found" in result.output
@@ -72,7 +72,12 @@ def test_schema_command_integration():
     assert result.exit_code == 0
     assert "config view" in result.output
 
-    # Test injection attempt
+    # Test injection attempt (semicolon)
     result = runner.invoke(cli, ["schema", "gh; rm -rf /"])
+    assert result.exit_code == 1
+    assert "Invalid command path" in result.output
+
+    # Test injection attempt (double space)
+    result = runner.invoke(cli, ["schema", "gh  view"])
     assert result.exit_code == 1
     assert "Invalid command path" in result.output

@@ -19,23 +19,24 @@ def get_type_name(param):
 def collect_commands(root_cmd, prefix="", max_depth=10):
     """
     Collects leaves of the command tree iteratively to avoid recursion limits.
+    Uses breadth-first traversal to maintain stable depth limits and performance.
     """
+    from collections import deque
     subcmds = {}
-    # stack elements: (cmd_obj, current_prefix, depth)
-    stack = [(root_cmd, prefix, 0)]
+    # queue elements: (cmd_obj, current_prefix, depth)
+    queue = deque([(root_cmd, prefix, 0)])
 
-    while stack:
-        cmd, pfx, depth = stack.pop()
+    while queue:
+        cmd, pfx, depth = queue.popleft()
 
         if depth > max_depth:
             continue
 
         if isinstance(cmd, click.Group):
-            # Sort items to maintain deterministic output
-            items = sorted(cmd.commands.items(), reverse=True) # reverse because it's a stack
-            for sub_name, sub_cmd in items:
+            # Maintain deterministic output by sorting subcommands once
+            for sub_name, sub_cmd in sorted(cmd.commands.items()):
                 new_prefix = f"{pfx} {sub_name}".strip()
-                stack.append((sub_cmd, new_prefix, depth + 1))
+                queue.append((sub_cmd, new_prefix, depth + 1))
         else:
             cmd_name = pfx
             cmd_help = cmd.help or ""
