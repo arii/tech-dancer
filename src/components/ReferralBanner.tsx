@@ -39,7 +39,7 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
     <Box
       width="full"
       padding={isCompact ? 6 : 8}
-      radius="md"
+      radius="sm"
       border
       surface={config.surface}
       className={className}

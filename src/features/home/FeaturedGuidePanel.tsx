@@ -41,7 +41,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
+        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%)' }}
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -49,7 +49,7 @@ export function FeaturedGuidePanel() {
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
-        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
+        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="white" leading="tight" tracking="tight">
           {FEATURED.title}
         </Text>
         <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">

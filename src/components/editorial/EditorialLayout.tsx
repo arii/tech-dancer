@@ -80,7 +80,7 @@ export function EditorialLayout({
               width="full"
               className="order-2 lg:order-1"
             >
-              <Box className="article-content-wrapper" width="full">
+              <Box className="article-content-wrapper" width="full" maxWidth="prose">
                 {children}
               </Box>
             </Box>
@@ -107,7 +107,7 @@ export function EditorialLayout({
           </Grid>
         ) : (
           <Stack gap="section-spacing" width="full" marginX="auto" maxWidth="3xl">
-            <Box className="article-content-wrapper" width="full">
+            <Box className="article-content-wrapper" width="full" maxWidth="prose">
               {children}
             </Box>
             {footer && (

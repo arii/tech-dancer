@@ -25,7 +25,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
         <Stack gap={4}>
           {items.map((item) => (
             <Link key={item.href} to={item.href} className="group">
-              <Box padding={4} border radius="md" className={journalVariants.card({ interactive: true })}>
+              <Box padding={4} border radius="sm" className={journalVariants.card({ interactive: true })}>
                 <Stack gap={1}>
                   {item.category && (
                     <Text variant="mono" size="micro" color="accent" weight="font-bold">

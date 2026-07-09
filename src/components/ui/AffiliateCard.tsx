@@ -12,7 +12,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
     <BaseCard
       data-testid="affiliate-card"
-      padding={{ base: 2, md: 4 }}
+      padding={4}
+      aspect="16/5"
       height="full"
       href={link.url}
       rel="noopener noreferrer sponsored"

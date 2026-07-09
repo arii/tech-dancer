@@ -25,10 +25,10 @@ export const interaction = {
 
 export const typography = {
   labelSmall: "text-tiny font-mono font-bold uppercase tracking-widest",
-  h1: "font-display font-black tracking-tighter leading-tightest",
-  h2: "font-display font-bold tracking-tight leading-tight",
-  h3: "font-display font-semibold tracking-tight leading-snug",
-  body: "font-sans leading-relaxed text-text-body",
+  h1: "font-display font-black tracking-tight leading-tightest",
+  h2: "font-display font-bold tracking-normal leading-tight",
+  h3: "font-display font-semibold tracking-normal leading-snug",
+  body: "font-sans leading-[1.6] text-text-body",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-semibold uppercase tracking-wider",
 };

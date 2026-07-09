@@ -38,7 +38,7 @@ export function BaseCard({
     interaction.card,
     transitions.default,
     border === true && "card-border",
-    isLink && interaction.cardHover,
+    isLink && [interaction.cardHover, "hover:-translate-y-0.5"],
     className
   );
 
@@ -47,7 +47,7 @@ export function BaseCard({
   return (
     <Stack
       as="article"
-      radius="md"
+      radius="sm"
       className={cardClasses}
       {...props}
     >
