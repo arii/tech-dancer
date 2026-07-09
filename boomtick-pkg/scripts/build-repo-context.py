@@ -91,32 +91,27 @@ def build_repo_context():
         print(f"Error gathering MCP schema: {e}", file=sys.stderr)
 
     # 4. CLI Schema (Package Internal)
-    cli_schema = {}
+    cli_schema = {
+        "tool_name": "td-cli",
+        "schema_authority": "Use 'repo.get_command_schema' or 'td-cli schema <path>' for granular discovery. This file remains for legacy fallback.",
+        "description": "Custom developer CLI for BoomTick repository management.",
+        "base_command": "td-cli"
+    }
     try:
-        # Dynamically generate cli-schema.json from code
         from dev_tools.cli import cli
         from dev_tools.schema_utils import collect_commands
 
-        generated_subcommands = collect_commands(cli)
+        # We keep cli-schema.json updated but minimal for the aggregate context
+        generated_subcommands = collect_commands(cli, max_depth=1)
+        cli_schema["subcommands"] = generated_subcommands
+        
         cli_schema_path = package_root / "cli" / "dev_tools" / "cli-schema.json"
         
-        schema_authority_payload = {
-            "tool_name": "td-cli",
-            "schema_authority": "This file is the single source of truth for td-cli. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
-            "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
-            "base_command": "td-cli",
-            "never_do": [
-                "Do not chain subcommands in a single shell call",
-                "Do not use --help or -h to discover flags — use this schema",
-                "Do not guess flags not listed here",
-                "Do not run td-cli without checking this schema first",
-                "Do not use interactive menus if prompted"
-            ],
-            "subcommands": generated_subcommands
-        }
-        
-        cli_schema_path.write_text(json.dumps(schema_authority_payload, indent=2))
-        cli_schema = schema_authority_payload
+        # Write full schema for legacy/reference but don't bloat the agent context
+        full_subcommands = collect_commands(cli)
+        full_payload = cli_schema.copy()
+        full_payload["subcommands"] = full_subcommands
+        cli_schema_path.write_text(json.dumps(full_payload, indent=2))
 
         # Also trigger Pydantic model contract generation
         try:

@@ -18,8 +18,8 @@ def get_type_name(param):
 
 def collect_commands(root_cmd, prefix="", max_depth=10):
     """
-    Collects leaves of the command tree iteratively to avoid recursion limits.
-    Uses breadth-first traversal to maintain stable depth limits and performance.
+    Collects leaves of the command tree iteratively using breadth-first traversal.
+    Avoids recursion limits and ensures predictable depth enforcement.
     """
     from collections import deque
     subcmds = {}
@@ -33,11 +33,16 @@ def collect_commands(root_cmd, prefix="", max_depth=10):
             continue
 
         if isinstance(cmd, click.Group):
-            # Maintain deterministic output by sorting subcommands once
-            for sub_name, sub_cmd in sorted(cmd.commands.items()):
-                new_prefix = f"{pfx} {sub_name}".strip()
-                queue.append((sub_cmd, new_prefix, depth + 1))
-        else:
+            # Sort items once to maintain deterministic output
+            try:
+                # Using sorted() once per group is efficient enough for typical CLI trees
+                items = sorted(cmd.commands.items())
+                for sub_name, sub_cmd in items:
+                    new_prefix = f"{pfx} {sub_name}".strip()
+                    queue.append((sub_cmd, new_prefix, depth + 1))
+            except Exception:
+                pass
+        elif isinstance(cmd, click.Command):
             cmd_name = pfx
             cmd_help = cmd.help or ""
 
@@ -72,17 +77,20 @@ def collect_commands(root_cmd, prefix="", max_depth=10):
                     else:
                         opt_flags.append(option_dict)
 
+            # Build a cleaner exact_usage string
             usage = f"td-cli {cmd_name}"
             if req_flags:
                 usage += " " + " ".join([f"{f['flag']} <{f['flag'].lstrip('-').upper()}>" for f in req_flags])
-            if opt_flags:
-                usage_parts = []
-                for f in opt_flags:
-                    if f['type'] == 'boolean':
-                        usage_parts.append(f"{f['flag']}")
-                    else:
-                        usage_parts.append(f"{f['flag']} <{f['flag'].lstrip('-').upper()}>")
-                usage += " " + " ".join([f"[{u}]" for u in usage_parts])
+
+            # Show a compact view of optional flags
+            boolean_flags = [f for f in opt_flags if f['type'] == 'boolean']
+            other_opt_flags = [f for f in opt_flags if f['type'] != 'boolean']
+
+            if boolean_flags:
+                usage += " " + " ".join([f"[{f['flag']}]" for f in boolean_flags])
+            if other_opt_flags:
+                usage += " " + " ".join([f"[{f['flag']} <{f['flag'].lstrip('-').upper()}>]" for f in other_opt_flags])
+
             if args_str:
                 usage += " " + " ".join(args_str)
 

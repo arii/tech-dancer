@@ -677,12 +677,13 @@ def schema_cmd(ctx, command_path):
     # Allowed format: words separated by single spaces (no special shell characters)
     if command_path:
         import re
-        # Stricter regex: words containing only alphanumeric, hyphens, and underscores,
+        # Stricter regex: words containing only lowercase alphanumeric, hyphens, and underscores,
         # separated by single spaces. No leading/trailing spaces.
-        word = r'[a-zA-Z0-9-_]+'
+        # This prevents any shell character injection and restricts to valid command tokens.
+        word = r'[a-z0-9-_]+'
         pattern = f'^{word}( {word})*$'
         if not re.match(pattern, command_path):
-            err(ctx, "Invalid command path. Allowed: alphanumeric, hyphens, and underscores, separated by single spaces.")
+            err(ctx, "Invalid command path. Only lowercase alphanumeric, hyphens, and underscores separated by single spaces are allowed.")
 
     from dev_tools.schema_utils import collect_commands, get_command_by_path
     target_cmd = get_command_by_path(cli, command_path)
@@ -695,11 +696,12 @@ def schema_cmd(ctx, command_path):
         if command_path and ' ' not in command_path:
             # Provide a small hint for common top-level groups
             if command_path in ['gh', 'repo', 'config', 'ux', 'agent', 'jules']:
-                 msg += f" Did you mean '{command_path} <subcommand>'?"
+                 msg += f" Did you mean 'td-cli schema {command_path}' to see subcommands?"
         err(ctx, msg)
         return
 
-    res = collect_commands(target_cmd, prefix=command_path or "", max_depth=10)
+    # Use a safe depth limit (5) for granular lookups to maintain performance
+    res = collect_commands(target_cmd, prefix=command_path or "", max_depth=5)
     out(ctx, f"Schema for {command_path or 'root'}", data={"schema": res})
 
 def _handle_gate(ctx, res, label):
