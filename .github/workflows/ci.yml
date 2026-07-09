@@ -88,7 +88,7 @@ jobs:
         target: [root, boomtick-mcp]
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/lint-typecheck
@@ -104,7 +104,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/audit
@@ -134,7 +134,7 @@ jobs:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/test-build
@@ -158,7 +158,7 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
 
@@ -197,7 +197,7 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
 
@@ -243,16 +243,36 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
 
       - name: Download actionlint
         id: get_actionlint
         run: |
+          # Robust download with retries for transient network issues or rate limiting (429)
+          download_with_retry() {
+            local url=$1
+            local output=$2
+            local max_attempts=5
+            local delay=5
+            for i in $(seq 1 $max_attempts); do
+              echo "Attempt $i: Downloading $url"
+              # Using -f to fail on 4xx/5xx and -sS for silent but showing errors
+              if curl -fsSL "$url" -o "$output"; then
+                return 0
+              fi
+              echo "Download failed. Retrying in $delay seconds..."
+              sleep $delay
+              delay=$((delay * 2))
+            done
+            return 1
+          }
+
           # Pin to a specific version and commit for security
           # Current commit for v1.7.12 as of 2026-06-26
-          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+          download_with_retry "https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash" "download-actionlint.sh"
+
           bash download-actionlint.sh 1.7.12
           rm download-actionlint.sh
         shell: bash
