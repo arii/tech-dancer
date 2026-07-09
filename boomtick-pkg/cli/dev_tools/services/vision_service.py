@@ -30,15 +30,7 @@ class VisionService:
         if not self.token:
             return "No GITHUB_TOKEN found."
 
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-
-        llm = ChatOpenAI(
-            base_url="https://models.inference.ai.azure.com",
-            api_key=self.token, # type: ignore
-            model=self.model,
-            temperature=0.7
-        )
+        from dev_tools.utils import _request
 
         message_content: List[Dict[str, Any]] = [{"type": "text", "text": prompt}]
         for img in images:
@@ -47,10 +39,23 @@ class VisionService:
                 "image_url": {"url": f"data:image/jpeg;base64,{img}"}
             })
 
+        url_target = "https://models.inference.ai.azure.com/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": message_content}],
+            "temperature": 0.7,
+            "max_tokens": 2048
+        }
+
         try:
-            from dev_tools.utils import extract_llm_content
-            response = llm.invoke([HumanMessage(content=message_content)]) # type: ignore
-            return extract_llm_content(response) or "No content returned from Vision."
+            response = _request("POST", url_target, headers=headers, json=payload, retry_status_codes=[429, 500, 502, 503, 504])
+            if not response:
+                return None
+            return response.json()["choices"][0]["message"]["content"]
         except Exception as e:
             return f"❌ Vision call failed: {e}"
 
