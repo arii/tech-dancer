@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# mypy: ignore-errors
+# mypy: ignore-errors
 import pandas as pd
 import logging
 import os

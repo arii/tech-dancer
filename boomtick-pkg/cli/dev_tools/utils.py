@@ -351,7 +351,7 @@ def to_standard_schema(schema):
         return [to_standard_schema(item) for item in schema]
     return schema
 
-def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None, max_retries: int = 3, schema: Any = None) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
 
     token = get_github_token()
@@ -375,7 +375,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         payload["response_format"] = {"type": "json_object"}
 
     try:
-        response = _request("POST", url_target, headers=headers, json=payload, max_retries=max_retries, retry_status_codes=[429, 500, 502, 503, 504])
+        response = _call_api_with_retry("POST", url_target, headers=headers, json=payload, max_retries=max_retries, retry_status_codes=[429, 500, 502, 503, 504])
         if not response:
             return None
         return response.json()["choices"][0]["message"]["content"]
@@ -397,7 +397,7 @@ def log_ai_run(entry: dict):
         log_error(f"Failed to append to AI run log: {e}")
 
 
-def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_github_models(prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Any = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
     token = get_github_token()
     if not token: return None
@@ -516,7 +516,7 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
 
     return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
 
-def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_gemini(prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Any = None) -> Optional[str]:
     """Unified helper to call Gemini API using LangChain."""
 
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -540,7 +540,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
     }
 
     try:
-        response = _request("POST", url_target, headers=headers, json=payload, max_retries=max_retries)
+        response = _call_api_with_retry("POST", url_target, headers=headers, json=payload, max_retries=max_retries)
         if not response:
             return None
         data = response.json()
@@ -551,7 +551,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         log_error(f"Gemini Call failed: {e}")
         return None
 
-def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
+def call_ai_service(prompt: str, model: Optional[str] = None, schema: Any = None) -> Optional[str]:
     """
     Orchestrates AI calls: GitHub Models -> Gemini.
     """
@@ -565,7 +565,7 @@ def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[s
 
     return None
 
-def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True, **kwargs) -> Union[str, subprocess.CompletedProcess]:
+def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True, **kwargs) -> Any:
     """
     Unified command execution helper.
     - If check=True (default): returns stripped stdout string, raises CLIError on non-zero exit.

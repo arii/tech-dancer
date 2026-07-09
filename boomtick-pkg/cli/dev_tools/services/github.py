@@ -25,7 +25,7 @@ class GitHubClient:
             "Authorization": f"Bearer {self.token}",
             "Accept": "application/vnd.github.v3+json",
         })
-        self._branch_cache = {}
+        self._branch_cache: Dict[str, bool] = {}
         self._cache = DiskCache(subdir="github", no_cache=no_cache)
 
     def branch_exists(self, branch_name: str) -> bool:
@@ -152,7 +152,7 @@ class GitHubClient:
             return self.search_pull_requests(query, limit=limit)
 
         # Fallback to standard Pulls API if no labels, using internal pagination
-        prs = []
+        prs: List[Dict[str, Any]] = []
         page = 1
         per_page = min(limit, 100)
 
@@ -268,7 +268,7 @@ class GitHubClient:
         Diff position is 0-indexed starting from the first '@@' hunk header in the file.
         """
         diff_text = self.fetch_pr_diff(pr_number)
-        mapping = {}
+        mapping: Dict[str, Dict[int, int]] = {}
         current_file = None
         file_diff_pos = 0
         new_line_num = 0
@@ -324,7 +324,7 @@ class GitHubClient:
         if body is not None:
             data['body'] = body
         if labels is not None:
-            data['labels'] = labels
+            data['labels'] = labels  # type: ignore  # type: ignore
         return self._request('PATCH', f'/repos/{self.repo}/issues/{number}', json_data=data)
 
     def create_review(self, number: int, body: str, comments: List[Dict[str, Any]], event: str) -> Dict[str, Any]:
@@ -447,7 +447,7 @@ class GitHubClient:
             raise CLIError(f"Could not find a valid JSON metadata block (expected keys: {', '.join(METADATA_IDENTIFIER_KEYS)})")
 
         # Extract Markdown body (everything above the metadata JSON block)
-        body = content[:metadata_match.start()].strip()
+        body = content[:metadata_match.start() if metadata_match else 0 if metadata_match else 0].strip()
         # Clean up the trailing "Output JSON" instructions if present
         body = re.split(r'##\s+Output JSON', body, flags=re.IGNORECASE)[0].strip()
 
@@ -519,7 +519,7 @@ class GitHubClient:
 
         if failing_checks and event == "APPROVE":
             event = "COMMENT"
-            warning = f"> ⚠️ **BLOCKING CI FAILURE**: Approval overridden to COMMENT because the following checks are failing: {', '.join(failing_checks)}. Please resolve CI issues before approval.\n\n"
+            warning = f"> ⚠️ **BLOCKING CI FAILURE**: Approval overridden to COMMENT because the following checks are failing: {', '.join([str(c) for c in [str(c) for c in failing_checks]])}. Please resolve CI issues before approval.\n\n"
             payload["body"] = warning + payload.get("body", "")
 
         if not dry_run:

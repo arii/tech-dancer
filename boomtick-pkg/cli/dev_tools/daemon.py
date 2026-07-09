@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ExtendedJulesClient(JulesClient):
     """JulesClient subclass with extended timeouts for daemon use."""
-    def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
+    def get_messages(self, session_id: str, timeout: int = 10) -> List[Dict[str, Any]]:
         # Set timeout to 30s instead of the default 10s
         return super().get_messages(session_id, timeout=30)
 
@@ -36,8 +36,8 @@ class JulesFeedbackDaemon:
             logger.error(f"Error fetching sessions: {e}")
             sys.exit(1)
 
-        self._pr_cache = {}
-        self._session_to_pr_map = {}
+        self._pr_cache: Dict[int, Dict[str, Any]] = {}
+        self._session_to_pr_map: Dict[str, Dict[str, Any]] = {}
 
         # Batch pre-match sessions to PRs where possible to reduce API hits
         self._pre_match_sessions_batch(sessions)
