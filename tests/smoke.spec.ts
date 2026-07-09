@@ -13,7 +13,7 @@ async function validateUrlNavigation(page: Page, href: string) {
   if (href.includes('#')) {
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
-      await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60000 });
+      await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
       const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
@@ -25,7 +25,7 @@ async function validateUrlNavigation(page: Page, href: string) {
       await expect(locator).toBeVisible({ timeout: 5000 });
     }
   } else {
-    const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
+    const response = await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 });
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
@@ -40,7 +40,7 @@ async function validateUrlNavigation(page: Page, href: string) {
 test.describe('Navigation Smoke Tests', () => {
   test.describe.configure({ timeout: 120000 }); // 2 minute timeout for these tests
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
-    await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
+    await page.goto('./', { waitUntil: 'domcontentloaded', timeout: 60000 });
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
@@ -51,7 +51,7 @@ test.describe('Navigation Smoke Tests', () => {
   });
 
   test('all nav links are reachable and error-free', async ({ page, pageErrors }) => {
-    await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
+    await page.goto('./', { waitUntil: 'domcontentloaded', timeout: 60000 });
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
@@ -87,7 +87,7 @@ test.describe('Navigation Smoke Tests', () => {
     const contentIndexes = ['./blog', './research'];
 
     for (const index of contentIndexes) {
-      await page.goto(index, { waitUntil: 'networkidle', timeout: 60000 });
+      await page.goto(index, { waitUntil: 'domcontentloaded', timeout: 60000 });
       const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {

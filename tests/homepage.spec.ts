@@ -5,7 +5,8 @@ const HOMEPAGE_URL = './';
 
 test('verify homepage visual consistency', async ({ page }) => {
   await page.goto(HOMEPAGE_URL);
-  await page.waitForLoadState('networkidle');
+  await expect(page.locator('main')).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
 
   await expect(page.locator('h1')).toContainText(/Dance more/i);
 

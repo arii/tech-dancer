@@ -334,12 +334,10 @@ export default function ResearchAnalytics() {
               label="HIRE_ME"
               title="DevAI Portfolio"
               as="h1"
+              description="building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling."
               paddingBottom={0}
               border="none"
             />
-            <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling.
-            </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
             <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
