@@ -6,7 +6,7 @@ All 15 GitHub Actions workflow files located under `.github/workflows/` have bee
 7 workflows were found to be missing this standardized workspace initialization and were subsequently modified to ensure uniformity and strict adherence to the runtime constraints. All workflows now use `pnpm` exclusively, do not hardcode Node.js versions, pin actions to their latest major versions, and properly handle dependency caching.
 
 ## Direct Modifications Made
-The following files were modified to include the `uses: ./.github/actions/setup-workspace` composite action:
+The following files were modified to include the `uses: ./boomtick-pkg/.github/actions/setup-workspace` composite action:
 
 1. `.github/workflows/ai-chatops.yml` - Inserted after checkout.
 2. `.github/workflows/deploy-image.yml` - Inserted after checkout.

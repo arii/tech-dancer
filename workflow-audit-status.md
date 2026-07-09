@@ -112,4 +112,4 @@
 - [x] Caching verified
 - [x] Status: Compliant (Added setup-workspace)
 
-**Notes:** Inserted `uses: ./.github/actions/setup-workspace` in 7 workflows to conform with node-version and caching standards.
+**Notes:** Inserted `uses: ./boomtick-pkg/.github/actions/setup-workspace` in 7 workflows to conform with node-version and caching standards.

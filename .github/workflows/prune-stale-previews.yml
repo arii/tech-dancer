@@ -23,7 +23,7 @@ jobs:
           path: source
 
       - name: Set up workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
 
       - name: Checkout gh-pages
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag

@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
 
       - name: Verify Diff Composition
         id: check_diff

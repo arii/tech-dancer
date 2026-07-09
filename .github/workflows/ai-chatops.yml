@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./.github/actions/setup-workspace
+      - uses: ./boomtick-pkg/.github/actions/setup-workspace
 
       - uses: ./boomtick-pkg/.github/actions/ai-review
         with:

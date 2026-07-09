@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
 
       - name: Parse Issue and Generate Markdown File
         env:

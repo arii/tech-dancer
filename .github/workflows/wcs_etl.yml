@@ -25,7 +25,7 @@ jobs:
           lfs: true
 
       - name: Set up workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
 
       - name: Run Pytest - Data Validation
         run: |
