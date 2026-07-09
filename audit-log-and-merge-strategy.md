@@ -25,3 +25,4 @@ All open Pull Requests have been audited for logical correctness, regression saf
 1. **Merge Standalone Fixes:** PR 3469, PR 3460, PR 3465, PR 3467, PR 3470.
 2. **Merge Refactors & Migrations:** PR 3428, PR 3466.
 3. **Resolve Major Component Conflicts:** PR 3455 and PR 3468 need coordination. Given PR 3455's large scope and warnings, it should be addressed (split or rebased) before PR 3468 is finalized.
+| 3472 | Approved | Removed raw tailwind text-pretty class. |
