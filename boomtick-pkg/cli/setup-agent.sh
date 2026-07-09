@@ -96,25 +96,25 @@ pip_install() {
     PIP_OPTS="--break-system-packages"
   fi
 
+  local max_retries=3
   local attempt=1
-  local max_attempts=3
-  while [ $attempt -le $max_attempts ]; do
-    log "Attempt $attempt of $max_attempts: $PIP_CMD install $*"
+  while [ $attempt -le $max_retries ]; do
+    log "pip install attempt $attempt/$max_retries: $*"
     if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
       return 0
     fi
+
     if [ -z "${VENV_PATH:-}" ]; then
       if timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"; then
         return 0
       fi
     fi
-    warn "pip install attempt $attempt failed."
-    if [ $attempt -lt $max_attempts ]; then
-      log "Retrying in 5 seconds..."
-      sleep 5
-    fi
+
+    warn "pip install failed on attempt $attempt"
     attempt=$((attempt + 1))
+    [ $attempt -le $max_retries ] && sleep 5
   done
+
   return 1
 }
 
@@ -252,6 +252,8 @@ install_python_deps() {
 
   log "Installing Python dependencies for dev tools..."
   # satisfy boomtick-cli requirement of setuptools < 81
+  # Proactively handle setuptools conflict by uninstalling first if necessary
+  python3 -m pip uninstall -y setuptools || true
   pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
 
   if [ -f "requirements-dev.txt" ]; then
