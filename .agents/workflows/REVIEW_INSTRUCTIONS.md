@@ -48,16 +48,10 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n- [x] No dead abstractions\n- [x] No unnecessary indirection\n- [x] No responsibility creep\n- [x] No import bloat\n- [x] Token compliance verified\n\n## FINDINGS\n<summary of key findings and observations>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
-  "recommendation": "Approved | Approved with Minor Changes | Not Approved",
-  "labels": ["lgtm", "needs-changes"],
-  "comments": [
-    {
-      "path": "src/example.tsx",
-      "line": 42,
-      "body": "This abstraction is unnecessary. Consider passing this as a direct prop."
-    }
-  ]
+  "body": "## ANTI-AI-SLOP\\n<findings>\\n\\n## FINDINGS\\n<summary>\\n\\n## FINAL RECOMMENDATION\\n<Approved | Approved with Minor Changes | Not Approved>\\n\\n<!-- td-review-manager-comment -->",
+  "recommendation": "<Approved | Approved with Minor Changes | Not Approved>",
+  "labels": [],
+  "comments": []
 }
 ```
 
