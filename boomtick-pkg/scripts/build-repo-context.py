@@ -4,6 +4,11 @@ import pathlib
 import sys
 import os
 
+# Inject CLI root into path to ensure heavy imports resolve during schema generation
+CLI_ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "cli")
+if CLI_ROOT not in sys.path:
+    sys.path.insert(0, CLI_ROOT)
+
 def build_repo_context():
     """Gathers static context about the repository."""
 

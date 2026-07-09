@@ -610,7 +610,11 @@ class Orchestrator:
                     context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
                     if run.get('conclusion') == 'failure':
                         failed_check_names.append(run.get('name'))
-                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                    run_id = run.get('id')
+                    if run_id is not None:
+                        logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                    else:
+                        logs = ""
 
                         # Structured failure analysis
                         findings = extract_failing_info(logs)
@@ -928,7 +932,11 @@ class Orchestrator:
         structured_failures = []
         for run in check_runs:
             if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                run_id = run.get('id')
+                if run_id is not None:
+                    logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                else:
+                    logs = ""
 
                 # Clean logs and take a smart snippet
                 cleaned_logs = clean_gha_logs(logs)
@@ -1065,10 +1073,12 @@ Respond only after the PR is created or updated:
             check_runs = self.github.fetch_check_runs(pr.head.sha)
             for run in check_runs:
                 if run.get('conclusion') == 'failure':
-                    logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                    for line in logs.splitlines():
-                        p = pipeline.generate_prompt(line)
-                        if p: prompts.append(p)
+                    run_id = run.get('id')
+                    if run_id is not None:
+                        logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                        for line in logs.splitlines():
+                            p = pipeline.generate_prompt(line)
+                            if p: prompts.append(p)
         return prompts
 
     def run_ux_audit(self, route: Optional[str] = None, all_routes: bool = False, desktop: bool = False, mobile: bool = False, screenshots_only: bool = False, images_only: bool = False, contrast_only: bool = False, overflow_only: bool = False) -> Dict[str, Any]:
@@ -1510,7 +1520,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
         return combined_logs
 
-    def get_merge_conflicts(self, prNumber: int, base_branch: str = None) -> Dict[str, Any]:
+    def get_merge_conflicts(self, prNumber: int, base_branch: Optional[str] = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
@@ -1703,8 +1713,13 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             feedback = "The CI pipeline reported failures. Here are the details:\n\n"
             for run in failed_checks:
                 feedback += f"### Failed Check: {run['name']}\n"
-                logs = self.github.fetch_check_run_logs(run['id'], external_id=run.get('external_id'))
-                findings = extract_failing_info(logs)
+                run_id = run.get('id')
+                if run_id is not None:
+                    logs = self.github.fetch_check_run_logs(int(run_id), external_id=run.get('external_id'))
+                    findings = extract_failing_info(logs)
+                else:
+                    logs = ""
+                    findings = []
                 if findings:
                     for f in findings:
                         feedback += f"- File: `{f['file']}:{f['line']}` ({f['type']})\n  Message: {f['message']}\n"
