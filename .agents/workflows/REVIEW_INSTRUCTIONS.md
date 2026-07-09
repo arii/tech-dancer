@@ -48,16 +48,10 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n- [x] No dead abstractions\n- [x] No unnecessary indirection\n- [x] No responsibility creep\n- [x] No import bloat\n- [x] Token compliance verified\n\n## FINDINGS\n<summary of key findings and observations>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
-  "recommendation": "Approved | Approved with Minor Changes | Not Approved",
-  "labels": ["lgtm", "needs-changes"],
-  "comments": [
-    {
-      "path": "src/example.tsx",
-      "line": 42,
-      "body": "This abstraction is unnecessary. Consider passing this as a direct prop."
-    }
-  ]
+  "body": "## ANTI-AI-SLOP\\n<findings>\\n\\n## FINDINGS\\n<summary>\\n\\n## FINAL RECOMMENDATION\\n<Approved | Approved with Minor Changes | Not Approved>\\n\\n<!-- td-review-manager-comment -->",
+  "recommendation": "<Approved | Approved with Minor Changes | Not Approved>",
+  "labels": [],
+  "comments": []
 }
 ```
 
@@ -65,7 +59,7 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 
 - **Standard Markdown Body**: Write your findings, checklist, and triage as standard Markdown at the top of the file.
 - **Flattened Schema**: The JSON block must ONLY contain metadata (`recommendation`, `labels`, `comments`). Do NOT nest the review body inside JSON.
-- **Always provide at least one comment** in the `comments` array. If no inline issues are found, add a summary comment with path `"SUMMARY"`.
+- **Comments**: Provide inline comments in the `comments` array. If no inline issues are found, use an empty array `[]`.
 - **Line Numbers**: Every inline comment MUST have a `line` number that exists within the **Valid Comment Ranges** for that file in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON.
 
