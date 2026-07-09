@@ -67,7 +67,30 @@ def limit_option(default_val=DEFAULT_GH_API_LIMIT, help_text='Limit the number o
         return click.option('--limit', type=int, default=default_val, help=help_text)(f)
     return decorator
 
-CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+def json_option(f):
+    """
+    Decorator to add --json option to subcommands.
+    Allows --json to be placed after the command (e.g., 'td command --json').
+    Automatically updates ctx.obj['JSON'] if the option is provided.
+    """
+    import functools
+    f = click.option('--json/--no-json', 'json_output', default=None, help='Output results in JSON format')(f)
+
+    @click.pass_context
+    @functools.wraps(f)
+    def wrapper(ctx, *args, **kwargs):
+        json_output = kwargs.pop('json_output', None)
+        if json_output is not None and ctx.obj is not None:
+            ctx.obj['JSON'] = json_output
+        return ctx.invoke(f, *args, **kwargs)
+
+    return wrapper
+
+CONTEXT_SETTINGS = dict(
+    help_option_names=["-h", "--help"],
+    ignore_unknown_options=True,
+    allow_extra_args=True
+)
 
 # CLI Group
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -134,6 +157,7 @@ def config():
     pass
 
 @config.command(name='view')
+@json_option
 @click.pass_context
 def config_view(ctx):
     """View the current project configuration as JSON."""
@@ -191,6 +215,7 @@ def gh():
     pass
 
 @gh.command()
+@json_option
 @click.option('--state', default='open')
 @limit_option(help_text='Limit the number of PRs to process')
 @click.option('--include-drafts/--no-include-drafts', default=True)
@@ -202,11 +227,11 @@ def search_prs(ctx, state, limit, include_drafts, labels):
 
     # Contract validation
     try:
-        SearchPRsInput(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+        SearchPRsInput(state=state, limit=limit, includeDrafts=include_drafts, labels=label_list)
     except Exception as e:
         _handle_unexpected_error(ctx, "pr list", e)
 
-    res = orch.list_prs(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+    res = orch.list_prs(state=state, limit=limit, includeDrafts=include_drafts, labels=label_list)
     out(ctx, f"Found {len(res['prs'])} PRs.", data=res)
 
 @gh.command()
@@ -217,6 +242,15 @@ def merge_conflicts(ctx, pr_number, base):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.get_merge_conflicts(pr_number, base_branch=base)
     out(ctx, f"Checked merge conflicts for PR #{pr_number}", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def sync_pr(ctx, pr_number):
+    """Reliably pull the latest remote PR state to local, overwriting messy rebases."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.sync_pr(pr_number)
+    out(ctx, res['message'], data=res)
 
 @gh.command()
 @click.argument('pr_number', type=int)
@@ -268,6 +302,7 @@ def audit(ctx, check_dirs):
     out(ctx, "Headless audit complete.", data=res)
 
 @gh.command()
+@json_option
 @click.argument('pr_number', type=int)
 @click.option('--fetch', is_flag=True)
 @click.option('--audit', 'run_audit', is_flag=True)
@@ -330,12 +365,12 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
     # Contract validation
     try:
         IssueUpdateInput(
-            issue_number=issue_number,
+            issueNumber=issue_number,
             body=body,
             file=file,
             labels=label_list,
-            add_labels=add_label_list,
-            remove_labels=remove_label_list
+            addLabels=add_label_list,
+            removeLabels=remove_label_list
         )
     except Exception as e:
         _handle_unexpected_error(ctx, "issue update", e)
@@ -345,11 +380,11 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
         content = _get_body_content(ctx, orch, file, body)
 
     res = orch.update_issue(
-        issue_number,
+        issueNumber=issue_number,
         body=content,
         labels=label_list,
-        add_labels=add_label_list,
-        remove_labels=remove_label_list
+        addLabels=add_label_list,
+        removeLabels=remove_label_list
     )
     out(ctx, f"✅ Successfully updated issue #{issue_number}", data=res)
 
@@ -538,11 +573,11 @@ def read_pr_comments(ctx, pr_number):
 
     # Input contract validation
     try:
-        ReadPRCommentsInput(pr_number=pr_number)
+        ReadPRCommentsInput(prNumber=pr_number)
     except Exception as e:
         _handle_unexpected_error(ctx, "read-pr-comments", e)
 
-    res = orch.get_pr_comments(pr_number)
+    res = orch.get_pr_comments(prNumber=pr_number)
 
     # Response contract validation
     try:
@@ -1096,6 +1131,7 @@ def plan_aggregation(ctx, pr_numbers, target):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='plan-issue-audit')
+@json_option
 @click.option('--issue', '--issues', 'issue_numbers', multiple=True, type=int, help='Issue number(s) to audit (e.g. --issue 1 --issue 2)')
 @click.option('--all-open', is_flag=True, help='Audit all open issues')
 @limit_option(help_text='Limit the number of open issues to process')

@@ -1,16 +1,17 @@
-import { cva } from 'class-variance-authority';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
+import { createTransitionVariants } from '@/lib/variants';
+import { buttons } from '@/styles/utilities';
 
-const returnButtonVariants = cva(
-  "group outline-none focus-visible:ring-2 focus-visible:ring-accent",
+const returnButtonVariants = createTransitionVariants(
+  buttons.returnBase,
   {
     variants: {},
   }
 );
 
-const returnButtonInnerVariants = cva(
-  "group-hover:bg-accent group-hover:text-bg transition-all shadow-lg group-hover:shadow-accent/20",
+const returnButtonInnerVariants = createTransitionVariants(
+  buttons.returnInner,
   {
     variants: {},
   }

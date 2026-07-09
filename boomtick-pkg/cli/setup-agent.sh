@@ -27,6 +27,9 @@ find_repo_root() {
 REPO_ROOT="$(find_repo_root "$START_DIR" || find_repo_root "$SCRIPT_DIR" || pwd -P)"
 cd "$REPO_ROOT"
 
+CLI_ROOT="$(bash scripts/resolve-cli.sh)"
+export CLI_ROOT
+
 # -------- configuration --------
 PNPM_VERSION="${PNPM_VERSION:-10.28.2}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
@@ -85,10 +88,22 @@ run_sudo() {
 pip_install() {
   # Ubuntu/Debian images may enable PEP 668.
   # Use a 600s timeout to prevent hangs while allowing for slow networks.
-  if timeout 600 python3 -m pip install --disable-pip-version-check "$@"; then
+  local PIP_CMD="python3 -m pip"
+  local PIP_OPTS=""
+  if [ -n "${VENV_PATH:-}" ]; then
+    PIP_CMD="${VENV_PATH}/bin/pip"
+  else
+    PIP_OPTS="--break-system-packages"
+  fi
+
+  if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
     return 0
   fi
-  timeout 600 python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
+  if [ -z "${VENV_PATH:-}" ]; then
+    timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"
+  else
+    return 1
+  fi
 }
 
 # -------- install steps --------
@@ -199,6 +214,28 @@ ensure_corepack_pnpm() {
 
 install_python_deps() {
   have python3 || err "python3 is required."
+
+  # Detect worktree or need for venv
+  IS_WORKTREE=0
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      local top_level
+      top_level="$(git rev-parse --show-toplevel)"
+      if [ "$top_level" != "$REPO_ROOT" ]; then
+          IS_WORKTREE=1
+      fi
+  fi
+
+  export VENV_PATH=""
+  if [ "$IS_WORKTREE" = "1" ] || [ "${CI:-0}" != "1" ]; then
+      VENV_PATH="${REPO_ROOT}/.venv"
+      if [ ! -d "$VENV_PATH" ]; then
+          log "Creating virtual environment in $VENV_PATH..."
+          python3 -m venv "$VENV_PATH"
+      fi
+      export VENV_PATH
+      export PATH="${VENV_PATH}/bin:$PATH"
+  fi
+
   log "Installing Python dependencies for dev tools..."
   # satisfy boomtick-cli requirement of setuptools < 81
   pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
@@ -208,13 +245,9 @@ install_python_deps() {
     pip_install --root-user-action=ignore -r requirements-dev.txt
   fi
 
-  if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
-    log "Installing boomtick-cli in editable mode..."
-    # Use standard user prefix to ensure deterministic binary location
-    python3 -m pip install --user -e "${REPO_ROOT}/boomtick-pkg/cli" --break-system-packages
-
+  if [ -f "${CLI_ROOT}/pyproject.toml" ]; then
+    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
     export PATH="$HOME/.local/bin:$PATH"
-
     if ! have td-cli || ! have td; then
       err "td/td-cli not found on PATH after editable install. Path: $PATH"
     fi
@@ -224,8 +257,8 @@ install_python_deps() {
     STATUS_PYTHON="INSTALLED (minimal)"
   fi
 
-  if [ -f "requirements-dev.txt" ]; then
-    pip_install --root-user-action=ignore -r requirements-dev.txt
+  if [ -f "${CLI_ROOT}/requirements-dev.txt" ]; then
+    pip_install --root-user-action=ignore -r "${CLI_ROOT}/requirements-dev.txt"
     STATUS_PYTHON="${STATUS_PYTHON} + DEV"
   fi
 
@@ -313,6 +346,7 @@ configure_git_hooks() {
 persist_environment() {
   log "Persisting environment settings to ~/.config/boomtick/env.sh..."
   local env_file="$HOME/.config/boomtick/env.sh"
+  local current_venv="${VENV_PATH-}"
   local target_rc=""
 
   # Detect user shell to determine appropriate RC file
@@ -340,6 +374,9 @@ nvm use ${NODE_MAJOR} >/dev/null 2>&1 || nvm install ${NODE_MAJOR} >/dev/null 2>
 nvm alias default ${NODE_MAJOR} >/dev/null 2>&1
 
 export PATH="\$HOME/.local/bin:\$PATH"
+if [ -n "${current_venv}" ]; then
+  export PATH="${current_venv}/bin:\$PATH"
+fi
 export PNPM_HOME="\$HOME/.local/share/pnpm"
 export PATH="\$PNPM_HOME:\$PATH"
 EOE

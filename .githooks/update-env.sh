@@ -41,7 +41,10 @@ fi
 
 if check_run "^boomtick-pkg/cli/"; then
     if command -v python3 >/dev/null 2>&1; then
-        echo "🐍 dev-tools changed. Re-installing in editable mode..."
+        echo "🐍 dev-tools changed. Syncing Python dependencies..."
+        python3 scripts/sync-python-deps.py || echo "⚠️  WARNING: Python dependency sync failed."
+
+        echo "🐍 Re-installing dev-tools in editable mode..."
         # Try normal install first, then fallback for externally managed environments
         if ! python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli; then
             python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli --break-system-packages || echo "❌ ERROR: dev-tools re-installation failed. Please run 'pip install -e ./boomtick-pkg/cli' manually."
