@@ -717,8 +717,7 @@ class AIClient:
                     "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue_description}",
                 })
         if not all_issues:
-            # Always provide at least one comment to satisfy validator
-            all_issues = [{"path": "SUMMARY", "line": 1, "body": "Review summary provided in body."}]
+            all_issues = []
 
         metadata_json = json.dumps({
             "recommendation": recommendation,
