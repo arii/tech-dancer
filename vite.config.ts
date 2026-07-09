@@ -69,19 +69,6 @@ export default defineConfig(({mode}) => {
           compact: !skipMinify,
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (id.includes('lucide-react')) return 'vendor-lucide';
-              if (id.includes('recharts')) return 'vendor-recharts';
-              if (id.includes('motion')) return 'vendor-motion';
-              if (id.includes('firebase')) return 'vendor-firebase';
-              if (id.includes('@google/genai')) return 'vendor-ai';
-              if (id.includes('@tanstack')) return 'vendor-tanstack';
-              if (id.includes('react-syntax-highlighter')) return 'vendor-syntax';
-              if (id.includes('react-markdown')) return 'vendor-markdown';
-              if (id.includes('jspdf')) return 'vendor-pdf';
-              if (id.includes('papaparse')) return 'vendor-csv';
-              if (id.includes('rehype') || id.includes('remark') || id.includes('unified')) return 'vendor-content';
-              if (id.includes('hyparquet')) return 'vendor-parquet';
-              if (id.includes('fuse.js')) return 'vendor-search';
               return 'vendor';
             }
           },
