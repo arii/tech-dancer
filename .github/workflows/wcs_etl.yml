@@ -24,6 +24,9 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. pytest etl/tests/

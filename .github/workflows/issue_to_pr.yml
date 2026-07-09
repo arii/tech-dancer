@@ -20,10 +20,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          python-version: '3.x'
+      - name: Set up Workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Parse Issue and Generate Markdown File
         env:
