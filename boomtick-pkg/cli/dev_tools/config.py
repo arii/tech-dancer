@@ -85,10 +85,10 @@ class ProjectConfig:
     def context_builder_script(self) -> str:
         """Returns the absolute path to the context builder script."""
         try:
-            import importlib.resources
+            import importlib_resources as resources
             # Use importlib.resources to find the script bundled in the package
-            ref = importlib.resources.files("dev_tools.resources").joinpath("build-repo-context.py")
-            with importlib.resources.as_file(ref) as path:
+            ref = resources.files("dev_tools.resources").joinpath("build-repo-context.py")
+            with resources.as_file(ref) as path:
                 return str(path)
         except (ImportError, FileNotFoundError):
             # Fallback to local path if running from source/monorepo without installation

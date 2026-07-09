@@ -20,6 +20,7 @@ dependencies = [
     "sentence-transformers>=5.6.0",
     "duckduckgo-search>=6.0.0",
     "setuptools<81.0.0",
+    "importlib-resources",
     "langchain-google-genai",
     "langchain-openai"
 ]

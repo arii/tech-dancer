@@ -80,9 +80,9 @@ def _get_review_prompt_constants() -> tuple[str, str, str]:
         return _REVIEW_CONSTANTS_CACHE
 
     try:
-        import importlib.resources
+        import importlib_resources as resources
         import json
-        resource_path = importlib.resources.files("dev_tools.resources").joinpath("prompt_constants.json")
+        resource_path = resources.files("dev_tools.resources").joinpath("prompt_constants.json")
         with resource_path.open('r') as f:
             data = json.load(f)
 

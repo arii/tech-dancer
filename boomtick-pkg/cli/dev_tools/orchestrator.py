@@ -649,8 +649,8 @@ class Orchestrator:
             errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
 
             try:
-                import importlib.resources
-                ref = importlib.resources.files("dev_tools.resources").joinpath("review_template.md")
+                import importlib_resources as resources
+                ref = resources.files("dev_tools.resources").joinpath("review_template.md")
                 template = ref.read_text(encoding='utf-8').format(
                     pr_num=prNumber,
                     head_sha=pr.head.sha,
