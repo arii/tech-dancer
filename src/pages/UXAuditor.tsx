@@ -475,30 +475,34 @@ export default function UXAuditor() {
                   as="button"
                   direction="row"
                   onClick={() => setActiveReport(report)}
-                  width="full" align="center" gap={3} padding={4}
+                  width="full"
+                  align="center"
+                  gap={3}
+                  padding={4}
                   className={listRowVariants(rowProps)}
                 >
-                <Box
-                  width={9}
-                  height={9}
-                  radius="full"
-                  surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
-                  shrink={0}
-                >
-                  {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
-                </Box>
-                <Box flex={1} minWidth="0">
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
-                    {report.url.replace('https://', '')}
-                  </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
-                    {new Date(report.timestamp).toLocaleTimeString()}
-                  </Text>
-                </Box>
-                <Icon icon={ChevronRight} size="sm" color="muted" />
-              </Stack>
-            ))}
+                  <Box
+                    width={9}
+                    height={9}
+                    radius="full"
+                    surface={report.status === 'completed' ? 'success' : 'warning'}
+                    className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                    shrink={0}
+                  >
+                    {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
+                  </Box>
+                  <Box flex={1} minWidth="0">
+                    <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
+                      {report.url.replace('https://', '')}
+                    </Text>
+                    <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                      {new Date(report.timestamp).toLocaleTimeString()}
+                    </Text>
+                  </Box>
+                  <Icon icon={ChevronRight} size="sm" color="muted" />
+                </Stack>
+              );
+            })}
           </Stack>
         </Stack>
 

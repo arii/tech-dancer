@@ -28,6 +28,7 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope,
     verify_ci_metrics,
+    extract_semantic_context,
     mask_sensitive_data
 )
 from dev_tools.config import get_config
@@ -931,17 +932,7 @@ def ai_get_context(ctx):
             "semantic": []
         }
 
-        if diff_text and store.is_available():
-            try:
-                semantic_results = store.query(diff_text, n_results=3)
-                for res in semantic_results:
-                    if res['metadata'].get('path') != filepath:
-                        context["semantic"].append({
-                            "path": res['metadata'].get('path'),
-                            "document": res['document']
-                        })
-            except Exception as e:
-                log_warn(f"Error querying vector store for {filepath}: {e}")
+        context["semantic"] = extract_semantic_context(filepath, diff_text, store)
 
         results.append(context)
 

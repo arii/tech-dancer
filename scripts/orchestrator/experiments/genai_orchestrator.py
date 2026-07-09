@@ -5,17 +5,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import time
-from dev_tools.utils import run_command
-
-def run_cli(args, suppress_errors=False):
-    try:
-        res = run_command(["td-cli"] + args)
-        return res if isinstance(res, str) else ""
-    except Exception as e:
-        if not suppress_errors:
-            print(f"CLI Error: {e}")
-        return "" if suppress_errors else None
+from utils import run_cli
 
 
 try:

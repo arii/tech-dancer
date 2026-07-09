@@ -6,6 +6,7 @@ import click
 
 from dev_tools.services.dependency_graph import DependencyGraph
 from dev_tools.services.vector_store import VectorStore
+from dev_tools.utils import extract_semantic_context
 
 def get_context(filepath: str, diff_text: str, graph: DependencyGraph, store: VectorStore, n_results: int = 3):
     context = {
@@ -20,18 +21,7 @@ def get_context(filepath: str, diff_text: str, graph: DependencyGraph, store: Ve
 
     context["dependencies"] = graph.get_dependencies(filepath)
     context["dependents"] = graph.get_dependents(filepath)
-
-    try:
-        # Use diff_text for semantic search
-        results = store.query(diff_text, n_results=n_results)
-        for res in results:
-            if res['metadata'].get('path') != filepath:
-                context["semantic"].append({
-                    "path": res['metadata'].get('path'),
-                    "document": res['document']
-                })
-    except Exception as e:
-        print(f"Error querying vector store: {e}", file=sys.stderr)
+    context["semantic"] = extract_semantic_context(filepath, diff_text, store, n_results=n_results)
 
     return context
 

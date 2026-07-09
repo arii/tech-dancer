@@ -309,7 +309,7 @@ def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None,
 
     llm = ChatOpenAI(
         base_url="https://models.inference.ai.azure.com",
-        api_key=token,
+        api_key=token, # type: ignore
         model=model,
         temperature=0.7,
         max_retries=max_retries,
@@ -318,7 +318,10 @@ def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None,
 
     try:
         response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
+        content = response.content
+        if isinstance(content, str):
+            return content
+        return str(content) if content else None
     except Exception as e:
         log_error(f"AI Call failed: {e}")
         return None
@@ -782,3 +785,21 @@ def verify_pr_scope(file_list=None):
         return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
     return None
 
+def extract_semantic_context(filepath: str, diff_text: str, store: Any, n_results: int = 3) -> List[Dict[str, Any]]:
+    """Helper to extract semantic context from vector store for a given file and diff."""
+    semantic_context = []
+    if not diff_text or not store.is_available():
+        return semantic_context
+
+    try:
+        results = store.query(diff_text, n_results=n_results)
+        for res in results:
+            if res['metadata'].get('path') != filepath:
+                semantic_context.append({
+                    "path": res['metadata'].get('path'),
+                    "document": res['document']
+                })
+    except Exception as e:
+        log_warn(f"Error querying vector store for {filepath}: {e}")
+
+    return semantic_context

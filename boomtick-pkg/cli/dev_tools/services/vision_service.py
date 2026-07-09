@@ -35,13 +35,12 @@ class VisionService:
 
         llm = ChatOpenAI(
             base_url="https://models.inference.ai.azure.com",
-            api_key=self.token,
+            api_key=self.token, # type: ignore
             model=self.model,
-            temperature=0.7,
-            max_tokens=2048,
+            temperature=0.7
         )
 
-        message_content = [{"type": "text", "text": prompt}]
+        message_content: List[Dict[str, Any]] = [{"type": "text", "text": prompt}]
         for img in images:
             message_content.append({
                 "type": "image_url",
@@ -49,8 +48,11 @@ class VisionService:
             })
 
         try:
-            response = llm.invoke([HumanMessage(content=message_content)])
-            return response.content
+            response = llm.invoke([HumanMessage(content=message_content)]) # type: ignore
+            content = response.content
+            if isinstance(content, str):
+                return content
+            return str(content) if content else None
         except Exception as e:
             return f"❌ Vision call failed: {e}"
 
