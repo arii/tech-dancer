@@ -14,12 +14,15 @@ def get_type_name(param):
         return "boolean"
     return "string"
 
-def collect_commands(cmd, prefix=""):
+def collect_commands(cmd, prefix="", depth=0, max_depth=10):
+    if depth > max_depth:
+        return {}
+
     subcmds = {}
     if isinstance(cmd, click.Group):
         for sub_name, sub_cmd in cmd.commands.items():
             new_prefix = f"{prefix} {sub_name}".strip()
-            subcmds.update(collect_commands(sub_cmd, new_prefix))
+            subcmds.update(collect_commands(sub_cmd, new_prefix, depth + 1, max_depth))
     else:
         cmd_name = prefix
         cmd_help = cmd.help or ""

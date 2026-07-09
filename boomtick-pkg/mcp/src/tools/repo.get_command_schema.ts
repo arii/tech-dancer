@@ -6,10 +6,14 @@ export const GetCommandSchemaInputSchema = z.object({
 });
 
 export async function getCommandSchemaHandler(args: z.infer<typeof GetCommandSchemaInputSchema>) {
-  const result = await runCommand("td-cli", ["schema", args.commandPath]);
+  // Sanitize input to prevent command injection (allow only alphanumeric, spaces, hyphens, and underscores)
+  const sanitizedPath = args.commandPath.replace(/[^a-zA-Z0-9-_ ]/g, "");
+  const result = await runCommand("td-cli", ["schema", sanitizedPath]);
 
   if (result.exitCode !== 0) {
-    throw new Error(`Failed to get command schema: ${result.stderr}`);
+    // Log stderr for debugging but don't expose it to the user
+    console.error(`td-cli schema failed for ${sanitizedPath}:`, result.stderr);
+    throw new Error(`Failed to get command schema for '${sanitizedPath}'`);
   }
 
   try {

@@ -397,7 +397,10 @@ EOE
   source "$env_file"
 
   # Inject feature flags for agent optimization
-  export TD_CLI_SCHEMA_QUERY_SUPPORTED="true"
+  # Used to signal that targeted CLI schema lookups are available.
+  if [ "${TD_CLI_SCHEMA_QUERY_SUPPORTED:-}" != "true" ]; then
+    export TD_CLI_SCHEMA_QUERY_SUPPORTED="true"
+  fi
   if ! grep -Fq "export TD_CLI_SCHEMA_QUERY_SUPPORTED" "$env_file"; then
     echo "export TD_CLI_SCHEMA_QUERY_SUPPORTED=\"true\"" >> "$env_file"
   fi
