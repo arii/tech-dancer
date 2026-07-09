@@ -31,6 +31,7 @@ from dev_tools.utils import (
     get_gha_variable,
     set_gha_variable,
     run_command,
+    log_info,
     is_ai_available,
     extract_failing_info,
     clean_gha_logs,
@@ -221,8 +222,8 @@ class Orchestrator:
         failing_logs = {}
         structured_failures = []
         for run in check_runs:
-            if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+            if run.get('conclusion') == 'failure' and run.get('id'):
+                logs = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
                 failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
                 findings = extract_failing_info(logs)
                 for f in findings:
@@ -243,9 +244,9 @@ class Orchestrator:
         review_dir = get_or_create_log_dir("reviews")
         cache_file = os.path.join(review_dir, f"review_cache_{prNumber}_{diff_hash}.json")
         if os.path.exists(cache_file):
-            with open(cache_file, 'r') as f: return json.load(f)
+            with open(cache_file, 'r') as f_in: return json.load(f_in)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
-        with open(cache_file, 'w') as f: json.dump(review_result, f)
+        with open(cache_file, 'w') as f_out: json.dump(review_result, f_out)
         return review_result
 
     def resolve_conflict(self, file_path: str) -> bool:
@@ -277,8 +278,8 @@ class Orchestrator:
             "--exclude-dir=target",
             "--exclude-dir=.venv"
         ], check=False, log_on_error=False)
-        if res.returncode == 0 and res.stdout:
-            return [f.strip() for f in res.stdout.splitlines() if f.strip()]
+        if not isinstance(res, str) and res.returncode == 0 and res.stdout:
+            return [f.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip() for f in res.stdout.splitlines() if f.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()]
         return []
 
     def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
@@ -292,7 +293,7 @@ class Orchestrator:
         if re.search(r"\b(consolidate|aggregate)\s+pr(s)?\b", prompt.lower()):
             raise CLIError("PR consolidation and aggregation tasks should be performed directly using the 'gh aggregate' command instead of dispatching a Jules session.")
 
-        source_id = self.jules.discover_source_id(self.github.repo)
+        source_id = self.jules.discover_source_id(self.github.repo or "")
         if not source_id:
             raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
 
@@ -307,9 +308,9 @@ class Orchestrator:
 
     def resolve_baseline(self, file_path: Optional[str], env_var: str, fallback_value: int) -> int:
         if file_path and os.path.exists(file_path):
-            with open(file_path, 'r') as f: return int(f.read().strip() or fallback_value)
+            with open(file_path, 'r') as f: return int(f.read().strip() if isinstance(res, subprocess.CompletedProcess) else res.strip() or fallback_value)
         val = self.get_env_or_gha(env_var)
-        if val is not None and str(val).strip() != "": return int(val)
+        if val is not None and str(val).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip() != "": return int(val)
         return fallback_value
 
     def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -319,6 +320,9 @@ class Orchestrator:
         elif content is not None:
             cmd.append("-")
         res = run_command(cmd, check=False, input_str=content)
+        if isinstance(res, str):
+             # This should not happen with check=False, but for type safety:
+             return {"violations": {}, "config": {}}
         try:
             return json.loads(res.stdout)
         except json.JSONDecodeError:
@@ -398,7 +402,7 @@ class Orchestrator:
         """
         Updates an issue's body and/or labels.
         """
-        res = None
+        res: Optional[Dict[str, Any]] = None
         # Shim for backward compatibility with old snake_case names from tests or older callers
         if "add_labels" in kwargs and addLabels is None: addLabels = kwargs["add_labels"]
         if "remove_labels" in kwargs and removeLabels is None: removeLabels = kwargs["remove_labels"]
@@ -408,7 +412,7 @@ class Orchestrator:
         else:
             # Handle incremental label changes (can happen together)
             if addLabels:
-                res = self.github.add_labels(issueNumber, addLabels)
+                res = self.github.add_labels(issueNumber, addLabels)  # type: ignore[assignment]
 
             if removeLabels:
                 for label in removeLabels:
@@ -433,7 +437,7 @@ class Orchestrator:
         """
         Posts a comment to a Pull Request or Issue.
         """
-        if body is None or not body.strip():
+        if body is None or not body.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip():
             raise CLIError("Comment body cannot be empty.")
         return self.github.create_issue_comment(entity_number, body)
 
@@ -441,7 +445,7 @@ class Orchestrator:
         if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
-        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
+        issue_numbers = kwargs.get("issue_numbers")
         if "limit" in kwargs: limit = kwargs["limit"]
         if all_open:
             issues = list(repo.get_issues(state='open'))
@@ -456,12 +460,12 @@ class Orchestrator:
         config = audit_base.get("config", {})
 
         for issue in issues:
-            findings = []
-            warnings = []
+            findings: List[str] = []
+            warnings: List[str] = []
             body = issue.body or ''
             title = issue.title or ''
 
-            if not body.strip():
+            if not body.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip():
                 findings.append("Issue body is empty.")
 
             for i, block in enumerate(self.extract_code_blocks(body)):
@@ -560,7 +564,7 @@ class Orchestrator:
             for filepath in walk_tsx(root_dir):
                 findings = find_patterns_in_file(filepath, [(re.escape(find), "Found")])
                 for ln, _, content in findings:
-                    matches.append({"file": filepath, "line": ln, "content": content.strip()})
+                    matches.append({"file": filepath, "line": ln, "content": content.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()})
         elif migrate:
             old, new = migrate
             for filepath in walk_tsx(root_dir):
@@ -593,7 +597,7 @@ class Orchestrator:
         if "pr_number" in kwargs: prNumber = kwargs["pr_number"]
         review_dir = get_or_create_log_dir("reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{prNumber}.md"); rev_path = os.path.join(review_dir, f"pr-review-{prNumber}.md")
-        res = {"pr": prNumber, "files": {}}
+        res: Dict[str, Any] = {"pr": prNumber, "files": {}}
         if fetch:
             repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(prNumber)
             title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
@@ -608,7 +612,7 @@ class Orchestrator:
                     context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
                     if run.get('conclusion') == 'failure':
                         failed_check_names.append(run.get('name'))
-                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                        logs = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
 
                         # Structured failure analysis
                         findings = extract_failing_info(logs)
@@ -643,15 +647,15 @@ class Orchestrator:
                         elif line.startswith('-'): annotated.append(f"     |{line}")
                         else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                 context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
+            with open(ctx_path, "w") as f_out: f_out.write("\n".join(context_lines))
             template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
 
             failed_checks_str = "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
             errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
 
             if os.path.exists(template_path):
-                with open(template_path) as f:
-                    template = f.read().format(
+                with open(template_path) as f_in:
+                    template = f_in.read().format(
                         pr_num=prNumber,
                         head_sha=pr.head.sha,
                         failed_checks=failed_checks_str,
@@ -659,18 +663,21 @@ class Orchestrator:
                     )
             else:
                 template = f"# PR Review: #{prNumber}\n- SHA: {pr.head.sha}\n\n## CI Log Triage\n- **Failed Checks:**\n{failed_checks_str}\n- **Detected Errors:**\n{errors_str}\n"
-            with open(rev_path, "w") as f: f.write(template)
+            with open(rev_path, "w") as f_out: f_out.write(template)
             res["files"]["context"] = ctx_path; res["files"]["review"] = rev_path
         if audit:
             if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
-            with open(ctx_path) as f: context = f.read()
+            with open(ctx_path) as f_in: context = f_in.read()
             changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
             scope_warning = verify_pr_scope(changed_files)
             if scope_warning: auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
             files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
             if files_to_audit:
                 audit_res = run_command(["node", "boomtick-pkg/scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, check=False)
-                output = audit_res.stdout
+                if isinstance(audit_res, str):
+                    output = audit_res
+                else:
+                    output = audit_res.stdout
                 if output and "{" in output:
                     json_start = output.find("{")
                     json_end = output.rfind("}") + 1
@@ -733,15 +740,15 @@ class Orchestrator:
         # Mirror boomtick-pkg/scripts/check-runtime.mjs logic in Python
         try:
             with open(".node-version", "r") as f:
-                expected_node = f.read().strip().replace('v', '')
+                expected_node = f.read().strip() if isinstance(res, subprocess.CompletedProcess) else res.strip().replace('v', '')
         except FileNotFoundError:
             try:
                 with open(".nvmrc", "r") as f:
-                    expected_node = f.read().strip().replace('v', '')
+                    expected_node = f.read().strip() if isinstance(res, subprocess.CompletedProcess) else res.strip().replace('v', '')
             except FileNotFoundError:
                 expected_node = "24.16.0"
 
-        actual_node = run_command(["node", "-v"]).strip().replace('v', '')
+        actual_node = run_command(["node", "-v"]).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip().replace('v', '')
         is_ci = os.environ.get("CI") == "true"
         is_jules = "jules" in os.environ.get("USER", "").lower() or os.environ.get("JULES_API_KEY")
 
@@ -763,7 +770,7 @@ class Orchestrator:
         else:
             expected_pnpm = "10.28.2"
 
-        actual_pnpm = run_command(["pnpm", "--version"]).strip()
+        actual_pnpm = run_command(["pnpm", "--version"]).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
             log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
@@ -836,7 +843,7 @@ class Orchestrator:
         return results
 
     def repair_local(self, logs_path: Optional[str] = None, stdin: bool = False, worktree: bool = False) -> Dict[str, Any]:
-        logs_content = ""
+        logs_content: str = ""
         if stdin: logs_content = sys.stdin.read()
         elif logs_path:
             if os.path.exists(logs_path):
@@ -846,7 +853,7 @@ class Orchestrator:
             res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
             res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
             logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
-        if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
+        if not logs_content.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip(): return {"status": "success", "message": "No errors found."}
         original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "dev-tools", "repair.py"))
         worktree_path = None; branch_name = None
         try:
@@ -874,7 +881,7 @@ class Orchestrator:
         current_count = int(run_command(["node", "boomtick-pkg/scripts/detect-antipatterns.mjs", "--count-only"]) or 0)
         baseline_count = self.resolve_baseline(None, 'AUDIT_BASELINE', -1)
 
-        is_shallow = run_command(["git", "rev-parse", "--is-shallow-repository"], check=False).stdout.strip() == "true"
+        is_shallow = run_command(["git", "rev-parse", "--is-shallow-repository"], check=False).stdout.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip() == "true"
 
         if baseline_count == -1 or is_shallow:
             val = self.get_env_or_gha('AUDIT_BASELINE')
@@ -915,7 +922,7 @@ class Orchestrator:
             branch = pr.head.ref
         elif branch: pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
         else:
-            branch = run_command(['git', 'branch', '--show-current']).strip()
+            branch = run_command(['git', 'branch', '--show-current']).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
 
         if not pr:
@@ -929,7 +936,7 @@ class Orchestrator:
         structured_failures = []
         for run in check_runs:
             if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                logs = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
 
                 # Clean logs and take a smart snippet
                 cleaned_logs = clean_gha_logs(logs)
@@ -998,7 +1005,7 @@ Respond only after the PR is created or updated:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
         agent_name = "Jules"
-        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name or "")
         if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
@@ -1067,7 +1074,7 @@ Respond only after the PR is created or updated:
             check_runs = self.github.fetch_check_runs(pr.head.sha)
             for run in check_runs:
                 if run.get('conclusion') == 'failure':
-                    logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                    logs = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
                     for line in logs.splitlines():
                         p = pipeline.generate_prompt(line)
                         if p: prompts.append(p)
@@ -1294,17 +1301,17 @@ Run the workflow (if possible via `gh workflow run` or by pushing a test branch)
             "workflow_plans": generated_plans
         }
 
-    def plan_issue_audit(self, issueNumbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100, **kwargs) -> Dict[str, Any]:
+    def plan_issue_audit(self, issue_numbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100, **kwargs) -> Dict[str, Any]:
         """
         Builds a deterministic roadmap and status checklist for auditing open issues.
         """
         issues = []
-        if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
+        if "issue_numbers" in kwargs and issue_numbers is None: issue_numbers = kwargs["issue_numbers"]
         if "limit" in kwargs: limit = kwargs["limit"]
         if all_open:
             issues = self.github.list_issues(state='open', limit=limit)
-        elif issueNumbers:
-            for num in issueNumbers:
+        elif issue_numbers:
+            for num in issue_numbers:
                 issue = self.github.fetch_issue_details(num)
                 # Normalize format to match list_issues
                 issues.append({
@@ -1430,7 +1437,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         # Use pull ref to be robust against forks and ensure we get the exact commit
         run_command(["git", "fetch", "origin", f"pull/{prNumber}/head"])
 
-        current_branch = run_command(["git", "branch", "--show-current"]).strip()
+        current_branch = run_command(["git", "branch", "--show-current"]).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
         if current_branch != head_ref:
             log_info(f"Switching from {current_branch} to {head_ref}")
             run_command(["git", "checkout", "-B", head_ref, "FETCH_HEAD"])
@@ -1466,7 +1473,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             runs = self.github.fetch_check_runs_for_suite(suite['id'])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
-                    log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                    log_content = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
                     logs[run["name"]] = log_content[:10000]
 
         return {
@@ -1491,7 +1498,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         # Limit to latest 20 jobs to avoid extreme memory usage
         for run in check_runs[:20]:
             # Fetch logs via API to avoid terminal paging/buffering issues
-            log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+            log_content = self.github.fetch_check_run_logs(int(run.get('id') or 0), external_id=run.get('external_id'))
             header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
             all_logs.append(header)
             # Truncate each log to 20k chars to balance detail vs memory
@@ -1508,7 +1515,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
         return combined_logs
 
-    def get_merge_conflicts(self, prNumber: int, base_branch: str = None) -> Dict[str, Any]:
+    def get_merge_conflicts(self, prNumber: int, base_branch: Optional[str] = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
@@ -1549,7 +1556,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                     cwd=worktree_path,
                     check=False
                 )
-                conflict_files = [f.strip() for f in res_diff.stdout.splitlines() if f.strip()]
+                conflict_files = [f.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip() for f in res_diff.stdout.splitlines() if f.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()]
                 run_command(["git", "merge", "--abort"], cwd=worktree_path, check=False)
         finally:
             run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
@@ -1701,7 +1708,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             feedback = "The CI pipeline reported failures. Here are the details:\n\n"
             for run in failed_checks:
                 feedback += f"### Failed Check: {run['name']}\n"
-                logs = self.github.fetch_check_run_logs(run['id'], external_id=run.get('external_id'))
+                logs = self.github.fetch_check_run_logs(int(run['id'] or 0), external_id=run.get('external_id'))
                 findings = extract_failing_info(logs)
                 if findings:
                     for f in findings:
@@ -1781,7 +1788,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                         1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`
                         2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.
                         3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`
-                    """).strip()
+                    """).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
                     raise CLIError(error_msg, code=res.returncode)
 
             # 4. Metadata Preservation
@@ -1835,13 +1842,13 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                 pr_context_content = f.read()
 
             summary_match = re.search(r'(# PR Context:.*?)(?=## CI Status|## Diff Stats)', pr_context_content, re.DOTALL)
-            if summary_match: pr_summary = summary_match.group(1).strip()
+            if summary_match: pr_summary = summary_match.group(1).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
 
             ci_status_match = re.search(r'(## CI Status.*?)(?=## Diff Stats|## Failing Tests)', pr_context_content, re.DOTALL)
-            if ci_status_match: ci_status = ci_status_match.group(1).strip()
+            if ci_status_match: ci_status = ci_status_match.group(1).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
 
             failure_logs_match = re.search(r'(## Failing Tests.*?)(?=## Diff Stats|$)', pr_context_content, re.DOTALL)
-            if failure_logs_match: failure_logs = failure_logs_match.group(1).strip()
+            if failure_logs_match: failure_logs = failure_logs_match.group(1).strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
 
             if not pr_summary: pr_summary = "See " + pr_context_file
             if not ci_status: ci_status = "See " + pr_context_file
@@ -1852,9 +1859,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         if os.path.exists("boomtick-pkg/scripts/impact-analysis.ts"):
             # Use check=False to swallow errors from impact analysis in the planning phase
             res = run_command(["npx", "tsx", "boomtick-pkg/scripts/impact-analysis.ts"], check=False, log_on_error=False)
-            impact_output = res.stdout + res.stderr
-            if res.returncode != 0:
-                impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
+            if not isinstance(res, str):
+                impact_output = res.stdout + res.stderr
+                if res.returncode != 0:
+                    impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
 
         # 6. Existing Review Data
         gemini_review = "None."
@@ -2037,10 +2045,10 @@ Only after successful completion.
             for f in files:
                 file_to_prs[f].append(num)
 
-        overlap_groups = defaultdict(list)
-        for file, prs in file_to_prs.items():
-            if len(prs) > 1:
-                overlap_groups[frozenset(prs)].append(file)
+        overlap_groups: Dict[frozenset[str], List[str]] = defaultdict(list)
+        for file, prs_list in file_to_prs.items():
+            if len(prs_list) > 1:
+                overlap_groups[frozenset(prs_list)].append(file)
 
         report = ["--- EXACT OVERLAP GROUPS ---"]
         for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
@@ -2155,7 +2163,10 @@ Overlapping functionality identified and resolved.
 
                 # Check for unmerged paths
                 res_diff = run_command(["git", "diff", "--name-only", "--diff-filter=U"], check=False)
-                unmerged = res_diff.stdout.strip()
+                if isinstance(res_diff, str):
+                    unmerged = res_diff.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
+                else:
+                    unmerged = res_diff.stdout.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip()
                 if unmerged:
                     raise CLIError(f"Unresolved conflicts remain in PR #{prNumber}:\n{unmerged}\n\nPlease resolve them in {worktree_path} before continuing.")
 
@@ -2164,7 +2175,7 @@ Overlapping functionality identified and resolved.
 
                 # Check if there is anything to commit
                 status_res = run_command(["git", "status", "--porcelain"], check=False)
-                if status_res.stdout.strip():
+                if status_res.stdout.strip() if isinstance(res, subprocess.CompletedProcess) else res.strip():
                     commit_msg = f"Merge {base_branch} into PR #{prNumber}"
                     run_command(["git", "commit", "-m", commit_msg], check=True)
 
