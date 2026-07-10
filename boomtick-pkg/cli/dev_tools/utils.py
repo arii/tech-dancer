@@ -139,8 +139,8 @@ def resolve_resource_path(resource_name: str) -> str:
         ref = resources.files("dev_tools.resources").joinpath(resource_name)
         if ref.exists():
             return str(ref)
-    except (ImportError, AttributeError, FileNotFoundError, TypeError):
-        pass
+    except (ImportError, AttributeError, FileNotFoundError, TypeError) as e:
+        log_warn(f"importlib_resources failed to resolve '{resource_name}': {e}. Falling back to manual discovery.")
 
     # 3. Fallback to manual discovery for development/monorepo
     base_dir = Path(__file__).parent
@@ -157,7 +157,7 @@ def resolve_resource_path(resource_name: str) -> str:
         if cand.exists():
             return str(cand.absolute())
 
-    raise FileNotFoundError(f"Could not resolve resource: {resource_name}")
+    raise FileNotFoundError(f"Could not resolve resource: {resource_name}. Tried: {[str(c) for c in candidates]}")
 
 def get_workspace_log_dir() -> Path:
     """Returns the path to the workspace log directory (.boomtick/logs)."""
