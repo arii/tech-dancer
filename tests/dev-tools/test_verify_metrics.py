@@ -16,7 +16,7 @@ def test_verify_metrics_success(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     # Create mock logs
-    log_dir = tmp_path / "boomtick-pkg" / "cli" / "logs" / "ai"
+    log_dir = tmp_path / ".boomtick" / "logs" / "ai"
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
@@ -33,7 +33,7 @@ def test_verify_metrics_success(tmp_path, monkeypatch):
 def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
-    log_dir = tmp_path / "boomtick-pkg" / "cli" / "logs" / "ai"
+    log_dir = tmp_path / ".boomtick" / "logs" / "ai"
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
@@ -47,7 +47,7 @@ def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
 def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
-    log_dir = tmp_path / "boomtick-pkg" / "cli" / "logs" / "ai"
+    log_dir = tmp_path / ".boomtick" / "logs" / "ai"
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
@@ -61,7 +61,7 @@ def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
 def test_verify_metrics_malformed_json(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
-    log_dir = tmp_path / "boomtick-pkg" / "cli" / "logs" / "ai"
+    log_dir = tmp_path / ".boomtick" / "logs" / "ai"
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
