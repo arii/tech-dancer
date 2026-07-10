@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
 
@@ -56,11 +56,11 @@ export function PageHeader({
   titleSize = "fluid-5",
   cta
 }: PageHeaderProps) {
-  const spacing = useMemo(() => getHeaderSpacing({
+  const spacing = getHeaderSpacing({
     hasTitle: !!title,
     hasDescription: !!description,
     hasCta: !!cta
-  }), [title, description, cta]);
+  });
 
   return (
     <Box
