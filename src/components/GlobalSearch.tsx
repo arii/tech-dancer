@@ -58,10 +58,10 @@ export function GlobalSearch() {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = requestAnimationFrame(() => {
+      const timer = setTimeout(() => {
         inputRef.current?.focus();
-      });
-      return () => cancelAnimationFrame(timer);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
