@@ -1,25 +1,40 @@
-import { runCommand, ShellResult } from "../lib/shell.js";
+import { runCommand } from "../lib/shell.js";
 
-export async function runTDCli(args: string[]): Promise<any> {
+export interface TDCliResponse {
+  status: string;
+  message?: string;
+  [key: string]: any;
+}
+
+export async function runTDCli(args: string[]): Promise<TDCliResponse> {
   const result = await runCommand("td-cli", args);
 
-  let output: unknown;
-  try {
-    output = JSON.parse(result.stdout);
-  } catch (e) {
-    if (result.exitCode !== 0) {
-      throw new Error(`td-cli command failed (${args.join(" ")}): ${result.stderr}`);
-    }
-    throw e;
-  }
-
-  if (output && typeof output === "object" && "status" in output && output.status === "error") {
-    const message = (output as { message?: string }).message ?? "Unknown error";
-    throw new Error(`td-cli returned error: ${message}`);
-  }
+  const stdout = result.stdout.trim();
+  const isPossiblyJson = stdout.startsWith("{");
 
   if (result.exitCode !== 0) {
-    throw new Error(`td-cli command failed (${args.join(" ")}): ${result.stderr}`);
+    if (isPossiblyJson) {
+      let output: TDCliResponse | null = null;
+      try {
+        output = JSON.parse(stdout) as TDCliResponse;
+      } catch {
+        // Ignore parse error and fall back to generic shell error
+      }
+
+      if (output && output.status === "error") {
+        throw new Error(`td-cli returned error: ${output.message ?? "Unknown error"}`);
+      }
+    }
+    throw new Error(`td-cli command failed (${args.join(" ")}): ${result.stderr || stdout}`);
+  }
+
+  if (!isPossiblyJson) {
+    throw new Error(`td-cli returned non-JSON output with exit code 0: ${stdout}`);
+  }
+
+  const output = JSON.parse(stdout) as TDCliResponse;
+  if (output.status === "error") {
+    throw new Error(`td-cli returned error: ${output.message ?? "Unknown error"}`);
   }
 
   return output;

@@ -89,7 +89,7 @@ describe("createJulesSessionHandler", () => {
   it("should throw error if PR view fails", async () => {
     vi.mocked(shell.runCommand).mockResolvedValue({
       stdout: JSON.stringify({ status: "error", message: "PR not found" }),
-      stderr: "",
+      stderr: "Original error",
       exitCode: 1,
       durationMs: 10,
       command: "td-cli gh view"
@@ -109,6 +109,6 @@ describe("createJulesSessionHandler", () => {
     });
 
     await expect(createJulesSessionHandler({ task: "do work", pr: 42 }))
-      .rejects.toThrow(/Unexpected token/);
+      .rejects.toThrow("td-cli returned non-JSON output with exit code 0: invalid json");
   });
 });
