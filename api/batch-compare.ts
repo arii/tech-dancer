@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions";
-import { rateLimiter } from "./_lib/rate-limiter";
+import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
+import { rateLimiter } from "./_lib/rate-limiter.js";
 
 const MAX_BATCH_SIZE = 25;
 

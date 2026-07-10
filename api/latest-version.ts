@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions";
-import { rateLimiter } from "./_lib/rate-limiter";
+import { resolveLatest, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
+import { rateLimiter } from "./_lib/rate-limiter.js";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
