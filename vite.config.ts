@@ -176,6 +176,20 @@ export default defineConfig(({mode}) => {
       {
         name: 'vercel-api-dev-server',
         configureServer(server) {
+          interface ExtendedRequest {
+            query?: Record<string, string>;
+            body?: unknown;
+          }
+
+          interface ExtendedResponse {
+            status: (statusCode: number) => ExtendedResponse;
+            json: (data: unknown) => ExtendedResponse;
+            send: (data: unknown) => ExtendedResponse;
+            statusCode: number;
+            setHeader: (name: string, value: string) => void;
+            end: (data?: unknown) => void;
+          }
+
           server.middlewares.use(async (req, res, next) => {
             if (!req.url?.startsWith('/api/')) {
               return next();
@@ -207,7 +221,8 @@ export default defineConfig(({mode}) => {
               url.searchParams.forEach((val, key) => {
                 query[key] = val;
               });
-              (req as any).query = query;
+              const extReq = req as unknown as ExtendedRequest & typeof req;
+              extReq.query = query;
 
               // Parse body for POST requests
               if (req.method === 'POST') {
@@ -217,25 +232,25 @@ export default defineConfig(({mode}) => {
                 }
                 const bodyStr = Buffer.concat(buffers).toString('utf-8');
                 try {
-                  (req as any).body = bodyStr ? JSON.parse(bodyStr) : undefined;
+                  extReq.body = bodyStr ? JSON.parse(bodyStr) : undefined;
                 } catch {
-                  (req as any).body = bodyStr;
+                  extReq.body = bodyStr;
                 }
               }
 
               // Mock VercelResponse helper methods
-              const extendedRes = res as any;
+              const extendedRes = res as unknown as ExtendedResponse & typeof res;
               extendedRes.status = (statusCode: number) => {
                 extendedRes.statusCode = statusCode;
                 return extendedRes;
               };
-              extendedRes.json = (data: any) => {
+              extendedRes.json = (data: unknown) => {
                 extendedRes.setHeader('Content-Type', 'application/json');
                 extendedRes.end(JSON.stringify(data));
                 return extendedRes;
               };
-              extendedRes.send = (data: any) => {
-                if (typeof data === 'object') {
+              extendedRes.send = (data: unknown) => {
+                if (data && typeof data === 'object') {
                   return extendedRes.json(data);
                 }
                 extendedRes.end(data);
@@ -243,7 +258,7 @@ export default defineConfig(({mode}) => {
               };
 
               // Run the handler
-              await handler(req, extendedRes);
+              await handler(extReq, extendedRes);
             } catch (err) {
               console.error(`Error executing API ${pathname}:`, err);
               res.writeHead(404, { 'Content-Type': 'application/json' });
