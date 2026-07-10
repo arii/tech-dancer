@@ -101,6 +101,14 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
     layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
     onUpdate, custom,
+    // Add missing motion props to destructuring so they are not in ...props
+    style: _style,
+    drag, dragControls, dragConstraints, dragElastic, dragMomentum,
+    dragPropagation, dragTransition, dragListener, onDragStart, onDragEnd,
+    onDrag, onDirectionLock, onDragTransitionEnd,
+    onHoverStart, onHoverEnd, onTap, onTapStart, onTapCancel,
+    onPan, onPanStart, onPanSessionStart, onPanEnd,
+    whileTransitionSelection,
     ...props 
   }, ref) => {
     const isMotion = typeof Component !== "string"

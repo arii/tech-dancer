@@ -69,6 +69,10 @@ export default defineConfig(({mode}) => {
           compact: !skipMinify,
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              const module = id.split('node_modules/').pop().split('/')[0];
+              if (['lucide-react', 'recharts', 'framer-motion', 'motion', 'firebase'].includes(module)) {
+                return module;
+              }
               return 'vendor';
             }
           },
