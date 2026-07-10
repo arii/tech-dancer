@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VersionTruth Demo Assets</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 2rem; max-width: 1200px; margin: 0 auto; background: #f9fafb; color: #111827; }
+        h1 { margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 1rem; }
+        .full-video { margin-bottom: 4rem; text-align: center; }
+        .full-video video { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .card-header { padding: 1rem; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; font-weight: 600; }
+        .card-media { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; }
+        .card-media video, .card-media img { width: 100%; height: 100%; object-fit: contain; }
+        .links { padding: 1rem; display: flex; gap: 1rem; justify-content: center; background: white; }
+        a { color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.875rem; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>VersionTruth Demo Assets</h1>
+
+    <div class="full-video">
+        <h2>Full Stitched Video</h2>
+        <video controls>
+            <source src="full_demo.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <div class="links">
+            <a href="full_demo.webm" download>Download Full Video</a>
+        </div>
+    </div>
+
+    <h2>Individual Shots</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">Shot 1: Problem</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot1_problem.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot1_problem.webm" download>Video</a>
+                <a href="shot1_problem.png" download>Screenshot</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Shot 2: Fix</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot2_fix.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot2_fix.webm" download>Video</a>
+                <a href="shot2_fix.png" download>Screenshot</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Shot 3: Live Demo</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot3_live_demo.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot3_live_demo.webm" download>Video</a>
+                <a href="shot3_demo_part1.png" download>Screen 1</a>
+                <a href="shot3_demo_part2.png" download>Screen 2</a>
+                <a href="shot3_demo_part3.png" download>Screen 3</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Shot 4: Agent Usage</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot4_agent_usage.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot4_agent_usage.webm" download>Video</a>
+                <a href="shot4_agent_usage.png" download>Screenshot</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Shot 5: Safety</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot5_safety.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot5_safety.webm" download>Video</a>
+                <a href="shot5_safety.png" download>Screenshot</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Shot 6: Close</div>
+            <div class="card-media">
+                <video controls preload="metadata"><source src="shot6_close.webm" type="video/webm"></video>
+            </div>
+            <div class="links">
+                <a href="shot6_close.webm" download>Video</a>
+                <a href="shot6_close.png" download>Screenshot</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
