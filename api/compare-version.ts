@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
-import { rateLimiter } from "./_lib/rate-limiter.js";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
@@ -10,7 +9,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Cache-Control", "s-maxage=1800, stale-while-revalidate=3600");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (!rateLimiter(req, res)) return;
   if (req.method !== "GET") return res.status(405).json({ error: "GET only" });
 
   const ecosystem = String(req.query.ecosystem ?? "") as Ecosystem;

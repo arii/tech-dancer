@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { rateLimiter } from "./_lib/rate-limiter.js";
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -7,7 +6,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Content-Type", "application/json");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (!rateLimiter(req, res)) return;
 
   return res.status(200).json({
     status: "ok",
