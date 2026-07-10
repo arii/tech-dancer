@@ -30,6 +30,7 @@ export function FeaturedGuidePanel() {
       {/* Background image — fills the column height naturally */}
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
+
         alt={FEATURED.imageAlt}
         width={420}
         height={600}

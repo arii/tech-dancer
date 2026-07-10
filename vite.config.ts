@@ -73,6 +73,7 @@ export default defineConfig(({mode}) => {
               if (['lucide-react', 'recharts', 'motion', 'framer-motion', 'firebase'].includes(module)) {
                 return module;
               }
+              if (id.includes('react-syntax-highlighter') || id.includes('jspdf')) return module;
               return 'vendor';
             }
           },
