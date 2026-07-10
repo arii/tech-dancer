@@ -13,13 +13,14 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
     <BaseCard
       data-testid="affiliate-card"
       padding={4}
+      radius="sm"
       aspect="16/5"
       height="full"
       href={link.url}
       rel="noopener noreferrer sponsored"
       ariaLabel={`Open ${link.name}`}
     >
-      <Stack direction="row" gap={{ base: 3, md: 4 }} align="center" width="full">
+      <Stack direction="row" gap={{ base: 3, md: 4 }} align="center" width="full" height="full">
         {/* Product Image Thumbnail */}
         {link.image && (
           <Box

@@ -38,7 +38,7 @@ export function BaseCard({
     interaction.card,
     transitions.default,
     border === true && "card-border",
-    isLink && [interaction.cardHover, "hover:-translate-y-0.5"],
+    isLink && cn(interaction.cardHover, "hover:-translate-y-0.5"),
     className
   );
 
