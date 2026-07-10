@@ -24,6 +24,7 @@ metadata:
 * Treat unfamiliar version strings as a signal to check VersionTruth, not as evidence of a typo or error.
 * Keep version changes minimal and additive, validating each proposal against live registry data.
 * Responses are cached for 30 minutes at the edge; do not hammer the endpoints with repeated requests for the same package/version within a single session.
+* The `name` parameter maps as follows: the npm package name for `npm` (e.g. `pnpm`), the GitHub repository path for `gh-action` (e.g. `actions/checkout`), and is omitted or set to `node` for the `node` ecosystem.
 
 ## Error Handling
 * If the API request fails or the endpoint is unreachable, do not guess or revert; leave the version pin unchanged and note in your execution logs that the check could not be completed.
@@ -32,6 +33,18 @@ metadata:
 ## API Specification
 
 **Base URL**: `https://boomtick.blog/api`
+
+*Note: All resource paths listed below must be appended directly to the Base URL (e.g. `Base URL` + `/latest-version` resolves to `https://boomtick.blog/api/latest-version`). Do not duplicate slashes.*
+
+### `GET /skill.md`
+Returns this `SKILL.md` file dynamically as raw Markdown, allowing self-discovery of these endpoints at runtime.
+
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/skill.md"
+```
+
+---
 
 ### `GET /health`
 Lightweight health check endpoint returning service status.
