@@ -1,30 +1,72 @@
-# VersionTruth
+---
+name: "VersionTruth"
+description: "The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions."
+version: "1.1.0"
+emoji: "🛡️"
+author: "Ariel Anders"
+github: "arii"
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - "curl"
+        - "jq"
+---
 
-**What it does:** Tells an agent the *actual current* version of an npm package, Node.js, or a GitHub Action — fetched live from the registry, not recalled from training data. Use it before pinning or "correcting" any version string in `package.json`, `.nvmrc`, `.node-version`, or a `.github/workflows/*.yml` `uses:` line.
+## Instructions
+1. Before pinning, editing, or correcting any dependency or runtime version pin in `package.json`, `.nvmrc`, `.node-version`, or a `.github/workflows/*.yml` `uses:` line, identify the candidate version string you intend to write.
+2. Query `GET https://boomtick.blog/api/compare-version?ecosystem={ecosystem}&name={name}&candidate={candidate}` or use the `POST https://boomtick.blog/api/batch-compare` endpoint to validate multiple candidates at once.
+3. Inspect the comparison results: verify `isOutdated`, `isCurrent`, `isDeprecated` (npm-only), and `isEOL` (node-only) statuses.
+4. If a version is outdated, deprecated, or EOL, evaluate upgrading to the returned `latest` version instead.
 
-**Why this exists:** Coding agents are frequently *confidently wrong* about "the latest version" of a dependency, because their training data has a cutoff and newer releases don't exist in it yet. A common failure mode: the agent sees `actions/checkout@v6` in a real, correct workflow file, doesn't recognize `v6` because it only ever saw up to `v4` during training, assumes the human made a typo or hallucinated it, and "helpfully" downgrades it to `v4` — breaking CI. This is a classic out-of-distribution error, not a real bug in the code. VersionTruth gives the agent a live ground-truth check so it stops treating "unfamiliar" as "wrong."
+## Rules
+* Never downgrade an existing version string in the repo simply because it is unfamiliar or not recognized from your training data cutoff.
+* Treat unfamiliar version strings as a signal to check VersionTruth, not as evidence of a typo or error.
+* Keep version changes minimal and additive, validating each proposal against live registry data.
+* Responses are cached for 30 minutes at the edge; do not hammer the endpoints with repeated requests for the same package/version within a single session.
+* The `name` parameter maps as follows: the npm package name for `npm` (e.g. `pnpm`), the GitHub repository path for `gh-action` (e.g. `actions/checkout`), and is omitted or set to `node` for the `node` ecosystem.
 
-**Base URL:** `https://boomtick.blog/api`
+## Error Handling
+* If the API request fails or the endpoint is unreachable, do not guess or revert; leave the version pin unchanged and note in your execution logs that the check could not be completed.
+* If a package name format or query parameter is invalid, report the validation error to the user immediately. Validation errors return `400` with `{ "error": "<message>" }`.
+* Requests are rate-limited to 100 per 15-minute window per IP. A rate-limited response returns `429` with `X-RateLimit-Remaining: 0`; back off until the timestamp in `X-RateLimit-Reset` rather than treating this as a hard failure.
 
-## Endpoints
+## API Specification
 
-### `GET /api/skill.md`
+**Base URL**: `https://boomtick.blog/api`
+
+*Note: All resource paths listed below must be appended directly to the Base URL (e.g. `Base URL` + `/latest-version` resolves to `https://boomtick.blog/api/latest-version`). Do not duplicate slashes.*
+
+### `GET /skill.md`
 Returns this `SKILL.md` file dynamically as raw Markdown, allowing self-discovery of these endpoints at runtime.
 
-```
-GET /api/skill.md
-→ (Returns the Markdown contents of this file)
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/skill.md"
 ```
 
-### `GET /api/health`
+---
+
+### `GET /health`
 Lightweight health check endpoint returning service status.
 
-```
-GET /api/health
-→ { "status": "ok", "service": "VersionTruth", "checkedAt": "..." }
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/health"
 ```
 
-### `GET /api/latest-version`
+**Example response**:
+```json
+{
+  "status": "ok",
+  "service": "VersionTruth",
+  "checkedAt": "2026-07-10T08:30:00.000Z"
+}
+```
+
+---
+
+### `GET /latest-version`
 Returns the current latest version for a package, runtime, or action.
 
 | param | required | values |
@@ -32,16 +74,25 @@ Returns the current latest version for a package, runtime, or action.
 | `ecosystem` | yes | `npm` \| `node` \| `gh-action` |
 | `name` | required unless `ecosystem=node` | npm package name, or `owner/repo` for gh-action |
 
-```
-GET /api/latest-version?ecosystem=gh-action&name=actions/checkout
-→ { "ecosystem": "gh-action", "name": "actions/checkout", "latest": "v6.0.1", "checkedAt": "..." }
-
-GET /api/latest-version?ecosystem=node
-→ { "ecosystem": "node", "name": "node", "latest": "24.16.0", "checkedAt": "..." }
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/latest-version?ecosystem=gh-action&name=actions/checkout"
 ```
 
-### `GET /api/compare-version`
-Tells you whether a candidate version is outdated, current, or ahead of the real latest, including npm deprecation and Node EOL warnings.
+**Example response**:
+```json
+{
+  "ecosystem": "gh-action",
+  "name": "actions/checkout",
+  "latest": "v4.2.2",
+  "checkedAt": "2026-07-10T08:30:00.000Z"
+}
+```
+
+---
+
+### `GET /compare-version`
+Tells you whether a candidate version is outdated, current, or ahead of the real latest. Includes npm deprecation warnings (`isDeprecated`) and Node EOL warnings (`isEOL`).
 
 | param | required | values |
 |---|---|---|
@@ -49,31 +100,74 @@ Tells you whether a candidate version is outdated, current, or ahead of the real
 | `name` | required unless `ecosystem=node` | npm package name, or `owner/repo` |
 | `candidate` | yes | the version string the agent is about to use |
 
-```
-GET /api/compare-version?ecosystem=gh-action&name=actions/checkout&candidate=v4
-→ { "ecosystem": "gh-action", "name": "actions/checkout", "candidate": "v4",
-    "latest": "v6.0.1", "isOutdated": true, "isCurrent": false, "isAheadOfLatest": false,
-    "isDeprecated": false }
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/compare-version?ecosystem=gh-action&name=actions/checkout&candidate=v4" | jq '.isOutdated'
 ```
 
-### `POST /api/batch-compare`
-Allows querying comparison results for multiple dependencies concurrently.
-
+**Example response**:
+```json
+{
+  "ecosystem": "gh-action",
+  "name": "actions/checkout",
+  "candidate": "v4",
+  "latest": "v4.2.2",
+  "isOutdated": true,
+  "isCurrent": false,
+  "isAheadOfLatest": false,
+  "isDeprecated": null,
+  "isEOL": null,
+  "checkedAt": "2026-07-10T08:30:00.000Z"
+}
 ```
-POST /api/batch-compare
-Body: [
-  { "ecosystem": "npm", "name": "pnpm", "candidate": "9.0.0" },
-  { "ecosystem": "gh-action", "name": "actions/checkout", "candidate": "v6" }
+
+---
+
+### `POST /batch-compare`
+Allows querying comparison results for up to **25 items** concurrently. Requests exceeding this limit are rejected with `400`.
+
+**Example request**:
+```bash
+curl -s -X POST -H "Content-Type: application/json" \
+  -d '[
+    { "ecosystem": "npm", "name": "pnpm", "candidate": "9.0.0" },
+    { "ecosystem": "gh-action", "name": "actions/checkout", "candidate": "v4" }
+  ]' \
+  "https://boomtick.blog/api/batch-compare"
+```
+
+**Example response**:
+```json
+[
+  {
+    "ecosystem": "npm",
+    "name": "pnpm",
+    "candidate": "9.0.0",
+    "latest": "10.28.2",
+    "isOutdated": true,
+    "isCurrent": false,
+    "isAheadOfLatest": false,
+    "isDeprecated": false,
+    "isEOL": null
+  },
+  {
+    "ecosystem": "gh-action",
+    "name": "actions/checkout",
+    "candidate": "v4",
+    "latest": "v4.2.2",
+    "isOutdated": true,
+    "isCurrent": false,
+    "isAheadOfLatest": false,
+    "isDeprecated": null,
+    "isEOL": null
+  }
 ]
-→ [
-    { "ecosystem": "npm", "name": "pnpm", "candidate": "9.0.0", "latest": "10.28.2", "isOutdated": true, ... },
-    { "ecosystem": "gh-action", "name": "actions/checkout", "candidate": "v6", "latest": "v6.0.1", "isOutdated": false, ... }
-  ]
 ```
 
-## How an agent should use this
-
-1. Before editing a version pin anywhere in the repo (dependency, runtime, or Action), call `GET /api/compare-version` or `POST /api/batch-compare`.
-2. If `isOutdated` is `true` or `isDeprecated`/`isEOL` is `true` — evaluate carefully. If you were about to lower the version that's already in the file, stop.
-3. If you don't recognize a version string (e.g. `v6` looks unfamiliar), that is a signal to check VersionTruth, not a signal that the code is wrong.
-4. If the endpoint is unreachable, don't guess — leave the version untouched and flag it for human review instead.
+## Changelog
+### 1.1.0
+* Introduced `/api/batch-compare` POST endpoint (max 25 items) for concurrent checks.
+* Refactored deprecation and EOL checks into clean ecosystem-specific `isDeprecated` and `isEOL` fields.
+* Added `/api/health` health verification route.
+* Integrated IP-based rate limiting (100 req / 15 min / IP) on all endpoints.
+* Hardened registry lookups against SSRF (strict owner/repo allowlist on GitHub Actions fetcher) and path traversal (dev server API resolver uses containment check + identifier allowlist).
