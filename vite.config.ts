@@ -192,24 +192,23 @@ export default defineConfig(({mode}) => {
 
           const API_DIR = path.resolve(process.cwd(), 'api');
 
+          // Static allowlist: maps every accepted route identifier to its absolute path.
+          // Built once at server start — no user-supplied string ever reaches path.resolve.
+          const ALLOWED_API_FILES: ReadonlyMap<string, string> = new Map(
+            [
+              'health',
+              'latest-version',
+              'compare-version',
+              'batch-compare',
+              'skill.md',
+            ].map((id) => {
+              const filename = id === 'skill.md' ? 'skill.md.ts' : `${id}.ts`;
+              return [id, path.resolve(API_DIR, filename)] as const;
+            }),
+          );
+
           function resolveApiFile(filename: string): string | null {
-            // Map skill.md specifically
-            if (filename === 'skill.md') {
-              return path.resolve(API_DIR, 'skill.md.ts');
-            }
-            // Reject anything that isn't a plain identifier — no slashes, dots, or traversal sequences.
-            if (!/^[a-zA-Z0-9_-]+$/.test(filename)) {
-              return null;
-            }
-
-            const candidate = path.resolve(API_DIR, `${filename}.ts`);
-
-            // Belt-and-suspenders: confirm the resolved path is still inside API_DIR.
-            if (!candidate.startsWith(API_DIR + path.sep)) {
-              return null;
-            }
-
-            return candidate;
+            return ALLOWED_API_FILES.get(filename) ?? null;
           }
 
           server.middlewares.use(async (req, res, next) => {
