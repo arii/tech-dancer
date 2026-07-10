@@ -23,6 +23,8 @@ describe("getJulesPullRequestHandler", () => {
         status: "success",
         session: {
           name: "sessions/123",
+          state: "IN_PROGRESS",
+          createTime: new Date().toISOString(),
           outputs: [{ pullRequest: { url: "https://github.com/pr/1" } }]
         }
       }),
