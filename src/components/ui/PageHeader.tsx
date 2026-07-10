@@ -16,13 +16,23 @@ interface PageHeaderProps {
 }
 
 /**
- * Spacing configuration for PageHeader elements.
- * Higher values provide consistent vertical rhythm between label, title, and body.
+ * Centralized vertical rhythm constants for PageHeader.
+ */
+const HEADER_SPACING = {
+  LABEL_TO_TITLE: 4,
+  TITLE_TO_BODY: 6,
+  BODY_TO_CTA: 8,
+  NONE: 0
+} as const;
+
+/**
+ * Resolves vertical spacing based on the presence of siblings.
+ * Encapsulated to maintain a consistent hierarchy across all consumers.
  */
 const getHeaderSpacing = ({ hasTitle, hasDescription, hasCta }: { hasTitle: boolean; hasDescription: boolean; hasCta: boolean }) => ({
-  labelBottom: hasTitle ? 4 : 0,
-  titleBottom: (hasDescription || hasCta) ? 6 : 0,
-  descriptionBottom: hasCta ? 8 : 0,
+  labelBottom: hasTitle ? HEADER_SPACING.LABEL_TO_TITLE : HEADER_SPACING.NONE,
+  titleBottom: (hasDescription || hasCta) ? HEADER_SPACING.TITLE_TO_BODY : HEADER_SPACING.NONE,
+  descriptionBottom: hasCta ? HEADER_SPACING.BODY_TO_CTA : HEADER_SPACING.NONE,
 });
 
 export function PageHeader({ 
