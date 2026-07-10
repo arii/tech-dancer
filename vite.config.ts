@@ -172,6 +172,86 @@ export default defineConfig(({mode}) => {
           });
         },
       },
+      // Local development emulation for Vercel Serverless Functions in api/
+      {
+        name: 'vercel-api-dev-server',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            if (!req.url?.startsWith('/api/')) {
+              return next();
+            }
+
+            const url = new URL(req.url, `http://${req.headers.host}`);
+            const pathname = url.pathname;
+            const filename = pathname.slice(5); // e.g. latest-version or skill.md
+
+            // Map endpoints to serverless function files
+            const isSkillMd = filename === 'skill.md';
+            const apiFilePath = isSkillMd
+              ? path.resolve(process.cwd(), 'api/skill.md.ts')
+              : path.resolve(process.cwd(), `api/${filename}.ts`);
+
+            try {
+              // Load the serverless function module dynamically via Vite's SSR loading
+              const module = await server.ssrLoadModule(apiFilePath);
+              const handler = module.default;
+
+              if (typeof handler !== 'function') {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'API handler must export a default function' }));
+                return;
+              }
+
+              // Mock VercelRequest helper properties
+              const query: Record<string, string> = {};
+              url.searchParams.forEach((val, key) => {
+                query[key] = val;
+              });
+              (req as any).query = query;
+
+              // Parse body for POST requests
+              if (req.method === 'POST') {
+                const buffers: Buffer[] = [];
+                for await (const chunk of req) {
+                  buffers.push(chunk as Buffer);
+                }
+                const bodyStr = Buffer.concat(buffers).toString('utf-8');
+                try {
+                  (req as any).body = bodyStr ? JSON.parse(bodyStr) : undefined;
+                } catch {
+                  (req as any).body = bodyStr;
+                }
+              }
+
+              // Mock VercelResponse helper methods
+              const extendedRes = res as any;
+              extendedRes.status = (statusCode: number) => {
+                extendedRes.statusCode = statusCode;
+                return extendedRes;
+              };
+              extendedRes.json = (data: any) => {
+                extendedRes.setHeader('Content-Type', 'application/json');
+                extendedRes.end(JSON.stringify(data));
+                return extendedRes;
+              };
+              extendedRes.send = (data: any) => {
+                if (typeof data === 'object') {
+                  return extendedRes.json(data);
+                }
+                extendedRes.end(data);
+                return extendedRes;
+              };
+
+              // Run the handler
+              await handler(req, extendedRes);
+            } catch (err) {
+              console.error(`Error executing API ${pathname}:`, err);
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: `API endpoint ${pathname} not found or failed to compile`, details: String(err) }));
+            }
+          });
+        }
+      },
     ].filter(Boolean),
     resolve: {
       alias: {
