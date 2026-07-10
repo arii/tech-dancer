@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Terminal</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 32px; /* Large font as requested */
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .line {
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .prompt {
+            color: #569cd6;
+        }
+        .command {
+            color: #ce9178;
+        }
+        .response {
+            color: #9cdcfe;
+        }
+        #terminal {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .cursor {
+            display: inline-block;
+            width: 16px;
+            height: 32px;
+            background-color: #d4d4d4;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="content"></div>
+        <div class="line" id="current-line"><span class="prompt">$ </span><span id="typing-command" class="command"></span><span class="cursor"></span></div>
+    </div>
+
+    <script>
+        const terminalContent = document.getElementById('content');
+        const typingCommand = document.getElementById('typing-command');
+        const currentLine = document.getElementById('current-line');
+        const terminal = document.getElementById('terminal');
+
+        function appendLine(html) {
+            const line = document.createElement('div');
+            line.className = 'line';
+            line.innerHTML = html;
+            terminalContent.appendChild(line);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        async function typeCommand(command, speed = 40) {
+            typingCommand.textContent = '';
+            for (let i = 0; i < command.length; i++) {
+                typingCommand.textContent += command.charAt(i);
+                await new Promise(resolve => setTimeout(resolve, speed));
+            }
+        }
+
+        async function executeCommand(command, responseHtml, delayBeforeResponse = 500) {
+            await typeCommand(command);
+            await new Promise(resolve => setTimeout(resolve, delayBeforeResponse));
+            appendLine(`<span class="prompt">$ </span><span class="command">${command}</span>`);
+            typingCommand.textContent = '';
+            if (responseHtml) {
+                appendLine(`<span class="response">${responseHtml}</span>`);
+            }
+            scrollToBottom();
+        }
+
+        async function clearTerminal() {
+            terminalContent.innerHTML = '';
+        }
+
+        window.executeCommand = executeCommand;
+        window.clearTerminal = clearTerminal;
+    </script>
+</body>
+</html>

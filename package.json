@@ -61,7 +61,8 @@
     "impact:github-models-review": "tsx boomtick-pkg/scripts/impact-github-models-review.ts",
     "impact:gemini-code-review": "tsx boomtick-pkg/scripts/impact-gemini-code-review.ts",
     "impact:github-models-code-review": "tsx boomtick-pkg/scripts/impact-github-models-code-review.ts",
-    "agent:prime": "command -v td-cli > /dev/null 2>&1 && td-cli context-warm || true"
+    "agent:prime": "command -v td-cli > /dev/null 2>&1 && td-cli context-warm || true",
+    "demo:generate": "python3 scripts/record-versiontruth-demo.py"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
