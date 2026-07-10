@@ -18,7 +18,8 @@ test.describe('accessibility', () => {
 
   test('search modal should not have any automatically detectable accessibility issues', async ({ page }) => {
     // Open search modal
-    await page.keyboard.press('Control+k');
+    await page.keyboard.press('Control+k', { delay: 100 });
+    await page.waitForLoadState('domcontentloaded');
     await expect(page.getByTestId("search-backdrop")).toBeVisible({ timeout: 15000 });
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
     await page.waitForTimeout(5000);
