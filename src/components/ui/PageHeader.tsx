@@ -19,9 +19,9 @@ interface PageHeaderProps {
  * Centralized vertical rhythm constants for PageHeader.
  */
 const HEADER_SPACING = {
-  LABEL_TO_TITLE: 4,
-  TITLE_TO_BODY: 6,
-  BODY_TO_CTA: 8,
+  LABEL_TO_TITLE: 2, // 8px
+  TITLE_TO_BODY: 6,  // 24px
+  BODY_TO_CTA: 8,    // 32px
   NONE: 0
 } as const;
 

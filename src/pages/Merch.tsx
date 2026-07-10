@@ -104,8 +104,8 @@ export default function Merch() {
         {activeCollection === 'all' && sections ? (
           <Stack gap="section-spacing">
             {sections.map((section) => (
-              <Stack key={section.id} gap={10}>
-                <Stack gap={1}>
+              <Stack key={section.id} gap={12}>
+                <Stack gap={4}>
                   <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
                     {section.title}
                   </Text>
