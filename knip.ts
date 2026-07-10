@@ -14,7 +14,8 @@ const config: KnipConfig = {
         'workbox-window',
         'dependency-cruiser',
         '@types/pixelmatch',
-        '@google/genai'
+        '@google/genai',
+        '@vercel/node'
       ],
     },
     "boomtick-pkg/mcp": {
