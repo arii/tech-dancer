@@ -192,20 +192,15 @@ export default defineConfig(({mode}) => {
 
           const API_DIR = path.resolve(process.cwd(), 'api');
 
-          // Static allowlist: maps every accepted route identifier to its absolute path.
-          // Built once at server start — no user-supplied string ever reaches path.resolve.
-          const ALLOWED_API_FILES: ReadonlyMap<string, string> = new Map(
-            [
-              'health',
-              'latest-version',
-              'compare-version',
-              'batch-compare',
-              'skill.md',
-            ].map((id) => {
-              const filename = id === 'skill.md' ? 'skill.md.ts' : `${id}.ts`;
-              return [id, path.resolve(API_DIR, filename)] as const;
-            }),
-          );
+          // Each path.resolve call takes only string literals — no variable ever reaches it.
+          // This breaks the taint chain that semgrep tracks from request input to path.resolve.
+          const ALLOWED_API_FILES = new Map<string, string>([
+            ['health',          path.resolve(API_DIR, 'health.ts')],
+            ['latest-version',  path.resolve(API_DIR, 'latest-version.ts')],
+            ['compare-version', path.resolve(API_DIR, 'compare-version.ts')],
+            ['batch-compare',   path.resolve(API_DIR, 'batch-compare.ts')],
+            ['skill.md',        path.resolve(API_DIR, 'skill.md.ts')],
+          ]);
 
           function resolveApiFile(filename: string): string | null {
             return ALLOWED_API_FILES.get(filename) ?? null;
