@@ -17,22 +17,27 @@ runs:
       env:
         TARGET: ${{ inputs.target }}
       run: |
+        # Use centralized script for CLI path resolution
+        if [ -f "boomtick-pkg/scripts/resolve-cli.sh" ]; then
+          CLI_PATH=$(bash boomtick-pkg/scripts/resolve-cli.sh | sed "s|$(pwd)/||")
+        elif [ -f "scripts/resolve-cli.sh" ]; then
+          CLI_PATH=$(bash scripts/resolve-cli.sh | sed "s|$(pwd)/||")
+        elif [ -d "boomtick-pkg/cli" ]; then
+          CLI_PATH="boomtick-pkg/cli"
+        else
+          CLI_PATH="cli"
+        fi
+        echo "CLI_PATH=$CLI_PATH" >> "$GITHUB_OUTPUT"
+
         case "$TARGET" in
           root)
             echo "FILTER_PATH=." >> "$GITHUB_OUTPUT"
-            if [ -d "boomtick-pkg/cli" ]; then
-              echo "CLI_PATH=boomtick-pkg/cli" >> "$GITHUB_OUTPUT"
-            else
-              echo "CLI_PATH=cli" >> "$GITHUB_OUTPUT"
-            fi
             ;;
           boomtick-mcp)
             if [ -d "boomtick-pkg/mcp" ]; then
               echo "FILTER_PATH=./boomtick-pkg/mcp" >> "$GITHUB_OUTPUT"
-              echo "CLI_PATH=boomtick-pkg/cli" >> "$GITHUB_OUTPUT"
             else
               echo "FILTER_PATH=./mcp" >> "$GITHUB_OUTPUT"
-              echo "CLI_PATH=cli" >> "$GITHUB_OUTPUT"
             fi
             ;;
           *)
