@@ -105,7 +105,8 @@
   --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 60%, transparent);
   --brand-gradient-main: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
   --brand-gradient-alt: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-magenta) 100%);
-  --hero-card-gradient: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+  /* Works in light/dark mode since text overlay is explicitly white */
+  --hero-card-gradient: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 50%);
 }
 
 /* Keyframes used by HeroSection.tsx */

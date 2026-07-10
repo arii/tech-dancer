@@ -29,7 +29,7 @@ export function PromoStrip({
       position="relative"
       width="full"
       padding={{ base: 3, sm: 4 }}
-      radius="md"
+      radius="sm"
       border="line"
       bg="surface"
       display="block"
@@ -39,7 +39,7 @@ export function PromoStrip({
         <Box
           width={{ base: 10, sm: 12 }}
           height={{ base: 10, sm: 12 }}
-          radius="md"
+          radius="sm"
           overflow="hidden"
           className="shrink-0 bg-white/10"
         >

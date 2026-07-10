@@ -32,11 +32,11 @@ export function ProductCard({
       gap={isFeatured ? 5 : 4}
       height="full"
       padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
-      radius="md"
+      radius="sm"
       border
       maxWidth="full"
       className={cn(
-        "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
+        "motion-safe:hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
         isFeatured && "border-accent/20 bg-accent/5",
         className
       )}
@@ -80,7 +80,7 @@ export function ProductCard({
                 key={role}
                 paddingX={2}
                 paddingY={0.5}
-                radius="md"
+                radius="sm"
                 surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
                 className={cn(
                   "border border-line/30",
@@ -99,7 +99,7 @@ export function ProductCard({
       <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 3).map((tag) => (
-            <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
+            <Box key={tag} paddingX={2} paddingY={0.5} radius="sm" surface="alt" className="border border-line/20">
               <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
                 {tag}
               </Text>

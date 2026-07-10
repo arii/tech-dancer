@@ -91,7 +91,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             border="b"
             width="full"
             position="relative"
-            radius="md"
+            radius="sm"
             className={`${transitions.default} hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target`}
           >
             <Box shrink={false}>

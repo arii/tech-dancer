@@ -28,7 +28,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             height={{ base: 14, md: 20 }}
             padding={link.imageMode === 'contain' ? 2 : 0}
             shrink={0}
-            radius="md"
+            radius="sm"
             overflow="hidden"
             border
             className={cn(
