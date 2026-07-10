@@ -170,7 +170,7 @@ jobs:
           echo "SHA=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
 
       - name: Cache main build
-        uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/cache@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           path: .tmp-main
           key: ${{ runner.os }}-main-build-${{ steps.main-sha.outputs.SHA }}
