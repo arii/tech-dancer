@@ -131,18 +131,9 @@ def get_base_dir() -> str:
 def resolve_resource_path(resource_name: str) -> str:
     """
     Resolves the absolute path to a package resource.
-    Handles importlib.resources with fallbacks for local development.
+    Handles importlib_resources with fallbacks for local development.
     """
-    # 1. Try modern importlib.resources (Python 3.9+)
-    try:
-        import importlib.resources as resources
-        ref = resources.files("dev_tools.resources").joinpath(resource_name)
-        if ref.exists():
-            return str(ref)
-    except (ImportError, AttributeError, FileNotFoundError, TypeError):
-        pass
-
-    # 2. Try the importlib_resources backport
+    # 1. Try the importlib_resources backport (preferred for compatibility)
     try:
         import importlib_resources as resources
         ref = resources.files("dev_tools.resources").joinpath(resource_name)
