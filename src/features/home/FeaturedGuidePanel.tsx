@@ -41,7 +41,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%)' }}
+        bgGradient="bg-hero-card-overlay"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}

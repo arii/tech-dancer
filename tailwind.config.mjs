@@ -48,7 +48,8 @@ export default {
         "error-surface": "var(--color-error-surface)",
       },
       backgroundImage: {
-        'equalizer': 'linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))'
+        'equalizer': 'linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))',
+        'hero-card-overlay': 'var(--hero-card-gradient)'
       },
       boxShadow: {
         'equalizer': '0 0 14px var(--hero-accent-shadow)'
