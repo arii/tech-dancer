@@ -1,4 +1,4 @@
-import{bQ as m}from"./vendor-q3k8VWId.js";import{A as h}from"./index-C7RqDkAu.js";const f=`---
+import{bQ as m}from"./vendor-q3k8VWId.js";import{A as h}from"./index-CTwKaBZq.js";const f=`---
 type: post
 draft: true
 status: draft
