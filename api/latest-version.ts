@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, Ecosystem } from "./_lib/versions";
+import { resolveLatest, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions";
 import { rateLimiter } from "./_lib/rate-limiter";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
@@ -19,6 +19,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!VALID.includes(ecosystem)) {
     return res.status(400).json({ error: `ecosystem must be one of: ${VALID.join(", ")}` });
+  }
+  if (name && name.length > MAX_PARAM_LENGTH) {
+    return res.status(400).json({ error: `name must be ${MAX_PARAM_LENGTH} characters or fewer` });
   }
   if (ecosystem !== "node" && !name) {
     return res.status(400).json({ error: `name is required for ecosystem=${ecosystem}` });

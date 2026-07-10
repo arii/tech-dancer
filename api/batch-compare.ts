@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem } from "./_lib/versions";
+import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions";
 import { rateLimiter } from "./_lib/rate-limiter";
+
+const MAX_BATCH_SIZE = 25;
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
@@ -23,6 +25,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!Array.isArray(items)) {
     return res.status(400).json({ error: "Body must be an array of query items" });
   }
+  if (items.length > MAX_BATCH_SIZE) {
+    return res.status(400).json({ error: `Batch size exceeds maximum of ${MAX_BATCH_SIZE} items` });
+  }
 
   try {
     const results = await Promise.all(
@@ -40,6 +45,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
         if (!candidate) {
           return { error: "Missing candidate version", item };
+        }
+        if (candidate.length > MAX_PARAM_LENGTH) {
+          return { error: `candidate must be ${MAX_PARAM_LENGTH} characters or fewer`, item };
+        }
+        if (name && name.length > MAX_PARAM_LENGTH) {
+          return { error: `name must be ${MAX_PARAM_LENGTH} characters or fewer`, item };
         }
         if (ecosystem !== "node" && !name) {
           return { error: `Missing name for ecosystem=${ecosystem}`, item };

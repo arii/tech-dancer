@@ -26,6 +26,9 @@ interface NodeEolCycle {
 
 export const GH_REPO_PATTERN = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
 
+/** Maximum length for any version or name parameter before parsing. */
+export const MAX_PARAM_LENGTH = 64;
+
 export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
   try {
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/latest`);
@@ -85,9 +88,20 @@ export async function fetchLatestGhAction(repoPath: string): Promise<string | nu
 
 /** Normalizes "v4", "24.x", "1.2.3" into a comparable number array. */
 function normalize(v: string): number[] {
-  const clean = v.trim().replace(/^v/i, "").replace(/\.x$/i, ".0");
+  const trimmed = v.trim();
+  if (trimmed.length > MAX_PARAM_LENGTH) return [0];
+
+  const clean = trimmed.replace(/^v/i, "").replace(/\.x$/i, ".0");
   return clean.split(".").map((part) => {
-    const n = parseInt(part.replace(/[^\d].*$/, ""), 10);
+    let digitString = "";
+    for (const char of part) {
+      if (char >= "0" && char <= "9") {
+        digitString += char;
+      } else {
+        break;
+      }
+    }
+    const n = parseInt(digitString, 10);
     return Number.isNaN(n) ? 0 : n;
   });
 }

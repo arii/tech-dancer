@@ -28,7 +28,8 @@ metadata:
 
 ## Error Handling
 * If the API request fails or the endpoint is unreachable, do not guess or revert; leave the version pin unchanged and note in your execution logs that the check could not be completed.
-* If a package name format or query parameter is invalid, report the validation error to the user immediately.
+* If a package name format or query parameter is invalid, report the validation error to the user immediately. Validation errors return `400` with `{ "error": "<message>" }`.
+* Requests are rate-limited to 100 per 15-minute window per IP. A rate-limited response returns `429` with `X-RateLimit-Remaining: 0`; back off until the timestamp in `X-RateLimit-Reset` rather than treating this as a hard failure.
 
 ## API Specification
 
@@ -123,7 +124,7 @@ curl -s "https://boomtick.blog/api/compare-version?ecosystem=gh-action&name=acti
 ---
 
 ### `POST /batch-compare`
-Allows querying comparison results for multiple dependencies concurrently.
+Allows querying comparison results for up to **25 items** concurrently. Requests exceeding this limit are rejected with `400`.
 
 **Example request**:
 ```bash
@@ -165,7 +166,8 @@ curl -s -X POST -H "Content-Type: application/json" \
 
 ## Changelog
 ### 1.1.0
-* Introduced `/api/batch-compare` POST endpoint for concurrent checks.
+* Introduced `/api/batch-compare` POST endpoint (max 25 items) for concurrent checks.
 * Refactored deprecation and EOL checks into clean ecosystem-specific `isDeprecated` and `isEOL` fields.
 * Added `/api/health` health verification route.
-* Integrated IP-based rate limiting on all endpoints.
+* Integrated IP-based rate limiting (100 req / 15 min / IP) on all endpoints.
+* Hardened registry lookups against SSRF (strict owner/repo allowlist on GitHub Actions fetcher) and path traversal (dev server API resolver uses containment check + identifier allowlist).
