@@ -13,7 +13,8 @@ runs:
   steps:
     - uses: ./boomtick-pkg/mcp/actions/setup
 
-    - run: pnpm install --frozen-lockfile --prefer-offline
+    - name: pnpm install
+      run: pnpm install --frozen-lockfile --prefer-offline
       shell: bash
 
     - name: Build App
