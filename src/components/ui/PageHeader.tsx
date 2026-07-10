@@ -6,7 +6,7 @@ import type { BaseProps } from '@/layouts/Box';
 /**
  * Props for the PageHeader component.
  *
- * Note for consumers: As part of the layout standardization (PR #3481),
+ * Note for consumers: As part of the layout standardization (PR 3481),
  * the vertical rhythm is now managed via explicit \`marginBottom\` properties
  * rather than relying on a wrapper \`Stack\` component's \`gap\` property.
  * If you relied on the previous behavior where children had uniform gap spacing,
