@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { resolveLatest, compareVersions, checkDeprecationOrEol, Ecosystem } from "./_lib/versions";
+import { rateLimiter } from "./_lib/rate-limiter";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
@@ -14,6 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 
   if (req.method === "OPTIONS") return res.status(204).end();
+  if (!rateLimiter(req, res)) return;
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
 
   const items = req.body as unknown;

@@ -24,13 +24,19 @@ interface NodeEolCycle {
   eol: string;
 }
 
+export const GH_REPO_PATTERN = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
+
 export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
   try {
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/latest`);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`Failed to fetch npm latest version for ${pkgName}. Status: ${res.status}`);
+      return null;
+    }
     const data = (await res.json()) as NpmLatestResponse;
     return data.version ?? null;
-  } catch {
+  } catch (error) {
+    console.error(`Error fetching npm latest version for ${pkgName}:`, error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -38,26 +44,41 @@ export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
 export async function fetchLatestNode(): Promise<string | null> {
   try {
     const res = await fetch("https://nodejs.org/dist/index.json");
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`Failed to fetch Node releases. Status: ${res.status}`);
+      return null;
+    }
     const data = (await res.json()) as NodeDistItem[];
     const first = Array.isArray(data) ? data[0] : null;
     return first?.version ? String(first.version).replace(/^v/, "") : null;
-  } catch {
+  } catch (error) {
+    console.error("Error fetching Node latest version:", error instanceof Error ? error.message : error);
     return null;
   }
 }
 
 export async function fetchLatestGhAction(repoPath: string): Promise<string | null> {
+  if (!GH_REPO_PATTERN.test(repoPath)) {
+    console.error("Invalid GitHub repository path format:", repoPath);
+    return null;
+  }
+
+  const [owner, repo] = repoPath.split('/');
   try {
     const headers: Record<string, string> = { "User-Agent": "boomtick-version-skill" };
     if (process.env.GITHUB_TOKEN) {
       headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
     }
-    const res = await fetch(`https://api.github.com/repos/${repoPath}/releases/latest`, { headers });
-    if (!res.ok) return null;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/releases/latest`;
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      console.error(`Failed to fetch GitHub release for ${owner}/${repo}. Status: ${res.status}`);
+      return null;
+    }
     const data = (await res.json()) as GithubReleaseResponse;
     return data.tag_name ?? null;
-  } catch {
+  } catch (error) {
+    console.error(`Error fetching GitHub release for ${owner}/${repo}:`, error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -103,10 +124,14 @@ export async function checkNpmDeprecation(pkgName: string, version: string): Pro
   try {
     const cleanVersion = version.replace(/^v/i, "");
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/${encodeURIComponent(cleanVersion)}`);
-    if (!res.ok) return false;
+    if (!res.ok) {
+      console.error(`Failed to check npm deprecation for ${pkgName}@${cleanVersion}. Status: ${res.status}`);
+      return false;
+    }
     const data = (await res.json()) as NpmVersionResponse;
     return typeof data.deprecated === "string";
-  } catch {
+  } catch (error) {
+    console.error(`Error checking npm deprecation for ${pkgName}@${version}:`, error instanceof Error ? error.message : error);
     return false;
   }
 }
@@ -119,6 +144,7 @@ export async function checkNodeEol(version: string): Promise<boolean> {
 
     const res = await fetch("https://endoflife.date/api/nodejs.json");
     if (!res.ok) {
+      console.error(`Failed to fetch Node EOL dates. Status: ${res.status}`);
       const majorNum = parseInt(major, 10);
       if (Number.isNaN(majorNum)) return false;
       return majorNum <= 18 || majorNum === 19 || majorNum === 21;
@@ -129,7 +155,8 @@ export async function checkNodeEol(version: string): Promise<boolean> {
 
     const eolDate = new Date(match.eol);
     return eolDate < new Date();
-  } catch {
+  } catch (error) {
+    console.error(`Error checking Node EOL for ${version}:`, error instanceof Error ? error.message : error);
     const major = version.replace(/^v/i, "").split(".")[0];
     const majorNum = parseInt(major, 10);
     if (Number.isNaN(majorNum)) return false;

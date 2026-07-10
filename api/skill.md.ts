@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { rateLimiter } from "./_lib/rate-limiter";
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -8,6 +9,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Content-Type", "text/markdown; charset=utf-8");
 
   if (req.method === "OPTIONS") return res.status(204).end();
+  if (!rateLimiter(req, res)) return;
 
   try {
     const content = readFileSync(join(process.cwd(), "public", "skill.md"), "utf-8");
