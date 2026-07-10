@@ -190,6 +190,28 @@ export default defineConfig(({mode}) => {
             end: (data?: unknown) => void;
           }
 
+          const API_DIR = path.resolve(process.cwd(), 'api');
+
+          function resolveApiFile(filename: string): string | null {
+            // Map skill.md specifically
+            if (filename === 'skill.md') {
+              return path.resolve(API_DIR, 'skill.md.ts');
+            }
+            // Reject anything that isn't a plain identifier — no slashes, dots, or traversal sequences.
+            if (!/^[a-zA-Z0-9_-]+$/.test(filename)) {
+              return null;
+            }
+
+            const candidate = path.resolve(API_DIR, `${filename}.ts`);
+
+            // Belt-and-suspenders: confirm the resolved path is still inside API_DIR.
+            if (!candidate.startsWith(API_DIR + path.sep)) {
+              return null;
+            }
+
+            return candidate;
+          }
+
           server.middlewares.use(async (req, res, next) => {
             if (!req.url?.startsWith('/api/')) {
               return next();
@@ -199,11 +221,12 @@ export default defineConfig(({mode}) => {
             const pathname = url.pathname;
             const filename = pathname.slice(5); // e.g. latest-version or skill.md
 
-            // Map endpoints to serverless function files
-            const isSkillMd = filename === 'skill.md';
-            const apiFilePath = isSkillMd
-              ? path.resolve(process.cwd(), 'api/skill.md.ts')
-              : path.resolve(process.cwd(), `api/${filename}.ts`);
+            const apiFilePath = resolveApiFile(filename);
+            if (!apiFilePath) {
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: `API endpoint ${pathname} not found or invalid` }));
+              return;
+            }
 
             try {
               // Load the serverless function module dynamically via Vite's SSR loading
@@ -260,7 +283,7 @@ export default defineConfig(({mode}) => {
               // Run the handler
               await handler(extReq, extendedRes);
             } catch (err) {
-              console.error(`Error executing API ${pathname}:`, err);
+              console.error("Error executing API:", pathname, err);
               res.writeHead(404, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ error: `API endpoint ${pathname} not found or failed to compile`, details: String(err) }));
             }

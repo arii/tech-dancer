@@ -30,13 +30,13 @@ export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
   try {
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/latest`);
     if (!res.ok) {
-      console.error(`Failed to fetch npm latest version for ${pkgName}. Status: ${res.status}`);
+      console.error("Failed to fetch npm latest version. Package:", pkgName, "Status:", res.status);
       return null;
     }
     const data = (await res.json()) as NpmLatestResponse;
     return data.version ?? null;
   } catch (error) {
-    console.error(`Error fetching npm latest version for ${pkgName}:`, error instanceof Error ? error.message : error);
+    console.error("Error fetching npm latest version:", pkgName, error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -72,13 +72,13 @@ export async function fetchLatestGhAction(repoPath: string): Promise<string | nu
     const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/releases/latest`;
     const res = await fetch(url, { headers });
     if (!res.ok) {
-      console.error(`Failed to fetch GitHub release for ${owner}/${repo}. Status: ${res.status}`);
+      console.error("Failed to fetch GitHub release. Repo:", `${owner}/${repo}`, "Status:", res.status);
       return null;
     }
     const data = (await res.json()) as GithubReleaseResponse;
     return data.tag_name ?? null;
   } catch (error) {
-    console.error(`Error fetching GitHub release for ${owner}/${repo}:`, error instanceof Error ? error.message : error);
+    console.error("Error fetching GitHub release:", `${owner}/${repo}`, error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -125,13 +125,13 @@ export async function checkNpmDeprecation(pkgName: string, version: string): Pro
     const cleanVersion = version.replace(/^v/i, "");
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/${encodeURIComponent(cleanVersion)}`);
     if (!res.ok) {
-      console.error(`Failed to check npm deprecation for ${pkgName}@${cleanVersion}. Status: ${res.status}`);
+      console.error("Failed to check npm deprecation. Package:", pkgName, "Version:", cleanVersion, "Status:", res.status);
       return false;
     }
     const data = (await res.json()) as NpmVersionResponse;
     return typeof data.deprecated === "string";
   } catch (error) {
-    console.error(`Error checking npm deprecation for ${pkgName}@${version}:`, error instanceof Error ? error.message : error);
+    console.error("Error checking npm deprecation:", pkgName, version, error instanceof Error ? error.message : error);
     return false;
   }
 }
@@ -156,7 +156,7 @@ export async function checkNodeEol(version: string): Promise<boolean> {
     const eolDate = new Date(match.eol);
     return eolDate < new Date();
   } catch (error) {
-    console.error(`Error checking Node EOL for ${version}:`, error instanceof Error ? error.message : error);
+    console.error("Error checking Node EOL:", version, error instanceof Error ? error.message : error);
     const major = version.replace(/^v/i, "").split(".")[0];
     const majorNum = parseInt(major, 10);
     if (Number.isNaN(majorNum)) return false;
