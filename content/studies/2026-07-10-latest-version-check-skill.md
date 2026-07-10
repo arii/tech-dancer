@@ -1,13 +1,13 @@
 ---
-type: blog
+type: study
 title: "VersionTruth: The Antidote to Version Hallucinations"
 date: "2026-07-10"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "DevAI"
-excerpt: "A follow-up to the actions/checkout@v4 hallucination post — this time, shipping VersionTruth, a live API and skill that keeps coding agents grounded."
-image: ""
-imageAlt: ""
 tags: ["automation", "ci", "dependencies", "ai"]
+excerpt: "A follow-up to the actions/checkout@v4 hallucination study — this time, shipping VersionTruth, a live API and skill that keeps coding agents grounded."
+readTime: 3
+status: "published"
 ---
 
 Last month I wrote about watching my own coding agent [confidently downgrade `actions/checkout@v6` back to `v4`](/research/confidently-incorrect-v4) — not because `v6` was wrong, but because the agent had never seen it during training and treated "unfamiliar" as "hallucinated." Classic out-of-distribution error. Harmless-looking, expensive in CI minutes.
