@@ -7,6 +7,11 @@
 
 
 
+/**
+ * Note on Radius:
+ * `radius="sm"` (6px) is the standardized corner radius for all card and panel components across the design system.
+ */
+
 export const spacing = {
   card: "p-card",
   compact: "p-compact",

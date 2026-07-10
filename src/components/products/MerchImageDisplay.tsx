@@ -20,7 +20,7 @@ function resolveImageSrc(src: string) {
 
 function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
   const imgWell = (
-    <Box position="relative" display="flex" align="center" justify="center" width="full" overflow="hidden" radius="md" aspect="square" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+    <Box position="relative" display="flex" align="center" justify="center" width="full" overflow="hidden" radius="sm" aspect="square" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
@@ -97,7 +97,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       display="block"
       width="full"
       height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
-      radius="md"
+      radius="sm"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
