@@ -40,7 +40,7 @@ export function PageHeader({
   title, 
   description, 
   as = "h1", 
-  paddingBottom = 12, 
+  paddingBottom = 16,
   border = "b", 
   descriptionMaxWidth = "prose",
   titleSize = "fluid-5",
