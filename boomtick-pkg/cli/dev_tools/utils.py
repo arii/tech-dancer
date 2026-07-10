@@ -131,29 +131,33 @@ def get_base_dir() -> str:
 def resolve_resource_path(resource_name: str) -> str:
     """
     Resolves the absolute path to a package resource.
-    Handles importlib_resources with fallbacks for local development.
+    Handles importlib.resources with fallbacks for local development.
     """
-    # 1. Try the importlib_resources backport (preferred for compatibility)
+    # 1. Try modern importlib.resources (Python 3.9+)
     try:
-        import importlib_resources as resources
+        import importlib.resources as resources
+        # Use modern functional API if available
         ref = resources.files("dev_tools.resources").joinpath(resource_name)
         if ref.exists():
             return str(ref)
     except (ImportError, AttributeError, FileNotFoundError, TypeError) as e:
-        log_warn(f"importlib_resources failed to resolve '{resource_name}': {e}. Falling back to manual discovery.")
+        log_debug(f"importlib.resources failed for '{resource_name}': {e}. Falling back.")
 
-    # 3. Fallback to manual discovery for development/monorepo
+    # 2. Fallback to manual discovery for development/monorepo
+    # Assumes structural layout:
+    # Standalone: boomtick-pkg/cli/dev_tools/utils.py -> resources/
+    # Monorepo: boomtick-pkg/cli/dev_tools/utils.py -> scripts/ (3 levels up)
     base_dir = Path(__file__).parent
 
     candidates = [
         base_dir / "resources" / resource_name,
         base_dir / resource_name,
         base_dir.parent / resource_name,
-        # Monorepo scripts fallback (e.g. from boomtick-pkg/cli/dev_tools/utils.py to scripts/)
         base_dir.parent.parent.parent / "scripts" / resource_name
     ]
 
     for cand in candidates:
+        # Validate existence before returning to avoid broken paths
         if cand.exists():
             return str(cand.absolute())
 
