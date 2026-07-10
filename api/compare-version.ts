@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, compareVersions, checkDeprecationOrEol, Ecosystem } from "./_lib/versions";
+import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem } from "./_lib/versions";
 import { rateLimiter } from "./_lib/rate-limiter";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
@@ -33,7 +33,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const cmp = compareVersions(candidate, latest);
-  const isDeprecated = await checkDeprecationOrEol(ecosystem, name, candidate);
+  
+  let isDeprecated: boolean | null = null;
+  let isEOL: boolean | null = null;
+
+  if (ecosystem === "npm" && name) {
+    isDeprecated = await checkNpmDeprecation(name, candidate);
+  } else if (ecosystem === "node") {
+    isEOL = await checkNodeEol(candidate);
+  }
 
   return res.status(200).json({
     ecosystem,
@@ -44,6 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     isCurrent: cmp === 0,
     isAheadOfLatest: cmp > 0,
     isDeprecated,
+    isEOL,
     checkedAt: new Date().toISOString(),
   });
 }

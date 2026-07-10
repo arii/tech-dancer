@@ -16,7 +16,7 @@ metadata:
 ## Instructions
 1. Before pinning, editing, or correcting any dependency or runtime version pin in `package.json`, `.nvmrc`, `.node-version`, or a `.github/workflows/*.yml` `uses:` line, identify the candidate version string you intend to write.
 2. Query `GET https://boomtick.blog/api/compare-version?ecosystem={ecosystem}&name={name}&candidate={candidate}` or use the `POST https://boomtick.blog/api/batch-compare` endpoint to validate multiple candidates at once.
-3. Inspect the comparison results: verify `isOutdated`, `isCurrent`, and `isDeprecated` statuses (for npm this indicates deprecation; for Node this indicates End-of-Life).
+3. Inspect the comparison results: verify `isOutdated`, `isCurrent`, `isDeprecated` (npm-only), and `isEOL` (node-only) statuses.
 4. If a version is outdated, deprecated, or EOL, evaluate upgrading to the returned `latest` version instead.
 
 ## Rules
@@ -33,11 +33,24 @@ metadata:
 
 **Base URL**: `https://boomtick.blog/api`
 
-### `GET /skill.md`
-Returns this `SKILL.md` file dynamically as raw Markdown, allowing self-discovery of these endpoints at runtime.
-
 ### `GET /health`
 Lightweight health check endpoint returning service status.
+
+**Example request**:
+```bash
+curl -s "https://boomtick.blog/api/health"
+```
+
+**Example response**:
+```json
+{
+  "status": "ok",
+  "service": "VersionTruth",
+  "checkedAt": "2026-07-10T08:30:00.000Z"
+}
+```
+
+---
 
 ### `GET /latest-version`
 Returns the current latest version for a package, runtime, or action.
@@ -65,7 +78,7 @@ curl -s "https://boomtick.blog/api/latest-version?ecosystem=gh-action&name=actio
 ---
 
 ### `GET /compare-version`
-Tells you whether a candidate version is outdated, current, or ahead of the real latest, including npm deprecation and Node EOL warnings (exposed via `isDeprecated`).
+Tells you whether a candidate version is outdated, current, or ahead of the real latest. Includes npm deprecation warnings (`isDeprecated`) and Node EOL warnings (`isEOL`).
 
 | param | required | values |
 |---|---|---|
@@ -88,7 +101,8 @@ curl -s "https://boomtick.blog/api/compare-version?ecosystem=gh-action&name=acti
   "isOutdated": true,
   "isCurrent": false,
   "isAheadOfLatest": false,
-  "isDeprecated": false,
+  "isDeprecated": null,
+  "isEOL": null,
   "checkedAt": "2026-07-10T08:30:00.000Z"
 }
 ```
@@ -119,7 +133,8 @@ curl -s -X POST -H "Content-Type: application/json" \
     "isOutdated": true,
     "isCurrent": false,
     "isAheadOfLatest": false,
-    "isDeprecated": false
+    "isDeprecated": false,
+    "isEOL": null
   },
   {
     "ecosystem": "gh-action",
@@ -129,7 +144,8 @@ curl -s -X POST -H "Content-Type: application/json" \
     "isOutdated": true,
     "isCurrent": false,
     "isAheadOfLatest": false,
-    "isDeprecated": false
+    "isDeprecated": null,
+    "isEOL": null
   }
 ]
 ```
@@ -137,6 +153,6 @@ curl -s -X POST -H "Content-Type: application/json" \
 ## Changelog
 ### 1.1.0
 * Introduced `/api/batch-compare` POST endpoint for concurrent checks.
-* Exposed `/api/skill.md` for self-discovery.
+* Refactored deprecation and EOL checks into clean ecosystem-specific `isDeprecated` and `isEOL` fields.
 * Added `/api/health` health verification route.
 * Integrated IP-based rate limiting on all endpoints.
