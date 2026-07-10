@@ -56,6 +56,15 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   // Debounced URL sync to avoid excessive navigation and re-renders
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -204,7 +213,6 @@ export function GlobalSearch() {
               weight="font-bold"
               color="main"
               className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
-              autoFocus
             />
             <Box 
               as="button"

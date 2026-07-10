@@ -1,12 +1,11 @@
 import json
-import time
+
 import re
 import os
 import sys
 from datetime import datetime
 
 
-import time
 from dev_tools.utils import run_command
 
 def run_cli(args, suppress_errors=False):
