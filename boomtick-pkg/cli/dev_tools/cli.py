@@ -1113,7 +1113,7 @@ def fix_ci(ctx, pr_number, branch, api_key, dry_run):
 @click.pass_context
 def repair_context(ctx, log, file, pr):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.repair_context(log=log, log_file=file, pr_number=pr)
+    res = orch.repair_context(log=log, log_file=file, prNumber=pr)
     out(ctx, f"Generated {len(res)} prompts.", data={"prompts": res})
 
 @agent_group.command()
