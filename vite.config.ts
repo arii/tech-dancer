@@ -67,6 +67,15 @@ export default defineConfig(({mode}) => {
       rollupOptions: {
         output: {
           compact: !skipMinify,
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              const module = id.split('node_modules/').pop().split('/')[0];
+              if (['lucide-react', 'recharts', 'motion', 'framer-motion', 'firebase'].includes(module)) {
+                return module;
+              }
+              return 'vendor';
+            }
+          },
         }
       }
     },

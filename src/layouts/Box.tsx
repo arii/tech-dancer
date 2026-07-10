@@ -97,10 +97,35 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     // Motion props filtering
-    initial, animate, exit, transition, variants: variantsProp,
-    whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
+    initial: _initial, animate: _animate, exit: _exit, transition: _transition, variants: variantsProp,
+    whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
     layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
     onUpdate, custom,
+    // Add missing motion props to destructuring so they are not in ...props
+    style: _style,
+    drag: _drag,
+    dragControls: _dragControls,
+    dragConstraints: _dragConstraints,
+    dragElastic: _dragElastic,
+    dragMomentum: _dragMomentum,
+    dragPropagation: _dragPropagation,
+    dragTransition: _dragTransition,
+    dragListener: _dragListener,
+    onDragStart: _onDragStart,
+    onDragEnd: _onDragEnd,
+    onDrag: _onDrag,
+    onDirectionLock: _onDirectionLock,
+    onDragTransitionEnd: _onDragTransitionEnd,
+    onHoverStart: _onHoverStart,
+    onHoverEnd: _onHoverEnd,
+    onTap: _onTap,
+    onTapStart: _onTapStart,
+    onTapCancel: _onTapCancel,
+    onPan: _onPan,
+    onPanStart: _onPanStart,
+    onPanSessionStart: _onPanSessionStart,
+    onPanEnd: _onPanEnd,
+    whileTransitionSelection: _whileTransitionSelection,
     ...props 
   }, ref) => {
     const isMotion = typeof Component !== "string"
@@ -116,10 +141,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {
       const allMotionProps = {
-        initial, animate, exit, transition, variants: variantsProp,
-        whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
-        layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
-        onUpdate, custom
+        initial: _initial, animate: _animate, exit: _exit, transition: _transition, variants: variantsProp,
+        whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
+        layout: layoutProp, layoutId: layoutId, onAnimationStart: onAnimationStart, onAnimationComplete: onAnimationComplete,
+        onUpdate: onUpdate, custom: custom
       };
 
       Object.entries(allMotionProps).forEach(([key, value]) => {
