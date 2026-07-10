@@ -128,6 +128,46 @@ def get_base_dir() -> str:
     """Returns the absolute path to the CLI package root."""
     return os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
+def resolve_resource_path(resource_name: str) -> str:
+    """
+    Resolves the absolute path to a package resource.
+    Handles importlib.resources with fallbacks for local development.
+    """
+    # 1. Try modern importlib.resources (Python 3.9+)
+    try:
+        import importlib.resources as resources
+        ref = resources.files("dev_tools.resources").joinpath(resource_name)
+        if ref.exists():
+            return str(ref)
+    except (ImportError, AttributeError, FileNotFoundError, TypeError):
+        pass
+
+    # 2. Try the importlib_resources backport
+    try:
+        import importlib_resources as resources
+        ref = resources.files("dev_tools.resources").joinpath(resource_name)
+        if ref.exists():
+            return str(ref)
+    except (ImportError, AttributeError, FileNotFoundError, TypeError):
+        pass
+
+    # 3. Fallback to manual discovery for development/monorepo
+    base_dir = Path(__file__).parent
+
+    candidates = [
+        base_dir / "resources" / resource_name,
+        base_dir / resource_name,
+        base_dir.parent / resource_name,
+        # Monorepo scripts fallback (e.g. from boomtick-pkg/cli/dev_tools/utils.py to scripts/)
+        base_dir.parent.parent.parent / "scripts" / resource_name
+    ]
+
+    for cand in candidates:
+        if cand.exists():
+            return str(cand.absolute())
+
+    raise FileNotFoundError(f"Could not resolve resource: {resource_name}")
+
 def get_workspace_log_dir() -> Path:
     """Returns the path to the workspace log directory (.boomtick/logs)."""
     # Use CWD for workspace-based logging
