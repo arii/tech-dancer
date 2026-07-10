@@ -406,12 +406,17 @@ def call_github_models(prompt: str, model: Optional[str] = None, max_retries: in
     if not base_url.endswith("/"): base_url += "/"
     target_url = urllib.parse.urljoin(base_url, "chat/completions")
 
-    data = {"model": model or get_ai_model(), "messages": [{"role": "user", "content": prompt}], "stream": False}
+    messages: List[Dict[str, Any]] = [{"role": "user", "content": prompt}]
+    data: Dict[str, Any] = {
+        "model": model or get_ai_model(),
+        "messages": messages,
+        "stream": False
+    }
     if schema:
         # OpenAI style: prompt injection + json_object mode
         norm_schema = to_standard_schema(schema)
         data["response_format"] = {"type": "json_object"}
-        data["messages"].insert(0, {
+        messages.insert(0, {
             "role": "system",
             "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}"
         })

@@ -431,8 +431,8 @@ class GitHubClient:
         # Known keys used to distinguish the metadata block from other JSON blocks (like code samples)
         METADATA_IDENTIFIER_KEYS = {"recommendation", "comments", "labels"}
 
-        payload = None
-        metadata_match = None
+        payload: Any = None
+        metadata_match: Optional[re.Match[str]] = None
         for match in reversed(json_blocks):
             try:
                 candidate = json.loads(match.group(1))
@@ -443,11 +443,11 @@ class GitHubClient:
             except json.JSONDecodeError:
                 continue
 
-        if not payload:
+        if not payload or not metadata_match:
             raise CLIError(f"Could not find a valid JSON metadata block (expected keys: {', '.join(METADATA_IDENTIFIER_KEYS)})")
 
         # Extract Markdown body (everything above the metadata JSON block)
-        body = content[:metadata_match.start() if metadata_match else 0 if metadata_match else 0].strip()
+        body = content[:metadata_match.start()].strip()
         # Clean up the trailing "Output JSON" instructions if present
         body = re.split(r'##\s+Output JSON', body, flags=re.IGNORECASE)[0].strip()
 
@@ -499,7 +499,7 @@ class GitHubClient:
 
         pr_details = self.fetch_pr_details(pr_number)
         check_runs = self.fetch_check_runs(pr_details.get('head', {}).get('sha'))
-        failing_checks = [run.get('name') for run in check_runs if run.get('conclusion') == 'failure']
+        failing_checks: List[str] = [str(run.get('name')) for run in check_runs if run.get('conclusion') == 'failure' and run.get('name')]
 
         # Determine event based on recommendation field, then fallback to body analysis
         recommendation = payload.get("recommendation", "")
@@ -519,7 +519,7 @@ class GitHubClient:
 
         if failing_checks and event == "APPROVE":
             event = "COMMENT"
-            warning = f"> ⚠️ **BLOCKING CI FAILURE**: Approval overridden to COMMENT because the following checks are failing: {', '.join([str(c) for c in [str(c) for c in failing_checks]])}. Please resolve CI issues before approval.\n\n"
+            warning = f"> ⚠️ **BLOCKING CI FAILURE**: Approval overridden to COMMENT because the following checks are failing: {', '.join(failing_checks)}. Please resolve CI issues before approval.\n\n"
             payload["body"] = warning + payload.get("body", "")
 
         if not dry_run:

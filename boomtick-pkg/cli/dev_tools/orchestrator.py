@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from dev_tools.services.repair_service import RepairService
     from dev_tools.services.vision_service import VisionService
 from dev_tools.utils import verify_ci_metrics
-from dev_tools.utils import log_error, log_warn, get_or_create_log_dir, CLIError
+from dev_tools.utils import log_error, log_warn, log_info, get_or_create_log_dir, CLIError
 from dev_tools.handlers.command_handler import CommandHandler
 from dev_tools.models import IssueSummary, PRSummary
 from dev_tools.utils import (
@@ -30,7 +30,7 @@ from dev_tools.utils import (
     get_repo_name,
     get_gha_variable,
     set_gha_variable,
-    run_command, log_info, log_info,
+    run_command,
     is_ai_available,
     extract_failing_info,
     clean_gha_logs,
@@ -393,12 +393,12 @@ class Orchestrator:
         """
         return self.github.fetch_issue_details(issueNumber)
 
-    def update_issue(self, issueNumber: int, body: Optional[str] = None, labels: Optional[List[str]] = None, addLabels: Optional[List[str]] = None, removeLabels: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]:
+    def update_issue(self, issueNumber: int, body: Optional[str] = None, labels: Optional[List[str]] = None, addLabels: Optional[List[str]] = None, removeLabels: Optional[List[str]] = None, **kwargs) -> Any:
         if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
         """
         Updates an issue's body and/or labels.
         """
-        res = None
+        res: Any = None
         # Shim for backward compatibility with old snake_case names from tests or older callers
         if "add_labels" in kwargs and addLabels is None: addLabels = kwargs["add_labels"]
         if "remove_labels" in kwargs and removeLabels is None: removeLabels = kwargs["remove_labels"]
@@ -441,10 +441,11 @@ class Orchestrator:
         if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
-        if "issue_numbers" in kwargs and issue_numbers is None: issue_numbers = kwargs["issue_numbers"]
-        if "limit" in kwargs: limit = kwargs["limit"]
+        limit = kwargs.get("limit")
         if all_open:
             issues = list(repo.get_issues(state='open'))
+            if limit:
+                issues = issues[:int(limit)]
         elif issueNumber:
             issues = [repo.get_issue(issueNumber)]
         else:
@@ -593,7 +594,7 @@ class Orchestrator:
         if "pr_number" in kwargs: prNumber = kwargs["pr_number"]
         review_dir = get_or_create_log_dir("reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{prNumber}.md"); rev_path = os.path.join(review_dir, f"pr-review-{prNumber}.md")
-        res = {"pr": prNumber, "files": {}}
+        res: Dict[str, Any] = {"pr": prNumber, "files": {}}
         if fetch:
             repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(prNumber)
             title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
@@ -1003,7 +1004,8 @@ Respond only after the PR is created or updated:
         session_name = "dry-run-session"
         if not dry_run:
             res = self.jules.create_session_from_source(source_id, branch, prompt)
-            if res: session_name = res.get("name")
+            if res and res.get("name"):
+                session_name = str(res.get("name"))
             else: raise CLIError(f"{agent_name} API session creation failed")
         feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
         if pr and not dry_run: pr.create_issue_comment(feedback)
@@ -1052,8 +1054,10 @@ Respond only after the PR is created or updated:
     def repair_context(self, log: Optional[str] = None, log_file: Optional[str] = None, prNumber: Optional[int] = None) -> List[str]:
         from dev_tools.services.repair_service import RepairService
         pipeline = RepairService()
-        prompts = []
-        if log: prompts.append(pipeline.generate_prompt(log))
+        prompts: List[str] = []
+        if log:
+            p = pipeline.generate_prompt(log)
+            if p: prompts.append(p)
         elif log_file:
             with open(log_file) as f:
                 for line in f:
@@ -1174,15 +1178,19 @@ Respond only after the PR is created or updated:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            for rule in rules:
+            for r in rules:
                 # Use re.IGNORECASE for robustness against mixed casing in YAML
-                pattern = re.compile(rule["regex"], re.IGNORECASE)
+                if not isinstance(r, dict): continue
+                regex = str(r.get("regex", ""))
+                pattern = re.compile(regex, re.IGNORECASE)
                 for match in pattern.finditer(content):
-                    validator = rule.get("validator")
-                    if validator is None or validator(match):
+                    validator = r.get("validator")
+                    if validator is None or (callable(validator) and validator(match)):
                         # Support dynamic version reporting if the regex has a group
-                        ver = match.group(1) if match.lastindex and match.lastindex >= 1 else ""
-                        violations.append(rule["message"].format(ver=ver))
+                        lastindex = match.lastindex
+                        ver = match.group(1) if lastindex is not None and lastindex >= 1 else ""
+                        msg = str(r.get("message", ""))
+                        violations.append(msg.format(ver=ver))
 
         except Exception as e:
             violations.append(f"Error parsing file: {e}")
@@ -1508,7 +1516,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
         return combined_logs
 
-    def get_merge_conflicts(self, prNumber: int, base_branch: str = None) -> Dict[str, Any]:
+    def get_merge_conflicts(self, prNumber: int, base_branch: Optional[str] = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
@@ -2037,14 +2045,14 @@ Only after successful completion.
             for f in files:
                 file_to_prs[f].append(num)
 
-        overlap_groups = defaultdict(list)
+        overlap_groups: Dict[Any, List[str]] = defaultdict(list)
         for file, prs in file_to_prs.items():
             if len(prs) > 1:
                 overlap_groups[frozenset(prs)].append(file)
 
         report = ["--- EXACT OVERLAP GROUPS ---"]
         for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
-            pr_list = sorted(list(pr_set), key=int)
+            pr_list: List[str] = sorted(list(pr_set), key=int)
             report.append(f"PRs {', '.join(pr_list)} overlap on {len(files)} files:")
             for pr_num in pr_list:
                 report.append(f"  [{pr_num}] {pr_titles.get(pr_num)}")

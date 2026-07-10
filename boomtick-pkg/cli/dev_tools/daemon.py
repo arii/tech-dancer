@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class ExtendedJulesClient(JulesClient):
     """JulesClient subclass with extended timeouts for daemon use."""
     def get_messages(self, session_id: str, timeout: int = 10) -> List[Dict[str, Any]]:
-        # Set timeout to 30s instead of the default 10s
+        # For daemon use, we ignore the requested timeout and force 30s
         return super().get_messages(session_id, timeout=30)
 
 
@@ -36,8 +36,8 @@ class JulesFeedbackDaemon:
             logger.error(f"Error fetching sessions: {e}")
             sys.exit(1)
 
-        self._pr_cache: Dict[int, Dict[str, Any]] = {}
-        self._session_to_pr_map: Dict[str, Dict[str, Any]] = {}
+        self._pr_cache: Dict[int, Any] = {}
+        self._session_to_pr_map: Dict[str, int] = {}
 
         # Batch pre-match sessions to PRs where possible to reduce API hits
         self._pre_match_sessions_batch(sessions)
@@ -79,7 +79,7 @@ class JulesFeedbackDaemon:
         except Exception as e:
             logger.warning(f"Batch PR search failed, will fallback to individual lookups: {e}")
 
-    def _get_pr_for_session(self, session: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def _get_pr_for_session(self, session: Dict[str, Any]) -> Any:
         """Optimized PR lookup for a session."""
         session_id = session.get("name", "").replace("sessions/", "")
 

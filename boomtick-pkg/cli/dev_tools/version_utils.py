@@ -13,8 +13,8 @@ def log_error(msg: str):
     print(f"ERROR: {msg}", file=sys.stderr)
 
 # Registry Cache
-_NPM_CACHE: Dict[str, Optional[str]] = {}
-_GITHUB_CACHE: Dict[str, Optional[str]] = {}
+_NPM_CACHE: Dict[str, str] = {}
+_GITHUB_CACHE: Dict[str, str] = {}
 
 def fetch_latest_npm(package_name: str) -> Optional[str]:
     if package_name in _NPM_CACHE:

@@ -835,7 +835,7 @@ def ux():
     """UX Audit Operations"""
     pass
 
-@ux.command()
+@ux.command(name="audit")
 @click.option('--route', help='Specific route to audit')
 @click.option('--all-routes', is_flag=True, help='Audit all discovered routes')
 @click.option('--desktop', is_flag=True, help='Audit desktop viewports')
