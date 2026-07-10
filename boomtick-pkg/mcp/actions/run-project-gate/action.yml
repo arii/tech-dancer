@@ -14,8 +14,9 @@ runs:
     - name: Resolve Project Paths
       id: resolve-paths
       shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
       run: |
-        TARGET="${{ inputs.target }}"
         case "$TARGET" in
           root)
             echo "FILTER_PATH=." >> "$GITHUB_OUTPUT"
@@ -50,13 +51,16 @@ runs:
       shell: bash
 
     - name: pnpm install
+      env:
+        TARGET: ${{ inputs.target }}
+        FILTER_PATH: ${{ steps.resolve-paths.outputs.FILTER_PATH }}
       run: |
         echo "::group::pnpm install"
         trap 'echo "::endgroup::"' EXIT
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm install --frozen-lockfile --engine-strict=false
         else
-          pnpm install --frozen-lockfile --filter "${{ steps.resolve-paths.outputs.FILTER_PATH }}" --engine-strict=false
+          pnpm install --frozen-lockfile --filter "$FILTER_PATH" --engine-strict=false
         fi
       shell: bash
 
@@ -77,19 +81,21 @@ runs:
       shell: bash
 
     - name: Type-check / Build
+      env:
+        TARGET: ${{ inputs.target }}
+        CLI_PATH: ${{ steps.resolve-paths.outputs.CLI_PATH }}
+        FILTER_PATH: ${{ steps.resolve-paths.outputs.FILTER_PATH }}
       run: |
-        if [ "${{ inputs.target }}" = "boomtick-mcp" ]; then
-          CLI_PATH="${{ steps.resolve-paths.outputs.CLI_PATH }}"
-          FILTER_PATH="${{ steps.resolve-paths.outputs.FILTER_PATH }}"
+        if [ "$TARGET" = "boomtick-mcp" ]; then
           PYTHONPATH="$CLI_PATH" python3 "$CLI_PATH/dev_tools/schema_gen.py"
           npx tsx "$FILTER_PATH/scripts/sync-contracts.ts"
           pnpm --filter "$FILTER_PATH" run sync:mcp-schemas
         fi
 
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm run type-check
         else
-          pnpm --filter "${{ steps.resolve-paths.outputs.FILTER_PATH }}" run build
+          pnpm --filter "$FILTER_PATH" run build
         fi
       shell: bash
 
@@ -107,20 +113,24 @@ runs:
       shell: bash
 
     - name: Run Unit Tests
+      env:
+        TARGET: ${{ inputs.target }}
+        FILTER_PATH: ${{ steps.resolve-paths.outputs.FILTER_PATH }}
       run: |
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm test
         else
-          pnpm --filter "${{ steps.resolve-paths.outputs.FILTER_PATH }}" run test
+          pnpm --filter "$FILTER_PATH" run test
         fi
       shell: bash
 
     - name: Run CLI Unit Tests
       if: inputs.target == 'root' || inputs.target == 'boomtick-mcp'
+      env:
+        CLI_PATH: ${{ steps.resolve-paths.outputs.CLI_PATH }}
       run: |
         echo "::group::Pytest"
         trap 'echo "::endgroup::"' EXIT
-        CLI_PATH="${{ steps.resolve-paths.outputs.CLI_PATH }}"
         PYTHONPATH="$CLI_PATH:$CLI_PATH/dev_tools" python3 -m pytest "$CLI_PATH/tests/"
       shell: bash
 

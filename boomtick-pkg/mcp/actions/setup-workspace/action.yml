@@ -91,12 +91,14 @@ runs:
 
     - name: Install dev-tools
       if: inputs.setup-python == 'true'
+      env:
+        CLI_DIR: ${{ steps.resolve-paths.outputs.CLI_DIR }}
       run: |
         echo "::group::Install dev-tools"
         if [ -f "requirements-dev.txt" ]; then
           pip install -r requirements-dev.txt --break-system-packages
         fi
-        pip install -e "${{ steps.resolve-paths.outputs.CLI_DIR }}" --break-system-packages
+        pip install -e "$CLI_DIR" --break-system-packages
 
         echo "::endgroup::"
       shell: bash
@@ -123,10 +125,12 @@ runs:
 
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
+      env:
+        CLI_SUBDIR: ${{ steps.resolve-paths.outputs.CLI_DIR }}
       run: |
         # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
         REPO_DIR=$(pwd)
-        CLI_DIR="$REPO_DIR/${{ steps.resolve-paths.outputs.CLI_DIR }}"
+        CLI_DIR="$REPO_DIR/$CLI_SUBDIR"
 
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
