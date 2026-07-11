@@ -1,0 +1,1 @@
+import{j as e}from"./vendor-q3k8VWId.js";import{B as u,c as i,H as m}from"./index-8-ZlflBH.js";const d=({label:r,onClick:s,isActive:t,className:a,type:o="button",variant:n="default"})=>e.jsx(u,{as:"button",type:o,onClick:s,"aria-pressed":t,radius:"md",cursor:"pointer",className:i(m({variant:n,isActive:t,className:a})),children:r});export{d as F};
