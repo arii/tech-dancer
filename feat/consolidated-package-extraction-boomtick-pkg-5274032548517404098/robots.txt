@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feat/consolidated-package-extraction-boomtick-pkg-5274032548517404098/sitemap.xml

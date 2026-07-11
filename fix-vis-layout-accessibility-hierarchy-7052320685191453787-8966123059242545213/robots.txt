@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/fix-vis-layout-accessibility-hierarchy-7052320685191453787-8966123059242545213/sitemap.xml
