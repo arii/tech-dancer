@@ -1,6 +1,7 @@
-# pylint: disable=function-redefined,missing-docstring,undefined-variable,unexpected-keyword-arg
+# pylint: disable=function-redefined,missing-docstring,unexpected-keyword-arg
 import json
 import re
+import time
 from datetime import datetime
 
 from dev_tools.utils import run_command

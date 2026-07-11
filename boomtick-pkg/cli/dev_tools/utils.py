@@ -1,4 +1,4 @@
-# pylint: disable=import-outside-toplevel,line-too-long,missing-docstring,no-else-return,raise-missing-from,redefined-outer-name,reimported,too-many-locals,undefined-variable,unused-argument,unused-variable
+# pylint: disable=import-outside-toplevel,line-too-long,missing-docstring,no-else-return,raise-missing-from,redefined-outer-name,reimported,too-many-locals,unused-argument,unused-variable
 import hashlib
 import json
 import os
@@ -454,7 +454,7 @@ def call_ai(
         payload["response_format"] = {"type": "json_object"}
 
     try:
-        response = _request(
+        response = _call_api_with_retry(
             "POST",
             url_target,
             headers=headers,
@@ -647,7 +647,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema=Non
     }
 
     try:
-        response = _request("POST", url_target, headers=headers, json=payload, max_retries=max_retries)
+        response = _call_api_with_retry("POST", url_target, headers=headers, json=payload, max_retries=max_retries)
         if not response:
             return None
         data = response.json()

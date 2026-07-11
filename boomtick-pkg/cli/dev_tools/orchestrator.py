@@ -1,4 +1,4 @@
-# pylint: disable=consider-using-enumerate,consider-using-get,consider-using-with,f-string-without-interpolation,import-outside-toplevel,invalid-name,line-too-long,missing-docstring,no-else-return,pointless-string-statement,raise-missing-from,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,too-many-nested-blocks,too-many-positional-arguments,too-many-public-methods,too-many-statements,try-except-raise,undefined-variable,unused-argument,unused-variable,wrong-import-position
+# pylint: disable=consider-using-enumerate,consider-using-get,consider-using-with,f-string-without-interpolation,import-outside-toplevel,invalid-name,line-too-long,missing-docstring,no-else-return,pointless-string-statement,raise-missing-from,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,too-many-nested-blocks,too-many-positional-arguments,too-many-public-methods,too-many-statements,try-except-raise,unused-argument,unused-variable,wrong-import-position
 import hashlib
 import json
 import os
@@ -24,6 +24,7 @@ from dev_tools.config import get_config
 from dev_tools.handlers.command_handler import CommandHandler
 from dev_tools.models import IssueSummary, PRSummary
 from dev_tools.utils import (
+    log_info,
     CLIError,
     clean_gha_logs,
     escape_md,
