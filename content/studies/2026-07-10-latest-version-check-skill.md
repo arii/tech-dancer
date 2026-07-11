@@ -28,7 +28,9 @@ What it isn't is something an agent can consult *before* it writes the bad edit 
 
 ## VersionTruth
 
-For NandaHack I packaged the same live-registry-lookup logic as a small public API called VersionTruth, along with a hosted `SKILL.md` that tells any agent how to use it:
+For NandaHack I packaged the same live-registry-lookup logic as a small public API called VersionTruth, along with a hosted `SKILL.md` that tells any agent how to use it. You can interact with it directly; [https://boomtick.blog/versiontruth](https://boomtick.blog/versiontruth) is a live active tool!
+
+![VersionTruth Solution](/images/studies/AI_Version_Hallucination_Solution.webp)
 
 ```
 GET /api/latest-version?ecosystem=gh-action&name=actions/checkout
