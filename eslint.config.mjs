@@ -25,6 +25,25 @@ export default tseslint.config(
       }],
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/purity': 'off',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.name='require'][arguments.0.value='url']",
+          message: "Please use 'import' instead of 'require(\"url\")'.",
+        },
+        {
+          selector: "MemberExpression[object.name='url'][property.name='parse']",
+          message: "Please use the WHATWG URL API (new URL()) instead of url.parse().",
+        },
+        {
+          selector: "CallExpression[callee.object.callee.name='require'][callee.object.arguments.0.value='url'][callee.property.name='parse']",
+          message: "Please use the WHATWG URL API (new URL()) instead of url.parse().",
+        },
+        {
+          selector: "ImportDeclaration[source.value='url'] > ImportSpecifier[imported.name='parse']",
+          message: "Please use the WHATWG URL API (new URL()) instead of url.parse().",
+        }
+      ],
     },
   },
   {
