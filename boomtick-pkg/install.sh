@@ -23,6 +23,7 @@ validate_env() {
 
     if [ "$FORCE" -eq 1 ]; then return 0; fi
 
+    # workspace.json is treated as a trusted repository configuration file.
     echo "Validating workspace configuration..."
     if [ -f "scripts/validate_workspace.py" ]; then
         ENGINES_JSON=$(python3 scripts/validate_workspace.py --get-engines | sed -n '/ENGINES_START/,/ENGINES_END/p' | sed '1d;$d')

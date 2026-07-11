@@ -4,6 +4,10 @@ import os
 from pathlib import Path
 
 def validate_workspace():
+    """
+    Validates workspace.json against its schema.
+    Note: workspace.json is a trusted repository configuration file.
+    """
     script_dir = Path(__file__).parent
     workspace_path = script_dir.parent / "workspace.json"
     schema_path = script_dir.parent / "workspace-schema.json"
