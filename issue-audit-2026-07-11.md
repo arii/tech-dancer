@@ -2,7 +2,7 @@
 
 ## 1. Summary of all open issues reviewed
 - Total issues reviewed: 61
-- Issues to keep open: 44
+- Issues to keep open: 40
 - Issues ready to close after merge: 7
 - Issues needing clarification: 3
 - Issues needing scope updates: 1
