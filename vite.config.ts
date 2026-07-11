@@ -172,6 +172,118 @@ export default defineConfig(({mode}) => {
           });
         },
       },
+      // Local development emulation for Vercel Serverless Functions in api/
+      {
+        name: 'vercel-api-dev-server',
+        configureServer(server) {
+          interface ExtendedRequest {
+            query?: Record<string, string>;
+            body?: unknown;
+          }
+
+          interface ExtendedResponse {
+            status: (statusCode: number) => ExtendedResponse;
+            json: (data: unknown) => ExtendedResponse;
+            send: (data: unknown) => ExtendedResponse;
+            statusCode: number;
+            setHeader: (name: string, value: string) => void;
+            end: (data?: unknown) => void;
+          }
+
+          const API_DIR = path.resolve(process.cwd(), 'api');
+
+          // Each path.resolve call takes only string literals — no variable ever reaches it.
+          // This breaks the taint chain that semgrep tracks from request input to path.resolve.
+          const ALLOWED_API_FILES = new Map<string, string>([
+            ['health',          path.resolve(API_DIR, 'health.ts')],
+            ['latest-version',  path.resolve(API_DIR, 'latest-version.ts')],
+            ['compare-version', path.resolve(API_DIR, 'compare-version.ts')],
+            ['batch-compare',   path.resolve(API_DIR, 'batch-compare.ts')],
+            ['skill.md',        path.resolve(API_DIR, 'skill.md.ts')],
+          ]);
+
+          function resolveApiFile(filename: string): string | null {
+            return ALLOWED_API_FILES.get(filename) ?? null;
+          }
+
+          server.middlewares.use(async (req, res, next) => {
+            if (!req.url?.startsWith('/api/')) {
+              return next();
+            }
+
+            const url = new URL(req.url, `http://${req.headers.host}`);
+            const pathname = url.pathname;
+            const filename = pathname.slice(5); // e.g. latest-version or skill.md
+
+            const apiFilePath = resolveApiFile(filename);
+            if (!apiFilePath) {
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: `API endpoint ${pathname} not found or invalid` }));
+              return;
+            }
+
+            try {
+              // Load the serverless function module dynamically via Vite's SSR loading
+              const module = await server.ssrLoadModule(apiFilePath);
+              const handler = module.default;
+
+              if (typeof handler !== 'function') {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'API handler must export a default function' }));
+                return;
+              }
+
+              // Mock VercelRequest helper properties
+              const query: Record<string, string> = {};
+              url.searchParams.forEach((val, key) => {
+                query[key] = val;
+              });
+              const extReq = req as unknown as ExtendedRequest & typeof req;
+              extReq.query = query;
+
+              // Parse body for POST requests
+              if (req.method === 'POST') {
+                const buffers: Buffer[] = [];
+                for await (const chunk of req) {
+                  buffers.push(chunk as Buffer);
+                }
+                const bodyStr = Buffer.concat(buffers).toString('utf-8');
+                try {
+                  extReq.body = bodyStr ? JSON.parse(bodyStr) : undefined;
+                } catch {
+                  extReq.body = bodyStr;
+                }
+              }
+
+              // Mock VercelResponse helper methods
+              const extendedRes = res as unknown as ExtendedResponse & typeof res;
+              extendedRes.status = (statusCode: number) => {
+                extendedRes.statusCode = statusCode;
+                return extendedRes;
+              };
+              extendedRes.json = (data: unknown) => {
+                extendedRes.setHeader('Content-Type', 'application/json');
+                extendedRes.end(JSON.stringify(data));
+                return extendedRes;
+              };
+              extendedRes.send = (data: unknown) => {
+                if (data && typeof data === 'object') {
+                  return extendedRes.json(data);
+                }
+                extendedRes.end(data);
+                return extendedRes;
+              };
+
+              // Run the handler
+              await handler(extReq, extendedRes);
+            } catch (err) {
+              console.error("Error executing API:", pathname, err);
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: `API endpoint ${pathname} not found or failed to compile`, details: String(err) }));
+            }
+          });
+        }
+      },
     ].filter(Boolean),
     resolve: {
       alias: {
