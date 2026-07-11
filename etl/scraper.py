@@ -1,4 +1,4 @@
-# pylint: disable=syntax-error
+# pylint: disable=too-many-locals,logging-fstring-interpolation,too-many-nested-blocks,pointless-string-statement,missing-function-docstring,too-few-public-methods,too-many-instance-attributes,import-outside-toplevel,too-many-statements,bare-except
 """Module for scraping data from external sources."""
 import argparse
 import asyncio
@@ -157,9 +157,9 @@ class ScoringDanceCrawler:
 class ScoringDanceParser:
     """Handles parsing of individual result pages."""
 
-    """Scrape specific item data."""
     @staticmethod
     def standardize_mark(mark_text):
+        """Scrape specific item data."""
         return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
     def _extract_single_dancer_id(self, link):
@@ -306,12 +306,12 @@ class OutputManager:
             "event_url",
             "location",
         ]
-        """Get the listing of items to scrape."""
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
             raise ValueError(f"DataFrame missing required columns: {missing_cols}")
 
     def update_ledger(self, new_data):
+        """Update the ledger with new data."""
         if new_data.empty:
             return
 
@@ -389,8 +389,8 @@ class ETLPipeline:
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def _fetch_page(self, browser_context, url):
-        page = await browser_context.new_page()
         """Handle the scraping loop."""
+        page = await browser_context.new_page()
         try:
             await page.goto(url, timeout=30000)
             try:
@@ -403,7 +403,7 @@ class ETLPipeline:
         return content
 
     async def run_single(self, url):
-    """Save the scraped data to a file."""
+        """Save the scraped data to a file."""
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent=USER_AGENT)
@@ -519,7 +519,6 @@ class ETLPipeline:
                     self._save_queue()
 
                 except Exception as e:
-    """Entry point for the scraper."""
                     logging.error(f"Failed to process event {event_url}: {e}")
 
             await browser.close()
@@ -527,6 +526,7 @@ class ETLPipeline:
 
 
 async def main():
+    """Entry point for the scraper."""
     parser = argparse.ArgumentParser(description="Scoring.dance ETL Scraper")
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")

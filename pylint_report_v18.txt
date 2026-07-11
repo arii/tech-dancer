@@ -1,5 +1,0 @@
-************* Module etl.scraper
-etl/scraper.py:395:9: E0001: Parsing failed: 'expected 'except' or 'finally' block (etl.scraper, line 395)' (syntax-error)
-
-------------------------------------------------------------------
-Your code has been rated at 9.99/10 (previous run: 9.99/10, +0.00)
