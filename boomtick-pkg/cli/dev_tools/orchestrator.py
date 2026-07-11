@@ -28,6 +28,7 @@ from dev_tools.utils import (
     get_github_token,
     get_github_client,
     get_repo_name,
+    resolve_resource_path,
     get_gha_variable,
     set_gha_variable,
     run_command,
@@ -649,10 +650,9 @@ class Orchestrator:
             failed_checks_str = "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
             errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
 
-            try:
-                import importlib_resources as resources
-                ref = resources.files("dev_tools.resources").joinpath("review_template.md")
-                template = ref.read_text(encoding='utf-8').format(
+            template_path = resolve_resource_path("review_template.md")
+            with open(template_path, 'r', encoding='utf-8') as f:
+                template = f.read().format(
                     pr_num=prNumber,
                     head_sha=pr.head.sha,
                     failed_checks=failed_checks_str,
@@ -1235,7 +1235,7 @@ Respond only after the PR is created or updated:
                 "status": "success",
                 "message": "No workflows found to audit.",
                 "files_count": 0,
-                "status_file": "workflow-audit-status.md"
+                "status_file": ".boomtick/workflow-audit-status.md"
             }
 
         # 1. Cache compliance checks to avoid redundant processing
@@ -1243,8 +1243,9 @@ Respond only after the PR is created or updated:
         for f_path in files:
             file_audit_results[f_path] = self._check_workflow_compliance(f_path)
 
-        # 2. Summary Checklist Generation (workflow-audit-status.md)
-        status_path = "workflow-audit-status.md"
+        # 2. Summary Checklist Generation (.boomtick/workflow-audit-status.md)
+        status_path = os.path.join(".boomtick", "workflow-audit-status.md")
+        os.makedirs(".boomtick", exist_ok=True)
         status_lines = [
             "# Workflow Audit Status",
             f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
@@ -1338,8 +1339,9 @@ Run the workflow (if possible via `gh workflow run` or by pushing a test branch)
         else:
             raise CLIError("Provide --issue or --all-open")
 
-        # 1. Summary Checklist Generation (issue-audit-status.md)
-        status_path = "issue-audit-status.md"
+        # 1. Summary Checklist Generation (.boomtick/issue-audit-status.md)
+        status_path = os.path.join(".boomtick", "issue-audit-status.md")
+        os.makedirs(".boomtick", exist_ok=True)
         status_lines = [
             "# Issue Audit Status",
             f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",

@@ -111,6 +111,4 @@ boomtick-pkg/mcp/src/tools/contract.ts
 
 # Boomtick CLI artifacts
 .boomtick/
-*-audit-status.md
-workflow-audit-status.md
-issue-audit-status.md
+.boomtick/*-audit-status.md
