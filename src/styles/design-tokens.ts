@@ -11,6 +11,7 @@ export const spacing = {
   card: "p-card",
   compact: "p-compact",
 } as const;
+export type Spacing = keyof typeof spacing;
 
 export const animation = {
   fast: "duration-fast",
@@ -30,6 +31,7 @@ export const layout = {
   mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
 } as const;
+export type Layout = keyof typeof layout;
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans text-slate-100 placeholder:text-slate-400 placeholder:opacity-100 focus:outline-none focus:border-accent transition-all duration-150",
@@ -44,12 +46,14 @@ export const shadows = {
   standard: "shadow-sm",
   glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
 } as const;
+export type Shadow = keyof typeof shadows;
 
 
 export const stroke = {
   thin: "stroke-[0.5]",
   thick: "stroke-[1.5]",
 } as const;
+export type Stroke = keyof typeof stroke;
 
 export const iconSizes = {
   xs: 12,
@@ -58,6 +62,7 @@ export const iconSizes = {
   lg: 24,
   xl: 32,
 } as const;
+export type IconSize = keyof typeof iconSizes;
 
 export const zIndex = {
   hide: "hide",
@@ -89,6 +94,7 @@ export const tracking = {
   label: "tracking-[2px]",
   wordmark: "tracking-[0.05em]",
 } as const;
+export type Tracking = keyof typeof tracking;
 
 export const typography = {
   h1: "font-display font-black tracking-tighter leading-[0.95]",
@@ -115,6 +121,7 @@ export const opacity = {
   solid: 0.9,
   full: 1,
 } as const;
+export type Opacity = keyof typeof opacity;
 
 export const typeSizes = {
   micro: "text-micro",

@@ -98,6 +98,7 @@ export const buttonVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for Button components. */
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 /**
@@ -119,6 +120,7 @@ export const actionButtonVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for ActionButton components. */
 export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
 
 /**
@@ -149,6 +151,7 @@ export const cardVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for Card components. */
 export type CardVariants = VariantProps<typeof cardVariants>;
 
 /**
@@ -198,6 +201,7 @@ export const filterButtonVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for FilterButton components. */
 export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
 
 /**
@@ -225,6 +229,7 @@ export const tagVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for Tag components. */
 export type TagVariants = VariantProps<typeof tagVariants>;
 
 /**
@@ -262,9 +267,13 @@ export const journalVariants = {
   })
 };
 
+/** Derived TypeScript props for Journal Card components. */
 export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+/** Derived TypeScript props for Journal Share Action components. */
 export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+/** Derived TypeScript props for Journal Tag components. */
 export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+/** Derived TypeScript props for Journal Nav Link components. */
 export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
 
 /**
@@ -285,4 +294,5 @@ export const listRowVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for List Row components. */
 export type ListRowVariants = VariantProps<typeof listRowVariants>;

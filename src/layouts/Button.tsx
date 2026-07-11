@@ -11,6 +11,9 @@ interface ButtonProps
   as?: ElementType
   href?: string
   loading?: boolean
+  variant?: ButtonVariants['variant']
+  intent?: ButtonVariants['intent']
+  size?: ButtonVariants['size']
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
