@@ -22,11 +22,17 @@ jobs:
           fetch-depth: 0
           path: source
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          package_json_file: 'source/package.json'
+
       - name: Setup Node
         uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          node-version-file: '.node-version'
+          node-version-file: 'source/.node-version'
           cache: 'pnpm'
+          cache-dependency-path: 'source/pnpm-lock.yaml'
 
       - name: Checkout gh-pages
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
