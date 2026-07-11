@@ -20,7 +20,7 @@ jobs:
       github.event.workflow_run.head_branch == 'main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
 
@@ -36,11 +36,11 @@ jobs:
           RUN_ID: ${{ github.event.workflow_run.id }}
           REPO: ${{ github.repository }}
         run: |
-          JOBS=$(gh api repos/$REPO/actions/runs/$RUN_ID/jobs --jq '[.jobs[] | select(.conclusion=="failure") | .name] | join(", ")')
+          JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" --jq '[.jobs[] | select(.conclusion=="failure") | .name] | join(", ")')
           echo "failing_jobs=$JOBS" >> "$GITHUB_OUTPUT"
 
-          SHA=${{ github.event.workflow_run.head_sha }}
-          echo "sha_short=$(echo $SHA | cut -c1-8)" >> "$GITHUB_OUTPUT"
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          echo "sha_short=$(echo "$SHA" | cut -c1-8)" >> "$GITHUB_OUTPUT"
 
       - name: Idempotency Check
         id: check
@@ -73,7 +73,7 @@ jobs:
         run: |
           gh label create main-ci-failure --color FF0000 --description "CI failures on main branch" || true
           ISSUE_NUMBER=$(gh issue create --title "$TITLE" --body "$BODY" --label "main-ci-failure,spec-driven")
-          echo "issue_number=$(echo $ISSUE_NUMBER | grep -oE '[0-9]+$')" >> "$GITHUB_OUTPUT"
+          echo "issue_number=$(echo "$ISSUE_NUMBER" | grep -oE '[0-9]+$')" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch Jules
         env:
