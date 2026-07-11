@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils';
 interface FilterButtonProps extends FilterButtonVariants {
   label: string;
   onClick: () => void;
-  isActive: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
 }
@@ -20,19 +19,20 @@ export const FilterButton = ({
   isActive,
   className,
   type = "button",
-  variant = "default"
+  variant = "default",
+  ...props
 }: FilterButtonProps) => {
   return (
     <Box
       as="button"
       type={type}
       onClick={onClick}
-      aria-pressed={isActive}
       radius="md"
       cursor="pointer"
       className={cn(
         filterButtonVariants({ variant, isActive, className })
       )}
+      {...props}
     >
       {label}
     </Box>
