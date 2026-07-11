@@ -51,7 +51,7 @@ open_prs.txt
 # Tools
 boomtick-pkg/cli/dev_tools/config.json
 .lighthouseci/*
-!.lighthouseci/assertion-results.json
+
 
 # IDEs
 .vscode/*
