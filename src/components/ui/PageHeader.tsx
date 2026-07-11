@@ -3,6 +3,16 @@ import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
 
+/**
+ * Props for the PageHeader component.
+ *
+ * Note for consumers: As part of the layout standardization (PR 3481),
+ * the vertical rhythm is now managed via explicit \`marginBottom\` properties
+ * rather than relying on a wrapper \`Stack\` component's \`gap\` property.
+ * If you relied on the previous behavior where children had uniform gap spacing,
+ * ensure you pass the \`description\` and \`cta\` props directly to this component
+ * rather than attempting to render them as siblings outside.
+ */
 interface PageHeaderProps {
   label: string;
   title: string;
@@ -40,7 +50,7 @@ export function PageHeader({
   title, 
   description, 
   as = "h1", 
-  paddingBottom = 16,
+  paddingBottom = 12,
   border = "b", 
   descriptionMaxWidth = "prose",
   titleSize = "fluid-5",
