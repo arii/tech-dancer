@@ -22,6 +22,7 @@ The repository also includes a self-contained developer unit under the `boomtick
 
 - **`boomtick-pkg/cli/`**: A Python-based CLI (`td`) that serves as the unified entry point for repository automation, GitHub operations, and agent coordination.
 - **`boomtick-pkg/mcp/`**: A Model Context Protocol (MCP) server that provides a structured interface for AI agents to interact with the repository.
+- **`boomtick-pkg/mcp/actions/`**: Modular, composite GitHub Actions for the toolkit (migrated from root `.github/actions/`).
 
 ## 🚀 Quick Start
 

@@ -1,32 +1,29 @@
-name: AI ChatOps
+name: Self-Healing CI
 
 on:
-  workflow_dispatch:
-    inputs:
-      issue_number:
-        description: 'Issue number'
-        required: true
-        type: string
-      comment_body:
-        description: 'Comment body'
-        required: true
-        type: string
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
 
 permissions:
   contents: write
   pull-requests: write
+  actions: read
 
 jobs:
-  ai-review:
+  repair:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
 
-      - uses: ./boomtick-pkg/.github/actions/ai-review
-        with:
-          pr_number: ${{ inputs.issue_number }}
+      - uses: ./boomtick-pkg/mcp/actions/setup
+
+      - name: Self-Heal
+        run: td agent fix-ci --pr-number ${{ github.event.workflow_run.pull_requests[0].number }} --execute
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
