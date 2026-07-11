@@ -54,7 +54,7 @@ export function GlobalErrorBoundary() {
 
         <Box
           padding={4}
-          radius="md"
+          radius="sm"
           surface="sunken"
           width="full"
           className="text-left border border-line/50 overflow-auto max-h-[300px]"

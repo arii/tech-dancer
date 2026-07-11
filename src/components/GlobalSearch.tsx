@@ -161,7 +161,7 @@ export function GlobalSearch() {
           height="fit"
           maxHeight="85vh"
           overflow="hidden"
-          radius="md"
+          radius="sm"
           border
           shadow="topOverlay"
           className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
@@ -245,7 +245,7 @@ export function GlobalSearch() {
                     display="flex"
                     align="center"
                     gap={4}
-                    radius="md"
+                    radius="sm"
                     cursor="pointer"
                     className="hover:bg-accent/10 group transition-colors text-left"
                   >

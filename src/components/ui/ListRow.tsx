@@ -58,7 +58,7 @@ export function ListRow(props: ListRowProps) {
         height={16}
         margin={4}
         shrink={0}
-        radius="md"
+        radius="sm"
         overflow="hidden"
         display="flex"
         align="center"

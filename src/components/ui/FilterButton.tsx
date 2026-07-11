@@ -29,7 +29,7 @@ export const FilterButton = ({
       type={type}
       onClick={onClick}
       aria-pressed={isActive}
-      radius="md"
+      radius="sm"
       cursor="pointer"
       className={cn(
         filterButtonVariants({ variant, isActive, className })
