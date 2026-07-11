@@ -24,6 +24,12 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Setup Node
+        uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
       - name: Install Python Dependencies
         run: |
           python3 -m pip install -r etl/requirements.txt --break-system-packages

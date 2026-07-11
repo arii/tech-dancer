@@ -102,6 +102,12 @@ jobs:
         with:
           setup-python: 'false'
 
+      - name: Setup Node
+        uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
