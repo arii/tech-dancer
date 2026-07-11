@@ -98,7 +98,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
           setup-python: 'false'
 
