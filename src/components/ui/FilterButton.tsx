@@ -22,16 +22,18 @@ export const FilterButton = ({
   variant = "default",
   ...props
 }: FilterButtonProps) => {
+  // Extract variant props so they don't leak to the DOM element via Box
+  const variantClasses = filterButtonVariants({ variant, isActive });
+
   return (
     <Box
       as="button"
       type={type}
       onClick={onClick}
+      aria-pressed={isActive || undefined}
       radius="md"
       cursor="pointer"
-      className={cn(
-        filterButtonVariants({ variant, isActive, className })
-      )}
+      className={cn(variantClasses, className)}
       {...props}
     >
       {label}

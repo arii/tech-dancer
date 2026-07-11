@@ -15,6 +15,7 @@ export const createTransitionVariants: typeof cva = (base, config) => {
   const cache = new Map<string, string>();
 
   const memoizedVariantFn = (props?: unknown) => {
+    // Generate a stable cache key from the props object
     const key = JSON.stringify(props || {});
     if (cache.has(key)) return cache.get(key)!;
 
