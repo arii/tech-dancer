@@ -44,6 +44,7 @@ export function PromoStrip({
           className="shrink-0 bg-white/10"
         >
           <img
+            loading="lazy"
             src={fullImageSrc}
             alt=""
             className="w-full h-full object-cover"
