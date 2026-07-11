@@ -2,11 +2,14 @@
 
 ## 1. Summary of all open issues reviewed
 - Total issues reviewed: 61
-- Issues to keep open: 40
+- Issues to keep open: 44
 - Issues ready to close after merge: 7
 - Issues needing clarification: 3
-- Issues to close as duplicates: 7
-- Issues to close as completed: 0
+- Issues needing scope updates: 1
+- Issues closed and merged: 1
+- Issues closed as duplicates: 7
+- Issues closed as completed: 0
+- Issues closed as outdated: 2
 
 ## 2. Recommended action for each issue
 *See `issue-audit-status.md` for detailed per-issue recommendations and evidence.*
