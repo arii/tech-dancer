@@ -1,9 +1,9 @@
-import unittest
+# pylint: disable=missing-docstring
 import os
-import sys
-import json
+import unittest
 
-from dev_tools.verify_versions import parse_diff, verify_changes, compare_versions
+from dev_tools.verify_versions import compare_versions, parse_diff, verify_changes
+
 
 class TestVersionProtection(unittest.TestCase):
     def test_compare_versions(self):
@@ -12,7 +12,7 @@ class TestVersionProtection(unittest.TestCase):
         self.assertEqual(compare_versions("1.2.2", "1.2.3"), -1)
         self.assertEqual(compare_versions("v7", "v4"), 1)
         self.assertEqual(compare_versions("24.x", "22.x"), 1)
-        self.assertEqual(compare_versions("24.16.0", "24.x"), 1) # Normalizes 24.x to 24.0
+        self.assertEqual(compare_versions("24.16.0", "24.x"), 1)  # Normalizes 24.x to 24.0
 
     def test_parse_diff_node(self):
         diff = """--- a/.nvmrc
@@ -46,25 +46,29 @@ class TestVersionProtection(unittest.TestCase):
         self.assertEqual(changes[0]["new"], "v4")
 
     def test_verify_downgrade(self):
-        changes = [{
-            "file": "package.json",
-            "type": "dependency",
-            "name": "pnpm",
-            "old": "10.28.2",
-            "new": "9.0.0"
-        }]
+        changes = [
+            {
+                "file": "package.json",
+                "type": "dependency",
+                "name": "pnpm",
+                "old": "10.28.2",
+                "new": "9.0.0",
+            }
+        ]
         findings = verify_changes(changes)
         self.assertTrue(any(f["type"] == "downgrade" for f in findings))
         self.assertTrue(any(f["severity"] == "error" for f in findings))
 
     def test_verify_node_hard_block(self):
-        changes = [{
-            "file": ".nvmrc",
-            "type": "runtime",
-            "name": "node",
-            "old": "24.16.0",
-            "new": "24.17.0"
-        }]
+        changes = [
+            {
+                "file": ".nvmrc",
+                "type": "runtime",
+                "name": "node",
+                "old": "24.16.0",
+                "new": "24.17.0",
+            }
+        ]
         if "ALLOW_NODE_VERSION_CHANGE" in os.environ:
             del os.environ["ALLOW_NODE_VERSION_CHANGE"]
 
@@ -73,13 +77,15 @@ class TestVersionProtection(unittest.TestCase):
         self.assertTrue(any(f["severity"] == "error" for f in findings))
 
     def test_verify_node_override(self):
-        changes = [{
-            "file": ".nvmrc",
-            "type": "runtime",
-            "name": "node",
-            "old": "24.16.0",
-            "new": "24.17.0"
-        }]
+        changes = [
+            {
+                "file": ".nvmrc",
+                "type": "runtime",
+                "name": "node",
+                "old": "24.16.0",
+                "new": "24.17.0",
+            }
+        ]
         os.environ["ALLOW_NODE_VERSION_CHANGE"] = "true"
         findings = verify_changes(changes)
         # Should NOT have hard_block because of override
@@ -100,6 +106,7 @@ class TestVersionProtection(unittest.TestCase):
         self.assertEqual(len(changes), 1)
         self.assertEqual(changes[0]["name"], "pnpm")
         self.assertEqual(changes[0]["new"], "9.0.0")
+
 
 if __name__ == "__main__":
     unittest.main()

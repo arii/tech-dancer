@@ -1,0 +1,5 @@
+************* Module etl.scraper
+etl/scraper.py:406:5: E0001: Parsing failed: 'expected an indented block after function definition on line 405 (etl.scraper, line 406)' (syntax-error)
+
+------------------------------------------------------------------
+Your code has been rated at 9.99/10 (previous run: 9.99/10, +0.00)

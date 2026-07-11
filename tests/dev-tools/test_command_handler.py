@@ -1,6 +1,9 @@
+# pylint: disable=missing-docstring
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
+
 from dev_tools.handlers.command_handler import CommandHandler
+
 
 class TestCommandHandler(unittest.TestCase):
     def setUp(self):
@@ -12,7 +15,7 @@ class TestCommandHandler(unittest.TestCase):
         pr_number = 123
         self.mock_orchestrator.review_pr.return_value = {
             "recommendation": "Approved",
-            "reviewComment": "Looks good!"
+            "reviewComment": "Looks good!",
         }
 
         # Execute
@@ -64,5 +67,6 @@ class TestCommandHandler(unittest.TestCase):
         self.assertEqual(result["status"], "ignored")
         self.assertIn("Unknown command", result["message"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

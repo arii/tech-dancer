@@ -1,12 +1,11 @@
-import json
+# pylint: disable=line-too-long,missing-docstring,redefined-outer-name
 import argparse
-import sys
-import os
-
-
-import time
+import json
 import re
+import time
+
 from dev_tools.utils import run_command
+
 
 def run_cli(args, suppress_errors=False):
     try:
@@ -17,12 +16,14 @@ def run_cli(args, suppress_errors=False):
             print(f"CLI Error: {e}")
         return "" if suppress_errors else None
 
+
 def get_session_id():
     stdout = run_cli(["agent", "sync"])
     if not stdout:
         return None
     match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
     return match.group(1) if match else None
+
 
 def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
     print(f"Polling state for session {session_id}...")
@@ -60,24 +61,25 @@ Outcome B (Proceed): { "status": "SUCCESS", "timestamp": "...", "target_id": "..
 Initial Task Payload:
 """
 
+
 def execute_orchestrator_loop(existing_session_id=None):
     """Main execution flow for Agent 2 orchestrating Agent 1 (Jules)."""
     target_branch = "main"
     session_id = existing_session_id
-    
+
     # 1. Initialize or Attach
     if not session_id:
         initial_payload = {
             "current_timestamp": "2026-06-26T23:12:00Z",
             "target_id": target_branch,
             "task_objective": "Initialize ledger and standby.",
-            "interaction_history": []
+            "interaction_history": [],
         }
-        
+
         full_dispatch_task = f"{JULES_SYSTEM_PROMPT}\n{json.dumps(initial_payload)}"
         print("Dispatching new task with system prompt...")
         run_cli(["agent", "dispatch", target_branch, full_dispatch_task])
-        
+
         session_id = get_session_id()
 
     if not session_id:
@@ -94,16 +96,16 @@ def execute_orchestrator_loop(existing_session_id=None):
         "current_timestamp": "2026-06-27T00:15:00Z",
         "target_id": f"pr-{target_pr}",
         "task_objective": f"Perform a comprehensive review of PR #{target_pr}.",
-        "interaction_history": [{"timestamp": "2026-06-26T23:12:00Z", "status": "SUCCESS"}]
+        "interaction_history": [{"timestamp": "2026-06-26T23:12:00Z", "status": "SUCCESS"}],
     }
-    
+
     print(f"Sending PR Review payload to session {session_id}...")
     run_cli(["agent", "send", session_id, json.dumps(follow_up_payload)])
 
     # 4. Await Completion & Read Response
     wait_for_agent(session_id)
     final_output = run_cli(["agent", "messages", session_id])
-    
+
     print("\n--- Agent 1 Output ---")
     try:
         jules_response = json.loads(final_output)
@@ -111,6 +113,7 @@ def execute_orchestrator_loop(existing_session_id=None):
         print(f"Utility: {jules_response.get('utility_evaluation')}")
     except json.JSONDecodeError:
         print(final_output)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Agent 2 Orchestrator")

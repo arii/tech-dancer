@@ -1,0 +1,5 @@
+************* Module etl.scraper
+etl/scraper.py:413:12: E0001: Parsing failed: 'unexpected indent (etl.scraper, line 413)' (syntax-error)
+
+------------------------------------------------------------------
+Your code has been rated at 9.99/10 (previous run: 9.99/10, +0.00)

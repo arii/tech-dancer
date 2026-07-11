@@ -1,6 +1,9 @@
+# pylint: disable=missing-docstring,protected-access,unused-argument
 import unittest
 from unittest.mock import MagicMock, patch
+
 from dev_tools.services.ai_service import AIClient
+
 
 class TestAIService(unittest.TestCase):
     def setUp(self):
@@ -25,5 +28,6 @@ class TestAIService(unittest.TestCase):
         self.assertIsInstance(result, str)
         self.assertIn("### Dependency Context", result)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

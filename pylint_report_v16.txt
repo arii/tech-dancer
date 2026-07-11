@@ -1,0 +1,7 @@
+************* Module cli/
+cli/:1:0: F0001: No module named cli/ (fatal)
+************* Module etl.scraper
+etl/scraper.py:311:8: E0001: Parsing failed: 'unexpected indent (etl.scraper, line 311)' (syntax-error)
+
+------------------------------------------------------------------
+Your code has been rated at 0.00/10 (previous run: 0.00/10, +0.00)
