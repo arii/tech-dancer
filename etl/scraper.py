@@ -159,7 +159,7 @@ class ScoringDanceParser:
 
     @staticmethod
     def standardize_mark(mark_text):
-        """Scrape specific item data."""
+        """Standardize the mark text into points."""
         return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
     def _extract_single_dancer_id(self, link):
