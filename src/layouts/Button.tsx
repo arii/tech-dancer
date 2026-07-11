@@ -1,7 +1,7 @@
 import * as React from "react"
 import { forwardRef, ButtonHTMLAttributes, ElementType, Ref } from "react"
 import { cn } from "@/lib/utils"
-import { buttonVariants, type ButtonVariants } from "@/lib/variants"
+import { buttonVariants, ButtonVariants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 
 interface ButtonProps

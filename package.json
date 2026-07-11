@@ -35,7 +35,7 @@
     "audit:duplication": "jscpd .",
     "audit:duplication:pkg": "jscpd boomtick-pkg/ --config boomtick-pkg/.jscpd.json",
     "ci:local": "run-s verify:schemas lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication audit:duplication:pkg",
-    "knip": "knip --exclude types --exclude nsTypes --exclude exports --exclude unresolved",
+    "knip": "knip --exclude exports",
     "type-check": "pnpm run verify:schemas && tsc --noEmit",
     "audit:inventory": "node boomtick-pkg/scripts/check-suppression-inventory.mjs",
     "verify:schemas": "node scripts/verify-schemas.mjs",
@@ -157,6 +157,10 @@
     "ignoreDependencies": [
       "@langchain/core",
       "@langchain/google-genai"
+    ],
+    "ignore": [
+      "src/lib/variants.ts",
+      "src/styles/design-tokens.ts"
     ]
   }
 }
