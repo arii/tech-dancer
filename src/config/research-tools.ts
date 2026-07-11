@@ -163,5 +163,17 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
     canonicalPath: '/research/ecommerce-automation'
+  },
+  {
+    id: 'versiontruth',
+    taxonomyBucket: 'engineering',
+    title: 'VersionTruth Oracle',
+    subtitle: 'REAL-TIME VERSION CHECKING SKILL',
+    description: 'An AI-agent version verification skill. Serves as a live registry-grounded oracle to prevent confidently incorrect out-of-distribution version downgrades in package.json, GitHub Actions, and Node.js runtimes. Compares candidate versions and exposes LTS EOL/deprecation warning alerts.',
+    category: 'DevAI Tooling',
+    status: 'Active',
+    tags: ['npm API', 'GitHub API', 'Vercel Serverless', 'Agentic Skills'],
+    canonicalPath: '/versiontruth',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/api'
   }
 ];
