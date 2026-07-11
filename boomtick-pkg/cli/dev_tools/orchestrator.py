@@ -907,6 +907,11 @@ class Orchestrator:
         return {"current": current_count, "baseline": baseline_count, "status": "success" if current_count <= baseline_count else "error"}
 
     def fix_ci(self, prNumber: Optional[int] = None, issueNumber: Optional[int] = None, branch: Optional[str] = None, api_key: Optional[str] = None, dry_run: bool = True, **kwargs) -> Dict[str, Any]:
+        """
+        Initializes an autonomous repair session (Jules) to fix CI failures.
+        Supports both Pull Request (prNumber) and Issue (issueNumber) contexts.
+        If branch is not provided, it defaults to the current local branch or matches the PR/Issue.
+        """
         if "pr_number" in kwargs and prNumber is None: prNumber = kwargs["pr_number"]
         if "issue_number" in kwargs and issueNumber is None: issueNumber = kwargs["issue_number"]
         repo_name = get_repo_name(); g = get_github_client(); repo = g.get_repo(repo_name)
@@ -1018,7 +1023,8 @@ Respond only after the PR is created or updated:
 - Notes or documented limitations"""
 
         if issue_details:
-            prompt += f"\n\n## Issue Context\n\nTitle: {issue_details.get('title')}\n\n{issue_details.get('body')}"
+            # Wrap issue context in clear delimiters to mitigate prompt injection risk from untrusted issue content
+            prompt += f"\n\n## External Issue Context (Untrusted)\n\n<issue-context>\nTitle: {issue_details.get('title')}\n\n{issue_details.get('body')}\n</issue-context>"
 
         if structured_failures:
             prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
