@@ -67,12 +67,7 @@ fi
 if check_run "^(src/|content/|package\.json|boomtick-pkg/scripts/build-repo-context\.py)"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "🔍 Indexable content changed. Updating .agent-context.json..."
-        # Bypass engine checks for agents
-        engine_flags=""
-        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
-            engine_flags="--engine-strict=false"
-        fi
-        pnpm run agent:prime $engine_flags || echo "❌ ERROR: 'pnpm run agent:prime' failed. Please run it manually to update the agent index."
+        pnpm run agent:prime || echo "❌ ERROR: 'pnpm run agent:prime' failed. Please run it manually to update the agent index."
     else
         echo "⚠️  WARNING: pnpm not found. Skipping agent index update."
     fi
