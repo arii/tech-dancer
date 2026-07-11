@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -63,6 +63,15 @@ export const routes: RouteConfig[] = [
     path: '/research/:id',
     lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
     skeleton: 'post'
+  },
+  {
+    path: '/versiontruth',
+    lazy: () => import('@/pages/VersionTruth').then(m => ({ Component: m.default })),
+    label: 'VersionTruth',
+    icon: ShieldCheck,
+    skeleton: 'simple',
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/ux-auditor',
