@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
@@ -67,7 +67,7 @@ export const variants = {
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
-};
+} as const;
 
 export const buttonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${buttons.base}`,
@@ -98,6 +98,8 @@ export const buttonVariants = createTransitionVariants(
   }
 );
 
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
+
 /**
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
@@ -116,6 +118,8 @@ export const actionButtonVariants = createTransitionVariants(
     },
   }
 );
+
+export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
 
 /**
  * Card variants for reports, tools, and callout blocks
@@ -144,6 +148,8 @@ export const cardVariants = createTransitionVariants(
     }
   }
 );
+
+export type CardVariants = VariantProps<typeof cardVariants>;
 
 /**
  * FilterButton variants for collection and category filtering.
@@ -192,6 +198,8 @@ export const filterButtonVariants = createTransitionVariants(
   }
 );
 
+export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
+
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
@@ -216,6 +224,8 @@ export const tagVariants = createTransitionVariants(
     }
   }
 );
+
+export type TagVariants = VariantProps<typeof tagVariants>;
 
 /**
  * Journal/Blog specific variants for editorial consistency.
@@ -252,6 +262,11 @@ export const journalVariants = {
   })
 };
 
+export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
+
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
@@ -269,3 +284,5 @@ export const listRowVariants = createTransitionVariants(
     }
   }
 );
+
+export type ListRowVariants = VariantProps<typeof listRowVariants>;
