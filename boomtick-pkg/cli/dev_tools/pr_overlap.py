@@ -10,8 +10,22 @@ from dev_tools.utils import log_error, log_info
 
 def get_pr_overlaps(github: GitHubClient, limit: int) -> List[Dict[str, Any]]:
     """
-    Identifies overlaps between open PRs.
-    Returns a list of clusters, where each cluster is a dict with PR numbers and overlapping files.
+    Identifies structural overlaps between open Pull Requests by analyzing modified file sets.
+
+    This function fetches open PRs from the repository, retrieves the list of modified files
+    for each PR, and identifies groups (clusters) of PRs that share at least one common file.
+    These clusters are useful for identifying potential merge conflicts or functional
+    dependencies that might necessitate PR consolidation.
+
+    Args:
+        github: An instance of GitHubClient to interact with the GitHub API.
+        limit: The maximum number of open PRs to retrieve for analysis.
+
+    Returns:
+        A list of cluster dictionaries, each containing:
+            - 'prs': A list of PR numbers in the cluster.
+            - 'files': A list of filenames shared across the PRs in the cluster.
+            - 'metadata': A dictionary mapping PR numbers to their full PR details.
     """
     # 1. Fetch open PRs
     log_info(f"Fetching up to {limit} open PRs...")
@@ -63,7 +77,16 @@ def get_pr_overlaps(github: GitHubClient, limit: int) -> List[Dict[str, Any]]:
 
 
 def report_overlaps(clusters: List[Dict[str, Any]]):
-    """Prints a formatted report of PR overlaps."""
+    """
+    Generates and prints a Markdown-formatted report of identified PR overlaps to stdout.
+
+    The report includes details for each cluster, such as the involved PR numbers,
+    the author of each PR, and a list of the primary overlapping files. It also
+    provides actionable recommendations for consolidation or coordination.
+
+    Args:
+        clusters: A list of cluster dictionaries as returned by `get_pr_overlaps`.
+    """
     if not clusters:
         print("✅ No significant PR overlaps detected.")
         return
