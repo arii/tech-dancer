@@ -152,28 +152,6 @@
     "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^4.1.5"
   },
-  "overrides": {
-    "shell-quote": ">=1.8.4",
-    "vite": "^6.4.3",
-    "hono": "^4.12.29",
-    "esbuild": "^0.27.3",
-    "@babel/plugin-transform-modules-systemjs": "^7.29.7",
-    "@babel/core": "^7.29.0",
-    "qs": "^6.15.3",
-    "js-yaml": "^4.3.0",
-    "uuid": "^14.0.1",
-    "tmp": "^0.2.7",
-    "minimatch": "^10.2.4",
-    "serialize-javascript": "^7.0.4",
-    "brace-expansion": "^5.0.4",
-    "undici@^5": "5.29.0",
-    "undici@^7": "7.28.0",
-    "protobufjs": "7.6.5",
-    "fast-uri": "3.1.3",
-    "@grpc/grpc-js": "1.14.4",
-    "ws@^7": "7.5.11",
-    "ws@^8": "8.21.0"
-  },
   "packageManager": "pnpm@10.28.2",
   "knip": {
     "ignoreDependencies": [
