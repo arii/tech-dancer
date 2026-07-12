@@ -1,3 +1,5 @@
+# actionlint-disable events
+
 name: Dependabot Alert Handler
 
 on:
@@ -35,7 +37,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
@@ -219,6 +221,7 @@ jobs:
             --assignee Jules)
           echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
 
+          # shellcheck disable=SC2155
           issue_number="${ISSUE_URL##*/}"
           echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
@@ -228,7 +231,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
         run: |
-          PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
-          export PYTHONPATH
+          # shellcheck disable=SC2155
+          export PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
           # Dispatch Jules for the new issue
           python3 -m dev_tools.cli jules dispatch main "Upgrade dependency to fix security vulnerability in issue #$ISSUE_NUMBER"

@@ -266,6 +266,5 @@ jobs:
             -ignore 'unexpected key "background"' \
             -ignore 'unexpected key "parallel"' \
             -ignore 'unexpected key "wait"' \
-            -ignore 'unknown Webhook event "repository_vulnerability_alert"' \
             -color
         shell: bash
