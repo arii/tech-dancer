@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
 import { config } from "../config.js";
 import path from "path";
+import fs from "fs";
 
 export const ALLOWED_COMMANDS = {
   git: "git",
@@ -50,7 +51,6 @@ export async function runCommand(
 
     // In standalone mode, config.repoPath is the boomtick-pkg root.
     // We check common venv locations to ensure we call the isolated binary.
-    const fs = await import("fs");
     if (fs.existsSync(venvBin)) {
       finalCmd = venvBin;
     } else if (fs.existsSync(localVenvBin)) {
