@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/security-upgrade-jspdf-4-2-1-15688041599973248122/sitemap.xml
