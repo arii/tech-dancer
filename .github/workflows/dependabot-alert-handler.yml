@@ -1,5 +1,3 @@
-# actionlint-disable events
-
 name: Dependabot Alert Handler
 
 on:
@@ -37,7 +35,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
@@ -59,7 +57,7 @@ jobs:
           ALERT_GHSA_ID: ${{ github.event.alert.security_advisory.ghsa_id }}
           ALERT_PATCHED_VERSION: ${{ github.event.alert.security_vulnerability.first_patched_version.identifier }}
         run: |
-          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             PACKAGE="$INPUT_PACKAGE_NAME"
             ECOSYSTEM="$INPUT_ECOSYSTEM"
             SEVERITY="$INPUT_SEVERITY"
@@ -73,12 +71,12 @@ jobs:
             PATCHED_VERSION="$ALERT_PATCHED_VERSION"
           fi
 
-          if [[ -z "$PATCHED_VERSION" || "$PATCHED_VERSION" == "null" ]]; then
+          if [ -z "$PATCHED_VERSION" ] || [ "$PATCHED_VERSION" = "null" ]; then
             PATCHED_VERSION="the latest secure version"
           fi
 
           export PACKAGE ECOSYSTEM SEVERITY GHSA_ID PATCHED_VERSION
-          python3 - <<'EOF'
+          python3 - <<'PYTHON_EOF'
           import os
           import re
           import textwrap
@@ -206,9 +204,10 @@ jobs:
 
           with open("issue_body.md", "w") as f:
               f.write(body)
-          EOF
+          PYTHON_EOF
 
       - name: Create Issue
+        id: create_issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_TITLE: ${{ steps.generate_body.outputs.title }}
@@ -219,8 +218,9 @@ jobs:
             --label "spec-driven,security" \
             --assignee Jules)
           echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
-          echo "issue_number=${ISSUE_URL##*/}" >> "$GITHUB_OUTPUT"
-        id: create_issue
+
+          issue_number="${ISSUE_URL##*/}"
+          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch Jules
         if: steps.create_issue.outputs.issue_number != ''
@@ -228,6 +228,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
         run: |
-          export PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
+          PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
+          export PYTHONPATH
           # Dispatch Jules for the new issue
           python3 -m dev_tools.cli jules dispatch main "Upgrade dependency to fix security vulnerability in issue #$ISSUE_NUMBER"
