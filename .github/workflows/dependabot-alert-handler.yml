@@ -1,7 +1,9 @@
+# actionlint-disable events
+
 name: Dependabot Alert Handler
 
 on:
-  repository_vulnerability_alert: # actionlint-disable events
+  repository_vulnerability_alert:
     types: [create, reopen]
   workflow_dispatch:
     inputs:
@@ -75,9 +77,6 @@ jobs:
             PATCHED_VERSION="the latest secure version"
           fi
 
-          TITLE="security: upgrade $PACKAGE to $PATCHED_VERSION ($GHSA_ID)"
-          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
-
           export PACKAGE ECOSYSTEM SEVERITY GHSA_ID PATCHED_VERSION
           python3 - <<'EOF'
           import os
@@ -104,6 +103,11 @@ jobs:
           s_severity = escape_md(severity)
           s_ghsa_id = escape_md(ghsa_id)
           s_patched_version = escape_md(patched_version)
+
+          # Output sanitized title
+          title = f"security: upgrade {s_package} to {s_patched_version} ({s_ghsa_id})"
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"title={title}\n")
 
           body = textwrap.dedent(f"""
           ## Problem Statement
@@ -207,23 +211,23 @@ jobs:
       - name: Create Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: ${{ steps.generate_body.outputs.title }}
         run: |
           ISSUE_URL=$(gh issue create \
-            --title "${{ steps.generate_body.outputs.title }}" \
+            --title "$ISSUE_TITLE" \
             --body-file issue_body.md \
             --label "spec-driven,security" \
             --assignee Jules)
           echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
-          # shellcheck disable=SC2155
-          ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
-          echo "issue_number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "issue_number=${ISSUE_URL##*/}" >> "$GITHUB_OUTPUT"
         id: create_issue
 
       - name: Dispatch Jules
         if: steps.create_issue.outputs.issue_number != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli
+          export PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
           # Dispatch Jules for the new issue
-          python3 -m dev_tools.cli jules dispatch main "Upgrade dependency to fix security vulnerability in issue #${{ steps.create_issue.outputs.issue_number }}"
+          python3 -m dev_tools.cli jules dispatch main "Upgrade dependency to fix security vulnerability in issue #$ISSUE_NUMBER"
