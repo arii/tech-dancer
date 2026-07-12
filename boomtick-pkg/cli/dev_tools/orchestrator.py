@@ -45,9 +45,9 @@ from dev_tools.utils import (
     sanitize_path,
     set_gha_variable,
     verify_ci_metrics,
-    verify_pr_scope,
     walk_tsx,
 )
+from dev_tools.scope_utils import verify_pr_scope
 
 PROJECT_CONFIG = get_config()
 AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
