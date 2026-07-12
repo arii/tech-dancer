@@ -5,8 +5,8 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
  */
 function sanitize(str: unknown): string {
   if (typeof str !== "string") return String(str || "");
-  // CodeQL: Use non-greedy match and simplified closing tag to avoid ReDoS.
-  return str.replace(/<script\b[\s\S]*?<\/script\s*>/gi, "[REMOVED]");
+  // CodeQL: Use non-greedy match and robust closing tag to avoid ReDoS and match variants like </script\t\n bar>.
+  return str.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, "[REMOVED]");
 }
 
 /**
