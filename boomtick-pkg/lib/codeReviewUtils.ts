@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as crypto from 'crypto';
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult, ReviewFinding } from './codeReviewTypes';
 
 /**
  * Generates a stable SHA-256 hash for a code review batch.
@@ -279,6 +279,40 @@ export function budgetInputContext(
 export function calculateEstimatedTokens(text: string | string[]): number {
   const combined = Array.isArray(text) ? text.join('') : text;
   return Math.ceil(combined.length / 4);
+}
+
+/**
+ * Validates a parsed Gemini structured response against the expected schema.
+ * Throws an error if required fields are missing or malformed.
+ */
+export function validateCodeReviewJson(parsed: unknown): asserts parsed is {
+  feedback: string;
+  verdict: 'pass' | 'fail' | 'warn';
+  findings: ReviewFinding[];
+} {
+  if (!parsed || typeof parsed !== 'object') {
+    throw new Error('Parsed response is not an object');
+  }
+
+  const p = parsed as Record<string, unknown>;
+
+  if (typeof p.feedback !== 'string' || !p.feedback) {
+    throw new Error('Missing or invalid "feedback" field');
+  }
+
+  if (typeof p.verdict !== 'string' || !['pass', 'fail', 'warn'].includes(p.verdict)) {
+    throw new Error(`Invalid "verdict" field: ${p.verdict}`);
+  }
+
+  if (!Array.isArray(p.findings)) {
+    throw new Error('Missing or invalid "findings" array');
+  }
+
+  for (const finding of p.findings) {
+    if (!finding.id || !finding.file || !finding.issue || !finding.status) {
+      throw new Error(`Finding is missing required fields: ${JSON.stringify(finding)}`);
+    }
+  }
 }
 
 export function extractFeedbackText(content: unknown): string {

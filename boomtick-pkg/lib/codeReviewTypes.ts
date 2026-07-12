@@ -78,22 +78,6 @@ export const codeReviewResponseSchema = {
   required: ['feedback', 'verdict', 'findings']
 };
 
-export interface GeminiStructuredResponse {
-  feedback: string;
-  verdict: 'pass' | 'fail' | 'warn';
-  findings: Array<{
-    id: string;
-    file: string;
-    line?: number;
-    snippet?: string;
-    issue: string;
-    status: 'open' | 'resolved';
-    confidence?: 'high' | 'medium' | 'low';
-    fixSummary?: string;
-    counterexample?: string;
-  }>;
-}
-
 export interface CodeReviewResult {
   feedback: string;
   role?: CodeReviewRole;

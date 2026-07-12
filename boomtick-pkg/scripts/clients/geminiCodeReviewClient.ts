@@ -2,7 +2,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   calculateEstimatedTokens,
-  normalizeFindings
+  normalizeFindings,
+  validateCodeReviewJson
 } from '../../lib/codeReviewUtils';
 
 import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
@@ -14,7 +15,6 @@ import {
   type CodeReviewSummary,
   type CodeReviewResult,
   codeReviewResponseSchema,
-  type GeminiStructuredResponse
 } from '../../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../../lib/codeReviewOrchestrator';
 
@@ -107,22 +107,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     // With response_mime_type: 'application/json', response.content is guaranteed to be a stringified JSON
-    let structuredResponse: GeminiStructuredResponse;
+    let structuredResponse: unknown;
     try {
       const rawText = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
       structuredResponse = JSON.parse(rawText);
 
-      // Basic runtime validation of required fields
-      if (!structuredResponse.feedback || !structuredResponse.verdict || !Array.isArray(structuredResponse.findings)) {
-        throw new Error('Missing required fields in Gemini structured response');
-      }
-
-      // Validate findings internal structure
-      for (const finding of structuredResponse.findings) {
-        if (!finding.id || !finding.file || !finding.issue || !finding.status) {
-          throw new Error(`Finding is missing required fields: ${JSON.stringify(finding)}`);
-        }
-      }
+      // Runtime validation of required fields and structure
+      validateCodeReviewJson(structuredResponse);
     } catch (e) {
       console.error('Failed to parse/validate Gemini structured output:', e, 'Raw content:', response.content);
       return {
