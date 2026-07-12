@@ -3,7 +3,7 @@ import json
 import os
 import re
 import subprocess
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
