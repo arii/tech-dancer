@@ -1,23 +1,22 @@
 import { z } from "zod";
-import { runCommand } from "../lib/shell.js";
+import fs from "fs/promises";
+import path from "path";
+import { config } from "../config.js";
 
 export const ReadAgentContextInputSchema = z.object({});
 
 export async function readAgentContextHandler(_args: z.infer<typeof ReadAgentContextInputSchema>) {
-  const result = await runCommand("td-cli", ["repo", "read-context"]);
-
-  if (result.exitCode !== 0) {
-    console.error("td-cli repo read-context failed:", result.stderr);
-    throw new Error("Failed to read agent context. Ensure '.agent-context.json' exists by running 'td-cli context-warm'.");
-  }
+  const contextPath = path.join(config.repoPath, ".agent-context.json");
 
   try {
-    const parsed = JSON.parse(result.stdout);
-    if (parsed.status === "error") {
-      throw new Error(parsed.message || "Failed to read agent context");
-    }
-    return parsed;
-  } catch (e) {
-    throw new Error(`Failed to parse agent context output: ${e}`);
+    const content = await fs.readFile(contextPath, "utf-8");
+    const parsed = JSON.parse(content);
+    return {
+      status: "success",
+      ...parsed
+    };
+  } catch (e: any) {
+    console.error("Failed to read agent context:", e.message);
+    throw new Error(`Failed to read agent context from ${contextPath}. Ensure it exists by running 'td-cli context-warm'.`);
   }
 }

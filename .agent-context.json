@@ -1,0 +1,2882 @@
+{
+  "cli_schema": {
+    "base_command": "td-cli",
+    "description": "Custom developer CLI for BoomTick repository management.",
+    "schema_authority": "Use 'repo.get_command_schema' or 'td-cli schema <path>' for granular discovery. This file remains for legacy fallback.",
+    "subcommands": {
+      "agent cancel": {
+        "description": "Cancel a Jules session.",
+        "exact_usage": "td-cli agent cancel <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "agent dispatch": {
+        "description": "\n    Initialize a Jules session for a specific branch and task.\n    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n    ",
+        "exact_usage": "td-cli agent dispatch <BRANCH> <TASK>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "branch",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "task",
+            "type": "string"
+          }
+        ]
+      },
+      "agent fix-ci": {
+        "description": "",
+        "exact_usage": "td-cli agent fix-ci [--dry-run] [--pr-number <PR-NUMBER>] [--issue-number <ISSUE-NUMBER>] [--branch <BRANCH>] [--api-key <API-KEY>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--pr-number",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--issue-number",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--branch",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--api-key",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "agent get-session": {
+        "description": "Get details of a Jules session.",
+        "exact_usage": "td-cli agent get-session <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "agent list": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli agent list [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent list-sessions": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli agent list-sessions [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent messages": {
+        "description": "Get message history for a Jules session.",
+        "exact_usage": "td-cli agent messages <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "agent plan-aggregation": {
+        "description": "Generate a deterministic aggregation workflow plan for an agent.",
+        "exact_usage": "td-cli agent plan-aggregation --pr <PR> --target <TARGET>",
+        "required_flags": [
+          {
+            "description": "PR numbers to aggregate",
+            "flag": "--pr",
+            "type": "integer"
+          },
+          {
+            "description": "Target branch name for aggregation",
+            "flag": "--target",
+            "type": "string"
+          }
+        ]
+      },
+      "agent plan-issue-audit": {
+        "description": "Generate deterministic roadmap and checklist for auditing open issues.",
+        "exact_usage": "td-cli agent plan-issue-audit [--json] [--all-open] [--issue <ISSUE>] [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Output results in JSON format",
+            "flag": "--json",
+            "type": "boolean"
+          },
+          {
+            "description": "Issue number(s) to audit (e.g. --issue 1 --issue 2)",
+            "flag": "--issue",
+            "type": "integer"
+          },
+          {
+            "description": "Audit all open issues",
+            "flag": "--all-open",
+            "type": "boolean"
+          },
+          {
+            "description": "Limit the number of open issues to process",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent plan-review": {
+        "description": "Generate a deterministic review workflow plan for an agent.",
+        "exact_usage": "td-cli agent plan-review --pr <PR> [--issue <ISSUE>]",
+        "optional_flags": [
+          {
+            "description": "Issue number",
+            "flag": "--issue",
+            "type": "integer"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "Pull Request number",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent plan-workflow-audit": {
+        "description": "Generate deterministic roadmap and checklist for auditing GitHub workflows.",
+        "exact_usage": "td-cli agent plan-workflow-audit [--workflow <WORKFLOW>]",
+        "optional_flags": [
+          {
+            "description": "Specific workflow file to audit",
+            "flag": "--workflow",
+            "type": "string"
+          }
+        ]
+      },
+      "agent repair": {
+        "description": "",
+        "exact_usage": "td-cli agent repair [--stdin] [--worktree] [--logs <LOGS>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--logs",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--stdin",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--worktree",
+            "type": "boolean"
+          }
+        ]
+      },
+      "agent repair-context": {
+        "description": "",
+        "exact_usage": "td-cli agent repair-context [--log <LOG>] [--file <FILE>] [--pr <PR>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--log",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent run-feedback-check": {
+        "description": "Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions.",
+        "exact_usage": "td-cli agent run-feedback-check [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of active sessions to check",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent send": {
+        "description": "Send a message to active Jules session(s) (supports comma-separated IDs).",
+        "exact_usage": "td-cli agent send <SESSION_IDS> <MESSAGE>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_ids",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "message",
+            "type": "string"
+          }
+        ]
+      },
+      "agent session": {
+        "description": "Get details of a Jules session.",
+        "exact_usage": "td-cli agent session <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "agent sync": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli agent sync [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "agent trigger-feedback": {
+        "description": "Trigger CI feedback for a Jules session.",
+        "exact_usage": "td-cli agent trigger-feedback <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "ai analyze": {
+        "description": "",
+        "exact_usage": "td-cli ai analyze <FILE>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "file",
+            "type": "string"
+          }
+        ]
+      },
+      "ai comment": {
+        "description": "",
+        "exact_usage": "td-cli ai comment --pr <PR> --command <COMMAND> [--comment-id <COMMENT-ID>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--comment-id",
+            "type": "string"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "",
+            "flag": "--pr",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--command",
+            "type": "string"
+          }
+        ]
+      },
+      "ai get-context": {
+        "description": "Retrieve dependency and semantic context for a set of changed files.",
+        "exact_usage": "td-cli ai get-context"
+      },
+      "ai review": {
+        "description": "",
+        "exact_usage": "td-cli ai review [--no-cache] <PR_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Bust the diff cache and force a fresh review call",
+            "flag": "--no-cache",
+            "type": "boolean"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "build": {
+        "description": "Build the project after runtime check",
+        "exact_usage": "td-cli build"
+      },
+      "config view": {
+        "description": "View the current project configuration as JSON.",
+        "exact_usage": "td-cli config view [--json]",
+        "optional_flags": [
+          {
+            "description": "Output results in JSON format",
+            "flag": "--json",
+            "type": "boolean"
+          }
+        ]
+      },
+      "context-warm": {
+        "description": "Pre-warm the .agent-context.json repository index.",
+        "exact_usage": "td-cli context-warm [--force]",
+        "optional_flags": [
+          {
+            "description": "Force re-generation of context even if not stale",
+            "flag": "--force",
+            "type": "boolean"
+          }
+        ]
+      },
+      "doctor": {
+        "description": "Runtime Consistency Check",
+        "exact_usage": "td-cli doctor"
+      },
+      "gh aggregate": {
+        "description": "Aggregate multiple PRs into a single branch.",
+        "exact_usage": "td-cli gh aggregate <TARGET_BRANCH> <PR_NUMBERS...>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "target_branch",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "pr_numbers",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh audit": {
+        "description": "Run a headless UI audit on the codebase.",
+        "exact_usage": "td-cli gh audit [--check-dirs <CHECK-DIRS>]",
+        "optional_flags": [
+          {
+            "description": "Comma-separated list of directories to audit",
+            "flag": "--check-dirs",
+            "type": "string"
+          }
+        ]
+      },
+      "gh audit-gate": {
+        "description": "",
+        "exact_usage": "td-cli gh audit-gate"
+      },
+      "gh audit-pr": {
+        "description": "",
+        "exact_usage": "td-cli gh audit-pr [--json] [--fetch] [--audit] [--submit] [--cleanup] [--dry-run] [--base <BASE>] [--event <EVENT>] <PR_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Output results in JSON format",
+            "flag": "--json",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--fetch",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--audit",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--submit",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--cleanup",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--base",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--event",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh bundle-size": {
+        "description": "",
+        "exact_usage": "td-cli gh bundle-size [--update] [--dry-run] [--baseline-file <BASELINE-FILE>] [--threshold <THRESHOLD>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--baseline-file",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--threshold",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--update",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "gh checkout": {
+        "description": "Checkout a branch.",
+        "exact_usage": "td-cli gh checkout <BRANCH>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "branch",
+            "type": "string"
+          }
+        ]
+      },
+      "gh conflicts": {
+        "description": "",
+        "exact_usage": "td-cli gh conflicts"
+      },
+      "gh create-issue": {
+        "description": "Create a new GitHub issue.",
+        "exact_usage": "td-cli gh create-issue --title <TITLE> [--file <FILE>] [--body <BODY>]",
+        "optional_flags": [
+          {
+            "description": "Path to file containing issue body",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "Literal body text",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "Issue title",
+            "flag": "--title",
+            "type": "string"
+          }
+        ]
+      },
+      "gh create-pr": {
+        "description": "Create a new pull request.",
+        "exact_usage": "td-cli gh create-pr --title <TITLE> --body <BODY> --head <HEAD> [--draft] [--base <BASE>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--base",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--draft",
+            "type": "boolean"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "",
+            "flag": "--title",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--body",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--head",
+            "type": "string"
+          }
+        ]
+      },
+      "gh detect-conflicts": {
+        "description": "",
+        "exact_usage": "td-cli gh detect-conflicts [--pr <PR>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-comment": {
+        "description": "Post a comment to a GitHub issue.",
+        "exact_usage": "td-cli gh issue-comment [--file <FILE>] [--body <BODY>] <ISSUE_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Path to file containing comment body",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "Literal body text",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "issue_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-update": {
+        "description": "Update a GitHub issue's body, labels, and/or state.",
+        "exact_usage": "td-cli gh issue-update [--file <FILE>] [--body <BODY>] [--labels <LABELS>] [--add-labels <ADD-LABELS>] [--remove-labels <REMOVE-LABELS>] [--state <STATE>] <ISSUE_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Path to file containing new issue body",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "Literal body text",
+            "flag": "--body",
+            "type": "string"
+          },
+          {
+            "description": "Comma-separated list of labels to set (replaces existing labels)",
+            "flag": "--labels",
+            "type": "string"
+          },
+          {
+            "description": "Comma-separated list of labels to add",
+            "flag": "--add-labels",
+            "type": "string"
+          },
+          {
+            "description": "Comma-separated list of labels to remove",
+            "flag": "--remove-labels",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--state",
+            "type": "choice"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "issue_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-view": {
+        "description": "View details of a GitHub issue.",
+        "exact_usage": "td-cli gh issue-view <ISSUE_NUMBER>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "issue_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh manage-reviews": {
+        "description": "",
+        "exact_usage": "td-cli gh manage-reviews [--check-responses] [--cleanup-comments] [--dry-run] [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--check-responses",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--cleanup-comments",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          },
+          {
+            "description": "Limit the number of PRs to process",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh merge-conflicts": {
+        "description": "",
+        "exact_usage": "td-cli gh merge-conflicts [--base <BASE>] <PR_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--base",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh migrate-tokens": {
+        "description": "",
+        "exact_usage": "td-cli gh migrate-tokens [--dry-run] [--find <FIND>] [--migrate <MIGRATE>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--find",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--migrate",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "gh overlaps": {
+        "description": "Identify and propose consolidation of PRs with high functional or structural overlap.",
+        "exact_usage": "td-cli gh overlaps [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of open PRs to process",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh parse-comment": {
+        "description": "Parse a comment body and return intended actions.",
+        "exact_usage": "td-cli gh parse-comment --author-association <AUTHOR-ASSOCIATION> [--body <BODY>]",
+        "optional_flags": [
+          {
+            "description": "The comment body text.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "The author association (e.g. OWNER, MEMBER).",
+            "flag": "--author-association",
+            "type": "string"
+          }
+        ]
+      },
+      "gh post-comment": {
+        "description": "Post a comment to a PR.",
+        "exact_usage": "td-cli gh post-comment --pr <PR> [--file <FILE>] [--body <BODY>]",
+        "optional_flags": [
+          {
+            "description": "Path to the file containing the comment body.",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "Literal comment text.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "The PR number to comment on.",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh pr-diff": {
+        "description": "",
+        "exact_usage": "td-cli gh pr-diff <PR_NUMBER>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh pre-submit": {
+        "description": "",
+        "exact_usage": "td-cli gh pre-submit"
+      },
+      "gh ratchet-any": {
+        "description": "",
+        "exact_usage": "td-cli gh ratchet-any [--update] [--dry-run] [--baseline-file <BASELINE-FILE>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--baseline-file",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--update",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "gh read-pr-comments": {
+        "description": "Fetch and display standard and review comments for a PR.",
+        "exact_usage": "td-cli gh read-pr-comments --pr-number <PR-NUMBER>",
+        "required_flags": [
+          {
+            "description": "The PR number to fetch comments for.",
+            "flag": "--pr-number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh resolve": {
+        "description": "",
+        "exact_usage": "td-cli gh resolve [--base <BASE>] <FILE>",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--base",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "file",
+            "type": "string"
+          }
+        ]
+      },
+      "gh resolve-conflicts": {
+        "description": "Resolve merge conflicts for a PR in a separate worktree.",
+        "exact_usage": "td-cli gh resolve-conflicts --pr <PR> [--allow-unrelated] [--push] [--continue] [--strategy <STRATEGY>]",
+        "optional_flags": [
+          {
+            "description": "Allow merging unrelated histories.",
+            "flag": "--allow-unrelated",
+            "type": "boolean"
+          },
+          {
+            "description": "Merge strategy option (-X ours/theirs).",
+            "flag": "--strategy",
+            "type": "choice"
+          },
+          {
+            "description": "Automatically push the resolution to origin.",
+            "flag": "--push",
+            "type": "boolean"
+          },
+          {
+            "description": "Finalize and push an in-progress conflict resolution.",
+            "flag": "--continue",
+            "type": "boolean"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "The PR number to resolve conflicts for.",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh search-prs": {
+        "description": "",
+        "exact_usage": "td-cli gh search-prs [--json] [--include-drafts] [--state <STATE>] [--limit <LIMIT>] [--labels <LABELS>]",
+        "optional_flags": [
+          {
+            "description": "Output results in JSON format",
+            "flag": "--json",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--state",
+            "type": "string"
+          },
+          {
+            "description": "Limit the number of PRs to process",
+            "flag": "--limit",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--include-drafts",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--labels",
+            "type": "string"
+          }
+        ]
+      },
+      "gh status-board": {
+        "description": "",
+        "exact_usage": "td-cli gh status-board [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of open PRs to process",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh summary-report": {
+        "description": "Generate a markdown report of CI metrics for GHA Step Summary.",
+        "exact_usage": "td-cli gh summary-report"
+      },
+      "gh sync-pr": {
+        "description": "Reliably pull the latest remote PR state to local, overwriting messy rebases.",
+        "exact_usage": "td-cli gh sync-pr <PR_NUMBER>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh track-review": {
+        "description": "",
+        "exact_usage": "td-cli gh track-review --pr <PR> --status <STATUS> --auditor <AUDITOR> [--dry-run]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "",
+            "flag": "--pr",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--status",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--auditor",
+            "type": "string"
+          }
+        ]
+      },
+      "gh update-issues": {
+        "description": "",
+        "exact_usage": "td-cli gh update-issues [--dry-run]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "gh validate-issue": {
+        "description": "",
+        "exact_usage": "td-cli gh validate-issue [--all-open] [--post-comments] [--dry-run] [--issue-number <ISSUE-NUMBER>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--issue-number",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--all-open",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--post-comments",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "gh verify-metrics": {
+        "description": "Verify CI metrics against established thresholds.",
+        "exact_usage": "td-cli gh verify-metrics"
+      },
+      "gh verify-versions": {
+        "description": "Verify version changes in a diff for downgrades or hard blocks.",
+        "exact_usage": "td-cli gh verify-versions <DIFF_INPUT>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "diff_input",
+            "type": "string"
+          }
+        ]
+      },
+      "gh view": {
+        "description": "",
+        "exact_usage": "td-cli gh view <PR_NUMBER>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules cancel": {
+        "description": "Cancel a Jules session.",
+        "exact_usage": "td-cli jules cancel <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "jules dispatch": {
+        "description": "\n    Initialize a Jules session for a specific branch and task.\n    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n    ",
+        "exact_usage": "td-cli jules dispatch <BRANCH> <TASK>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "branch",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "task",
+            "type": "string"
+          }
+        ]
+      },
+      "jules fix-ci": {
+        "description": "",
+        "exact_usage": "td-cli jules fix-ci [--dry-run] [--pr-number <PR-NUMBER>] [--issue-number <ISSUE-NUMBER>] [--branch <BRANCH>] [--api-key <API-KEY>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--pr-number",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--issue-number",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "flag": "--branch",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--api-key",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--dry-run",
+            "type": "boolean"
+          }
+        ]
+      },
+      "jules get-session": {
+        "description": "Get details of a Jules session.",
+        "exact_usage": "td-cli jules get-session <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "jules list": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli jules list [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules list-sessions": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli jules list-sessions [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules messages": {
+        "description": "Get message history for a Jules session.",
+        "exact_usage": "td-cli jules messages <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "jules plan-aggregation": {
+        "description": "Generate a deterministic aggregation workflow plan for an agent.",
+        "exact_usage": "td-cli jules plan-aggregation --pr <PR> --target <TARGET>",
+        "required_flags": [
+          {
+            "description": "PR numbers to aggregate",
+            "flag": "--pr",
+            "type": "integer"
+          },
+          {
+            "description": "Target branch name for aggregation",
+            "flag": "--target",
+            "type": "string"
+          }
+        ]
+      },
+      "jules plan-review": {
+        "description": "Generate a deterministic review workflow plan for an agent.",
+        "exact_usage": "td-cli jules plan-review --pr <PR> [--issue <ISSUE>]",
+        "optional_flags": [
+          {
+            "description": "Issue number",
+            "flag": "--issue",
+            "type": "integer"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "Pull Request number",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules repair": {
+        "description": "",
+        "exact_usage": "td-cli jules repair [--stdin] [--worktree] [--logs <LOGS>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--logs",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--stdin",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "flag": "--worktree",
+            "type": "boolean"
+          }
+        ]
+      },
+      "jules repair-context": {
+        "description": "",
+        "exact_usage": "td-cli jules repair-context [--log <LOG>] [--file <FILE>] [--pr <PR>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--log",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules send": {
+        "description": "Send a message to active Jules session(s) (supports comma-separated IDs).",
+        "exact_usage": "td-cli jules send <SESSION_IDS> <MESSAGE>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_ids",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "message",
+            "type": "string"
+          }
+        ]
+      },
+      "jules session": {
+        "description": "Get details of a Jules session.",
+        "exact_usage": "td-cli jules session <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "jules sync": {
+        "description": "Sync active agent sessions.",
+        "exact_usage": "td-cli jules sync [--limit <LIMIT>]",
+        "optional_flags": [
+          {
+            "description": "Limit the number of sessions to retrieve",
+            "flag": "--limit",
+            "type": "integer"
+          }
+        ]
+      },
+      "jules trigger-feedback": {
+        "description": "Trigger CI feedback for a Jules session.",
+        "exact_usage": "td-cli jules trigger-feedback <SESSION_ID>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "session_id",
+            "type": "string"
+          }
+        ]
+      },
+      "lint": {
+        "description": "Lint the project after runtime check",
+        "exact_usage": "td-cli lint"
+      },
+      "repo apply-patch": {
+        "description": "Apply a patch to a file using resilient git apply.",
+        "exact_usage": "td-cli repo apply-patch [--patch-file <PATCH-FILE>] [--patch-body <PATCH-BODY>] <FILEPATH>",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--patch-file",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--patch-body",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "filepath",
+            "type": "string"
+          }
+        ]
+      },
+      "repo ci-logs": {
+        "description": "",
+        "exact_usage": "td-cli repo ci-logs [--all] <PR_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Include logs for successful runs",
+            "flag": "--all",
+            "type": "boolean"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "repo logs": {
+        "description": "",
+        "exact_usage": "td-cli repo logs [--grep <GREP>] <PR_NUMBER>",
+        "optional_flags": [
+          {
+            "description": "Filter logs by pattern",
+            "flag": "--grep",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "pr_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "repo read-context": {
+        "description": "Read and return the contents of .agent-context.json.",
+        "exact_usage": "td-cli repo read-context"
+      },
+      "repo run-playwright": {
+        "description": "",
+        "exact_usage": "td-cli repo run-playwright [--grep <GREP>] [--worktree <WORKTREE>]",
+        "optional_flags": [
+          {
+            "description": "",
+            "flag": "--grep",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "flag": "--worktree",
+            "type": "string"
+          }
+        ]
+      },
+      "schema": {
+        "description": "Retrieve the schema for a specific subcommand or all commands.",
+        "exact_usage": "td-cli schema <COMMAND_PATH>",
+        "required_arguments": [
+          {
+            "description": "",
+            "name": "command_path",
+            "type": "string"
+          }
+        ]
+      },
+      "test cli": {
+        "description": "Run CLI package tests",
+        "exact_usage": "td-cli test cli"
+      },
+      "ux audit": {
+        "description": "",
+        "exact_usage": "td-cli ux audit [--all-routes] [--desktop] [--mobile] [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route to audit",
+            "flag": "--route",
+            "type": "string"
+          },
+          {
+            "description": "Audit all discovered routes",
+            "flag": "--all-routes",
+            "type": "boolean"
+          },
+          {
+            "description": "Audit desktop viewports",
+            "flag": "--desktop",
+            "type": "boolean"
+          },
+          {
+            "description": "Audit mobile viewports",
+            "flag": "--mobile",
+            "type": "boolean"
+          }
+        ]
+      },
+      "ux contrast": {
+        "description": "",
+        "exact_usage": "td-cli ux contrast [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route for contrast check",
+            "flag": "--route",
+            "type": "string"
+          }
+        ]
+      },
+      "ux images": {
+        "description": "",
+        "exact_usage": "td-cli ux images [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route for image audit",
+            "flag": "--route",
+            "type": "string"
+          }
+        ]
+      },
+      "ux lighthouse": {
+        "description": "",
+        "exact_usage": "td-cli ux lighthouse [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route for Lighthouse",
+            "flag": "--route",
+            "type": "string"
+          }
+        ]
+      },
+      "ux overflow": {
+        "description": "",
+        "exact_usage": "td-cli ux overflow [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route for overflow check",
+            "flag": "--route",
+            "type": "string"
+          }
+        ]
+      },
+      "ux report": {
+        "description": "",
+        "exact_usage": "td-cli ux report"
+      },
+      "ux screenshots": {
+        "description": "",
+        "exact_usage": "td-cli ux screenshots [--route <ROUTE>]",
+        "optional_flags": [
+          {
+            "description": "Specific route for screenshots",
+            "flag": "--route",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "tool_name": "td-cli"
+  },
+  "file_tree": {
+    "AGENTS.md": null,
+    "CONTRIBUTING.md": null,
+    "LICENSE": null,
+    "README.md": null,
+    "api/": {
+      "_lib/": "...",
+      "batch-compare.ts": null,
+      "compare-version.ts": null,
+      "health.ts": null,
+      "latest-version.ts": null,
+      "skill.md.ts": null,
+      "telemetry.ts": null
+    },
+    "artifacts/": {
+      "visual-review/": "..."
+    },
+    "boomtick-pkg/": {
+      "cli/": "...",
+      "install.sh": null,
+      "lib/": "...",
+      "mcp/": "...",
+      "scripts/": "...",
+      "tests/": "...",
+      "workspace-schema.json": null,
+      "workspace.json": null
+    },
+    "content/": {
+      "blog/": "...",
+      "posts/": "...",
+      "studies/": "..."
+    },
+    "docs/": {
+      "affiliate-tooling.md": null,
+      "agent/": "...",
+      "architecture-summary.md": null,
+      "deployment-impact-analysis.md": null,
+      "github-workflows.md": null,
+      "guides/": "...",
+      "infrastructure/": "...",
+      "release.md": null,
+      "semantic-duplicate-detection.md": null,
+      "semantic-duplicate-github-issues.md": null
+    },
+    "eslint.config.mjs": null,
+    "etl/": {
+      "README.md": null,
+      "__init__.py": null,
+      "data/": "...",
+      "processor.py": null,
+      "query_ledger.py": null,
+      "requirements.txt": null,
+      "scraper.py": null,
+      "tests/": "..."
+    },
+    "firestore.rules": null,
+    "index.html": null,
+    "knip.ts": null,
+    "lighthouserc.json": null,
+    "mypy_errors.txt": null,
+    "mypy_final.txt": null,
+    "mypy_final_v2.txt": null,
+    "package.json": null,
+    "playwright.config.ts": null,
+    "pnpm-lock.yaml": null,
+    "pnpm-workspace.yaml": null,
+    "project_config.json": null,
+    "public/": {
+      "404.html": null,
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "boomtick_logo.svg": null,
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "robots.txt": null,
+      "skill.md": null
+    },
+    "pylint_final.txt": null,
+    "pylint_final_v2.txt": null,
+    "pytest.ini": null,
+    "requirements-dev.txt": null,
+    "scripts/": {
+      "affiliate/": "...",
+      "ai-playwright-crawler.ts": null,
+      "amazon-image-map.tsv": null,
+      "base-path.js": null,
+      "clean-sitemap.mjs": null,
+      "cleanup-ports.mjs": null,
+      "configure-log-drains.mjs": null,
+      "content-loader.ts": null,
+      "download-amazon-gear-images.sh": null,
+      "generate-assets.ts": null,
+      "generate-robots.ts": null,
+      "generate-spa-stubs.mjs": null,
+      "heartbeat.ts": null,
+      "index-codebase.py": null,
+      "manage-previews.sh": null,
+      "orchestrator/": "...",
+      "resolve-cli.sh": null,
+      "run-etl.sh": null,
+      "send-jules-impact.py": null,
+      "sync-python-deps.py": null,
+      "ux-audit-runner.ts": null,
+      "ux-capture.ts": null,
+      "ux-discover-routes.ts": null,
+      "ux-lighthouse-runner.ts": null,
+      "validate-links.ts": null,
+      "verify-schemas.mjs": null
+    },
+    "setup-agent.sh": null,
+    "src/": {
+      "App.tsx": null,
+      "affiliate-tool.test.ts": null,
+      "assets/": "...",
+      "components/": "...",
+      "config/": "...",
+      "constants/": "...",
+      "context/": "...",
+      "data/": "...",
+      "features/": "...",
+      "hooks/": "...",
+      "index.css": null,
+      "layouts/": "...",
+      "lib/": "...",
+      "main.tsx": null,
+      "pages/": "...",
+      "providers/": "...",
+      "styles/": "...",
+      "types.ts": null,
+      "utils/": "...",
+      "vite-env.d.ts": null
+    },
+    "svgo.config.mjs": null,
+    "tailwind.config.mjs": null,
+    "tests/": {
+      "a11y.spec.ts": null,
+      "affiliate-mobile.spec.ts": null,
+      "affiliate-mobile.spec.ts-snapshots/": "...",
+      "blog-post-mobile.spec.ts": null,
+      "blog-post-mobile.spec.ts-snapshots/": "...",
+      "blog-post.spec.ts": null,
+      "blog-post.spec.ts-snapshots/": "...",
+      "crawl.spec.ts": null,
+      "dev-tools/": "...",
+      "fixtures/": "...",
+      "guide.spec.ts": null,
+      "guide.spec.ts-snapshots/": "...",
+      "homepage.spec.ts": null,
+      "homepage.spec.ts-snapshots/": "...",
+      "merch.spec.ts": null,
+      "previews.spec.ts": null,
+      "research-mobile.spec.ts": null,
+      "search.spec.ts": null,
+      "search_mobile.spec.ts": null,
+      "seo.spec.ts": null,
+      "smoke.spec.ts": null,
+      "test-constants.ts": null,
+      "unit/": "...",
+      "utils/": "...",
+      "verify_homepage_guide.spec.ts": null,
+      "visual-affiliate.spec.ts": null,
+      "visual.spec.ts": null,
+      "visual.spec.ts-snapshots/": "..."
+    },
+    "tsconfig.app.json": null,
+    "tsconfig.base.json": null,
+    "tsconfig.json": null,
+    "tsconfig.node.json": null,
+    "vercel.json": null,
+    "vite.config.ts": null
+  },
+  "mcp_schema": {
+    "prompts": [
+      {
+        "description": "Find PRs worth rescuing.",
+        "name": "conflict-scout"
+      },
+      {
+        "description": "Guidelines for analyzing and proposing consolidation of overlapping PRs.",
+        "name": "pr-consolidation"
+      },
+      {
+        "description": "Gather repository context for a PR.",
+        "name": "repo-context"
+      },
+      {
+        "description": "Apply the smallest safe fix for a PR.",
+        "name": "repair-agent"
+      },
+      {
+        "description": "Verify that a repair works.",
+        "name": "verifier-agent"
+      },
+      {
+        "description": "Write a summary for a replacement PR.",
+        "name": "pr-writer"
+      }
+    ],
+    "resources": [
+      {
+        "description": "The root package.json file of the repository.",
+        "mimeType": "application/json",
+        "name": "package.json",
+        "uri": "repo://package-json"
+      },
+      {
+        "description": "The mapping of application routes to content files.",
+        "mimeType": "application/json",
+        "name": "Route Map",
+        "uri": "repo://routes"
+      },
+      {
+        "description": "The design tokens used in the repository.",
+        "mimeType": "application/json",
+        "name": "Design Tokens",
+        "uri": "repo://design-tokens"
+      },
+      {
+        "description": "The validation report for a specific repair branch.",
+        "mimeType": "application/json",
+        "name": "Repair Report",
+        "uri": "repo://repair-report/{branch}"
+      },
+      {
+        "description": "Lighthouse CI report for a specific branch.",
+        "mimeType": "application/json",
+        "name": "Lighthouse Report",
+        "uri": "repo://lighthouse/{branch}"
+      },
+      {
+        "description": "Playwright test report for a specific branch.",
+        "mimeType": "application/json",
+        "name": "Playwright Report",
+        "uri": "repo://playwright/{branch}"
+      }
+    ],
+    "tools": [
+      {
+        "description": "Check the health and configuration of the MCP server.",
+        "inputSchema": {
+          "properties": {
+            "checkDeep": {
+              "default": false,
+              "description": "Whether to perform a deep health check including external dependencies.",
+              "title": "Checkdeep",
+              "type": "boolean"
+            }
+          },
+          "title": "HealthCheckInput",
+          "type": "object"
+        },
+        "name": "boomtick.health"
+      },
+      {
+        "description": "Search for open pull requests in the repository.",
+        "inputSchema": {
+          "properties": {
+            "includeDrafts": {
+              "default": true,
+              "description": "Whether to include draft PRs in the results.",
+              "title": "Includedrafts",
+              "type": "boolean"
+            },
+            "labels": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter PRs by labels.",
+              "title": "Labels"
+            },
+            "limit": {
+              "default": 100,
+              "description": "The maximum number of PRs to return (default: 100, range: 1-100).",
+              "title": "Limit",
+              "type": "integer"
+            },
+            "state": {
+              "default": "open",
+              "description": "The state of the PRs to search for (open, closed, all).",
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "title": "SearchPRsInput",
+          "type": "object"
+        },
+        "name": "github.search_open_prs"
+      },
+      {
+        "description": "Read the full repository index including file tree, CLI schema, and MCP tools.",
+        "inputSchema": {
+          "properties": {},
+          "title": "ReadAgentContextInput",
+          "type": "object"
+        },
+        "name": "repo.read_agent_context"
+      },
+      {
+        "description": "Get the diff and changed files for a pull request.",
+        "inputSchema": {
+          "properties": {
+            "prNumber": {
+              "description": "The number of the pull request to get the diff for.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber"
+          ],
+          "title": "GetPrDiffInput",
+          "type": "object"
+        },
+        "name": "github.get_pr_diff"
+      },
+      {
+        "description": "Checkout a specific branch in the repository or worktree.",
+        "inputSchema": {
+          "properties": {
+            "branch": {
+              "description": "The name of the branch to checkout.",
+              "title": "Branch",
+              "type": "string"
+            },
+            "worktreePath": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional path to the worktree to perform the checkout in.",
+              "title": "Worktreepath"
+            }
+          },
+          "required": [
+            "branch"
+          ],
+          "title": "CheckoutBranchInput",
+          "type": "object"
+        },
+        "name": "github.checkout_branch"
+      },
+      {
+        "description": "Detect files that conflict when a PR is merged with the base branch.",
+        "inputSchema": {
+          "properties": {
+            "baseBranch": {
+              "default": "main",
+              "description": "The base branch to check against (default: 'main').",
+              "title": "Basebranch",
+              "type": "string"
+            },
+            "prNumber": {
+              "description": "The number of the pull request to check for conflicts.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber"
+          ],
+          "title": "GetMergeConflictFilesInput",
+          "type": "object"
+        },
+        "name": "github.get_merge_conflict_files"
+      },
+      {
+        "description": "Get the list of changed files between two refs.",
+        "inputSchema": {
+          "properties": {
+            "base": {
+              "default": "main",
+              "description": "The base ref to compare from (default: 'main').",
+              "title": "Base",
+              "type": "string"
+            },
+            "head": {
+              "default": "HEAD",
+              "description": "The head ref to compare to (default: 'HEAD').",
+              "title": "Head",
+              "type": "string"
+            }
+          },
+          "title": "GetChangedFilesInput",
+          "type": "object"
+        },
+        "name": "repo.get_changed_files"
+      },
+      {
+        "description": "Retrieve a lightweight, targeted schema for a specific td-cli subcommand. Use this instead of reading the entire cli-schema.json to save tokens.",
+        "inputSchema": {
+          "properties": {
+            "commandPath": {
+              "description": "The CLI command path to retrieve the schema for (e.g. 'gh audit-pr')",
+              "type": "string"
+            }
+          },
+          "required": [
+            "commandPath"
+          ],
+          "type": "object"
+        },
+        "name": "repo.get_command_schema"
+      },
+      {
+        "description": "Get the scripts defined in package.json.",
+        "inputSchema": {
+          "properties": {
+            "filter": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional glob pattern to filter script names.",
+              "title": "Filter"
+            }
+          },
+          "title": "GetPackageScriptsInput",
+          "type": "object"
+        },
+        "name": "repo.get_package_scripts"
+      },
+      {
+        "description": "Get the mapping of routes to content files.",
+        "inputSchema": {
+          "properties": {
+            "includeStatic": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Whether to include static assets in the route map.",
+              "title": "Includestatic"
+            }
+          },
+          "title": "GetRouteMapInput",
+          "type": "object"
+        },
+        "name": "repo.get_route_map"
+      },
+      {
+        "description": "Read CI logs for a given pull request.",
+        "inputSchema": {
+          "properties": {
+            "all": {
+              "default": false,
+              "description": "Include logs for successful runs (default: false).",
+              "title": "All",
+              "type": "boolean"
+            },
+            "prNumber": {
+              "description": "The number of the pull request to read logs for.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber"
+          ],
+          "title": "ReadCiLogsInput",
+          "type": "object"
+        },
+        "name": "repo.read_ci_logs"
+      },
+      {
+        "description": "Stream or grep combined CI logs for all jobs in a pull request.",
+        "inputSchema": {
+          "properties": {
+            "grep": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional pattern to filter log lines.",
+              "title": "Grep"
+            },
+            "prNumber": {
+              "description": "The number of the pull request to stream logs for.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber"
+          ],
+          "title": "RepoLogsInput",
+          "type": "object"
+        },
+        "name": "repo.logs"
+      },
+      {
+        "description": "Creates a new clean git branch from a target base branch.",
+        "inputSchema": {
+          "properties": {
+            "baseBranch": {
+              "default": "main",
+              "description": "Branch to branch off from",
+              "title": "Basebranch",
+              "type": "string"
+            },
+            "branchName": {
+              "description": "The name of the new branch",
+              "title": "Branchname",
+              "type": "string"
+            }
+          },
+          "required": [
+            "branchName"
+          ],
+          "title": "CreateBranchInput",
+          "type": "object"
+        },
+        "name": "repo.create_branch"
+      },
+      {
+        "description": "Creates a fresh worktree and a new repair branch for an existing PR. This isolates the repair work from the main codebase.",
+        "inputSchema": {
+          "properties": {
+            "prNumber": {
+              "description": "The original pull request number to repair.",
+              "title": "Prnumber",
+              "type": "integer"
+            },
+            "repairBranchName": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional custom name for the new repair branch.",
+              "title": "Repairbranchname"
+            },
+            "writeMode": {
+              "description": "Safety gate: Must be true to perform branch creation and worktree setup.",
+              "title": "Writemode",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "prNumber",
+            "writeMode"
+          ],
+          "title": "CreateRepairBranchInput",
+          "type": "object"
+        },
+        "name": "repo.create_repair_branch"
+      },
+      {
+        "description": "Run repository tests and checks.",
+        "inputSchema": {
+          "properties": {
+            "commands": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional list of commands to run (default includes install, lint, test, build).",
+              "title": "Commands"
+            },
+            "timeoutSeconds": {
+              "default": 300,
+              "description": "Maximum time in seconds to wait for tests (default: 300).",
+              "title": "Timeoutseconds",
+              "type": "integer"
+            },
+            "worktreePath": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional path to the worktree to run tests in.",
+              "title": "Worktreepath"
+            }
+          },
+          "title": "RunTestsInput",
+          "type": "object"
+        },
+        "name": "repo.run_tests"
+      },
+      {
+        "description": "Run Lighthouse CI audits.",
+        "inputSchema": {
+          "properties": {
+            "route": {
+              "default": "/",
+              "description": "The route to audit (default: '/').",
+              "title": "Route",
+              "type": "string"
+            },
+            "worktreePath": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional path to the worktree to run the audit in.",
+              "title": "Worktreepath"
+            }
+          },
+          "title": "RunLighthouseInput",
+          "type": "object"
+        },
+        "name": "repo.run_lighthouse"
+      },
+      {
+        "description": "Run Playwright E2E tests.",
+        "inputSchema": {
+          "properties": {
+            "grep": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional pattern to filter tests by name.",
+              "title": "Grep"
+            },
+            "worktreePath": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional path to the worktree to run tests in.",
+              "title": "Worktreepath"
+            }
+          },
+          "title": "RunPlaywrightInput",
+          "type": "object"
+        },
+        "name": "repo.run_playwright"
+      },
+      {
+        "description": "Commit verified repair changes in a worktree.",
+        "inputSchema": {
+          "properties": {
+            "allowedFiles": {
+              "description": "List of files that are allowed to be committed.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Allowedfiles",
+              "type": "array"
+            },
+            "message": {
+              "description": "Commit message.",
+              "title": "Message",
+              "type": "string"
+            },
+            "worktreePath": {
+              "description": "Path to the worktree where changes are made.",
+              "title": "Worktreepath",
+              "type": "string"
+            },
+            "writeMode": {
+              "description": "Safety gate: Must be true to perform the commit.",
+              "title": "Writemode",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "worktreePath",
+            "message",
+            "allowedFiles",
+            "writeMode"
+          ],
+          "title": "CommitPatchInput",
+          "type": "object"
+        },
+        "name": "repo.commit_patch"
+      },
+      {
+        "description": "Open a new PR that replaces or repairs the original PR.",
+        "inputSchema": {
+          "properties": {
+            "baseBranch": {
+              "description": "The branch to merge the fixes into.",
+              "title": "Basebranch",
+              "type": "string"
+            },
+            "body": {
+              "description": "The body/description of the new PR.",
+              "title": "Body",
+              "type": "string"
+            },
+            "draft": {
+              "default": true,
+              "description": "Whether to create the PR as a draft (default: true).",
+              "title": "Draft",
+              "type": "boolean"
+            },
+            "originalPrNumber": {
+              "description": "The number of the pull request being replaced.",
+              "title": "Originalprnumber",
+              "type": "integer"
+            },
+            "pushMode": {
+              "description": "Safety gate: Must be true to push the branch and open the PR.",
+              "title": "Pushmode",
+              "type": "boolean"
+            },
+            "repairBranch": {
+              "description": "The branch containing the fixes.",
+              "title": "Repairbranch",
+              "type": "string"
+            },
+            "title": {
+              "description": "The title of the new PR.",
+              "title": "Title",
+              "type": "string"
+            },
+            "worktreePath": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional path to the worktree where the PR is created from.",
+              "title": "Worktreepath"
+            }
+          },
+          "required": [
+            "originalPrNumber",
+            "repairBranch",
+            "baseBranch",
+            "title",
+            "body",
+            "pushMode"
+          ],
+          "title": "OpenReplacementPrInput",
+          "type": "object"
+        },
+        "name": "github.open_replacement_pr"
+      },
+      {
+        "description": "Creates a pull request on GitHub using the MCP server's integrated credentials. Bypasses terminal CLI constraints.",
+        "inputSchema": {
+          "properties": {
+            "base": {
+              "default": "main",
+              "description": "The target branch to merge into.",
+              "title": "Base",
+              "type": "string"
+            },
+            "body": {
+              "description": "Description of changes.",
+              "title": "Body",
+              "type": "string"
+            },
+            "draft": {
+              "default": false,
+              "description": "Whether to create the PR as a draft.",
+              "title": "Draft",
+              "type": "boolean"
+            },
+            "head": {
+              "description": "The branch containing changes to merge.",
+              "title": "Head",
+              "type": "string"
+            },
+            "title": {
+              "description": "PR Title.",
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "body",
+            "head"
+          ],
+          "title": "CreatePullRequestInput",
+          "type": "object"
+        },
+        "name": "github.create_pull_request"
+      },
+      {
+        "description": "Comment on the original PR with a diagnosis and replacement link.",
+        "inputSchema": {
+          "properties": {
+            "body": {
+              "description": "The content of the comment.",
+              "title": "Body",
+              "type": "string"
+            },
+            "prNumber": {
+              "description": "The number of the original PR to comment on.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber",
+            "body"
+          ],
+          "title": "CommentTriageSummaryInput",
+          "type": "object"
+        },
+        "name": "github.comment_triage_summary"
+      },
+      {
+        "description": "Get details of a GitHub PR including title, state, and URLs.",
+        "inputSchema": {
+          "properties": {
+            "prNumber": {
+              "description": "The number of the PR to view.",
+              "title": "Prnumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "prNumber"
+          ],
+          "title": "GetPrInput",
+          "type": "object"
+        },
+        "name": "github.get_pr"
+      },
+      {
+        "description": "View details of a GitHub issue including title, body, and state.",
+        "inputSchema": {
+          "properties": {
+            "issueNumber": {
+              "description": "The number of the issue to view.",
+              "title": "Issuenumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "issueNumber"
+          ],
+          "title": "IssueViewInput",
+          "type": "object"
+        },
+        "name": "github.issue_view"
+      },
+      {
+        "description": "Update a GitHub issue's body, labels, and/or state.",
+        "inputSchema": {
+          "properties": {
+            "addLabels": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Comma-separated list of labels to add.",
+              "title": "Addlabels"
+            },
+            "body": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The new body content for the issue.",
+              "title": "Body"
+            },
+            "file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Path to file containing new issue body.",
+              "title": "File"
+            },
+            "issueNumber": {
+              "description": "The number of the issue to update.",
+              "title": "Issuenumber",
+              "type": "integer"
+            },
+            "labels": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Comma-separated list of labels to set.",
+              "title": "Labels"
+            },
+            "removeLabels": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Comma-separated list of labels to remove.",
+              "title": "Removelabels"
+            },
+            "state": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The state to set the issue to (open or closed).",
+              "title": "State"
+            }
+          },
+          "required": [
+            "issueNumber"
+          ],
+          "title": "IssueUpdateInput",
+          "type": "object"
+        },
+        "name": "github.issue_update"
+      },
+      {
+        "description": "Add a new comment to a GitHub issue.",
+        "inputSchema": {
+          "properties": {
+            "body": {
+              "description": "The content of the comment.",
+              "title": "Body",
+              "type": "string"
+            },
+            "issueNumber": {
+              "description": "The number of the issue to comment on.",
+              "title": "Issuenumber",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "issueNumber",
+            "body"
+          ],
+          "title": "IssueCommentInput",
+          "type": "object"
+        },
+        "name": "github.issue_comment"
+      },
+      {
+        "description": "Create a new GitHub issue.",
+        "inputSchema": {
+          "properties": {
+            "body": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Body"
+            },
+            "file": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "File"
+            },
+            "title": {
+              "minLength": 1,
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "title"
+          ],
+          "title": "CreateIssueInput",
+          "type": "object"
+        },
+        "name": "github.create_issue"
+      },
+      {
+        "description": "Create a Jules session that performs work externally and may generate a GitHub pull request.",
+        "inputSchema": {
+          "properties": {
+            "branch": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The base branch to start from (e.g., 'main').",
+              "title": "Branch"
+            },
+            "pr": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The PR number to use as the base branch context.",
+              "title": "Pr"
+            },
+            "task": {
+              "description": "The instructions for Jules.",
+              "title": "Task",
+              "type": "string"
+            }
+          },
+          "required": [
+            "task"
+          ],
+          "title": "CreateJulesSessionInput",
+          "type": "object"
+        },
+        "name": "jules.create_session"
+      },
+      {
+        "description": "Get the status and details of a Jules session.",
+        "inputSchema": {
+          "properties": {
+            "sessionId": {
+              "description": "The unique ID of the Jules session.",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId"
+          ],
+          "title": "JulesSessionIdInput",
+          "type": "object"
+        },
+        "name": "jules.get_session"
+      },
+      {
+        "description": "Send a message to an active Jules session.",
+        "inputSchema": {
+          "properties": {
+            "message": {
+              "description": "The message content to send.",
+              "minLength": 1,
+              "title": "Message",
+              "type": "string"
+            },
+            "sessionId": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              ],
+              "description": "The unique ID or IDs of the Jules session(s).",
+              "title": "Sessionid"
+            }
+          },
+          "required": [
+            "sessionId",
+            "message"
+          ],
+          "title": "JulesSendMessageInput",
+          "type": "object"
+        },
+        "name": "jules.send_message"
+      },
+      {
+        "description": "Get the message history of a Jules session.",
+        "inputSchema": {
+          "properties": {
+            "sessionId": {
+              "description": "The unique ID of the Jules session.",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId"
+          ],
+          "title": "JulesSessionIdInput",
+          "type": "object"
+        },
+        "name": "jules.get_messages"
+      },
+      {
+        "description": "List all Jules sessions.",
+        "inputSchema": {
+          "properties": {
+            "pageSize": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Maximum number of sessions to return.",
+              "title": "Pagesize"
+            },
+            "pageToken": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Token for pagination.",
+              "title": "Pagetoken"
+            }
+          },
+          "title": "JulesListSessionsInput",
+          "type": "object"
+        },
+        "name": "jules.list_sessions"
+      },
+      {
+        "description": "Cancel an ongoing Jules session.",
+        "inputSchema": {
+          "properties": {
+            "sessionId": {
+              "description": "The unique ID of the Jules session.",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId"
+          ],
+          "title": "JulesSessionIdInput",
+          "type": "object"
+        },
+        "name": "jules.cancel_session"
+      },
+      {
+        "description": "Get the generated pull request url associated with an active Jules agent session.",
+        "inputSchema": {
+          "properties": {
+            "sessionId": {
+              "description": "The unique ID of the Jules session.",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId"
+          ],
+          "title": "JulesSessionIdInput",
+          "type": "object"
+        },
+        "name": "jules.get_pr"
+      },
+      {
+        "description": "Automatically collect CI status/logs for the PR associated with a Jules session and send them back as feedback.",
+        "inputSchema": {
+          "properties": {
+            "sessionId": {
+              "description": "The unique ID of the Jules session.",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sessionId"
+          ],
+          "title": "JulesSessionIdInput",
+          "type": "object"
+        },
+        "name": "jules.trigger_feedback"
+      },
+      {
+        "description": "Search the web using DuckDuckGo (via ddgs python library).",
+        "inputSchema": {
+          "properties": {
+            "maxResults": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Maximum number of results to return.",
+              "title": "Maxresults"
+            },
+            "query": {
+              "description": "The search query.",
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "title": "SearchDdgsInput",
+          "type": "object"
+        },
+        "name": "agent.search_ddgs"
+      }
+    ]
+  },
+  "package_json": {
+    "dependencies": [
+      "@google/genai",
+      "@langchain/core",
+      "@langchain/google-genai",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@types/react-syntax-highlighter",
+      "@vercel/analytics",
+      "@vercel/speed-insights",
+      "@vitejs/plugin-react",
+      "class-variance-authority",
+      "clsx",
+      "firebase",
+      "fuse.js",
+      "glob",
+      "hyparquet",
+      "jspdf",
+      "jspdf-autotable",
+      "lucide-react",
+      "motion",
+      "papaparse",
+      "path-to-regexp",
+      "react",
+      "react-dom",
+      "react-helmet-async",
+      "react-markdown",
+      "react-router-dom",
+      "react-syntax-highlighter",
+      "recharts",
+      "rehype-raw",
+      "rehype-sanitize",
+      "remark-gfm",
+      "remark-parse",
+      "tailwind-merge",
+      "tw-animate-css",
+      "unified",
+      "unist-util-visit",
+      "vite-plugin-pwa",
+      "workbox-window",
+      "yaml"
+    ],
+    "devDependencies": [
+      "@axe-core/playwright",
+      "@eslint/js",
+      "@lhci/cli",
+      "@playwright/test",
+      "@tailwindcss/typography",
+      "@testing-library/dom",
+      "@testing-library/react",
+      "@types/jsdom",
+      "@types/mdast",
+      "@types/node",
+      "@types/papaparse",
+      "@types/pixelmatch",
+      "@types/pngjs",
+      "@vercel/node",
+      "dependency-cruiser",
+      "diff",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "globals",
+      "jscpd",
+      "jsdom",
+      "knip",
+      "mdast",
+      "npm-run-all",
+      "oxlint",
+      "pixelmatch",
+      "playwright",
+      "pngjs",
+      "rollup-plugin-visualizer",
+      "sharp",
+      "shx",
+      "svgo",
+      "tailwindcss",
+      "tsx",
+      "typescript",
+      "typescript-eslint",
+      "vite",
+      "vite-plugin-image-optimizer",
+      "vite-plugin-inspect",
+      "vite-plugin-sitemap",
+      "vitest"
+    ],
+    "name": "react-example",
+    "scripts": {
+      "affiliate:add": "tsx scripts/affiliate/add-item.ts",
+      "affiliate:audit": "tsx scripts/affiliate/audit.ts",
+      "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
+      "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
+      "agent:prime": "command -v td-cli > /dev/null 2>&1 && td-cli context-warm || true",
+      "ai:index": "python3 scripts/index-codebase.py",
+      "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs",
+      "audit:dead-code": "pnpm exec knip",
+      "audit:duplication": "jscpd .",
+      "audit:duplication:pkg": "jscpd boomtick-pkg/ --config boomtick-pkg/.jscpd.json",
+      "audit:inventory": "node boomtick-pkg/scripts/check-suppression-inventory.mjs",
+      "audit:semantic": "node boomtick-pkg/scripts/detect-semantic-duplicates.mjs",
+      "audit:semgrep": "semgrep scan --config auto --error",
+      "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
+      "build:analyze": "ANALYZE=true vite build",
+      "build:profile": "vite build --profile",
+      "build:review": "DISABLE_MINIFY=true pnpm run build",
+      "check:runtime-files": "node boomtick-pkg/scripts/check-runtime-files.mjs",
+      "ci:local": "run-s verify:schemas lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication audit:duplication:pkg",
+      "clean": "rm -rf dist",
+      "dev": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0",
+      "doctor": "node boomtick-pkg/scripts/check-runtime.mjs",
+      "drafter": "tsx scripts/affiliate/add-item.ts",
+      "impact:analysis": "tsx boomtick-pkg/scripts/impact-analysis.ts",
+      "impact:build-main": "tsx boomtick-pkg/scripts/impact-build-main.ts",
+      "impact:dom-diff": "tsx boomtick-pkg/scripts/impact-dom-diff.ts",
+      "impact:gemini-code-review": "tsx boomtick-pkg/scripts/impact-gemini-code-review.ts",
+      "impact:gemini-review": "tsx boomtick-pkg/scripts/impact-gemini-review.ts",
+      "impact:github-models-code-review": "tsx boomtick-pkg/scripts/impact-github-models-code-review.ts",
+      "impact:github-models-review": "tsx boomtick-pkg/scripts/impact-github-models-review.ts",
+      "impact:visual-diff": "tsx boomtick-pkg/scripts/impact-visual-diff.ts",
+      "knip": "knip",
+      "lighthouse": "lhci autorun",
+      "lint": "run-p lint:*",
+      "lint:eslint": "eslint . --max-warnings 0",
+      "lint:ox": "oxlint --deny-warnings src/ tests/ scripts/",
+      "lint:python": "pylint etl/ boomtick-pkg/ scripts/ tests/",
+      "lint:types": "tsc --noEmit",
+      "postbuild": "tsx scripts/generate-robots.ts && tsx scripts/generate-spa-stubs.mjs && node scripts/clean-sitemap.mjs && pnpm run agent:prime",
+      "postinstall": "python3 scripts/sync-python-deps.py",
+      "prebuild": "pnpm run verify:schemas && tsx scripts/generate-assets.ts",
+      "preinstall": "node boomtick-pkg/scripts/check-runtime.mjs",
+      "prepreview": "node scripts/cleanup-ports.mjs",
+      "preview": "vite preview",
+      "release:major": "pnpm version major",
+      "release:minor": "pnpm version minor",
+      "release:patch": "pnpm version patch",
+      "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli td-cli repair-context",
+      "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
+      "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
+      "review:ux:prep": "pnpm run setup:playwright && node boomtick-pkg/scripts/detect-antipatterns.mjs",
+      "setup:playwright": "playwright install --with-deps chromium",
+      "test": "vitest run",
+      "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",
+      "test:e2e:targeted": "playwright test",
+      "test:watch": "vitest",
+      "type-check": "pnpm run verify:schemas && tsc --noEmit",
+      "type-check:python": "mypy .",
+      "verify:schemas": "node scripts/verify-schemas.mjs"
+    }
+  },
+  "project_config": {
+    "github_repo": "arii/tech-dancer"
+  },
+  "repo": {
+    "name": "react-example"
+  }
+}
