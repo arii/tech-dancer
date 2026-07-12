@@ -135,12 +135,12 @@ runs:
 
           if [ "$VERDICT" = "fail" ] || [ "$PASSED" = "false" ]; then
             HIGH=$(jq -r '.highCount' "$f" 2>/dev/null || echo "unknown")
-            echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
+            echo "Review failed: $HIGH HIGH severity issues found ($f)" >&2
             FAILED=1
           elif [ "$VERDICT" = "warn" ]; then
-            echo "⚠️ Review warning: review was truncated or inconclusive ($f). Manual review recommended." >&2
+            echo "Review warning: review was truncated or inconclusive ($f). Manual review recommended." >&2
           elif [ "$VERDICT" = "error" ] || [ "$PASSED" = "error" ]; then
-            echo "⚠️ Review failed: Could not parse verdict file ($f)" >&2
+            echo "Review failed: Could not parse verdict file ($f)" >&2
           fi
         done
         exit $FAILED
@@ -185,12 +185,14 @@ runs:
         mkdir -p artifacts/logs/ai
 
         # Sync from the TS logger location to the workspace log location expected by Python CLI
-        if [ -d boomtick-pkg/cli/logs/ai ]; then
+        if [ -d boomtick-pkg/cli/logs/ai ] && [ "$(ls -A boomtick-pkg/cli/logs/ai 2>/dev/null)" ]; then
           cp -r boomtick-pkg/cli/logs/ai/* .boomtick/logs/ai/ 2>/dev/null || true
         fi
 
         # Sync to artifacts for upload
-        cp -r .boomtick/logs/ai/* artifacts/logs/ai/ 2>/dev/null || true
+        if [ -d .boomtick/logs/ai ] && [ "$(ls -A .boomtick/logs/ai 2>/dev/null)" ]; then
+          cp -r .boomtick/logs/ai/* artifacts/logs/ai/ 2>/dev/null || true
+        fi
       shell: bash
 
     - name: Upload Deployment Review Artifacts
