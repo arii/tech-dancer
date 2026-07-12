@@ -2,12 +2,12 @@
 import json
 import os
 import re
-import subprocess
 from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
 from dev_tools.utils import CLIError, DiskCache, log_warn
+from dev_tools.utils.git import GitUtility
 
 
 class GitHubClient:
@@ -51,9 +51,9 @@ class GitHubClient:
             raise e
 
     def _detect_repo(self) -> str:
+        from dev_tools.utils import run_command
         try:
-            proc = subprocess.run(["git", "config", "--get", "remote.origin.url"], capture_output=True, text=True)
-            url = proc.stdout.strip()
+            url = run_command(["git", "config", "--get", "remote.origin.url"], log_on_error=False)
             import re
 
             match = re.search(r"[:/]([^/]+/[^/.]+)(\.git)?$", url)
@@ -242,47 +242,13 @@ class GitHubClient:
         """Creates a PR, automatically pushing the head branch if it doesn't exist on remote."""
         if not self.branch_exists(head):
             log_warn(f"Branch '{head}' not found on remote. Checking for local branch and pushing...")
-            try:
-                # Check if branch exists locally
-                proc = subprocess.run(["git", "show-ref", "--verify", f"refs/heads/{head}"], capture_output=True, text=True)
-                if proc.returncode == 0:
-                    # Push branch to origin
-                    log_warn(f"Pushing local branch '{head}' to origin...")
-
-                    # Security: Use environment variable for token to avoid leaking in process list
-                    env = os.environ.copy()
-                    if self.token:
-                        env["GIT_TOKEN_FOR_PUSH"] = self.token
-                        # Use a credential helper to pass the token securely
-                        cred_helper = "!f() { echo \"username=x-access-token\"; echo \"password=$GIT_TOKEN_FOR_PUSH\"; }; f"
-                        push_url = f"https://github.com/{self.repo}.git"
-                        push_args = ["git", "-c", f"credential.helper={cred_helper}", "push", "-u", push_url, head]
-                    else:
-                        push_args = ["git", "push", "-u", "origin", head]
-
-                    # Capture output and handle error manually to avoid leaking sensitive info in exceptions
-                    push_res = subprocess.run(
-                        push_args,
-                        capture_output=True,
-                        text=True,
-                        env=env,
-                        check=False
-                    )
-
-                    if push_res.returncode != 0:
-                        # Sanitize error message before logging
-                        from dev_tools.utils import mask_sensitive_data
-                        sanitized_stderr = mask_sensitive_data(push_res.stderr)
-                        log_warn(f"Failed to push branch '{head}': {sanitized_stderr}")
-                    else:
-                        # Invalidate branch cache
-                        if head in self._branch_cache:
-                            del self._branch_cache[head]
-                else:
-                    log_warn(f"Local branch '{head}' also not found. PR creation will likely fail.")
-            except Exception as e:
-                from dev_tools.utils import mask_sensitive_data
-                log_warn(f"Unexpected error during auto-push: {mask_sensitive_data(str(e))}")
+            git_util = GitUtility(token=self.token, repo=self.repo)
+            if git_util.push_branch(head):
+                # Invalidate branch cache
+                if head in self._branch_cache:
+                    del self._branch_cache[head]
+            else:
+                log_warn(f"PR creation for '{head}' will likely fail because auto-push was unsuccessful.")
 
         data = {"title": title, "body": body, "head": head, "base": base, "draft": draft}
         return self._request("POST", f"/repos/{self.repo}/pulls", json_data=data)
@@ -751,4 +717,5 @@ class GitHubClient:
         with open(dest, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-        subprocess.run(["unzip", "-o", dest], check=True)
+        from dev_tools.utils import run_command
+        run_command(["unzip", "-o", dest])
