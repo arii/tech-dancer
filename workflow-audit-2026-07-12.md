@@ -8,11 +8,14 @@ The following modifications were applied across the audited workflow files:
 
 *   **`boomtick-pkg/mcp/actions/setup-workspace/action.yml`**:
     *   Pinned `actions/setup-node` to `v4`.
-*   **`.github/workflows/ci.yml`**:
-    *   Pinned `github/codeql-action/init` to `v3`.
-    *   Pinned `github/codeql-action/analyze` to `v3`.
 
-*Note: Most workflow files such as `deploy.yml`, `auto-conflict-resolver.yml`, `prune-stale-previews.yml`, `reusable-gate.yml`, `update-snapshots.yml`, `wcs_etl.yml`, and `deploy-image.yml` were already correctly pinned to the latest major action versions and did not require any modifications.*
+*   **`.github/workflows/deploy.yml`**:
+    *   Pinned `actions/download-artifact` to `v4`.
+
+*   **`boomtick-pkg/mcp/actions/run-project-gate/action.yml`**:
+    *   Appended `--break-system-packages` to the pip install command to resolve externally-managed-environment PEP 668 errors.
+
+*Note: Most workflow files such as `ci.yml`, `auto-conflict-resolver.yml`, `prune-stale-previews.yml`, `reusable-gate.yml`, `update-snapshots.yml`, `wcs_etl.yml`, and `deploy-image.yml` were already correctly pinned to the latest major action versions and did not require any modifications.*
 
 ## 3. Optimization / Caching Improvements
 *   By standardizing on `actions/setup-node@v4`, workflows correctly utilize intrinsic caching mechanisms without needing manual `actions/cache` setups (where applicable).
