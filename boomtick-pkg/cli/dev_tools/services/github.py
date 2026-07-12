@@ -222,6 +222,12 @@ class GitHubClient:
         data = {"title": title, "body": body, "head": head, "base": base, "draft": draft}
         return self._request("POST", f"/repos/{self.repo}/pulls", json_data=data)
 
+    def _handle_missing_logs(self, identifier: Any, is_fallback: bool = False) -> str:
+        """Helper to log warning and return a warning string for missing logs."""
+        label = "check run" if is_fallback else "job"
+        log_warn(f"Logs for {label} {identifier} {'also ' if is_fallback else ''}not found (404).")
+        return f"WARNING: Logs not available for {identifier} (GitHub returned 404). They may have expired or the job is still pending."
+
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
         """Fetches logs for a specific check run, using external_id (job_id) if available. Gracefully fallback to check_run_id if external_id 404s."""
         # Ensure we have a valid ID and it's a string for the URL path
@@ -254,12 +260,10 @@ class GitHubClient:
                         )
                     except requests.exceptions.HTTPError as fallback_e:
                         if fallback_e.response is not None and fallback_e.response.status_code == 404:
-                            log_warn(f"Logs for check run {check_run_id} also not found (404).")
-                            return f"WARNING: Logs not available for check run {check_run_id} (GitHub returned 404). They may have expired or the job is still pending."
+                            return self._handle_missing_logs(check_run_id, is_fallback=True)
                         raise fallback_e
                 else:
-                    log_warn(f"Logs for job {job_id} not found (404).")
-                    return f"WARNING: Logs not available for job {job_id} (GitHub returned 404). They may have expired or the job is still pending."
+                    return self._handle_missing_logs(job_id)
             raise
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
