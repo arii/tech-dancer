@@ -19,6 +19,9 @@ RUN apt-get update \
     python3-setuptools \
     python3-wheel \
     build-essential \
+    fonts-noto-color-emoji \
+    fonts-liberation \
+    fonts-roboto \
   && git lfs install \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \

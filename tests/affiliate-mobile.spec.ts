@@ -1,6 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
-
-test.use({ ...devices['Pixel 5'] });
+import { test, expect } from './fixtures/visual';
 
 test('Capture affiliate card on mobile', async ({ page }) => {
   // Go directly to the known post
@@ -8,6 +6,7 @@ test('Capture affiliate card on mobile', async ({ page }) => {
 
   // Wait for the page to load
   await page.waitForLoadState('domcontentloaded');
+  await page.evaluate(() => document.fonts.ready);
 
   // Use the data-testid for a more resilient test
   const affiliateCard = page.locator('[data-testid="affiliate-card"]').first();
@@ -19,5 +18,7 @@ test('Capture affiliate card on mobile', async ({ page }) => {
   await affiliateCard.scrollIntoViewIfNeeded();
 
   // Take a screenshot
-  await expect(affiliateCard).toHaveScreenshot('affiliate-card-mobile.png');
+  await expect(affiliateCard).toHaveScreenshot('affiliate-card-mobile.png', {
+    animations: 'disabled',
+  });
 });

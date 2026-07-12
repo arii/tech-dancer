@@ -1,6 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
-
-test.use({ ...devices['Pixel 5'] });
+import { test, expect } from './fixtures/visual';
 
 test('visual comparison for event-travel-packing mobile', async ({ page }) => {
   await page.goto('./blog/2026-06-01-event-travel-packing');

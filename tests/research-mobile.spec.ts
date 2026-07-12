@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
 const tools = [
@@ -8,8 +8,6 @@ const tools = [
 ];
 
 test.describe('Research Tools Mobile UX', () => {
-  test.use({ viewport: { width: 390, height: 844 } }); // iPhone 12
-
   for (const tool of tools) {
     test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
       // Increase timeout for slow CI environments
@@ -20,6 +18,9 @@ test.describe('Research Tools Mobile UX', () => {
 
       // Wait for domcontentloaded instead of networkidle to avoid timing out on slow external assets
       await page.waitForLoadState('domcontentloaded');
+
+      // Wait for fonts to be loaded to prevent text-rendering flakiness
+      await page.evaluate(() => document.fonts.ready);
 
       // Wait for lazy components based on tool path using robust locators with generous timeouts
       if (tool.path.includes('ux-auditor')) {
@@ -41,10 +42,10 @@ test.describe('Research Tools Mobile UX', () => {
 
       expect(overflowX).toBe(false);
 
-      // Take a screenshot for visual verification
-      await page.screenshot({
-        path: `tests/visual.spec.ts-snapshots/mobile-${tool.path.replace(/\//g, '-')}.png`,
+      // Take a standardized screenshot
+      await expect(page).toHaveScreenshot(`mobile-${tool.path.replace(/\//g, '-')}.png`, {
         fullPage: true,
+        animations: 'disabled',
         mask: getVisualTestMasks(page)
       });
     });
