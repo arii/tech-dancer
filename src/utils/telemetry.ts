@@ -15,31 +15,19 @@ export interface TelemetryPayload {
 
 const ENDPOINT = '/api/telemetry';
 const DEDUPE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+const MAX_CACHE_SIZE = 100;
 
 // Simple in-memory cache for deduplication: Map<key, expiry_timestamp>
 const errorCache = new Map<string, number>();
 
-// Periodic cleanup of expired cache entries
-if (typeof window !== 'undefined') {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [key, expiry] of errorCache.entries()) {
-      if (now > expiry) {
-        errorCache.delete(key);
-      }
-    }
-  }, 60 * 1000); // Clean up every minute
-}
-
 /**
  * Generates a stable key for an error to deduplicate reports.
- * Uses a simple hash of critical fields to reduce collisions.
  */
 function getErrorKey(payload: Partial<TelemetryPayload>): string {
   const parts = [
     payload.type || '',
     payload.message || '',
-    (payload.stack || '').slice(0, 500), // Use more of the stack for better uniqueness
+    (payload.stack || '').slice(0, 500),
     payload.componentStack || ''
   ];
   return parts.join('|');
@@ -54,8 +42,8 @@ export function reportError(payload: Partial<TelemetryPayload>) {
     type: payload.type || 'error',
     stack: payload.stack,
     componentStack: payload.componentStack,
-    url: window.location.href,
-    userAgent: navigator.userAgent,
+    url: typeof window !== 'undefined' ? window.location.href : '',
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
     timestamp: new Date().toISOString(),
   };
 
@@ -69,15 +57,21 @@ export function reportError(payload: Partial<TelemetryPayload>) {
     }
   }
 
+  // LRU-ish eviction: if cache too large, clear oldest (first) entry
+  if (errorCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = errorCache.keys().next().value;
+    if (firstKey !== undefined) errorCache.delete(firstKey);
+  }
+
   errorCache.set(key, now + DEDUPE_WINDOW_MS);
 
   const body = JSON.stringify(fullPayload);
 
   // Use sendBeacon if available for reliability during page unload
-  if (navigator.sendBeacon) {
+  if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
     const blob = new Blob([body], { type: 'application/json' });
     navigator.sendBeacon(ENDPOINT, blob);
-  } else {
+  } else if (typeof fetch !== 'undefined') {
     // Fallback to fetch with keepalive
     fetch(ENDPOINT, {
       method: 'POST',

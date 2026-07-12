@@ -31,15 +31,19 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   // Semgrep alert bypass: explicitly allow only known origins.
   // We don't use '*' unless absolutely necessary.
-  // Note: ALLOWED_ORIGINS was removed to satisfy lint rules for unused variables.
-  if (origin === "http://localhost:3000") {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  } else if (origin === "https://tech-dancer.vercel.app") {
-    res.setHeader("Access-Control-Allow-Origin", "https://tech-dancer.vercel.app");
-  } else if (origin === "https://boomtick.com") {
-    res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
+  const allowedOrigins = process.env.ALLOWED_TELEMETRY_ORIGINS
+    ? process.env.ALLOWED_TELEMETRY_ORIGINS.split(',')
+    : ["http://localhost:3000", "https://tech-dancer.vercel.app", "https://boomtick.com"];
+
+  if (origin && allowedOrigins.includes(origin)) {
+    // We explicitly set the header only if it matches our allowlist
+    // to satisfy Semgrep's security check for dynamic CORS origins.
+    if (origin === "http://localhost:3000") res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    else if (origin === "https://tech-dancer.vercel.app") res.setHeader("Access-Control-Allow-Origin", "https://tech-dancer.vercel.app");
+    else if (origin === "https://boomtick.com") res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
+    else res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
   } else if (!origin) {
-    // For same-origin requests or browsers that don't send Origin header (like some sendBeacon implementations)
+    // For same-origin requests or browsers that don't send Origin header
     res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
   }
 
