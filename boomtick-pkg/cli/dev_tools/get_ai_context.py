@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring,no-value-for-parameter
 import json
 import sys
+from typing import Any, Dict, List
 
 import click
 from dev_tools.services.dependency_graph import DependencyGraph
