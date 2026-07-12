@@ -5,7 +5,8 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
  */
 function sanitize(str: unknown): string {
   if (typeof str !== "string") return String(str || "");
-  return str.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "[REMOVED]");
+  // CodeQL: Use more robust regex to catch variants like </script >
+  return str.replace(/<script\b[^<]*(?:(?!<\/script\s*>)<[^<]*)*<\/script\s*>/gi, "[REMOVED]");
 }
 
 /**
@@ -25,17 +26,12 @@ function anonymizeIp(ip: string | undefined): string {
   return "anonymized";
 }
 
-const ALLOWED_ORIGINS = [
-  "http://localhost:3000",
-  "https://tech-dancer.vercel.app",
-  "https://boomtick.com",
-];
-
 export default function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin;
 
   // Semgrep alert bypass: explicitly allow only known origins.
   // We don't use '*' unless absolutely necessary.
+  // Note: ALLOWED_ORIGINS was removed to satisfy lint rules for unused variables.
   if (origin === "http://localhost:3000") {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   } else if (origin === "https://tech-dancer.vercel.app") {
