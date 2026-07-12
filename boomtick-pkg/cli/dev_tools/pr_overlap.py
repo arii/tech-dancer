@@ -98,7 +98,7 @@ def report_overlaps(clusters: List[Dict[str, Any]]):
 @click.command()
 @click.option("--limit", default=20, help="Limit the number of PRs to process")
 @click.option("--no-cache", is_flag=True, help="Bypass the disk cache for GitHub API calls")
-def main(limit, no_cache):
+def run_cli(limit, no_cache):
     try:
         github = GitHubClient(no_cache=no_cache)
         clusters = get_pr_overlaps(github, limit)
@@ -106,6 +106,10 @@ def main(limit, no_cache):
     except Exception as e:
         log_error(f"Overlap analysis failed: {e}")
         sys.exit(1)
+
+
+def main():
+    run_cli()  # pylint: disable=no-value-for-parameter
 
 
 if __name__ == "__main__":
