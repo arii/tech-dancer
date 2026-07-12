@@ -1,13 +1,24 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractFinishReason(res: any): string {
+export function extractFinishReason(res: unknown): string {
+  if (!res || typeof res !== 'object') return 'UNKNOWN';
+
+  const r = res as {
+    response_metadata?: {
+      finishReason?: string;
+      finish_reason?: string;
+      candidates?: Array<{ finishReason?: string }>;
+    };
+    generationInfo?: {
+      finishReason?: string;
+    };
+  };
+
   // Langchain structure varies depending on the provider wrapper
-  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
-  if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
-  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
-  if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
+  if (r.response_metadata?.finishReason) return r.response_metadata.finishReason;
+  if (r.response_metadata?.finish_reason) return r.response_metadata.finish_reason;
+  if (r.generationInfo?.finishReason) return r.generationInfo.finishReason;
 
   // Look deeper into candidates if raw output exposes it
-  const candidate = res.response_metadata?.candidates?.[0];
+  const candidate = r.response_metadata?.candidates?.[0];
   if (candidate?.finishReason) return candidate.finishReason;
 
   return 'UNKNOWN';
