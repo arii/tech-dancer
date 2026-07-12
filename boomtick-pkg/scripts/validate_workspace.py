@@ -1,4 +1,6 @@
-"""Workspace validation script."""
+"""
+Validates workspace.json against its schema.
+"""
 import json
 import sys
 from pathlib import Path
