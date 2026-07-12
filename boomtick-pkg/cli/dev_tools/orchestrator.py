@@ -477,7 +477,7 @@ class Orchestrator:
         dry_run: bool = True,
         **kwargs: Any,
     ) -> Dict[str, Any]:
-        if "issue_number" in kwargs and issueNumber is None:
+        if "issue_number" in kwargs and kwargs["issue_number"] is not None and issueNumber is None:
             issueNumber = int(kwargs["issue_number"])
         repo = get_github_client().get_repo(get_repo_name() or "")
         issues: List[Any] = []
