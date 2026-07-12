@@ -1,14 +1,13 @@
 import * as React from "react"
 import { forwardRef, ButtonHTMLAttributes, ElementType, Ref } from "react"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/lib/variants"
-import { type VariantProps } from "class-variance-authority"
+import { buttonVariants, ButtonVariants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 
 interface ButtonProps
   extends BaseProps,
     Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
-    VariantProps<typeof buttonVariants> {
+    ButtonVariants {
   as?: ElementType
   href?: string
   loading?: boolean
