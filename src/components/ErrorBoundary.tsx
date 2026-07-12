@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { reportError } from '@/utils/telemetry';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 interface Props {
   children: ReactNode;
@@ -32,20 +33,47 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return this.props.fallback || (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-            <p className="text-gray-600 mb-6">
+        <Box
+          width="full"
+          minHeight="screen"
+          display="flex"
+          align="center"
+          justify="center"
+          surface="bg"
+          padding={4}
+        >
+          <Stack
+            gap={6}
+            padding={8}
+            radius="lg"
+            surface="card"
+            maxWidth="md"
+            width="full"
+            align="center"
+            className="text-center shadow-lg"
+          >
+            <Text
+              as="h2"
+              variant="h2"
+              className="text-error font-bold"
+            >
+              Something went wrong
+            </Text>
+            <Text
+              variant="body"
+              className="text-gray-600"
+            >
               The application encountered an unexpected error. We have been notified and are looking into it.
-            </p>
-            <button
+            </Text>
+            <Button
               onClick={() => window.location.reload()}
-              className="bg-accent hover:bg-accent-dark text-white font-semibold py-2 px-6 rounded transition-colors"
+              intent="accent"
+              size="lg"
             >
               Reload Page
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Stack>
+        </Box>
       );
     }
 

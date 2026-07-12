@@ -16,14 +16,33 @@ export interface TelemetryPayload {
 const ENDPOINT = '/api/telemetry';
 const DEDUPE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
 
-// Simple in-memory cache for deduplication
-const errorCache = new Set<string>();
+// Simple in-memory cache for deduplication: Map<key, expiry_timestamp>
+const errorCache = new Map<string, number>();
+
+// Periodic cleanup of expired cache entries
+if (typeof window !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, expiry] of errorCache.entries()) {
+      if (now > expiry) {
+        errorCache.delete(key);
+      }
+    }
+  }, 60 * 1000); // Clean up every minute
+}
 
 /**
  * Generates a stable key for an error to deduplicate reports.
+ * Uses a simple hash of critical fields to reduce collisions.
  */
 function getErrorKey(payload: Partial<TelemetryPayload>): string {
-  return `${payload.type}:${payload.message}:${payload.stack?.slice(0, 100)}`;
+  const parts = [
+    payload.type || '',
+    payload.message || '',
+    (payload.stack || '').slice(0, 500), // Use more of the stack for better uniqueness
+    payload.componentStack || ''
+  ];
+  return parts.join('|');
 }
 
 /**
@@ -41,13 +60,16 @@ export function reportError(payload: Partial<TelemetryPayload>) {
   };
 
   const key = getErrorKey(fullPayload);
+  const now = Date.now();
 
   if (errorCache.has(key)) {
-    return;
+    const expiry = errorCache.get(key);
+    if (expiry && now < expiry) {
+      return;
+    }
   }
 
-  errorCache.add(key);
-  setTimeout(() => errorCache.delete(key), DEDUPE_WINDOW_MS);
+  errorCache.set(key, now + DEDUPE_WINDOW_MS);
 
   const body = JSON.stringify(fullPayload);
 
