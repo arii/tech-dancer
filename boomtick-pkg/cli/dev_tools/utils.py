@@ -10,7 +10,7 @@ import urllib.parse
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 
 def sanitize_path(path: str, max_length: int = 255) -> str:
@@ -51,7 +51,7 @@ def escape_md(text: Any) -> str:
 
 def run_git_commands(
     commands: List[List[str]], cwd: Optional[str] = None
-) -> List[Union[str, subprocess.CompletedProcess]]:
+) -> List[Union[str, subprocess.CompletedProcess[str]]]:
     """Executes a sequence of git commands."""
     results = []
     for cmd in commands:
@@ -109,7 +109,7 @@ def log_debug(msg: str):
 
 def _call_api_with_retry(method: str, url: str, **kwargs) -> requests.Response:
     """Internal helper for making API calls with standard retry logic."""
-    from requests.adapters import HTTPAdapter
+    from requests.adapters import HTTPAdapter  # type: ignore[import-untyped]
     from urllib3.util import Retry
 
     # Default to 60s for standard calls, 300s for large downloads/logs
@@ -432,7 +432,11 @@ def to_standard_schema(schema):
 
 
 def call_ai(
-    prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema=None
+    prompt: str,
+    model: Optional[str] = None,
+    url: Optional[str] = None,
+    max_retries: int = 3,
+    schema: Optional[Dict[str, Any]] = None,
 ) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
 
@@ -483,7 +487,9 @@ def log_ai_run(entry: dict):
         log_error(f"Failed to append to AI run log: {e}")
 
 
-def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema=None) -> Optional[str]:
+def call_github_models(
+    prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict[str, Any]] = None
+) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
     token = get_github_token()
     if not token:
@@ -494,7 +500,7 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
         base_url += "/"
     target_url = urllib.parse.urljoin(base_url, "chat/completions")
 
-    data = {
+    data: Dict[str, Any] = {
         "model": model or get_ai_model(),
         "messages": [{"role": "user", "content": prompt}],
         "stream": False,
@@ -503,13 +509,15 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
         # OpenAI style: prompt injection + json_object mode
         norm_schema = to_standard_schema(schema)
         data["response_format"] = {"type": "json_object"}
-        data["messages"].insert(
-            0,
-            {
-                "role": "system",
-                "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}",
-            },
-        )
+        messages = data.get("messages")
+        if isinstance(messages, list):
+            messages.insert(
+                0,
+                {
+                    "role": "system",
+                    "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}",
+                },
+            )
 
     start_time = time.time()
     try:
@@ -625,7 +633,9 @@ def verify_ci_metrics(
     return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
 
 
-def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema=None) -> Optional[str]:
+def call_gemini(
+    prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict[str, Any]] = None
+) -> Optional[str]:
     """Unified helper to call Gemini API using LangChain."""
 
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -659,7 +669,9 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema=Non
         return None
 
 
-def call_ai_service(prompt: str, model: str = None, schema=None) -> Optional[str]:
+def call_ai_service(
+    prompt: str, model: Optional[str] = None, schema: Optional[Dict[str, Any]] = None
+) -> Optional[str]:
     """
     Orchestrates AI calls: GitHub Models -> Gemini.
     """
@@ -683,14 +695,22 @@ def run_command(
     check: bool = True,
     input_str: Optional[str] = None,
     log_on_error: bool = True,
-    **kwargs,
-) -> Union[str, subprocess.CompletedProcess]:
+    **kwargs: Any,
+) -> Union[str, subprocess.CompletedProcess[str]]:
     """
     Unified command execution helper.
     - If check=True (default): returns stripped stdout string, raises CLIError on non-zero exit.
     - If check=False: returns CompletedProcess object.
     """
-    proc = subprocess.run(cmd, shell=shell, input=input_str, capture_output=True, text=True, check=False, **kwargs)
+    proc = subprocess.run(
+        cmd,
+        shell=shell,
+        input=input_str,
+        capture_output=True,
+        text=True,
+        check=False,
+        **kwargs,
+    )
     if proc.returncode != 0 and log_on_error:
         log_error(f"Command failed (exit {proc.returncode}): {proc.args}")
         if proc.stdout:
@@ -732,6 +752,9 @@ def get_repo_name() -> Optional[str]:
     try:
         # Using check=False here to avoid noisy logs for a common discovery step
         res = run_command(["git", "config", "--get", "remote.origin.url"], check=False, log_on_error=False)
+        if not isinstance(res, subprocess.CompletedProcess):
+            return os.getenv("GH_REPO")
+
         if res.returncode != 0:
             return os.getenv("GH_REPO")
         url = res.stdout.strip()
@@ -755,7 +778,7 @@ def get_gha_variable(name: str) -> Optional[str]:
         return _gha_var_cache[name]
     try:
         proc = run_command(["gh", "variable", "get", name], check=False, log_on_error=False)
-        if proc.returncode == 0:
+        if isinstance(proc, subprocess.CompletedProcess) and proc.returncode == 0:
             val = proc.stdout.strip()
             _gha_var_cache[name] = val
             return val
@@ -768,10 +791,10 @@ def set_gha_variable(name: str, value: str) -> bool:
     """Helper function to set a GHA variable via the native gh cli."""
     try:
         proc = run_command(["gh", "variable", "set", name, "--body", str(value)], check=False, log_on_error=False)
-        if proc.returncode == 0:
+        if isinstance(proc, subprocess.CompletedProcess) and proc.returncode == 0:
             _gha_var_cache[name] = str(value)
             return True
-        else:
+        elif isinstance(proc, subprocess.CompletedProcess):
             log_warn(f"Failed to set GHA variable {name}. stderr: {proc.stderr}")
     except Exception as e:
         log_warn(f"Failed to set GHA variable {name}: {e}")
@@ -961,7 +984,7 @@ def get_changed_files():
     return []
 
 
-def verify_pr_scope(file_list=None):
+def verify_pr_scope(file_list: Optional[List[str]] = None) -> Optional[str]:
     from dev_tools.config import get_config
 
     if file_list is None:

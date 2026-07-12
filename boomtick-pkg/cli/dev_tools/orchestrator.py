@@ -10,7 +10,7 @@ import tempfile
 import textwrap
 from collections import defaultdict
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple
 
 from dev_tools.services.github import GitHubClient
 from dev_tools.services.jules import JulesClient
@@ -221,13 +221,15 @@ class Orchestrator:
         pr_details["checkResults"] = check_runs
 
         # Fetch logs for failing checks
-        failing_logs = {}
+        failing_logs: Dict[str, str] = {}
         structured_failures = []
         for run in check_runs:
             if run.get("conclusion") == "failure":
-                logs = self.github.fetch_check_run_logs(run.get("id"), external_id=run.get("external_id"))
-                failing_logs[run.get("name")] = logs[-5000:]  # Keep last 5k chars
-                findings = extract_failing_info(logs)
+                run_id = run.get("id")
+                if isinstance(run_id, int):
+                    logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
+                    failing_logs[str(run.get("name", "unknown"))] = logs[-5000:]  # Keep last 5k chars
+                    findings = extract_failing_info(logs)
                 for f in findings:
                     structured_failures.append(
                         {
@@ -248,11 +250,11 @@ class Orchestrator:
         review_dir = get_or_create_log_dir("reviews")
         cache_file = os.path.join(review_dir, f"review_cache_{prNumber}_{diff_hash}.json")
         if os.path.exists(cache_file):
-            with open(cache_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+            with open(cache_file, "r", encoding="utf-8") as review_file:
+                return json.load(review_file)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
-        with open(cache_file, "w", encoding="utf-8") as f:
-            json.dump(review_result, f)
+        with open(cache_file, "w", encoding="utf-8") as review_file:
+            json.dump(review_result, review_file)
         return review_result
 
     def resolve_conflict(self, file_path: str) -> bool:
@@ -308,9 +310,10 @@ class Orchestrator:
                 "PR consolidation and aggregation tasks should be performed directly using the 'gh aggregate' command instead of dispatching a Jules session."
             )
 
-        source_id = self.jules.discover_source_id(self.github.repo)
+        repo_name = self.github.repo or ""
+        source_id = self.jules.discover_source_id(repo_name)
         if not source_id:
-            raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
+            raise CLIError(f"Could not find a Jules source mapping for repository: {repo_name}")
 
         session = self.jules.create_session_from_source(source_id, branch, prompt)
         return session
@@ -339,7 +342,8 @@ class Orchestrator:
             cmd.append("-")
         res = run_command(cmd, check=False, input_str=content)
         try:
-            return json.loads(res.stdout)
+            stdout = res.stdout if isinstance(res, subprocess.CompletedProcess) else str(res)
+            return json.loads(stdout)
         except json.JSONDecodeError:
             return {"violations": {}, "config": {}}
 
@@ -476,8 +480,7 @@ class Orchestrator:
             issueNumber = kwargs["issue_number"]
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
-        if "issue_numbers" in kwargs and issueNumbers is None:
-            issueNumbers = kwargs["issue_numbers"]
+        issue_nums = kwargs.get("issue_numbers")
         if "limit" in kwargs:
             limit = kwargs["limit"]
         if all_open:
@@ -721,10 +724,12 @@ class Orchestrator:
                     )
                     if run.get("conclusion") == "failure":
                         failed_check_names.append(run.get("name"))
-                        logs = self.github.fetch_check_run_logs(run.get("id"), external_id=run.get("external_id"))
+                        run_id = run.get("id")
+                        if isinstance(run_id, int):
+                            logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
 
-                        # Structured failure analysis
-                        findings = extract_failing_info(logs)
+                            # Structured failure analysis
+                            findings = extract_failing_info(logs)
                         if findings:
                             context_lines.append("  **Failing Tests/Build Errors:**")
                             for f in findings:
@@ -773,8 +778,8 @@ class Orchestrator:
                             annotated.append(f"{line_num:4d} |{line}")
                             line_num += 1
                 context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            with open(ctx_path, "w", encoding="utf-8") as f:
-                f.write("\n".join(context_lines))
+            with open(ctx_path, "w", encoding="utf-8") as context_file:
+                context_file.write("\n".join(context_lines))
 
             failed_checks_str = (
                 "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
@@ -784,23 +789,23 @@ class Orchestrator:
             )
 
             template_path = resolve_resource_path("review_template.md")
-            with open(template_path, "r", encoding="utf-8") as f:
-                template = f.read().format(
+            with open(template_path, "r", encoding="utf-8") as template_file:
+                template = template_file.read().format(
                     pr_num=prNumber,
                     head_sha=pr.head.sha,
                     failed_checks=failed_checks_str,
                     detected_errors=errors_str,
                 )
 
-            with open(rev_path, "w", encoding="utf-8") as f:
-                f.write(template)
+            with open(rev_path, "w", encoding="utf-8") as review_file:
+                review_file.write(template)
             res["files"]["context"] = ctx_path
             res["files"]["review"] = rev_path
         if audit:
             if not os.path.exists(ctx_path):
                 raise CLIError(f"Context file missing: {ctx_path}")
-            with open(ctx_path, encoding="utf-8") as f:
-                context = f.read()
+            with open(ctx_path, "r", encoding="utf-8") as context_file:
+                context = context_file.read()
             changed_files = re.findall(r"### `([^`]+)`", context)
             auto_findings = []
             scope_warning = verify_pr_scope(changed_files)
@@ -1188,7 +1193,9 @@ class Orchestrator:
             check_runs = self.github.fetch_check_runs(target_sha)
             for run in check_runs:
                 if run.get("conclusion") == "failure":
-                    logs = self.github.fetch_check_run_logs(run.get("id"), external_id=run.get("external_id"))
+                    run_id = run.get("id")
+                    if isinstance(run_id, int):
+                        logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
 
                     # Clean logs and take a smart snippet
                     cleaned_logs = clean_gha_logs(logs)
@@ -1265,14 +1272,14 @@ Respond only after the PR is created or updated:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
         agent_name = "Jules"
-        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name or "")
         if not source_id:
             raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
-            res = self.jules.create_session_from_source(source_id, branch, prompt)
-            if res:
-                session_name = res.get("name")
+            res = self.jules.create_session_from_source(source_id, branch or "", prompt)
+            if res and isinstance(res, dict):
+                session_name = str(res.get("name", "unknown"))
             else:
                 raise CLIError(f"{agent_name} API session creation failed")
         feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
@@ -1366,9 +1373,11 @@ Respond only after the PR is created or updated:
         from dev_tools.services.repair_service import RepairService
 
         pipeline = RepairService()
-        prompts = []
+        prompts: List[str] = []
         if log:
-            prompts.append(pipeline.generate_prompt(log))
+            p_log = pipeline.generate_prompt(log)
+            if p_log:
+                prompts.append(p_log)
         elif log_file:
             with open(log_file, encoding="utf-8") as f:
                 for line in f:
@@ -1383,12 +1392,15 @@ Respond only after the PR is created or updated:
             check_runs = self.github.fetch_check_runs(pr.head.sha)
             for run in check_runs:
                 if run.get("conclusion") == "failure":
-                    logs = self.github.fetch_check_run_logs(run.get("id"), external_id=run.get("external_id"))
-                    for line in logs.splitlines():
-                        p = pipeline.generate_prompt(line)
-                        if p:
-                            prompts.append(p)
-        return prompts
+                    run_id = run.get("id")
+                    if isinstance(run_id, int):
+                        logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
+                        for line in logs.splitlines():
+                            p = pipeline.generate_prompt(line)
+                            if p:
+                                prompts.append(p)
+        # Filter out None values to satisfy return type list[str]
+        return [p for p in prompts if p is not None]
 
     def run_ux_audit(
         self,
@@ -1487,7 +1499,7 @@ Respond only after the PR is created or updated:
 
         # Rule definition model: dictionaries with regex, message, and optional validator.
         # Regexes are designed to be robust against varying whitespace and formatting.
-        rules = [
+        rules: List[Dict[str, Any]] = [
             {
                 "regex": r"node-version\s*:\s*['\"]?\d+",
                 "message": "Hardcoded `node-version:`. Use `node-version-file: '.node-version'` instead.",
@@ -1514,13 +1526,18 @@ Respond only after the PR is created or updated:
 
             for rule in rules:
                 # Use re.IGNORECASE for robustness against mixed casing in YAML
-                pattern = re.compile(rule["regex"], re.IGNORECASE)
+                regex = rule.get("regex")
+                if not isinstance(regex, str):
+                    continue
+                pattern = re.compile(regex, re.IGNORECASE)
                 for match in pattern.finditer(content):
                     validator = rule.get("validator")
-                    if validator is None or validator(match):
+                    if validator is None or (callable(validator) and validator(match)):
                         # Support dynamic version reporting if the regex has a group
                         ver = match.group(1) if match.lastindex and match.lastindex >= 1 else ""
-                        violations.append(rule["message"].format(ver=ver))
+                        msg = rule.get("message")
+                        if isinstance(msg, str):
+                            violations.append(msg.format(ver=ver))
 
         except Exception as e:
             violations.append(f"Error parsing file: {e}")
@@ -1826,8 +1843,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             runs = self.github.fetch_check_runs_for_suite(suite["id"])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
-                    log_content = self.github.fetch_check_run_logs(run.get("id"), external_id=run.get("external_id"))
-                    logs[run["name"]] = log_content[:10000]
+                    run_id = run.get("id")
+                    if isinstance(run_id, int):
+                        log_content = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
+                        logs[run["name"]] = log_content[:10000]
 
         return {"checks": checks, "failedChecks": failed_checks, "logs": logs}
 
@@ -1864,7 +1883,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
         return combined_logs
 
-    def get_merge_conflicts(self, prNumber: int, base_branch: str = None) -> Dict[str, Any]:
+    def get_merge_conflicts(self, prNumber: int, base_branch: Optional[str] = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
@@ -2071,7 +2090,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             feedback = "The CI pipeline reported failures. Here are the details:\n\n"
             for run in failed_checks:
                 feedback += f"### Failed Check: {run['name']}\n"
-                logs = self.github.fetch_check_run_logs(run["id"], external_id=run.get("external_id"))
+                run_id = run.get("id")
+                if not isinstance(run_id, int):
+                    continue
+                logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
                 findings = extract_failing_info(logs)
                 if findings:
                     for f in findings:
@@ -2244,9 +2266,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                 check=False,
                 log_on_error=False,
             )
-            impact_output = res.stdout + res.stderr
-            if res.returncode != 0:
-                impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
+            if isinstance(res, subprocess.CompletedProcess):
+                impact_output = (res.stdout or "") + (res.stderr or "")
+                if res.returncode != 0:
+                    impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
 
         # 6. Existing Review Data
         gemini_review = "None."
@@ -2437,9 +2460,9 @@ Only after successful completion.
                 overlap_groups[frozenset(prs)].append(file)
 
         report = ["--- EXACT OVERLAP GROUPS ---"]
-        for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
+        for pr_set, overlap_files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
             pr_list = sorted(list(pr_set), key=int)
-            report.append(f"PRs {', '.join(pr_list)} overlap on {len(files)} files:")
+            report.append(f"PRs {', '.join(pr_list)} overlap on {len(overlap_files)} files:")
             for pr_num in pr_list:
                 report.append(f"  [{pr_num}] {pr_titles.get(pr_num)}")
 
