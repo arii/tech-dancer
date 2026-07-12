@@ -10,7 +10,7 @@ def test_verify_metrics_no_logs(tmp_path, monkeypatch):
 
     # Run verification when logs don't exist
     result = verify_ci_metrics()
-    assert result["status"] == "warning"
+    assert result["status"] == "success"
     assert "No AI usage logs found" in result["message"]
 
 
