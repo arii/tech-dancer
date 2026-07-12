@@ -14,5 +14,6 @@
 
 ## Merge Strategy
 - PRs reviewed sequentially with approvals or change requests based on structural integrity and missing definition of done.
-- Specifically, PRs 3561 and 3562 were rejected/requested changes for including temporary file dumps.
+- Specifically, PRs 3561 and 3562 were rejected/requested changes for including temporary file dumps. PR 3558 was rejected/requested changes for missing logic.
+- PR 3559 and others were approved.
 - Merge all approved PRs sequentially when status checks on target branches pass.
