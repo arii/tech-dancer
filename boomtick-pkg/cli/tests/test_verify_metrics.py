@@ -64,18 +64,19 @@ class TestVerifyMetrics(unittest.TestCase):
 
         # Mocking logs that exceed threshold
         log_content = [
-            json.dumps({"inputTokens": 500000, "outputTokens": 300000}),
+            json.dumps({"inputTokens": 500000, "outputTokens": 0}),
         ]
         mock_open.return_value.__enter__.return_value = log_content
 
         result = verify_ci_metrics(
             input_threshold=100000,
             output_threshold=100000,
-            total_threshold=200000
+            total_threshold=1000000
         )
 
         self.assertEqual(result["status"], "error")
-        self.assertIn("AI Token threshold exceeded", result["message"])
+        expected_msg = "AI Token threshold exceeded: Input tokens (500000) exceeded limit (100000)"
+        self.assertEqual(result["message"], expected_msg)
 
 if __name__ == "__main__":
     unittest.main()
