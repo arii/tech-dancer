@@ -75,6 +75,32 @@ class TestModernCLI(unittest.TestCase):
         self.assertNotEqual(result.exit_code, 0)
         self.assertIn("Failed setup", result.output)
 
+    @patch("sys.exit")
+    @patch("dev_tools.cli.cli")
+    def test_main_error_handling(self, mock_cli, mock_exit):
+        from dev_tools.cli import main
+
+        mock_cli.side_effect = Exception("Test Error")
+
+        # Test with --no-json
+        with patch("sys.argv", ["td-cli", "--no-json"]):
+            main()
+        mock_exit.assert_called()
+
+        # Test with default (JSON)
+        mock_exit.reset_mock()
+        with patch("sys.argv", ["td-cli"]):
+            with patch("builtins.print") as mock_print:
+                main()
+                # Verify JSON output was attempted
+                args, _ = mock_print.call_args
+                import json
+
+                data = json.loads(args[0])
+                self.assertEqual(data["status"], "error")
+                self.assertEqual(data["message"], "Test Error")
+        mock_exit.assert_called()
+
 
 if __name__ == "__main__":
     unittest.main()
