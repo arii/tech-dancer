@@ -47,4 +47,4 @@ export const motionTokens = {
     pulse: "animate-pulse",
     opacity: "opacity-50"
   }
-};
+} as const;

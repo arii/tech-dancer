@@ -81,7 +81,7 @@ class TestLabels(unittest.TestCase):
             "state": "S",
         }
         self.orch.update_issue(123, labels=["l1", "l2"])
-        self.orch.github.update_issue.assert_called_once_with(123, body=None, labels=["l1", "l2"])
+        self.orch.github.update_issue.assert_called_once_with(123, body=None, labels=["l1", "l2"], state=None)
 
     def test_orchestrator_update_issue_simultaneous_add_remove(self):
         self.orch.github.fetch_issue_details.return_value = {
@@ -114,7 +114,7 @@ class TestLabels(unittest.TestCase):
         }
         self.orch.update_issue(123, body="new body", add_labels=["l1"])
         self.orch.github.add_labels.assert_called_once_with(123, ["l1"])
-        self.orch.github.update_issue.assert_called_once_with(123, body="new body")
+        self.orch.github.update_issue.assert_called_once_with(123, body="new body", state=None)
 
 
 if __name__ == "__main__":
