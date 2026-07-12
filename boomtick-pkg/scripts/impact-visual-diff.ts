@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { chromium } from '@playwright/test';
 import fs from 'fs';
+import { fileURLToPath } from "node:url";
 import path from 'path';
 import { execSync } from 'child_process';
 import { logHeartbeat } from '../lib/heartbeat';
@@ -25,6 +26,9 @@ import {
 } from './impact-review-utils';
 import { whiteCanvas, copyImage } from './image-processing-utils.ts';
 import { VIEWPORTS } from '../../src/constants/visual-viewports';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const projectConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../project_config.json'), 'utf-8'));
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
