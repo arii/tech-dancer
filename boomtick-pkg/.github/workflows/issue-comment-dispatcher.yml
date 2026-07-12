@@ -26,7 +26,6 @@ jobs:
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
           AUTHOR_ASSOC: ${{ github.event.comment.author_association }}
-          PYTHONPATH: "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
         run: |
           # Pass COMMENT_BODY via env var to td-cli for secure parsing
           RESULT=$(td-cli gh parse-comment --author-association "$AUTHOR_ASSOC")
