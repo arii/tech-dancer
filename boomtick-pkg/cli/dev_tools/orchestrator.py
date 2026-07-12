@@ -10,7 +10,7 @@ import tempfile
 import textwrap
 from collections import defaultdict
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 from dev_tools.services.github import GitHubClient
 from dev_tools.services.jules import JulesClient
@@ -226,6 +226,7 @@ class Orchestrator:
         for run in check_runs:
             if run.get("conclusion") == "failure":
                 run_id = run.get("id")
+                findings: List[Dict[str, Any]] = []
                 if isinstance(run_id, int):
                     logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
                     failing_logs[str(run.get("name", "unknown"))] = logs[-5000:]  # Keep last 5k chars
@@ -293,7 +294,7 @@ class Orchestrator:
             check=False,
             log_on_error=False,
         )
-        if res.returncode == 0 and res.stdout:
+        if isinstance(res, subprocess.CompletedProcess) and res.returncode == 0 and res.stdout:
             return [f.strip() for f in res.stdout.splitlines() if f.strip()]
         return []
 
@@ -474,15 +475,12 @@ class Orchestrator:
         all_open: bool = False,
         post_comments: bool = False,
         dry_run: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ) -> Dict[str, Any]:
         if "issue_number" in kwargs and issueNumber is None:
-            issueNumber = kwargs["issue_number"]
-        repo = get_github_client().get_repo(get_repo_name())
-        issues = []
-        issue_nums = kwargs.get("issue_numbers")
-        if "limit" in kwargs:
-            limit = kwargs["limit"]
+            issueNumber = int(kwargs["issue_number"])
+        repo = get_github_client().get_repo(get_repo_name() or "")
+        issues: List[Any] = []
         if all_open:
             issues = list(repo.get_issues(state="open"))
         elif issueNumber:
@@ -725,6 +723,7 @@ class Orchestrator:
                     if run.get("conclusion") == "failure":
                         failed_check_names.append(run.get("name"))
                         run_id = run.get("id")
+                        findings: List[Dict[str, Any]] = []
                         if isinstance(run_id, int):
                             logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
 
@@ -819,7 +818,7 @@ class Orchestrator:
                     ["node", "boomtick-pkg/scripts/detect-antipatterns.mjs", "--json"] + files_to_audit,
                     check=False,
                 )
-                output = audit_res.stdout
+                output = audit_res.stdout if isinstance(audit_res, subprocess.CompletedProcess) else str(audit_res)
                 if output and "{" in output:
                     json_start = output.find("{")
                     json_end = output.rfind("}") + 1
@@ -836,20 +835,18 @@ class Orchestrator:
 
                     if isinstance(audit_data, dict):
                         violations_map = audit_data.get("violations", {})
-                        if not isinstance(violations_map, dict):
-                            violations_map = {}
-
-                        for filepath, violations in violations_map.items():
-                            if isinstance(violations, list):
-                                for v in violations:
-                                    if isinstance(v, dict):
-                                        auto_findings.append(
-                                            {
-                                                "path": str(filepath),
-                                                "issue": f"{v.get('pattern', 'N/A')}: {v.get('message', 'No message')} (value: {v.get('value', 'N/A')})",
-                                                "severity": str(v.get("severity", "minor")),
-                                            }
-                                        )
+                        if isinstance(violations_map, dict):
+                            for filepath, violations in violations_map.items():
+                                if isinstance(violations, list):
+                                    for v in violations:
+                                        if isinstance(v, dict):
+                                            auto_findings.append(
+                                                {
+                                                    "path": str(filepath),
+                                                    "issue": f"{v.get('pattern', 'N/A')}: {v.get('message', 'No message')} (value: {v.get('value', 'N/A')})",
+                                                    "severity": str(v.get("severity", "minor")),
+                                                }
+                                            )
             res["auto_findings"] = auto_findings
         if submit:
             self.github.submit_pr_review(prNumber, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
@@ -892,7 +889,8 @@ class Orchestrator:
             except FileNotFoundError:
                 expected_node = "24.16.0"
 
-        actual_node = run_command(["node", "-v"]).strip().replace("v", "")
+        actual_node_res = run_command(["node", "-v"])
+        actual_node = str(actual_node_res).strip().replace("v", "")
         is_ci = os.environ.get("CI") == "true"
         is_jules = "jules" in os.environ.get("USER", "").lower() or os.environ.get("JULES_API_KEY")
 
@@ -914,7 +912,8 @@ class Orchestrator:
         else:
             expected_pnpm = "10.28.2"
 
-        actual_pnpm = run_command(["pnpm", "--version"]).strip()
+        actual_pnpm_res = run_command(["pnpm", "--version"])
+        actual_pnpm = str(actual_pnpm_res).strip()
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
             log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
@@ -922,7 +921,7 @@ class Orchestrator:
 
         return {"node": actual_node, "pnpm": actual_pnpm}
 
-    def generate_ci_summary_report(self):
+    def generate_ci_summary_report(self) -> str:
         """Generates a markdown summary of CI metrics."""
         metrics_res = verify_ci_metrics()
 
@@ -1176,13 +1175,14 @@ class Orchestrator:
         if api_key:
             self.jules.api_key = api_key
 
-        failing_logs = []
+        failing_logs: List[str] = []
         structured_failures = []
 
         target_sha = pr.head.sha if pr else None
         if not target_sha and branch:
             try:
                 # Try to get the latest SHA for the branch if no PR exists (e.g. main branch failure)
+                # pylint: disable=protected-access
                 branch_info = self.github._request("GET", f"/repos/{self.github.repo}/branches/{branch}")
                 target_sha = branch_info.get("commit", {}).get("sha")
             except Exception:
@@ -1194,6 +1194,7 @@ class Orchestrator:
             for run in check_runs:
                 if run.get("conclusion") == "failure":
                     run_id = run.get("id")
+                    logs = ""
                     if isinstance(run_id, int):
                         logs = self.github.fetch_check_run_logs(run_id, external_id=run.get("external_id"))
 
@@ -1265,7 +1266,7 @@ Respond only after the PR is created or updated:
 
         if structured_failures:
             prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(
-                structured_failures
+                [str(f) for f in structured_failures]
             )
 
         if failing_logs:

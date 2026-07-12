@@ -28,7 +28,7 @@
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
     "lint:python": "pylint etl/ boomtick-pkg/ scripts/ tests/",
-    "type-check:python": "mypy . || true",
+    "type-check:python": "mypy .",
     "audit:semgrep": "semgrep scan --config auto --error",
     "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs",
     "audit:dead-code": "pnpm exec knip",
