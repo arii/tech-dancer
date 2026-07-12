@@ -18,6 +18,10 @@ async function main(): Promise<void> {
       path.join(ARTIFACTS_DIR, githubModelsCodeReviewClient.reportFileName),
       `## ${githubModelsCodeReviewClient.reportTitle}\n\nSkipped: No GITHUB_TOKEN provided.\n`
     );
+    fs.writeFileSync(
+      path.join(ARTIFACTS_DIR, `${githubModelsCodeReviewClient.reportFileName.replace('.md', '')}-verdict.json`),
+      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn' }, null, 2)
+    );
     return;
   }
 

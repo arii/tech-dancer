@@ -18,6 +18,10 @@ async function main(): Promise<void> {
       path.join(ARTIFACTS_DIR, geminiCodeReviewClient.reportFileName),
       `## ${geminiCodeReviewClient.reportTitle}\n\nSkipped: No GEMINI_API_KEY provided.\n`
     );
+    fs.writeFileSync(
+      path.join(ARTIFACTS_DIR, `${geminiCodeReviewClient.reportFileName.replace('.md', '')}-verdict.json`),
+      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn' }, null, 2)
+    );
     return;
   }
 

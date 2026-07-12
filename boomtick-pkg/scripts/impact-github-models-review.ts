@@ -13,9 +13,14 @@ const ALL_REVIEW_TITLES = [
 async function main(): Promise<void> {
   if (!process.env.GITHUB_TOKEN) {
     console.warn('⚠️  Skipping agent review — GITHUB_TOKEN not set.');
+    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
     fs.writeFileSync(
       path.join(ARTIFACTS_DIR, githubModelsVisualReviewClient.reportFileName),
       `## ${githubModelsVisualReviewClient.reportTitle}\n\nSkipped: No GITHUB_TOKEN provided.\n`
+    );
+    fs.writeFileSync(
+      path.join(ARTIFACTS_DIR, `${githubModelsVisualReviewClient.reportFileName.replace('.md', '')}-verdict.json`),
+      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn' }, null, 2)
     );
     return;
   }

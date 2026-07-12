@@ -16,9 +16,14 @@ async function main(): Promise<void> {
     // The orchestrator handles missing visual summary gracefully,
     // but if the API key is strictly missing we should probably just exit or stub a file
     // to match original behavior.
+    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
     fs.writeFileSync(
       path.join(ARTIFACTS_DIR, geminiVisualReviewClient.reportFileName),
       `## ${geminiVisualReviewClient.reportTitle}\n\nSkipped: No GEMINI_API_KEY provided.\n`
+    );
+    fs.writeFileSync(
+      path.join(ARTIFACTS_DIR, `${geminiVisualReviewClient.reportFileName.replace('.md', '')}-verdict.json`),
+      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn' }, null, 2)
     );
     return;
   }
