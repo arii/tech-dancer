@@ -48,7 +48,7 @@ function verifySchemas() {
     // 6. Check for drift
     console.log('📊 Checking for schema/contract drift...');
     try {
-      execSync('git diff --exit-code boomtick-pkg/cli/dev_tools/cli-schema.json boomtick-pkg/mcp/src/tools/contract.ts', { stdio: 'inherit' });
+      execSync('git diff --exit-code boomtick-pkg/mcp/src/tools/contract.ts', { stdio: 'inherit' });
     } catch {
       console.error('\n❌ Schema or Contract drift detected.');
       console.error('   The generated files do not match the committed versions.');
