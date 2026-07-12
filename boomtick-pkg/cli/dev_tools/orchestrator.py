@@ -943,7 +943,8 @@ class Orchestrator:
             report.append(f"- **Total:** {m['totalTokens']} / {m['totalThreshold']}")
 
             report.append("\n### Pipeline Performance")
-            report.append(f"- **Duration:** {m['durationMinutes']}m / {m['durationThreshold']}m")
+            duration_str = f"{m['durationMinutes']}m" if m.get("durationMinutes") is not None else "N/A"
+            report.append(f"- **Duration:** {duration_str} / {m['durationThreshold']}m")
 
             report.append("\n<details><summary>Raw Metrics JSON</summary>\n")
             report.append("```json")

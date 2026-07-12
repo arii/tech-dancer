@@ -561,30 +561,33 @@ def call_github_models(
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 
-def _get_ci_duration_mins() -> float:
+def _get_ci_duration_mins() -> Optional[float]:
     """Calculates the current CI pipeline duration in minutes using GitHub API."""
     run_id = os.environ.get("GITHUB_RUN_ID")
     if not run_id:
-        return 0.0
+        return None
+    if not run_id.isdigit():
+        log_warn(f"GITHUB_RUN_ID is not a digit: {run_id}")
+        return None
     try:
         from datetime import datetime, timezone
 
         client = get_github_client()
         repo_name = get_repo_name()
         if not repo_name:
-            return 0.0
+            return None
         repo = client.get_repo(repo_name)
         run = repo.get_workflow_run(int(run_id))
         start_time = run.run_started_at
         if not start_time:
-            return 0.0
+            return None
         if start_time.tzinfo is None:
             start_time = start_time.replace(tzinfo=timezone.utc)
         now = datetime.now(timezone.utc)
         return (now - start_time).total_seconds() / 60.0
     except Exception as e:
         log_warn(f"Failed to fetch CI duration: {e}")
-        return 0.0
+        return None
 
 
 def verify_ci_metrics(
@@ -599,13 +602,25 @@ def verify_ci_metrics(
     config = get_config()
 
     # Use environment variables if provided, otherwise use project config defaults
-    def get_limit(val, env_key, config_val):
+    def get_limit(val: Optional[int], env_key: str, config_val: int) -> int:
         if val is not None:
             return int(val)
-        try:
-            return int(os.environ.get(env_key, config_val))
-        except (ValueError, TypeError):
-            return config_val
+        env_val = os.environ.get(env_key)
+        if env_val is not None:
+            try:
+                parsed_val = int(env_val)
+                # Reasonable range check: thresholds should be non-negative and not excessively large
+                # AI tokens max 10M, duration max 24h (1440m)
+                is_duration = "DURATION" in env_key
+                max_allowed = 1440 if is_duration else 10000000
+                if parsed_val < 0 or parsed_val > max_allowed:
+                    log_warn(f"Value for {env_key} ({parsed_val}) out of range. Falling back to config default.")
+                    return config_val
+                return parsed_val
+            except (ValueError, TypeError):
+                log_warn(f"Invalid integer for {env_key} ({env_val}). Falling back to config default.")
+                return config_val
+        return config_val
 
     input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", config.ai_token_input_limit)
     output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", config.ai_token_output_limit)
@@ -616,28 +631,29 @@ def verify_ci_metrics(
         raise CLIError("Thresholds must be non-negative integers.")
 
     log_file = Path(get_or_create_log_dir("ai")) / "review-run.jsonl"
-    if not log_file.exists():
-        return {"status": "warning", "message": f"No AI usage logs found at {log_file}."}
-
     total_input, total_output = 0, 0
-    try:
-        with log_file.open("r") as f:
-            for line in [l.strip() for l in f if l.strip()]:
-                entry = json.loads(line)
-                total_input += entry.get("inputTokens", 0)
-                total_output += entry.get("outputTokens", 0)
-    except Exception as e:
-        log_error(f"Failed to read AI logs: {e}")
-        return {"status": "error", "message": f"Could not verify metrics: {e}"}
+    ai_logs_missing = not log_file.exists()
+
+    if not ai_logs_missing:
+        try:
+            with log_file.open("r") as f:
+                for line in [l.strip() for l in f if l.strip()]:
+                    entry = json.loads(line)
+                    total_input += entry.get("inputTokens", 0)
+                    total_output += entry.get("outputTokens", 0)
+        except Exception as e:
+            log_error(f"Failed to read AI logs: {e}")
+            return {"status": "error", "message": f"Could not verify metrics: {e}"}
 
     total_tokens = total_input + total_output
-    actual_duration_mins = _get_ci_duration_mins()
+    maybe_duration = _get_ci_duration_mins()
+    actual_duration_mins = maybe_duration if maybe_duration is not None else 0.0
 
     result = {
         "inputTokens": total_input,
         "outputTokens": total_output,
         "totalTokens": total_tokens,
-        "durationMinutes": round(actual_duration_mins, 2),
+        "durationMinutes": round(actual_duration_mins, 2) if maybe_duration is not None else None,
         "inputThreshold": input_limit,
         "outputThreshold": output_limit,
         "totalThreshold": total_limit,
@@ -651,13 +667,25 @@ def verify_ci_metrics(
         errors.append(f"Output tokens ({total_output}) exceeded limit ({output_limit})")
     if total_tokens > total_limit:
         errors.append(f"Total tokens ({total_tokens}) exceeded limit ({total_limit})")
-    if actual_duration_mins > duration_limit:
-        errors.append(f"CI duration ({round(actual_duration_mins, 2)}m) exceeded limit ({duration_limit}m)")
+
+    is_ci = os.environ.get("CI") == "true"
+    if maybe_duration is not None:
+        if maybe_duration > duration_limit:
+            errors.append(f"CI duration ({round(maybe_duration, 2)}m) exceeded limit ({duration_limit}m)")
+    elif is_ci:
+        log_warn("CI duration could not be calculated from environment.")
 
     if errors:
-        return {"status": "error", "message": "AI Token threshold exceeded: " + "; ".join(errors), "metrics": result}
+        return {"status": "error", "message": "CI Metric threshold exceeded: " + "; ".join(errors), "metrics": result}
 
-    return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
+    if ai_logs_missing:
+        return {
+            "status": "warning",
+            "message": f"AI usage logs missing at {log_file}. Verified duration only.",
+            "metrics": result,
+        }
+
+    return {"status": "success", "message": "All CI metrics are within limits.", "metrics": result}
 
 
 def call_gemini(

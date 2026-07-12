@@ -1,6 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import { getBasePath } from './scripts/base-path.js';
+import fs from 'node:fs';
 
+const projectConfig = JSON.parse(fs.readFileSync('./project_config.json', 'utf-8'));
 const PORT = process.env.PORT || 4173;
 const BASE_PATH = getBasePath();
 
@@ -35,7 +37,7 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       // Sensitivity threshold for color differences (0 to 1)
-      threshold: Number(process.env.VISUAL_SNAPSHOT_THRESHOLD || 0.1),
+      threshold: Number(process.env.VISUAL_SNAPSHOT_THRESHOLD || projectConfig.visual_snapshot_pixel_threshold || 0.1),
       // Total allowed difference in pixels as a ratio (0 to 1)
       maxDiffPixelRatio: 0.15,
     },

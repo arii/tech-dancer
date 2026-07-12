@@ -48,7 +48,7 @@ These metrics establish measurable targets for CI pipeline performance and cost.
 | **AI Token Input** | 800,000 tokens | Maximum prompt tokens consumed per pipeline run. |
 | **AI Token Output** | 200,000 tokens | Maximum completion tokens generated per pipeline run. |
 | **AI Token Total** | 1,000,000 tokens | Aggregated token limit (Input + Output). |
-| **Visual Snapshot Threshold** | 0.1 | Sensitivity threshold for visual regression comparisons. |
+| **Visual Snapshot Threshold** | 0.1 | Sensitivity threshold for visual regression comparisons (0 to 1). A lower value indicates stricter comparison, detecting smaller color/pixel differences. |
 
 ### Updating Baselines
 
