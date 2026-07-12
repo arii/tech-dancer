@@ -20,7 +20,7 @@ async function main(): Promise<void> {
     );
     fs.writeFileSync(
       path.join(ARTIFACTS_DIR, `${geminiCodeReviewClient.reportFileName.replace('.md', '')}-verdict.json`),
-      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn' }, null, 2)
+      JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'warn', skipReason: 'MISSING_API_KEY' }, null, 2)
     );
     return;
   }
