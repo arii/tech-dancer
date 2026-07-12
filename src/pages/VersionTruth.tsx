@@ -11,7 +11,7 @@ const VersionTruth = () => {
     >
       <SEO
         title="VersionTruth - Real-time Version Oracle"
-        description="The antidote to version hallucinations: real-time version verification for npm, Node, and GitHub Actions."
+        description="The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions."
       />
 
       <Stack gap={8} width="full" maxWidth="full">
@@ -21,7 +21,7 @@ const VersionTruth = () => {
             VersionTruth
           </Box>
           <Box as="p" className="text-lg text-secondary max-w-[800px]">
-            The antidote to version hallucinations. Exposes live, registry-fetched ground-truth for npm packages, Node.js runtimes, and GitHub Actions so coding agents stop downgrading correct dependency versions.
+            The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions. Exposes live, registry-fetched ground-truth so coding agents stop downgrading correct dependency versions.
           </Box>
         </Stack>
 
