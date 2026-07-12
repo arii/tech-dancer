@@ -1,7 +1,7 @@
 name: Dependabot Alert Handler
 
 on:
-  repository_vulnerability_alert:
+  repository_vulnerability_alert: # actionlint-disable events
     types: [create, reopen]
   workflow_dispatch:
     inputs:
@@ -81,7 +81,16 @@ jobs:
           export PACKAGE ECOSYSTEM SEVERITY GHSA_ID PATCHED_VERSION
           python3 - <<'EOF'
           import os
+          import re
           import textwrap
+
+          def escape_md(text):
+              """Escapes markdown special characters and prevents mentions."""
+              if not text:
+                  return ""
+              # Basic MD escaping
+              text = re.sub(r"([\\`*_{}\[\]()#+-.!|@])", r"\\\1", text)
+              return text
 
           package = os.environ.get("PACKAGE", "unknown")
           ecosystem = os.environ.get("ECOSYSTEM", "unknown")
@@ -89,14 +98,21 @@ jobs:
           ghsa_id = os.environ.get("GHSA_ID", "unknown")
           patched_version = os.environ.get("PATCHED_VERSION", "the latest version")
 
+          # Sanitize for Markdown
+          s_package = escape_md(package)
+          s_ecosystem = escape_md(ecosystem)
+          s_severity = escape_md(severity)
+          s_ghsa_id = escape_md(ghsa_id)
+          s_patched_version = escape_md(patched_version)
+
           body = textwrap.dedent(f"""
           ## Problem Statement
 
-          A {severity} severity vulnerability ({ghsa_id}) has been detected in the {package} package ({ecosystem} ecosystem).
+          A {s_severity} severity vulnerability ({s_ghsa_id}) has been detected in the {s_package} package ({s_ecosystem} ecosystem).
 
           ## Goal
 
-          Upgrade {package} to version {patched_version} to resolve the security vulnerability.
+          Upgrade {s_package} to version {s_patched_version} to resolve the security vulnerability.
 
           ## Non-Goals
 
@@ -107,7 +123,7 @@ jobs:
 
           ## Proposed Approach
 
-          Upgrade {package} to at least version {patched_version} using the appropriate package manager commands for {ecosystem}.
+          Upgrade {s_package} to at least version {s_patched_version} using the appropriate package manager commands for {s_ecosystem}.
 
           ### Alternatives Considered
 
@@ -136,10 +152,10 @@ jobs:
           ## UNDERSTAND THE ISSUE
 
           Restate the problem in your own words:
-          A security vulnerability {ghsa_id} was found in {package}. We need to upgrade to {patched_version} to mitigate this.
+          A security vulnerability {s_ghsa_id} was found in {s_package}. We need to upgrade to {s_patched_version} to mitigate this.
 
           State the underlying GOAL:
-          Mitigate security risk by upgrading {package}.
+          Mitigate security risk by upgrading {s_package}.
 
           Flag any ambiguity in the issue as written:
           None.
@@ -147,7 +163,7 @@ jobs:
           ## DETERMINE APPROACH
 
           Propose the most likely correct solution approach:
-          Run the upgrade command for {ecosystem}. For example, `pnpm update {package}@{patched_version}`.
+          Run the upgrade command for {s_ecosystem}. For example, `pnpm update {s_package}@{s_patched_version}`.
 
           Identify at least one alternative approach and state why it was rejected:
           Ignoring it - rejected due to security policy.
@@ -161,7 +177,7 @@ jobs:
           ## SPECIFY SCOPE
 
           IN SCOPE:
-          [Upgrading {package} to {patched_version}, Updating lockfiles]
+          [Upgrading {s_package} to {s_patched_version}, Updating lockfiles]
 
           OUT OF SCOPE:
           [Unrelated upgrades]
@@ -173,9 +189,9 @@ jobs:
 
           List concrete, verifiable completion criteria:
 
-          - [ ] {package} is at version {patched_version} or higher.
+          - [ ] {s_package} is at version {s_patched_version} or higher.
           - [ ] All CI tests pass.
-          - [ ] Dependabot alert {ghsa_id} is resolved/dismissed.
+          - [ ] Dependabot alert {s_ghsa_id} is resolved/dismissed.
 
           State what must be manually verified vs. what can be automated:
           Automated via CI.
@@ -198,7 +214,9 @@ jobs:
             --label "spec-driven,security" \
             --assignee Jules)
           echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
-          echo "issue_number=$(echo $ISSUE_URL | grep -oE '[0-9]+$')" >> "$GITHUB_OUTPUT"
+          # shellcheck disable=SC2155
+          ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+          echo "issue_number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
         id: create_issue
 
       - name: Dispatch Jules
