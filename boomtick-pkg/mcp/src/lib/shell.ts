@@ -38,10 +38,26 @@ export async function runCommand(
   const start = Date.now();
   const timeout = options.timeout || 60000;
 
-  // Resolve path for 'gh' if specified
+  // Resolve path for 'gh' or 'td-cli' if specified
   let finalCmd = ALLOWED_COMMANDS[safeCmd] as string;
   if (safeCmd === "gh") {
     finalCmd = config.ghPath;
+  } else if (safeCmd === "td-cli") {
+    // If we have a repo-relative .venv, prioritize it
+    const venvBin = path.join(config.repoPath, ".venv", "bin", "td-cli");
+    const localVenvBin = path.join(process.cwd(), ".venv", "bin", "td-cli");
+    const parentVenvBin = path.join(config.repoPath, "..", ".venv", "bin", "td-cli");
+
+    // In standalone mode, config.repoPath is the boomtick-pkg root.
+    // We check common venv locations to ensure we call the isolated binary.
+    const fs = await import("fs");
+    if (fs.existsSync(venvBin)) {
+      finalCmd = venvBin;
+    } else if (fs.existsSync(localVenvBin)) {
+      finalCmd = localVenvBin;
+    } else if (fs.existsSync(parentVenvBin)) {
+      finalCmd = parentVenvBin;
+    }
   }
 
   const env = {
