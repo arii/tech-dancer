@@ -26,7 +26,7 @@ import {
 import { whiteCanvas, copyImage } from './image-processing-utils.ts';
 import { VIEWPORTS } from '../../src/constants/visual-viewports';
 
-const projectConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'project_config.json'), 'utf-8'));
+const projectConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../project_config.json'), 'utf-8'));
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
 const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;

@@ -1,8 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import { getBasePath } from './scripts/base-path.js';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const projectConfig = JSON.parse(fs.readFileSync('./project_config.json', 'utf-8'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const projectConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, './project_config.json'), 'utf-8'));
 const PORT = process.env.PORT || 4173;
 const BASE_PATH = getBasePath();
 

@@ -564,11 +564,15 @@ def call_github_models(
 def _get_ci_duration_mins() -> Optional[float]:
     """Calculates the current CI pipeline duration in minutes using GitHub API."""
     run_id = os.environ.get("GITHUB_RUN_ID")
-    if not run_id:
+    if not (run_id and run_id.isdigit()):
         return None
-    if not run_id.isdigit():
-        log_warn(f"GITHUB_RUN_ID is not a digit: {run_id}")
+
+    # Range check for GITHUB_RUN_ID (max 10^15 as a safe upper bound)
+    run_id_int = int(run_id)
+    if run_id_int <= 0 or run_id_int > 10**15:
+        log_warn("GITHUB_RUN_ID out of reasonable range.")
         return None
+
     try:
         from datetime import datetime, timezone
 
@@ -577,7 +581,7 @@ def _get_ci_duration_mins() -> Optional[float]:
         if not repo_name:
             return None
         repo = client.get_repo(repo_name)
-        run = repo.get_workflow_run(int(run_id))
+        run = repo.get_workflow_run(run_id_int)
         start_time = run.run_started_at
         if not start_time:
             return None
@@ -586,7 +590,8 @@ def _get_ci_duration_mins() -> Optional[float]:
         now = datetime.now(timezone.utc)
         return (now - start_time).total_seconds() / 60.0
     except Exception as e:
-        log_warn(f"Failed to fetch CI duration: {e}")
+        log_warn("Failed to fetch CI duration from GitHub API.")
+        log_debug(f"CI duration fetch error: {e}")
         return None
 
 
@@ -614,11 +619,11 @@ def verify_ci_metrics(
                 is_duration = "DURATION" in env_key
                 max_allowed = 1440 if is_duration else 10000000
                 if parsed_val < 0 or parsed_val > max_allowed:
-                    log_warn(f"Value for {env_key} ({parsed_val}) out of range. Falling back to config default.")
+                    log_warn(f"Failed to parse {env_key} with value: {env_val} (out of range). Falling back to config default.")
                     return config_val
                 return parsed_val
             except (ValueError, TypeError):
-                log_warn(f"Invalid integer for {env_key} ({env_val}). Falling back to config default.")
+                log_warn(f"Failed to parse {env_key} with value: {env_val} (invalid integer). Falling back to config default.")
                 return config_val
         return config_val
 
