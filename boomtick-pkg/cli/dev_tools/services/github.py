@@ -6,7 +6,7 @@ import subprocess
 from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
-import requests
+import requests  # type: ignore[import-untyped]
 from dev_tools.utils import DiskCache, log_warn
 
 
@@ -174,7 +174,7 @@ class GitHubClient:
             return self.search_pull_requests(query, limit=limit)
 
         # Fallback to standard Pulls API if no labels, using internal pagination
-        prs = []
+        prs: List[Dict[str, Any]] = []
         page = 1
         per_page = min(limit, 100)
 
@@ -316,7 +316,7 @@ class GitHubClient:
         Diff position is 0-indexed starting from the first '@@' hunk header in the file.
         """
         diff_text = self.fetch_pr_diff(pr_number)
-        mapping = {}
+        mapping: Dict[str, Dict[int, int]] = {}
         current_file = None
         file_diff_pos = 0
         new_line_num = 0
@@ -374,7 +374,7 @@ class GitHubClient:
         state: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Updates a GitHub issue's body, labels, and/or state."""
-        data = {}
+        data: Dict[str, Any] = {}
         if body is not None:
             data["body"] = body
         if labels is not None:
@@ -517,6 +517,8 @@ class GitHubClient:
             )
 
         # Extract Markdown body (everything above the metadata JSON block)
+        if not metadata_match:
+            raise CLIError("Could not determine the start of the JSON block")
         body = content[: metadata_match.start()].strip()
         # Clean up the trailing "Output JSON" instructions if present
         body = re.split(r"##\s+Output JSON", body, flags=re.IGNORECASE)[0].strip()
@@ -576,7 +578,7 @@ class GitHubClient:
 
         pr_details = self.fetch_pr_details(pr_number)
         check_runs = self.fetch_check_runs(pr_details.get("head", {}).get("sha"))
-        failing_checks = [run.get("name") for run in check_runs if run.get("conclusion") == "failure"]
+        failing_checks = [str(run.get("name")) for run in check_runs if run.get("conclusion") == "failure"]
 
         # Determine event based on recommendation field, then fallback to body analysis
         recommendation = payload.get("recommendation", "")
