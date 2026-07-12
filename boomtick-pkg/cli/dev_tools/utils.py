@@ -160,9 +160,15 @@ def resolve_resource_path(resource_name: str) -> str:
     try:
         import importlib_resources as resources
 
+        # Try resources first
         ref = resources.files("dev_tools.resources").joinpath(resource_name)
         # mypy: Traversable might not have exists() depending on version, but it's common in backports
         if hasattr(ref, "exists") and ref.exists():
+            return str(ref)
+
+        # Then try dev_tools root (for verify_versions.py etc)
+        ref = resources.files("dev_tools").joinpath(resource_name)
+        if ref.exists():
             return str(ref)
     except (ImportError, AttributeError, FileNotFoundError, TypeError) as e:
         log_debug(f"importlib_resources failed for '{resource_name}': {e}. Falling back.")
