@@ -120,8 +120,9 @@ When multiple agents work simultaneously:
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
-- All agents read `.agent-context.json` before starting work to get current
-  repository state and discover available MCP tools and CLI subcommands.
+- All agents MUST read `.agent-context.json` (using `repo.read_agent_context`)
+  upon startup to get current repository state and discover available MCP
+  tools and CLI subcommands. Bypassing this step is a contract violation.
 - **Git Push Restrictions**: Direct `git push` is blocked/intercepted in the
   sandbox environment. Use the `submit` tool or appropriate CLI commands
   that handle submission via the agent's specific workflow.
@@ -150,7 +151,7 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 
 ### 🚫 Zero-Fallback & Self-Correction Policy
 
-Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists.
+Raw terminal execution (e.g., `git checkout`, `gh issue list`, `gh issue edit`) via Bash is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists. Bypassing these tools for raw `gh` commands causes structural blindness and prevents proper automation audits.
 
 **Self-Correction Rule**: If you catch yourself about to run a raw shell
 command (like `gh issue list` or `git checkout`) that has an MCP or `td-cli`

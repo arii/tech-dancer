@@ -261,6 +261,22 @@ def apply_patch(ctx, filepath, patch_file, patch_body):
         err(ctx, f"Failed to apply patch: {str(e)}")
 
 
+@repo.command(name="read-context")
+@click.pass_context
+def read_context(ctx):
+    """Read and return the contents of .agent-context.json."""
+    context_file = ".agent-context.json"
+    if not os.path.exists(context_file):
+        err(ctx, f"{context_file} not found. Run 'td-cli context-warm' to generate it.")
+
+    try:
+        with open(context_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        out(ctx, "Agent context retrieved successfully.", data=data)
+    except Exception as e:
+        err(ctx, f"Failed to read {context_file}: {str(e)}")
+
+
 # ==========================================
 # GH COMMAND GROUP
 # ==========================================
