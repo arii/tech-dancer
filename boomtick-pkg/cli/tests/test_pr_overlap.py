@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring,protected-access,redefined-outer-name
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from dev_tools.pr_overlap import get_pr_overlaps
 
 class TestPrOverlap(unittest.TestCase):
