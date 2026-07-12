@@ -35,7 +35,7 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       // Sensitivity threshold for color differences (0 to 1)
-      threshold: 0.2,
+      threshold: Number(process.env.VISUAL_SNAPSHOT_THRESHOLD || 0.1),
       // Total allowed difference in pixels as a ratio (0 to 1)
       maxDiffPixelRatio: 0.15,
     },

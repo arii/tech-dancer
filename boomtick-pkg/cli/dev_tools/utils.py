@@ -565,25 +565,30 @@ def verify_ci_metrics(
     input_threshold: Optional[int] = None,
     output_threshold: Optional[int] = None,
     total_threshold: Optional[int] = None,
+    duration_threshold: Optional[int] = None,
 ):
-    """Verifies that the aggregated AI token usage in the current run is within limits."""
+    """Verifies that the aggregated AI token usage and pipeline duration in the current run are within limits."""
+    from dev_tools.config import get_config
 
-    # Use environment variables if provided, otherwise use documented defaults
-    # Note: Docs specify 150k input, 50k output, 200k total.
-    def get_limit(val, env_key, default):
+    config = get_config()
+
+    # Use environment variables if provided, otherwise use project config defaults
+    def get_limit(val, env_key, config_val):
         if val is not None:
             return int(val)
         try:
-            return int(os.environ.get(env_key, default))
+            # Fallback to env var, then to config_val
+            return int(os.environ.get(env_key, config_val))
         except (ValueError, TypeError):
-            return default
+            return config_val
 
-    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 800000)
-    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 200000)
-    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 1000000)
+    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", config.ai_token_input_limit)
+    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", config.ai_token_output_limit)
+    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
+    duration_limit = get_limit(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
 
     # Threshold validation
-    if input_limit < 0 or output_limit < 0 or total_limit < 0:
+    if input_limit < 0 or output_limit < 0 or total_limit < 0 or duration_limit < 0:
         raise CLIError("Thresholds must be non-negative integers.")
 
     # Use Path for robust path resolution
@@ -613,13 +618,36 @@ def verify_ci_metrics(
 
     total_tokens = total_input + total_output
 
+    # Pipeline duration check
+    actual_duration_mins = 0.0
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    if run_id:
+        try:
+            from datetime import datetime, timezone
+
+            client = get_github_client()
+            repo_name = get_repo_name()
+            if repo_name:
+                repo = client.get_repo(repo_name)
+                run = repo.get_workflow_run(int(run_id))
+                start_time = run.run_started_at
+                if start_time:
+                    if start_time.tzinfo is None:
+                        start_time = start_time.replace(tzinfo=timezone.utc)
+                    now = datetime.now(timezone.utc)
+                    actual_duration_mins = (now - start_time).total_seconds() / 60.0
+        except Exception as e:
+            log_warn(f"Failed to fetch CI duration: {e}")
+
     result = {
         "inputTokens": total_input,
         "outputTokens": total_output,
         "totalTokens": total_tokens,
+        "durationMinutes": round(actual_duration_mins, 2),
         "inputThreshold": input_limit,
         "outputThreshold": output_limit,
         "totalThreshold": total_limit,
+        "durationThreshold": duration_limit,
     }
 
     errors = []
@@ -629,6 +657,8 @@ def verify_ci_metrics(
         errors.append(f"Output tokens ({total_output}) exceeded limit ({output_limit})")
     if total_tokens > total_limit:
         errors.append(f"Total tokens ({total_tokens}) exceeded limit ({total_limit})")
+    if actual_duration_mins > duration_limit:
+        errors.append(f"CI duration ({round(actual_duration_mins, 2)}m) exceeded limit ({duration_limit}m)")
 
     if errors:
         return {

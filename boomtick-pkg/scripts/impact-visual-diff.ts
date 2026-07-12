@@ -237,7 +237,9 @@ function createVisualDiff(beforePath: string, afterPath: string, diffPath: strin
   copyImage(beforeRaw, before);
   copyImage(afterRaw, after);
 
-  const diffPixels = pixelmatch(before.data, after.data, diff.data, width, height, { threshold: 0.1 });
+  const diffPixels = pixelmatch(before.data, after.data, diff.data, width, height, {
+    threshold: Number(process.env.VISUAL_SNAPSHOT_THRESHOLD || 0.1)
+  });
   const totalPixels = width * height;
   const differencePercent = totalPixels === 0 ? 0 : (diffPixels / totalPixels) * 100;
 

@@ -942,6 +942,9 @@ class Orchestrator:
             report.append(f"- **Output:** {m['outputTokens']} / {m['outputThreshold']}")
             report.append(f"- **Total:** {m['totalTokens']} / {m['totalThreshold']}")
 
+            report.append("\n### Pipeline Performance")
+            report.append(f"- **Duration:** {m['durationMinutes']}m / {m['durationThreshold']}m")
+
             report.append("\n<details><summary>Raw Metrics JSON</summary>\n")
             report.append("```json")
             report.append(json.dumps(metrics_res, indent=2))
@@ -1437,6 +1440,9 @@ Respond only after the PR is created or updated:
         flags = []
         if images_only:
             flags.append("--images-only")
+
+        env = os.environ.copy()
+        env["VISUAL_SNAPSHOT_THRESHOLD"] = str(PROJECT_CONFIG.visual_snapshot_pixel_threshold)
         if overflow_only:
             flags.append("--overflow-only")
         if contrast_only:
@@ -1447,7 +1453,7 @@ Respond only after the PR is created or updated:
             cmd = ["pnpm", "exec", "tsx", "scripts/ux-audit-runner.ts", r]
             if viewports:
                 for vp in viewports:
-                    res = run_command(cmd + [vp] + flags, check=False)
+                    res = run_command(cmd + [vp] + flags, check=False, env=env)
                     results.append(
                         {
                             "route": r,
@@ -1456,7 +1462,7 @@ Respond only after the PR is created or updated:
                         }
                     )
             else:
-                res = run_command(cmd + flags, check=False)
+                res = run_command(cmd + flags, check=False, env=env)
                 results.append({"route": r, "status": "success" if res.returncode == 0 else "error"})
 
         return {"status": "success", "results": results}
@@ -1759,7 +1765,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         if grep:
             playwright_args.extend(["--grep", grep])
 
-        res = run_command(["pnpm"] + playwright_args, cwd=worktree_path, check=False)
+        env = os.environ.copy()
+        env["VISUAL_SNAPSHOT_THRESHOLD"] = str(PROJECT_CONFIG.visual_snapshot_pixel_threshold)
+
+        res = run_command(["pnpm"] + playwright_args, cwd=worktree_path, check=False, env=env)
 
         failed_tests = []
         try:

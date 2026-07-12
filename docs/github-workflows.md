@@ -38,6 +38,18 @@ To update the baseline (if new suppressions are justified):
 pnpm run audit:inventory --update-baseline
 ```
 
+## 📊 Systemic CI Metrics
+
+These metrics establish measurable targets for CI pipeline performance and cost. They serve as acceptance criteria for all open issues related to CI pipeline improvements, token limits, and AI bot review flows (#2582, #2581, #2579, #2577, #2576, #2575, #2574, #2573, #2571, #2570, #2569, #2563, #2561, #2555, #2554, #2553, #2552, #2551, #2550).
+
+| Metric | Target / Limit | Description |
+|--------|----------------|-------------|
+| **Pipeline Duration** | < 15 minutes | Cumulative time for the CI pipeline to reach completion. |
+| **AI Token Input** | 800,000 tokens | Maximum prompt tokens consumed per pipeline run. |
+| **AI Token Output** | 200,000 tokens | Maximum completion tokens generated per pipeline run. |
+| **AI Token Total** | 1,000,000 tokens | Aggregated token limit (Input + Output). |
+| **Visual Snapshot Threshold** | 0.1 | Sensitivity threshold for visual regression comparisons. |
+
 ### Updating Baselines
 
 If a change legitimately increases the bundle size or `any` count (and has been approved), update the baseline variable after the PR is merged:

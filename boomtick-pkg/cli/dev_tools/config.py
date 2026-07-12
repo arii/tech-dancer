@@ -32,6 +32,11 @@ class ProjectConfig:
     ai_synthesis_model: str = "gpt-4o-mini"
     ai_review_model: str = "gpt-4o"
     ai_vision_model: str = "gpt-4o"
+    ai_token_input_limit: int = 800000
+    ai_token_output_limit: int = 200000
+    ai_token_total_limit: int = 1000000
+    max_ci_duration_minutes: int = 15
+    visual_snapshot_pixel_threshold: float = 0.1
     ui_indicators: List[str] = field(
         default_factory=lambda: [
             "src/components",
@@ -208,6 +213,16 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         kwargs["ai_review_model"] = raw["ai_review_model"]
     if "ai_vision_model" in raw:
         kwargs["ai_vision_model"] = raw["ai_vision_model"]
+    if "ai_token_input_limit" in raw:
+        kwargs["ai_token_input_limit"] = int(raw["ai_token_input_limit"])
+    if "ai_token_output_limit" in raw:
+        kwargs["ai_token_output_limit"] = int(raw["ai_token_output_limit"])
+    if "ai_token_total_limit" in raw:
+        kwargs["ai_token_total_limit"] = int(raw["ai_token_total_limit"])
+    if "max_ci_duration_minutes" in raw:
+        kwargs["max_ci_duration_minutes"] = int(raw["max_ci_duration_minutes"])
+    if "visual_snapshot_pixel_threshold" in raw:
+        kwargs["visual_snapshot_pixel_threshold"] = float(raw["visual_snapshot_pixel_threshold"])
     if "worktree_prefix" in raw:
         kwargs["worktree_prefix"] = raw["worktree_prefix"]
     if "pnpm_version" in raw:
