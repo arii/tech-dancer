@@ -1,4 +1,3 @@
-# actionlint-disable events
 name: Dependabot Alert Handler
 
 on:
