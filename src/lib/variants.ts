@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
@@ -15,6 +15,7 @@ export const createTransitionVariants: typeof cva = (base, config) => {
   const cache = new Map<string, string>();
 
   const memoizedVariantFn = (props?: unknown) => {
+    // Generate a stable cache key from the props object
     const key = JSON.stringify(props || {});
     if (cache.has(key)) return cache.get(key)!;
 
@@ -67,7 +68,7 @@ export const variants = {
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
-};
+} as const;
 
 export const buttonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${buttons.base}`,
@@ -98,6 +99,9 @@ export const buttonVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for Button components. */
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
+
 /**
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
@@ -116,6 +120,9 @@ export const actionButtonVariants = createTransitionVariants(
     },
   }
 );
+
+/** Derived TypeScript props for ActionButton components. */
+export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
 
 /**
  * Card variants for reports, tools, and callout blocks
@@ -144,6 +151,9 @@ export const cardVariants = createTransitionVariants(
     }
   }
 );
+
+/** Derived TypeScript props for Card components. */
+export type CardVariants = VariantProps<typeof cardVariants>;
 
 /**
  * FilterButton variants for collection and category filtering.
@@ -192,6 +202,9 @@ export const filterButtonVariants = createTransitionVariants(
   }
 );
 
+/** Derived TypeScript props for FilterButton components. */
+export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
+
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
@@ -216,6 +229,9 @@ export const tagVariants = createTransitionVariants(
     }
   }
 );
+
+/** Derived TypeScript props for Tag components. */
+export type TagVariants = VariantProps<typeof tagVariants>;
 
 /**
  * Journal/Blog specific variants for editorial consistency.
@@ -252,6 +268,15 @@ export const journalVariants = {
   })
 };
 
+/** Derived TypeScript props for Journal Card components. */
+export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+/** Derived TypeScript props for Journal Share Action components. */
+export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+/** Derived TypeScript props for Journal Tag components. */
+export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+/** Derived TypeScript props for Journal Nav Link components. */
+export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
+
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
@@ -269,3 +294,6 @@ export const listRowVariants = createTransitionVariants(
     }
   }
 );
+
+/** Derived TypeScript props for List Row components. */
+export type ListRowVariants = VariantProps<typeof listRowVariants>;

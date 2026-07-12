@@ -31,11 +31,11 @@
     "type-check:python": "mypy . || true",
     "audit:semgrep": "semgrep scan --config auto --error",
     "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs",
-    "audit:dead-code": "pnpm exec knip --exclude exports",
+    "audit:dead-code": "pnpm exec knip",
     "audit:duplication": "jscpd .",
     "audit:duplication:pkg": "jscpd boomtick-pkg/ --config boomtick-pkg/.jscpd.json",
     "ci:local": "run-s verify:schemas lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication audit:duplication:pkg",
-    "knip": "knip --exclude exports",
+    "knip": "knip",
     "type-check": "pnpm run verify:schemas && tsc --noEmit",
     "audit:inventory": "node boomtick-pkg/scripts/check-suppression-inventory.mjs",
     "verify:schemas": "node scripts/verify-schemas.mjs",
@@ -157,6 +157,11 @@
     "ignoreDependencies": [
       "@langchain/core",
       "@langchain/google-genai"
+    ],
+    "exclude": [
+      "exports",
+      "types",
+      "nsTypes"
     ]
   }
 }
