@@ -116,6 +116,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       if (!structuredResponse.feedback || !structuredResponse.verdict || !Array.isArray(structuredResponse.findings)) {
         throw new Error('Missing required fields in Gemini structured response');
       }
+
+      // Validate findings internal structure
+      for (const finding of structuredResponse.findings) {
+        if (!finding.id || !finding.file || !finding.issue || !finding.status) {
+          throw new Error(`Finding is missing required fields: ${JSON.stringify(finding)}`);
+        }
+      }
     } catch (e) {
       console.error('Failed to parse/validate Gemini structured output:', e, 'Raw content:', response.content);
       return {
