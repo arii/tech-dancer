@@ -384,9 +384,10 @@ def issue_view(ctx, issue_number):
 @click.option('--labels', help='Comma-separated list of labels to set (replaces existing labels)')
 @click.option('--add-labels', help='Comma-separated list of labels to add')
 @click.option('--remove-labels', help='Comma-separated list of labels to remove')
+@click.option('--state', type=click.Choice(['open', 'closed']))
 @click.pass_context
-def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_labels):
-    """Update a GitHub issue's body and/or labels."""
+def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_labels, state):
+    """Update a GitHub issue's body, labels, and/or state."""
     orch = ctx.obj['ORCHESTRATOR']
 
     label_list = [l.strip() for l in labels.split(',')] if labels else None
@@ -402,7 +403,8 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
         body=content,
         labels=label_list,
         addLabels=add_label_list,
-        removeLabels=remove_label_list
+        removeLabels=remove_label_list,
+        state=state
     )
     out(ctx, f"✅ Successfully updated issue #{issue_number}", data=res)
 
@@ -1061,13 +1063,14 @@ def sync(ctx, limit):
 
 @agent_group.command()
 @click.option('--pr-number', type=int)
+@click.option('--issue-number', type=int)
 @click.option('--branch')
 @click.option('--api-key')
 @click.option('--dry-run/--execute', default=True)
 @click.pass_context
-def fix_ci(ctx, pr_number, branch, api_key, dry_run):
+def fix_ci(ctx, pr_number, issue_number, branch, api_key, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.fix_ci(pr_number=pr_number, branch=branch, api_key=api_key, dry_run=dry_run)
+    res = orch.fix_ci(pr_number=pr_number, issue_number=issue_number, branch=branch, api_key=api_key, dry_run=dry_run)
     agent_name = res.get('agent_name', 'Jules')
     out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
