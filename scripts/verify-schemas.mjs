@@ -43,7 +43,7 @@ function verifySchemas() {
 
     // 5. Sync MCP Schemas
     console.log('🛠️  Syncing MCP schemas...');
-    execSync('pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas', { stdio: 'inherit' });
+    execSync('npm --prefix ./boomtick-pkg/mcp run sync:mcp-schemas', { stdio: 'inherit' });
 
     // 6. Check for drift
     console.log('📊 Checking for schema/contract drift...');
