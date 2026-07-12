@@ -150,18 +150,16 @@ export async function checkNpmDeprecation(pkgName: string, version: string): Pro
   }
 }
 
-export async function checkNodeEol(version: string): Promise<boolean> {
-  try {
-    const cleanVersion = version.replace(/^v/i, "");
-    const major = cleanVersion.split(".")[0];
-    if (!major) return false;
+export async function checkNodeEol(version: string): Promise<boolean | null> {
+  const cleanVersion = version.replace(/^v/i, "");
+  const major = cleanVersion.split(".")[0];
+  if (!major) return null;
 
+  try {
     const res = await fetch("https://endoflife.date/api/nodejs.json");
     if (!res.ok) {
       console.error(`Failed to fetch Node EOL dates. Status: ${res.status}`);
-      const majorNum = parseInt(major, 10);
-      if (Number.isNaN(majorNum)) return false;
-      return majorNum <= 18 || majorNum === 19 || majorNum === 21;
+      return null;
     }
     const data = (await res.json()) as NodeEolCycle[];
     const match = data.find((item) => String(item.cycle) === major);
@@ -171,10 +169,7 @@ export async function checkNodeEol(version: string): Promise<boolean> {
     return eolDate < new Date();
   } catch (error) {
     console.error("Error checking Node EOL:", version, error instanceof Error ? error.message : error);
-    const major = version.replace(/^v/i, "").split(".")[0];
-    const majorNum = parseInt(major, 10);
-    if (Number.isNaN(majorNum)) return false;
-    return majorNum <= 18 || majorNum === 19 || majorNum === 21;
+    return null;
   }
 }
 
@@ -182,7 +177,7 @@ export async function checkDeprecationOrEol(
   ecosystem: Ecosystem,
   name: string | undefined,
   candidate: string
-): Promise<boolean> {
+): Promise<boolean | null> {
   if (ecosystem === "npm" && name) {
     return checkNpmDeprecation(name, candidate);
   }

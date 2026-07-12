@@ -81,11 +81,21 @@ describe('versions utilities', () => {
       expect(isEol).toBe(false);
     });
 
-    it('should fallback to hardcoded logic if fetch fails', async () => {
+    it('should return null if fetch fails (fallback logic removed)', async () => {
       vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
 
       const isEol = await checkNodeEol('18.0.0');
-      expect(isEol).toBe(true); // Node 18 EOL fallback should trigger true
+      expect(isEol).toBeNull();
+    });
+
+    it('should return null if fetch returns non-2xx status', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+      }));
+
+      const isEol = await checkNodeEol('18.0.0');
+      expect(isEol).toBeNull();
     });
   });
 });
