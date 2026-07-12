@@ -128,8 +128,21 @@ runs:
         fi
 
         FAILED=0
-        for f in artifacts/*-verdict.json; do
-          [ -f "$f" ] || continue
+        # Expected verdicts: gemini-code-review, github-models-code-review
+        # Visual reviews are expected only if visual changes exist
+        EXPECTED_REVIEWS="gemini-code-review github-models-code-review"
+        if [ "${{ steps.check_visuals.outputs.changed_routes }}" != "0" ] && [ "${{ steps.check_visuals.outputs.changed_routes }}" != "" ]; then
+          EXPECTED_REVIEWS="$EXPECTED_REVIEWS gemini-review github-models-review"
+        fi
+
+        for r in $EXPECTED_REVIEWS; do
+          f="artifacts/$r-verdict.json"
+          if [ ! -f "$f" ]; then
+            echo "❌ Expected review verdict file missing: $f. The review script may have crashed." >&2
+            FAILED=1
+            continue
+          fi
+
           PASSED=$(jq -r '.passed' "$f" 2>/dev/null || echo "error")
           VERDICT=$(jq -r '.llmVerdict' "$f" 2>/dev/null || echo "unknown")
           HIGH=$(jq -r '.highCount' "$f" 2>/dev/null || echo "0")
@@ -142,7 +155,8 @@ runs:
             echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
             FAILED=1
           elif [ "$PASSED" = "error" ]; then
-            echo "⚠️ Review failed: Could not parse verdict file ($f)" >&2
+            echo "❌ Review failed: Could not parse verdict file ($f). Review may be malformed." >&2
+            FAILED=1
           fi
         done
         exit $FAILED

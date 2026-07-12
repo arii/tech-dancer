@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { chromium } from '@playwright/test';
+import { chromium, type Browser } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
@@ -97,7 +97,7 @@ async function cropImage(imagePath: string, outputPath: string, box: BoundingBox
 }
 
 async function captureRoute(
-  browser: any,
+  browser: Browser,
   base: string,
   route: string,
   imagePath: string,
@@ -156,8 +156,8 @@ function validateLayout(before: LayoutMetrics, after: LayoutMetrics): LayoutVali
 }
 
 async function captureViewport(
-  baseBrowser: any,
-  headBrowser: any,
+  baseBrowser: Browser,
+  headBrowser: Browser,
   baseUrl: string,
   headUrl: string,
   route: string,
