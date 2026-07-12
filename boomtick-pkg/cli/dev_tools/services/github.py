@@ -3,11 +3,11 @@ import json
 import os
 import re
 import subprocess
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
-from dev_tools.utils import DiskCache, log_warn
+from dev_tools.utils import CLIError, DiskCache, log_warn
 
 
 class GitHubClient:
@@ -40,8 +40,12 @@ class GitHubClient:
             self._request("GET", f"/repos/{self.repo}/branches/{branch_name}")
             self._branch_cache[branch_name] = True
             return True
-        except requests.exceptions.RequestException as e:
-            if e.response is not None and e.response.status_code == 404:
+        except (requests.exceptions.RequestException, CLIError) as e:
+            code = getattr(e, "code", None)
+            if code is None and isinstance(e, requests.exceptions.RequestException) and e.response is not None:
+                code = e.response.status_code
+
+            if code == 404:
                 self._branch_cache[branch_name] = False
                 return False
             raise e
@@ -103,6 +107,22 @@ class GitHubClient:
                 self._cache.set(cache_key, result, ttl=ttl)
 
             return result
+        except requests.exceptions.HTTPError as e:
+            # Try to extract detailed error message from GitHub API response
+            try:
+                error_data = e.response.json()
+                github_message = error_data.get("message", "")
+                if "errors" in error_data:
+                    github_message += f": {json.dumps(error_data['errors'])}"
+                if github_message:
+                    raise CLIError(
+                        f"GitHub API Error: {github_message}",
+                        code=e.response.status_code,
+                        data=error_data,
+                    ) from e
+            except (ValueError, AttributeError):
+                pass
+            raise
         except requests.exceptions.RequestException:
             # Preserve the original requests exception for specific status code handling in callers
             raise
@@ -219,6 +239,51 @@ class GitHubClient:
         return prs
 
     def create_pull_request(self, title: str, body: str, head: str, base: str, draft: bool = False) -> Dict[str, Any]:
+        """Creates a PR, automatically pushing the head branch if it doesn't exist on remote."""
+        if not self.branch_exists(head):
+            log_warn(f"Branch '{head}' not found on remote. Checking for local branch and pushing...")
+            try:
+                # Check if branch exists locally
+                proc = subprocess.run(["git", "show-ref", "--verify", f"refs/heads/{head}"], capture_output=True, text=True)
+                if proc.returncode == 0:
+                    # Push branch to origin
+                    log_warn(f"Pushing local branch '{head}' to origin...")
+
+                    # Security: Use environment variable for token to avoid leaking in process list
+                    env = os.environ.copy()
+                    if self.token:
+                        env["GIT_TOKEN_FOR_PUSH"] = self.token
+                        # Use a credential helper to pass the token securely
+                        cred_helper = "!f() { echo \"username=x-access-token\"; echo \"password=$GIT_TOKEN_FOR_PUSH\"; }; f"
+                        push_url = f"https://github.com/{self.repo}.git"
+                        push_args = ["git", "-c", f"credential.helper={cred_helper}", "push", "-u", push_url, head]
+                    else:
+                        push_args = ["git", "push", "-u", "origin", head]
+
+                    # Capture output and handle error manually to avoid leaking sensitive info in exceptions
+                    push_res = subprocess.run(
+                        push_args,
+                        capture_output=True,
+                        text=True,
+                        env=env,
+                        check=False
+                    )
+
+                    if push_res.returncode != 0:
+                        # Sanitize error message before logging
+                        from dev_tools.utils import mask_sensitive_data
+                        sanitized_stderr = mask_sensitive_data(push_res.stderr)
+                        log_warn(f"Failed to push branch '{head}': {sanitized_stderr}")
+                    else:
+                        # Invalidate branch cache
+                        if head in self._branch_cache:
+                            del self._branch_cache[head]
+                else:
+                    log_warn(f"Local branch '{head}' also not found. PR creation will likely fail.")
+            except Exception as e:
+                from dev_tools.utils import mask_sensitive_data
+                log_warn(f"Unexpected error during auto-push: {mask_sensitive_data(str(e))}")
+
         data = {"title": title, "body": body, "head": head, "base": base, "draft": draft}
         return self._request("POST", f"/repos/{self.repo}/pulls", json_data=data)
 
@@ -245,8 +310,12 @@ class GitHubClient:
                 allow_redirects=True,
                 timeout=300,
             )
-        except requests.exceptions.HTTPError as e:
-            if e.response is not None and e.response.status_code == 404:
+        except (requests.exceptions.HTTPError, CLIError) as e:
+            code = getattr(e, "code", None)
+            if code is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                code = e.response.status_code
+
+            if code == 404:
                 if external_id is not None:
                     # Fallback to query by raw check_run_id
                     log_warn(f"Logs for job {external_id} not found (404). Falling back to check run {check_run_id}...")
@@ -258,8 +327,16 @@ class GitHubClient:
                             accept="application/vnd.github.v3.raw",
                             timeout=300,
                         )
-                    except requests.exceptions.HTTPError as fallback_e:
-                        if fallback_e.response is not None and fallback_e.response.status_code == 404:
+                    except (requests.exceptions.HTTPError, CLIError) as fallback_e:
+                        fallback_code = getattr(fallback_e, "code", None)
+                        if (
+                            fallback_code is None
+                            and isinstance(fallback_e, requests.exceptions.HTTPError)
+                            and fallback_e.response is not None
+                        ):
+                            fallback_code = fallback_e.response.status_code
+
+                        if fallback_code == 404:
                             return self._handle_missing_logs(check_run_id, is_fallback=True)
                         raise fallback_e
                 else:
@@ -608,13 +685,20 @@ class GitHubClient:
             def try_create_review(review_body, review_comments, review_event):
                 try:
                     return self.create_review(pr_number, review_body, review_comments, review_event)
-                except requests.exceptions.HTTPError as e:
-                    if e.response is not None and e.response.status_code == 422:
-                        try:
-                            error_data = e.response.json()
-                            error_msg = json.dumps(error_data)
-                        except Exception:
-                            error_msg = e.response.text
+                except (requests.exceptions.HTTPError, CLIError) as e:
+                    code = getattr(e, "code", None)
+                    if code is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                        code = e.response.status_code
+
+                    if code == 422:
+                        error_data = getattr(e, "data", None)
+                        if error_data is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                            try:
+                                error_data = e.response.json()
+                            except Exception:
+                                pass
+
+                        error_msg = json.dumps(error_data) if error_data else (e.response.text if hasattr(e, "response") and e.response else str(e))
 
                         if "Can not approve your own pull request" in error_msg and review_event != "COMMENT":
                             log_warn("Cannot approve own PR. Retrying as COMMENT...")
