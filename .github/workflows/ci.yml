@@ -209,7 +209,7 @@ jobs:
 
       - name: Initialize CodeQL
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/init@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: github/codeql-action/init@v3 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           languages: actions, javascript-typescript
 
@@ -232,7 +232,7 @@ jobs:
 
       - name: Perform CodeQL Analysis
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/analyze@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: github/codeql-action/analyze@v3 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           category: "/language:security-scan"
 
