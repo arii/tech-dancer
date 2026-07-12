@@ -5,8 +5,8 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
  */
 function sanitize(str: unknown): string {
   if (typeof str !== "string") return String(str || "");
-  // CodeQL: Use more robust regex to catch variants like </script >
-  return str.replace(/<script\b[^<]*(?:(?!<\/script\s*>)<[^<]*)*<\/script\s*>/gi, "[REMOVED]");
+  // CodeQL: Use more robust regex to catch variants like </script > or </script\t\n bar>
+  return str.replace(/<script\b[^<]*(?:(?!<\/script\s*[^>]*>)<[^<]*)*<\/script\s*[^>]*>/gi, "[REMOVED]");
 }
 
 /**
