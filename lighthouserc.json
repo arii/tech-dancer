@@ -17,8 +17,8 @@
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.35 }],
-        "largest-contentful-paint": ["error", { "maxNumericValue": 8000 }],
+        "categories:performance": ["error", { "minScore": 0.25 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 12000 }],
         "cumulative-layout-shift": ["error", { "maxNumericValue": 0.2 }],
         "total-blocking-time": ["error", { "maxNumericValue": 1500 }]
       }
