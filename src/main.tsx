@@ -1,12 +1,17 @@
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { Box } from '@/layouts/Primitives';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { initTelemetry } from '@/utils/telemetry';
 import { routes } from './App.tsx';
 import './index.css';
+
+// Initialize error telemetry
+initTelemetry();
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,25 +55,27 @@ const router = createBrowserRouter(routes, {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <RouterProvider
-            router={router}
-            future={{ v7_startTransition: true }}
-            fallbackElement={
-              <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
-                <Box
-                  width={8}
-                  height={8}
-                  radius="full"
-                  className="border-4 border-accent border-t-transparent animate-spin"
-                />
-              </Box>
-            }
-          />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <ErrorBoundary>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <RouterProvider
+              router={router}
+              future={{ v7_startTransition: true }}
+              fallbackElement={
+                <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+                  <Box
+                    width={8}
+                    height={8}
+                    radius="full"
+                    className="border-4 border-accent border-t-transparent animate-spin"
+                  />
+                </Box>
+              }
+            />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

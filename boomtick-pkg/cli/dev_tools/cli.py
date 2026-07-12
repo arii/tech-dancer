@@ -527,9 +527,9 @@ def _render_conflicts(ctx, conflicts):
         if not conflicts:
             click.echo("✅ No potential merge conflicts detected.")
         for c in conflicts:
-            conflict_prs = ' ↔ '.join(f'#{p}' for p in c['prs'])
-            file_count = len(c['files'])
-            click.echo(f"⚠️  {conflict_prs} share {file_count} file(s):")
+            prs_str = ' ↔ '.join(f'#{p}' for p in c['prs'])
+            files_count = len(c['files'])
+            click.echo(f"⚠️  {prs_str} share {files_count} file(s):")
             for f in sorted(c["files"])[:10]:
                 click.echo(f"    - {f}")
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
@@ -1535,8 +1535,7 @@ def main():
             log_error(str(e))
             code = getattr(e, "code", 1)
 
-        if "pytest" not in sys.modules:
-            sys.exit(code)
+        sys.exit(code)
 
 
 if __name__ == "__main__":
