@@ -530,7 +530,8 @@ class Orchestrator:
             # Spec-Driven Issue Validation
             missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
             if missing_spec_sections:
-                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
+                sections_str = ', '.join(f'`{s}`' for s in missing_spec_sections)
+                findings.append(f"Missing spec-driven sections: {sections_str}")
 
             issue_result = {
                 "number": issue.number,
@@ -1619,10 +1620,10 @@ Respond only after the PR is created or updated:
 `{f_path}`
 
 ## Compliance Status
-{"✅ All rules followed." if not violations else "❌ Non-compliant patterns found."}
+{ "✅ All rules followed." if not violations else "❌ Non-compliant patterns found." }
 
 ### Violations
-{"" if not violations else "\n".join(f"- {v}" for v in violations)}
+{ "\n".join(f"- {v}" for v in violations) if violations else "" }
 
 ## Audit Instructions
 
