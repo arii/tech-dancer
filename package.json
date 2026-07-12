@@ -146,7 +146,7 @@
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.59.0",
-    "vite": "^6.4.2",
+    "vite": "^6.4.3",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-sitemap": "^0.8.2",
@@ -154,7 +154,19 @@
   },
   "pnpm": {
     "overrides": {
-      "shell-quote": ">=1.8.4"
+      "shell-quote": ">=1.8.4",
+      "vite": "^6.4.3",
+      "hono": "^4.12.29",
+      "esbuild": "^0.27.3",
+      "@babel/plugin-transform-modules-systemjs": "^7.29.7",
+      "@babel/core": "^7.29.0",
+      "qs": "^6.15.3",
+      "js-yaml": "^4.1.1",
+      "uuid": "^14.0.1",
+      "tmp": "^0.2.7",
+      "minimatch": "^10.2.4",
+      "serialize-javascript": "^7.0.4",
+      "brace-expansion": "^5.0.4"
     }
   },
   "packageManager": "pnpm@10.28.2",
