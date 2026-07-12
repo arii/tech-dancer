@@ -1,7 +1,5 @@
 export const STRICT_JSON_VERIFICATION = `Strict JSON Verification:
-- You MUST self-verify the completeness and validity of the JSON block before finishing your response.
 - Every finding MUST have an \`id\`, \`file\`, \`issue\`, and \`status\`.
-- Ensure the JSON is well-formed and contained entirely within the \`<findings>\` tags.
 - Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
 
 export const SNIPPET_AND_VERIFICATION_RULES = `Snippet and verification rules:

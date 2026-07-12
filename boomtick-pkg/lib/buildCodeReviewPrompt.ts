@@ -107,36 +107,13 @@ Severity rules:
 
   const outputContract = `## 5. Output
 - STRICT SNIPPET: Quote entire line from diff.
-- COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
-- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status, confidence, counterexample), followed immediately by </findings>. No truncation.
+- COUNTEREXAMPLES: Required for errors.
+- STRUCTURED JSON: You MUST respond with a JSON object matching the provided schema.
 
 ${SNIPPET_AND_VERIFICATION_RULES}
 
-You MUST end your review with exactly one of the following strings indicating your final verdict:
-[VERDICT: PASS]
-[VERDICT: WARN]
-[VERDICT: FAIL]
+Final verdict must be one of: 'pass', 'warn', 'fail'.
 
-Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can demonstrate with evidence from the diff.
-
-The JSON must follow this schema:
-<findings>
-{
-  "findings": [
-    {
-      "id": "finding-1",
-      "file": "src/App.tsx",
-      "line": 10,
-      "snippet": "const x = 1;",
-      "issue": "Brief description of the issue",
-      "status": "open",
-      "confidence": "high",
-      "counterexample": "why it fails...",
-      "fixSummary": "Brief summary of how it was addressed"
-    }
-  ]
-}
-</findings>
 ${STRICT_JSON_VERIFICATION}`;
 
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}

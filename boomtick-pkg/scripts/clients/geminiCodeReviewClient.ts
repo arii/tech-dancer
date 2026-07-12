@@ -1,11 +1,8 @@
 import {
-  parseCodeReviewVerdict,
-  parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
-  buildReviewPayload,
   calculateEstimatedTokens,
-  extractFeedbackText
+  normalizeFindings
 } from '../../lib/codeReviewUtils';
 
 import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
@@ -13,7 +10,7 @@ import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
 import { pickGeminiModel, getGeminiPricing } from '../../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../../lib/geminiUtils';
 
-import type { CodeReviewSummary, CodeReviewResult } from '../../lib/codeReviewTypes';
+import { type CodeReviewSummary, type CodeReviewResult, codeReviewResponseSchema } from '../../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../../lib/codeReviewOrchestrator';
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
@@ -41,12 +38,19 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let thinkingBudget = estimatedInputTokens > 10000 ? 4096 : 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText).map(msg => msg.content).join('\n\n');
-    const { HumanMessage } = await import('@langchain/core/messages');
-    const message = new HumanMessage({ content: baseContent });
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, codeReviewResponseSchema);
+    const { SystemMessage, HumanMessage } = await import('@langchain/core/messages');
 
-    let response = await model.invoke([message]);
+    const messages = [
+      new SystemMessage(systemPrompt),
+      new HumanMessage(`DIFF:\n\n${diffText}`),
+    ];
+
+    if (externalText) {
+      messages.push(new SystemMessage(`EXTERNAL CONTEXT:\n\n${externalText}`));
+    }
+
+    let response = await model.invoke(messages);
 
     let finishReason = extractFinishReason(response);
 
@@ -58,8 +62,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, newMax, thinkingBudget);
-      response = await model.invoke([message]);
+      model = createGeminiModel(modelName, newMax, thinkingBudget, codeReviewResponseSchema);
+      response = await model.invoke(messages);
 
       finishReason = extractFinishReason(response);
     }
@@ -76,19 +80,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const cacheTokens = usageMetadata?.cache_read_tokens ?? 0;
-    // thoughtsTokenCount might be nested in response_metadata or usage_metadata
-    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
-                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
-                                 : 0) ?? 0;
-
-    if (thoughtsTokenCount > thinkingBudget * 1.1) {
-      console.warn('Thinking budget exceeded by >10%', {
-        budgetSet: thinkingBudget,
-        thoughtsUsed: thoughtsTokenCount,
-        model: modelName,
-      });
-    }
 
     const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length' || finishReason === 'max_tokens';
 
@@ -97,8 +88,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
         finishReason,
         usage: usageMetadata,
       });
-      // Do not throw here, instead pass the error state gracefully
-      // so it can be handled by orchestrator without breaking the CI suite
       return {
         feedback: `Error: Gemini model was truncated during execution (finishReason=${finishReason}).`,
         tokens: totalTokens,
@@ -112,16 +101,24 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
-    // typically in @langchain response.content is a string, but if we extract only text it's better
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
-
-    const parsedState = parseCodeReviewStateDetailed(feedback);
+    // With response_mime_type: 'application/json', response.content is guaranteed to be a stringified JSON
+    let structuredResponse: { feedback: string, verdict: 'pass' | 'fail' | 'warn', findings: unknown[] };
+    try {
+      structuredResponse = JSON.parse(typeof response.content === 'string' ? response.content : JSON.stringify(response.content));
+    } catch (e) {
+      console.error('Failed to parse Gemini structured output:', e, 'Raw content:', response.content);
+      return {
+        feedback: typeof response.content === 'string' ? response.content : JSON.stringify(response.content),
+        tokens: totalTokens,
+        cost: cost,
+        modelName,
+        llmVerdict: 'warn',
+        parseError: 'invalid_json',
+      };
+    }
 
     return {
-      feedback: feedback,
+      feedback: structuredResponse.feedback,
       role: summary.role,
       tokens: totalTokens,
       inputTokens,
@@ -129,10 +126,11 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       cacheTokens,
       cost: cost,
       modelName: modelName,
-      llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parsedState.state,
+      llmVerdict: structuredResponse.verdict,
+      state: {
+        findings: normalizeFindings(structuredResponse.findings),
+      },
       truncated: isTruncated,
-      parseError: parsedState.parseError,
     };
   }
 };
