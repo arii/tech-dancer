@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests
-from dev_tools.utils import DiskCache
+from dev_tools.utils import DiskCache, log_warn
 
 
 class GitHubClient:
@@ -240,16 +240,26 @@ class GitHubClient:
                 timeout=300,
             )
         except requests.exceptions.HTTPError as e:
-            if external_id is not None and e.response.status_code == 404:
-                # Fallback to query by raw check_run_id
-                job_id = str(check_run_id)
-                return self._request(
-                    "GET",
-                    f"/repos/{self.repo}/actions/jobs/{job_id}/logs",
-                    is_text=True,
-                    accept="application/vnd.github.v3.raw",
-                    timeout=300,
-                )
+            if e.response is not None and e.response.status_code == 404:
+                if external_id is not None:
+                    # Fallback to query by raw check_run_id
+                    log_warn(f"Logs for job {external_id} not found (404). Falling back to check run {check_run_id}...")
+                    try:
+                        return self._request(
+                            "GET",
+                            f"/repos/{self.repo}/actions/jobs/{check_run_id}/logs",
+                            is_text=True,
+                            accept="application/vnd.github.v3.raw",
+                            timeout=300,
+                        )
+                    except requests.exceptions.HTTPError as fallback_e:
+                        if fallback_e.response is not None and fallback_e.response.status_code == 404:
+                            log_warn(f"Logs for check run {check_run_id} also not found (404).")
+                            return f"WARNING: Logs not available for check run {check_run_id} (GitHub returned 404). They may have expired or the job is still pending."
+                        raise fallback_e
+                else:
+                    log_warn(f"Logs for job {job_id} not found (404).")
+                    return f"WARNING: Logs not available for job {job_id} (GitHub returned 404). They may have expired or the job is still pending."
             raise
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
