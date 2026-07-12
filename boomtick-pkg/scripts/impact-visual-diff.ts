@@ -97,26 +97,27 @@ async function cropImage(imagePath: string, outputPath: string, box: BoundingBox
 }
 
 async function captureRoute(
+  browser: any,
   base: string,
   route: string,
   imagePath: string,
   htmlPath: string,
   viewport = { width: 1440, height: 900 }
 ): Promise<LayoutMetrics> {
-  let browser;
+  const context = await browser.newContext({
+    viewport,
+    isMobile: viewport.width < 768,
+    hasTouch: viewport.width < 768
+  });
+
   try {
-    browser = await chromium.launch();
-    const page = await browser.newPage({
-      viewport,
-      isMobile: viewport.width < 768,
-      hasTouch: viewport.width < 768
-    });
+    const page = await context.newPage();
     await page.goto(new URL(route, base).toString(), { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
       console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
     });
 
-    const metrics = await page.evaluate((vpWidth) => {
+    const metrics = await page.evaluate((vpWidth: number) => {
       const main = document.querySelector('main');
       return {
         scrollWidth: document.body.scrollWidth,
@@ -131,7 +132,7 @@ async function captureRoute(
     fs.writeFileSync(htmlPath, await page.content());
     return metrics;
   } finally {
-    if (browser) await browser.close();
+    await context.close();
   }
 }
 
@@ -155,6 +156,8 @@ function validateLayout(before: LayoutMetrics, after: LayoutMetrics): LayoutVali
 }
 
 async function captureViewport(
+  baseBrowser: any,
+  headBrowser: any,
   baseUrl: string,
   headUrl: string,
   route: string,
@@ -173,8 +176,10 @@ async function captureViewport(
   const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
 
   console.log(`📸 Capturing ${route} (${label})`);
-  const beforeMetrics = await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
-  const afterMetrics = await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+  const [beforeMetrics, afterMetrics] = await Promise.all([
+    captureRoute(baseBrowser, baseUrl, route, beforePath, beforeHtmlPath, viewport),
+    captureRoute(headBrowser, headUrl, route, afterPath, afterHtmlPath, viewport)
+  ]);
 
   const validation = validateLayout(beforeMetrics, afterMetrics);
   if (!validation.passed) {
@@ -272,26 +277,45 @@ async function main(): Promise<void> {
   const basePreview = startPreview(baseWorktree, basePort);
   const headPreview = startPreview(process.cwd(), headPort);
 
+  const CONCURRENCY = Number(process.env.IMPACT_CONCURRENCY ?? 3);
+
   try {
     await Promise.all([waitForServer(baseUrl), waitForServer(headUrl)]);
 
+    const baseBrowser = await chromium.launch();
+    const headBrowser = await chromium.launch();
+
     const summaries: VisualRouteSummary[] = [];
-    for (const route of routes) {
-      const slug = routeToSlug(route);
-      const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
-      ensureDirectory(routeVisualDir);
+    try {
+      const tasks: (() => Promise<void>)[] = [];
 
-      for (const vp of VIEWPORTS) {
-        const vpSlug = `${slug}-${vp.name.toLowerCase()}`;
-        const vpDomDir = path.join(DOM_REVIEW_DIR, vpSlug);
-        ensureDirectory(vpDomDir);
+      for (const route of routes) {
+        const slug = routeToSlug(route);
+        const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
+        ensureDirectory(routeVisualDir);
 
-        const summary = await captureViewport(
-          baseUrl, headUrl, route, vpSlug, vp.name, vp.suffix,
-          { width: vp.width, height: vp.height }, routeVisualDir, vpDomDir
-        );
-        summaries.push(summary);
+        for (const vp of VIEWPORTS) {
+          const vpSlug = `${slug}-${vp.name.toLowerCase()}`;
+          const vpDomDir = path.join(DOM_REVIEW_DIR, vpSlug);
+          ensureDirectory(vpDomDir);
+
+          tasks.push(async () => {
+            const summary = await captureViewport(
+              baseBrowser, headBrowser, baseUrl, headUrl, route, vpSlug, vp.name, vp.suffix,
+              { width: vp.width, height: vp.height }, routeVisualDir, vpDomDir
+            );
+            summaries.push(summary);
+          });
+        }
       }
+
+      // Run tasks with concurrency limit
+      for (let i = 0; i < tasks.length; i += CONCURRENCY) {
+        const batch = tasks.slice(i, i + CONCURRENCY);
+        await Promise.all(batch.map(task => task()));
+      }
+    } finally {
+      await Promise.all([baseBrowser.close(), headBrowser.close()]);
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
