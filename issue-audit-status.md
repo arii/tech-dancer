@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Total open issues reviewed: 45
+- Total open issues reviewed: 47
 - Issues recommended to keep open: 45
 - Issues recommended for clarification: 0
 - Issues recommended to merge: 0
@@ -10,6 +10,38 @@
 - Issues blocked by PRs or other work: 0
 
 ## Issue Checklist
+
+### Issue #3565 — td-cli gh audit-pr throws 404 Client Error for PR 3558 logs
+
+- URL: https://github.com/arii/tech-dancer/issues/3565
+- [x] Relevance checked
+- [x] Duplicate check completed
+- [x] Related PRs checked
+- [x] Current implementation checked
+- [x] Labels / milestone reviewed
+- [x] Audit note written
+- [x] Recommendation recorded
+
+**Audit Note:** Issue is open and active but lacks a PR.
+
+**Recommendation:** Keep open
+**Reason:** Issue is still relevant and requires implementation.
+
+### Issue #3564 — fix: `td-cli gh validate-issue --all-open` fails with TypeError on missing `issueNumber` argument
+
+- URL: https://github.com/arii/tech-dancer/issues/3564
+- [x] Relevance checked
+- [x] Duplicate check completed
+- [x] Related PRs checked
+- [x] Current implementation checked
+- [x] Labels / milestone reviewed
+- [x] Audit note written
+- [x] Recommendation recorded
+
+**Audit Note:** Issue is open and active but lacks a PR.
+
+**Recommendation:** Keep open
+**Reason:** Issue is still relevant and requires implementation.
 
 ### Issue #3546 — chore: remove pytest leakage in production from click entrypoint in cli.py
 
