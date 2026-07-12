@@ -1,4 +1,5 @@
 # pylint: disable=import-outside-toplevel,missing-docstring
+# pylint: disable=cyclic-import
 import unittest
 from unittest.mock import patch
 
