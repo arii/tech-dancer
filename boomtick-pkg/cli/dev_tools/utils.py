@@ -561,6 +561,32 @@ def call_github_models(
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 
+def _get_ci_duration_mins() -> float:
+    """Calculates the current CI pipeline duration in minutes using GitHub API."""
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    if not run_id:
+        return 0.0
+    try:
+        from datetime import datetime, timezone
+
+        client = get_github_client()
+        repo_name = get_repo_name()
+        if not repo_name:
+            return 0.0
+        repo = client.get_repo(repo_name)
+        run = repo.get_workflow_run(int(run_id))
+        start_time = run.run_started_at
+        if not start_time:
+            return 0.0
+        if start_time.tzinfo is None:
+            start_time = start_time.replace(tzinfo=timezone.utc)
+        now = datetime.now(timezone.utc)
+        return (now - start_time).total_seconds() / 60.0
+    except Exception as e:
+        log_warn(f"Failed to fetch CI duration: {e}")
+        return 0.0
+
+
 def verify_ci_metrics(
     input_threshold: Optional[int] = None,
     output_threshold: Optional[int] = None,
@@ -577,7 +603,6 @@ def verify_ci_metrics(
         if val is not None:
             return int(val)
         try:
-            # Fallback to env var, then to config_val
             return int(os.environ.get(env_key, config_val))
         except (ValueError, TypeError):
             return config_val
@@ -587,28 +612,17 @@ def verify_ci_metrics(
     total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
     duration_limit = get_limit(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
 
-    # Threshold validation
     if input_limit < 0 or output_limit < 0 or total_limit < 0 or duration_limit < 0:
         raise CLIError("Thresholds must be non-negative integers.")
 
-    # Use Path for robust path resolution
     log_file = Path(get_or_create_log_dir("ai")) / "review-run.jsonl"
-
     if not log_file.exists():
-        # In multi-job CI, this might happen if logs weren't shared.
-        return {
-            "status": "warning",
-            "message": f"No AI usage logs found at {log_file}. Ensure logs are shared between jobs.",
-        }
+        return {"status": "warning", "message": f"No AI usage logs found at {log_file}."}
 
-    total_input = 0
-    total_output = 0
-
+    total_input, total_output = 0, 0
     try:
         with log_file.open("r") as f:
-            for line in f:
-                if not line.strip():
-                    continue
+            for line in [l.strip() for l in f if l.strip()]:
                 entry = json.loads(line)
                 total_input += entry.get("inputTokens", 0)
                 total_output += entry.get("outputTokens", 0)
@@ -617,27 +631,7 @@ def verify_ci_metrics(
         return {"status": "error", "message": f"Could not verify metrics: {e}"}
 
     total_tokens = total_input + total_output
-
-    # Pipeline duration check
-    actual_duration_mins = 0.0
-    run_id = os.environ.get("GITHUB_RUN_ID")
-    if run_id:
-        try:
-            from datetime import datetime, timezone
-
-            client = get_github_client()
-            repo_name = get_repo_name()
-            if repo_name:
-                repo = client.get_repo(repo_name)
-                run = repo.get_workflow_run(int(run_id))
-                start_time = run.run_started_at
-                if start_time:
-                    if start_time.tzinfo is None:
-                        start_time = start_time.replace(tzinfo=timezone.utc)
-                    now = datetime.now(timezone.utc)
-                    actual_duration_mins = (now - start_time).total_seconds() / 60.0
-        except Exception as e:
-            log_warn(f"Failed to fetch CI duration: {e}")
+    actual_duration_mins = _get_ci_duration_mins()
 
     result = {
         "inputTokens": total_input,
@@ -661,11 +655,7 @@ def verify_ci_metrics(
         errors.append(f"CI duration ({round(actual_duration_mins, 2)}m) exceeded limit ({duration_limit}m)")
 
     if errors:
-        return {
-            "status": "error",
-            "message": "AI Token threshold exceeded: " + "; ".join(errors),
-            "metrics": result,
-        }
+        return {"status": "error", "message": "AI Token threshold exceeded: " + "; ".join(errors), "metrics": result}
 
     return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
 
