@@ -1,6 +1,4 @@
-"""
-Validates workspace.json against its schema.
-"""
+"""Validates workspace.json against its schema."""
 import json
 import sys
 from pathlib import Path
@@ -23,9 +21,9 @@ def validate_workspace():
         sys.exit(1)
 
     try:
-        with open(workspace_path, 'r', encoding="utf-8") as f:
+        with open(workspace_path, "r", encoding="utf-8") as f:
             workspace = json.load(f)
-        with open(schema_path, 'r', encoding="utf-8") as f:
+        with open(schema_path, "r", encoding="utf-8") as f:
             schema = json.load(f)
     except Exception as e:
         print(f"Error reading JSON files: {e}")

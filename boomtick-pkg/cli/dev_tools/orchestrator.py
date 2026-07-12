@@ -431,7 +431,7 @@ class Orchestrator:
         """
         Updates an issue's body, labels, and/or state.
         """
-        res = None
+        res: Any = None
         # Shim for backward compatibility with old snake_case names from tests or older callers
         if "add_labels" in kwargs and addLabels is None:
             addLabels = kwargs["add_labels"]
@@ -823,7 +823,7 @@ class Orchestrator:
                     json_start = output.find("{")
                     json_end = output.rfind("}") + 1
                     try:
-                        audit_data = json.loads(output[json_start:json_end])
+                        audit_data: Any = json.loads(output[json_start:json_end])
                         # Ensure audit_data is a dictionary, and recursively parse if it's a stringified JSON
                         if isinstance(audit_data, str):
                             try:

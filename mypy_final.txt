@@ -1,0 +1,7 @@
+
+> react-example@0.1.0 type-check:python /app
+> mypy .
+
+boomtick-pkg/cli/dev_tools/orchestrator.py:297: error: Expected ':'  [syntax]
+Found 1 error in 1 file (errors prevented further checking)
+ ELIFECYCLE  Command failed with exit code 2.
