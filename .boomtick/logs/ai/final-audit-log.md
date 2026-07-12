@@ -13,5 +13,6 @@
 - [x] PR 3553: Restore missing pr_overlap.py script
 
 ## Merge Strategy
-- PRs reviewed sequentially with auto approvals based on structural integrity, no conflicts found, and passing CI logs checks.
-- Merge all PRs sequentially when status checks on target branches pass.
+- PRs reviewed sequentially with approvals or change requests based on structural integrity and missing definition of done.
+- Specifically, PRs 3561 and 3562 were rejected/requested changes for including temporary file dumps.
+- Merge all approved PRs sequentially when status checks on target branches pass.
