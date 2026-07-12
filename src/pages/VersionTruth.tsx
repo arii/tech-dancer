@@ -7,7 +7,12 @@ const VersionTruth = () => {
     <Box
       as="section"
       aria-label="VersionTruth content"
-      className="mx-auto w-full max-w-[1024px] min-w-0 px-4 sm:px-6 lg:px-8 py-10"
+      marginX="auto"
+      width="full"
+      maxWidth="1024px"
+      minWidth={0}
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingY={10}
     >
       <SEO
         title="VersionTruth - Real-time Version Oracle"
@@ -17,10 +22,10 @@ const VersionTruth = () => {
       <Stack gap={8} width="full" maxWidth="full">
         {/* Header */}
         <Stack gap={3}>
-          <Box as="h1" className="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">
+          <Box as="h1" emphasis="h1" className="text-3xl sm:text-4xl">
             VersionTruth
           </Box>
-          <Box as="p" className="text-lg text-secondary max-w-[800px]">
+          <Box as="p" emphasis="body" className="text-lg" maxWidth="800px">
             The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions. Exposes live, registry-fetched ground-truth so coding agents stop downgrading correct dependency versions.
           </Box>
         </Stack>
@@ -28,26 +33,26 @@ const VersionTruth = () => {
         {/* Concept Cards */}
         <Grid cols={{ base: 1, md: 2 }} gap={6} width="full">
           <Box padding={6} radius="lg" border="default" surface="card">
-            <Box as="h3" className="text-lg font-bold text-primary mb-2">
+            <Box as="h3" emphasis="h3" className="mb-2">
               The Fallacy
             </Box>
-            <Box as="p" className="text-sm text-secondary">
+            <Box as="p" emphasis="body" className="text-sm">
               LLMs suffer from knowledge cutoff dates. When they encounter newer, unfamiliar releases (like v6), they confidently assume they are hallucinations or typos and revert them back to old, stale versions (like v4) that exist in their training data.
             </Box>
           </Box>
           <Box padding={6} radius="lg" border="default" surface="card">
-            <Box as="h3" className="text-lg font-bold text-primary mb-2">
+            <Box as="h3" emphasis="h3" className="mb-2">
               The Remedy
             </Box>
-            <Box as="p" className="text-sm text-secondary">
-              VersionTruth serves as a live oracle. Before writing updates, an agent queries the API or reads the hosted <Box as="code" className="text-xs font-mono">skill.md</Box> to verify that their candidate is current and valid.
+            <Box as="p" emphasis="body" className="text-sm">
+              VersionTruth serves as a live oracle. Before writing updates, an agent queries the API or reads the hosted <Box as="code" emphasis="mono" className="text-xs">skill.md</Box> to verify that their candidate is current and valid.
             </Box>
           </Box>
         </Grid>
 
         {/* Endpoints */}
         <Stack gap={4}>
-          <Box as="h2" className="text-2xl font-bold text-primary">
+          <Box as="h2" emphasis="h2">
             API Endpoints
           </Box>
           <Stack gap={4} width="full">
