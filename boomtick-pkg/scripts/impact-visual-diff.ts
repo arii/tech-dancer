@@ -112,25 +112,30 @@ async function captureRoute(
 
   try {
     const page = await context.newPage();
-    await page.goto(new URL(route, base).toString(), { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
-      console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
-    });
+    try {
+      await page.goto(new URL(route, base).toString(), { waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {
+        console.warn(`[Impact Analysis] Warning: Network did not become idle for ${route} within 15s; continuing with current DOM state.`);
+      });
 
-    const metrics = await page.evaluate((vpWidth: number) => {
-      const main = document.querySelector('main');
-      return {
-        scrollWidth: document.body.scrollWidth,
-        clientWidth: document.body.clientWidth,
-        mainWidth: main ? main.clientWidth : 0,
-        scrollHeight: document.body.scrollHeight,
-        viewportWidth: vpWidth
-      };
-    }, viewport.width);
+      const metrics = await page.evaluate((vpWidth: number) => {
+        const main = document.querySelector('main');
+        return {
+          scrollWidth: document.body.scrollWidth,
+          clientWidth: document.body.clientWidth,
+          mainWidth: main ? main.clientWidth : 0,
+          scrollHeight: document.body.scrollHeight,
+          viewportWidth: vpWidth
+        };
+      }, viewport.width);
 
-    await page.screenshot({ path: imagePath, fullPage: true });
-    fs.writeFileSync(htmlPath, await page.content());
-    return metrics;
+      await page.screenshot({ path: imagePath, fullPage: true });
+      fs.writeFileSync(htmlPath, await page.content());
+      return metrics;
+    } catch (err) {
+      console.error(`❌ Failed to capture route ${route}:`, err);
+      throw err;
+    }
   } finally {
     await context.close();
   }
@@ -277,7 +282,8 @@ async function main(): Promise<void> {
   const basePreview = startPreview(baseWorktree, basePort);
   const headPreview = startPreview(process.cwd(), headPort);
 
-  const CONCURRENCY = Number(process.env.IMPACT_CONCURRENCY ?? 3);
+  const rawConcurrency = process.env.IMPACT_CONCURRENCY ? parseInt(process.env.IMPACT_CONCURRENCY, 10) : 3;
+  const CONCURRENCY = isNaN(rawConcurrency) || rawConcurrency < 1 ? 3 : Math.min(rawConcurrency, 10);
 
   try {
     await Promise.all([waitForServer(baseUrl), waitForServer(headUrl)]);
