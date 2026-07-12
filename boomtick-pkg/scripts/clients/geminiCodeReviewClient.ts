@@ -10,7 +10,12 @@ import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
 import { pickGeminiModel, getGeminiPricing } from '../../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../../lib/geminiUtils';
 
-import { type CodeReviewSummary, type CodeReviewResult, codeReviewResponseSchema } from '../../lib/codeReviewTypes';
+import {
+  type CodeReviewSummary,
+  type CodeReviewResult,
+  codeReviewResponseSchema,
+  type GeminiStructuredResponse
+} from '../../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../../lib/codeReviewOrchestrator';
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
@@ -102,11 +107,17 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     // With response_mime_type: 'application/json', response.content is guaranteed to be a stringified JSON
-    let structuredResponse: { feedback: string, verdict: 'pass' | 'fail' | 'warn', findings: unknown[] };
+    let structuredResponse: GeminiStructuredResponse;
     try {
-      structuredResponse = JSON.parse(typeof response.content === 'string' ? response.content : JSON.stringify(response.content));
+      const rawText = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
+      structuredResponse = JSON.parse(rawText);
+
+      // Basic runtime validation of required fields
+      if (!structuredResponse.feedback || !structuredResponse.verdict || !Array.isArray(structuredResponse.findings)) {
+        throw new Error('Missing required fields in Gemini structured response');
+      }
     } catch (e) {
-      console.error('Failed to parse Gemini structured output:', e, 'Raw content:', response.content);
+      console.error('Failed to parse/validate Gemini structured output:', e, 'Raw content:', response.content);
       return {
         feedback: typeof response.content === 'string' ? response.content : JSON.stringify(response.content),
         tokens: totalTokens,
