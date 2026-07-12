@@ -147,20 +147,20 @@ runs:
           VERDICT=$(jq -r '.llmVerdict' "$f" 2>/dev/null || echo "unknown")
           HIGH=$(jq -r '.highCount' "$f" 2>/dev/null || echo "0")
 
-          if [ "$VERDICT" = "warn" ]; then
+          if [[ "$VERDICT" == "warn" ]]; then
              # Only allow specific safe-skip reasons for warnings to pass CI
              IS_TRUNCATED=$(jq -r '.isTruncated // .truncated // "false"' "$f" 2>/dev/null)
              SKIP_REASON=$(jq -r '.skipReason // "NONE"' "$f" 2>/dev/null)
 
-             if [ "$IS_TRUNCATED" = "true" ] || [ "$SKIP_REASON" = "MISSING_API_KEY" ] || [ "$SKIP_REASON" = "RATE_LIMIT" ]; then
+             if [[ "$IS_TRUNCATED" == "true" || "$SKIP_REASON" == *"MISSING_API_KEY"* || "$SKIP_REASON" == *"RATE_LIMIT"* ]]; then
                 echo "⚠️ Review Warning: Legitimate skip/truncation ($f, reason: $SKIP_REASON, truncated: $IS_TRUNCATED). Manual review recommended."
              else
-                echo "❌ Review failed: Unexpected warning state or unhandled error ($f)" >&2
+                echo "❌ Review failed: Unexpected warning state or unhandled error ($f, reason: $SKIP_REASON)" >&2
                 FAILED=1
              fi
           fi
 
-          if [ "$PASSED" = "false" ] || [ "$VERDICT" = "fail" ]; then
+          if [[ "$PASSED" == "false" || "$VERDICT" == "fail" ]]; then
             echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
             FAILED=1
           elif [ "$PASSED" = "error" ]; then
