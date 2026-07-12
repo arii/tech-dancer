@@ -1,5 +1,4 @@
 # actionlint-disable events
-
 name: Dependabot Alert Handler
 
 on:
@@ -37,7 +36,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
@@ -84,11 +83,13 @@ jobs:
           import textwrap
 
           def escape_md(text):
-              """Escapes markdown special characters and prevents mentions."""
+              """Escapes problematic markdown special characters and prevents mentions."""
               if not text:
                   return ""
-              # Basic MD escaping
-              text = re.sub(r"([\\`*_{}\[\]()#+-.!|@])", r"\\\1", text)
+              # Only escape backticks, @ (mentions), # (issue links), and [ (links)
+              # GitHub issue titles are plain text, so we don't escape there.
+              # In the body, we escape these to prevent unwanted side-effects.
+              text = re.sub(r"([`@#\[])", r"\\\1", text)
               return text
 
           package = os.environ.get("PACKAGE", "unknown")
@@ -97,15 +98,15 @@ jobs:
           ghsa_id = os.environ.get("GHSA_ID", "unknown")
           patched_version = os.environ.get("PATCHED_VERSION", "the latest version")
 
-          # Sanitize for Markdown
+          # Sanitize for Markdown body
           s_package = escape_md(package)
           s_ecosystem = escape_md(ecosystem)
           s_severity = escape_md(severity)
           s_ghsa_id = escape_md(ghsa_id)
           s_patched_version = escape_md(patched_version)
 
-          # Output sanitized title
-          title = f"security: upgrade {s_package} to {s_patched_version} ({s_ghsa_id})"
+          # Output plain title (titles are not Markdown)
+          title = f"security: upgrade {package} to {patched_version} ({ghsa_id})"
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"title={title}\n")
 
