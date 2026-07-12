@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring,wrong-import-order
+from dev_tools.utils import run_command
 import json
 import os
 import sys
@@ -5,8 +7,6 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import time
-from dev_tools.utils import run_command
 
 def run_cli(args, suppress_errors=False):
     try:
@@ -19,11 +19,15 @@ def run_cli(args, suppress_errors=False):
 
 
 try:
-    from dev_tools.utils import call_ai, get_ai_synthesis_model, clean_llm_output
+    from dev_tools.utils import call_ai, clean_llm_output, get_ai_synthesis_model
 except ImportError:
     call_ai = None
-    get_ai_synthesis_model = lambda: "gpt-4o-mini"
-    clean_llm_output = lambda x: x
+
+    def get_ai_synthesis_model():
+        return "gpt-4o-mini"
+
+    def clean_llm_output(x):
+        return x
 
 
 def generate_text_ai(model, prompt):
@@ -42,12 +46,12 @@ def generate_text_ai(model, prompt):
                         "properties": {
                             "timestamp": {"type": "string"},
                             "target_id": {"type": "string"},
-                            "status": {"type": "string"}
-                        }
-                    }
-                }
+                            "status": {"type": "string"},
+                        },
+                    },
+                },
             },
-            "required": ["current_timestamp", "target_id", "task_objective", "interaction_history"]
+            "required": ["current_timestamp", "target_id", "task_objective", "interaction_history"],
         }
         try:
             res = call_ai(prompt, model=model, schema=schema)
@@ -57,20 +61,24 @@ def generate_text_ai(model, prompt):
             print(f"AI call failed, falling back to mock: {e}")
 
     # Fallback to mock routing decision
-    return json.dumps({
-        "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "target_id": "global-pr-review",
-        "task_objective": "Review open PRs to determine merge readiness. Check CI passing and enforce DRY.",
-        "interaction_history": []
-    })
+    return json.dumps(
+        {
+            "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "target_id": "global-pr-review",
+            "task_objective": "Review open PRs to determine merge readiness. Check CI passing and enforce DRY.",
+            "interaction_history": [],
+        }
+    )
+
 
 def get_repo_status():
     stdout = run_cli(["gh", "status-board"])
     return stdout if stdout else "No active PRs or status board available."
 
+
 def generate_dynamic_payload():
     repo_status = get_repo_status()
-    
+
     prompt = f"""
     You are the Orchestrator. Review this repo status:
     {repo_status}
@@ -78,21 +86,22 @@ def generate_dynamic_payload():
     Decide the single most important task for an engineering agent. 
     Output ONLY a JSON payload matching the expected Jules schema.
     """
-    
+
     model = get_ai_synthesis_model()
     llm_response = generate_text_ai(model=model, prompt=prompt)
     return json.loads(llm_response)
 
+
 def execute_genai_routing():
     print("Evaluating repository state via GenAI...")
     payload = generate_dynamic_payload()
-    
+
     print(f"Generated Payload for target: {payload.get('target_id')}")
     print(f"Objective: {payload.get('task_objective')}")
-    
+
     print("Dispatching to Agent 1...")
     run_cli(["agent", "dispatch", "main", json.dumps(payload)])
 
+
 if __name__ == "__main__":
     execute_genai_routing()
-

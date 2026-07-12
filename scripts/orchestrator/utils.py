@@ -1,9 +1,11 @@
+# pylint: disable=missing-docstring
 import os
-import subprocess
 import re
+import subprocess
 import time
 
 CLI_BASE = ["td-cli"]
+
 
 def run_cli(args, suppress_errors=False):
     """Executes a BoomTick CLI command and returns the standard output."""
@@ -21,6 +23,7 @@ def run_cli(args, suppress_errors=False):
             print(f"CLI Error: {e.stderr}")
         return "" if suppress_errors else None
 
+
 def get_session_id():
     """Runs 'agent sync' and parses the output for the active session ID."""
     stdout = run_cli(["agent", "sync"])
@@ -28,6 +31,7 @@ def get_session_id():
         return None
     match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
     return match.group(1) if match else None
+
 
 def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
     """Blocks execution until the agent reaches a terminal state or requests input."""

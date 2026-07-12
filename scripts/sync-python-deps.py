@@ -1,7 +1,8 @@
-import os
+# pylint: disable=invalid-name,missing-docstring
 import subprocess
 import sys
 from pathlib import Path
+
 
 def sync_deps():
     repo_root = Path(__file__).parent.parent
@@ -23,11 +24,21 @@ def sync_deps():
         # Using --no-cache-dir to avoid disk space issues in some environments
         # and --upgrade to ensure latest specified versions
         subprocess.run(
-            [str(venv_python), "-m", "pip", "install", "--upgrade", "--no-cache-dir", "--break-system-packages", "-r", str(req_file)],
+            [
+                str(venv_python),
+                "-m",
+                "pip",
+                "install",
+                "--upgrade",
+                "--no-cache-dir",
+                "--break-system-packages",
+                "-r",
+                str(req_file),
+            ],
             check=True,
             capture_output=True,
             text=True,
-            timeout=600 # Increased to 10 minutes for slow environments
+            timeout=600,  # Increased to 10 minutes for slow environments
         )
         print("✅ Python dependencies synced successfully.")
     except subprocess.TimeoutExpired:
@@ -36,6 +47,7 @@ def sync_deps():
         print(f"❌ Failed to sync Python dependencies: {e.stderr}")
     except Exception as e:
         print(f"❌ An error occurred: {e}")
+
 
 if __name__ == "__main__":
     sync_deps()

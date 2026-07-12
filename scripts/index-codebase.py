@@ -1,14 +1,16 @@
+# pylint: disable=f-string-without-interpolation,invalid-name,missing-docstring,too-many-locals,too-many-nested-blocks,unused-argument
 import os
-from pathlib import Path
 
 from dev_tools.services.vector_store import VectorStore
+
 
 def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
     """Simple chunking by character count (approximate)."""
     chunks = []
     for i in range(0, len(content), chunk_size):
-        chunks.append(content[i:i + chunk_size])
+        chunks.append(content[i : i + chunk_size])
     return chunks
+
 
 def index_codebase():
     print("🚀 Indexing codebase...")
@@ -18,8 +20,8 @@ def index_codebase():
         return
     store.reset()
 
-    extensions = {'.ts', '.tsx', '.py', '.md'}
-    exclude_dirs = {'.git', 'node_modules', 'dist', 'artifacts', 'build', '.venv'}
+    extensions = {".ts", ".tsx", ".py", ".md"}
+    exclude_dirs = {".git", "node_modules", "dist", "artifacts", "build", ".venv"}
 
     documents = []
     metadatas = []
@@ -34,7 +36,7 @@ def index_codebase():
             if ext in extensions:
                 filepath = os.path.join(root, file)
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, "r", encoding="utf-8") as f:
                         content = f.read()
 
                     if not content.strip():
@@ -61,6 +63,7 @@ def index_codebase():
         store.add_documents(documents, metadatas, ids)
 
     print("✅ Indexing complete!")
+
 
 if __name__ == "__main__":
     index_codebase()

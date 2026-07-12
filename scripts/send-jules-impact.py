@@ -1,20 +1,28 @@
+# pylint: disable=invalid-name,logging-fstring-interpolation,missing-docstring,too-many-branches,too-many-locals,too-many-statements,wrong-import-order
+from dev_tools.services.jules import JulesClient
+import glob
+import json
+import logging
 import os
 import sys
-import json
-import glob
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from dev_tools.services.jules import JulesClient
 
 def is_skipped_review(content: str) -> bool:
     lines = [line.strip() for line in content.splitlines() if line.strip()]
     return len(lines) == 2 and lines[1].startswith("Skipped:")
 
+
 def is_skipped_verdict(data: dict) -> bool:
-    return data.get("llmVerdict") == "pass" and data.get("highCount") == 0 and len(data.get("routes", [])) == 0 and data.get("passed") is True
+    return (
+        data.get("llmVerdict") == "pass"
+        and data.get("highCount") == 0
+        and len(data.get("routes", [])) == 0
+        and data.get("passed") is True
+    )
+
 
 def main():
     task_id = os.environ.get("TASK_ID")
@@ -62,7 +70,7 @@ def main():
         "gemini-review.md",
         "github-models-review.md",
         "gemini-code-review.md",
-        "github-models-code-review.md"
+        "github-models-code-review.md",
     ]
 
     has_valid_reviews = False
@@ -96,7 +104,7 @@ def main():
                     logger.error(f"Invalid JSON in verdict file {filepath}: {e}")
                     continue
         except IOError as e:
-             logger.error(f"Failed to read JSON verdict {filepath}: {e}")
+            logger.error(f"Failed to read JSON verdict {filepath}: {e}")
 
     if not has_valid_reviews:
         logger.info("No valid reviews found. Skipping sending impact analysis.")
@@ -111,12 +119,13 @@ def main():
     try:
         result = client.send_message(session_id, body)
         if result.get("status") != "success":
-             logger.warning(f"⚠️ Failed to send message to Jules API (non-blocking): {result}")
-             sys.exit(0)
+            logger.warning(f"⚠️ Failed to send message to Jules API (non-blocking): {result}")
+            sys.exit(0)
         logger.info(f"✅ Sent impact analysis to {session_id}")
     except Exception as e:
         logger.warning(f"⚠️ Exception while sending message to Jules API (non-blocking): {e}")
         sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

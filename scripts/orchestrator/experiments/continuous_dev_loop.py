@@ -1,3 +1,7 @@
+# pylint: disable=missing-docstring,wrong-import-order
+from dev_tools.utils import run_command
+import time
+import re
 import json
 import os
 import sys
@@ -5,9 +9,6 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import time
-import re
-from dev_tools.utils import run_command
 
 def run_cli(args, suppress_errors=False):
     try:
@@ -18,12 +19,14 @@ def run_cli(args, suppress_errors=False):
             print(f"CLI Error: {e}")
         return "" if suppress_errors else None
 
+
 def get_session_id():
     stdout = run_cli(["agent", "sync"])
     if not stdout:
         return None
     match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
     return match.group(1) if match else None
+
 
 def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
     print(f"Polling state for session {session_id}...")
@@ -51,28 +54,28 @@ def execute_continuous_dev_loop(issue_queue):
     Simulates a continuous integration pipeline where Agent 1 acts as Lead Engineer.
     """
     base_branch = "develop"
-    
+
     print(f"Initializing primary Agent 1 session on {base_branch}...")
     initial_payload = {
         "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "target_id": base_branch,
         "task_objective": "Initialize session on develop branch. Stand by to orchestrate issue resolutions.",
-        "interaction_history": []
+        "interaction_history": [],
     }
-    
+
     run_cli(["agent", "dispatch", base_branch, json.dumps(initial_payload)])
     session_id = get_session_id()
-    
+
     if not session_id:
         print("Could not initialize base session. Aborting.")
         return
 
     wait_for_agent(session_id)
-    
+
     # Process issues sequentially
     for issue_id in issue_queue:
         print(f"\n--- Assigning Issue #{issue_id} to Agent 1 ---")
-        
+
         task_objective = (
             f"Resolve Issue #{issue_id}. "
             "1. You may create sub-sessions using your CLI tools if needed to handle this branch. "
@@ -80,19 +83,20 @@ def execute_continuous_dev_loop(issue_queue):
             "3. Ensure tests pass. "
             "4. Verify the PR is approved and merged before returning SUCCESS."
         )
-        
+
         payload = {
             "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
             "target_id": f"issue-{issue_id}",
             "task_objective": task_objective,
-            "interaction_history": [{"timestamp": "2026-06-26T23:12:00Z", "status": "SUCCESS"}]
+            "interaction_history": [{"timestamp": "2026-06-26T23:12:00Z", "status": "SUCCESS"}],
         }
-        
+
         run_cli(["agent", "send", session_id, json.dumps(payload)])
         wait_for_agent(session_id)
         print(f"Issue #{issue_id} lifecycle complete. Moving to next issue in queue.")
-        
+
     print("\nIssue queue exhausted. Continuous development loop complete.")
+
 
 if __name__ == "__main__":
     # Example Backlog Queue

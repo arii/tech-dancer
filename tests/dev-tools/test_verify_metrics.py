@@ -1,7 +1,8 @@
-import os
+# pylint: disable=missing-docstring
 import json
-import pytest
+
 from dev_tools.utils import verify_ci_metrics
+
 
 def test_verify_metrics_no_logs(tmp_path, monkeypatch):
     # Mock current working directory to a temp path
@@ -12,6 +13,7 @@ def test_verify_metrics_no_logs(tmp_path, monkeypatch):
     assert result["status"] == "warning"
     assert "No AI usage logs found" in result["message"]
 
+
 def test_verify_metrics_success(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
@@ -20,7 +22,7 @@ def test_verify_metrics_success(tmp_path, monkeypatch):
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
-    with open(log_file, "w") as f:
+    with open(log_file, "w", encoding="utf-8") as f:
         f.write(json.dumps({"inputTokens": 100, "outputTokens": 50}) + "\n")
         f.write(json.dumps({"inputTokens": 200, "outputTokens": 100}) + "\n")
 
@@ -30,6 +32,7 @@ def test_verify_metrics_success(tmp_path, monkeypatch):
     assert result["metrics"]["outputTokens"] == 150
     assert result["metrics"]["totalTokens"] == 450
 
+
 def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
@@ -37,12 +40,13 @@ def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
-    with open(log_file, "w") as f:
+    with open(log_file, "w", encoding="utf-8") as f:
         f.write(json.dumps({"inputTokens": 160000, "outputTokens": 10}) + "\n")
 
     result = verify_ci_metrics(input_threshold=150000)
     assert result["status"] == "error"
     assert "Input tokens (160000) exceeded limit (150000)" in result["message"]
+
 
 def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
@@ -51,12 +55,13 @@ def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
-    with open(log_file, "w") as f:
+    with open(log_file, "w", encoding="utf-8") as f:
         f.write(json.dumps({"inputTokens": 300, "outputTokens": 300}) + "\n")
 
     result = verify_ci_metrics(input_threshold=400, output_threshold=400, total_threshold=500)
     assert result["status"] == "error"
     assert "Total tokens (600) exceeded limit (500)" in result["message"]
+
 
 def test_verify_metrics_malformed_json(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
@@ -65,7 +70,7 @@ def test_verify_metrics_malformed_json(tmp_path, monkeypatch):
     log_dir.mkdir(parents=True)
     log_file = log_dir / "review-run.jsonl"
 
-    with open(log_file, "w") as f:
+    with open(log_file, "w", encoding="utf-8") as f:
         f.write("not json\n")
 
     result = verify_ci_metrics()
