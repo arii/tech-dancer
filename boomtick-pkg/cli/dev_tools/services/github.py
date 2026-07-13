@@ -7,22 +7,11 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
+from dev_tools.constants import REVIEW_PLACEHOLDERS
 from dev_tools.utils import DiskCache, log_warn
 
 
 class GitHubClient:
-    # Robust placeholder detection using regex to handle minor variants
-    REVIEW_PLACEHOLDERS = [
-        r"<findings\s*/?>",
-        r"<summary\s*/?>",
-        r"<filename\s*/?>",
-        r"<feedback\s*/?>",
-        r"<Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved>",
-        r"##\s+ANTI-AI-SLOP",
-        r"##\s+FINDINGS",
-        r"##\s+FINAL RECOMMENDATION",
-        r"<!--\s*td-review-manager-comment\s*-->",
-    ]
 
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
         from dev_tools.utils import get_github_token
@@ -436,7 +425,7 @@ class GitHubClient:
             raise CLIError("Review rejected: 'comments' must be a list.")
 
         # Check recommendation for placeholders (should be explicit)
-        for p in GitHubClient.REVIEW_PLACEHOLDERS:
+        for p in REVIEW_PLACEHOLDERS:
             if re.search(p, recommendation, re.IGNORECASE):
                 raise CLIError(f"Review rejected: Recommendation contains boilerplate placeholder matching '{p}'")
 
@@ -451,7 +440,7 @@ class GitHubClient:
 
             # Check if comment fields contain placeholders
             is_placeholder = False
-            for p in GitHubClient.REVIEW_PLACEHOLDERS:
+            for p in REVIEW_PLACEHOLDERS:
                 if re.search(p, c_body, re.IGNORECASE) or re.search(p, c_path, re.IGNORECASE):
                     is_placeholder = True
                     break
@@ -466,7 +455,7 @@ class GitHubClient:
         clean_body = body
         clean_body = re.sub(r"^#+.*$", "", clean_body, flags=re.MULTILINE)
         # Strip all placeholders for meaningful content check
-        for p in GitHubClient.REVIEW_PLACEHOLDERS:
+        for p in REVIEW_PLACEHOLDERS:
             clean_body = re.sub(p, "", clean_body, flags=re.IGNORECASE | re.DOTALL)
 
         clean_body = clean_body.strip()
@@ -531,7 +520,7 @@ class GitHubClient:
         body = re.split(r"##\s+Output JSON", body, flags=re.IGNORECASE)[0].strip()
 
         # Robustly strip placeholders from the markdown body as well
-        for p in GitHubClient.REVIEW_PLACEHOLDERS:
+        for p in REVIEW_PLACEHOLDERS:
             body = re.sub(p, "", body, flags=re.IGNORECASE | re.DOTALL).strip()
 
         if not body:
@@ -543,7 +532,7 @@ class GitHubClient:
         if json_body:
             # Check if JSON body contains only placeholders
             stripped_body = json_body
-            for p in GitHubClient.REVIEW_PLACEHOLDERS:
+            for p in REVIEW_PLACEHOLDERS:
                 stripped_body = re.sub(p, "", stripped_body, flags=re.IGNORECASE | re.DOTALL).strip()
 
             if not stripped_body:
