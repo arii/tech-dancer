@@ -39,6 +39,8 @@ export function getVisualTestMasks(page: Page) {
     page.getByTestId('search-input'),
     // Mask timeline rows which contain dates
     page.getByTestId('timeline-row'),
+    // Mask scroll-to-top button which can appear/disappear based on scroll settle
+    page.getByTestId('scroll-to-top-button'),
   ];
 }
 
