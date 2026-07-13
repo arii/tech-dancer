@@ -1,8 +1,6 @@
 # pylint: disable=missing-docstring
 from typing import Any, Dict, List
 
-import chromadb
-from chromadb.utils import embedding_functions
 
 
 class VectorStore:
@@ -16,12 +14,14 @@ class VectorStore:
     @property
     def client(self):
         if self._client is None and self.is_available():
+            import chromadb  # pylint: disable=import-outside-toplevel
             self._client = chromadb.PersistentClient(path=self.persist_directory)
         return self._client
 
     @property
     def embedding_fn(self):
         if self._embedding_fn is None and self.is_available():
+            from chromadb.utils import embedding_functions  # pylint: disable=import-outside-toplevel
             self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
         return self._embedding_fn
 
