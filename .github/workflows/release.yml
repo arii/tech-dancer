@@ -1,0 +1,59 @@
+name: Release boomtick-cli
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          pip install -r boomtick-pkg/cli/requirements.txt
+          pip install build twine
+
+      - name: Sync schemas/contracts
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli
+          python3 boomtick-pkg/cli/dev_tools/schema_gen.py
+          pnpm exec tsx boomtick-pkg/mcp/scripts/sync-contracts.ts
+
+      - name: Build TypeScript MCP
+        run: pnpm --filter @boomtick/mcp build
+
+      - name: Copy compiled JS
+        run: |
+          mkdir -p boomtick-pkg/cli/dev_tools/dist
+          cp -r boomtick-pkg/mcp/dist/* boomtick-pkg/cli/dev_tools/dist/
+
+      - name: Build Python Package
+        run: |
+          cd boomtick-pkg/cli
+          python3 -m build
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          twine upload boomtick-pkg/cli/dist/*
