@@ -61,6 +61,19 @@ boomtick-pkg/cli/dev_tools/config.json
 *.swp
 *.swo
 
+# Temporary Artifacts
+.status_*
+boomtick-pkg-*.zip
+boomtick-pkg-*.tar.gz
+cleanup-branches.sh
+mypy_*.txt
+pylint_*.txt
+*.png
+!public/**/*.png
+!docs/**/*.png
+!tests/**/*.png
+ai-slop-audit-*.md
+
 # Python / ETL
 **/__pycache__/
 *.py[cod]
