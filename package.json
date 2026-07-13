@@ -181,7 +181,9 @@
   "knip": {
     "ignoreDependencies": [
       "@langchain/core",
-      "@langchain/google-genai"
+      "@langchain/google-genai",
+      "dompurify",
+      "@types/dompurify"
     ],
     "exclude": [
       "exports",

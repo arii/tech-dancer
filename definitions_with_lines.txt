@@ -1,0 +1,288 @@
+     1	import { Tool, Prompt, Resource } from "@modelcontextprotocol/sdk/types.js";
+     2	import {
+     3	  HealthCheckInputJsonSchema,
+     4	  SearchPRsInputJsonSchema,
+     5	  GetPrDiffInputJsonSchema,
+     6	  CheckoutBranchInputJsonSchema,
+     7	  GetMergeConflictFilesInputJsonSchema,
+     8	  GetChangedFilesInputJsonSchema,
+     9	  GetPackageScriptsInputJsonSchema,
+    10	  GetRouteMapInputJsonSchema,
+    11	  ReadCiLogsInputJsonSchema,
+    12	  RepoLogsInputJsonSchema,
+    13	  CreateBranchInputJsonSchema,
+    14	  CreateRepairBranchInputJsonSchema,
+    15	  RunTestsInputJsonSchema,
+    16	  RunLighthouseInputJsonSchema,
+    17	  RunPlaywrightInputJsonSchema,
+    18	  CommitPatchInputJsonSchema,
+    19	  OpenReplacementPrInputJsonSchema,
+    20	  CreatePullRequestInputJsonSchema,
+    21	  CommentTriageSummaryInputJsonSchema,
+    22	  GetPrInputJsonSchema,
+    23	  IssueViewInputJsonSchema,
+    24	  IssueUpdateInputJsonSchema,
+    25	  IssueCommentInputJsonSchema,
+    26	  CreateIssueInputJsonSchema,
+    27	  ReadAgentContextInputJsonSchema,
+    28	  CreateJulesSessionInputJsonSchema,
+    29	  JulesSessionIdInputJsonSchema,
+    30	  JulesSendMessageInputJsonSchema,
+    31	  JulesListSessionsInputJsonSchema,
+    32	  SearchDdgsInputJsonSchema,
+    33	} from "../tools/contract.js";
+    34
+    35	export const GetCommandSchemaInputJsonSchema = {
+    36	  type: "object",
+    37	  properties: {
+    38	    commandPath: {
+    39	      type: "string",
+    40	      description: "The CLI command path to retrieve the schema for (e.g. 'gh audit-pr')"
+    41	    }
+    42	  },
+    43	  required: ["commandPath"]
+    44	} as const;
+    45
+    46	export const MCP_PROMPTS: Prompt[] = [
+    47	  {
+    48	    name: "conflict-scout",
+    49	    description: "Find PRs worth rescuing.",
+    50	  },
+    51	  {
+    52	    name: "pr-consolidation",
+    53	    description: "Guidelines for analyzing and proposing consolidation of overlapping PRs.",
+    54	  },
+    55	  {
+    56	    name: "repo-context",
+    57	    description: "Gather repository context for a PR.",
+    58	  },
+    59	  {
+    60	    name: "repair-agent",
+    61	    description: "Apply the smallest safe fix for a PR.",
+    62	  },
+    63	  {
+    64	    name: "verifier-agent",
+    65	    description: "Verify that a repair works.",
+    66	  },
+    67	  {
+    68	    name: "pr-writer",
+    69	    description: "Write a summary for a replacement PR.",
+    70	  },
+    71	];
+    72
+    73	export const MCP_RESOURCES: Resource[] = [
+    74	  {
+    75	    uri: "repo://package-json",
+    76	    name: "package.json",
+    77	    mimeType: "application/json",
+    78	    description: "The root package.json file of the repository.",
+    79	  },
+    80	  {
+    81	    uri: "repo://routes",
+    82	    name: "Route Map",
+    83	    mimeType: "application/json",
+    84	    description: "The mapping of application routes to content files.",
+    85	  },
+    86	  {
+    87	    uri: "repo://design-tokens",
+    88	    name: "Design Tokens",
+    89	    mimeType: "application/json",
+    90	    description: "The design tokens used in the repository.",
+    91	  },
+    92	  {
+    93	    uri: "repo://repair-report/{branch}",
+    94	    name: "Repair Report",
+    95	    mimeType: "application/json",
+    96	    description: "The validation report for a specific repair branch.",
+    97	  },
+    98	  {
+    99	    uri: "repo://lighthouse/{branch}",
+   100	    name: "Lighthouse Report",
+   101	    mimeType: "application/json",
+   102	    description: "Lighthouse CI report for a specific branch.",
+   103	  },
+   104	  {
+   105	    uri: "repo://playwright/{branch}",
+   106	    name: "Playwright Report",
+   107	    mimeType: "application/json",
+   108	    description: "Playwright test report for a specific branch.",
+   109	  },
+   110	];
+   111
+   112	export const MCP_TOOLS: Tool[] = [
+   113	  {
+   114	    name: "boomtick.health",
+   115	    description: "Check the health and configuration of the MCP server.",
+   116	    inputSchema: HealthCheckInputJsonSchema as any,
+   117	  },
+   118	  {
+   119	    name: "github.search_open_prs",
+   120	    description: "Search for open pull requests in the repository.",
+   121	    inputSchema: SearchPRsInputJsonSchema as any,
+   122	  },
+   123	  {
+   124	    name: "repo.read_agent_context",
+   125	    description: "Read the full repository index including file tree, CLI schema, and MCP tools.",
+   126	    inputSchema: ReadAgentContextInputJsonSchema as any,
+   127	  },
+   128	  {
+   129	    name: "github.get_pr_diff",
+   130	    description: "Get the diff and changed files for a pull request.",
+   131	    inputSchema: GetPrDiffInputJsonSchema as any,
+   132	  },
+   133	  {
+   134	    name: "github.checkout_branch",
+   135	    description: "Checkout a specific branch in the repository or worktree.",
+   136	    inputSchema: CheckoutBranchInputJsonSchema as any,
+   137	  },
+   138	  {
+   139	    name: "github.get_merge_conflict_files",
+   140	    description: "Detect files that conflict when a PR is merged with the base branch.",
+   141	    inputSchema: GetMergeConflictFilesInputJsonSchema as any,
+   142	  },
+   143	  {
+   144	    name: "repo.get_changed_files",
+   145	    description: "Get the list of changed files between two refs.",
+   146	    inputSchema: GetChangedFilesInputJsonSchema as any,
+   147	  },
+   148	  {
+   149	    name: "repo.get_command_schema",
+   150	    description: "Retrieve a lightweight, targeted schema for a specific td-cli subcommand. Use this instead of reading the entire cli-schema.json to save tokens.",
+   151	    inputSchema: GetCommandSchemaInputJsonSchema as any,
+   152	  },
+   153	  {
+   154	    name: "repo.get_package_scripts",
+   155	    description: "Get the scripts defined in package.json.",
+   156	    inputSchema: GetPackageScriptsInputJsonSchema as any,
+   157	  },
+   158	  {
+   159	    name: "repo.get_route_map",
+   160	    description: "Get the mapping of routes to content files.",
+   161	    inputSchema: GetRouteMapInputJsonSchema as any,
+   162	  },
+   163	  {
+   164	    name: "repo.read_ci_logs",
+   165	    description: "Read CI logs for a given pull request.",
+   166	    inputSchema: ReadCiLogsInputJsonSchema as any,
+   167	  },
+   168	  {
+   169	    name: "repo.logs",
+   170	    description: "Stream or grep combined CI logs for all jobs in a pull request.",
+   171	    inputSchema: RepoLogsInputJsonSchema as any,
+   172	  },
+   173	  {
+   174	    name: "repo.create_branch",
+   175	    description: "Creates a new clean git branch from a target base branch.",
+   176	    inputSchema: CreateBranchInputJsonSchema as any,
+   177	  },
+   178	  {
+   179	    name: "repo.create_repair_branch",
+   180	    description: "Creates a fresh worktree and a new repair branch for an existing PR. This isolates the repair work from the main codebase.",
+   181	    inputSchema: CreateRepairBranchInputJsonSchema as any,
+   182	  },
+   183	  {
+   184	    name: "repo.run_tests",
+   185	    description: "Run repository tests and checks.",
+   186	    inputSchema: RunTestsInputJsonSchema as any,
+   187	  },
+   188	  {
+   189	    name: "repo.run_lighthouse",
+   190	    description: "Run Lighthouse CI audits.",
+   191	    inputSchema: RunLighthouseInputJsonSchema as any,
+   192	  },
+   193	  {
+   194	    name: "repo.run_playwright",
+   195	    description: "Run Playwright E2E tests.",
+   196	    inputSchema: RunPlaywrightInputJsonSchema as any,
+   197	  },
+   198	  {
+   199	    name: "repo.commit_patch",
+   200	    description: "Commit verified repair changes in a worktree.",
+   201	    inputSchema: CommitPatchInputJsonSchema as any,
+   202	  },
+   203	  {
+   204	    name: "github.open_replacement_pr",
+   205	    description: "Open a new PR that replaces or repairs the original PR.",
+   206	    inputSchema: OpenReplacementPrInputJsonSchema as any,
+   207	  },
+   208	  {
+   209	    name: "github.create_pull_request",
+   210	    description: "Creates a pull request on GitHub using the MCP server's integrated credentials. Bypasses terminal CLI constraints.",
+   211	    inputSchema: CreatePullRequestInputJsonSchema as any,
+   212	  },
+   213	  {
+   214	    name: "github.comment_triage_summary",
+   215	    description: "Comment on the original PR with a diagnosis and replacement link.",
+   216	    inputSchema: CommentTriageSummaryInputJsonSchema as any,
+   217	  },
+   218	  {
+   219	    name: "github.get_pr",
+   220	    description: "Get details of a GitHub PR including title, state, and URLs.",
+   221	    inputSchema: GetPrInputJsonSchema as any,
+   222	  },
+   223	  {
+   224	    name: "github.issue_view",
+   225	    description: "View details of a GitHub issue including title, body, and state.",
+   226	    inputSchema: IssueViewInputJsonSchema as any,
+   227	  },
+   228	  {
+   229	    name: "github.issue_update",
+   230	    description: "Update a GitHub issue's body, labels, and/or state.",
+   231	    inputSchema: IssueUpdateInputJsonSchema as any,
+   232	  },
+   233	  {
+   234	    name: "github.issue_comment",
+   235	    description: "Add a new comment to a GitHub issue.",
+   236	    inputSchema: IssueCommentInputJsonSchema as any,
+   237	  },
+   238	  {
+   239	    name: "github.create_issue",
+   240	    description: "Create a new GitHub issue.",
+   241	    inputSchema: CreateIssueInputJsonSchema as any,
+   242	  },
+   243	  {
+   244	    name: "jules.create_session",
+   245	    description: "Create a Jules session that performs work externally and may generate a GitHub pull request.",
+   246	    inputSchema: CreateJulesSessionInputJsonSchema as any,
+   247	  },
+   248	  {
+   249	    name: "jules.get_session",
+   250	    description: "Get the status and details of a Jules session.",
+   251	    inputSchema: JulesSessionIdInputJsonSchema as any,
+   252	  },
+   253	  {
+   254	    name: "jules.send_message",
+   255	    description: "Send a message to an active Jules session.",
+   256	    inputSchema: JulesSendMessageInputJsonSchema as any,
+   257	  },
+   258	  {
+   259	    name: "jules.get_messages",
+   260	    description: "Get the message history of a Jules session.",
+   261	    inputSchema: JulesSessionIdInputJsonSchema as any,
+   262	  },
+   263	  {
+   264	    name: "jules.list_sessions",
+   265	    description: "List all Jules sessions.",
+   266	    inputSchema: JulesListSessionsInputJsonSchema as any,
+   267	  },
+   268	  {
+   269	    name: "jules.cancel_session",
+   270	    description: "Cancel an ongoing Jules session.",
+   271	    inputSchema: JulesSessionIdInputJsonSchema as any,
+   272	  },
+   273	  {
+   274	    name: "jules.get_pr",
+   275	    description: "Get the generated pull request url associated with an active Jules agent session.",
+   276	    inputSchema: JulesSessionIdInputJsonSchema as any,
+   277	  },
+   278	  {
+   279	    name: "jules.trigger_feedback",
+   280	    description: "Automatically collect CI status/logs for the PR associated with a Jules session and send them back as feedback.",
+   281	    inputSchema: JulesSessionIdInputJsonSchema as any,
+   282	  },
+   283	  {
+   284	    name: "agent.search_ddgs",
+   285	    description: "Search the web using DuckDuckGo (via ddgs python library).",
+   286	    inputSchema: SearchDdgsInputJsonSchema as any,
+   287	  },
+   288	];
