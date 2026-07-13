@@ -15,6 +15,7 @@ import {
   type CodeReviewSummary,
   type CodeReviewResult,
   codeReviewResponseSchema,
+  type CodeReviewResponse
 } from '../../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../../lib/codeReviewOrchestrator';
 
@@ -107,13 +108,14 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     // With response_mime_type: 'application/json', response.content is guaranteed to be a stringified JSON
-    let structuredResponse: unknown;
+    let structuredResponse: CodeReviewResponse;
     try {
       const rawText = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
-      structuredResponse = JSON.parse(rawText);
+      const parsed = JSON.parse(rawText);
 
       // Runtime validation of required fields and structure
-      validateCodeReviewJson(structuredResponse);
+      validateCodeReviewJson(parsed);
+      structuredResponse = parsed;
     } catch (e) {
       console.error('Failed to parse/validate Gemini structured output:', e, 'Raw content:', response.content);
       return {

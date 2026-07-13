@@ -285,11 +285,7 @@ export function calculateEstimatedTokens(text: string | string[]): number {
  * Validates a parsed Gemini structured response against the expected schema.
  * Throws an error if required fields are missing or malformed.
  */
-export function validateCodeReviewJson(parsed: unknown): asserts parsed is {
-  feedback: string;
-  verdict: 'pass' | 'fail' | 'warn';
-  findings: ReviewFinding[];
-} {
+export function validateCodeReviewJson(parsed: unknown): asserts parsed is CodeReviewResponse {
   if (!parsed || typeof parsed !== 'object') {
     throw new Error('Parsed response is not an object');
   }

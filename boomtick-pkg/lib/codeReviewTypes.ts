@@ -15,6 +15,15 @@ export interface CodeReviewState {
   cache?: Record<string, CodeReviewResult>;
 }
 
+/**
+ * The expected structure of the JSON response from the LLM.
+ */
+export interface CodeReviewResponse {
+  feedback: string;
+  verdict: 'pass' | 'fail' | 'warn';
+  findings: ReviewFinding[];
+}
+
 export type CodeReviewRole = 'SECURITY' | 'PERFORMANCE' | 'STYLE' | 'ARCHITECTURE';
 
 export interface CodeReviewSummary {
