@@ -202,7 +202,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
