@@ -267,5 +267,6 @@ jobs:
             -ignore 'unexpected key "parallel"' \
             -ignore 'unexpected key "wait"' \
             -ignore 'repository_vulnerability_alert' \
+            -ignore 'dependabot_alert' \
             -color
         shell: bash
