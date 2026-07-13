@@ -174,7 +174,8 @@
     "ws": "8.21.0",
     "lighthouse": {
       "ws": "7.5.11"
-    }
+    },
+    "dompurify": "3.4.12"
   },
   "packageManager": "pnpm@10.28.2",
   "knip": {
