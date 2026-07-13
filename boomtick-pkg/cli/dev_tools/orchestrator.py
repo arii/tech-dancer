@@ -530,8 +530,7 @@ class Orchestrator:
             # Spec-Driven Issue Validation
             missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
             if missing_spec_sections:
-                sections_str = ', '.join(f'`{s}`' for s in missing_spec_sections)
-                findings.append(f"Missing spec-driven sections: {sections_str}")
+                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
             issue_result = {
                 "number": issue.number,
@@ -1611,9 +1610,6 @@ Respond only after the PR is created or updated:
             plan_path = os.path.join(plan_dir, f"workflow-plan-{name}.md")
             violations = file_audit_results[f_path]
 
-            compliance_status = "✅ All rules followed." if not violations else "❌ Non-compliant patterns found."
-            violations_list = "\n".join("- " + v for v in violations) if violations else ""
-
             with open(plan_path, "w", encoding="utf-8") as f:
                 f.write(f"""# Workflow Audit Plan: {name}
 
@@ -1621,10 +1617,10 @@ Respond only after the PR is created or updated:
 `{f_path}`
 
 ## Compliance Status
-{compliance_status}
+{"✅ All rules followed." if not violations else "❌ Non-compliant patterns found."}
 
 ### Violations
-{violations_list}
+{"" if not violations else "\n".join(f"- {v}" for v in violations)}
 
 ## Audit Instructions
 
@@ -2816,8 +2812,7 @@ Run the validation suite to ensure the aggregated branch is stable.
                 f.write("No overlapping files detected.\n")
             else:
                 for filename, prs in sorted(overlapping_files.items()):
-                    prs_str = ", ".join("#" + str(p) for p in prs)
-                    f.write(f"- `{filename}`: Changed in PRs {prs_str}\n")
+                    f.write(f"- `{filename}`: Changed in PRs {', '.join(f'#{p}' for p in prs)}\n")
 
             f.write("\n## Structural Conflicts (Line Overlaps)\n")
             if not conflicts:
