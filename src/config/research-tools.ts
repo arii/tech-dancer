@@ -167,12 +167,12 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'versiontruth',
     taxonomyBucket: 'engineering',
-    title: 'VersionTruth Oracle',
-    subtitle: 'REAL-TIME VERSION CHECKING SKILL',
-    description: 'An AI-agent version verification skill. Serves as a live registry-grounded oracle to prevent confidently incorrect out-of-distribution version downgrades in package.json, GitHub Actions, and Node.js runtimes. Compares candidate versions and exposes LTS EOL/deprecation warning alerts.',
+    title: 'VersionTruth',
+    subtitle: 'The antidote to version hallucinations',
+    description: 'The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions.',
     category: 'DevAI Tooling',
     status: 'Active',
-    tags: ['npm API', 'GitHub API', 'Vercel Serverless', 'Agentic Skills'],
+    tags: ['versions', 'ci', 'dependencies', 'hallucination-mitigation', 'npm', 'node', 'github-actions', 'agents', 'nanda'],
     canonicalPath: '/versiontruth',
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/api'
   }
