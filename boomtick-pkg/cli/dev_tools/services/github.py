@@ -275,7 +275,8 @@ class GitHubClient:
         """Creates a new GitHub issue."""
         return self._request("POST", f"/repos/{self.repo}/issues", json_data={"title": title, "body": body})
 
-    def normalize_issue(self, issue: Dict[str, Any]) -> Dict[str, Any]:
+    @staticmethod
+    def normalize_issue(issue: Dict[str, Any]) -> Dict[str, Any]:
         """Normalizes issue dict to standard format."""
         return {
             "number": issue.get("number"),
