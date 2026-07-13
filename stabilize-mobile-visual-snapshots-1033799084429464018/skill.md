@@ -5,6 +5,7 @@ version: "1.1.0"
 emoji: "🛡️"
 author: "Ariel Anders"
 github: "arii"
+tags: ["versions", "ci", "dependencies", "hallucination-mitigation", "npm", "node", "github-actions", "agents", "nanda"]
 metadata:
   openclaw:
     requires:
