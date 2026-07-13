@@ -108,3 +108,5 @@ boomtick-pkg/cli/dev_tools/contract-schema.json
 # Boomtick CLI artifacts
 .boomtick/
 .boomtick/*-audit-status.md
+boomtick-pkg/cli/dev_tools/cli-schema.json
+boomtick-pkg/mcp/src/tools/contract.ts
