@@ -1,0 +1,847 @@
+{
+  "actions": [
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1120311,
+          "path": ".>@lhci/cli>chrome-launcher>rimraf>glob>minimatch>brace-expansion",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "brace-expansion",
+      "target": "5.0.7",
+      "depth": 7
+    },
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1120793,
+          "path": ".>eslint-plugin-react-hooks>@babel/core",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "@babel/core",
+      "target": "7.29.7",
+      "depth": 3
+    },
+    {
+      "action": "review",
+      "module": "undici",
+      "resolves": [
+        {
+          "id": 1112496,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1114594,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1114638,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1114640,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1114642,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1121242,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1121245,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1121250,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1121255,
+          "path": ".>@vercel/node>undici",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "ajv",
+      "resolves": [
+        {
+          "id": 1113715,
+          "path": ".>@vercel/node>@vercel/static-config>ajv",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "smol-toml",
+      "resolves": [
+        {
+          "id": 1115393,
+          "path": ".>@vercel/node>@vercel/build-utils>@vercel/python-analysis>smol-toml",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "react-router",
+      "resolves": [
+        {
+          "id": 1120063,
+          "path": ".>react-router-dom>react-router",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1120069,
+          "path": ".>react-router-dom>react-router",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1120807,
+          "path": ".>react-router-dom>react-router",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "esbuild",
+      "resolves": [
+        {
+          "id": 1120680,
+          "path": ".>@vercel/node>esbuild",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    }
+  ],
+  "advisories": {
+    "1112496": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-g9mf-h72j-4rw9\n- https://github.com/nodejs/undici/commit/b04e3cbb569c1596f86c108e9b52c79d8475dcb3\n- https://nvd.nist.gov/vuln/detail/CVE-2026-22036\n- https://github.com/advisories/GHSA-g9mf-h72j-4rw9",
+      "created": "2026-01-14T21:06:08.000Z",
+      "id": 1112496,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nThe `fetch()` API supports chained HTTP encoding algorithms for response content according to RFC 9110 (e.g., Content-Encoding: gzip, br). This is also supported by the undici decompress interceptor.\n\nHowever, the number of links in the decompression chain is unbounded and the default maxHeaderSize allows a malicious server to insert thousands compression steps leading to high CPU usage and excessive memory allocation.\n\n### Patches\n\nUpgrade to 7.18.2 or 6.23.0.\n\n### Workarounds\n\nIt is possible to apply an undici interceptor and filter long `Content-Encoding` sequences manually.\n\n### References\n\n* https://hackerone.com/reports/3456148\n* https://github.com/advisories/GHSA-gm62-xv2j-4w53\n* https://curl.se/docs/CVE-2022-32206.html",
+      "reported_by": null,
+      "title": "Undici has an unbounded decompression chain in HTTP responses on Node.js Fetch API via Content-Encoding leads to resource exhaustion",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-22036"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.23.0",
+      "github_advisory_id": "GHSA-g9mf-h72j-4rw9",
+      "recommendation": "Upgrade to version 6.23.0 or later",
+      "patched_versions": ">=6.23.0",
+      "updated": "2026-01-22T20:17:08.000Z",
+      "cvss": {
+        "score": 5.9,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-770"
+      ],
+      "url": "https://github.com/advisories/GHSA-g9mf-h72j-4rw9"
+    },
+    "1113715": {
+      "findings": [
+        {
+          "version": "8.6.3",
+          "paths": [
+            ".>@vercel/node>@vercel/static-config>ajv"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2025-69873\n- https://github.com/EthanKim88/ethan-cve-disclosures/blob/main/CVE-2025-69873-ajv-ReDoS.md\n- https://github.com/ajv-validator/ajv/pull/2586\n- https://github.com/ajv-validator/ajv/commit/720a23fa453ffae8340e92c9b0fe886c54cfe0d5\n- https://github.com/ajv-validator/ajv/releases/tag/v8.18.0\n- https://github.com/ajv-validator/ajv/pull/2588\n- https://github.com/ajv-validator/ajv/releases/tag/v6.14.0\n- https://github.com/advisories/GHSA-2g4f-4pwh-qvx6\n- https://github.com/ajv-validator/ajv/pull/2590\n- https://github.com/github/advisory-database/pull/6991",
+      "created": "2026-02-11T21:30:39.000Z",
+      "id": 1113715,
+      "npm_advisory_id": null,
+      "overview": "ajv (Another JSON Schema Validator) through version 8.17.1 is vulnerable to Regular Expression Denial of Service (ReDoS) when the `$data` option is enabled. The pattern keyword accepts runtime data via JSON Pointer syntax (`$data` reference), which is passed directly to the JavaScript `RegExp()` constructor without validation. An attacker can inject a malicious regex pattern (e.g., `\\\"^(a|a)*$\\\"`) combined with crafted input to cause catastrophic backtracking. A 31-character payload causes approximately 44 seconds of CPU blocking, with each additional character doubling execution time. This enables complete denial of service with a single HTTP request against any API using ajv with `$data`: true for dynamic schema validation.",
+      "reported_by": null,
+      "title": "ajv has ReDoS when using `$data` option",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-69873"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "ajv",
+      "vulnerable_versions": ">=7.0.0-alpha.0 <8.18.0",
+      "github_advisory_id": "GHSA-2g4f-4pwh-qvx6",
+      "recommendation": "Upgrade to version 8.18.0 or later",
+      "patched_versions": ">=8.18.0",
+      "updated": "2026-03-02T21:58:41.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-1333"
+      ],
+      "url": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6"
+    },
+    "1114594": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-2mjp-6q6p-2qxm\n- https://nvd.nist.gov/vuln/detail/CVE-2026-1525\n- https://hackerone.com/reports/3556037\n- https://cna.openjsf.org/security-advisories.html\n- https://cwe.mitre.org/data/definitions/444.html\n- https://www.rfc-editor.org/rfc/rfc9110.html#section-8.6\n- https://github.com/advisories/GHSA-2mjp-6q6p-2qxm",
+      "created": "2026-03-13T20:07:03.000Z",
+      "id": 1114594,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nUndici allows duplicate HTTP `Content-Length` headers when they are provided in an array with case-variant names (e.g., `Content-Length` and `content-length`). This produces malformed HTTP/1.1 requests with multiple conflicting `Content-Length` values on the wire.\n\n**Who is impacted:**\n  - Applications using `undici.request()`, `undici.Client`, or similar low-level APIs with headers passed as flat arrays\n  - Applications that accept user-controlled header names without case-normalization\n\n**Potential consequences:**\n  - **Denial of Service**: Strict HTTP parsers (proxies, servers) will reject requests with duplicate `Content-Length` headers (400 Bad Request)\n  - **HTTP Request Smuggling**: In deployments where an intermediary and backend interpret duplicate headers inconsistently (e.g., one uses the first value, the other uses the last), this can enable request smuggling attacks leading to ACL bypass, cache poisoning, or credential hijacking\n\n### Patches\n\n Patched in the undici version v7.24.0 and v6.24.0. Users should upgrade to this version or later.\n\n### Workarounds\n\n  If upgrading is not immediately possible:\n\n  1. **Validate header names**: Ensure no duplicate `Content-Length` headers (case-insensitive) are present before passing headers to undici\n  2. **Use object format**: Pass headers as a plain object (`{ 'content-length': '123' }`) rather than an array, which naturally deduplicates by key\n  3. **Sanitize user input**: If headers originate from user input, normalize header names to lowercase and reject duplicates",
+      "reported_by": null,
+      "title": "Undici has an HTTP Request/Response Smuggling issue",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-1525"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.24.0",
+      "github_advisory_id": "GHSA-2mjp-6q6p-2qxm",
+      "recommendation": "Upgrade to version 6.24.0 or later",
+      "patched_versions": ">=6.24.0",
+      "updated": "2026-03-13T20:07:05.000Z",
+      "cvss": {
+        "score": 6.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+      },
+      "cwe": [
+        "CWE-444"
+      ],
+      "url": "https://github.com/advisories/GHSA-2mjp-6q6p-2qxm"
+    },
+    "1114638": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-vrm6-8vpv-qv8q\n- https://nvd.nist.gov/vuln/detail/CVE-2026-1526\n- https://hackerone.com/reports/3481206\n- https://cna.openjsf.org/security-advisories.html\n- https://datatracker.ietf.org/doc/html/rfc7692\n- https://owasp.org/www-community/attacks/Denial_of_Service\n- https://github.com/advisories/GHSA-vrm6-8vpv-qv8q",
+      "created": "2026-03-13T20:41:56.000Z",
+      "id": 1114638,
+      "npm_advisory_id": null,
+      "overview": "## Description\n\nThe undici WebSocket client is vulnerable to a denial-of-service attack via unbounded memory consumption during permessage-deflate decompression. When a WebSocket connection negotiates the permessage-deflate extension, the client decompresses incoming compressed frames without enforcing any limit on the decompressed data size. A malicious WebSocket server can send a small compressed frame (a \"decompression bomb\") that expands to an extremely large size in memory, causing the Node.js process to exhaust available memory and crash or become unresponsive.\n\nThe vulnerability exists in the `PerMessageDeflate.decompress()` method, which accumulates all decompressed chunks in memory and concatenates them into a single Buffer without checking whether the total size exceeds a safe threshold.\n\n## Impact\n\n- Remote denial of service against any Node.js application using undici's WebSocket client\n- A single compressed WebSocket frame of ~6 MB can decompress to ~1 GB or more\n- Memory exhaustion occurs in native/external memory, bypassing V8 heap limits\n- No application-level mitigation is possible as decompression occurs before message delivery\n\n### Patches\n\nUsers should upgrade to fixed versions.\n\n### Workarounds\n\nNo workaround are possible.",
+      "reported_by": null,
+      "title": "Undici has Unbounded Memory Consumption in WebSocket permessage-deflate Decompression",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-1526"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.24.0",
+      "github_advisory_id": "GHSA-vrm6-8vpv-qv8q",
+      "recommendation": "Upgrade to version 6.24.0 or later",
+      "patched_versions": ">=6.24.0",
+      "updated": "2026-03-13T20:41:59.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-409"
+      ],
+      "url": "https://github.com/advisories/GHSA-vrm6-8vpv-qv8q"
+    },
+    "1114640": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-v9p9-hfj2-hcw8\n- https://nvd.nist.gov/vuln/detail/CVE-2026-2229\n- https://hackerone.com/reports/3487486\n- https://cna.openjsf.org/security-advisories.html\n- https://datatracker.ietf.org/doc/html/rfc7692\n- https://nodejs.org/api/zlib.html#class-zlibinflateraw\n- https://github.com/advisories/GHSA-v9p9-hfj2-hcw8",
+      "created": "2026-03-13T20:41:41.000Z",
+      "id": 1114640,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nThe undici WebSocket client is vulnerable to a denial-of-service attack due to improper validation of the `server_max_window_bits` parameter in the permessage-deflate extension. When a WebSocket client connects to a server, it automatically advertises support for permessage-deflate compression. A malicious server can respond with an out-of-range `server_max_window_bits` value (outside zlib's valid range of 8-15). When the server subsequently sends a compressed frame, the client attempts to create a zlib InflateRaw instance with the invalid windowBits value, causing a synchronous RangeError exception that is not caught, resulting in immediate process termination.\n\nThe vulnerability exists because:\n\n1. The `isValidClientWindowBits()` function only validates that the value contains ASCII digits, not that it falls within the valid range 8-15\n2. The `createInflateRaw()` call is not wrapped in a try-catch block\n3. The resulting exception propagates up through the call stack and crashes the Node.js process\n\n### Patches\n_Has the problem been patched? What versions should users upgrade to?_\n\n### Workarounds\n_Is there a way for users to fix or remediate the vulnerability without upgrading?_",
+      "reported_by": null,
+      "title": "Undici has Unhandled Exception in WebSocket Client Due to Invalid server_max_window_bits Validation",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-2229"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.24.0",
+      "github_advisory_id": "GHSA-v9p9-hfj2-hcw8",
+      "recommendation": "Upgrade to version 6.24.0 or later",
+      "patched_versions": ">=6.24.0",
+      "updated": "2026-03-13T20:41:44.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-248"
+      ],
+      "url": "https://github.com/advisories/GHSA-v9p9-hfj2-hcw8"
+    },
+    "1114642": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-4992-7rv2-5pvq\n- https://nvd.nist.gov/vuln/detail/CVE-2026-1527\n- https://hackerone.com/reports/3487198\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/advisories/GHSA-4992-7rv2-5pvq",
+      "created": "2026-03-13T20:41:26.000Z",
+      "id": 1114642,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nWhen an application passes user-controlled input to the `upgrade` option of `client.request()`, an attacker can inject CRLF sequences (`\\r\\n`) to:\n\n1. Inject arbitrary HTTP headers\n2. Terminate the HTTP request prematurely and smuggle raw data to non-HTTP services (Redis, Memcached, Elasticsearch)\n\nThe vulnerability exists because undici writes the `upgrade` value directly to the socket without validating for invalid header characters:\n\n```javascript\n// lib/dispatcher/client-h1.js:1121\nif (upgrade) {\n  header += `connection: upgrade\\r\\nupgrade: ${upgrade}\\r\\n`\n}\n```\n\n### Patches\n\n Patched in the undici version v7.24.0 and v6.24.0. Users should upgrade to this version or later.\n\n### Workarounds\n\nSanitize the `upgrade` option string before passing to undici:\n\n```javascript\nfunction sanitizeUpgrade(value) {\n  if (/[\\r\\n]/.test(value)) {\n    throw new Error('Invalid upgrade value')\n  }\n  return value\n}\n\nclient.request({\n  upgrade: sanitizeUpgrade(userInput)\n})\n```",
+      "reported_by": null,
+      "title": "Undici has CRLF Injection in undici via `upgrade` option",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-1527"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.24.0",
+      "github_advisory_id": "GHSA-4992-7rv2-5pvq",
+      "recommendation": "Upgrade to version 6.24.0 or later",
+      "patched_versions": ">=6.24.0",
+      "updated": "2026-03-13T20:41:28.000Z",
+      "cvss": {
+        "score": 4.6,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-93"
+      ],
+      "url": "https://github.com/advisories/GHSA-4992-7rv2-5pvq"
+    },
+    "1115393": {
+      "findings": [
+        {
+          "version": "1.5.2",
+          "paths": [
+            ".>@vercel/node>@vercel/build-utils>@vercel/python-analysis>smol-toml"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/squirrelchat/smol-toml/security/advisories/GHSA-v3rj-xjv7-4jmq\n- https://github.com/squirrelchat/smol-toml/releases/tag/v1.6.1\n- https://github.com/advisories/GHSA-v3rj-xjv7-4jmq",
+      "created": "2026-03-25T21:03:56.000Z",
+      "id": 1115393,
+      "npm_advisory_id": null,
+      "overview": "### Summary\nAn attacker can send a maliciously crafted TOML to cause the parser to crash, because of a stack overflow caused by thousands of consecutive commented lines.\n\nThe library uses recursion internally while parsing to skip over commented lines, which can be exploited to crash an application that is processing arbitrary TOML documents.\n\n### Proof of concept\n```js\nrequire(\"smol-toml\").parse('# comment\\n'.repeat(8000) + 'key = \"value\"')\n```\n\n### Impact\nApplications which parse arbitrary TOML documents may suffer availability issues if they receive malicious input. If uncaught, the crash may cause the application itself to crash. The impact is deemed minor, as the function is already likely to throw errors on invalid input. Downstream users are supposed to properly handle errors in such situations.\n\nDue to the design of most JavaScript runtimes, the uncontrolled recursion does not lead to excessive memory usage and the execution is quickly aborted.\n\nAs a reminder, it is **strongly** advised when working with untrusted user input to expect errors to occur and to appropriately catch them.\n\n### Patches\nVersion 1.6.1 uses a different approach for parsing comments, which no longer involves recursion.\n\n### Workarounds\nWrap all invocations of `parse` and `stringify` in a try/catch block when dealing with untrusted user input.",
+      "reported_by": null,
+      "title": "smol-toml: Denial of Service via TOML documents containing thousands of consecutive commented lines",
+      "metadata": null,
+      "cves": [],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "smol-toml",
+      "vulnerable_versions": "<1.6.1",
+      "github_advisory_id": "GHSA-v3rj-xjv7-4jmq",
+      "recommendation": "Upgrade to version 1.6.1 or later",
+      "patched_versions": ">=1.6.1",
+      "updated": "2026-03-25T21:03:56.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      },
+      "cwe": [
+        "CWE-674"
+      ],
+      "url": "https://github.com/advisories/GHSA-v3rj-xjv7-4jmq"
+    },
+    "1120063": {
+      "findings": [
+        {
+          "version": "7.14.1",
+          "paths": [
+            ".>react-router-dom>react-router"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/remix-run/react-router/security/advisories/GHSA-49rj-9fvp-4h2h\n- https://nvd.nist.gov/vuln/detail/CVE-2026-42211\n- https://github.com/advisories/GHSA-49rj-9fvp-4h2h",
+      "created": "2026-06-03T21:03:32.000Z",
+      "id": 1120063,
+      "npm_advisory_id": null,
+      "overview": "When using React Router v7 in [Framework Mode](https://reactrouter.com/start/modes#framework), there exists a combination of steps that could potentially allow unauthorized RCE through external requests.  This first requires the application code to have an existing prototype pollution vulnerability.  This can be leveraged into a 2-step attack in which the second step can trigger unauthorized RCE on the remote server.\n\n> [!NOTE]\n> This does not impact your React Router application if you are using [Declarative Mode](https://reactrouter.com/start/modes#declarative) (`<BrowserRouter>`) or [Data Mode](https://reactrouter.com/start/modes#data) (`createBrowserRouter`/`<RouterProvider>`).",
+      "reported_by": null,
+      "title": "React Router's vendored turbo-stream v2 allows arbitrary constructor invocation via TYPE_ERROR deserialization leading to Unauth RCE",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-42211"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "react-router",
+      "vulnerable_versions": ">=7.0.0 <=7.14.1",
+      "github_advisory_id": "GHSA-49rj-9fvp-4h2h",
+      "recommendation": "Upgrade to version 7.14.2 or later",
+      "patched_versions": ">=7.14.2",
+      "updated": "2026-06-03T21:03:33.000Z",
+      "cvss": {
+        "score": 8.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      "cwe": [
+        "CWE-502"
+      ],
+      "url": "https://github.com/advisories/GHSA-49rj-9fvp-4h2h"
+    },
+    "1120069": {
+      "findings": [
+        {
+          "version": "7.14.1",
+          "paths": [
+            ".>react-router-dom>react-router"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/remix-run/react-router/security/advisories/GHSA-8x6r-g9mw-2r78\n- https://nvd.nist.gov/vuln/detail/CVE-2026-42342\n- https://github.com/advisories/GHSA-8x6r-g9mw-2r78",
+      "created": "2026-06-03T21:05:17.000Z",
+      "id": 1120069,
+      "npm_advisory_id": null,
+      "overview": "There exists a potential DOS attack vector in React Router Framework Mode applications (as well as Remix v2.10.0 - 2.17.4).  Certain requests can be crafted to consume disproportionate resources on the server, resulting in response time degredation and/or service unavailability for end users.\n\n> [!NOTE]\n> This does not impact your React Router application if you are using [Declarative Mode](https://reactrouter.com/start/modes#declarative) (`<BrowserRouter>`) or [Data Mode](https://reactrouter.com/start/modes#data) (`createBrowserRouter`/`<RouterProvider>`).",
+      "reported_by": null,
+      "title": "React Router vulnerable to DoS via unbounded path expansion in __manifest endpoint",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-42342"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "react-router",
+      "vulnerable_versions": ">=7.0.0 <7.15.0",
+      "github_advisory_id": "GHSA-8x6r-g9mw-2r78",
+      "recommendation": "Upgrade to version 7.15.0 or later",
+      "patched_versions": ">=7.15.0",
+      "updated": "2026-06-03T21:05:18.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-400"
+      ],
+      "url": "https://github.com/advisories/GHSA-8x6r-g9mw-2r78"
+    },
+    "1120311": {
+      "findings": [
+        {
+          "version": "5.0.5",
+          "paths": [
+            ".>@lhci/cli>chrome-launcher>rimraf>glob>minimatch>brace-expansion"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-jxxr-4gwj-5jf2\n- https://github.com/juliangruber/brace-expansion/commit/c0b095bdc52bc4c36dc88deddbadabc49f8371e5\n- https://nvd.nist.gov/vuln/detail/CVE-2026-45149\n- https://github.com/advisories/GHSA-jxxr-4gwj-5jf2",
+      "created": "2026-05-18T16:22:01.000Z",
+      "id": 1120311,
+      "npm_advisory_id": null,
+      "overview": "The `max` option was being applied too late:\n\nWhen expanding a single large numeric range like `{1..10000000}`, the sequence generation loop generates all 10 million intermediate elements before the `max` limit is applied With `max=10`, the output is correctly limited to 10 items, but the process still allocates `~505 MB` and spends `~800ms` building the full intermediate array.\n\n### Workaround\n\nEnsure the string to be expanded doesn't contain more values than the desired `max` item count.",
+      "reported_by": null,
+      "title": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-45149"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "brace-expansion",
+      "vulnerable_versions": ">=5.0.0 <5.0.6",
+      "github_advisory_id": "GHSA-jxxr-4gwj-5jf2",
+      "recommendation": "Upgrade to version 5.0.6 or later",
+      "patched_versions": ">=5.0.6",
+      "updated": "2026-06-09T10:32:29.000Z",
+      "cvss": {
+        "score": 6.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-400"
+      ],
+      "url": "https://github.com/advisories/GHSA-jxxr-4gwj-5jf2"
+    },
+    "1120680": {
+      "findings": [
+        {
+          "version": "0.27.7",
+          "paths": [
+            ".>@vercel/node>esbuild"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/evanw/esbuild/security/advisories/GHSA-g7r4-m6w7-qqqr\n- https://github.com/evanw/esbuild/releases/tag/v0.28.1\n- https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+      "created": "2026-06-12T20:08:53.000Z",
+      "id": 1120680,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\nThe development server contains a path traversal vulnerability on Windows when serving files from `servedir`.\n\nDue to the use of `path.Clean()` (which only normalizes forward-slash `/` separators) instead of a Windows-aware path normalization function, it is possible to craft requests using backslashes (`\\`) that bypass the intended directory containment logic. An attacker can escape the configured `servedir` root and access arbitrary files on the filesystem.\nThis issue affects Windows environments only.\n\n### Details\n\nThe request path is sanitized using:\n```go\n// https://github.com/evanw/esbuild/blob/v0.27.3/pkg/api/serve_other.go#L165\nqueryPath := path.Clean(req.URL.Path)[1:]\n```\n\n\nHowever:\n- `path.Clean()` is POSIX-style and only understands `/` (docs: `https://pkg.go.dev/path#Clean`)\n- On Windows, `\\` is a valid path separator\n- `path.Clean()` does not treat `\\` as a separator\n\nLater, the server constructs the absolute path:\n```go\n// https://github.com/evanw/esbuild/blob/v0.27.3/pkg/api/serve_other.go#L221\nabsPath := h.fs.Join(h.servedir, queryPath)\n```\n\nIf `queryPath` contains sequences such as:\n```\n..\\..\\..\\..\\..\\..\\..\\Windows\\system.ini\n```\n\n`path.Clean()` will not normalize them, but the Windows filesystem will interpret `\\` as directory separators when resolving `absPath`.\nBecause the implementation does not verify that the final resolved path remains within `servedir`, it allows directory traversal outside the intended root directory.\n### Vulnerable Code\n\n```go\n// https://github.com/evanw/esbuild/blob/v0.27.3/pkg/api/serve_other.go#L165\n\tqueryPath := path.Clean(req.URL.Path)[1:]\n\t....\n\t// Check for a file in the \"servedir\" directory\n\tif h.servedir != \"\" && kind != fs.FileEntry {\n\t\tabsPath := h.fs.Join(h.servedir, queryPath)\n\t\tif absDir := h.fs.Dir(absPath); absDir != absPath {\n\t\t\tif entries, err, _ := h.fs.ReadDirectory(absDir); err == nil {\n\t\t\t\tif entry, _ := entries.Get(h.fs.Base(absPath)); entry != nil && entry.Kind(h.fs) == fs.FileEntry {\n\t....\t\t\t\t\n```\n\n\n### Steps to reproduce\n\n```\nnpm install --save-exact --save-dev esbuild\n\necho \"console.log(1)\" > app.js\n\n.\\node_modules\\.bin\\esbuild --version\n0.27.3\n\n.\\node_modules\\.bin\\esbuild app.js --bundle --outdir=www --servedir=www --watch\n\ncurl -i --path-as-is \"http://localhost:8000/..\\..\\..\\..\\..\\..\\..\\Windows\\system.ini\"\n<content of Windows\\system.ini>\n```\n\n\n### Impact\n\n- Arbitrary file read on Windows\n- Exposure of sensitive files",
+      "reported_by": null,
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "metadata": null,
+      "cves": [],
+      "access": "public",
+      "severity": "low",
+      "module_name": "esbuild",
+      "vulnerable_versions": ">=0.27.3 <0.28.1",
+      "github_advisory_id": "GHSA-g7r4-m6w7-qqqr",
+      "recommendation": "Upgrade to version 0.28.1 or later",
+      "patched_versions": ">=0.28.1",
+      "updated": "2026-06-12T20:08:54.000Z",
+      "cvss": {
+        "score": 2.5,
+        "vectorString": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-22"
+      ],
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr"
+    },
+    "1120793": {
+      "findings": [
+        {
+          "version": "7.29.0",
+          "paths": [
+            ".>eslint-plugin-react-hooks>@babel/core"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/babel/babel/security/advisories/GHSA-4x5r-pxfx-6jf8\n- https://babeljs.io/docs/options#inputsourcemap\n- https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+      "created": "2026-06-15T17:14:14.000Z",
+      "id": 1120793,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nUsing `@babel/core` to compile maliciously crafted code can allow ab attacker to read any source map from the system that is running Babel, if these conditions are _all_ true:\n- the attacker controls the input source code\n- the attacker can read the output source code\n- the attacker knows the path of the source map file that they want to read\n\n**Users that only compile trusted code are not impacted.**\n\n## Patches\n\nThe vulnerability has been fixed in `@babel/core@7.29.6` and `@babel/core@8.0.0-rc.6`.\n\n## Workarounds\n\nCallers can mitigate the issue without upgrading by setting [`inputSourceMap: false`](https://babeljs.io/docs/options#inputsourcemap) in their Babel options.\n\nCallers can also manually extract the `#sourceMappingURL` comment from the input source code, validate whether the source map that it links to is allowed to be read, and if it is pass an object to `inputSourceMap` (passing `false` when it's not).\n\n## Credits\n\nThanks Teodor-Cristian Radoi for reporting the vulnerability.",
+      "reported_by": null,
+      "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-49356"
+      ],
+      "access": "public",
+      "severity": "low",
+      "module_name": "@babel/core",
+      "vulnerable_versions": "<=7.29.0",
+      "github_advisory_id": "GHSA-4x5r-pxfx-6jf8",
+      "recommendation": "Upgrade to version 7.29.6 or later",
+      "patched_versions": ">=7.29.6",
+      "updated": "2026-06-15T17:14:15.000Z",
+      "cvss": {
+        "score": 3.2,
+        "vectorString": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:C/C:L/I:N/A:N"
+      },
+      "cwe": [
+        "CWE-22",
+        "CWE-200"
+      ],
+      "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8"
+    },
+    "1120807": {
+      "findings": [
+        {
+          "version": "7.14.1",
+          "paths": [
+            ".>react-router-dom>react-router"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/remix-run/react-router/security/advisories/GHSA-84g9-w2xq-vcv6\n- https://github.com/advisories/GHSA-84g9-w2xq-vcv6",
+      "created": "2026-06-15T20:06:15.000Z",
+      "id": 1120807,
+      "npm_advisory_id": null,
+      "overview": "Certain CSRF checks in React Router v7 [Framework Mode]() were insufficient and run on POST requests, but were bypassed on PUT/PATCH/DELETE requests.  This is a low severity vulnerability because modern browser protections (CORS preflight, SameSite cookies) already block the cross-origin attack vectors that this missing CSRF check would otherwise gate.\n\n> [!NOTE]\n> This does not impact your React Router application if you are using [Declarative Mode](https://reactrouter.com/start/modes#framework) (`<BrowserRouter>`) or [Data Mode](https://reactrouter.com/start/modes#data) (`createBrowserRouter`/`<RouterProvider>`).",
+      "reported_by": null,
+      "title": "React Router: Potential CSRF via PUT/PATCH/DELETE document requests",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-53663"
+      ],
+      "access": "public",
+      "severity": "low",
+      "module_name": "react-router",
+      "vulnerable_versions": ">=7.12.0 <7.15.1",
+      "github_advisory_id": "GHSA-84g9-w2xq-vcv6",
+      "recommendation": "Upgrade to version 7.15.1 or later",
+      "patched_versions": ">=7.15.1",
+      "updated": "2026-06-15T20:06:17.000Z",
+      "cvss": {
+        "score": 3.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-352"
+      ],
+      "url": "https://github.com/advisories/GHSA-84g9-w2xq-vcv6"
+    },
+    "1121242": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-p88m-4jfj-68fv\n- https://nvd.nist.gov/vuln/detail/CVE-2026-9679\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "created": "2026-06-19T14:21:30.000Z",
+      "id": 1121242,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nundici's cookie parser in `parseSetCookie` percent-decodes cookie values via `qsUnescape`, turning encoded sequences like `%0D%0A`, `%00`, `%3B`, and `%3D` into their literal byte equivalents. RFC 6265 §5.4 does not specify any decoding and browsers do not decode either.\n\nApplications that parse a `Set-Cookie` header and then forward the parsed value into a response header (proxies, middleware, SSR frameworks) become vulnerable to HTTP response header injection: an attacker-controlled upstream can inject arbitrary `Set-Cookie`, `Location`, or `Cache-Control` headers into the application's downstream response, enabling session fixation, open redirect, or cache poisoning.\n\nAffected applications are those that use undici's cookie parsing (`parseSetCookie`, `parseCookie`, `getSetCookies`) and forward the parsed cookie value into a response header.\n\nThis was introduced in undici 7.0.0 via [#3789](https://github.com/nodejs/undici/pull/3789).\n\n## Patches\n\nUpgrade to undici v6.27.0, v7.28.0 or v8.5.0.\n\n## Workarounds\n\nIf upgrade is not immediately possible, do not forward values returned by `parseSetCookie`/`parseCookie`/`getSetCookies` directly into response headers; sanitize the value first to strip or reject CR, LF, NUL, `;`, and `=` bytes.",
+      "reported_by": null,
+      "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-9679"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.27.0",
+      "github_advisory_id": "GHSA-p88m-4jfj-68fv",
+      "recommendation": "Upgrade to version 6.27.0 or later",
+      "patched_versions": ">=6.27.0",
+      "updated": "2026-06-19T14:23:30.000Z",
+      "cvss": {
+        "score": 5.9,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+      },
+      "cwe": [
+        "CWE-93"
+      ],
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv"
+    },
+    "1121245": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-vxpw-j846-p89q\n- https://nvd.nist.gov/vuln/detail/CVE-2026-12151\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "created": "2026-06-19T14:22:01.000Z",
+      "id": 1121245,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nThe undici WebSocket client enforces `maxPayloadSize` on the cumulative byte count of fragments in a message but does not enforce a limit on the number of fragments. A malicious WebSocket server can stream many small or empty continuation frames that each pass per-frame and cumulative-size validation, collectively causing unbounded memory growth in the client process. The result is memory exhaustion and a denial of service.\n\nAffected applications are those using the undici WebSocket client (`new WebSocket(...)`) or the `WebSocketStream` API that can be induced to connect to an attacker-controlled or compromised WebSocket endpoint.\n\nAll releases starting at undici 6.17.0 are affected.\n\n## Patches\n\nUpgrade to undici v6.27.0, v7.28.0 or v8.5.0.\n\n## Workarounds\n\nNo workaround is available. The fix must be applied through an upgrade.",
+      "reported_by": null,
+      "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-12151"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.27.0",
+      "github_advisory_id": "GHSA-vxpw-j846-p89q",
+      "recommendation": "Upgrade to version 6.27.0 or later",
+      "patched_versions": ">=6.27.0",
+      "updated": "2026-06-19T14:23:29.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-770"
+      ],
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q"
+    },
+    "1121250": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-35p6-xmwp-9g52\n- https://nvd.nist.gov/vuln/detail/CVE-2026-6733\n- https://hackerone.com/reports/3582376\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+      "created": "2026-06-19T14:19:13.000Z",
+      "id": 1121250,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nUndici's HTTP/1.1 client is vulnerable to response queue poisoning on reused keep-alive sockets. An attacker-controlled upstream server can inject an unsolicited HTTP/1.1 response onto an idle socket after a request completes. When the client dispatches the next request on that socket, it associates the injected response with the new request, causing responses to be delivered to the wrong requests.\n\nThis requires an attacker-controlled or compromised upstream HTTP/1.1 server and keep-alive connection reuse.\n\n## Patches\n\nUpgrade to undici v6.27.0, v7.28.0 or v8.5.0.\n\n## Workarounds\n\nDisable keep-alive connection reuse by setting `keepAliveTimeout: 0` on the Client or Pool.",
+      "reported_by": null,
+      "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-6733"
+      ],
+      "access": "public",
+      "severity": "low",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.27.0",
+      "github_advisory_id": "GHSA-35p6-xmwp-9g52",
+      "recommendation": "Upgrade to version 6.27.0 or later",
+      "patched_versions": ">=6.27.0",
+      "updated": "2026-06-19T14:19:15.000Z",
+      "cvss": {
+        "score": 3.7,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-367"
+      ],
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52"
+    },
+    "1121255": {
+      "findings": [
+        {
+          "version": "5.29.0",
+          "paths": [
+            ".>@vercel/node>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-g8m3-5g58-fq7m\n- https://nvd.nist.gov/vuln/detail/CVE-2026-11525\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "created": "2026-06-19T14:34:46.000Z",
+      "id": 1121255,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nWhen undici parses a `Set-Cookie` header, it accepts any `SameSite` attribute value that contains `Strict`, `Lax`, or `None` as a substring, rather than the case-insensitive exact match specified by RFC 6265. Non-spec values are silently mapped to one of the three standard tokens:\n\n- `SameSite=NoneOfYourBusiness` is parsed as `None`, the most permissive setting.\n- `SameSite=StrictLax` is parsed as `Lax`, a downgrade from `Strict`.\n\nAffected applications are those that consume `Set-Cookie` headers from server responses (for example via undici's `fetch` or proxy code paths) and then forward or rely on the parsed `sameSite` attribute. A malicious or non-compliant server can coerce the consumer's view of a cookie's SameSite policy to a weaker value, silently degrading the SameSite enforcement the cookie is supposed to provide.\n\nThis was introduced in undici 5.15.0 when the cookies feature was added.\n\n## Patches\n\nUpgrade to undici v6.27.0, v7.28.0 or v8.5.0.\n\n## Workarounds\n\nAfter parsing a `Set-Cookie` header, validate that the resulting `sameSite` attribute is one of `'Strict'`, `'Lax'`, or `'None'` (exact, case-insensitive) before forwarding or relying on it.",
+      "reported_by": null,
+      "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-11525"
+      ],
+      "access": "public",
+      "severity": "low",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.27.0",
+      "github_advisory_id": "GHSA-g8m3-5g58-fq7m",
+      "recommendation": "Upgrade to version 6.27.0 or later",
+      "patched_versions": ">=6.27.0",
+      "updated": "2026-06-19T14:34:46.000Z",
+      "cvss": {
+        "score": 3.7,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-183"
+      ],
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m"
+    }
+  },
+  "muted": [],
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 5,
+      "moderate": 7,
+      "high": 5,
+      "critical": 0
+    },
+    "dependencies": 1537,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1537
+  }
+}
