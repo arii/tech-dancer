@@ -7,10 +7,16 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
 import requests  # type: ignore[import-untyped]
-from dev_tools.utils import DiskCache, log_warn
+from dev_tools.constants import REVIEW_PLACEHOLDERS
+from dev_tools.utils import CLIError, DiskCache, log_warn
+from dev_tools.utils.git import GitUtility
 
 
 class GitHubClient:
+    # --- Constants ---
+    ERROR_AUTO_PUSH_FAILED = "PR creation for '{head}' will likely fail because auto-push was unsuccessful."
+    BRANCH_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9._/-]+$")
+
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
         from dev_tools.utils import get_github_token
 
@@ -40,17 +46,26 @@ class GitHubClient:
             self._request("GET", f"/repos/{self.repo}/branches/{branch_name}")
             self._branch_cache[branch_name] = True
             return True
-        except requests.exceptions.RequestException as e:
-            if e.response is not None and e.response.status_code == 404:
+        except (requests.exceptions.RequestException, CLIError) as e:
+            # Fallback to status_code if 'code' attribute is missing (e.g. RequestException)
+            code = getattr(e, "code", None)
+            if code is None and hasattr(e, "response") and e.response is not None:
+                code = e.response.status_code
+
+            if code == 404:
                 self._branch_cache[branch_name] = False
                 return False
             raise e
 
+    def invalidate_branch_cache(self, branch_name: str) -> None:
+        """Invalidates the branch existence cache for a specific branch."""
+        if branch_name in self._branch_cache:
+            del self._branch_cache[branch_name]
+
     def _detect_repo(self) -> str:
         try:
-            proc = subprocess.run(["git", "config", "--get", "remote.origin.url"], capture_output=True, text=True)
+            proc = subprocess.run(["git", "config", "--get", "remote.origin.url"], capture_output=True, text=True, check=False)
             url = proc.stdout.strip()
-            import re
 
             match = re.search(r"[:/]([^/]+/[^/.]+)(\.git)?$", url)
             return match.group(1) if match else url
@@ -103,9 +118,56 @@ class GitHubClient:
                 self._cache.set(cache_key, result, ttl=ttl)
 
             return result
-        except requests.exceptions.RequestException:
-            # Preserve the original requests exception for specific status code handling in callers
+        except requests.exceptions.HTTPError as e:
+            self._parse_github_error(e)
             raise
+        except requests.exceptions.RequestException as e:
+            # Provide context and a status code for consistency
+            status_code = 500
+            if e.response is not None:
+                status_code = e.response.status_code
+
+            raise CLIError(
+                f"GitHub Request failed: {method} {path} - {str(e)}",
+                code=status_code,
+                data={"method": method, "path": path}
+            ) from e
+
+    def _parse_github_error(self, e: requests.exceptions.HTTPError) -> None:
+        """Helper to extract detailed error message from GitHub API response."""
+        try:
+            if e.response is None:
+                return
+            error_data = e.response.json()
+            if not isinstance(error_data, dict):
+                return
+            github_message = error_data.get("message", "")
+
+            # Sanitize detailed errors to prevent information disclosure
+            if "errors" in error_data and isinstance(error_data["errors"], list):
+                sanitized_errors = []
+                for err in error_data["errors"]:
+                    if isinstance(err, dict):
+                        # Only include safe fields: 'message', 'field', 'resource', 'code'
+                        # Cast to str and truncate to avoid leaking nested structures or massive data
+                        safe_err = {
+                            k: str(err[k])[:200]
+                            for k in ["message", "field", "resource", "code"]
+                            if k in err and err[k] is not None
+                        }
+                        sanitized_errors.append(safe_err)
+
+                if sanitized_errors:
+                    github_message += f": {json.dumps(sanitized_errors)}"
+
+            if github_message:
+                raise CLIError(
+                    f"GitHub API Error: {github_message}",
+                    code=e.response.status_code,
+                    data=error_data,
+                ) from e
+        except (ValueError, AttributeError):
+            pass
 
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""
@@ -219,6 +281,24 @@ class GitHubClient:
         return prs
 
     def create_pull_request(self, title: str, body: str, head: str, base: str, draft: bool = False) -> Dict[str, Any]:
+        """Creates a PR, automatically pushing the head branch if it doesn't exist on remote."""
+        # Security: Validate branch name to prevent injection
+        if not self.BRANCH_NAME_PATTERN.match(head):
+            raise CLIError(f"Invalid branch name: {head}", code=400)
+
+        if not self.branch_exists(head):
+            log_warn(f"Branch '{head}' not found on remote. Checking for local branch and pushing...")
+            git_util = GitUtility(token=self.token, repo=self.repo)
+
+            # Style: Explicitly check for local branch existence before pushing
+            if not git_util.branch_exists_locally(head):
+                log_warn(f"Local branch '{head}' also not found. PR creation will likely fail.")
+            elif git_util.push_branch(head):
+                # Invalidate branch cache
+                self.invalidate_branch_cache(head)
+            else:
+                log_warn(self.ERROR_AUTO_PUSH_FAILED.format(head=head))
+
         data = {"title": title, "body": body, "head": head, "base": base, "draft": draft}
         return self._request("POST", f"/repos/{self.repo}/pulls", json_data=data)
 
@@ -245,11 +325,18 @@ class GitHubClient:
                 allow_redirects=True,
                 timeout=300,
             )
-        except requests.exceptions.HTTPError as e:
-            if e.response is not None and e.response.status_code == 404:
+        except (requests.exceptions.HTTPError, CLIError) as e:
+            code = getattr(e, "code", None)
+            if code is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                code = e.response.status_code
+
+            # Fallback only if the error was a 404 (permanent not found) or a potentially transient network error
+            # If it's a 500 or other permanent error, don't waste time retrying with the other ID
+            is_transient = code in [408, 429, 502, 503, 504]
+            if code == 404 or is_transient:
                 if external_id is not None:
                     # Fallback to query by raw check_run_id
-                    log_warn(f"Logs for job {external_id} not found (404). Falling back to check run {check_run_id}...")
+                    log_warn(f"Logs for job {external_id} not found ({code}). Falling back to check run {check_run_id}...")
                     try:
                         return self._request(
                             "GET",
@@ -258,11 +345,19 @@ class GitHubClient:
                             accept="application/vnd.github.v3.raw",
                             timeout=300,
                         )
-                    except requests.exceptions.HTTPError as fallback_e:
-                        if fallback_e.response is not None and fallback_e.response.status_code == 404:
+                    except (requests.exceptions.HTTPError, CLIError) as fallback_e:
+                        fallback_code = getattr(fallback_e, "code", None)
+                        if (
+                            fallback_code is None
+                            and isinstance(fallback_e, requests.exceptions.HTTPError)
+                            and fallback_e.response is not None
+                        ):
+                            fallback_code = fallback_e.response.status_code
+
+                        if fallback_code == 404:
                             return self._handle_missing_logs(check_run_id, is_fallback=True)
                         raise fallback_e
-                else:
+                elif code == 404:
                     return self._handle_missing_logs(job_id)
             raise
 
@@ -272,6 +367,19 @@ class GitHubClient:
     def create_issue(self, title: str, body: str) -> Dict[str, Any]:
         """Creates a new GitHub issue."""
         return self._request("POST", f"/repos/{self.repo}/issues", json_data={"title": title, "body": body})
+
+    @staticmethod
+    def normalize_issue(issue: Dict[str, Any]) -> Dict[str, Any]:
+        """Normalizes issue dict to standard format."""
+        return {
+            "number": issue.get("number"),
+            "title": issue.get("title"),
+            "body": issue.get("body"),
+            "state": issue.get("state"),
+            "html_url": issue.get("html_url"),
+            "labels": [l.get("name") if isinstance(l, dict) else l for l in issue.get("labels", [])],
+            "updated_at": issue.get("updated_at"),
+        }
 
     def fetch_issue_details(self, number: int) -> Dict[str, Any]:
         """Fetches the details of a GitHub issue."""
@@ -289,18 +397,7 @@ class GitHubClient:
         data = self._request("GET", "/search/issues", params={"q": query, "per_page": limit})
         items = data.get("items", []) if isinstance(data, dict) else []
 
-        return [
-            {
-                "number": issue.get("number"),
-                "title": issue.get("title"),
-                "body": issue.get("body"),
-                "state": issue.get("state"),
-                "html_url": issue.get("html_url"),
-                "labels": [l.get("name") if isinstance(l, dict) else l for l in issue.get("labels", [])],
-                "updated_at": issue.get("updated_at"),
-            }
-            for issue in items[:limit]
-        ]
+        return [self.normalize_issue(issue) for issue in items[:limit]]
 
     def fetch_issue_comments(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the comments on an issue or pull request."""
@@ -412,23 +509,18 @@ class GitHubClient:
         if not isinstance(body, str):
             body = str(body)
 
+        recommendation = payload.get("recommendation", "")
+        if not isinstance(recommendation, str):
+            recommendation = str(recommendation)
+
         comments = payload.get("comments", [])
         if not isinstance(comments, list):
             raise CLIError("Review rejected: 'comments' must be a list.")
 
-        # Robust placeholder detection using regex to handle minor variants
-        placeholders = [
-            r"<findings\s*/?>",
-            r"<summary\s*/?>",
-            r"<filename\s*/?>",
-            r"<feedback\s*/?>",
-            r"<Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved>",
-        ]
-
-        # Check body for placeholders
-        for p in placeholders:
-            if re.search(p, body, re.IGNORECASE):
-                raise CLIError(f"Review rejected: Contains boilerplate placeholder matching '{p}'")
+        # Check recommendation for placeholders (should be explicit)
+        for p in REVIEW_PLACEHOLDERS:
+            if re.search(p, recommendation, re.IGNORECASE):
+                raise CLIError(f"Review rejected: Recommendation contains boilerplate placeholder matching '{p}'")
 
         # Check for real comments (not placeholders)
         real_comments = []
@@ -441,27 +533,24 @@ class GitHubClient:
 
             # Check if comment fields contain placeholders
             is_placeholder = False
-            for p in placeholders:
+            for p in REVIEW_PLACEHOLDERS:
                 if re.search(p, c_body, re.IGNORECASE) or re.search(p, c_path, re.IGNORECASE):
                     is_placeholder = True
                     break
 
             if is_placeholder:
-                raise CLIError(f"Review rejected: Comment contains boilerplate placeholder.")
+                raise CLIError("Review rejected: Comment contains boilerplate placeholder.")
 
-            if c_body.strip() and c_path != "<filename>":
+            if c_body.strip() and not re.search(r"<filename\s*/?>", c_path, re.IGNORECASE):
                 real_comments.append(c)
 
         # Check for empty/meaningless body
         clean_body = body
         clean_body = re.sub(r"^#+.*$", "", clean_body, flags=re.MULTILINE)
-        clean_body = re.sub(r"<!--.*?-->", "", clean_body, flags=re.DOTALL)
-        clean_body = re.sub(
-            r"Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved",
-            "",
-            clean_body,
-            flags=re.IGNORECASE,
-        )
+        # Strip all placeholders for meaningful content check
+        for p in REVIEW_PLACEHOLDERS:
+            clean_body = re.sub(p, "", clean_body, flags=re.IGNORECASE | re.DOTALL)
+
         clean_body = clean_body.strip()
 
         if not clean_body and not real_comments:
@@ -523,26 +612,29 @@ class GitHubClient:
         # Clean up the trailing "Output JSON" instructions if present
         body = re.split(r"##\s+Output JSON", body, flags=re.IGNORECASE)[0].strip()
 
+        # Robustly strip placeholders from the markdown body as well
+        for p in REVIEW_PLACEHOLDERS:
+            body = re.sub(p, "", body, flags=re.IGNORECASE | re.DOTALL).strip()
+
         if not body:
             raise CLIError("Review body (Markdown section) is empty. Provide findings before the JSON block.")
 
         # Combine extracted body (Markdown section) and payload body (JSON section)
-        existing_body = payload.get("body", "").strip()
+        json_body = payload.get("body", "").strip()
 
-        if existing_body:
-            # Strip known placeholders out of the JSON body
-            for p in [
-                "<findings>",
-                "<summary>",
-                "<feedback>",
-                "## ANTI-AI-SLOP",
-                "## FINDINGS",
-                "## FINAL RECOMMENDATION",
-            ]:
-                existing_body = re.sub(rf"{p}\s*", "", existing_body, flags=re.IGNORECASE).strip()
+        if json_body:
+            # Check if JSON body contains only placeholders
+            stripped_body = json_body
+            for p in REVIEW_PLACEHOLDERS:
+                stripped_body = re.sub(p, "", stripped_body, flags=re.IGNORECASE | re.DOTALL).strip()
 
-        if existing_body:
-            payload["body"] = f"{body}\n\n{existing_body}"
+            if not stripped_body:
+                raise CLIError(
+                    "Review rejected: JSON body contains only placeholders/boilerplate. "
+                    "Ensure you provide actual feedback in the 'body' field of the JSON block."
+                )
+
+            payload["body"] = f"{body}\n\n{stripped_body}"
         else:
             payload["body"] = body
 
@@ -608,13 +700,20 @@ class GitHubClient:
             def try_create_review(review_body, review_comments, review_event):
                 try:
                     return self.create_review(pr_number, review_body, review_comments, review_event)
-                except requests.exceptions.HTTPError as e:
-                    if e.response is not None and e.response.status_code == 422:
-                        try:
-                            error_data = e.response.json()
-                            error_msg = json.dumps(error_data)
-                        except Exception:
-                            error_msg = e.response.text
+                except (requests.exceptions.HTTPError, CLIError) as e:
+                    code = getattr(e, "code", None)
+                    if code is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                        code = e.response.status_code
+
+                    if code == 422:
+                        error_data = getattr(e, "data", None)
+                        if error_data is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                            try:
+                                error_data = e.response.json()
+                            except Exception:
+                                pass
+
+                        error_msg = json.dumps(error_data) if error_data else (e.response.text if hasattr(e, "response") and e.response else str(e))
 
                         if "Can not approve your own pull request" in error_msg and review_event != "COMMENT":
                             log_warn("Cannot approve own PR. Retrying as COMMENT...")
@@ -659,12 +758,26 @@ class GitHubClient:
 
     def download_zipball(self, ref: str, dest: str = "repo.zip") -> None:
         """A stateless download helper for the Orchestrator"""
+        from dev_tools.utils import sanitize_path
+
+        # Security: Validate input to prevent command/path injection
+        if not re.match(r"^[a-zA-Z0-9._/-]+$", ref):
+            raise CLIError(f"Invalid ref: {ref}", code=400)
+
+        safe_dest = sanitize_path(dest)
+        if not safe_dest.endswith(".zip"):
+            safe_dest += ".zip"
+
         url = f"{self.base_url}/repos/{self.repo}/zipball/{ref}"
         headers = {"Authorization": f"Bearer {self.token}"}
         # Increased timeout for large downloads
         response = requests.get(url, headers=headers, stream=True, timeout=300)
         response.raise_for_status()
-        with open(dest, "wb") as f:
+
+        with open(safe_dest, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-        subprocess.run(["unzip", "-o", dest], check=True)
+
+        from dev_tools.utils import run_command
+        # unzip -o overwrite files without prompting
+        run_command(["unzip", "-o", safe_dest])
