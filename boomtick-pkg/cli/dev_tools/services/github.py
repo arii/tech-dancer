@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import subprocess
 from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
@@ -51,10 +52,9 @@ class GitHubClient:
             raise e
 
     def _detect_repo(self) -> str:
-        from dev_tools.utils import run_command
         try:
-            url = run_command(["git", "config", "--get", "remote.origin.url"], log_on_error=False)
-            import re
+            proc = subprocess.run(["git", "config", "--get", "remote.origin.url"], capture_output=True, text=True, check=False)
+            url = proc.stdout.strip()
 
             match = re.search(r"[:/]([^/]+/[^/.]+)(\.git)?$", url)
             return match.group(1) if match else url
