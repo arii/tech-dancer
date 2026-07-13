@@ -37,6 +37,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
+      - name: Environment Validation
+        run: |
+          set -eo pipefail
+          echo "Checking environment dependencies..."
+          command -v gh >/dev/null 2>&1 || { echo >&2 "gh CLI is required but not installed. Aborting."; exit 1; }
+          if [ ! -d "./boomtick-pkg/mcp/actions/setup-workspace" ]; then
+            echo >&2 "Custom local action path ./boomtick-pkg/mcp/actions/setup-workspace does not exist. Aborting."
+            exit 1
+          fi
+          echo "Environment validation passed."
+
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -57,6 +68,7 @@ jobs:
           ALERT_GHSA_ID: ${{ github.event.alert.security_advisory.ghsa_id }}
           ALERT_PATCHED_VERSION: ${{ github.event.alert.security_vulnerability.first_patched_version.identifier }}
         run: |
+          set -eo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             PACKAGE="$INPUT_PACKAGE_NAME"
             ECOSYSTEM="$INPUT_ECOSYSTEM"
@@ -214,16 +226,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_TITLE: ${{ steps.generate_body.outputs.title }}
         run: |
+          set -eo pipefail
           ISSUE_URL=$(gh issue create \
             --title "$ISSUE_TITLE" \
             --body-file issue_body.md \
             --label "spec-driven,security" \
             --assignee Jules)
-          echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
 
-          # shellcheck disable=SC2155
-          issue_number="${ISSUE_URL##*/}"
-          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
+          # Explicitly quote and escape if necessary, ensuring the variable is not empty
+          if [ -n "$ISSUE_URL" ]; then
+            echo "issue_url=${ISSUE_URL}" >> "$GITHUB_OUTPUT"
+
+            # shellcheck disable=SC2155
+            issue_number="${ISSUE_URL##*/}"
+            echo "issue_number=${issue_number}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Failed to create issue" >&2
+            exit 1
+          fi
 
       - name: Dispatch Jules
         if: steps.create_issue.outputs.issue_number != ''
@@ -231,6 +251,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
         run: |
+          set -eo pipefail
           # shellcheck disable=SC2155
           export PYTHONPATH="$PYTHONPATH:$GITHUB_WORKSPACE/boomtick-pkg/cli"
           # Dispatch Jules for the new issue
