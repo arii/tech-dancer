@@ -611,11 +611,11 @@ def _resolve_ci_threshold(val: Optional[int], env_key: str, config_val: int) -> 
         try:
             parsed_val = int(raw_val)
             if parsed_val < 0 or parsed_val > max_allowed:
-                log_warn(f"Failed to validate {env_key} with value: {raw_val} from {source} (out of range).")
+                log_warn(f"Failed to parse {env_key} with value: {raw_val} (out of range). Falling back to default.")
                 return None
             return parsed_val
         except (ValueError, TypeError):
-            log_warn(f"Failed to validate {env_key} with value: {raw_val} from {source} (invalid integer).")
+            log_warn(f"Failed to parse {env_key} with value: {raw_val} (invalid integer). Falling back to default.")
             return None
 
     # 1. Prioritize explicit argument
@@ -658,7 +658,10 @@ def verify_ci_metrics(
     if not ai_logs_missing:
         try:
             with log_file.open("r") as f:
-                for line in [l.strip() for l in f if l.strip()]:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
                     entry = json.loads(line)
                     total_input += entry.get("inputTokens", 0)
                     total_output += entry.get("outputTokens", 0)

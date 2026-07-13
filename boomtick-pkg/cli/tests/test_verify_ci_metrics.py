@@ -24,8 +24,8 @@ class TestVerifyMetrics(unittest.TestCase):
             total_threshold=self.total_threshold
         )
 
-        self.assertEqual(result["status"], "success")
-        self.assertEqual(result["message"], "No AI usage logs found. Assuming 0 tokens used.")
+        self.assertEqual(result["status"], "warning")
+        self.assertEqual(result["message"], "AI usage logs missing at /tmp/ai/review-run.jsonl. Verified duration only.")
         self.assertEqual(result["metrics"]["inputTokens"], 0)
         self.assertEqual(result["metrics"]["outputTokens"], 0)
         self.assertEqual(result["metrics"]["totalTokens"], 0)
@@ -75,7 +75,7 @@ class TestVerifyMetrics(unittest.TestCase):
         )
 
         self.assertEqual(result["status"], "error")
-        expected_msg = "AI Token threshold exceeded: Input tokens (500000) exceeded limit (100000)"
+        expected_msg = "CI Metric threshold exceeded: Input tokens (500000) exceeded limit (100000)"
         self.assertEqual(result["message"], expected_msg)
 
 if __name__ == "__main__":
