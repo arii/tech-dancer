@@ -118,8 +118,7 @@ class GitHubClient:
         except requests.exceptions.HTTPError as e:
             self._parse_github_error(e)
             raise
-        except requests.exceptions.RequestException as e:
-            log_warn(f"GitHub Request failed: {method} {path} - {str(e)}")
+        except requests.exceptions.RequestException:
             # Preserve the original requests exception for specific status code handling in callers
             raise
 
@@ -130,8 +129,19 @@ class GitHubClient:
                 return
             error_data = e.response.json()
             github_message = error_data.get("message", "")
-            if "errors" in error_data:
-                github_message += f": {json.dumps(error_data['errors'])}"
+
+            # Sanitize detailed errors to prevent information disclosure
+            if "errors" in error_data and isinstance(error_data["errors"], list):
+                sanitized_errors = []
+                for err in error_data["errors"]:
+                    if isinstance(err, dict):
+                        # Only include safe fields: 'message', 'field', 'resource', 'code'
+                        safe_err = {k: err[k] for k in ["message", "field", "resource", "code"] if k in err}
+                        sanitized_errors.append(safe_err)
+
+                if sanitized_errors:
+                    github_message += f": {json.dumps(sanitized_errors)}"
+
             if github_message:
                 raise CLIError(
                     f"GitHub API Error: {github_message}",
@@ -302,10 +312,13 @@ class GitHubClient:
             if code is None and isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
                 code = e.response.status_code
 
-            if code == 404:
+            # Fallback only if the error was a 404 (permanent not found) or a potentially transient network error
+            # If it's a 500 or other permanent error, don't waste time retrying with the other ID
+            is_transient = code in [408, 429, 502, 503, 504]
+            if code == 404 or is_transient:
                 if external_id is not None:
                     # Fallback to query by raw check_run_id
-                    log_warn(f"Logs for job {external_id} not found (404). Falling back to check run {check_run_id}...")
+                    log_warn(f"Logs for job {external_id} not found ({code}). Falling back to check run {check_run_id}...")
                     try:
                         return self._request(
                             "GET",
@@ -326,7 +339,7 @@ class GitHubClient:
                         if fallback_code == 404:
                             return self._handle_missing_logs(check_run_id, is_fallback=True)
                         raise fallback_e
-                else:
+                elif code == 404:
                     return self._handle_missing_logs(job_id)
             raise
 
@@ -730,13 +743,26 @@ class GitHubClient:
 
     def download_zipball(self, ref: str, dest: str = "repo.zip") -> None:
         """A stateless download helper for the Orchestrator"""
+        from dev_tools.utils import sanitize_path
+
+        # Security: Validate input to prevent command/path injection
+        if not re.match(r"^[a-zA-Z0-9._/-]+$", ref):
+            raise CLIError(f"Invalid ref: {ref}", code=400)
+
+        safe_dest = sanitize_path(dest)
+        if not safe_dest.endswith(".zip"):
+            safe_dest += ".zip"
+
         url = f"{self.base_url}/repos/{self.repo}/zipball/{ref}"
         headers = {"Authorization": f"Bearer {self.token}"}
         # Increased timeout for large downloads
         response = requests.get(url, headers=headers, stream=True, timeout=300)
         response.raise_for_status()
-        with open(dest, "wb") as f:
+
+        with open(safe_dest, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
+
         from dev_tools.utils import run_command
-        run_command(["unzip", "-o", dest])
+        # unzip -o overwrite files without prompting
+        run_command(["unzip", "-o", safe_dest])

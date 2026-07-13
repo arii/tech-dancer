@@ -1,8 +1,9 @@
 """Git utilities for secure branch operations."""
 import os
+import re
 import subprocess
 from typing import Optional
-from dev_tools.utils import log_warn, mask_sensitive_data
+from dev_tools.utils import CLIError, log_warn, mask_sensitive_data
 
 class GitUtility:  # pylint: disable=too-few-public-methods
     """Utility class for Git operations."""
@@ -23,6 +24,10 @@ class GitUtility:  # pylint: disable=too-few-public-methods
 
     def push_branch(self, branch: str) -> bool:
         """Securely pushes a local branch to the remote origin."""
+        # Security: Validate branch name to prevent injection
+        if not re.match(r"^[a-zA-Z0-9._/-]+$", branch):
+            raise CLIError(f"Invalid branch name: {branch}", code=400)
+
         try:
             # Check if branch exists locally
             if not self.branch_exists_locally(branch):
