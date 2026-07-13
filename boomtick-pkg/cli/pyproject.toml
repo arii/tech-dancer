@@ -38,7 +38,6 @@ include = ["dev_tools*"]
     "cli-schema.json",
     "config.json",
     "project_config.json",
-    "*.json",
     "verify_versions.py",
     "dist/index.js",
     "dist/config.js",
