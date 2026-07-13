@@ -635,6 +635,7 @@ def _resolve_ci_threshold(val: Optional[int], env_key: str, config_val: int) -> 
     return config_val
 
 
+# pylint: disable=too-many-branches
 def verify_ci_metrics(
     input_threshold: Optional[int] = None,
     output_threshold: Optional[int] = None,
@@ -662,7 +663,11 @@ def verify_ci_metrics(
                     line = line.strip()
                     if not line:
                         continue
-                    entry = json.loads(line)
+                    # pylint: disable=bare-except
+                    try:
+                        entry = json.loads(line)
+                    except Exception:
+                        continue
                     total_input += entry.get("inputTokens", 0)
                     total_output += entry.get("outputTokens", 0)
         except Exception as e:

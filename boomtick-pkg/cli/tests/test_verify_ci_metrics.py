@@ -25,7 +25,10 @@ class TestVerifyMetrics(unittest.TestCase):
         )
 
         self.assertEqual(result["status"], "warning")
-        self.assertEqual(result["message"], "AI usage logs missing at /tmp/ai/review-run.jsonl. Verified duration only.")
+        self.assertEqual(
+            result["message"],
+            "AI usage logs missing at /tmp/ai/review-run.jsonl. Verified duration only."
+        )
         self.assertEqual(result["metrics"]["inputTokens"], 0)
         self.assertEqual(result["metrics"]["outputTokens"], 0)
         self.assertEqual(result["metrics"]["totalTokens"], 0)

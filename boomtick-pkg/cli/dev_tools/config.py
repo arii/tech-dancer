@@ -208,12 +208,12 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         if f.name in raw:
             raw_val = raw[f.name]
             # Handle typing dynamically
-            if f.type == int or f.type == 'int':
+            if f.type in (int, 'int'):
                 try:
                     kwargs[f.name] = int(raw_val)
                 except (ValueError, TypeError):
                     pass
-            elif f.type == float or f.type == 'float':
+            elif f.type in (float, 'float'):
                 try:
                     kwargs[f.name] = float(raw_val)
                 except (ValueError, TypeError):
