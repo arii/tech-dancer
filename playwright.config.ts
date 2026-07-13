@@ -1,6 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 import { getBasePath } from './scripts/base-path.js';
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
