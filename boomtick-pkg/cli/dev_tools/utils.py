@@ -564,13 +564,13 @@ def call_github_models(
 def _get_ci_duration_mins() -> Optional[float]:
     """Calculates the current CI pipeline duration in minutes using GitHub API."""
     run_id = os.environ.get("GITHUB_RUN_ID")
-    if not (run_id and run_id.isdigit()):
+    # Security: Length and digit check to prevent potential overflow/malicious input
+    if not (run_id and run_id.isdigit() and len(run_id) < 20):
         return None
 
     # Range check for GITHUB_RUN_ID (ensure positive)
     run_id_int = int(run_id)
     if run_id_int <= 0:
-        log_warn("GITHUB_RUN_ID must be a positive integer.")
         return None
 
     try:
@@ -600,30 +600,29 @@ def _resolve_ci_threshold(val: Optional[int], env_key: str, config_val: int) -> 
     is_duration = "DURATION" in env_key
     max_allowed = 1440 if is_duration else 10000000
 
-    def validate_range(input_val: int, source: str, raw_str: Optional[str] = None) -> Optional[int]:
-        if input_val < 0 or input_val > max_allowed:
-            reason = "out of range"
-            raw_info = f" with value: {raw_str}" if raw_str else ""
-            log_warn(f"Failed to validate {env_key}{raw_info} from {source} ({reason}). Falling back to default.")
+    def validate_and_parse(raw_val: Any, source: str) -> Optional[int]:
+        try:
+            parsed_val = int(raw_val)
+            if parsed_val < 0 or parsed_val > max_allowed:
+                log_warn(f"Failed to validate {env_key} with value: {raw_val} from {source} (out of range).")
+                return None
+            return parsed_val
+        except (ValueError, TypeError):
+            log_warn(f"Failed to validate {env_key} with value: {raw_val} from {source} (invalid integer).")
             return None
-        return input_val
 
     # 1. Prioritize explicit argument
     if val is not None:
-        validated = validate_range(int(val), "argument")
+        validated = validate_and_parse(val, "argument")
         if validated is not None:
             return validated
 
     # 2. Check environment variable
     env_val = os.environ.get(env_key)
     if env_val is not None:
-        try:
-            parsed_val = int(env_val)
-            validated = validate_range(parsed_val, "environment", raw_str=env_val)
-            if validated is not None:
-                return validated
-        except (ValueError, TypeError):
-            log_warn(f"Failed to parse {env_key} with value: {env_val} (invalid integer). Falling back to default.")
+        validated = validate_and_parse(env_val, "environment")
+        if validated is not None:
+            return validated
 
     # 3. Fallback to config default (assumed trusted)
     return config_val
@@ -645,8 +644,6 @@ def verify_ci_metrics(
     total_limit = _resolve_ci_threshold(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
     duration_limit = _resolve_ci_threshold(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
 
-    if input_limit < 0 or output_limit < 0 or total_limit < 0 or duration_limit < 0:
-        raise CLIError("Thresholds must be non-negative integers.")
 
     log_file = Path(get_or_create_log_dir("ai")) / "review-run.jsonl"
     total_input, total_output = 0, 0

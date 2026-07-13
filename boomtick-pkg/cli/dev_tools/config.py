@@ -35,7 +35,7 @@ class ProjectConfig:
     ai_token_input_limit: int = 800000
     ai_token_output_limit: int = 200000
     ai_token_total_limit: int = 1000000
-    max_ci_duration_minutes: int = 40
+    max_ci_duration_minutes: int = 15
     visual_snapshot_pixel_threshold: float = 0.1
     ui_indicators: List[str] = field(
         default_factory=lambda: [

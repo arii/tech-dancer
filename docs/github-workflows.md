@@ -44,7 +44,7 @@ These metrics establish measurable targets for CI pipeline performance and cost.
 
 | Metric | Target / Limit | Description |
 |--------|----------------|-------------|
-| **Pipeline Duration** | < 40 minutes | Cumulative time for the CI pipeline to reach completion. |
+| **Pipeline Duration** | < 15 minutes | Cumulative time for the CI pipeline to reach completion. |
 | **AI Token Input** | 800,000 tokens | Maximum prompt tokens consumed per pipeline run. |
 | **AI Token Output** | 200,000 tokens | Maximum completion tokens generated per pipeline run. |
 | **AI Token Total** | 1,000,000 tokens | Aggregated token limit (Input + Output). |
