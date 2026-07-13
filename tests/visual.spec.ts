@@ -15,7 +15,7 @@ const routes = [
 
 test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
-    test(`visual comparison for ${route.name}`, async ({ page }) => {
+    test(`visual comparison for ${route.name}`, async ({ page, waitForFonts }) => {
       if (route.viewport) {
         await page.setViewportSize(route.viewport);
       }
@@ -25,7 +25,7 @@ test.describe('Visual Regression Tests', () => {
       await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
 
       // Wait for fonts to be loaded to prevent text-rendering flakiness
-      await page.evaluate(() => document.fonts.ready);
+      await waitForFonts();
 
       // Route-specific stability waits
       if (route.name === 'research') {

@@ -9,7 +9,7 @@ const tools = [
 
 test.describe('Research Tools Mobile UX', () => {
   for (const tool of tools) {
-    test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
+    test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page, waitForFonts }) => {
       // Increase timeout for slow CI environments
       test.setTimeout(90000);
 
@@ -20,7 +20,7 @@ test.describe('Research Tools Mobile UX', () => {
       await page.waitForLoadState('domcontentloaded');
 
       // Wait for fonts to be loaded to prevent text-rendering flakiness
-      await page.evaluate(() => document.fonts.ready);
+      await waitForFonts();
 
       // Wait for lazy components based on tool path using robust locators with generous timeouts
       if (tool.path.includes('ux-auditor')) {

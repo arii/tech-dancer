@@ -20,4 +20,10 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
 
     await use(page);
   },
+  waitForFonts: async ({ page }, use) => {
+    const helper = async () => {
+      await page.evaluate(() => document.fonts.ready);
+    };
+    await use(helper);
+  },
 });
