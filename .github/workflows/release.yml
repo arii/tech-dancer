@@ -6,10 +6,10 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   release:
-    uses: ./boomtick-pkg/workflows/release.yml
+    uses: ./.github/workflows/release-logic.yml
     secrets:
       PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
