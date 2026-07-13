@@ -12,8 +12,9 @@ from dev_tools.utils.git import GitUtility
 
 
 class GitHubClient:
-    # --- Error Messages ---
+    # --- Constants ---
     ERROR_AUTO_PUSH_FAILED = "PR creation for '{head}' will likely fail because auto-push was unsuccessful."
+    BRANCH_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9._/-]+$")
 
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
         from dev_tools.utils import get_github_token
@@ -45,8 +46,9 @@ class GitHubClient:
             self._branch_cache[branch_name] = True
             return True
         except (requests.exceptions.RequestException, CLIError) as e:
+            # Fallback to status_code if 'code' attribute is missing (e.g. RequestException)
             code = getattr(e, "code", None)
-            if code is None and isinstance(e, requests.exceptions.RequestException) and e.response is not None:
+            if code is None and hasattr(e, "response") and e.response is not None:
                 code = e.response.status_code
 
             if code == 404:
@@ -118,9 +120,17 @@ class GitHubClient:
         except requests.exceptions.HTTPError as e:
             self._parse_github_error(e)
             raise
-        except requests.exceptions.RequestException:
-            # Preserve the original requests exception for specific status code handling in callers
-            raise
+        except requests.exceptions.RequestException as e:
+            # Provide context and a status code for consistency
+            status_code = 500
+            if e.response is not None:
+                status_code = e.response.status_code
+
+            raise CLIError(
+                f"GitHub Request failed: {method} {path} - {str(e)}",
+                code=status_code,
+                data={"method": method, "path": path}
+            ) from e
 
     def _parse_github_error(self, e: requests.exceptions.HTTPError) -> None:
         """Helper to extract detailed error message from GitHub API response."""
@@ -128,6 +138,8 @@ class GitHubClient:
             if e.response is None:
                 return
             error_data = e.response.json()
+            if not isinstance(error_data, dict):
+                return
             github_message = error_data.get("message", "")
 
             # Sanitize detailed errors to prevent information disclosure
@@ -136,7 +148,12 @@ class GitHubClient:
                 for err in error_data["errors"]:
                     if isinstance(err, dict):
                         # Only include safe fields: 'message', 'field', 'resource', 'code'
-                        safe_err = {k: err[k] for k in ["message", "field", "resource", "code"] if k in err}
+                        # Cast to str and truncate to avoid leaking nested structures or massive data
+                        safe_err = {
+                            k: str(err[k])[:200]
+                            for k in ["message", "field", "resource", "code"]
+                            if k in err and err[k] is not None
+                        }
                         sanitized_errors.append(safe_err)
 
                 if sanitized_errors:
@@ -265,7 +282,7 @@ class GitHubClient:
     def create_pull_request(self, title: str, body: str, head: str, base: str, draft: bool = False) -> Dict[str, Any]:
         """Creates a PR, automatically pushing the head branch if it doesn't exist on remote."""
         # Security: Validate branch name to prevent injection
-        if not re.match(r"^[a-zA-Z0-9._/-]+$", head):
+        if not self.BRANCH_NAME_PATTERN.match(head):
             raise CLIError(f"Invalid branch name: {head}", code=400)
 
         if not self.branch_exists(head):
