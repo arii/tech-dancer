@@ -11,17 +11,21 @@ class GitUtility:  # pylint: disable=too-few-public-methods
         self.token = token
         self.repo = repo
 
+    def branch_exists_locally(self, branch: str) -> bool:
+        """Checks if a branch exists in the local repository."""
+        proc = subprocess.run(
+            ["git", "show-ref", "--verify", f"refs/heads/{branch}"],
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        return proc.returncode == 0
+
     def push_branch(self, branch: str) -> bool:
         """Securely pushes a local branch to the remote origin."""
         try:
             # Check if branch exists locally
-            proc = subprocess.run(
-                ["git", "show-ref", "--verify", f"refs/heads/{branch}"],
-                capture_output=True,
-                text=True,
-                check=False
-            )
-            if proc.returncode != 0:
+            if not self.branch_exists_locally(branch):
                 log_warn(f"Local branch '{branch}' not found. Cannot push.")
                 return False
 

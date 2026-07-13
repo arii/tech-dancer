@@ -12,6 +12,9 @@ from dev_tools.utils.git import GitUtility
 
 
 class GitHubClient:
+    # --- Error Messages ---
+    ERROR_AUTO_PUSH_FAILED = "PR creation for '{head}' will likely fail because auto-push was unsuccessful."
+
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
         from dev_tools.utils import get_github_token
 
@@ -50,6 +53,11 @@ class GitHubClient:
                 self._branch_cache[branch_name] = False
                 return False
             raise e
+
+    def invalidate_branch_cache(self, branch_name: str) -> None:
+        """Invalidates the branch existence cache for a specific branch."""
+        if branch_name in self._branch_cache:
+            del self._branch_cache[branch_name]
 
     def _detect_repo(self) -> str:
         try:
@@ -108,24 +116,30 @@ class GitHubClient:
 
             return result
         except requests.exceptions.HTTPError as e:
-            # Try to extract detailed error message from GitHub API response
-            try:
-                error_data = e.response.json()
-                github_message = error_data.get("message", "")
-                if "errors" in error_data:
-                    github_message += f": {json.dumps(error_data['errors'])}"
-                if github_message:
-                    raise CLIError(
-                        f"GitHub API Error: {github_message}",
-                        code=e.response.status_code,
-                        data=error_data,
-                    ) from e
-            except (ValueError, AttributeError):
-                pass
+            self._parse_github_error(e)
             raise
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
+            log_warn(f"GitHub Request failed: {method} {path} - {str(e)}")
             # Preserve the original requests exception for specific status code handling in callers
             raise
+
+    def _parse_github_error(self, e: requests.exceptions.HTTPError) -> None:
+        """Helper to extract detailed error message from GitHub API response."""
+        try:
+            if e.response is None:
+                return
+            error_data = e.response.json()
+            github_message = error_data.get("message", "")
+            if "errors" in error_data:
+                github_message += f": {json.dumps(error_data['errors'])}"
+            if github_message:
+                raise CLIError(
+                    f"GitHub API Error: {github_message}",
+                    code=e.response.status_code,
+                    data=error_data,
+                ) from e
+        except (ValueError, AttributeError):
+            pass
 
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""
@@ -240,15 +254,22 @@ class GitHubClient:
 
     def create_pull_request(self, title: str, body: str, head: str, base: str, draft: bool = False) -> Dict[str, Any]:
         """Creates a PR, automatically pushing the head branch if it doesn't exist on remote."""
+        # Security: Validate branch name to prevent injection
+        if not re.match(r"^[a-zA-Z0-9._/-]+$", head):
+            raise CLIError(f"Invalid branch name: {head}", code=400)
+
         if not self.branch_exists(head):
             log_warn(f"Branch '{head}' not found on remote. Checking for local branch and pushing...")
             git_util = GitUtility(token=self.token, repo=self.repo)
-            if git_util.push_branch(head):
+
+            # Style: Explicitly check for local branch existence before pushing
+            if not git_util.branch_exists_locally(head):
+                log_warn(f"Local branch '{head}' also not found. PR creation will likely fail.")
+            elif git_util.push_branch(head):
                 # Invalidate branch cache
-                if head in self._branch_cache:
-                    del self._branch_cache[head]
+                self.invalidate_branch_cache(head)
             else:
-                log_warn(f"PR creation for '{head}' will likely fail because auto-push was unsuccessful.")
+                log_warn(self.ERROR_AUTO_PUSH_FAILED.format(head=head))
 
         data = {"title": title, "body": body, "head": head, "base": base, "draft": draft}
         return self._request("POST", f"/repos/{self.repo}/pulls", json_data=data)
