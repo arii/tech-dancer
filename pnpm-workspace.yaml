@@ -23,3 +23,4 @@ overrides:
   "@grpc/grpc-js": "1.14.4"
   "ws@^8": "8.21.0"
   "ws@^7": "7.5.11"
+  dompurify: "3.4.12"
