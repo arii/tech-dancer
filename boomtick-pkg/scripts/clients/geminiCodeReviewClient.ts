@@ -44,7 +44,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let thinkingBudget = estimatedInputTokens > 10000 ? 4096 : 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, codeReviewResponseSchema);
+    let model = await createGeminiModel(modelName, maxOutputTokens, thinkingBudget, codeReviewResponseSchema) as {
+      invoke: (m: unknown[]) => Promise<{
+        content: string | unknown;
+        usage_metadata?: Record<string, unknown>;
+        response_metadata?: Record<string, unknown>;
+      }>
+    };
     const { SystemMessage, HumanMessage } = await import('@langchain/core/messages');
 
     const messages = [
@@ -68,7 +74,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, newMax, thinkingBudget, codeReviewResponseSchema);
+      model = await createGeminiModel(modelName, newMax, thinkingBudget, codeReviewResponseSchema) as typeof model;
       response = await model.invoke(messages);
 
       finishReason = extractFinishReason(response);

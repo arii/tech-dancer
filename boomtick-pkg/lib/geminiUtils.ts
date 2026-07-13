@@ -1,40 +1,50 @@
+/**
+ * Extracts the finish reason from a Gemini response in a type-safe manner.
+ * Handles various structures from LangChain and raw Gemini API.
+ */
 export function extractFinishReason(res: unknown): string {
-  if (!res || typeof res !== 'object') return 'UNKNOWN';
+  if (!res || typeof res !== 'object' || Array.isArray(res)) return 'UNKNOWN';
 
-  const r = res as {
-    response_metadata?: {
-      finishReason?: string;
-      finish_reason?: string;
-      candidates?: Array<{ finishReason?: string }>;
-    };
-    generationInfo?: {
-      finishReason?: string;
-    };
-  };
+  const r = res as Record<string, unknown>;
 
-  // Langchain structure varies depending on the provider wrapper
-  if (r.response_metadata?.finishReason) return r.response_metadata.finishReason;
-  if (r.response_metadata?.finish_reason) return r.response_metadata.finish_reason;
-  if (r.generationInfo?.finishReason) return r.generationInfo.finishReason;
+  // Check response_metadata (LangChain)
+  const metadata = r.response_metadata as Record<string, unknown> | undefined;
+  if (metadata) {
+    if (typeof metadata.finishReason === 'string') return metadata.finishReason;
+    if (typeof metadata.finish_reason === 'string') return metadata.finish_reason;
 
-  // Look deeper into candidates if raw output exposes it
-  const candidate = r.response_metadata?.candidates?.[0];
-  if (candidate?.finishReason) return candidate.finishReason;
+    const candidates = metadata.candidates as Array<Record<string, unknown>> | undefined;
+    if (Array.isArray(candidates) && candidates[0]?.finishReason) {
+      return String(candidates[0].finishReason);
+    }
+  }
+
+  // Check generationInfo (LangChain)
+  const genInfo = r.generationInfo as Record<string, unknown> | undefined;
+  if (genInfo && typeof genInfo.finishReason === 'string') {
+    return genInfo.finishReason;
+  }
 
   return 'UNKNOWN';
 }
 
-
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-
-export function createGeminiModel(
+/**
+ * Creates a Gemini model instance with the specified configuration.
+ * Enforces structured output if a responseSchema is provided.
+ * Uses lazy loading for @langchain/google-genai to improve startup performance.
+ */
+export async function createGeminiModel(
   modelName: string,
   maxOutputTokens: number,
   thinkingBudget: number,
   responseSchema?: Record<string, unknown>
-): ChatGoogleGenerativeAI {
+): Promise<unknown> {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
+  if (!apiKey || apiKey.trim() === '') {
+    throw new Error('Missing or empty GEMINI_API_KEY environment variable');
+  }
+
+  const { ChatGoogleGenerativeAI } = await import('@langchain/google-genai');
 
   return new ChatGoogleGenerativeAI({
     model: modelName,
@@ -48,6 +58,10 @@ export function createGeminiModel(
     }
   });
 }
+
+/**
+ * Returns configured token and thinking budget limits.
+ */
 export function getConfiguredTokens(type: 'code' | 'visual'): { maxOutputTokens: number; thinkingBudget: number } {
   let maxOutputTokens = type === 'code' ? 6000 : 4096;
   let thinkingBudget = type === 'code' ? 2048 : 1024;
@@ -65,6 +79,9 @@ export function getConfiguredTokens(type: 'code' | 'visual'): { maxOutputTokens:
   return { maxOutputTokens, thinkingBudget };
 }
 
+/**
+ * Adjusts token budget for a retry attempt.
+ */
 export function applyRetryStrategy(currentMax: number, currentThinking: number): { newMax: number; newThinking: number } {
   // Hard cap to avoid runaways
   const newMax = Math.min(Math.round(currentMax * 1.25), 8192);
