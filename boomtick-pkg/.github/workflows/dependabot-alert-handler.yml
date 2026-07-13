@@ -37,17 +37,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
-      - name: Environment Validation
-        run: |
-          set -eo pipefail
-          echo "Checking environment dependencies..."
-          command -v gh >/dev/null 2>&1 || { echo >&2 "gh CLI is required but not installed. Aborting."; exit 1; }
-          if [ ! -d "./boomtick-pkg/mcp/actions/setup-workspace" ]; then
-            echo >&2 "Custom local action path ./boomtick-pkg/mcp/actions/setup-workspace does not exist. Aborting."
-            exit 1
-          fi
-          echo "Environment validation passed."
-
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -233,17 +222,11 @@ jobs:
             --label "spec-driven,security" \
             --assignee Jules)
 
-          # Explicitly quote and escape if necessary, ensuring the variable is not empty
-          if [ -n "$ISSUE_URL" ]; then
-            echo "issue_url=${ISSUE_URL}" >> "$GITHUB_OUTPUT"
+          echo "issue_url=${ISSUE_URL}" >> "$GITHUB_OUTPUT"
 
-            # shellcheck disable=SC2155
-            issue_number="${ISSUE_URL##*/}"
-            echo "issue_number=${issue_number}" >> "$GITHUB_OUTPUT"
-          else
-            echo "Failed to create issue" >&2
-            exit 1
-          fi
+          # shellcheck disable=SC2155
+          issue_number="${ISSUE_URL##*/}"
+          echo "issue_number=${issue_number}" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch Jules
         if: steps.create_issue.outputs.issue_number != ''
