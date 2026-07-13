@@ -49,4 +49,3 @@ include = ["dev_tools*"]
     "resources/*",
     "pr_overlap.py"
 ]
-"*" = ["*.json"]
