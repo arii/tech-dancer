@@ -567,10 +567,10 @@ def _get_ci_duration_mins() -> Optional[float]:
     if not (run_id and run_id.isdigit()):
         return None
 
-    # Range check for GITHUB_RUN_ID (max 10^15 as a safe upper bound)
+    # Range check for GITHUB_RUN_ID (ensure positive)
     run_id_int = int(run_id)
-    if run_id_int <= 0 or run_id_int > 10**15:
-        log_warn("GITHUB_RUN_ID out of reasonable range.")
+    if run_id_int <= 0:
+        log_warn("GITHUB_RUN_ID must be a positive integer.")
         return None
 
     try:
@@ -595,6 +595,40 @@ def _get_ci_duration_mins() -> Optional[float]:
         return None
 
 
+def _resolve_ci_threshold(val: Optional[int], env_key: str, config_val: int) -> int:
+    """Helper to resolve a CI threshold from argument, environment, or config default."""
+    is_duration = "DURATION" in env_key
+    max_allowed = 1440 if is_duration else 10000000
+
+    def validate_range(input_val: int, source: str, raw_str: Optional[str] = None) -> Optional[int]:
+        if input_val < 0 or input_val > max_allowed:
+            reason = "out of range"
+            raw_info = f" with value: {raw_str}" if raw_str else ""
+            log_warn(f"Failed to validate {env_key}{raw_info} from {source} ({reason}). Falling back to default.")
+            return None
+        return input_val
+
+    # 1. Prioritize explicit argument
+    if val is not None:
+        validated = validate_range(int(val), "argument")
+        if validated is not None:
+            return validated
+
+    # 2. Check environment variable
+    env_val = os.environ.get(env_key)
+    if env_val is not None:
+        try:
+            parsed_val = int(env_val)
+            validated = validate_range(parsed_val, "environment", raw_str=env_val)
+            if validated is not None:
+                return validated
+        except (ValueError, TypeError):
+            log_warn(f"Failed to parse {env_key} with value: {env_val} (invalid integer). Falling back to default.")
+
+    # 3. Fallback to config default (assumed trusted)
+    return config_val
+
+
 def verify_ci_metrics(
     input_threshold: Optional[int] = None,
     output_threshold: Optional[int] = None,
@@ -606,31 +640,10 @@ def verify_ci_metrics(
 
     config = get_config()
 
-    # Use environment variables if provided, otherwise use project config defaults
-    def get_limit(val: Optional[int], env_key: str, config_val: int) -> int:
-        if val is not None:
-            return int(val)
-        env_val = os.environ.get(env_key)
-        if env_val is not None:
-            try:
-                parsed_val = int(env_val)
-                # Reasonable range check: thresholds should be non-negative and not excessively large
-                # AI tokens max 10M, duration max 24h (1440m)
-                is_duration = "DURATION" in env_key
-                max_allowed = 1440 if is_duration else 10000000
-                if parsed_val < 0 or parsed_val > max_allowed:
-                    log_warn(f"Failed to parse {env_key} with value: {env_val} (out of range). Falling back to config default.")
-                    return config_val
-                return parsed_val
-            except (ValueError, TypeError):
-                log_warn(f"Failed to parse {env_key} with value: {env_val} (invalid integer). Falling back to config default.")
-                return config_val
-        return config_val
-
-    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", config.ai_token_input_limit)
-    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", config.ai_token_output_limit)
-    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
-    duration_limit = get_limit(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
+    input_limit = _resolve_ci_threshold(input_threshold, "MAX_INPUT_TOKENS", config.ai_token_input_limit)
+    output_limit = _resolve_ci_threshold(output_threshold, "MAX_OUTPUT_TOKENS", config.ai_token_output_limit)
+    total_limit = _resolve_ci_threshold(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
+    duration_limit = _resolve_ci_threshold(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
 
     if input_limit < 0 or output_limit < 0 or total_limit < 0 or duration_limit < 0:
         raise CLIError("Thresholds must be non-negative integers.")

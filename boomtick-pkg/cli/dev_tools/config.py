@@ -104,6 +104,13 @@ class ProjectConfig:
         ]
     )
 
+    def __post_init__(self):
+        """Validates configuration parameters after initialization."""
+        # Validate visual snapshot threshold range [0.0, 1.0]
+        if not 0.0 <= self.visual_snapshot_pixel_threshold <= 1.0:
+            # We use object.__setattr__ because the dataclass is frozen
+            object.__setattr__(self, "visual_snapshot_pixel_threshold", max(0.0, min(1.0, self.visual_snapshot_pixel_threshold)))
+
     @property
     def base_branch_name(self) -> str:
         """Returns the base branch name without the remote prefix (e.g., 'main' for 'origin/main')."""
@@ -222,7 +229,13 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
     if "max_ci_duration_minutes" in raw:
         kwargs["max_ci_duration_minutes"] = int(raw["max_ci_duration_minutes"])
     if "visual_snapshot_pixel_threshold" in raw:
-        kwargs["visual_snapshot_pixel_threshold"] = float(raw["visual_snapshot_pixel_threshold"])
+        try:
+            val = float(raw["visual_snapshot_pixel_threshold"])
+            if not 0.0 <= val <= 1.0:
+                val = max(0.0, min(1.0, val))
+            kwargs["visual_snapshot_pixel_threshold"] = val
+        except (ValueError, TypeError):
+            pass
     if "worktree_prefix" in raw:
         kwargs["worktree_prefix"] = raw["worktree_prefix"]
     if "pnpm_version" in raw:
