@@ -6,7 +6,6 @@ const BASE_PATH = getBasePath();
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: '**/*.spec.ts',
   testIgnore: '**/unit/**',
   /* Run tests in files in parallel */
   fullyParallel: true,
