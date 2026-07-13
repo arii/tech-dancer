@@ -56,6 +56,7 @@ A single, required file placed at the root of the host repository.
 | :--- | :--- | :--- | :--- |
 | **Config Defaults** | `dev_tools/config.py` | Hardcoded fallback repo `"arii/tech-dancer"` and base path `"/tech-dancer/"`. | Remove all hardcoded strings. Throw `ValueError` during initialization if required keys are missing or undetectable. |
 | **MCP Configuration** | `mcp/src/config.ts` | Silent fallback values for base path. | Decouple and raise loud `Error` exceptions if keys are missing from environment or `project_config.json`. |
+| **MCP Env Template** | `mcp/.env.example` | Contains hardcoded `GITHUB_OWNER=arii`, `GITHUB_REPO=tech-dancer`, and `VITE_BASE_PATH=/tech-dancer/`. | Replace hardcoded values with generic placeholders (`your-org`, `your-repo`, `/`). |
 | **Content & Routing** | `mcp/src/tools/repo.get_route_map.ts` | Hardcoded search for `src/config/routes.ts` and `content/` folders. | Parameterize routing path and content scope directories in `project_config.json`. |
 | **Linter Rules** | `scripts/detect-antipatterns.mjs` | Lint rules are highly opinionated towards `tech-dancer`'s unique design token vocabulary. | Extract design token arrays (`allowedColors`, `allowedTextUtils`) to a local config file or make them overridable. |
 | **CLI Orchestration** | `dev_tools/orchestrator.py` | Directly invokes scripts outside the package scope (e.g. `scripts/ux-discover-routes.ts`). | Package UX/routing utility scripts directly inside `boomtick-pkg/scripts/` so the package is self-contained. |
