@@ -660,12 +660,9 @@ def verify_ci_metrics(
         try:
             with log_file.open("r") as f:
                 for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
                     # pylint: disable=bare-except
                     try:
-                        entry = json.loads(line)
+                        entry = json.loads(line.strip())
                     except Exception:
                         continue
                     total_input += entry.get("inputTokens", 0)

@@ -152,6 +152,7 @@ def _detect_repo_name() -> str | None:
         return None
 
 
+# pylint: disable=too-many-locals
 def load_project_config(path: str | Path = "project_config.json") -> ProjectConfig:
     p = Path(path)
 
@@ -218,15 +219,20 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
                     kwargs[f.name] = float(raw_val)
                 except (ValueError, TypeError):
                     pass
-            elif str(f.type).startswith('typing.List') or 'List[' in str(f.type):
-                list_val = get_list(f.name)
-                if list_val is not None:
-                    kwargs[f.name] = list_val
-            elif str(f.type).startswith('typing.Dict') or 'Dict[' in str(f.type):
-                dict_val = get_dict(f.name)
-                if dict_val is not None:
-                    kwargs[f.name] = dict_val
             else:
-                kwargs[f.name] = raw_val
+                # Use get_origin for robust type inspection
+                import typing
+                origin = typing.get_origin(f.type)
+
+                if origin is list or origin is typing.List or str(f.type).startswith('typing.List') or 'List[' in str(f.type):
+                    list_val = get_list(f.name)
+                    if list_val is not None:
+                        kwargs[f.name] = list_val
+                elif origin is dict or origin is typing.Dict or str(f.type).startswith('typing.Dict') or 'Dict[' in str(f.type):
+                    dict_val = get_dict(f.name)
+                    if dict_val is not None:
+                        kwargs[f.name] = dict_val
+                else:
+                    kwargs[f.name] = raw_val
 
     return ProjectConfig(**kwargs)
