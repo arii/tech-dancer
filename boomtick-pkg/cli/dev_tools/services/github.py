@@ -275,6 +275,18 @@ class GitHubClient:
         """Creates a new GitHub issue."""
         return self._request("POST", f"/repos/{self.repo}/issues", json_data={"title": title, "body": body})
 
+    def normalize_issue(self, issue: Dict[str, Any]) -> Dict[str, Any]:
+        """Normalizes issue dict to standard format."""
+        return {
+            "number": issue.get("number"),
+            "title": issue.get("title"),
+            "body": issue.get("body"),
+            "state": issue.get("state"),
+            "html_url": issue.get("html_url"),
+            "labels": [l.get("name") if isinstance(l, dict) else l for l in issue.get("labels", [])],
+            "updated_at": issue.get("updated_at"),
+        }
+
     def fetch_issue_details(self, number: int) -> Dict[str, Any]:
         """Fetches the details of a GitHub issue."""
         return self._request("GET", f"/repos/{self.repo}/issues/{number}")
@@ -291,18 +303,7 @@ class GitHubClient:
         data = self._request("GET", "/search/issues", params={"q": query, "per_page": limit})
         items = data.get("items", []) if isinstance(data, dict) else []
 
-        return [
-            {
-                "number": issue.get("number"),
-                "title": issue.get("title"),
-                "body": issue.get("body"),
-                "state": issue.get("state"),
-                "html_url": issue.get("html_url"),
-                "labels": [l.get("name") if isinstance(l, dict) else l for l in issue.get("labels", [])],
-                "updated_at": issue.get("updated_at"),
-            }
-            for issue in items[:limit]
-        ]
+        return [self.normalize_issue(issue) for issue in items[:limit]]
 
     def fetch_issue_comments(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the comments on an issue or pull request."""
