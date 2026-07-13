@@ -24,13 +24,17 @@ import {
   IssueUpdateInputJsonSchema,
   IssueCommentInputJsonSchema,
   CreateIssueInputJsonSchema,
-  ReadAgentContextInputJsonSchema,
   CreateJulesSessionInputJsonSchema,
   JulesSessionIdInputJsonSchema,
   JulesSendMessageInputJsonSchema,
   JulesListSessionsInputJsonSchema,
   SearchDdgsInputJsonSchema,
 } from "../tools/contract.js";
+
+export const ReadAgentContextInputJsonSchema = {
+  type: "object",
+  properties: {},
+} as const;
 
 export const GetCommandSchemaInputJsonSchema = {
   type: "object",
