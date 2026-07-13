@@ -45,12 +45,18 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: /.*mobile\.spec\.ts/,
+      // Specifically ignore mobile specs in the desktop project
+      testIgnore: [
+        /.*mobile\.spec\.ts/,
+        '**/unit/**'
+      ],
     },
     {
       name: 'mobile-chromium',
       use: { ...devices['iPhone 12'] },
+      // Specifically target only mobile specs in the mobile project
       testMatch: /.*mobile\.spec\.ts/,
+      testIgnore: '**/unit/**',
     },
   ],
   webServer: {
