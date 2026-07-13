@@ -118,7 +118,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
-    "@types/dompurify": "3.2.0",
     "@types/jsdom": "^28.0.3",
     "@types/mdast": "^4.0.4",
     "@types/node": "^24.13.2",
@@ -182,8 +181,7 @@
     "ignoreDependencies": [
       "@langchain/core",
       "@langchain/google-genai",
-      "dompurify",
-      "@types/dompurify"
+      "dompurify"
     ],
     "exclude": [
       "exports",

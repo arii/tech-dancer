@@ -25,7 +25,7 @@ import {
   IssueCommentInputJsonSchema,
   CreateIssueInputJsonSchema,
   GetCommandSchemaInputJsonSchema,
-  ReadAgentContextInputJsonSchema,
+  ReadAgentContextInputJsonSchema as ReadAgentContextSchema,
   CreateJulesSessionInputJsonSchema,
   JulesSessionIdInputJsonSchema,
   JulesSendMessageInputJsonSchema,
@@ -113,7 +113,7 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "repo.read_agent_context",
     description: "Read the full repository index including file tree, CLI schema, and MCP tools.",
-    inputSchema: ReadAgentContextInputJsonSchema as any,
+    inputSchema: ReadAgentContextSchema as any,
   },
   {
     name: "github.get_pr_diff",
