@@ -25,14 +25,30 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      # This allows the workflow to be migration-ready.
+      # In the monorepo, SUBPKG_PATH is 'boomtick-pkg'
+      # We detect monorepo by checking if boomtick-pkg directory exists
+      SUBPKG_PATH: boomtick-pkg
     steps:
       - name: Checkout code
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
+      - name: Resolve Subpackage Path
+        id: resolve-path
+        shell: bash
+        run: |
+          set -eo pipefail
+          if [ -d "boomtick-pkg" ]; then
+            echo "path=boomtick-pkg" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=." >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          node-version-file: 'boomtick-pkg/.node-version'
+          node-version-file: ${{ steps.resolve-path.outputs.path }}/.node-version
 
       - name: Setup Python
         uses: actions/setup-python@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -45,29 +61,35 @@ jobs:
 
       - name: Install dependencies
         run: |
+          set -eo pipefail
           pnpm install --frozen-lockfile
-          pip install -r boomtick-pkg/cli/requirements.txt
+          pip install -r ${{ steps.resolve-path.outputs.path }}/cli/requirements.txt
           pip install build twine
 
       - name: Sync schemas/contracts
         run: |
+          set -eo pipefail
           # Use relative paths from repo root
-          PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli"
+          PYTHONPATH="$PYTHONPATH:$(pwd)/${{ steps.resolve-path.outputs.path }}/cli"
           export PYTHONPATH
-          python3 boomtick-pkg/cli/dev_tools/schema_gen.py
-          pnpm exec tsx boomtick-pkg/mcp/scripts/sync-contracts.ts
+          python3 ${{ steps.resolve-path.outputs.path }}/cli/dev_tools/schema_gen.py
+          pnpm exec tsx ${{ steps.resolve-path.outputs.path }}/mcp/scripts/sync-contracts.ts
 
       - name: Build TypeScript MCP
-        run: pnpm --filter @boomtick/mcp build
+        run: |
+          set -eo pipefail
+          pnpm --filter @boomtick/mcp build
 
       - name: Copy compiled JS
         run: |
-          mkdir -p boomtick-pkg/cli/dev_tools/dist
-          cp -r boomtick-pkg/mcp/dist/* boomtick-pkg/cli/dev_tools/dist/
+          set -eo pipefail
+          mkdir -p ${{ steps.resolve-path.outputs.path }}/cli/dev_tools/dist
+          cp -r ${{ steps.resolve-path.outputs.path }}/mcp/dist/* ${{ steps.resolve-path.outputs.path }}/cli/dev_tools/dist/
 
       - name: Build Python Package
         run: |
-          cd boomtick-pkg/cli
+          set -eo pipefail
+          cd ${{ steps.resolve-path.outputs.path }}/cli
           python3 -m build
 
       - name: Publish to PyPI
@@ -76,4 +98,5 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          twine upload boomtick-pkg/cli/dist/*
+          set -eo pipefail
+          twine upload ${{ steps.resolve-path.outputs.path }}/cli/dist/*

@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   release:
-    uses: ./.github/workflows/release-logic.yml
+    uses: ./boomtick-pkg/.github/workflows/release-logic.yml
     with:
       dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
     secrets:
