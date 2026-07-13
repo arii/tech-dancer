@@ -14,6 +14,8 @@ runs:
     - name: Check version and tag status
       id: check_version
       shell: bash
+      env:
+        GITHUB_REF_ENV: ${{ github.ref }}
       run: |
         set -eo pipefail
         # shellcheck disable=SC2129,SC2193
@@ -27,19 +29,19 @@ runs:
 
         if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
           echo "Tag ${TAG_NAME} already exists."
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          if [[ "${GITHUB_REF_ENV}" == refs/tags/* ]]; then
             echo "Triggered directly by tag. Proceeding."
-            echo "should_release=true" >> "${GITHUB_OUTPUT}"
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           else
             echo "Version has not changed or tag already exists. Skipping release."
-            echo "should_release=false" >> "${GITHUB_OUTPUT}"
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           fi
         else
           echo "Tag ${TAG_NAME} does not exist. Proceeding with new release."
-          echo "should_release=true" >> "${GITHUB_OUTPUT}"
-          echo "create_tag=true" >> "${GITHUB_OUTPUT}"
-          echo "tag_name=${TAG_NAME}" >> "${GITHUB_OUTPUT}"
-          echo "version=${CURRENT_VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+          echo "create_tag=true" >> "$GITHUB_OUTPUT"
+          echo "tag_name=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Create Git Tag and GitHub Release
