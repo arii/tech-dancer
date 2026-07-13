@@ -205,6 +205,13 @@ gh variable get ANY_COUNT_BASELINE
 gh variable set ANY_COUNT_BASELINE --body 42
 ```
 
+## 21) Repository Agnosticism & Config Enforcement
+
+All agents must strictly respect repository-agnostic layout structures.
+- **Root Configuration:** Base parameters (e.g. `github_repo`, `vite_base_path`) must be declared in `project_config.json` at the root of the repository, which is tracked under revision control.
+- **Environment Isolation:** Secrets (e.g., API keys, auth tokens) must never be committed to `project_config.json` and must remain strictly in environment variables (such as `GITHUB_TOKEN`).
+- **Fail-Fast Policy:** Both `td-cli` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
+
 ---
 
 ## 22) Runtime Environment Contract
