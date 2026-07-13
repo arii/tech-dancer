@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures/visual';
+import { getVisualTestMasks } from './utils/playwright-helpers';
 
 test('visual comparison for event-travel-packing mobile', async ({ page, waitForFonts }) => {
   await page.goto('./blog/2026-06-01-event-travel-packing');
@@ -9,5 +10,6 @@ test('visual comparison for event-travel-packing mobile', async ({ page, waitFor
     fullPage: true,
     allowSizeMismatch: true,
     animations: 'disabled',
+    mask: getVisualTestMasks(page)
   });
 });

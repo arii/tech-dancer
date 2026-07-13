@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures/visual';
+import { getVisualTestMasks } from './utils/playwright-helpers';
 
 test('Capture affiliate card on mobile', async ({ page, waitForFonts }) => {
   // Go directly to the known post
@@ -17,8 +18,24 @@ test('Capture affiliate card on mobile', async ({ page, waitForFonts }) => {
   // Scroll it into view
   await affiliateCard.scrollIntoViewIfNeeded();
 
+  // Ensure image is loaded to prevent half-rendered card snapshots
+  const img = affiliateCard.locator('img');
+  if (await img.count() > 0) {
+    await img.first().evaluate((element: HTMLImageElement) => {
+      if (element.complete) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        element.onload = resolve;
+        element.onerror = reject;
+      });
+    });
+  }
+
+  // Brief settle time after scroll and image load
+  await page.waitForTimeout(500);
+
   // Take a screenshot
   await expect(affiliateCard).toHaveScreenshot('affiliate-card.png', {
     animations: 'disabled',
+    mask: getVisualTestMasks(page)
   });
 });
