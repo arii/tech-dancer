@@ -209,7 +209,7 @@ runs:
         PYTHONPATH: boomtick-pkg/cli
       run: |
         td-cli gh summary-report >> "$GITHUB_STEP_SUMMARY"
-        if ! td-cli gh verify-metrics > /dev/null 2>&1; then
+        if ! td-cli gh verify-metrics; then
           echo "CI Metrics verification failed."
           exit 1
         fi
