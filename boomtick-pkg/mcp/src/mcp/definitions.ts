@@ -24,29 +24,17 @@ import {
   IssueUpdateInputJsonSchema,
   IssueCommentInputJsonSchema,
   CreateIssueInputJsonSchema,
+<<<<<<< jules/ai-slop-audit-fix-11929870306754162392
+=======
+  ReadAgentContextInputJsonSchema,
+  GetCommandSchemaInputJsonSchema,
+>>>>>>> main
   CreateJulesSessionInputJsonSchema,
   JulesSessionIdInputJsonSchema,
   JulesSendMessageInputJsonSchema,
   JulesListSessionsInputJsonSchema,
   SearchDdgsInputJsonSchema,
 } from "../tools/contract.js";
-
-export const ReadAgentContextInputJsonSchema = {
-  type: "object",
-  properties: {},
-  additionalProperties: false,
-} as const;
-
-export const GetCommandSchemaInputJsonSchema = {
-  type: "object",
-  properties: {
-    commandPath: {
-      type: "string",
-      description: "The CLI command path to retrieve the schema for (e.g. 'gh audit-pr')"
-    }
-  },
-  required: ["commandPath"]
-} as const;
 
 export const MCP_PROMPTS: Prompt[] = [
   {
