@@ -18,6 +18,15 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
     // Control CSS Animations and Transitions to prevent visual flakiness
     await disableAnimations(page);
 
+    // Hide scrollbars and floating elements globally for cleaner snapshots
+    await page.addStyleTag({
+      content: `
+        ::-webkit-scrollbar { display: none !important; }
+        * { scrollbar-width: none !important; }
+        [data-testid="scroll-to-top-button"] { visibility: hidden !important; }
+      `
+    });
+
     await use(page);
   },
   waitForFonts: async ({ page }, use) => {
