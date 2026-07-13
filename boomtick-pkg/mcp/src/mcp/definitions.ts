@@ -24,23 +24,14 @@ import {
   IssueUpdateInputJsonSchema,
   IssueCommentInputJsonSchema,
   CreateIssueInputJsonSchema,
+  ReadAgentContextInputJsonSchema,
+  GetCommandSchemaInputJsonSchema,
   CreateJulesSessionInputJsonSchema,
   JulesSessionIdInputJsonSchema,
   JulesSendMessageInputJsonSchema,
   JulesListSessionsInputJsonSchema,
   SearchDdgsInputJsonSchema,
 } from "../tools/contract.js";
-
-export const GetCommandSchemaInputJsonSchema = {
-  type: "object",
-  properties: {
-    commandPath: {
-      type: "string",
-      description: "The CLI command path to retrieve the schema for (e.g. 'gh audit-pr')"
-    }
-  },
-  required: ["commandPath"]
-} as const;
 
 export const MCP_PROMPTS: Prompt[] = [
   {
