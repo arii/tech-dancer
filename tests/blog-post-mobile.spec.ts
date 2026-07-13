@@ -5,7 +5,7 @@ test('visual comparison for event-travel-packing mobile', async ({ page, waitFor
   await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
   await waitForFonts();
 
-  await expect(page).toHaveScreenshot('event-travel-packing-mobile.png', {
+  await expect(page).toHaveScreenshot('event-travel-packing.png', {
     fullPage: true,
     allowSizeMismatch: true,
     animations: 'disabled',

@@ -43,7 +43,7 @@ test.describe('Research Tools Mobile UX', () => {
       expect(overflowX).toBe(false);
 
       // Take a standardized screenshot
-      await expect(page).toHaveScreenshot(`mobile-${tool.path.replace(/\//g, '-')}.png`, {
+      await expect(page).toHaveScreenshot(`${tool.path.replace(/\//g, '-')}.png`, {
         fullPage: true,
         animations: 'disabled',
         mask: getVisualTestMasks(page)

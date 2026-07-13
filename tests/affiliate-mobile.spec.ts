@@ -18,7 +18,7 @@ test('Capture affiliate card on mobile', async ({ page, waitForFonts }) => {
   await affiliateCard.scrollIntoViewIfNeeded();
 
   // Take a screenshot
-  await expect(affiliateCard).toHaveScreenshot('affiliate-card-mobile.png', {
+  await expect(affiliateCard).toHaveScreenshot('affiliate-card.png', {
     animations: 'disabled',
   });
 });
