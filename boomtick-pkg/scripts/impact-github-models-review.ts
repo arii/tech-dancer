@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { orchestrateVisualReview } from '../lib/visualReviewOrchestrator';
 import { githubModelsVisualReviewClient } from './clients/githubModelsVisualReviewClient';
 import { geminiVisualReviewClient } from './clients/geminiVisualReviewClient';

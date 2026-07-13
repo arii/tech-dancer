@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { orchestrateCodeReview } from '../lib/codeReviewOrchestrator';
 import { githubModelsCodeReviewClient } from './clients/githubModelsCodeReviewClient';
 import { geminiCodeReviewClient } from './clients/geminiCodeReviewClient';
