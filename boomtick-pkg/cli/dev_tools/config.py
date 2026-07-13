@@ -252,9 +252,9 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         "spec_sections",
         "temp_file_patterns",
     ]:
-        val = get_list(list_key)
-        if val is not None:
-            kwargs[list_key] = val
+        list_val = get_list(list_key)
+        if list_val is not None:
+            kwargs[list_key] = list_val
 
     content_scopes = get_dict("content_scopes")
     if content_scopes is not None:

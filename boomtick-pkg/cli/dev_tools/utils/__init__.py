@@ -175,7 +175,7 @@ def resolve_resource_path(resource_name: str) -> str:
 
         # Then try dev_tools root (for verify_versions.py etc)
         ref = resources.files("dev_tools").joinpath(resource_name)
-        if ref.exists():
+        if hasattr(ref, "exists") and ref.exists():
             return str(ref)
     except (ImportError, AttributeError, FileNotFoundError, TypeError) as e:
         log_debug(f"importlib_resources failed for '{resource_name}': {e}. Falling back.")
