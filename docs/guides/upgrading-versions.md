@@ -25,7 +25,7 @@ When upgrading pnpm (e.g. via dependabot), you must update the version in all of
 
 - `package.json` (in the `packageManager` field, and `engines.pnpm`)
 - `boomtick-pkg/scripts/check-runtime-files.mjs` (in `expectedPnpm`)
-- `.github/actions/setup-workspace/action.yml` (in the `pnpm-version` input default)
+- `boomtick-pkg/mcp/actions/setup-workspace/action.yml` (in the `pnpm-version` input default)
 - `.devcontainer/Dockerfile` (in the `PNPM_VERSION` environment variable)
 
 ## Upgrading node
