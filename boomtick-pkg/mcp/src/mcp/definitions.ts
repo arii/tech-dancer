@@ -24,6 +24,7 @@ import {
   IssueUpdateInputJsonSchema,
   IssueCommentInputJsonSchema,
   CreateIssueInputJsonSchema,
+  ReadAgentContextInputJsonSchema,
   CreateJulesSessionInputJsonSchema,
   JulesSessionIdInputJsonSchema,
   JulesSendMessageInputJsonSchema,
