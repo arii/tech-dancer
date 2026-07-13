@@ -61,6 +61,7 @@ A single, required file placed at the root of the host repository.
 | **Linter Rules** | `scripts/detect-antipatterns.mjs` | Lint rules are highly opinionated towards `tech-dancer`'s unique design token vocabulary. | Extract design token arrays (`allowedColors`, `allowedTextUtils`) to a local config file or make them overridable. |
 | **CLI Orchestration** | `dev_tools/orchestrator.py` | Directly invokes scripts outside the package scope (e.g. `scripts/ux-discover-routes.ts`). | Package UX/routing utility scripts directly inside `boomtick-pkg/scripts/` so the package is self-contained. |
 | **Dependency Sync** | `scripts/sync-python-deps.py` | Host-level script reaches inside the package folder to find requirements. | Move requirements installation and syncing strictly into the internal setup pipeline of the package. |
+| **Agent Docs Setup** | `install.sh` / `setup-agent.sh` | Agent docs (`.agents/`, `AGENTS.md`) are currently duplicated or manually copied to the host root. | Automatically initialize/sync base agent docs and guidelines from the package to the host repository root during setup. |
 
 ---
 
@@ -85,3 +86,4 @@ The following tasks are structured to be parsed directly into design specificati
 ### Phase 4: Packaging and PyPI Prep
 - [ ] **Issue 4.1:** Clean up `requirements.txt` and package metadata in `pyproject.toml` or `setup.py` inside `boomtick-pkg/cli/`.
 - [ ] **Issue 4.2:** Publish updated integration instructions and PyPI documentation (detailing Vite, Playwright, and Component specifications) to `README.md`.
+- [ ] **Issue 4.3:** Update setup/install scripts to automatically provision `.agents/` configurations and `AGENTS.md` to the host repository root.
