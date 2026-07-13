@@ -46,7 +46,8 @@ def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
 
     result = verify_ci_metrics(input_threshold=150000)
     assert result["status"] == "error"
-    assert "Input tokens (160000) exceeded limit (150000)" in result["message"]
+    expected = "AI Token threshold exceeded: Input tokens (160000) exceeded limit (150000)"
+    assert result["message"] == expected
 
 
 def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
@@ -61,7 +62,8 @@ def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
 
     result = verify_ci_metrics(input_threshold=400, output_threshold=400, total_threshold=500)
     assert result["status"] == "error"
-    assert "Total tokens (600) exceeded limit (500)" in result["message"]
+    expected = "AI Token threshold exceeded: Total tokens (600) exceeded limit (500)"
+    assert result["message"] == expected
 
 
 def test_verify_metrics_malformed_json(tmp_path, monkeypatch):
