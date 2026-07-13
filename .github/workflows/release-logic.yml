@@ -1,4 +1,4 @@
-name: Release boomtick-cli
+name: Release Logic
 
 on:
   workflow_call:
@@ -21,45 +21,11 @@ jobs:
         with:
           node-version-file: '.node-version'
 
-      - name: Check version and tag status
+      - name: Tag and Release
         id: check_version
-        run: |
-          # shellcheck disable=SC2129,SC2193
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
-          TAG_NAME="v$CURRENT_VERSION"
-          
-          # Fetch tags to check existence
-          git fetch --tags
-          
-          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-            echo "Tag $TAG_NAME already exists."
-            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-              echo "Triggered directly by tag. Proceeding."
-              echo "should_release=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "Version has not changed or tag already exists. Skipping release."
-              echo "should_release=false" >> "$GITHUB_OUTPUT"
-            fi
-          else
-            echo "Tag $TAG_NAME does not exist. Proceeding with new release."
-            echo "should_release=true" >> "$GITHUB_OUTPUT"
-            echo "create_tag=true" >> "$GITHUB_OUTPUT"
-            echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
-            echo "version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create Git Tag and GitHub Release
-        if: steps.check_version.outputs.should_release == 'true' && steps.check_version.outputs.create_tag == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ steps.check_version.outputs.tag_name }}
-          VERSION: ${{ steps.check_version.outputs.version }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$TAG_NAME"
-          git push origin "$TAG_NAME"
-          gh release create "$TAG_NAME" --title "chore: release $TAG_NAME" --generate-notes
+        uses: ./.github/actions/tag-and-release
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         if: steps.check_version.outputs.should_release == 'true'
@@ -75,6 +41,7 @@ jobs:
       - name: Install dependencies
         if: steps.check_version.outputs.should_release == 'true'
         run: |
+          set -eo pipefail
           pnpm install --frozen-lockfile
           pip install -r boomtick-pkg/cli/requirements.txt
           pip install build twine
@@ -82,6 +49,7 @@ jobs:
       - name: Sync schemas/contracts
         if: steps.check_version.outputs.should_release == 'true'
         run: |
+          set -eo pipefail
           PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli"
           export PYTHONPATH
           python3 boomtick-pkg/cli/dev_tools/schema_gen.py
@@ -89,17 +57,21 @@ jobs:
 
       - name: Build TypeScript MCP
         if: steps.check_version.outputs.should_release == 'true'
-        run: pnpm --filter @boomtick/mcp build
+        run: |
+          set -eo pipefail
+          pnpm --filter @boomtick/mcp build
 
       - name: Copy compiled JS
         if: steps.check_version.outputs.should_release == 'true'
         run: |
+          set -eo pipefail
           mkdir -p boomtick-pkg/cli/dev_tools/dist
           cp -r boomtick-pkg/mcp/dist/* boomtick-pkg/cli/dev_tools/dist/
 
       - name: Build Python Package
         if: steps.check_version.outputs.should_release == 'true'
         run: |
+          set -eo pipefail
           cd boomtick-pkg/cli
           python3 -m build
 
@@ -109,4 +81,5 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
+          set -eo pipefail
           twine upload boomtick-pkg/cli/dist/*
