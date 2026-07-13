@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "work": [
+    {
+      "branch": "security/upgrade-dompurify-5606994530231010654",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3602
+    },
+    {
+      "branch": "fix/dynamic-basename-resolution-5819676119838957008",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3601
+    },
+    {
+      "branch": "feat-ci-metrics-definition-532604527971653279-3769584114207092359",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3600
+    },
+    {
+      "branch": "fix/workflow-audit-remediation-consolidated-health-report-remediation-11452975215165997872",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3599
+    },
+    {
+      "branch": "jules-3620375955950871758-33312100",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3598
+    },
+    {
+      "branch": "infra/establish-release-process-mcp-integration-1676237118743388817",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3596
+    },
+    {
+      "branch": "chore/release-process-documentation-8827288089628834790",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3595
+    },
+    {
+      "branch": "stabilize-mobile-visual-snapshots-1033799084429464018",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3589
+    },
+    {
+      "branch": "feat/ci-metrics-definition-532604527971653279",
+      "issue": "\u2014",
+      "status": "Draft",
+      "number": 3578
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "status": "error",
+  "message": "Found 12 blocking findings.",
+  "code": 1,
+  "data": {
+    "status": "error",
+    "issues": [
+      {
+        "number": 3602,
+        "title": "Upgrade dompurify to 3.4.12 to resolve XSS vulnerabilities",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3601,
+        "title": "Fix Dynamic Basename Mapping for Subfolder Preview Branches",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": [
+          "No acceptance criteria."
+        ]
+      },
+      {
+        "number": 3600,
+        "title": "Refactor project configuration and pipeline metric checks",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3599,
+        "title": "Workflow Audit Remediation: Consolidated Health Report Fixes",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3598,
+        "title": "chore(tests): fix visual snapshots and test configuration",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3597,
+        "title": "infra: Migrate boomtick-pkg to external submodule referencing the standalone boomtick repository",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": [
+          "No acceptance criteria."
+        ]
+      },
+      {
+        "number": 3596,
+        "title": "Establish release process for boomtick-pkg with integrated TypeScript MCP server",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": [
+          "No acceptance criteria."
+        ]
+      },
+      {
+        "number": 3595,
+        "title": "Document and standardize boomtick-pkg release process",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3594,
+        "title": "infra: Establish release process for boomtick-pkg with integrated TypeScript MCP server",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3593,
+        "title": "[Workflow Audit] Consolidated Health Report",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3591,
+        "title": "Bug: React Router basename mapping incorrect under dynamic subdirectory preview branches",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3589,
+        "title": "Stabilize Mobile Visual Snapshots",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3578,
+        "title": "Systemic CI Metrics Definition: Establish clear measurable targets",
+        "findings": [
+          "Missing spec-driven sections: `Problem Statement`, `Goal`, `Non-Goals`, `Proposed Approach`, `Alternatives Considered`, `Architectural Impact`, `Scope`, `UNDERSTAND THE ISSUE`, `DETERMINE APPROACH`, `SPECIFY SCOPE`, `DEFINITION OF DONE`"
+        ],
+        "warnings": []
+      },
+      {
+        "number": 3577,
+        "title": "Task: Document and standardize the official release process for boomtick-pkg",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3529,
+        "title": "security: upgrade dompurify to resolve 14 medium/low XSS bypass CVEs (prod dependency)",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3528,
+        "title": "security: upgrade shell-quote to >=1.8.4 \u2014 critical newline injection / command injection (GHSA-w7jw-789q-3m8p, CVSS 8.1)",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3527,
+        "title": "security: upgrade react-router to >=7.15.1 to resolve RCE and DoS CVEs (prod dependency)",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3382,
+        "title": "[Epic] Composable and Localized Design System Refactor",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3265,
+        "title": "improve devai vis layout",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3264,
+        "title": "Merch:  Text Spacing & Content Hierarchy",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3263,
+        "title": "Merch page:  Call-to-Action (CTA) Primary vs. Secondary Hierarchy",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 3248,
+        "title": "Refactor Over-engineered Layout Primitives and Remove Hallucinated JIT Resolver",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2996,
+        "title": "Epic: Group and Prioritize Raw Styling UI Refactors",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2900,
+        "title": "Investigate why mobile visual snapshots prompt unexpected updates when no changes exist",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2687,
+        "title": "content: Audit and improve blog posts to meet Impeccable standards",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2678,
+        "title": "accessibility: fix contrast ratio regressions on homepage elements",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2675,
+        "title": "bug: fix clipped overflow containers and skip link text overflow",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2672,
+        "title": "Improve AI Review Context Management and Truncation Handling",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2664,
+        "title": "feat: Add linked issue specifications to PR review context",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2630,
+        "title": "entropy gate",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2618,
+        "title": "Improvement: Trace layout dependencies for impact analysis",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2606,
+        "title": "Deployment Impact Analysis Effectiveness Audit",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2602,
+        "title": "Refactor: De-slop ResearchAnalytics by extracting common UI components",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2582,
+        "title": "ci(models): capture context window limits from GitHub models catalog and filter on them",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2569,
+        "title": "ci(review): require evidence for HIGH/blocking severity",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2561,
+        "title": "Recommendations for Improving AI Code Review & Repository Standards",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2555,
+        "title": "model aware token usage",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2553,
+        "title": "CI: Move UI Anti-Pattern Audit to its own workflow",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2552,
+        "title": "CI: Consider merging static analysis toolchecks",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2550,
+        "title": "CI: Impact Analysis API returns 404 Not Found",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2531,
+        "title": "Replace raw flex and items-center classes with Box primitive in UXAuditor.tsx",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2530,
+        "title": "Replace raw form styling with UI components in BlogDrafter.tsx",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2529,
+        "title": "Remove raw padding and flex classes in ResearchAnalytics.tsx",
+        "findings": [],
+        "warnings": []
+      },
+      {
+        "number": 2492,
+        "title": "refactor(scripts): extract impact-analysis helpers into scripts/impact/ submodules with Zod schemas",
+        "findings": [],
+        "warnings": []
+      }
+    ],
+    "total_findings": 12
+  }
+}
