@@ -111,7 +111,7 @@ runs:
         echo "::group::Python Linting"
         trap 'echo "::endgroup::"' EXIT
         if [ -f "requirements-dev.txt" ]; then
-          pip install -r requirements-dev.txt
+          pip install -r requirements-dev.txt --break-system-packages
         fi
         pnpm run lint:python
         pnpm run type-check:python

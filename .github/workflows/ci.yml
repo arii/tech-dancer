@@ -221,7 +221,7 @@ jobs:
         if: matrix.scanner == 'semgrep'
         run: |
           # Install semgrep on the host for efficiency
-          pip install semgrep
+          pip install semgrep --break-system-packages
           pnpm run audit:semgrep
 
       - name: Gitleaks Secret Detection

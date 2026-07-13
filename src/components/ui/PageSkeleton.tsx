@@ -2,7 +2,7 @@
 import { ReactNode } from 'react';
 import { Box, Stack, Grid } from '../../layouts/Primitives';
 import { Skeleton } from './Skeleton';
-import { motionTokens } from '@/styles/motion';
+import { motionTokens } from '../../styles/motion';
 
 export type SkeletonVariant = 'grid' | 'post' | 'simple';
 

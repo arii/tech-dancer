@@ -1,8 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { match } from "path-to-regexp"
-import { RouteConfig } from "@/lib/types/routes"
-import { SkeletonVariant } from "@/components/ui/PageSkeleton"
+import { RouteConfig } from "./types/routes"
+import { SkeletonVariant } from "../components/ui/PageSkeleton"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

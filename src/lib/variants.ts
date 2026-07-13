@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { cva, type VariantProps } from "class-variance-authority";
-import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
+import { transitions, interaction, typography, layouts, buttons, journal, lists } from "../styles/utilities";
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
