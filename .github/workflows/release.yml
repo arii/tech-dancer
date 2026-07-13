@@ -26,6 +26,7 @@ jobs:
       - name: Check version and tag status
         id: check_version
         run: |
+          # shellcheck disable=SC2129,SC2193
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           TAG_NAME="v$CURRENT_VERSION"
           
