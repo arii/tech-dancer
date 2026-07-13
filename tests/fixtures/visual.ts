@@ -31,7 +31,9 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
     const originalGoto = page.goto.bind(page);
     page.goto = async (...args) => {
       const response = await originalGoto(...args);
-      await page.evaluate(() => document.fonts.ready);
+      if (response !== null) {
+        await page.evaluate(() => document.fonts.ready);
+      }
       return response;
     };
 
