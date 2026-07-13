@@ -644,7 +644,6 @@ def verify_ci_metrics(
     total_limit = _resolve_ci_threshold(total_threshold, "MAX_TOTAL_TOKENS", config.ai_token_total_limit)
     duration_limit = _resolve_ci_threshold(duration_threshold, "MAX_CI_DURATION_MINUTES", config.max_ci_duration_minutes)
 
-
     log_file = Path(get_or_create_log_dir("ai")) / "review-run.jsonl"
     total_input, total_output = 0, 0
     ai_logs_missing = not log_file.exists()
