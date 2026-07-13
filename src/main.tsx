@@ -8,6 +8,7 @@ import { Box } from '@/layouts/Primitives';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { initTelemetry } from '@/utils/telemetry';
 import { routes } from './App.tsx';
+import { getBasename } from './lib/basename';
 import './index.css';
 
 // Initialize error telemetry
@@ -22,20 +23,12 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Function to calculate the actual basename at runtime.
- * This ensures correct routing regardless of deployment depth.
- */
-const getBasename = (): string => {
-  return import.meta.env.BASE_URL || '/';
-};
-
 // Restore GitHub Pages SPA redirect
 const redirect = sessionStorage.getItem('ghpages_redirect');
 if (redirect) {
   sessionStorage.removeItem('ghpages_redirect');
   // Replace the current history entry with the real path
-  const restoreBase = window.__ROUTER_BASENAME__ || import.meta.env.BASE_URL || '/';
+  const restoreBase = window.__ROUTER_BASENAME__ || getBasename();
   const normalizedBase = restoreBase.endsWith('/') ? restoreBase.slice(0, -1) : restoreBase;
   window.history.replaceState(null, '', `${normalizedBase}${redirect}`);
 }

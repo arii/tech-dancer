@@ -1,5 +1,6 @@
 import { Home, BookOpen, Database, User, Tag, ShieldCheck } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
+import { getBasename } from '@/lib/basename';
 
 import { LucideIcon } from 'lucide-react';
 
@@ -87,7 +88,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/previews',
     Component: () => {
-      const base = import.meta.env.BASE_URL || '/';
+      const base = getBasename();
       const cleanBase = base.endsWith('/') ? base : base + '/';
       window.location.replace(cleanBase + 'previews/index.html');
       return null;

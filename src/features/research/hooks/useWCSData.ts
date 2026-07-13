@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { parquetReadObjects, asyncBufferFromUrl } from 'hyparquet';
+import { getBasename } from '@/lib/basename';
 import { useSearchParam } from '@/hooks/useSearchParam';
 
 export interface WCSRecord {
@@ -26,9 +27,9 @@ export function useWCSData() {
     const loadData = async () => {
       const startTime = performance.now();
       try {
-        const baseUrl = import.meta.env.BASE_URL.endsWith('/')
-          ? import.meta.env.BASE_URL
-          : `${import.meta.env.BASE_URL}/`;
+        const baseUrl = getBasename().endsWith('/')
+          ? getBasename()
+          : `${getBasename()}/`;
         const parquetUrl = new URL(`${baseUrl}data/wcs_prelims.parquet`, window.location.origin).href;
 
         let objects;

@@ -30,7 +30,7 @@ export default defineConfig(({mode}) => {
   };
 
   const hostname = resolveHostname().replace(/\/$/, '');
-  const fullAppUrl = new URL(base, hostname).href;
+  const fullAppUrl = new URL( hostname).href;
 
   const appVersion = process.env.npm_package_version || '0.0.0';
 
@@ -51,7 +51,7 @@ export default defineConfig(({mode}) => {
   );
 
   return {
-    base,
+
     test: {
       globals: false,
       environment: 'jsdom',
@@ -99,7 +99,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       !process.env.VITEST && Sitemap({
         hostname: resolveHostname().replace(/\/$/, ''),
-        basePath: base.replace(/\/$/, ''),
+        basePath: getBasePath().replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.filter(route => route !== '/').map(route => route.replace(/\/$/, '') || '/'),
         // Exclude infrastructure pages that are not real app routes
         exclude: ['/404', '/previews', '/previews/'],

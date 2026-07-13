@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import { getBasename } from '@/lib/basename';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
@@ -42,8 +43,8 @@ export function ListRow(props: ListRowProps) {
 
   const affiliate = affiliateManager.getLink(affiliateIds?.[0]);
   const rawImage = propsImage || affiliate?.image;
-  const image = rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL)
-    ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
+  const image = rawImage && rawImage.startsWith('/') && !rawImage.startsWith(getBasename())
+    ? `${getBasename().replace(/\/$/, '')}${rawImage}`
     : rawImage;
 
   return (

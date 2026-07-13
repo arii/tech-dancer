@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { getBasename } from '@/lib/basename';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -311,7 +312,7 @@ function ToolSection({ title, tools, navigate }: { title: string, tools: Researc
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const baseUrl = getBasename().replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   const flagshipTools = tools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
