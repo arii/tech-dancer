@@ -1,13 +1,12 @@
 import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
-test('Capture affiliate card on mobile', async ({ page, waitForFonts }) => {
+test('Capture affiliate card on mobile', async ({ page }) => {
   // Go directly to the known post
   await page.goto('./blog/2026-06-01-shoe-care-modification');
 
   // Wait for the page to load
   await page.waitForLoadState('domcontentloaded');
-  await waitForFonts();
 
   // Use the data-testid for a more resilient test
   const affiliateCard = page.locator('[data-testid="affiliate-card"]').first();

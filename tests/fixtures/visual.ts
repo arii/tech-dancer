@@ -27,12 +27,14 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
       `
     });
 
-    await use(page);
-  },
-  waitForFonts: async ({ page }, use) => {
-    const helper = async () => {
+    // Intercept goto to ensure fonts are loaded after navigation
+    const originalGoto = page.goto.bind(page);
+    page.goto = async (...args) => {
+      const response = await originalGoto(...args);
       await page.evaluate(() => document.fonts.ready);
+      return response;
     };
-    await use(helper);
+
+    await use(page);
   },
 });
