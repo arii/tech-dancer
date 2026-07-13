@@ -1,6 +1,6 @@
 import { Home, BookOpen, Database, User, Tag, ShieldCheck } from 'lucide-react';
-import { RouteConfig } from '@/lib/types/routes';
-import { getBasename } from '@/lib/basename';
+import { RouteConfig } from '../lib/types/routes';
+import { getBasename } from '../lib/basename';
 
 import { LucideIcon } from 'lucide-react';
 

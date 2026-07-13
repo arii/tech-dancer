@@ -1,4 +1,4 @@
-import { getBasename } from '@/lib/basename';
+import { getBasename } from '../lib/basename';
 
 export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const ASSET_PREFIX = getBasename().replace(/\/$/, '');
