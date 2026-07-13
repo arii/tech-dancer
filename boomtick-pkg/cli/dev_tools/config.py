@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
-@dataclass(frozen=True)
+@dataclass
 class ProjectConfig:
     github_repo: str | None = None
     github_token_env: str = "GITHUB_TOKEN"
@@ -108,8 +108,7 @@ class ProjectConfig:
         """Validates configuration parameters after initialization."""
         # Validate visual snapshot threshold range [0.0, 1.0]
         if not 0.0 <= self.visual_snapshot_pixel_threshold <= 1.0:
-            # We use object.__setattr__ because the dataclass is frozen
-            object.__setattr__(self, "visual_snapshot_pixel_threshold", max(0.0, min(1.0, self.visual_snapshot_pixel_threshold)))
+            self.visual_snapshot_pixel_threshold = max(0.0, min(1.0, self.visual_snapshot_pixel_threshold))
 
     @property
     def base_branch_name(self) -> str:
@@ -195,69 +194,39 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         return None
 
     kwargs: Dict[str, Any] = {}
+    from dataclasses import fields
+
     if "github_repo" in raw or "repo_name" in raw:
         kwargs["github_repo"] = raw.get("github_repo") or raw.get("repo_name")
     else:
         kwargs["github_repo"] = _detect_repo_name() or "arii/tech-dancer"
 
-    if "vite_base_path" in raw:
-        kwargs["vite_base_path"] = raw["vite_base_path"]
-    if "gh_path" in raw:
-        kwargs["gh_path"] = raw["gh_path"]
-    if "github_token_env" in raw:
-        kwargs["github_token_env"] = raw["github_token_env"]
-    if "jules_api_url" in raw:
-        kwargs["jules_api_url"] = raw["jules_api_url"]
-    if "monolithic_pr_threshold" in raw:
-        kwargs["monolithic_pr_threshold"] = int(raw["monolithic_pr_threshold"])
-    if "base_branch" in raw:
-        kwargs["base_branch"] = raw["base_branch"]
-    if "max_diff_chars" in raw:
-        kwargs["max_diff_chars"] = int(raw["max_diff_chars"])
-    if "ai_synthesis_model" in raw:
-        kwargs["ai_synthesis_model"] = raw["ai_synthesis_model"]
-    if "ai_review_model" in raw:
-        kwargs["ai_review_model"] = raw["ai_review_model"]
-    if "ai_vision_model" in raw:
-        kwargs["ai_vision_model"] = raw["ai_vision_model"]
-    if "ai_token_input_limit" in raw:
-        kwargs["ai_token_input_limit"] = int(raw["ai_token_input_limit"])
-    if "ai_token_output_limit" in raw:
-        kwargs["ai_token_output_limit"] = int(raw["ai_token_output_limit"])
-    if "ai_token_total_limit" in raw:
-        kwargs["ai_token_total_limit"] = int(raw["ai_token_total_limit"])
-    if "max_ci_duration_minutes" in raw:
-        kwargs["max_ci_duration_minutes"] = int(raw["max_ci_duration_minutes"])
-    if "visual_snapshot_pixel_threshold" in raw:
-        try:
-            val = float(raw["visual_snapshot_pixel_threshold"])
-            if not 0.0 <= val <= 1.0:
-                val = max(0.0, min(1.0, val))
-            kwargs["visual_snapshot_pixel_threshold"] = val
-        except (ValueError, TypeError):
-            pass
-    if "worktree_prefix" in raw:
-        kwargs["worktree_prefix"] = raw["worktree_prefix"]
-    if "pnpm_version" in raw:
-        kwargs["pnpm_version"] = raw["pnpm_version"]
-    if "temp_file_feedback" in raw:
-        kwargs["temp_file_feedback"] = raw["temp_file_feedback"]
+    for f in fields(ProjectConfig):
+        if f.name == "github_repo":
+            continue
 
-    for list_key in [
-        "core_dirs",
-        "ui_indicators",
-        "tailwind_indicators",
-        "audit_check_dirs",
-        "allowed_bots",
-        "spec_sections",
-        "temp_file_patterns",
-    ]:
-        list_val = get_list(list_key)
-        if list_val is not None:
-            kwargs[list_key] = list_val
-
-    content_scopes = get_dict("content_scopes")
-    if content_scopes is not None:
-        kwargs["content_scopes"] = content_scopes
+        if f.name in raw:
+            raw_val = raw[f.name]
+            # Handle typing dynamically
+            if f.type in (int, 'int'):
+                try:
+                    kwargs[f.name] = int(raw_val)
+                except (ValueError, TypeError):
+                    pass
+            elif f.type in (float, 'float'):
+                try:
+                    kwargs[f.name] = float(raw_val)
+                except (ValueError, TypeError):
+                    pass
+            elif str(f.type).startswith('typing.List') or 'List[' in str(f.type):
+                list_val = get_list(f.name)
+                if list_val is not None:
+                    kwargs[f.name] = list_val
+            elif str(f.type).startswith('typing.Dict') or 'Dict[' in str(f.type):
+                dict_val = get_dict(f.name)
+                if dict_val is not None:
+                    kwargs[f.name] = dict_val
+            else:
+                kwargs[f.name] = raw_val
 
     return ProjectConfig(**kwargs)
