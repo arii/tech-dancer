@@ -1,11 +1,11 @@
 // impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
-import { cn } from "@/lib/utils"
-import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
-import { variants } from "@/lib/variants"
+import { cn } from "../lib/utils"
+import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "../styles/design-tokens"
+import { variants } from "../lib/variants"
 import { Box, BaseProps } from "./Box"
-import { resolveJIT, applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
+import { resolveJIT, applyResponsive, type ResponsiveProp } from "../lib/style-utils"
 
 export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes<HTMLElement>, "color"> {
   as?: ElementType

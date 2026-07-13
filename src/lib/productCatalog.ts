@@ -1,5 +1,5 @@
-import { MERCH_CATALOG_PRODUCTS } from '@/data/products/merch';
-import type { ProductCatalogItem } from '@/data/products/catalog';
+import { MERCH_CATALOG_PRODUCTS } from '../data/products/merch';
+import type { ProductCatalogItem } from '../data/products/catalog';
 
 export function getAllMerchProducts(): ProductCatalogItem[] {
   return MERCH_CATALOG_PRODUCTS;

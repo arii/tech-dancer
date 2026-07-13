@@ -1,4 +1,4 @@
-import type { MerchImageDisplayMode, MerchProductImage } from '@/data/products/catalog';
+import type { MerchImageDisplayMode, MerchProductImage } from '../../data/products/catalog';
 
 export interface ResolvedMerchImages {
   mode: MerchImageDisplayMode;

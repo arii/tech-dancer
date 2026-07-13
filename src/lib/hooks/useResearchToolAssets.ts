@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { DEVAI_ASSETS } from '@/config/devai-assets';
+import { DEVAI_ASSETS } from '../../config/devai-assets';
 
 export function useResearchToolAssets(toolIds: string[]) {
   return useMemo(() => {

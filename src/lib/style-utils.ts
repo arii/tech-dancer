@@ -1,4 +1,4 @@
-import { SPACING_MAP } from "@/layouts/layout-maps"
+import { SPACING_MAP } from "../layouts/layout-maps"
 
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
 

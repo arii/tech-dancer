@@ -1,6 +1,6 @@
 import { Box, BoxProps } from '../../layouts/Box';
-import { motionTokens } from '@/styles/motion';
-import { cn } from '@/lib/utils';
+import { motionTokens } from '../../styles/motion';
+import { cn } from '../../lib/utils';
 
 export interface SkeletonProps extends BoxProps {
   variant?: 'text' | 'circular' | 'rectangular';

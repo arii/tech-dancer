@@ -1,8 +1,8 @@
 import * as React from "react"
 import { forwardRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "../lib/utils"
 import { Box, BoxProps } from "./Box"
-import { applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
+import { applyResponsive, type ResponsiveProp } from "../lib/style-utils"
 
 import { COLS_MAP, ROWS_MAP } from "./layout-maps"
 

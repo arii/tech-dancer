@@ -5,7 +5,7 @@
  */
 
 import { parse } from 'yaml';
-import { ASSET_PREFIX } from '@/config/constants';
+import { ASSET_PREFIX } from '../config/constants';
 import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
 
 export type { Post, Resource, Study, ContentItem, ContentStatus };

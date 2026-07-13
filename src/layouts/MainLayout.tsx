@@ -1,14 +1,14 @@
 import { useRef, lazy, Suspense } from 'react';
 import { ReactNode } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
-import Navigation from '@/components/Navigation';
-import { Footer } from '@/layouts/Footer';
-import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
-import { useScrollManagement } from '@/hooks/useScrollManagement';
-import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useCommandKey } from '@/hooks/useHotkeys';
+import { Box, Stack } from './Primitives';
+import Navigation from '../components/Navigation';
+import { Footer } from './Footer';
+import { ScrollToTopButton } from '../components/ui/ScrollToTopButton';
+import { useScrollManagement } from '../hooks/useScrollManagement';
+import { useGlobalSearch } from '../hooks/useGlobalSearch';
+import { useCommandKey } from '../hooks/useHotkeys';
 
-const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+const GlobalSearch = lazy(() => import('../components/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
 
 
 

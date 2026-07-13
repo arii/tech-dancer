@@ -5,7 +5,7 @@
 
 import { AffiliateLink } from '../types';
 import AFFILIATE_DATABASE_JSON from '../data/affiliates.json';
-import { ASSET_PREFIX } from '@/config/constants';
+import { ASSET_PREFIX } from '../config/constants';
 
 const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
 

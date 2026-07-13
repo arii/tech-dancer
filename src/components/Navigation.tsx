@@ -2,11 +2,11 @@ import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Logo } from '@/components/ui/Logo';
-import { TOP_NAV_ROUTES } from '@/config/routes';
-import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { MobileBottomNav } from './MobileBottomNav';
+import { Box, Stack, Text } from '../layouts/Primitives';
+import { Logo } from './ui/Logo';
+import { TOP_NAV_ROUTES } from '../config/routes';
+import { useGlobalSearch } from '../hooks/useGlobalSearch';
+import { cn } from '../lib/utils';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { cn } from '@/lib/utils';
 

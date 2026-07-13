@@ -1,5 +1,5 @@
-import { Text, TextProps } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
+import { Text, TextProps } from '../../layouts/Primitives';
+import { cn } from '../../lib/utils';
 
 export type WordmarkVariant = "default" | "hero" | "navigation" | "nav";
 
