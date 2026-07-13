@@ -143,9 +143,9 @@ runs:
             continue
           fi
 
-          PASSED=$(jq -r '.passed' "$f" 2>/dev/null || echo "error")
-          VERDICT=$(jq -r '.llmVerdict' "$f" 2>/dev/null || echo "unknown")
-          HIGH=$(jq -r '.highCount' "$f" 2>/dev/null || echo "0")
+          PASSED=$(jq -r '.passed | if type == "null" or type == "nan" then "error" else . end' "$f" 2>/dev/null || echo "error")
+          VERDICT=$(jq -r '.llmVerdict | if type == "null" or type == "nan" then "unknown" else . end' "$f" 2>/dev/null || echo "unknown")
+          HIGH=$(jq -r '.highCount | if type == "null" or type == "nan" then "0" else . end' "$f" 2>/dev/null || echo "0")
 
           if [[ "$VERDICT" == "warn" ]]; then
              # Only allow specific safe-skip reasons for warnings to pass CI
