@@ -32,7 +32,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -92,7 +92,7 @@ jobs:
           jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/upload-artifact@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           name: dist-assets
           path: dist/
@@ -107,13 +107,13 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/download-artifact@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           name: dist-assets
           path: ../dist-assets
@@ -230,7 +230,7 @@ jobs:
           exit 1
 
       - name: Update Deployment Feedback
-        uses: actions/github-script@v9 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/github-script@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

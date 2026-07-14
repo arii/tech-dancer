@@ -32,7 +32,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Create initial comment
         id: initial-comment
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           issue-number: ${{ inputs.issue_number }}
           body: |
@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Resolve PR details
-        uses: actions/github-script@v9 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/github-script@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           script: |
             const pr = await github.rest.pulls.get({
@@ -52,7 +52,7 @@ jobs:
             core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           ref: ${{ env.HEAD_REF }}
@@ -99,7 +99,7 @@ jobs:
 
       - name: Update comment on success
         if: success()
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           comment-id: ${{ steps.initial-comment.outputs.comment-id }}
           body: |
@@ -109,7 +109,7 @@ jobs:
 
       - name: Update comment on failure
         if: failure()
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           comment-id: ${{ steps.initial-comment.outputs.comment-id }}
           body: |
