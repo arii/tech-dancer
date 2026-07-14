@@ -1,5 +1,5 @@
 {
-  "threshold": 5,
+  "threshold": 7,
   "minLines": 6,
   "minTokens": 40,
   "ignore": [
