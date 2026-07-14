@@ -65,6 +65,11 @@ jobs:
         with:
           setup-python: 'false'
 
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

@@ -103,6 +103,11 @@ jobs:
         with:
           setup-python: 'false'
 
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
       - name: Validate and fetch branches
         id: validate_branches
         shell: bash
