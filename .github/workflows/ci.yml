@@ -6,7 +6,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -31,7 +30,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -77,28 +75,30 @@ env:
 
 jobs:
   lint-typecheck:
-    name: Lint & Type Check (${{ matrix.target }})
+    name: Lint & Type Check
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [root, boomtick-mcp]
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/lint-typecheck@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
         with:
-          target: ${{ matrix.target }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          setup-python: 'false'
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Lint
+        run: pnpm run lint
+      - name: Type Check
+        run: pnpm run type-check
 
   audit:
-    name: Anti-Pattern Audit
+    name: Code Quality Audit
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -109,16 +109,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/audit@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Semantic Duplicate Audit
-        run: pnpm run audit:semantic
-
-      - name: Audit Suppression Inventory
-        run: pnpm run audit:inventory
-
+          setup-python: 'false'
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile --prefer-offline
       - name: Duplicate Code Detection
         run: pnpm run audit:duplication
 
@@ -140,54 +136,48 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/test-build@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
-
-
-  impact-analysis:
-    needs: [lint-typecheck, audit, test-build]
-    name: Deployment Impact Analysis
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
-    env:
-      DISABLE_MINIFY: true
-      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-      GITHUB_REPOSITORY: ${{ github.repository }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      GITHUB_MODELS_MODEL: gpt-4o-mini
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Get main branch SHA
-        id: main-sha
-        shell: bash
+          setup-python: 'false'
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Build App
         run: |
-          git fetch origin main
-          echo "SHA=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache main build
-        uses: actions/cache@v4.2.0 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+      - name: Run Playwright Smoke Test
+        run: |
+          VITE_BASE_PATH=/ pnpm run test:e2e
+      - name: Run Lighthouse CI
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -eu
+          VITE_BASE_PATH="/"
+          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          export VITE_BASE_PATH
+          export CHROME_PATH
+          echo "CHROME_PATH=$CHROME_PATH"
+          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+        env:
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Playwright Report Exists
+        id: check_report
+        if: always()
+        run: |
+          if [ -d "playwright-report/" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Upload Test Results
+        if: always() && steps.check_report.outputs.exists == 'true'
+        uses: actions/upload-artifact@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          path: .tmp-main
-          key: ${{ runner.os }}-main-build-${{ steps.main-sha.outputs.SHA }}
-          restore-keys: |
-            ${{ runner.os }}-main-build-
-
-      - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          pr_number: ${{ github.event.pull_request.number }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
@@ -207,7 +197,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline

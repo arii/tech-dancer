@@ -99,14 +99,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'false'
-
-      - name: Check active runtime
-        run: |
-          pnpm run check:runtime-files
-          pnpm run doctor
 
       - name: Validate and fetch branches
         id: validate_branches
