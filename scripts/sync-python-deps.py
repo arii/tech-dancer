@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 def sync_deps():
-    if os.environ.get("SKIP_BOOMTICK_PKG") == "true":
-        print("⏭️ Skipping Python dependency sync (SKIP_BOOMTICK_PKG is true).")
+    if os.environ.get("SKIP_BOOMTICK_PKG") == "true" or os.environ.get("VERCEL") == "1":
+        print("⏭️ Skipping Python dependency sync (SKIP_BOOMTICK_PKG is true or on Vercel).")
         return
 
     repo_root = Path(__file__).parent.parent
