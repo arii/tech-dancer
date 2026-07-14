@@ -182,7 +182,8 @@ jobs:
             ${{ runner.os }}-main-build-
 
       - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-
+        env:
+          npm_config_ignore_scripts: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
