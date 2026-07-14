@@ -19,12 +19,14 @@ jobs:
       - name: Checkout Source (for scripts)
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
           path: source
 
       - name: Checkout gh-pages
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           ref: gh-pages
           path: gh-pages-branch
           fetch-depth: 0
