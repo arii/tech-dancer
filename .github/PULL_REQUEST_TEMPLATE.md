@@ -1,5 +1,9 @@
 # Description
 
+This repository is the source code for boomtick.blog, a West Coast Swing dancer site with some tech features by the author.
+
+The development and AI-agent automation tools previously maintained here (`boomtick-mcp`, `td-cli`, and other agentic dev tools used by this package) have been migrated to the new repository [arii/boomtick](https://github.com/arii/boomtick). Please note that the `boomtick-mcp` tools are intended to be repo agnostic.
+
 Please provide a summary of the changes and which content scope this PR covers.
 
 ## Scope (Select One)
