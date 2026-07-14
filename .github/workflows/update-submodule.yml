@@ -1,0 +1,46 @@
+name: Update Submodule
+
+on:
+  repository_dispatch:
+    types: [update-submodule]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # nosemgrep
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Update submodules and push changes
+        run: |
+          set -eo pipefail
+
+          # Update the submodule to the latest commit
+          git submodule update --remote --recursive
+
+          # Check if there are any changes
+          if [[ -n $(git status --porcelain boomtick-pkg) ]]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+            # Install dependencies to update lockfile
+            corepack enable
+            corepack prepare pnpm@10.28.2 --activate
+            pnpm install --no-frozen-lockfile
+
+            git add boomtick-pkg pnpm-lock.yaml
+            git commit -m "chore: update submodules and lockfile"
+            git push
+            echo "Submodules updated and changes pushed."
+          else
+            echo "No changes in submodules."
+          fi
