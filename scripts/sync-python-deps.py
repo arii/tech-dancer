@@ -1,12 +1,11 @@
 # pylint: disable=invalid-name,missing-docstring
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 
 def sync_deps():
-    import os
-
     if os.environ.get("SKIP_BOOMTICK_PKG") == "true":
         print("⏭️ SKIP_BOOMTICK_PKG is true. Bypassing Python dependency sync.")
         return
