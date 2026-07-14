@@ -20,7 +20,9 @@
     "public/assets/**",
     "public/**/*.svg",
     ".agents/**",
-    "plan.md"
+    "plan.md",
+    "**/contract.ts",
+    "**/*.json"
   ],
   "reporters": ["console"]
 }
