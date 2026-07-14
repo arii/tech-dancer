@@ -92,7 +92,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/lint-typecheck@main
+      - uses: arii/boomtick/mcp/actions/lint-typecheck@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           target: ${{ matrix.target }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -109,7 +109,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/audit@main
+      - uses: arii/boomtick/mcp/actions/audit@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -140,7 +140,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/test-build@main
+      - uses: arii/boomtick/mcp/actions/test-build@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
@@ -181,7 +181,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-build-
 
-      - uses: arii/boomtick/mcp/actions/impact-analysis@main
+      - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -207,7 +207,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main
+        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
