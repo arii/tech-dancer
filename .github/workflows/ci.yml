@@ -179,6 +179,90 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+
+  impact-analysis:
+    needs: [lint-typecheck, audit, test-build]
+    name: Deployment Impact Analysis
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      DISABLE_MINIFY: true
+      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_MODELS_MODEL: gpt-4o-mini
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          setup-python: 'false'
+
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run Impact Analysis
+        run: pnpm run impact:analysis
+
+      - name: Build Main
+        run: pnpm run impact:build-main
+
+      - name: Build PR
+        run: pnpm run build:review
+
+      - name: Code Review (Gemini)
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-code-review
+
+      - name: Code Review (GitHub Models)
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-code-review
+
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
+
+      - name: DOM Diff
+        run: pnpm run impact:dom-diff
+
+      - name: Check if visual changes exist
+        id: check_visuals
+        shell: bash
+        run: pnpm exec tsx boomtick-pkg/scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+
+      - name: Visual Review (Gemini)
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-review
+
+      - name: Visual Review (GitHub Models)
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-review
+
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          name: deployment-review
+          path: artifacts/
+
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
     runs-on: ubuntu-latest
