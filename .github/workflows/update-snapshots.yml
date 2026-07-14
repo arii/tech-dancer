@@ -60,7 +60,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: arii/boomtick/mcp/actions/setup-workspace@main
         with:
           setup-python: 'false'
 

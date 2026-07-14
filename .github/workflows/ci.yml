@@ -91,7 +91,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
+      - uses: arii/boomtick/mcp/actions/lint-typecheck@main
         with:
           target: ${{ matrix.target }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -107,7 +107,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/audit
+      - uses: arii/boomtick/mcp/actions/audit@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -137,7 +137,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/test-build
+      - uses: arii/boomtick/mcp/actions/test-build@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
@@ -177,7 +177,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-build-
 
-      - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+      - uses: arii/boomtick/mcp/actions/impact-analysis@main
 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -202,7 +202,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: arii/boomtick/mcp/actions/setup-workspace@main
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
