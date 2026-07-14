@@ -5,6 +5,11 @@ from pathlib import Path
 
 
 def sync_deps():
+    import os
+    if os.environ.get("SKIP_BOOMTICK_PKG") == "true":
+        print("⏭️ Skipping Python dependency sync (SKIP_BOOMTICK_PKG is true).")
+        return
+
     repo_root = Path(__file__).parent.parent
     cli_dir = repo_root / "boomtick-pkg" / "cli"
     req_file = cli_dir / "requirements.txt"

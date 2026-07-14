@@ -6,6 +6,11 @@ import { join } from 'node:path';
  * Orchestrates the schema verification and synchronization process.
  */
 function verifySchemas() {
+  if (process.env.SKIP_BOOMTICK_PKG === 'true') {
+    console.log('⏭️ Skipping schema verification (SKIP_BOOMTICK_PKG is true).');
+    return;
+  }
+
   const root = process.cwd();
 
   // 1. Check dependencies
