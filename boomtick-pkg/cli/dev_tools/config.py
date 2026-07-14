@@ -156,7 +156,7 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
             raw = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, IOError):
             pass
-    else:
+    elif str(path) == "project_config.json":
         # Check parent directories for project_config.json if not in CWD
         # This helps when running from subdirectories
         current = Path.cwd()
