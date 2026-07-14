@@ -23,10 +23,6 @@
     "plan.md",
     "**/contract.ts",
     "**/*.json"
-    "boomtick-pkg/mcp/src/tools/contract.ts",
-    "boomtick-pkg/cli/dev_tools/cli-schema.json",
-    "boomtick-pkg/mcp/.mcp/schemas/**",
-    "boomtick-pkg/cli/setup-agent.sh"
   ],
   "reporters": ["console"]
 }

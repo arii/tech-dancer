@@ -20,11 +20,6 @@ check_run() {
     [ -n "$changed_files" ] && printf "%s\n" "$changed_files" | grep -qE "$1"
 }
 
-if check_run "^\.gitmodules$|boomtick-pkg"; then
-    echo "🔗 Submodule pointers changed. Updating submodules..."
-    git submodule update --init --recursive || echo "❌ ERROR: Failed to update submodules. Please run 'git submodule update --init --recursive' manually."
-fi
-
 if check_run "^(pnpm-lock\.yaml|package\.json)$"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "📦 Node dependencies changed. Running pnpm install..."
