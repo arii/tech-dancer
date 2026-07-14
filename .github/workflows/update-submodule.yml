@@ -4,6 +4,8 @@ on:
   repository_dispatch:
     types: [update-submodule]
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
 
 permissions:
   contents: write
@@ -26,11 +28,17 @@ jobs:
           git submodule update --remote --recursive
 
           # Check if there are any changes
-          if [[ -n $(git status --porcelain) ]]; then
+          if [[ -n $(git status --porcelain boomtick-pkg) ]]; then
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add .
-            git commit -m "chore: update submodules to latest commit"
+
+            # Install dependencies to update lockfile
+            corepack enable
+            corepack prepare pnpm@10.28.2 --activate
+            pnpm install --no-frozen-lockfile
+
+            git add boomtick-pkg pnpm-lock.yaml
+            git commit -m "chore: update submodules and lockfile"
             git push
             echo "Submodules updated and changes pushed."
           else
