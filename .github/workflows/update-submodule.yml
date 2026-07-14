@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
