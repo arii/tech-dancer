@@ -90,6 +90,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
       - uses: arii/boomtick/mcp/actions/lint-typecheck@main
         with:
@@ -106,6 +107,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
       - uses: arii/boomtick/mcp/actions/audit@main
         with:
@@ -136,6 +138,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
       - uses: arii/boomtick/mcp/actions/test-build@main
         with:
@@ -160,6 +163,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
 
       - name: Get main branch SHA
@@ -199,6 +203,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
 
       - name: Setup Workspace
@@ -245,6 +250,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          submodules: recursive
           fetch-depth: 0
 
       - name: Download actionlint
