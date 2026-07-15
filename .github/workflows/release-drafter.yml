@@ -6,8 +6,8 @@ on:
       - main
   # NOTE: pull_request trigger is temporarily disabled to avoid CI errors during initial setup.
   # Re-enable after merging to the default branch so Release Drafter can find its configuration.
-  # pull_request:
-  #   types: [opened, reopened, synchronize]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
@@ -21,6 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Draft Release
-        uses: release-drafter/release-drafter@v6 # nosemgrep
+        uses: release-drafter/release-drafter@v7 # nosemgrep
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
