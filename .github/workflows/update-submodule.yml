@@ -76,20 +76,19 @@ jobs:
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update submodule to ${{ steps.target.outputs.target_ref }} and update lockfile"
-          branch: "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
+          commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
+          branch: "automation/update-submodule-${{ github.event.inputs.ref || 'main' }}"
           delete-branch: true
           title: "chore: update submodule to ${{ steps.target.outputs.target_ref }}"
           body: |
             ## Submodule Update
             - Updated `boomtick-pkg` to ref: `${{ steps.target.outputs.target_ref }}`
             - Updated `pnpm-lock.yaml`
-            - Automated update triggered by ${{ github.event_name }}
+            - Automated update triggered by `${{ github.event_name }}`
 
-      - name: Trigger CI on new PR
-        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
-        run: |
-          gh workflow run ci.yml --ref "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
+            _This PR was automatically generated to sync the submodule._
+
+      - name: Job Summary
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - Automated update triggered by `${{ github.event_name }}`
