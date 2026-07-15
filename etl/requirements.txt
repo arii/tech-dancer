@@ -9,3 +9,4 @@ tenacity==9.1.4
 requests==2.34.2
 tqdm==4.68.3
 duckduckgo-search>=6.0.0
+types-requests
