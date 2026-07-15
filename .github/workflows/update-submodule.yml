@@ -60,7 +60,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
-          branch: "automation/update-submodule/${{ github.event.inputs.ref || 'main' }}"
+          branch: "automation/update-submodule-${{ github.event.inputs.ref || 'main' }}"
           delete-branch: true
           title: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }}"
           body: |
@@ -75,14 +75,18 @@ jobs:
         env:
           INPUT_REF: ${{ github.event.inputs.ref || 'main' }}
         run: |
-          if [ "${{ steps.cpr.outputs.pull-request-number }}" ]; then
-            echo "### ✅ Pull Request Created/Updated" >> $GITHUB_STEP_SUMMARY
-            echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Branch:** \`automation/update-submodule/$INPUT_REF\`" >> $GITHUB_STEP_SUMMARY
-            echo "- **Target Ref:** \`$INPUT_REF\`" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ steps.cpr.outputs.pull-request-number }}" ]; then
+            {
+              echo "### ✅ Pull Request Created/Updated"
+              echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}"
+              echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}"
+              echo "- **Branch:** \`automation/update-submodule-$INPUT_REF\`"
+              echo "- **Target Ref:** \`$INPUT_REF\`"
+            } >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "### ℹ️ No Pull Request Created" >> $GITHUB_STEP_SUMMARY
-            echo "No changes were detected in the submodule or lockfile." >> $GITHUB_STEP_SUMMARY
+            {
+              echo "### ℹ️ No Pull Request Created"
+              echo "No changes were detected in the submodule or lockfile."
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
         shell: bash
