@@ -20,9 +20,7 @@ jobs:
         uses: orhun/git-cliff-action@v4 # nosemgrep
         with:
           config: keepachangelog.toml
-          args: --latest --strip header
-        env:
-          OUTPUT: CHANGELOG_NEW.md
+          args: --latest --strip header -o CHANGELOG_NEW.md
 
       - name: Prepend to CHANGELOG.md
         run: |
@@ -30,20 +28,26 @@ jobs:
             # Ensure we maintain the header at the top
             if grep -q "^## " CHANGELOG.md; then
               # Found existing entries. Prepend header, then new notes, then existing entries.
-              printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n" > CHANGELOG.tmp
-              cat CHANGELOG_NEW.md >> CHANGELOG.tmp
-              printf "\n" >> CHANGELOG.tmp
-              sed -n '/^## /,$p' CHANGELOG.md >> CHANGELOG.tmp
+              {
+                printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+                cat CHANGELOG_NEW.md
+                printf "\n"
+                sed -n '/^## /,$p' CHANGELOG.md
+              } > CHANGELOG.tmp
               mv CHANGELOG.tmp CHANGELOG.md
             else
               # No version entries found, just the header.
-              printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n" > CHANGELOG.md
-              cat CHANGELOG_NEW.md >> CHANGELOG.md
+              {
+                printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+                cat CHANGELOG_NEW.md
+              } > CHANGELOG.md
             fi
           else
             # File doesn't exist.
-            printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n" > CHANGELOG.md
-            cat CHANGELOG_NEW.md >> CHANGELOG.md
+            {
+              printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+              cat CHANGELOG_NEW.md
+            } > CHANGELOG.md
           fi
           rm -f CHANGELOG_NEW.md
 
