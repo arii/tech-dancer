@@ -343,6 +343,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
 
+      - name: GitHub Models Code Review
+        if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
+        run: pnpm run impact:github-models-code-review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
     runs-on: ubuntu-latest
