@@ -20,6 +20,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # nosemgrep
+        with:
+          node-version-file: '.node-version'
+
       - name: Update submodules and push changes
         run: |
           set -eo pipefail

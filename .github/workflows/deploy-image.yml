@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - .devcontainer/Dockerfile
+      - boomtick-pkg
 
 # Permissions required to write to GitHub Packages
 permissions:
