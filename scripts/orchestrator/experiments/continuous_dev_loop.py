@@ -78,7 +78,8 @@ def execute_continuous_dev_loop(issue_queue):
 
         task_objective = (
             f"Resolve Issue #{issue_id}. "
-            "1. You may create sub-sessions using your CLI tools if needed to handle this branch. "
+            "1. You should be flexible in determining your own tasks and decide what to do, "
+            "but you MUST NOT create new jules sessions ever. Only agent2 can orchestrate that. "
             f"2. Fix the issue and open a Pull Request into the '{base_branch}' branch. "
             "3. Ensure tests pass. "
             "4. Verify the PR is approved and merged before returning SUCCESS."
