@@ -4,6 +4,12 @@ on:
   repository_dispatch:
     types: [update-submodule]
   workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch name, commit hash, or tag to update the submodule to'
+        required: true
+        default: 'main'
+        type: string
   schedule:
     - cron: '0 0 * * *'
 
@@ -26,24 +32,29 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Update submodules and push changes
+        env:
+          INPUT_REF: ${{ github.event.inputs.ref }}
         run: |
           set -eo pipefail
 
-          # Update the submodule to the latest commit
-          git submodule update --remote --recursive
+          TARGET_REF="${INPUT_REF:-main}"
+          echo "Updating boomtick-pkg to ref: $TARGET_REF"
 
-          # Check if there are any changes
+          cd boomtick-pkg
+          git fetch origin
+          git checkout "$TARGET_REF"
+          cd ..
+
           if [[ -n $(git status --porcelain boomtick-pkg) ]]; then
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-            # Install dependencies to update lockfile
             corepack enable
             corepack prepare pnpm@10.28.2 --activate
             pnpm install --no-frozen-lockfile
 
             git add boomtick-pkg pnpm-lock.yaml
-            git commit -m "chore: update submodules and lockfile"
+            git commit -m "chore: update submodule to $TARGET_REF and update lockfile"
             git push
             echo "Submodules updated and changes pushed."
           else
