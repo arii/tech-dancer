@@ -55,15 +55,34 @@ jobs:
         shell: bash
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
-          branch: "automation/update-submodule"
+          branch: "automation/update-submodule/${{ github.event.inputs.ref || 'main' }}"
           delete-branch: true
           title: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }}"
           body: |
             ## Submodule Update
             - Updated `boomtick-pkg` to ref: `${{ github.event.inputs.ref || 'main' }}`
             - Updated `pnpm-lock.yaml`
-            - Automated update triggered by ${{ github.event_name }}
+            - Automated update triggered by `${{ github.event_name }}`
+
+            _This PR was automatically generated to sync the submodule._
+
+      - name: Job Summary
+        env:
+          INPUT_REF: ${{ github.event.inputs.ref || 'main' }}
+        run: |
+          if [ "${{ steps.cpr.outputs.pull-request-number }}" ]; then
+            echo "### ✅ Pull Request Created/Updated" >> $GITHUB_STEP_SUMMARY
+            echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Branch:** \`automation/update-submodule/$INPUT_REF\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Target Ref:** \`$INPUT_REF\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ℹ️ No Pull Request Created" >> $GITHUB_STEP_SUMMARY
+            echo "No changes were detected in the submodule or lockfile." >> $GITHUB_STEP_SUMMARY
+          fi
+        shell: bash
