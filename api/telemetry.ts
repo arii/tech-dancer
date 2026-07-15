@@ -36,7 +36,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     : [
         "http://localhost:3000",
         "https://tech-dancer.vercel.app",
-        "https://boomtick.com",
         "https://boomtick.blog",
       ];
 
