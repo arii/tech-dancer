@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "cleanup-boomtick-pkg-checks-4923388282719288041" ]
     paths:
       - .devcontainer/Dockerfile
       - boomtick-pkg
