@@ -331,12 +331,16 @@ jobs:
             ${{ runner.os }}-main-build-
 
       - name: Impact Analysis
-        run: pnpm run impact:analysis
+        run: |
+          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
+          pnpm run impact:analysis
         shell: bash
 
       - name: Gemini Code Review
         if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
-        run: pnpm run impact:gemini-code-review
+        run: |
+          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
+          pnpm run impact:gemini-code-review
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
