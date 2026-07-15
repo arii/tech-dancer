@@ -45,7 +45,7 @@
     "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli td-cli repair-context",
     "doctor": "node boomtick-pkg/scripts/check-runtime.mjs",
     "check:runtime-files": "node boomtick-pkg/scripts/check-runtime-files.mjs",
-    "preinstall": "node boomtick-pkg/scripts/check-runtime.mjs",
+    "preinstall": "node -e \"if (process.env.SKIP_BOOMTICK_PKG !== 'true' && process.env.VERCEL !== '1') require('node:child_process').execSync('node boomtick-pkg/scripts/check-runtime.mjs', {stdio: 'inherit'})\"",
     "postinstall": "python3 scripts/sync-python-deps.py",
     "drafter": "tsx scripts/affiliate/add-item.ts",
     "ai:index": "python3 scripts/index-codebase.py",

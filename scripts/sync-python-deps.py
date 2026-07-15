@@ -1,10 +1,15 @@
 # pylint: disable=invalid-name,missing-docstring
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 
 def sync_deps():
+    if os.environ.get("SKIP_BOOMTICK_PKG") == "true" or os.environ.get("VERCEL") == "1":
+        print("⏭️ Skipping Python dependency sync (SKIP_BOOMTICK_PKG is true or on Vercel).")
+        return
+
     repo_root = Path(__file__).parent.parent
     cli_dir = repo_root / "boomtick-pkg" / "cli"
     req_file = cli_dir / "requirements.txt"
