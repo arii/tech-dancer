@@ -77,25 +77,99 @@ env:
 
 jobs:
   lint-typecheck:
-    name: Lint & Type Check (${{ matrix.target }})
+    name: Lint & Type Check
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [root, boomtick-mcp]
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/lint-typecheck@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6 # nosemgrep
         with:
-          target: ${{ matrix.target }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version: "10.28.2"
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4.2.0 # nosemgrep
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6 # nosemgrep
+        with:
+          node-version-file: ".node-version"
+
+      - name: Enable Corepack
+        run: corepack enable
+        shell: bash
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+        shell: bash
+
+      - name: Get pip cache directory
+        id: pip-cache
+        shell: bash
+        run: echo "DIR=$(pip cache dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pip
+        uses: actions/cache@v4.2.0 # nosemgrep
+        with:
+          path: ${{ steps.pip-cache.outputs.DIR }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt', 'boomtick-pkg/cli/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile --engine-strict=false
+          if [ -f "requirements-dev.txt" ]; then
+            pip install -r requirements-dev.txt --break-system-packages
+          fi
+          pip install -e boomtick-pkg/cli --break-system-packages
+        shell: bash
+
+      - name: Verify lockfile integrity
+        run: |
+          if ! git diff --quiet pnpm-lock.yaml; then
+            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
+            exit 1
+          fi
+        shell: bash
+
+      - name: Lint & Type-check
+        run: |
+          pnpm run lint
+          pnpm run type-check
+        shell: bash
+
+      - name: Python Linting
+        continue-on-error: true
+        run: |
+          pnpm run lint:python
+          pnpm run type-check:python
+        shell: bash
+
+      - name: Ratchet Any
+        run: |
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh ratchet-any
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
 
   audit:
     name: Anti-Pattern Audit
@@ -105,13 +179,24 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/audit@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6 # nosemgrep
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version: "10.28.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6 # nosemgrep
+        with:
+          node-version-file: ".node-version"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
 
       - name: Semantic Duplicate Audit
         run: pnpm run audit:semantic
@@ -122,6 +207,14 @@ jobs:
       - name: Duplicate Code Detection
         run: pnpm run audit:duplication
 
+      - name: UI Anti-Pattern Audit
+        run: |
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          pnpm run audit:anti-patterns
+          td-cli gh audit-gate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
 
   test-build:
     name: Build & E2E
@@ -136,15 +229,57 @@ jobs:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/test-build@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6 # nosemgrep
+        with:
+          version: "10.28.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6 # nosemgrep
+        with:
+          node-version-file: ".node-version"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
+
+      - name: Build App
+        run: |
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+        shell: bash
+
+      - name: Bundle Size Check
+        run: |
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td gh bundle-size
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
+      - name: Run Playwright E2E
+        run: |
+          VITE_BASE_PATH=/ pnpm run test:e2e
+        shell: bash
+
+      - name: Run Lighthouse CI
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -eu
+          VITE_BASE_PATH="/"
+          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          export VITE_BASE_PATH
+          export CHROME_PATH
+          echo "CHROME_PATH=$CHROME_PATH"
+          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+        env:
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
 
   impact-analysis:
     needs: [lint-typecheck, audit, test-build]
@@ -161,10 +296,24 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6 # nosemgrep
+        with:
+          version: "10.28.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6 # nosemgrep
+        with:
+          node-version-file: ".node-version"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
 
       - name: Get main branch SHA
         id: main-sha
@@ -174,20 +323,25 @@ jobs:
           echo "SHA=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
 
       - name: Cache main build
-        uses: actions/cache@v4.2.0 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/cache@v4.2.0 # nosemgrep
         with:
           path: .tmp-main
           key: ${{ runner.os }}-main-build-${{ steps.main-sha.outputs.SHA }}
           restore-keys: |
             ${{ runner.os }}-main-build-
 
-      - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Impact Analysis
+        run: pnpm run impact:analysis
+        shell: bash
 
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          pr_number: ${{ github.event.pull_request.number }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
+      - name: Gemini Code Review
+        if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
+        run: pnpm run impact:gemini-code-review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
@@ -201,20 +355,28 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6 # nosemgrep
+        with:
+          version: "10.28.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6 # nosemgrep
+        with:
+          node-version-file: ".node-version"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
 
       - name: Initialize CodeQL
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/init@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: github/codeql-action/init@v4 # nosemgrep
         with:
           languages: actions, javascript-typescript
 
@@ -225,19 +387,18 @@ jobs:
       - name: Semgrep Static Analysis
         if: matrix.scanner == 'semgrep'
         run: |
-          # Install semgrep on the host for efficiency
           pip install semgrep
           pnpm run audit:semgrep
 
       - name: Gitleaks Secret Detection
         if: matrix.scanner == 'gitleaks'
-        uses: gitleaks/gitleaks-action@v3 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: gitleaks/gitleaks-action@v3 # nosemgrep
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Perform CodeQL Analysis
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/analyze@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: github/codeql-action/analyze@v4 # nosemgrep
         with:
           category: "/language:security-scan"
 
@@ -248,7 +409,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -256,8 +417,6 @@ jobs:
       - name: Download actionlint
         id: get_actionlint
         run: |
-          # Pin to a specific version and commit for security
-          # Current commit for v1.7.12 as of 2026-06-26
           curl --retry 5 --retry-delay 5 -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
           bash download-actionlint.sh 1.7.12
           rm download-actionlint.sh
@@ -265,8 +424,6 @@ jobs:
 
       - name: Lint workflow logic with actionlint
         run: |
-          # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
-          # not yet support these new GitHub Actions features.
           ./actionlint \
             -ignore 'step must run script with "run" section' \
             -ignore 'unexpected key "background"' \
