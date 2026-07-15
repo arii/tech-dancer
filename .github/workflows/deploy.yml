@@ -39,7 +39,7 @@ jobs:
           lfs: true
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 

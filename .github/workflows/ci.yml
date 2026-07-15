@@ -89,57 +89,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0 # nosemgrep
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
-
-      - name: Enable Corepack
-        run: corepack enable
-        shell: bash
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-        shell: bash
-
-      - name: Get pip cache directory
-        id: pip-cache
-        shell: bash
-        run: echo "DIR=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pip
-        uses: actions/cache@v4.2.0 # nosemgrep
-        with:
-          path: ${{ steps.pip-cache.outputs.DIR }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt', 'boomtick-pkg/cli/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          setup-python: 'true'
 
       - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile --engine-strict=false
-          if [ -f "requirements-dev.txt" ]; then
-            pip install -r requirements-dev.txt --break-system-packages
-          fi
-          pip install -e boomtick-pkg/cli --break-system-packages
+        run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
 
       - name: Verify lockfile integrity
@@ -184,15 +140,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -234,15 +185,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -301,15 +247,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -360,15 +301,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
