@@ -38,7 +38,9 @@ metadata:
 
 *Note: All resource paths listed below must be appended directly to the Base URL (e.g. `Base URL` + `/latest-version` resolves to `https://boomtick.blog/api/latest-version`). Do not duplicate slashes.*
 
-### `GET /skill.md`
+### `GET /skill.md` (Temporarily Disabled)
+**Status: 503 Service Unavailable**
+
 Returns this `SKILL.md` file dynamically as raw Markdown, allowing self-discovery of these endpoints at runtime.
 
 **Example request**:
@@ -48,7 +50,9 @@ curl -s "https://boomtick.blog/api/skill.md"
 
 ---
 
-### `GET /health`
+### `GET /health` (Temporarily Disabled)
+**Status: 503 Service Unavailable**
+
 Lightweight health check endpoint returning service status.
 
 **Example request**:
@@ -56,7 +60,7 @@ Lightweight health check endpoint returning service status.
 curl -s "https://boomtick.blog/api/health"
 ```
 
-**Example response**:
+**Example response (when enabled)**:
 ```json
 {
   "status": "ok",
