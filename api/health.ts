@@ -7,8 +7,9 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  return res.status(503).json({
-    error: "Service Temporarily Unavailable",
-    message: "The health check endpoint is temporarily disabled due to maintenance.",
+  return res.status(200).json({
+    status: "ok",
+    service: "VersionTruth",
+    checkedAt: new Date().toISOString(),
   });
 }

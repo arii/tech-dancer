@@ -42,6 +42,20 @@ git push origin main
 git push --tags
 ```
 
+## Automated Changelog and Release Notes
+
+The repository uses automated tooling to manage releases:
+
+- **Release Drafter**: Automatically creates and updates a draft release on GitHub as PRs are merged into `main`. It groups changes by PR labels (e.g., `feature`, `bug`).
+- **git-cliff**: Automatically updates the `CHANGELOG.md` file in the root directory whenever a new release is published on GitHub.
+
+### Release Workflow
+
+1.  **Label PRs**: Ensure all Pull Requests have appropriate labels (`feature`, `bug`, `documentation`, `chore`).
+2.  **Merge to main**: When PRs are merged, Release Drafter updates the draft release notes.
+3.  **Publish Release**: When ready to release, go to the GitHub "Releases" tab, review the draft, and click "Publish release".
+4.  **Automatic Update**: The `Update Changelog on Release` workflow will trigger, generating the new changelog entry and committing it to `main`.
+
 ## Build Guard
 
 The production build (`pnpm build`) includes a guard in `vite.config.ts` that prevents deploying if the version is still `0.0.0`.
