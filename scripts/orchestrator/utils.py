@@ -4,7 +4,7 @@ import re
 import subprocess
 import time
 
-CLI_BASE = ["td-cli"]
+CLI_BASE = ["python3", "-m", "dev_tools.cli"]
 
 
 def run_cli(args, suppress_errors=False):

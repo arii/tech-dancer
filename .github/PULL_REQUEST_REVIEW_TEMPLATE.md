@@ -134,5 +134,5 @@ After completing every file block above, fill in the body below and run the comm
 Command:
 
 ```bash
-td-cli gh audit-pr {{NUMBER}} --submit --cleanup
+python3 -m dev_tools.cli gh audit-pr {{NUMBER}} --submit --cleanup
 ```

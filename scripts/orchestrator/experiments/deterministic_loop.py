@@ -9,7 +9,7 @@ from dev_tools.utils import run_command
 
 def run_cli(args, suppress_errors=False):
     try:
-        res = run_command(["td-cli"] + args)
+        res = run_command(["python3", "-m", "dev_tools.cli"] + args)
         return res if isinstance(res, str) else ""
     except Exception as e:
         if not suppress_errors:

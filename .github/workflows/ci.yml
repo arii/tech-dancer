@@ -165,8 +165,8 @@ jobs:
 
       - name: Ratchet Any
         run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh ratchet-any
+          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
+          python3 -m dev_tools.cli gh ratchet-any
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -209,9 +209,9 @@ jobs:
 
       - name: UI Anti-Pattern Audit
         run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
           pnpm run audit:anti-patterns
-          td-cli gh audit-gate
+          python3 -m dev_tools.cli gh audit-gate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -256,8 +256,8 @@ jobs:
 
       - name: Bundle Size Check
         run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td gh bundle-size
+          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
+          python3 -m dev_tools.cli gh bundle-size
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
