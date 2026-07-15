@@ -3,10 +3,11 @@ import type { KnipConfig } from 'knip';
 const config: KnipConfig = {
   workspaces: {
     ".": {
-      entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'boomtick-pkg/cli/*.{ts,mjs}'],
-      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'boomtick-pkg/cli/**/*.{ts,mjs}'],
+      entry: ['scripts/*.ts', 'scripts/**/*.mjs'],
+      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}'],
       ignore: [
-        'src/components/Equalizer.tsx'
+        'src/components/Equalizer.tsx',
+        'boomtick-pkg/mcp/**/*'
       ],
       ignoreDependencies: [
         'tw-animate-css',
@@ -17,13 +18,9 @@ const config: KnipConfig = {
         '@google/genai',
         '@vercel/node'
       ],
-    },
-    "boomtick-pkg/mcp": {
-      entry: ["src/evals/run-evals.ts"],
-      project: ["src/**/*.ts"]
     }
   },
-  ignoreBinaries: ['python3', 'semgrep', 'td-cli', 'pylint', 'mypy', 'netstat', 'findstr', 'taskkill', 'lsof'],
+  ignoreBinaries: ['python3', 'semgrep', 'pylint', 'mypy'],
   ignoreExportsUsedInFile: true,
 };
 
