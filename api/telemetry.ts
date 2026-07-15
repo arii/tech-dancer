@@ -43,7 +43,9 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   if (origin && allowedOrigins.includes(origin)) {
     // We explicitly set the header only if it matches our allowlist
     // to satisfy Semgrep's security check for dynamic CORS origins.
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    // We use the value from our allowlist rather than the raw header.
+    const safeOrigin = allowedOrigins.find((o) => o === origin) || "https://boomtick.blog";
+    res.setHeader("Access-Control-Allow-Origin", safeOrigin);
   } else if (!origin) {
     // For same-origin requests or browsers that don't send Origin header
     // Default to the primary production domain
