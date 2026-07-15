@@ -76,8 +76,8 @@ jobs:
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
-          branch: "automation/update-submodule-${{ github.event.inputs.ref || 'main' }}"
+          commit-message: "chore: update submodule to ${{ steps.target.outputs.target_ref }} and update lockfile"
+          branch: "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
           delete-branch: true
           title: "chore: update submodule to ${{ steps.target.outputs.target_ref }}"
           body: |
@@ -90,22 +90,16 @@ jobs:
 
       - name: Job Summary
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - Automated update triggered by `${{ github.event_name }}`
-
-            _This PR was automatically generated to sync the submodule._
-
-      - name: Job Summary
-        env:
-          INPUT_REF: ${{ github.event.inputs.ref || 'main' }}
+          SAFE_REF: ${{ steps.target.outputs.safe_ref }}
+          TARGET_REF: ${{ steps.target.outputs.target_ref }}
         run: |
           if [ -n "${{ steps.cpr.outputs.pull-request-number }}" ]; then
             {
               echo "### ✅ Pull Request Created/Updated"
               echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}"
               echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}"
-              echo "- **Branch:** \`automation/update-submodule-$INPUT_REF\`"
-              echo "- **Target Ref:** \`$INPUT_REF\`"
+              echo "- **Branch:** \`automation/update-submodule-$SAFE_REF\`"
+              echo "- **Target Ref:** \`$TARGET_REF\`"
             } >> "$GITHUB_STEP_SUMMARY"
           else
             {
