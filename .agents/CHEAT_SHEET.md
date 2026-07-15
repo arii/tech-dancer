@@ -6,15 +6,15 @@ This is a condensed guide for optimized tool usage. For full protocols and princ
 
 | Goal | Primary Tool (Tier 1 / MCP) | CLI Equivalent (Tier 2) |
 | :--- | :--- | :--- |
-| **Discover Args** | `repo.get_command_schema` | `td-cli schema "<path>"` |
-| **Search PRs** | `github.search_open_prs` | `td-cli gh search-prs` |
-| **Tests/CI** | `repo.run_playwright` | `td-cli repo run-playwright`|
-| **Environment** | `boomtick.health` | `td-cli doctor` |
+| **Discover Args** | `repo.get_command_schema` | `python3 -m dev_tools.cli schema "<path>"` |
+| **Search PRs** | `github.search_open_prs` | `python3 -m dev_tools.cli gh search-prs` |
+| **Tests/CI** | `repo.run_playwright` | `python3 -m dev_tools.cli repo run-playwright`|
+| **Environment** | `boomtick.health` | `python3 -m dev_tools.cli doctor` |
 
 ## 🚀 Key Overrides
 
-- **PR Audit**: `td-cli gh audit-pr <PR> --fetch --audit --submit --execute`
-- **Context Refresh**: `td-cli context-warm` (updates `.agent-context.json`)
+- **PR Audit**: `python3 -m dev_tools.cli gh audit-pr <PR> --fetch --audit --submit --execute`
+- **Context Refresh**: `python3 -m dev_tools.cli context-warm` (updates `.agent-context.json`)
 
 ## ⚠️ Reminders
 

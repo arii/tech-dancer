@@ -116,7 +116,7 @@ When multiple agents work simultaneously:
 
 - Each agent works on its own branch.
 - No agent merges to `main` without CI passing.
-- Conflicts are resolved via `td-cli gh resolve-conflicts` (Tier 2) or
+- Conflicts are resolved via `python3 -m dev_tools.cli gh resolve-conflicts` (Tier 2) or
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
@@ -140,13 +140,13 @@ executing any GitHub or repository operation.
 
 ### The Execution Chain
 
-`boomtick-mcp` is a thin gateway over `td-cli`. Every MCP tool
+`boomtick-mcp` is a thin gateway over `python3 -m dev_tools.cli`. Every MCP tool
 call automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
-2. Calls the appropriate `td-cli` subcommand internally
+2. Calls the appropriate `python3 -m dev_tools.cli` subcommand internally
 3. Returns structured output with repo context already attached
 
-Calling `td-cli` directly skips step 1. Calling raw bash skips steps 1–2.
+Calling `python3 -m dev_tools.cli` directly skips step 1. Calling raw bash skips steps 1–2.
 Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
 
 ### 🚫 Zero-Fallback & Self-Correction Policy
@@ -154,7 +154,7 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 Raw terminal execution (e.g., `git checkout`, `gh issue list`, `gh issue edit`) via Bash is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists. Bypassing these tools for raw `gh` commands causes structural blindness and prevents proper automation audits.
 
 **Self-Correction Rule**: If you catch yourself about to run a raw shell
-command (like `gh issue list` or `git checkout`) that has an MCP or `td-cli`
+command (like `gh issue list` or `git checkout`) that has an MCP or `python3 -m dev_tools.cli`
 equivalent, you MUST stop and use the pre-packaged tool instead.
 
 If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
@@ -164,7 +164,7 @@ If a tool failure occurs, you **must** document the failure in `progress_and_nex
 ### CLI Schema Authority
 
 `boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
-`cli_schema`) is the single source of truth for all `td-cli` flags.
+`cli_schema`) is the single source of truth for all `python3 -m dev_tools.cli` flags.
 MCP tools read this automatically. If calling Tier 2 directly, always
 read `cli_schema` from `.agent-context.json` first — never guess flags,
 never use `--help`.
@@ -189,10 +189,10 @@ validate issues against the Spec-Driven Issue Template before dispatching Jules.
 
 ```bash
 # Validate a single issue (dry-run by default)
-td-cli gh validate-issue --issue-number <N>
+python3 -m dev_tools.cli gh validate-issue --issue-number <N>
 
 # Validate and post results
-td-cli gh validate-issue --issue-number <N> --post-comments --execute
+python3 -m dev_tools.cli gh validate-issue --issue-number <N> --post-comments --execute
 ```
 
 ### Setting GitHub Variables
@@ -210,7 +210,7 @@ gh variable set ANY_COUNT_BASELINE --body 42
 All agents must strictly respect repository-agnostic layout structures.
 - **Root Configuration:** Base parameters (e.g. `github_repo`, `vite_base_path`) must be declared in `project_config.json` at the root of the repository, which is tracked under revision control.
 - **Environment Isolation:** Secrets (e.g., API keys, auth tokens) must never be committed to `project_config.json` and must remain strictly in environment variables (such as `GITHUB_TOKEN`).
-- **Fail-Fast Policy:** Both `td-cli` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
+- **Fail-Fast Policy:** Both `python3 -m dev_tools.cli` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
 
 ---
 
@@ -232,7 +232,7 @@ boomtick-pkg/scripts/build-repo-context.py.
 After setup, validate:
 
 ```bash
-td-cli doctor
+python3 -m dev_tools.cli doctor
 pnpm run check:runtime-files
 ```
 
