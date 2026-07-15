@@ -89,57 +89,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0 # nosemgrep
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
-
-      - name: Enable Corepack
-        run: corepack enable
-        shell: bash
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-        shell: bash
-
-      - name: Get pip cache directory
-        id: pip-cache
-        shell: bash
-        run: echo "DIR=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pip
-        uses: actions/cache@v4.2.0 # nosemgrep
-        with:
-          path: ${{ steps.pip-cache.outputs.DIR }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt', 'boomtick-pkg/cli/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          setup-python: 'true'
 
       - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile --engine-strict=false
-          if [ -f "requirements-dev.txt" ]; then
-            pip install -r requirements-dev.txt --break-system-packages
-          fi
-          pip install -e boomtick-pkg/cli --break-system-packages
+        run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
 
       - name: Verify lockfile integrity
@@ -184,15 +140,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -234,15 +185,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -284,7 +230,7 @@ jobs:
   impact-analysis:
     needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
-    timeout-minutes: 10
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -301,15 +247,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
@@ -331,17 +272,117 @@ jobs:
             ${{ runner.os }}-main-build-
 
       - name: Impact Analysis
-        run: pnpm run impact:analysis
+        id: impact_analysis
+        run: |
+          pnpm run impact:analysis
+          echo "has_impact=true" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Build Main
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        run: pnpm run impact:build-main
+        shell: bash
+
+      - name: Build PR
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        run: pnpm run build:review
         shell: bash
 
       - name: Gemini Code Review
-        if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
+        if: always() && github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0' && steps.impact_analysis.outputs.has_impact == 'true'
+        continue-on-error: true
         run: pnpm run impact:gemini-code-review
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
+
+      - name: GitHub Models Code Review
+        if: always() && github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0' && steps.impact_analysis.outputs.has_impact == 'true'
+        continue-on-error: true
+        run: pnpm run impact:github-models-code-review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
+      - name: Visual Diff
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        run: pnpm run impact:visual-diff
+        shell: bash
+
+      - name: DOM Diff
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        run: pnpm run impact:dom-diff
+        shell: bash
+
+      - name: Check if visual changes exist
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        id: check_visuals
+        env:
+          VISUAL_DIFF_THRESHOLD: 1.5
+        run: pnpm exec tsx boomtick-pkg/scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Visual review agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-review
+        shell: bash
+
+      - name: Visual review github models agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-review
+        shell: bash
+
+      - name: Report Summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/impact-analysis/impact.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          else
+            {
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          fi
+
+      - name: Update Impact Analysis Feedback
+        if: always() && github.event_name == 'pull_request'
+        uses: ./boomtick-pkg/mcp/actions/update-pr-comment
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status_line: '✅ **Impact Analysis Complete**'
+          impact_body: ${{ env.IMPACT_BODY }}
+
+      - name: Upload Deployment Review Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7 # nosemgrep
+        with:
+          name: deployment-review
+          path: artifacts/
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
@@ -360,15 +401,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
+          setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
