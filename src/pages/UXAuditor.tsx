@@ -241,7 +241,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
       </Stack>
 
       <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+        <Box padding={6} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
@@ -255,13 +255,13 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                 <Icon icon={ImageIcon} size="2xl" color="muted" />
               </Box>
               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
-                Awaiting Frame...
+                Enter URL for Preview
               </Text>
             </Stack>
           )}
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+        <Stack gap={6} padding={6} flex={1} minWidth="0" overflow="hidden">
           {data ? (
             <>
               <Box surface="alt" padding={5} className="border border-line rounded-lg">
@@ -284,7 +284,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                           {imp.element}
                         </Text>
                       </Stack>
-                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface={imp.severity > 7 ? "error" : "warning"} color="white" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                         SEV {imp.severity}
                       </Text>
                     </Box>
@@ -296,7 +296,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                         <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                           <Box flex={1} minWidth="0" className="overflow-hidden">
-                            <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
+                            <Text variant="sans" size="sm" weight="font-bold" className="break-words" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
                             {imp.element === "Manual Audit Required" && (
