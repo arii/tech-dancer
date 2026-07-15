@@ -88,11 +88,11 @@ jobs:
         target: [root, boomtick-mcp]
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/lint-typecheck@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           target: ${{ matrix.target }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -105,11 +105,11 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/audit@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - uses: ./boomtick-pkg/mcp/actions/audit # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -136,11 +136,11 @@ jobs:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: arii/boomtick/mcp/actions/test-build@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - uses: ./boomtick-pkg/mcp/actions/test-build # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
@@ -161,7 +161,7 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -181,7 +181,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-build-
 
-      - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - uses: ./boomtick-pkg/mcp/actions/impact-analysis # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -201,13 +201,13 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
@@ -248,7 +248,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0

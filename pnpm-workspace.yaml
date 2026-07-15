@@ -1,6 +1,5 @@
 packages:
   - "."
-  - "boomtick-pkg/mcp"
 enableGlobalVirtualStore: true
 overrides:
   shell-quote: ">=1.8.4"

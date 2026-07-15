@@ -92,14 +92,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Workspace
-        uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'false'
 
