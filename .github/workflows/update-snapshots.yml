@@ -52,7 +52,7 @@ jobs:
             core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           ref: ${{ env.HEAD_REF }}
