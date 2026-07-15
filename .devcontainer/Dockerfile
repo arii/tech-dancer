@@ -88,6 +88,7 @@ RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-p
 # Copy lockfile and workspace config to pre-install dependencies
 COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml .node-version ./
 COPY --chown=pwuser:pwuser boomtick-pkg/mcp/package.json ./boomtick-pkg/mcp/
+COPY --chown=pwuser:pwuser boomtick-pkg/scripts/ ./boomtick-pkg/scripts/
 COPY --chown=pwuser:pwuser scripts/ ./scripts/
 
 USER pwuser
