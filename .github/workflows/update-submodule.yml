@@ -16,6 +16,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   update:
@@ -32,13 +33,29 @@ jobs:
         with:
           setup-python: 'false'
 
-      - name: Update submodules
+      - name: Determine Target Ref
+        id: target
         env:
           INPUT_REF: ${{ github.event.inputs.ref }}
         run: |
+          TARGET_REF="${INPUT_REF:-main}"
+          echo "target_ref=$TARGET_REF" >> "$GITHUB_OUTPUT"
+
+          # Replace slashes with hyphens for safe branch name
+          SAFE_REF=$(echo "$TARGET_REF" | tr '/' '-')
+
+          # Further sanitize to ensure a valid branch name
+          SAFE_REF=$(echo "$SAFE_REF" | tr -cd '[:alnum:]_.-')
+
+          echo "safe_ref=$SAFE_REF" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Update submodules
+        env:
+          TARGET_REF: ${{ steps.target.outputs.target_ref }}
+        run: |
           set -eo pipefail
 
-          TARGET_REF="${INPUT_REF:-main}"
           echo "Updating boomtick-pkg to ref: $TARGET_REF"
 
           cd boomtick-pkg
@@ -59,13 +76,13 @@ jobs:
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
-          branch: "automation/update-submodule-${{ github.event.inputs.ref || 'main' }}"
+          commit-message: "chore: update submodule to ${{ steps.target.outputs.target_ref }} and update lockfile"
+          branch: "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
           delete-branch: true
-          title: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }}"
+          title: "chore: update submodule to ${{ steps.target.outputs.target_ref }}"
           body: |
             ## Submodule Update
-            - Updated `boomtick-pkg` to ref: `${{ github.event.inputs.ref || 'main' }}`
+            - Updated `boomtick-pkg` to ref: `${{ steps.target.outputs.target_ref }}`
             - Updated `pnpm-lock.yaml`
             - Automated update triggered by `${{ github.event_name }}`
 
@@ -73,15 +90,16 @@ jobs:
 
       - name: Job Summary
         env:
-          INPUT_REF: ${{ github.event.inputs.ref || 'main' }}
+          SAFE_REF: ${{ steps.target.outputs.safe_ref }}
+          TARGET_REF: ${{ steps.target.outputs.target_ref }}
         run: |
           if [ -n "${{ steps.cpr.outputs.pull-request-number }}" ]; then
             {
               echo "### ✅ Pull Request Created/Updated"
               echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}"
               echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}"
-              echo "- **Branch:** \`automation/update-submodule-$INPUT_REF\`"
-              echo "- **Target Ref:** \`$INPUT_REF\`"
+              echo "- **Branch:** \`automation/update-submodule-$SAFE_REF\`"
+              echo "- **Target Ref:** \`$TARGET_REF\`"
             } >> "$GITHUB_STEP_SUMMARY"
           else
             {

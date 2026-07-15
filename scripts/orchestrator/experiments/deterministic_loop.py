@@ -7,7 +7,7 @@ from datetime import datetime
 from dev_tools.utils import run_command
 
 
-def run_cli(args, suppress_errors=False):
+def _run_cli(args, suppress_errors=False):
     try:
         res = run_command(["td-cli"] + args)
         return res if isinstance(res, str) else ""
@@ -18,7 +18,7 @@ def run_cli(args, suppress_errors=False):
 
 
 def base_run_cli(args, suppress_errors=False):
-    return run_cli(args, suppress_errors=suppress_errors)
+    return _run_cli(args, suppress_errors=suppress_errors)
 
 
 def run_cli(args):
