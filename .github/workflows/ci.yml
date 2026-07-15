@@ -284,16 +284,10 @@ jobs:
   impact-analysis:
     needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
-    env:
-      DISABLE_MINIFY: true
-      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-      GITHUB_REPOSITORY: ${{ github.repository }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
@@ -301,51 +295,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6 # nosemgrep
+      - name: Impact Analysis Suite
+        uses: ./boomtick-pkg/mcp/actions/impact-analysis
         with:
-          version: "10.28.2"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6 # nosemgrep
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
-
-      - name: Get main branch SHA
-        id: main-sha
-        shell: bash
-        run: |
-          git fetch origin main
-          echo "SHA=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache main build
-        uses: actions/cache@v4.2.0 # nosemgrep
-        with:
-          path: .tmp-main
-          key: ${{ runner.os }}-main-build-${{ steps.main-sha.outputs.SHA }}
-          restore-keys: |
-            ${{ runner.os }}-main-build-
-
-      - name: Impact Analysis
-        run: |
-          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
-          pnpm run impact:analysis
-        shell: bash
-
-      - name: Gemini Code Review
-        if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
-        run: |
-          export PYTHONPATH="boomtick-pkg/cli:$PYTHONPATH"
-          pnpm run impact:gemini-code-review
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          pr_number: ${{ github.event.pull_request.number }}
+          jules_api_key: ${{ secrets.JULES_API_KEY }}
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
