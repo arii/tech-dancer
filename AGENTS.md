@@ -223,7 +223,7 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in .githooks/ so .agent-context.json stays fresh automatically by calling
-boomtick-pkg/scripts/build-repo-context.py.
+the context builder.
 
 ```bash
 ./setup-agent.sh
@@ -232,7 +232,7 @@ boomtick-pkg/scripts/build-repo-context.py.
 After setup, validate:
 
 ```bash
-td-cli doctor
+pnpm run doctor
 pnpm run check:runtime-files
 ```
 
