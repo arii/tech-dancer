@@ -55,10 +55,7 @@ RUN corepack enable \
 # ── Workspace ──────────────────────────────────────────────────────────────────
 WORKDIR /workspace
 
-# ── Python packages (Pre-bake dependencies for caching) ────────────────────────
-# Copy only dependency definitions first to leverage Docker layer caching
-COPY boomtick-pkg/cli/pyproject.toml boomtick-pkg/cli/requirements-dev.txt /workspace/boomtick-pkg/cli/
-
+# ── Python packages (Pre-bake common dependencies for caching) ────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
     PyGithub \
     click \
@@ -74,15 +71,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     tqdm==4.68.3 \
     langchain-openai \
     langchain-core \
-    duckduckgo-search>=6.0.0 \
-    && if [ -f /workspace/boomtick-pkg/cli/requirements-dev.txt ]; then \
-        pip3 install --no-cache-dir --break-system-packages -r /workspace/boomtick-pkg/cli/requirements-dev.txt; \
-    fi
-
-# ── Dev Tools ──────────────────────────────────────────────────────────────────
-# Now copy the rest of the CLI source and install in editable mode
-COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
-RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
+    duckduckgo-search>=6.0.0
 
 # ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
 # Copy lockfile and workspace config to pre-install dependencies

@@ -1,18 +1,14 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { readFileSync } from "fs";
-import { join } from "path";
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.setHeader("Content-Type", "text/markdown; charset=utf-8");
+  res.setHeader("Content-Type", "application/json");
 
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  try {
-    const content = readFileSync(join(process.cwd(), "public", "skill.md"), "utf-8");
-    return res.status(200).send(content);
-  } catch {
-    return res.status(500).json({ error: "Failed to read SKILL.md file" });
-  }
+  return res.status(503).json({
+    error: "Service Temporarily Unavailable",
+    message: "The skill.md endpoint is temporarily disabled due to maintenance.",
+  });
 }
