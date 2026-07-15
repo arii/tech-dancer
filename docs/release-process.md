@@ -51,7 +51,12 @@ zip -r boomtick-pkg-<VERSION>.zip boomtick-pkg
 ```
 
 ### 4. GitHub Release Creation
-Create the tag and official release on GitHub using the `gh` CLI, attaching all three built assets:
+Create the tag and official release on GitHub using the `gh` CLI or the GitHub UI.
+
+The repository uses **Release Drafter** to automatically maintain a draft release. When you are ready to release:
+
+1.  Review the auto-generated draft in the GitHub "Releases" section.
+2.  Ensure built assets are attached if performing a manual release via `gh` CLI:
 
 ```bash
 gh release create v<VERSION> \
@@ -61,6 +66,8 @@ gh release create v<VERSION> \
   boomtick-pkg-<VERSION>.tar.gz \
   boomtick-pkg-<VERSION>.zip
 ```
+
+3.  Once published, the **Update Changelog on Release** workflow will automatically update the root `CHANGELOG.md`.
 
 ---
 

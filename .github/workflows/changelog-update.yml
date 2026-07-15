@@ -1,0 +1,60 @@
+name: Update Changelog on Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7 # nosemgrep
+        with:
+          fetch-depth: 0 # Fetch all history for accurate changelog generation
+
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@v4 # nosemgrep
+        with:
+          config: keepachangelog.toml
+          args: --latest --strip header -o CHANGELOG_NEW.md
+
+      - name: Prepend to CHANGELOG.md
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            # Ensure we maintain the header at the top
+            if grep -q "^## " CHANGELOG.md; then
+              # Found existing entries. Prepend header, then new notes, then existing entries.
+              {
+                printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+                cat CHANGELOG_NEW.md
+                printf "\n"
+                sed -n '/^## /,$p' CHANGELOG.md
+              } > CHANGELOG.tmp
+              mv CHANGELOG.tmp CHANGELOG.md
+            else
+              # No version entries found, just the header.
+              {
+                printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+                cat CHANGELOG_NEW.md
+              } > CHANGELOG.md
+            fi
+          else
+            # File doesn't exist.
+            {
+              printf "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
+              cat CHANGELOG_NEW.md
+            } > CHANGELOG.md
+          fi
+          rm -f CHANGELOG_NEW.md
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG.md for ${{ github.event.release.tag_name }} [skip ci]"
+          git push origin main

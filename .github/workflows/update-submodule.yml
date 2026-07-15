@@ -92,3 +92,26 @@ jobs:
           gh workflow run ci.yml --ref "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - Automated update triggered by `${{ github.event_name }}`
+
+            _This PR was automatically generated to sync the submodule._
+
+      - name: Job Summary
+        env:
+          INPUT_REF: ${{ github.event.inputs.ref || 'main' }}
+        run: |
+          if [ -n "${{ steps.cpr.outputs.pull-request-number }}" ]; then
+            {
+              echo "### ✅ Pull Request Created/Updated"
+              echo "- **PR:** #${{ steps.cpr.outputs.pull-request-number }}"
+              echo "- **URL:** ${{ steps.cpr.outputs.pull-request-url }}"
+              echo "- **Branch:** \`automation/update-submodule-$INPUT_REF\`"
+              echo "- **Target Ref:** \`$INPUT_REF\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### ℹ️ No Pull Request Created"
+              echo "No changes were detected in the submodule or lockfile."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+        shell: bash
