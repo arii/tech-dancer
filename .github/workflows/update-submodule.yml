@@ -22,15 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4 # nosemgrep
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
-          node-version-file: '.node-version'
+          setup-python: 'false'
 
       - name: Update submodules
         env:
@@ -48,8 +48,6 @@ jobs:
 
           if [[ -n $(git status --porcelain boomtick-pkg) ]]; then
             # Install dependencies to update lockfile
-            corepack enable
-            corepack prepare pnpm@10.28.2 --activate
             pnpm install --no-frozen-lockfile
           else
             echo "No changes in submodules."
@@ -57,7 +55,7 @@ jobs:
         shell: bash
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update submodule to ${{ github.event.inputs.ref || 'main' }} and update lockfile"
