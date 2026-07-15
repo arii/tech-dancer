@@ -69,9 +69,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/VersionTruth').then(m => ({ Component: m.default })),
     label: 'VersionTruth',
     icon: ShieldCheck,
-    skeleton: 'simple',
-    isMobileVisible: true,
-    isTopNav: true
+    skeleton: 'simple'
   },
   {
     path: '/ux-auditor',
