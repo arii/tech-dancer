@@ -1,4 +1,4 @@
-import { logHeartbeat } from '../boomtick-pkg/lib/heartbeat';
+import { logHeartbeat } from './lib/heartbeat';
 
 async function run() {
   const status = process.argv.slice(2).join(' ') || 'Heartbeat';

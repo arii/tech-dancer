@@ -10,7 +10,7 @@ async function runLighthouse() {
   }
 
   const { routes } = JSON.parse(fs.readFileSync(routesPath, 'utf-8'));
-  const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'boomtick-pkg', 'cli', 'ux-audit.config.json'), 'utf-8'));
+  const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'scripts', 'cli', 'ux-audit.config.json'), 'utf-8'));
 
   const lighthouseDir = path.join(process.cwd(), 'artifacts', 'ux-audit', 'lighthouse');
   if (!fs.existsSync(lighthouseDir)) {

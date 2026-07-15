@@ -1,7 +1,7 @@
 import { chromium, Page, Browser } from 'playwright';
 import * as fs from 'fs';
 import * as path from 'path';
-import { pickOptimalGeminiModel } from '../boomtick-pkg/lib/modelPicker';
+import { pickOptimalGeminiModel } from './lib/modelPicker';
 
 const TMP_DIR = path.join(process.cwd(), '.tmp-crawler');
 const SNAPSHOTS_DIR = path.join(TMP_DIR, 'snapshots');

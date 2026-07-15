@@ -12,7 +12,7 @@ def run_cli(args, suppress_errors=False):
     cmd = CLI_BASE + args
     env = os.environ.copy()
     existing_path = env.get("PYTHONPATH", "")
-    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    local_paths = "scripts/cli:scripts/dev_tools"
     env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
     env["CI"] = "true"
     try:

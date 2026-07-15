@@ -115,6 +115,9 @@ jobs:
           setup-python: 'false'
       - name: pnpm install
         run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Anti-Pattern Audit
+        run: pnpm run audit:anti-patterns
+
       - name: Duplicate Code Detection
         run: pnpm run audit:duplication
 
@@ -190,6 +193,7 @@ jobs:
     env:
       DISABLE_MINIFY: true
       MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+      npm_config_ignore_scripts: true
       GITHUB_REPOSITORY: ${{ github.repository }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GITHUB_MODELS_MODEL: gpt-4o-mini
@@ -241,7 +245,7 @@ jobs:
       - name: Check if visual changes exist
         id: check_visuals
         shell: bash
-        run: pnpm exec tsx boomtick-pkg/scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
       - name: Visual Review (Gemini)
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
