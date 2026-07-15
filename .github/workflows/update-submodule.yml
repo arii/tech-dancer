@@ -71,6 +71,7 @@ jobs:
         shell: bash
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,3 +84,10 @@ jobs:
             - Updated `boomtick-pkg` to ref: `${{ steps.target.outputs.target_ref }}`
             - Updated `pnpm-lock.yaml`
             - Automated update triggered by ${{ github.event_name }}
+
+      - name: Trigger CI on new PR
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        run: |
+          gh workflow run ci.yml --ref "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
