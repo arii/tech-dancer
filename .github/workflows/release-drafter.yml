@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-  # Also runs when PRs are opened or updated to manage the draft labels
-  pull_request:
-    types: [opened, reopened, synchronize]
+  # NOTE: pull_request trigger is temporarily disabled to avoid CI errors during initial setup.
+  # Re-enable after merging to the default branch so Release Drafter can find its configuration.
+  # pull_request:
+  #   types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
