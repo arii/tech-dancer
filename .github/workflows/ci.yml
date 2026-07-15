@@ -330,6 +330,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-build-
 
+      - name: Build main branch for impact analysis
+        run: pnpm run impact:build-main
+        shell: bash
+
+      - name: DOM Diff
+        run: pnpm run impact:dom-diff
+        shell: bash
+
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
+        shell: bash
+
       - name: Impact Analysis
         run: pnpm run impact:analysis
         shell: bash
@@ -337,6 +349,15 @@ jobs:
       - name: Gemini Code Review
         if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
         run: pnpm run impact:gemini-code-review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
+      - name: Gemini Visual Review
+        if: github.event_name == 'pull_request' && env.MAX_AI_REVIEWS != '0'
+        run: pnpm run impact:gemini-review
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
