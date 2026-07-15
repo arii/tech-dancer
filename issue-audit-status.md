@@ -33,6 +33,19 @@ Due to the heavy overlap in the `.github/workflows/ci.yml` and `.devcontainer/Do
 - Rebase PR #3662 onto the new main to ensure `boomtick-pkg/scripts/` is copied correctly in the updated `Dockerfile`.
 - Regenerate or rebase PR #3664 to resolve any trailing conflicts in `ci.yml`.
 
+## Boomtick Submodule Audit
+
+In addition to the root repository PRs, an audit was conducted on the following open PRs in the `boomtick-pkg` submodule (`arii/boomtick`):
+- **PR #52:** fix: detect-antipatterns.mjs path resolution and impact-analysis-utils eslint errors
+- **PR #51:** Robust script checks in impact-analysis action
+
+**Conflict and Overlap Analysis for Submodule:**
+- PR #51 and PR #52 heavily overlap. They both touch `package.json`, `pnpm-lock.yaml`, `mcp/actions/impact-analysis/action.yml`, and the TS impact analysis scripts (`scripts/impact-analysis.ts`, `scripts/impact-visual-diff.ts`).
+
+**Merge Strategy Recommendation for Submodule:**
+1. **Merge PR #51 First:** It introduces structural execution checks (`if [ -f "package.json" ]`) for impact analysis scripts in the GitHub action, adding robustness to external workflows.
+2. **Rebase and Merge PR #52:** Since PR #52 addresses script path resolution (`detect-antipatterns.mjs`) and eslint fixes inside the impact analysis code, it should be rebased on top of #51 to resolve the dependency and lockfile conflicts gracefully.
+
 ## Status
 
-**Completed.** All review skeletons generated in `.boomtick/logs/reviews/` were verified and successfully executed via the `td-cli` (using the `python3 -m dev_tools.cli` bypass).
+**Completed.** All review skeletons generated in both `.boomtick/logs/reviews/` (root) and `boomtick-pkg/.boomtick/logs/reviews/` (submodule) were verified and successfully executed via the `dev_tools.cli` using the `python3 -m` bypass approach.
