@@ -27,19 +27,19 @@ Tier 1 MCP tools are the **required first call** — not a preference.
 
 Every `boomtick-mcp` tool automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema` into context
-2. Calls the appropriate `td-cli` subcommand internally
+2. Calls the appropriate `td` subcommand internally
 3. Returns structured output with repo context already attached
 
-Calling `td-cli` directly (Tier 2) skips step 1.
+Calling `td` directly (Tier 2) skips step 1.
 Calling raw bash (Tier 3) skips steps 1 and 2.
 
 **Violation pattern to avoid:**
 
 ```bash
 # ❌ Wrong — bypasses MCP, no context injection, no index hydration
-td-cli gh pr-diff 2280
+td gh pr-diff 2280
 
-# ✅ Correct — MCP hydrates .agent-context.json, calls td-cli internally
+# ✅ Correct — MCP hydrates .agent-context.json, calls td internally
 github.get_pr_diff(pr_number=2280)
 ```
 
@@ -47,10 +47,10 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 
 ### 🚫 Zero-Fallback & Self-Correction Policy
 
-Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists.
+Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td) tool exists.
 
 **Self-Correction Rule**: If you catch yourself about to run a raw shell
-command (like `gh issue list` or `git checkout`) that has an MCP or `td-cli`
+command (like `gh issue list` or `git checkout`) that has an MCP or `td`
 equivalent, you MUST stop and use the pre-packaged tool instead.
 
 If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
@@ -62,37 +62,37 @@ If you encounter a schema error or a missing argument in an MCP tool, you must *
 | Tier | Tool | When to Use |
 | :--- | :--- | :--- |
 | **Tier 1** | `boomtick-mcp` tools | Always — primary entry point for all repo and GitHub operations |
-| **Tier 2** | `td-cli` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
+| **Tier 2** | `td` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
 | **Tier 3** | Raw bash / `gh` CLI | Last resort — only when no Tier 1 or Tier 2 tool exists for the task |
 
 ---
 
 ## 🗺️ Tool Mapping Table
 
-| Category | Task | Tier 1: MCP (required first) | Tier 2: `td-cli` (fallback) | Tier 3: Bash (last resort) |
+| Category | Task | Tier 1: MCP (required first) | Tier 2: `td` (fallback) | Tier 3: Bash (last resort) |
 | :--- | :--- | :--- | :--- | :--- |
-| **GitHub** | Search PRs | `github.search_open_prs` | `td-cli gh search-prs` | `gh pr list` |
-| **GitHub** | Get PR Diff | `github.get_pr_diff` | `td-cli gh pr-diff <PR>` | `gh pr diff <PR>` |
-| **GitHub** | Check Conflicts (global) | `github.get_merge_conflict_files` | `td-cli gh conflicts` | - |
-| **GitHub** | Detect Conflicts (single PR) | `github.get_merge_conflict_files` | `td-cli gh detect-conflicts --pr <PR>` | `git merge-tree` |
-| **GitHub** | Merge Conflicts (PR vs base) | `github.get_merge_conflict_files` | `td-cli gh merge-conflicts <PR>` | - |
-| **GitHub** | Resolve Conflicts | `github.create_repair_branch` | `td-cli gh resolve-conflicts --pr <PR>` | - |
-| **GitHub** | Comment on PR | `github.comment_triage_summary` | `td-cli gh audit-pr <PR> --submit` | `gh pr comment` |
-| **GitHub** | Status Board | `github.get_status_board` | `td-cli gh status-board` | - |
-| **GitHub** | PR Overlaps | `github.analyze_overlaps` | `td-cli gh overlaps` | - |
-| **GitHub** | Plan Review | `github.plan_review` | `td-cli agent plan-review --pr <PR>` | - |
-| **GitHub** | Audit PR (Submit) | `github.audit_pr` | `td-cli gh audit-pr <PR> --submit` | - |
-| **GitHub** | Manage Reviews | `github.manage_reviews` | `td-cli gh manage-reviews` | - |
-| **GitHub** | Validate Issue | `github.validate_issue` | `td-cli gh validate-issue` | - |
-| **GitHub** | Create Issue | `github.create_issue` | `td-cli gh create-issue` | `gh issue create` |
-| **GitHub** | Aggregate PRs / Consolidate | - | `td-cli gh aggregate <TARGET_BRANCH> <PR_NUMBERS...>` (Note: Use `main` branch as base) | - |
-| **GitHub** | Pre-submit Gate | `github.pre_submit` | `td-cli gh pre-submit` | - |
+| **GitHub** | Search PRs | `github.search_open_prs` | `td gh search-prs` | `gh pr list` |
+| **GitHub** | Get PR Diff | `github.get_pr_diff` | `td gh pr-diff <PR>` | `gh pr diff <PR>` |
+| **GitHub** | Check Conflicts (global) | `github.get_merge_conflict_files` | `td gh conflicts` | - |
+| **GitHub** | Detect Conflicts (single PR) | `github.get_merge_conflict_files` | `td gh detect-conflicts --pr <PR>` | `git merge-tree` |
+| **GitHub** | Merge Conflicts (PR vs base) | `github.get_merge_conflict_files` | `td gh merge-conflicts <PR>` | - |
+| **GitHub** | Resolve Conflicts | `github.create_repair_branch` | `td gh resolve-conflicts --pr <PR>` | - |
+| **GitHub** | Comment on PR | `github.comment_triage_summary` | `td gh audit-pr <PR> --submit` | `gh pr comment` |
+| **GitHub** | Status Board | `github.get_status_board` | `td gh status-board` | - |
+| **GitHub** | PR Overlaps | `github.analyze_overlaps` | `td gh overlaps` | - |
+| **GitHub** | Plan Review | `github.plan_review` | `td agent plan-review --pr <PR>` | - |
+| **GitHub** | Audit PR (Submit) | `github.audit_pr` | `td gh audit-pr <PR> --submit` | - |
+| **GitHub** | Manage Reviews | `github.manage_reviews` | `td gh manage-reviews` | - |
+| **GitHub** | Validate Issue | `github.validate_issue` | `td gh validate-issue` | - |
+| **GitHub** | Create Issue | `github.create_issue` | `td gh create-issue` | `gh issue create` |
+| **GitHub** | Aggregate PRs / Consolidate | - | `td gh aggregate <TARGET_BRANCH> <PR_NUMBERS...>` (Note: Use `main` branch as base) | - |
+| **GitHub** | Pre-submit Gate | `github.pre_submit` | `td gh pre-submit` | - |
 | **Repository** | Read Repo Index | `repo.read_agent_context` | `cat .agent-context.json` | - |
 | **Repository** | List Changed Files | `repo.get_changed_files` | - | `git diff --name-only` |
-| **Repository** | Read CI Logs | `repo.read_ci_logs` | `td-cli repo ci-logs <PR>` | `gh run view` |
-| **Repository** | Runtime Check | `repo.doctor` | `td-cli doctor` | - |
+| **Repository** | Read CI Logs | `repo.read_ci_logs` | `td repo ci-logs <PR>` | `gh run view` |
+| **Repository** | Runtime Check | `repo.doctor` | `td doctor` | - |
 | **Testing** | Run Vitest | `repo.run_tests` | - | `pnpm test` |
-| **Testing** | Run Playwright | `repo.run_playwright` | `td-cli repo run-playwright` | `npx playwright test` |
+| **Testing** | Run Playwright | `repo.run_playwright` | `td repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
 | **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
 
@@ -187,7 +187,7 @@ Synchronization occurs automatically during:
 All agents must strictly respect repository-agnostic layout structures.
 - **Root Configuration:** Base parameters (e.g. `github_repo`, `vite_base_path`) must be declared in `project_config.json` at the root of the repository, which is tracked under revision control.
 - **Environment Isolation:** Secrets (e.g., API keys, auth tokens) must never be committed to `project_config.json` and must remain strictly in environment variables (such as `GITHUB_TOKEN`).
-- **Fail-Fast Policy:** Both `td-cli` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
+- **Fail-Fast Policy:** Both `td` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
 
 ## Appendix: CLI Entrypoint & Packaging Standards
 

@@ -328,13 +328,13 @@ Composite Actions do not support the `secrets` or `secrets: inherit` blocks. You
 
 ---
 
-## Part 5: Seamless Submodule Development via td-cli
+## Part 5: Seamless Submodule Development via td
 
-To abstract the complexity of submodules for your team, you can add helper scripts or configurations to your internal command-line tool, `td-cli`. This lowers developer overhead and ensures consistent environments.
+To abstract the complexity of submodules for your team, you can add helper scripts or configurations to your internal command-line tool, `td`. This lowers developer overhead and ensures consistent environments.
 
-Below are configurations to integrate into your `td-cli` wrapper (whether it is built in Bash, Python, or Node).
+Below are configurations to integrate into your `td` wrapper (whether it is built in Bash, Python, or Node).
 
-### 1. td-cli Subcommands to Implement
+### 1. td Subcommands to Implement
 
 | Command | Action Performed | Benefit |
 | :--- | :--- | :--- |
@@ -344,10 +344,10 @@ Below are configurations to integrate into your `td-cli` wrapper (whether it is 
 
 ### 2. Implementation Reference (Bash-based CLI Wrapper)
 
-If your `td-cli` is managed via a shell script runner, add this block to route submodule actions:
+If your `td` is managed via a shell script runner, add this block to route submodule actions:
 
 ```bash
-# Inside td-cli command routing:
+# Inside td command routing:
 case "$1" in
   submodule)
     subcommand="$2"
@@ -407,14 +407,14 @@ If your agent runs as a daemonized or active system service (e.g., PM2, Docker, 
 pm2 restart tech-dancer-mcp
 
 # Or direct CLI restart
-td-cli agent restart
+td agent restart
 ```
 
-### Step 4: Automate the Cycle with td-cli
-Combine editing, compiling, and reloading into a single command by extending `td-cli`:
+### Step 4: Automate the Cycle with td
+Combine editing, compiling, and reloading into a single command by extending `td`:
 
 ```bash
-# Inside td-cli command routing:
+# Inside td command routing:
 case "$1" in
   agent)
     subcommand="$2"

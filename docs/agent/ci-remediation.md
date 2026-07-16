@@ -72,5 +72,5 @@ If a test fails intermittently:
 3.  **Reproduce locally** using a targeted test run.
 4.  **Apply fix**.
 5.  **Verify fix** with the same targeted test run.
-6.  **Run full pre-submit check**: `td-cli gh pre-submit`.
+6.  **Run full pre-submit check**: `td gh pre-submit`.
 7.  **Push and update PR**.

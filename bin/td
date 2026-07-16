@@ -5,7 +5,25 @@
 set -e
 
 # Find repository root
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)"
+# Try git first, then look for markers like pnpm-workspace.yaml
+if git rev-parse --show-toplevel >/dev/null 2>&1; then
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+else
+    # Fallback: search upwards for package.json or pnpm-workspace.yaml
+    CUR_DIR="$(pwd -P)"
+    while [ "$CUR_DIR" != "/" ]; do
+        if [ -f "$CUR_DIR/pnpm-workspace.yaml" ] || [ -f "$CUR_DIR/package.json" ]; then
+            REPO_ROOT="$CUR_DIR"
+            break
+        fi
+        CUR_DIR="$(dirname "$CUR_DIR")"
+    done
+fi
+
+if [ -z "$REPO_ROOT" ]; then
+    echo "❌ Error: Could not resolve REPO_ROOT. Ensure you are inside the repository." >&2
+    exit 1
+fi
 
 # Resolve CLI root
 if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
@@ -13,13 +31,18 @@ if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
 elif [ -d "${REPO_ROOT}/cli" ]; then
     CLI_ROOT="${REPO_ROOT}/cli"
 else
-    # Fallback to current directory if pyproject.toml exists
-    if [ -f "pyproject.toml" ]; then
-        CLI_ROOT="$(pwd -P)"
-    else
-        echo "❌ Error: Could not resolve CLI_ROOT. Ensure you are inside the repository." >&2
-        exit 1
-    fi
+    echo "❌ Error: Could not resolve CLI_ROOT at ${REPO_ROOT}/boomtick-pkg/cli or ${REPO_ROOT}/cli" >&2
+    exit 1
+fi
+
+# Resolve Python executable
+# Prefer .venv if it exists at repo root
+if [ -x "${REPO_ROOT}/.venv/bin/python3" ]; then
+    PYTHON_EXEC="${REPO_ROOT}/.venv/bin/python3"
+elif [ -x "${REPO_ROOT}/.venv/bin/python" ]; then
+    PYTHON_EXEC="${REPO_ROOT}/.venv/bin/python"
+else
+    PYTHON_EXEC="python3"
 fi
 
 # Export PYTHONPATH to include CLI_ROOT
@@ -27,4 +50,4 @@ fi
 export PYTHONPATH="${CLI_ROOT}${PYTHONPATH:+:$PYTHONPATH}"
 
 # Execute the CLI
-exec python3 -m dev_tools.cli "$@"
+exec "$PYTHON_EXEC" -m dev_tools.cli "$@"

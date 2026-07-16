@@ -38,8 +38,8 @@ This script installs and configures:
 `boomtick-mcp` on every tool call. It contains:
 
 - `file_tree` — repository structure, used for role gating in code review
-- `cli_schema` — full `td-cli` command/flag reference, used by MCP tools
-  to call `td-cli` correctly without guessing flags
+- `cli_schema` — full `td` command/flag reference, used by MCP tools
+  to call `td` correctly without guessing flags
 - `package_json` — dependency and script metadata
 
 **Automatic refresh** — the git hooks registered by `./setup-agent.sh` keep
@@ -71,7 +71,7 @@ in `.agents/AGENTS.md`:
 
 1. **Tier 1: `boomtick-mcp`** — required first call; auto-injects
    `.agent-context.json` context on every operation
-2. **Tier 2: `dev-tools/td-cli`** — fallback when MCP unavailable;
+2. **Tier 2: `dev-tools/td`** — fallback when MCP unavailable;
    read `cli_schema` from `.agent-context.json` before calling
 3. **Tier 3: raw bash / `gh`** — last resort only
 
@@ -84,7 +84,7 @@ See `.agents/AGENTS.md` for the full tool mapping table.
 ```bash
 node --version                          # must match .node-version
 pnpm --version                          # must be 10.28.2
-td-cli doctor      # runtime contract check
+td doctor      # runtime contract check
 pnpm run check:runtime-files            # lockfile and config consistency
 gh auth status                          # GitHub CLI authentication
 cat .agent-context.json | python3 -c \

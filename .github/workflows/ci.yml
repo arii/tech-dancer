@@ -124,9 +124,7 @@ jobs:
         shell: bash
 
       - name: Ratchet Any
-        run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh ratchet-any
+        run: ./bin/td gh ratchet-any
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -164,9 +162,8 @@ jobs:
 
       - name: UI Anti-Pattern Audit
         run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           pnpm run audit:anti-patterns
-          td-cli gh audit-gate
+          ./bin/td gh audit-gate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -207,9 +204,7 @@ jobs:
         shell: bash
 
       - name: Bundle Size Check
-        run: |
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td gh bundle-size
+        run: ./bin/td gh bundle-size
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash

@@ -21,7 +21,7 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
     toolId: TOOL_ID_SDLC_PROFILER
   },
   {
-    path: 'td-cli',
+    path: 'td',
     label: 'CLI Manager',
     description: 'Unified command-line interface for DevAI operations.',
     toolId: TOOL_ID_GITOPS_PR_REVIEWER
