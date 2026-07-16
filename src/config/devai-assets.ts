@@ -9,13 +9,13 @@ export interface DevAIAsset {
 
 export const DEVAI_ASSETS: DevAIAsset[] = [
   {
-    path: 'dev-tools/scope_check.py',
+    path: 'boomtick-pkg/cli/dev_tools/scope_check.py',
     label: 'Impact Analyzer',
     description: 'Calculates semantic blast radius of code changes.',
     toolId: TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER
   },
   {
-    path: 'dev-tools/workflow_summary.py',
+    path: 'boomtick-pkg/cli/dev_tools/workflow_summary.py',
     label: 'SDLC Profiler',
     description: 'Analyzes GitHub Workflow execution metrics.',
     toolId: TOOL_ID_SDLC_PROFILER
