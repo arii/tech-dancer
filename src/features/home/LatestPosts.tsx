@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
@@ -14,19 +14,22 @@ export function LatestPosts() {
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
           Latest from BoomTick
         </Text>
-        <Text
+        <Box
           as={NavLink}
           to="/blog"
-          variant="mono"
-          size="xs"
-          color="dim"
-          weight="font-bold"
-          paddingY={{ base: 4, sm: 0 }}
-          paddingX={{ base: 4, sm: 0 }}
-          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
+          className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/50 px-3 py-1 transition-colors hover:border-accent hover:text-accent group"
         >
-          View all →
-        </Text>
+          <Text
+            variant="mono"
+            size="xs"
+            color="dim"
+            weight="font-bold"
+            className="shrink-0 uppercase tracking-widest transition-colors group-hover:text-accent"
+          >
+            View all
+          </Text>
+          <ArrowRight className="h-3 w-3 text-accent transition-transform group-hover:translate-x-0.5" />
+        </Box>
       </Box>
 
       {/* Compact editorial post rows — responsive grid for ultrawide */}
@@ -39,7 +42,7 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-5 transition-colors hover:bg-surface/50 2xl:border-none 2xl:bg-surface/30 2xl:p-5 2xl:rounded-md"
+            className="group w-full max-w-full min-w-0 border-b border-line py-6 transition-colors hover:bg-surface/50 2xl:border-none 2xl:bg-surface/30 2xl:p-6 2xl:rounded-md"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box

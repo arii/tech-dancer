@@ -17,7 +17,7 @@ export function MobileBottomNav() {
       display={{ lg: 'none' }}
       className="bg-surface/90 backdrop-blur-xl safe-bottom"
     >
-      <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
+      <Box as="ul" display="flex" justify="between" align="center" width="full" height={16} paddingX={4}>
         {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
           return (

@@ -80,6 +80,7 @@ export function HeroSection() {
             color="white"
             size={{ base: "3xl", md: "5xl", lg: "6xl" }}
             display="block"
+            className="tracking-tight"
           >
             Pack smart.
           </Text>
