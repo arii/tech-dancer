@@ -52,7 +52,7 @@ gh variable set ANY_COUNT_BASELINE --body <NEW_COUNT>
 
 ## 🛡️ Quality Gates (Local vs CI)
 
-### Local (`td pre-submit`)
+### Local (`td-cli pre-submit`)
 
 Run this before pushing to catch errors early:
 

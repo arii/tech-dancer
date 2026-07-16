@@ -73,10 +73,10 @@ For every issue recommended as **Completed, close**, an evidence block is requir
 If this evidence is missing or incomplete, the issue **must** stay open.
 
 ## ⚠️ CLI Execution Rules
-Before executing any commands using `td`, you **MUST** read the schema defined in `dev-tools/cli-schema.json`.
-- **DO NOT** run `td --help`.
+Before executing any commands using `td-cli`, you **MUST** read the schema defined in `dev-tools/cli-schema.json`.
+- **DO NOT** run `td-cli --help`.
 - **DO NOT** guess subcommands or flags.
-- **DO NOT** use native git commands if a `td` subcommand exists in the schema to accomplish the task.
+- **DO NOT** use native git commands if a `td-cli` subcommand exists in the schema to accomplish the task.
 Always format your shell execution exactly as defined in the `exact_usage` field of the schema.
 
 ## 6. Duplicate closure rules

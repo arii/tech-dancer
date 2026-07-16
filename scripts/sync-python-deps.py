@@ -44,11 +44,10 @@ def sync_deps():
             check=True,
             capture_output=True,
             text=True,
-            timeout=600,
+            timeout=600,  # Increased to 10 minutes for slow environments
         )
 
-        # 2. Ensure the CLI package itself is installed in editable mode
-        # This ensures the 'td' entry point is correctly registered/updated
+        # 2. Ensure CLI is installed in editable mode to register/update td-cli
         subprocess.run(
             [
                 str(venv_python),
@@ -64,8 +63,7 @@ def sync_deps():
             text=True,
             timeout=300,
         )
-
-        print("✅ Python dependencies and 'td' CLI synced successfully.")
+        print("✅ Python dependencies synced and 'td-cli' registered successfully.")
     except subprocess.TimeoutExpired:
         print("❌ Timeout syncing Python dependencies.")
     except subprocess.CalledProcessError as e:

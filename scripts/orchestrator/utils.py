@@ -4,13 +4,16 @@ import re
 import subprocess
 import time
 
-CLI_BASE = ["td"]
+CLI_BASE = ["td-cli"]
 
 
 def run_cli(args, suppress_errors=False):
     """Executes a BoomTick CLI command and returns the standard output."""
     cmd = CLI_BASE + args
     env = os.environ.copy()
+    existing_path = env.get("PYTHONPATH", "")
+    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
     env["CI"] = "true"
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)

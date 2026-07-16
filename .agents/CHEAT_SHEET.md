@@ -6,15 +6,15 @@ This is a condensed guide for optimized tool usage. For full protocols and princ
 
 | Goal | Primary Tool (Tier 1 / MCP) | CLI Equivalent (Tier 2) |
 | :--- | :--- | :--- |
-| **Discover Args** | `repo.get_command_schema` | `td schema "<path>"` |
-| **Search PRs** | `github.search_open_prs` | `td gh search-prs` |
-| **Tests/CI** | `repo.run_playwright` | `td repo run-playwright`|
-| **Environment** | `boomtick.health` | `td doctor` |
+| **Discover Args** | `repo.get_command_schema` | `td-cli schema "<path>"` |
+| **Search PRs** | `github.search_open_prs` | `td-cli gh search-prs` |
+| **Tests/CI** | `repo.run_playwright` | `td-cli repo run-playwright`|
+| **Environment** | `boomtick.health` | `td-cli doctor` |
 
 ## 🚀 Key Overrides
 
-- **PR Audit**: `td gh audit-pr <PR> --fetch --audit --submit --execute`
-- **Context Refresh**: `td context-warm` (updates `.agent-context.json`)
+- **PR Audit**: `td-cli gh audit-pr <PR> --fetch --audit --submit --execute`
+- **Context Refresh**: `td-cli context-warm` (updates `.agent-context.json`)
 
 ## ⚠️ Reminders
 

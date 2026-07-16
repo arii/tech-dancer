@@ -63,7 +63,7 @@ audit:
     - name: UI Anti-Pattern Audit
       run: |
         node boomtick-pkg/scripts/detect-antipatterns.mjs || true
-        td audit-gate
+        td-cli audit-gate
 ```
 
 #### 3. Build & E2E Testing

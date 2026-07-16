@@ -119,7 +119,7 @@ python dev-tools/aggregate_pr_context.py \
   --output .devai/review-context.md
 ```
 
-> **Implemented:** `dev-tools/td gh audit-pr <PR_NUMBER> --fetch` fetches PR diffs, CI logs, and linked issue context into a structured review packet. `dev-tools/aggregate-prs.sh` handles batch aggregation.
+> **Implemented:** `dev-tools/td-cli gh audit-pr <PR_NUMBER> --fetch` fetches PR diffs, CI logs, and linked issue context into a structured review packet. `dev-tools/aggregate-prs.sh` handles batch aggregation.
 
 The point is not that my aggregation command is special. The point is that the model should receive a curated artifact instead of wandering through the repo.
 
@@ -292,7 +292,7 @@ sequenceDiagram
 
 That last step is not ceremony. It is the safety boundary.
 
-> **Experimental:** `dev-tools/td ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion; always review before merge.
+> **Experimental:** `dev-tools/td-cli ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion; always review before merge.
 
 ---
 

@@ -83,13 +83,13 @@ class TestModernCLI(unittest.TestCase):
         mock_cli.side_effect = Exception("Test Error")
 
         # Test with --no-json
-        with patch("sys.argv", ["td", "--no-json"]):
+        with patch("sys.argv", ["td-cli", "--no-json"]):
             main()
         mock_exit.assert_called()
 
         # Test with default (JSON)
         mock_exit.reset_mock()
-        with patch("sys.argv", ["td"]):
+        with patch("sys.argv", ["td-cli"]):
             with patch("builtins.print") as mock_print:
                 main()
                 # Verify JSON output was attempted

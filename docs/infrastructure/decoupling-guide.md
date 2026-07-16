@@ -21,7 +21,7 @@ The goal is to transition from using \`boomtick-pkg\` as a raw, source-level sub
 * Extract them into standalone actions that can be referenced via \`uses: arii/boomtick-pkg/.github/actions/some-action@v1\`.
 
 ### Phase 3: Update Parent Repository CI
-* Replace source-level script invocations in the parent repo (e.g., \`impact-build-main.ts\` loading \`boomtick-pkg\` scripts) with calls to the globally installed CLI (\`td\`).
+* Replace source-level script invocations in the parent repo (e.g., \`impact-build-main.ts\` loading \`boomtick-pkg\` scripts) with calls to the globally installed CLI (\`td-cli\`).
 * Update \`package.json\` scripts (like \`preinstall\` and \`doctor\`) to run CLI commands from the installed package instead of referencing local files.
 
 ### Phase 4: Remove Submodule

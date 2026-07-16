@@ -36,9 +36,9 @@ Read the matching workflow before starting these task types:
 
 - **Self-Correction Rule**: If you catch yourself about to run a raw shell
   command (like `gh issue list`, `gh issue edit`, or `git checkout`) that has
-  an MCP or `td` equivalent, you MUST stop and use the pre-packaged tool
+  an MCP or `td-cli` equivalent, you MUST stop and use the pre-packaged tool
   instead. Raw shell fallback for these tasks is a contract violation.
-- Call `td` directly when an MCP tool covers the same operation.
+- Call `td-cli` directly when an MCP tool covers the same operation.
 - Call raw bash (`gh`, `git`) when a Tier 1 or Tier 2 tool covers the operation.
 - Use `--help` or `-h` to discover CLI flags — read `cli_schema` from
   `.agent-context.json` instead.

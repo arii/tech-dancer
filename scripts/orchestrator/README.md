@@ -8,7 +8,7 @@ agent_2_orchestrator.py: The primary Orchestrator implementation. This handles i
 
 experiments/genai_orchestrator.py: Explores using a fast LLM (gpt-4o-mini) to read CLI outputs (gh status-board) and dynamically generate tasks for Agent 1.
 
-experiments/deterministic_loop.py: Explores a rigid while loop that acts on basic string matching from the CLI tools (e.g., triggering a task when it sees "conflicts" in td gh conflicts).
+experiments/deterministic_loop.py: Explores a rigid while loop that acts on basic string matching from the CLI tools (e.g., triggering a task when it sees "conflicts" in td-cli gh conflicts).
 
 experiments/continuous_dev_loop.py: Simulates an end-to-end continuous integration pipeline where Agent 2 feeds a backlog of GitHub issues sequentially to a "Lead Engineer" Agent 1.
 
@@ -37,7 +37,7 @@ Instead of hardcoding targets, Agent 2 uses a fast, cheap model (like gpt-4o-min
 
 Concept
 
-Run td gh status-board.
+Run td-cli gh status-board.
 
 Pass the status board text to a lightweight LLM.
 
@@ -53,7 +53,7 @@ import os
 from some_llm_library import generate_text 
 
 def get_repo_status():
-    result = subprocess.run(["td", "gh", "status-board"], capture_output=True, text=True)
+    result = subprocess.run(["td-cli", "gh", "status-board"], capture_output=True, text=True)
     return result.stdout
 
 def generate_dynamic_payload():
@@ -224,7 +224,7 @@ Two-Agent System Architecture: Jules & The Orchestrator
 
 Overview
 
-A continuous, dual-agent system leveraging the td CLI.
+A continuous, dual-agent system leveraging the td-cli CLI.
 
 Agent 1 (Jules): An autonomous software engineering agent that executes tasks on demand via MCP tools.
 

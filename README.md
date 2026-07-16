@@ -34,14 +34,12 @@ bash boomtick-pkg/install.sh
 
 ## 🛠 Entry Points
 
-### 1. `td` CLI
-The primary tool for local automation. It automatically configures the dual Node/Python environment.
-
-You can use the provided wrapper:
+### 1. `td-cli` CLI
+The primary tool for local automation. It automatically configures and syncs the dual Node/Python environment. After installation, you can run:
 ```bash
-./bin/td doctor
+td-cli doctor
 ```
-to verify your runtime consistency across both Node.js and Python.
+to verify your runtime consistency across Node, pnpm, and Python environments.
 
 ### 2. BoomTick MCP Server
 A TypeScript-based MCP server communicating via stdio.
