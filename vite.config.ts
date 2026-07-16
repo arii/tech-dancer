@@ -52,6 +52,11 @@ export default defineConfig(({mode}) => {
 
   return {
     base,
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022',
+      },
+    },
     test: {
       globals: false,
       environment: 'jsdom',
@@ -59,7 +64,7 @@ export default defineConfig(({mode}) => {
       include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/unit/**/*.{test,spec}.{ts,tsx}', 'boomtick-pkg/tests/unit/**/*.{test,spec}.{ts,tsx}'],
     },
     build: {
-      target: 'esnext',
+      target: 'es2022',
       // Ensure assets are also handled correctly
       assetsDir: 'assets',
       chunkSizeWarningLimit: 400,
