@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# BoomTick CLI Wrapper
+# Automatically configures PYTHONPATH and invokes the dev_tools.cli
+
+set -e
+
+# Find repository root
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)"
+
+# Resolve CLI root
+if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
+    CLI_ROOT="${REPO_ROOT}/boomtick-pkg/cli"
+elif [ -d "${REPO_ROOT}/cli" ]; then
+    CLI_ROOT="${REPO_ROOT}/cli"
+else
+    # Fallback to current directory if pyproject.toml exists
+    if [ -f "pyproject.toml" ]; then
+        CLI_ROOT="$(pwd -P)"
+    else
+        echo "❌ Error: Could not resolve CLI_ROOT. Ensure you are inside the repository." >&2
+        exit 1
+    fi
+fi
+
+# Export PYTHONPATH to include CLI_ROOT
+# We use :$PYTHONPATH to preserve existing paths if any
+export PYTHONPATH="${CLI_ROOT}${PYTHONPATH:+:$PYTHONPATH}"
+
+# Execute the CLI
+exec python3 -m dev_tools.cli "$@"

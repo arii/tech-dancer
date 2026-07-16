@@ -229,10 +229,10 @@ boomtick-pkg/scripts/build-repo-context.py.
 ./setup-agent.sh
 ```
 
-After setup, validate:
+After setup, validate the dual-environment (Node/Python) consistency:
 
 ```bash
-td-cli doctor
+./bin/td doctor
 pnpm run check:runtime-files
 ```
 

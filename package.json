@@ -40,7 +40,7 @@
     "review:ux:prep": "pnpm run setup:playwright && node boomtick-pkg/scripts/detect-antipatterns.mjs",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
-    "doctor": "node boomtick-pkg/scripts/check-runtime.mjs",
+    "doctor": "./bin/td doctor",
     "check:runtime-files": "node boomtick-pkg/scripts/check-runtime-files.mjs",
     "preinstall": "node -e \"if (process.env.SKIP_BOOMTICK_PKG !== 'true' && process.env.VERCEL !== '1' && require('node:fs').existsSync('boomtick-pkg/scripts/check-runtime.mjs')) require('node:child_process').execSync('node boomtick-pkg/scripts/check-runtime.mjs', {stdio: 'inherit'})\"",
     "postinstall": "python3 scripts/sync-python-deps.py",
