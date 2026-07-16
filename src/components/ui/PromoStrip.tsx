@@ -73,7 +73,7 @@ export function PromoStrip({
           <Text
             variant="mono"
             size={{ base: 'xs', sm: 'sm' }}
-            weight="font-black"
+            weight="font-bold"
             color="accent"
             className="group-hover:underline underline-offset-4 uppercase transition-all"
           >

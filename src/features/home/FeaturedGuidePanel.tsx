@@ -43,7 +43,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/100 via-bg/80 to-transparent"
+        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -58,7 +58,8 @@ export function FeaturedGuidePanel() {
           {FEATURED.subtitle}
         </Text>
         <Box
-          className="mt-2 inline-flex items-center gap-2 self-start rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 transition-colors group-hover:bg-accent/20 group-hover:border-accent"
+          radius="xl"
+          className="mt-2 inline-flex items-center gap-2 self-start border border-accent/40 bg-accent/10 px-4 py-1.5 transition-colors group-hover:bg-accent/20 group-hover:border-accent"
         >
           <Text
             variant="mono"

@@ -128,7 +128,7 @@ export function HeroSection() {
             align={{ base: 'center', lg: 'left' }}
             size={{ base: "sm", md: "lg", lg: "xl" }}
             leading="relaxed"
-            className="hero-tagline-text"
+            className="hero-tagline-text [text-wrap:pretty]"
           >
             The west coast swing dancer's guide to gear, travel, and better dance weekends.
           </Text>
