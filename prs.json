@@ -1,0 +1,96 @@
+{
+  "status": "success",
+  "prs": [
+    {
+      "number": 3718,
+      "title": "Automate CI Triggers for Bot-Authored Submodule Updates",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "automation/trigger-ci-for-submodule-updates-11917650826854842734",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:44:03Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3718"
+    },
+    {
+      "number": 3717,
+      "title": "Improve Dual-Package Developer Experience and Environment Discovery",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "improve-dual-package-dx-automation-5584561375768885455",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:44:03Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3717"
+    },
+    {
+      "number": 3716,
+      "title": "Fix EISDIR error in codeReviewOrchestrator for submodules",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "fix-eisdir-submodule-16912451493119842517",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:33:54Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3716"
+    },
+    {
+      "number": 3715,
+      "title": "docs: Audit open issues and generate tracking documentation",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "issue-audit-docs-5314094856833656555",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:32:02Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3715"
+    },
+    {
+      "number": 3714,
+      "title": "chore: update submodule to main",
+      "author": {
+        "login": "github-actions[bot]"
+      },
+      "headRefName": "automation/update-submodule-main",
+      "baseRefName": "main",
+      "isDraft": false,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:18:02Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3714"
+    },
+    {
+      "number": 3712,
+      "title": "UX Audit Findings: Layout, Spacing, and Responsive Fixes",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "ux-audit-fixes-10912325086164259762",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:18:04Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3712"
+    },
+    {
+      "number": 3701,
+      "title": "ui: improve ux audit findings readability and visual hierarchy",
+      "author": {
+        "login": "google-labs-jules[bot]"
+      },
+      "headRefName": "fix/ux-audit-readability-14710961124773067030",
+      "baseRefName": "main",
+      "isDraft": true,
+      "mergeStateStatus": null,
+      "updatedAt": "2026-07-16T07:18:05Z",
+      "url": "https://github.com/arii/tech-dancer/pull/3701"
+    }
+  ]
+}
