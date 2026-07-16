@@ -32,26 +32,19 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   // Semgrep alert bypass: explicitly allow only known origins.
   // We don't use '*' unless absolutely necessary.
   const allowedOrigins = process.env.ALLOWED_TELEMETRY_ORIGINS
-    ? process.env.ALLOWED_TELEMETRY_ORIGINS.split(",")
-    : [
-        "http://localhost:3000",
-        "https://tech-dancer.vercel.app",
-        "https://boomtick.blog",
-      ];
+    ? process.env.ALLOWED_TELEMETRY_ORIGINS.split(',')
+    : ["http://localhost:3000", "https://tech-dancer.vercel.app", "https://boomtick.com"];
 
   if (origin && allowedOrigins.includes(origin)) {
     // We explicitly set the header only if it matches our allowlist
     // to satisfy Semgrep's security check for dynamic CORS origins.
-    // We use the value from our allowlist rather than the raw header.
-    const safeOrigin = allowedOrigins.find((o) => o === origin) || "https://boomtick.blog";
-    res.setHeader("Access-Control-Allow-Origin", safeOrigin);
+    if (origin === "http://localhost:3000") res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    else if (origin === "https://tech-dancer.vercel.app") res.setHeader("Access-Control-Allow-Origin", "https://tech-dancer.vercel.app");
+    else if (origin === "https://boomtick.com") res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
+    else res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
   } else if (!origin) {
     // For same-origin requests or browsers that don't send Origin header
-    // Default to the primary production domain
-    res.setHeader("Access-Control-Allow-Origin", "https://boomtick.blog");
-  } else {
-    // Log unauthorized origin attempts to help debug missing logs
-    console.warn(`Telemetry blocked: Unauthorized origin ${origin}`);
+    res.setHeader("Access-Control-Allow-Origin", "https://boomtick.com");
   }
 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -70,19 +63,12 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
     // Basic validation
     if (!payload || typeof payload !== "object") {
-      console.warn("Telemetry rejected: Invalid payload type", typeof payload);
       return res.status(400).json({ error: "Invalid payload" });
     }
 
     const { message, type, url, timestamp, stack, componentStack, userAgent } = payload;
 
     if (!message || !type || !url || !timestamp) {
-      console.warn("Telemetry rejected: Missing required fields", {
-        hasMessage: !!message,
-        hasType: !!type,
-        hasUrl: !!url,
-        hasTimestamp: !!timestamp,
-      });
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -92,7 +78,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     );
 
     // Log the structured telemetry to Vercel logs
-    console.info(`Telemetry received: ${type} from ${clientIp}`);
     console.error(JSON.stringify({
       telemetry: "frontend-error",
       message: sanitize(message),

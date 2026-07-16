@@ -99,7 +99,7 @@ def execute_genai_routing():
     print(f"Generated Payload for target: {payload.get('target_id')}")
     print(f"Objective: {payload.get('task_objective')}")
 
-    print("Dispatching to primary agent...")
+    print("Dispatching to Agent 1...")
     run_cli(["agent", "dispatch", "main", json.dumps(payload)])
 
 

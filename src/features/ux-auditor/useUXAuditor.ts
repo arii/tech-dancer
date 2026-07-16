@@ -311,9 +311,7 @@ export function useUXAuditor() {
         md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
         md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
         data.improvements?.forEach(i => {
-          // Sanitize suggestions to remove large base64 strings that break GitHub URL exports
-          const sanitizedSuggestion = i.suggestion.replace(/data:image\/[^;]+;base64,[^\s|)]+/g, '[Base64 Image Omitted]');
-          md += `| ${i.element} | ${i.issue} | ${sanitizedSuggestion} | ${i.severity}/10 |\n`;
+          md += `| ${i.element} | ${i.issue} | ${i.suggestion} | ${i.severity}/10 |\n`;
         });
         md += `\n`;
       }

@@ -43,7 +43,7 @@ def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
             is_completed = "SUCCESS" in messages or "ABORTED_THROTTLED" in messages
             is_waiting = "waiting for input" in messages.lower() or "failed" in messages.lower()
             if is_completed or is_waiting:
-                print("Primary agent is ready.")
+                print("Agent 1 is ready.")
                 break
         retries += 1
         time.sleep(poll_interval)
@@ -51,11 +51,11 @@ def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
 
 def execute_continuous_dev_loop(issue_queue):
     """
-    Simulates a continuous integration pipeline where primary agent acts as Lead Engineer.
+    Simulates a continuous integration pipeline where Agent 1 acts as Lead Engineer.
     """
     base_branch = "develop"
 
-    print(f"Initializing primary agent session on {base_branch}...")
+    print(f"Initializing primary Agent 1 session on {base_branch}...")
     initial_payload = {
         "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "target_id": base_branch,
@@ -74,12 +74,11 @@ def execute_continuous_dev_loop(issue_queue):
 
     # Process issues sequentially
     for issue_id in issue_queue:
-        print(f"\n--- Assigning Issue #{issue_id} to primary agent ---")
+        print(f"\n--- Assigning Issue #{issue_id} to Agent 1 ---")
 
         task_objective = (
             f"Resolve Issue #{issue_id}. "
-            "1. You should be flexible in determining your own tasks and decide what to do, "
-            "but you MUST NOT create new jules sessions ever. Only orchestrator agent can orchestrate that. "
+            "1. You may create sub-sessions using your CLI tools if needed to handle this branch. "
             f"2. Fix the issue and open a Pull Request into the '{base_branch}' branch. "
             "3. Ensure tests pass. "
             "4. Verify the PR is approved and merged before returning SUCCESS."
