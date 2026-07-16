@@ -28,7 +28,7 @@ export function PromoStrip({
       to={resolvedHref}
       position="relative"
       width="full"
-      padding={{ base: 3, sm: 4 }}
+      padding={{ base: 4, sm: 6 }}
       radius="md"
       border="line"
       bg="surface"
@@ -72,8 +72,8 @@ export function PromoStrip({
         >
           <Text
             variant="mono"
-            size={{ base: 'micro', sm: 'tiny' }}
-            weight="font-bold"
+            size={{ base: 'xs', sm: 'sm' }}
+            weight="font-black"
             color="accent"
             className="group-hover:underline underline-offset-4 uppercase transition-all"
           >

@@ -25,6 +25,7 @@ export function FeaturedGuidePanel() {
       overflow="hidden"
       border
       radius="md"
+      shadow="md"
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}
@@ -42,7 +43,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
+        className="bg-gradient-to-t from-bg/100 via-bg/80 to-transparent"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -56,15 +57,20 @@ export function FeaturedGuidePanel() {
         <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">
           {FEATURED.subtitle}
         </Text>
-        <Text
-          variant="mono"
-          size="xs"
-          color="accent"
-          weight="font-bold"
-          className="mt-1 group-hover:underline"
+        <Box
+          className="mt-2 inline-flex items-center gap-2 self-start rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 transition-colors group-hover:bg-accent/20 group-hover:border-accent"
         >
-          Read the guide →
-        </Text>
+          <Text
+            variant="mono"
+            size="xs"
+            color="accent"
+            weight="font-black"
+            className="uppercase tracking-widest"
+          >
+            Read the guide
+          </Text>
+          <Text color="accent" className="font-bold">→</Text>
+        </Box>
       </Stack>
     </Stack>
   );

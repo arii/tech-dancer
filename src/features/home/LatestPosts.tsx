@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
@@ -29,8 +29,8 @@ export function LatestPosts() {
         </Text>
       </Box>
 
-      {/* Compact editorial post rows — no card wrapper, border-bottom only */}
-      <Stack gap={0} border="t" className="border-line">
+      {/* Compact editorial post rows — responsive grid for ultrawide */}
+      <div className="grid grid-cols-1 gap-6 border-t border-line 2xl:grid-cols-3">
         {posts.map((post) => (
           <Box
             key={post.slug}
@@ -39,7 +39,7 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            className="group w-full max-w-full min-w-0 border-b border-line py-5 transition-colors hover:bg-surface/50 2xl:border-none 2xl:bg-surface/30 2xl:p-5 2xl:rounded-md"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
@@ -80,7 +80,7 @@ export function LatestPosts() {
             <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
           </Box>
         ))}
-      </Stack>
+      </div>
     </Box>
   );
 }

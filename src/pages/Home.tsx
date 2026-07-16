@@ -11,7 +11,7 @@ import { PromoStrip } from '@/components/ui/PromoStrip';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8">
+    <Box as="section" aria-label="Home content" marginX="auto" width="full" maxWidth="screen-2xl" minWidth={0} className="overflow-x-clip px-4 sm:px-6 lg:px-8">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."

@@ -32,7 +32,7 @@ const HIGHLIGHTS: Highlight[] = [
 
 export function DevLabCallout() {
   return (
-    <Box border radius="md" padding={5} className="w-full max-w-full min-w-0">
+    <Box border radius="md" padding={6} className="w-full max-w-full min-w-0">
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
         <Box padding={2} radius="md" shrink={0} className="bg-accent/10">
@@ -45,7 +45,7 @@ export function DevLabCallout() {
 
 
       {/* Description */}
-      <Text variant="body" size="xs" color="dim" leading="relaxed" marginTop={3}>
+      <Text variant="body" size="xs" color="dim" leading="relaxed" className="leading-relaxed" marginTop={3}>
         I build AI-assisted engineering infrastructure and autonomous systems. Explore my portfolio of independently led DevAI projects focusing on agentic CI/CD pipelines, LLM workflows, and automated developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
       </Text>
 

@@ -26,9 +26,9 @@ export default function Navigation() {
     <>
       <MobileBottomNav />
       <Box as="nav" aria-label="Main Navigation" zIndex="nav" position="fixed" inset="top" height={16} width="full" border="b" isolation="isolate" className="bg-bg/95 backdrop-blur-xl">
-        <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
-          <Stack direction="row" align="center" gap={8}>
-            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} height={{ base: 8, md: 9 }} width="auto" className="group">
+        <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="screen-xl" marginX="auto" minWidth={0} height="full">
+          <Stack direction="row" align="center" gap={10}>
+            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} height={{ base: 8, md: 9 }} width="auto" display="flex" align="center" className="group">
               <Logo className="text-white transition-opacity group-hover:opacity-heavy" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>

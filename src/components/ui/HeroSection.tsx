@@ -44,13 +44,14 @@ export function HeroSection() {
       <Stack
         position="relative"
         zIndex={10}
-        align="start"
+        align={{ base: 'center', lg: 'start' }}
+        textAlign={{ base: 'center', lg: 'left' }}
         gap={0}
         paddingX={{ base: 4, md: 8, lg: 12 }}
         paddingTop={{ base: 2, lg: 8 }}
         paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
-        marginX={{ base: 0, xl: "auto" }}
+        marginX="auto"
       >
 
 
@@ -65,7 +66,7 @@ export function HeroSection() {
         <Stack
           as="h1"
           marginTop={{ base: 2, lg: 6 }}
-          align="start"
+          align={{ base: 'center', lg: 'start' }}
           gap={0}
           width="full"
           maxWidth="full"
@@ -115,6 +116,7 @@ export function HeroSection() {
         >
           <Box
             width="0.5"
+            display={{ base: 'none', lg: 'block' }}
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
@@ -122,8 +124,9 @@ export function HeroSection() {
             as="p"
             variant="body"
             weight="font-normal"
-            align="left"
+            align={{ base: 'center', lg: 'left' }}
             size={{ base: "sm", md: "lg", lg: "xl" }}
+            leading="relaxed"
             className="hero-tagline-text"
           >
             The west coast swing dancer's guide to gear, travel, and better dance weekends.
