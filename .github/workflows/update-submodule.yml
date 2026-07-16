@@ -25,6 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
+          token: ${{ secrets.GH_PAT_SUBMODULE_UPDATE }}
           submodules: recursive
           fetch-depth: 0
 
@@ -75,7 +76,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT_SUBMODULE_UPDATE }}
           commit-message: "chore: update submodule to ${{ steps.target.outputs.target_ref }} and update lockfile"
           branch: "automation/update-submodule-${{ steps.target.outputs.safe_ref }}"
           delete-branch: true
