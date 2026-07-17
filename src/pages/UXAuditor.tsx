@@ -76,7 +76,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       )}
     </Stack>
     {helpText && (
-      <Text variant="sans" size="xs" color={isPassword ? "warning" : "dim"} paddingX={2} weight={isPassword ? "font-medium" : "normal"}>
+      <Text variant="sans" size="xs" color={isPassword ? "warning" : "dim"} paddingX={2} weight={isPassword ? "font-medium" : "normal"} align="left">
         {helpText}
       </Text>
     )}
@@ -208,8 +208,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       />
       <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
          <Box
-           paddingX={2}
-           paddingY={1}
+           padding={4}
            radius="sm"
            border={true}
            className="bg-bg/80 backdrop-blur-sm"
@@ -241,7 +240,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
       </Stack>
 
       <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', lg: '1/2' }}>
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
@@ -421,7 +420,7 @@ export default function UXAuditor() {
             isPassword
             placeholder="OpenAI or Gemini API Key (optional override)"
             onClear={() => setCustomApiKey("")}
-            helpText="⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices."
+            helpText="⚠️ API Keys Are Stored In Your Browser's Session Storage. They Are Cleared When You Close The Tab. Plain-Text Storage Is Not Fully Secure; Use Only On Trusted Devices."
           />
 
           <AuditInput
@@ -432,14 +431,14 @@ export default function UXAuditor() {
             onChange={setSnapshotService}
             type="url"
             placeholder="Custom service URL with {url}, {width}, {height} (optional)"
-            helpText='Use {"{url}"}, {"{width}"}, and {"{height}"} as placeholders. Example: https://api.service.com?url={"{url}"}&size={"{width}"}x{"{height}"}'
+            helpText='Use {"{url}"}, {"{width}"}, And {"{height}"} As Placeholders. Example: https://api.service.com?url={"{url}"}&size={"{width}"}x{"{height}"}'
           />
         </Stack>
       </Stack>
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
+        <Stack gap={4} span={{ lg: 1 }} minWidth={0} lgBorder="r" className="lg:border-line lg:pr-8">
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
@@ -499,7 +498,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
+                  <Text variant="sans" size="xl" weight="font-black" className="break-all block" title={activeReport.url}>
                     {activeReport.url}
                   </Text>
                 </Stack>
@@ -514,8 +513,9 @@ export default function UXAuditor() {
                     className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
                     color="dim"
-                    paddingX={4}
+                    paddingX={6}
                     paddingY={2}
+                    border={true}
                     radius="xl"
                     width={{ base: 'full', sm: 'auto' }}
                   >
@@ -533,6 +533,7 @@ export default function UXAuditor() {
                     className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
+                    border={true}
                     radius="xl"
                     width={{ base: 'full', sm: 'auto' }}
                   >
