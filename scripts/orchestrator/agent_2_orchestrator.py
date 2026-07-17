@@ -1,9 +1,13 @@
-# pylint: disable=line-too-long,missing-docstring,redefined-outer-name
+# pylint: disable=line-too-long,missing-docstring,redefined-outer-name,wrong-import-position
 import argparse
 import json
 import re
 import time
 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli')))
 from dev_tools.utils import run_command
 
 

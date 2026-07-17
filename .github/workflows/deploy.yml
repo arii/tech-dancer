@@ -14,6 +14,9 @@ permissions:
   pull-requests: write
   issues: write
 
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
 jobs:
   verify-changes:
     uses: ./.github/workflows/reusable-gate.yml
@@ -37,6 +40,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           lfs: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
 
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -111,6 +119,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
