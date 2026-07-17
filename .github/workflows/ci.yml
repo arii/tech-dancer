@@ -180,8 +180,6 @@ jobs:
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
@@ -196,6 +194,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
+
+      - name: Ensure correct Playwright browsers
+        run: pnpm exec playwright install chromium
         shell: bash
 
       - name: Build App
@@ -258,6 +260,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
+        shell: bash
+
+      - name: Ensure correct Playwright browsers
+        run: pnpm exec playwright install chromium
         shell: bash
 
       - name: Get main branch SHA
