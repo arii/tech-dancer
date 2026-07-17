@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
@@ -31,7 +31,15 @@ async function runLighthouse() {
       // Using lhci if available, otherwise fallback to lighthouse CLI if installed globally/locally
       // Here we assume lhci autorun might be overkill for a specific route runner,
       // but let's use the lighthouse CLI directly.
-      execSync(`npx lighthouse ${url} --output=json --output=html --output-path=${reportPath} --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo`, { stdio: 'inherit' });
+      execFileSync('npx', [
+        'lighthouse',
+        url,
+        '--output=json',
+        '--output=html',
+        `--output-path=${reportPath}`,
+        '--chrome-flags=--headless',
+        '--only-categories=performance,accessibility,best-practices,seo'
+      ], { stdio: 'inherit' });
     } catch (error) {
       console.error(`Lighthouse failed for ${route}:`, error);
     }
