@@ -1,11 +1,12 @@
-# pylint: disable=missing-docstring,wrong-import-order
+# pylint: disable=missing-docstring,wrong-import-order,wrong-import-position
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../boomtick-pkg/cli')))
 from dev_tools.utils import run_command
 import json
-import os
-import sys
 from datetime import datetime
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 def run_cli(args, suppress_errors=False):
