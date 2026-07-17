@@ -95,6 +95,8 @@ If you encounter a schema error or a missing argument in an MCP tool, you must *
 | **Testing** | Run Playwright | `repo.run_playwright` | `td-cli repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
 | **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
+| **Agent** | Register Lock | `agent.lock` | `td-cli agent lock --entity <PR_OR_ISSUE> --files <FILES>` | - |
+| **Agent** | Check Locks | `agent.check_locks` | `td-cli agent check-locks --entity <PR_OR_ISSUE>` | - |
 
 ---
 

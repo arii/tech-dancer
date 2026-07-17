@@ -120,6 +120,11 @@ When multiple agents work simultaneously:
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
+- **Claim and Lock Protocol**: To prevent overlapping work and merge conflicts when multiple agents are active:
+  - Before starting any development task, an agent must register a lock on their targeted files or feature scope.
+  - Locks are registered by posting or updating a comment on the target GitHub issue or PR containing the lock metadata within a hidden HTML comment format: `<!-- AGENT_LOCK: {"branch": "<branch>", "files": ["<file1>", "<file2>"], "session_id": "<session_id>"} -->`.
+  - Agents must use the `td-cli agent lock` command or the corresponding MCP tool to register/update their active work scope.
+  - Agents must use `td-cli agent check-locks` or the corresponding MCP tool to verify if any target files are locked by another active agent session before beginning work.
 - All agents MUST read `.agent-context.json` (using `repo.read_agent_context`)
   upon startup to get current repository state and discover available MCP
   tools and CLI subcommands. Bypassing this step is a contract violation.
