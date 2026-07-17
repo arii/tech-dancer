@@ -28,6 +28,14 @@ async function runLighthouse() {
 
     console.log(`Running Lighthouse for ${url}...`);
     try {
+      // Sanitize and validate inputs against CodeQL command/argument injection
+      if (!/^https?:\/\/[a-zA-Z0-9][-a-zA-Z0-9@:%._+~#=]{1,256}(\.[a-zA-Z0-9()]{1,6})?\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(url)) {
+        throw new Error(`Invalid URL format: ${url}`);
+      }
+      if (!/^[\w\-/:\\.]+$/.test(reportPath)) {
+        throw new Error(`Invalid report path format: ${reportPath}`);
+      }
+
       // Using lhci if available, otherwise fallback to lighthouse CLI if installed globally/locally
       // Here we assume lhci autorun might be overkill for a specific route runner,
       // but let's use the lighthouse CLI directly.
