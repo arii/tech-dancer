@@ -250,6 +250,7 @@ jobs:
         shell: bash
 
   impact-analysis:
+    if: ${{ !startsWith(github.head_ref, 'automation/update-submodule-') }}
     needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
     timeout-minutes: 20
