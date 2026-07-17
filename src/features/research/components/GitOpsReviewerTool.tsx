@@ -41,48 +41,46 @@ export function GitOpsReviewerTool() {
         <Stack gap={6}>
           <Text variant="headline" size="xl" weight="font-black" as="h2">What we built</Text>
           <Text variant="body" color="dim">
-            We built a hybrid review pipeline that combines static validation checks with LLM intelligence.
-            Before invoking expensive AI endpoints, the system constructs a precise, token-budgeted pull request context packet containing the PR metadata, target file diffs, associated design tokens, and linked issue text.
+            We developed <strong>Boomtick (`boomtick-pkg`)</strong>, a decoupled, framework-agnostic foundational template repository and orchestrator designed to separate human-led strategy from agentic execution. It serves as our advanced AI review framework and local developer CLI.
           </Text>
-          <Grid cols={{ base: 1, md: 3 }} gap={6}>
+          <Grid cols={{ base: 1, md: 2 }} gap={6}>
             <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">Context Packaging</Text>
+              <Text variant="display" size="md" weight="font-bold">Model Context Protocol (MCP)</Text>
               <Text variant="body" size="sm" color="dim">
-                Aggregates exact diff segments, design system guidelines, and failing CI logs. This removes the need for the model to wander through the repo, focusing its attention entirely on a highly relevant markdown document.
+                Our `mcp/` server grants autonomous agents structured access to pull requests, files, and CI logs, and orchestrates seamless integration with macro-agents such as Jules.
               </Text>
             </Stack>
             <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">Structured Schemas</Text>
+              <Text variant="display" size="md" weight="font-bold">Local Developer Tooling (td-cli)</Text>
               <Text variant="body" size="sm" color="dim">
-                Forces the model to respond in structured JSON containing explicit `blocking` and `non_blocking` lists rather than generic markdown comments. Deterministic CI scripts can then parse and act on these findings.
-              </Text>
-            </Stack>
-            <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">Playwright Integration</Text>
-              <Text variant="body" size="sm" color="dim">
-                Executes visual regression smoke tests. Captures and masks screenshots of stable layouts to flag unintended layout shifts and styling drifts that unit tests and lint scripts can't catch.
+                Our `cli/` module provides developers with command-line utilities to perform local PR audits, run static analysis checks, and fetch target repository states.
               </Text>
             </Stack>
           </Grid>
         </Stack>
 
         <Stack gap={6}>
-          <Text variant="headline" size="xl" weight="font-black" as="h2">How it felt</Text>
+          <Text variant="headline" size="xl" weight="font-black" as="h2">How we built it</Text>
           <Text variant="body" color="dim">
-            Moving from free-form AI chats to a structured pipeline fundamentally changed how we trusted AI in the development lifecycle.
-            We experienced a substantial shift in developer confidence and overall review velocity.
+            By leveraging strict CI/CD automation pipelines, we combined multi-modal LLM orchestration (GitHub Models and Gemini) with advanced RAG systems to create an robust, automated triage review system.
           </Text>
-          <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <Grid cols={{ base: 1, md: 3 }} gap={6}>
             <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">From Noise to Signal</Text>
+              <Text variant="display" size="md" weight="font-bold">Multi-Modal AI Orchestration</Text>
               <Text variant="body" size="sm" color="dim">
-                By shrinking the model's job and restricting its response formats, we reduced 'AI slop' by over 80%. Instead of receiving walls of obvious or irrelevant advice, developers now get highly action-oriented, precise, and accurate suggestions.
+                Integrates Google Gemini for visual interface diffs and OpenAI-compatible GitHub Models for structural code analysis, routed seamlessly through `@langchain/core` fallback strategies.
               </Text>
             </Stack>
             <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">Deterministic Controls</Text>
+              <Text variant="display" size="md" weight="font-bold">RAG & Vector Retrieval</Text>
               <Text variant="body" size="sm" color="dim">
-                Decoupling analysis from policy means scripts, not LLMs, decide when to request changes. This strict division ensures that aesthetic opinions never block integration, while serious layout or security issues are consistently caught.
+                Leverages a contextual retrieval pipeline utilizing local vector stores to perform automated duplicate code triage and identify architectural overlap before code merges.
+              </Text>
+            </Stack>
+            <Stack gap={3} padding={5} border radius="md" surface="surface">
+              <Text variant="display" size="md" weight="font-bold">CI/CD Guardrails</Text>
+              <Text variant="body" size="sm" color="dim">
+                Orchestrates automated feedback reviews directly onto the GitHub conversation. It runs visual regression smoke tests via Playwright, blocking or warning based on structured JSON results.
               </Text>
             </Stack>
           </Grid>

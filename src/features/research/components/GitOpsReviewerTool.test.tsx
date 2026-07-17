@@ -14,17 +14,17 @@ describe('GitOpsReviewerTool', () => {
     // Check for major heading
     expect(screen.getByText(/Automating the Outer Loop/i)).toBeTruthy();
 
-    // Check for "What we built" and "How it felt" headings
+    // Check for "What we built" and "How we built it" headings
     expect(screen.getByRole('heading', { level: 2, name: /What we built/i })).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 2, name: /How it felt/i })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 2, name: /How we built it/i })).toBeTruthy();
 
     // Check for key terms in "What we built" section
-    expect(screen.getByText(/Context Packaging/i)).toBeTruthy();
-    expect(screen.getByText(/Structured Schemas/i)).toBeTruthy();
-    expect(screen.getByText(/Playwright Integration/i)).toBeTruthy();
+    expect(screen.getByText(/Model Context Protocol/i)).toBeTruthy();
+    expect(screen.getByText(/Local Developer Tooling/i)).toBeTruthy();
 
-    // Check for key terms in "How it felt" section
-    expect(screen.getByText(/From Noise to Signal/i)).toBeTruthy();
-    expect(screen.getByText(/Deterministic Controls/i)).toBeTruthy();
+    // Check for key terms in "How we built it" section
+    expect(screen.getByText(/Multi-Modal AI Orchestration/i)).toBeTruthy();
+    expect(screen.getByText(/RAG & Vector Retrieval/i)).toBeTruthy();
+    expect(screen.getByText(/CI\/CD Guardrails/i)).toBeTruthy();
   });
 });
