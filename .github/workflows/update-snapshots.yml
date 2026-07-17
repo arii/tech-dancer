@@ -13,6 +13,7 @@ on:
         type: string
 
 env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   NODE_ENV: production
   REPO_NAME: ${{ github.event.repository.name }}
   VITE_BASE_PATH: /${{ github.event.repository.name }}/
@@ -59,6 +60,11 @@ jobs:
           repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
 
       - name: Setup Workspace
         uses: arii/boomtick/mcp/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag

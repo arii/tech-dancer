@@ -2,7 +2,7 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "package-name": "react-example"
+      "package-name": "tech-dancer"
     }
   }
 }
