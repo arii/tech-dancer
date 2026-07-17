@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/arii/tech-dancer/compare/react-example-v0.3.0...react-example-v0.3.1) (2026-07-17)
+
+
+### Bug Fixes
+
+* prevent agent 1 from creating new sessions in continuous dev loop ([#3702](https://github.com/arii/tech-dancer/issues/3702)) ([6c88253](https://github.com/arii/tech-dancer/commit/6c882530581219e5f5b119b356213a2d00dc6061))
+
 ## [0.3.0](https://github.com/arii/tech-dancer/compare/react-example-v0.2.1...react-example-v0.3.0) (2026-07-15)
 
 
