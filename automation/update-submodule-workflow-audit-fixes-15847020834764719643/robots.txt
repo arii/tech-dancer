@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/automation/update-submodule-workflow-audit-fixes-15847020834764719643/sitemap.xml
