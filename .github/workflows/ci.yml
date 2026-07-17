@@ -93,6 +93,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -144,6 +149,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -187,6 +197,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -253,6 +268,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -411,6 +431,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Setup Workspace
         uses: ./boomtick-pkg/mcp/actions/setup-workspace
         with:
@@ -460,6 +485,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Download actionlint
         id: get_actionlint
         run: |
