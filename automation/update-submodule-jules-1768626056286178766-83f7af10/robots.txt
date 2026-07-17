@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/automation/update-submodule-jules-1768626056286178766-83f7af10/sitemap.xml
