@@ -6,7 +6,7 @@ This comprehensive planning document outlines the design specifications, baselin
 
 ## 1. Executive Summary & Objective
 
-The goal is to transition `boomtick-pkg` (encompassing the `td-cli` Python tool and the TypeScript MCP server) from a package tailored to `boomtick.blog` (`tech-dancer`) into a highly portable, self-contained utility. 
+The goal is to transition `boomtick-pkg` (encompassing the `td-cli` Python tool and the TypeScript MCP server) from a package tailored to `boomtick.blog` (`tech-dancer`) into a highly portable, self-contained utility.
 This plan enforces baseline repository specifications, removes silent default configurations in favor of loud "fail-fast" runtime exceptions, and simplifies root-level setup so third-party developers can adopt this tool suite instantly.
 
 ---

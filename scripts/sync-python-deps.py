@@ -26,6 +26,7 @@ def sync_deps():
         venv_python = Path(sys.executable)
 
     try:
+        # 1. Sync requirements
         # Using --no-cache-dir to avoid disk space issues in some environments
         # and --upgrade to ensure latest specified versions
         subprocess.run(
@@ -45,7 +46,24 @@ def sync_deps():
             text=True,
             timeout=600,  # Increased to 10 minutes for slow environments
         )
-        print("✅ Python dependencies synced successfully.")
+
+        # 2. Ensure CLI is installed in editable mode to register/update td-cli
+        subprocess.run(
+            [
+                str(venv_python),
+                "-m",
+                "pip",
+                "install",
+                "-e",
+                str(cli_dir),
+                "--break-system-packages",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+        print("✅ Python dependencies synced and 'td-cli' registered successfully.")
     except subprocess.TimeoutExpired:
         print("❌ Timeout syncing Python dependencies.")
     except subprocess.CalledProcessError as e:
