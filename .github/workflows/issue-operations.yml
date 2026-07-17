@@ -1,0 +1,227 @@
+name: Issue Operations
+
+on:
+  issues:
+    types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - ai-review
+          - resolve-conflicts
+          - update-snapshots
+      issue_number:
+        description: 'Issue or PR number'
+        required: true
+        type: string
+      comment_body:
+        description: 'Comment body (optional)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+jobs:
+  validate-quality:
+    name: Validate Issue Quality
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:v2.0.1
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 1
+
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        with:
+          setup-node: 'false'
+
+      - name: Validate Issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute
+
+  create-pr:
+    name: Issue to Content PR
+    if: |
+      github.event_name == 'issues' &&
+      startsWith(github.event.issue.title, 'Draft') &&
+      contains(github.event.issue.title, ':') &&
+      (github.event.issue.author_association == 'OWNER' ||
+       github.event.issue.author_association == 'MEMBER' ||
+       github.event.issue.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          python-version: '3.x'
+
+      - name: Parse Issue and Generate Markdown File
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        shell: python
+        run: |
+          import re
+          from datetime import datetime
+          import os
+
+          body = os.environ['ISSUE_BODY']
+          title = os.environ['ISSUE_TITLE']
+          title = re.sub(r'^Draft[^:]*:\s*', '', title).strip()
+
+          match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
+          if not match:
+              print("No markdown block found in issue. Exiting.")
+              exit(1)
+
+          content = match.group(1).strip()
+
+          # Detect content type from frontmatter
+          type_match = re.search(r'^type:\s*"?(\w+)"?', content, re.MULTILINE)
+          content_type = type_match.group(1) if type_match else 'post'
+
+          # Route to the right folder
+          folder_map = {
+              'post': 'content/posts',
+              'resource': 'content/resources',
+              'study': 'content/studies',
+          }
+          folder = folder_map.get(content_type, 'content/posts')
+
+          date_str = datetime.now().strftime('%Y-%m-%d')
+          safe_title = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+          filename = f"{folder}/{date_str}-{safe_title}.md"
+
+          os.makedirs(folder, exist_ok=True)
+
+          with open(filename, 'w', encoding='utf-8') as f:
+              f.write(content)
+
+          print(f"File created: {filename}")
+
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f"NEW_FILE={filename}\n")
+              f.write(f"SAFE_TITLE={safe_title}\n")
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: add content from issue #${{ github.event.issue.number }}"
+          title: "Content: ${{ github.event.issue.title }}"
+          body: "This PR was automatically generated from issue #${{ github.event.issue.number }}."
+          branch: "content/${{ env.SAFE_TITLE }}"
+          base: main
+          delete-branch: true
+
+  ai-review:
+    name: AI Review
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'ai-review'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 1
+
+      - uses: ./boomtick-pkg/mcp/actions/ai-review
+        with:
+          pr_number: ${{ github.event.inputs.issue_number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GOOGLE_JULES_API_KEY: ${{ secrets.GOOGLE_JULES_API_KEY }}
+
+  resolve-conflicts:
+    name: Resolve PR Conflicts
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'resolve-conflicts'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:v2.0.1
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout Code
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+
+      - name: Find and Resolve Conflicts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Use our unified CLI for resolution
+          td-cli gh resolve
+
+      - name: Validate Resolution
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @arii/boomtick-mcp run sync-contracts
+          pnpm run type-check || exit 1
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-resolved merge conflicts using AI"
+          file_pattern: '.'
+
+  update-snapshots:
+    name: Update Playwright Snapshots
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'update-snapshots'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 1
+
+      - name: Setup Workspace
+        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update Snapshots
+        run: |
+          # pnpm run test:e2e is the established entry point for playwright
+          VITE_BASE_PATH=/ pnpm run test:e2e --update-snapshots
+
+      - name: Check for Changes
+        id: status
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit Changes
+        if: steps.status.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update playwright snapshots"
+          file_pattern: '**/snapshots/*'
