@@ -10,6 +10,9 @@ Our current backend architectures lack a formalized, unified specification for a
 
 Provide a comprehensive, spec-driven design blueprint that outlines the core interfaces, queueing models, retry strategies, and error-handling policies for the new dispatch system. This document will establish strict architectural guidelines and schema-enforced interfaces to align all developers and future agents when implementing robust dispatchers.
 
+The finalized architectural specification is written and maintained under:
+👉 **[docs/dispatch-architecture-spec.md](https://github.com/arii/tech-dancer/blob/main/docs/dispatch-architecture-spec.md)**
+
 # Non-Goals
 
 - **No Implementation in this Issue:** This issue is strictly for documenting the architectural specification, establishing consensus on design patterns, and validating the spec. No codebase changes or implementation commits are within scope.
@@ -18,17 +21,15 @@ Provide a comprehensive, spec-driven design blueprint that outlines the core int
 # Proposed Approach
 
 1. **Draft and Specialize the Dispatch Core Interface:**
-   Define precise TypeScript and Python type definitions for the dispatcher, payload contracts, execution states, and tracking metadata.
+   Define precise TypeScript and Python type definitions for the dispatcher, payload contracts, execution states, and tracking metadata. (Complete - see `docs/dispatch-architecture-spec.md` Section 1)
 2. **Standardize Queueing Models:**
-   Provide explicit designs for:
-   - *In-Memory Queue (Local/Dev):* High-efficiency, non-blocking queueing using Promise-based or asyncio token-bucket concurrency limiters.
-   - *Transactional Outbox Pattern (Production):* Storing events in a database (e.g., Firestore) within the same transaction as state updates, then publishing them asynchronously via a dedicated worker to guarantee "at-least-once" delivery.
+   Provide explicit designs for In-Memory Queue (Local/Dev) and Transactional Outbox Pattern (Production) to ensure reliable event publication. (Complete - see `docs/dispatch-architecture-spec.md` Section 2)
 3. **Establish Exponential Backoff with Jitter Retry Policies:**
-   Document the exact mathematical models for retries to avoid "thundering herd" conditions during service outages.
+   Document the exact mathematical models for retries using a randomized full jitter algorithm. (Complete - see `docs/dispatch-architecture-spec.md` Section 3)
 4. **Formulate Error Handling & DLQ Strategies:**
-   Outline the lifecycle of failed messages, specifying how they transition through retry loops, trigger circuit breakers, and are eventually parked in a structured DLQ for manual review.
+   Outline failed message lifecycles and circuit breaker states (Closed, Open, Half-Open). (Complete - see `docs/dispatch-architecture-spec.md` Section 4)
 5. **Enforce Observability and Context Propagation:**
-   Define a unified telemetry envelope that embeds trace IDs, Span IDs, and retry counters directly into the dispatch headers.
+   Embed standard W3C telemetry headers (`traceparent`, `tracestate`, `x-correlation-id`) inside the dispatch metadata envelope. (Complete - see `docs/dispatch-architecture-spec.md` Section 5)
 
 # Alternatives Considered
 
@@ -69,7 +70,7 @@ The scope is strictly bounded to documenting the dispatch architecture, API sign
 
 # DEFINITION OF DONE
 
-1. **A complete spec document is written** with zero placeholder text, incorporating concrete, highly detailed TypeScript/Python definitions, retry algorithms, and DLQ schemas.
-2. **The design is approved** by running the internal `validate-issue` tool with zero blocking warnings.
-3. **The issue is successfully created** in the project repository using the standard `gh create-issue` subcommand, establishing a permanent architectural reference.
-4. **The local workspace and environment are fully verified** as clean and regression-free via our comprehensive `pnpm run doctor` and testing suites.
+1. **A complete spec document is written** with zero placeholder text, incorporating concrete, highly detailed TypeScript/Python definitions, retry algorithms, and DLQ schemas. (Completed in `docs/dispatch-architecture-spec.md`)
+2. **The design is approved** by running the internal `validate-issue` tool with zero blocking warnings. (Completed)
+3. **The issue is successfully created** in the project repository using the standard `gh create-issue` subcommand, establishing a permanent architectural reference. (Completed as #3731)
+4. **The local workspace and environment are fully verified** as clean and regression-free via our comprehensive `pnpm run doctor` and testing suites. (Completed)
