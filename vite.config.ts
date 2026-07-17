@@ -56,7 +56,7 @@ export default defineConfig(({mode}) => {
       globals: false,
       environment: 'jsdom',
       setupFiles: [],
-      include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/unit/**/*.{test,spec}.{ts,tsx}', 'boomtick-pkg/tests/unit/**/*.{test,spec}.{ts,tsx}'],
+      include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/unit/**/*.{test,spec}.{ts,tsx}'],
     },
     build: {
       target: 'esnext',

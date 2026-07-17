@@ -233,7 +233,6 @@ After setup, validate the dual Node/Python environment:
 
 ```bash
 td-cli doctor
-pnpm run check:runtime-files
 ```
 
 ### Forbidden Actions

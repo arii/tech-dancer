@@ -6,7 +6,7 @@
   },
   "workspaceFolder": "/workspace",
   "remoteUser": "pwuser",
-  "postCreateCommand": "pip3 install -e boomtick-pkg/cli/ --break-system-packages && corepack enable && corepack prepare pnpm@10.28.2 --activate && pnpm run check:runtime-files && pnpm run doctor && pnpm install --frozen-lockfile && pnpm run setup:playwright",
+  "postCreateCommand": "pip3 install -e boomtick-pkg/cli/ --break-system-packages && corepack enable && corepack prepare pnpm@10.28.2 --activate && pnpm run doctor && pnpm install --frozen-lockfile && pnpm run setup:playwright",
   "containerEnv": {
     "CI": "1",
     "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright",

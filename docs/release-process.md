@@ -16,7 +16,6 @@ Verify packages, synchronize schema contracts, and confirm runtime consistency b
 ```bash
 pnpm run verify:schemas
 pnpm run doctor
-pnpm run check:runtime-files
 ```
 
 ### 2. Commit & Pull Request

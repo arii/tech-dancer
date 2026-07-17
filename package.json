@@ -41,7 +41,6 @@
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
     "doctor": "td-cli doctor",
-    "check:runtime-files": "td-cli doctor",
     "preinstall": "node -e \"if (process.env.SKIP_BOOMTICK_PKG !== 'true' && process.env.VERCEL !== '1') { try { require('node:child_process').execSync('td-cli doctor', {stdio: 'inherit'}); } catch (e) {} }\"",
     "postinstall": "python3 scripts/sync-python-deps.py",
     "drafter": "tsx scripts/affiliate/add-item.ts",
