@@ -72,6 +72,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   CI: true
   MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
   GITHUB_MODELS_MODEL: gpt-4o-mini
