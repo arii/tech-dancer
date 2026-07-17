@@ -67,7 +67,7 @@ export function GitOpsReviewerTool() {
         </Stack>
 
         <Stack gap={6}>
-          <Text variant="headline" size="xl" weight="font-black" as="h2">How we felt it</Text>
+          <Text variant="headline" size="xl" weight="font-black" as="h2">How it felt</Text>
           <Text variant="body" color="dim">
             Moving from free-form AI chats to a structured pipeline fundamentally changed how we trusted AI in the development lifecycle.
             We experienced a substantial shift in developer confidence and overall review velocity.

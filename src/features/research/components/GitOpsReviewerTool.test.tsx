@@ -14,16 +14,16 @@ describe('GitOpsReviewerTool', () => {
     // Check for major heading
     expect(screen.getByText(/Automating the Outer Loop/i)).toBeTruthy();
 
-    // Check for "What we built" and "How we felt it" headings
+    // Check for "What we built" and "How it felt" headings
     expect(screen.getByRole('heading', { level: 2, name: /What we built/i })).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 2, name: /How we felt it/i })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 2, name: /How it felt/i })).toBeTruthy();
 
     // Check for key terms in "What we built" section
     expect(screen.getByText(/Context Packaging/i)).toBeTruthy();
     expect(screen.getByText(/Structured Schemas/i)).toBeTruthy();
     expect(screen.getByText(/Playwright Integration/i)).toBeTruthy();
 
-    // Check for key terms in "How we felt it" section
+    // Check for key terms in "How it felt" section
     expect(screen.getByText(/From Noise to Signal/i)).toBeTruthy();
     expect(screen.getByText(/Deterministic Controls/i)).toBeTruthy();
   });
