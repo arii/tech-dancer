@@ -61,6 +61,7 @@ export const tailwindSafelist = [
   'p-8',
   'pb-0',
   'pb-10',
+  'pb-12',
   'pb-2',
   'pb-20',
   'pb-28',

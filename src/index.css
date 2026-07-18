@@ -115,6 +115,7 @@
     transform-origin: bottom;
   }
   .animation-reverse { animation-direction: reverse; }
+  .gap-section-spacing { gap: var(--section-spacing); }
 
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 

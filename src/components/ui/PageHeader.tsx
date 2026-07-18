@@ -51,7 +51,7 @@ export function PageHeader({
           </Text>
         )}
         {cta && (
-          <Box marginTop={6}>
+          <Box marginTop={{ base: 8, sm: 10 }}>
             {cta}
           </Box>
         )}
