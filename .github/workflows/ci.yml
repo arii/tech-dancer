@@ -336,6 +336,7 @@ jobs:
         run: pnpm run impact:github-models-code-review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         shell: bash
 
       - name: Visual Diff
@@ -361,6 +362,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: pnpm run impact:gemini-review
         shell: bash
 
@@ -368,6 +370,7 @@ jobs:
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: pnpm run impact:github-models-review
         shell: bash
 
@@ -400,6 +403,37 @@ jobs:
               echo "EOF"
             } >> "$GITHUB_ENV"
           fi
+
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" | grep -oP 'jules\.google\.com/task/\K[0-9]+' | head -1 || true)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f "scripts/send-jules-impact.py" ]; then
+            python3 scripts/send-jules-impact.py
+          elif [ -f "boomtick-pkg/scripts/send-jules-impact.py" ]; then
+            python3 "boomtick-pkg/scripts/send-jules-impact.py"
+          else
+            echo "⚠️ Skipping: send-jules-impact.py script not found"
+          fi
+        shell: bash
 
       - name: Update Impact Analysis Feedback
         if: always() && github.event_name == 'pull_request'
