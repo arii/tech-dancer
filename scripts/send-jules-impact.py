@@ -50,16 +50,20 @@ def main():
     deployment_review_path = os.path.join(artifacts_dir, "deployment-review.md")
     impact_md_path = os.path.join(artifacts_dir, "impact-analysis", "impact.md")
 
+    has_valid_reviews = False
+
     if os.path.isfile(deployment_review_path):
         try:
             with open(deployment_review_path, "r", encoding="utf-8") as f:
                 body += f.read() + "\n\n"
+                has_valid_reviews = True
         except IOError as e:
             logger.error(f"Failed to read {deployment_review_path}: {e}")
     elif os.path.isfile(impact_md_path):
         try:
             with open(impact_md_path, "r", encoding="utf-8") as f:
                 body += f.read() + "\n\n"
+                has_valid_reviews = True
         except IOError as e:
             logger.error(f"Failed to read {impact_md_path}: {e}")
     else:
@@ -72,8 +76,6 @@ def main():
         "gemini-code-review.md",
         "github-models-code-review.md",
     ]
-
-    has_valid_reviews = False
 
     for filename in review_files:
         filepath = os.path.join(artifacts_dir, filename)
