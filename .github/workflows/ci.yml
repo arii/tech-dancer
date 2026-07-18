@@ -377,16 +377,28 @@ jobs:
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            head -n 150 artifacts/deployment-review.md > artifacts/deployment-review-short.md
+            if [ $(wc -l < artifacts/deployment-review.md) -gt 150 ]; then
+              echo "" >> artifacts/deployment-review-short.md
+              echo "---" >> artifacts/deployment-review-short.md
+              echo "⚠️ **Report truncated for PR comment size limits.** Please view the full summary below or download the build artifacts for detail." >> artifacts/deployment-review-short.md
+            fi
             {
               echo "IMPACT_BODY<<EOF"
-              cat artifacts/deployment-review.md
+              cat artifacts/deployment-review-short.md
               echo "EOF"
             } >> "$GITHUB_ENV"
           elif [ -f artifacts/impact-analysis/impact.md ]; then
             cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            head -n 150 artifacts/impact-analysis/impact.md > artifacts/impact-analysis-short.md
+            if [ $(wc -l < artifacts/impact-analysis/impact.md) -gt 150 ]; then
+              echo "" >> artifacts/impact-analysis-short.md
+              echo "---" >> artifacts/impact-analysis-short.md
+              echo "⚠️ **Report truncated for PR comment size limits.** Please view the full summary below or download the build artifacts for detail." >> artifacts/impact-analysis-short.md
+            fi
             {
               echo "IMPACT_BODY<<EOF"
-              cat artifacts/impact-analysis/impact.md
+              cat artifacts/impact-analysis-short.md
               echo "EOF"
             } >> "$GITHUB_ENV"
           else
