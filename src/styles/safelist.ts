@@ -120,6 +120,7 @@ export const tailwindSafelist = [
   'col-span-1',
   'lg:col-span-7',
   'lg:col-span-5',
+  'lg:col-span-3',
   'lg:gap-6',
   'lg:gap-8',
   'md:gap-6',
