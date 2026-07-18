@@ -68,6 +68,7 @@ export default function Merch() {
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
+          ctaMarginTop={{ base: 8, sm: 10 }}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={{ base: 5, sm: 4 }} align={{ base: 'stretch', sm: 'center' }}>
               <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
