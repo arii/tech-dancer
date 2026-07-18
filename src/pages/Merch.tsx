@@ -82,7 +82,7 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={5}>
+        <Stack gap={5} marginTop={{ base: 8, sm: 12 }}>
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
