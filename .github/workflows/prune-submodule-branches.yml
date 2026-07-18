@@ -24,41 +24,29 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Fetch open PRs to avoid deleting active update branches
-          echo "Fetching open PRs..."
-          gh pr list --repo ${{ github.repository }} --state open --limit 1000 --json headRefName --jq '.[].headRefName' > open_prs.txt
-
-          # Get all branches matching our prefix from remote
-          # We use github API directly or git ls-remote to find remote branches
-          echo "Fetching remote branches..."
-          # git ls-remote --heads origin is lightweight
-          git ls-remote --heads origin 'automation/update-submodule-*' | awk '{print $2}' | sed 's|^refs/heads/||' > target_branches.txt
-
           deleted_count=0
+          deleted_list=""
 
-          echo "Evaluating branches for pruning..."
+          # We use comm -23 to find branches in target_branches but not in open_prs
+          # Process substitution avoids writing to temporary files
           while IFS= read -r branch; do
             if [ -z "$branch" ]; then continue; fi
 
-            if ! grep -qx "$branch" open_prs.txt; then
-              echo "Deleting orphaned branch: $branch"
-              # Delete branch via git push
-              git push origin --delete "$branch" || {
-                echo "Failed to delete $branch"
-                continue
-              }
-              deleted_count=$((deleted_count + 1))
-              echo "- \`$branch\`" >> deleted_branches.txt
-            else
-              echo "Skipping active branch: $branch"
-            fi
-          done < target_branches.txt
+            git push origin --delete "$branch" || {
+              echo "Failed to delete $branch" >&2
+              continue
+            }
+            deleted_count=$((deleted_count + 1))
+            deleted_list="$deleted_list\n- \`$branch\`"
+          done < <(comm -23 \
+            <(git ls-remote --heads origin 'automation/update-submodule-*' | awk '{print $2}' | sed 's|^refs/heads/||' | sort) \
+            <(gh pr list --repo ${{ github.repository }} --state open --limit 1000 --json headRefName --jq '.[].headRefName' | sort))
 
           if [ $deleted_count -gt 0 ]; then
             {
               echo "### 🧹 Pruned Submodule Branches"
               echo "Successfully deleted $deleted_count orphaned automation branches:"
-              cat deleted_branches.txt
+              echo -e "$deleted_list" | sed '/^$/d'
             } >> "$GITHUB_STEP_SUMMARY"
           else
             {
