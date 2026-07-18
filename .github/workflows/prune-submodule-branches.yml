@@ -1,0 +1,65 @@
+name: Prune Submodule Branches
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual triggering
+
+concurrency:
+  group: prune-submodule-branches
+  cancel-in-progress: true
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+
+      - name: Prune orphaned submodule update branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # Fetch open PRs to avoid deleting active update branches
+          echo "Fetching open PRs..."
+          gh pr list --repo ${{ github.repository }} --state open --limit 1000 --json headRefName --jq '.[].headRefName' > open_prs.txt
+
+          # Get all branches matching our prefix from remote
+          # We use github API directly or git ls-remote to find remote branches
+          echo "Fetching remote branches..."
+          # git ls-remote --heads origin is lightweight
+          git ls-remote --heads origin 'automation/update-submodule-*' | awk '{print $2}' | sed 's|^refs/heads/||' > target_branches.txt
+
+          deleted_count=0
+
+          echo "Evaluating branches for pruning..."
+          while IFS= read -r branch; do
+            if [ -z "$branch" ]; then continue; fi
+
+            if ! grep -qx "$branch" open_prs.txt; then
+              echo "Deleting orphaned branch: $branch"
+              # Delete branch via git push
+              git push origin --delete "$branch" || {
+                echo "Failed to delete $branch"
+                continue
+              }
+              deleted_count=$((deleted_count + 1))
+              echo "- \`$branch\`" >> deleted_branches.txt
+            else
+              echo "Skipping active branch: $branch"
+            fi
+          done < target_branches.txt
+
+          if [ $deleted_count -gt 0 ]; then
+            echo "### 🧹 Pruned Submodule Branches" >> "$GITHUB_STEP_SUMMARY"
+            echo "Successfully deleted $deleted_count orphaned automation branches:" >> "$GITHUB_STEP_SUMMARY"
+            cat deleted_branches.txt >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### ✅ No Orphaned Branches Found" >> "$GITHUB_STEP_SUMMARY"
+            echo "No stale \`automation/update-submodule-*\` branches were found." >> "$GITHUB_STEP_SUMMARY"
+          fi
+        shell: bash
