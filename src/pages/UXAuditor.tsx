@@ -369,7 +369,7 @@ export default function UXAuditor() {
           />
         </Box>
 
-        <Stack gap={4} as="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); runUXAudit(url); }}>
+        <Stack gap={4} as="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); if (!isAnalyzing) runUXAudit(url); }}>
           <Stack
             direction="row"
             align="center"
@@ -398,7 +398,7 @@ export default function UXAuditor() {
             />
             <Box
               as="button"
-              onClick={() => runUXAudit(url)}
+              onClick={() => { if (!isAnalyzing) runUXAudit(url); }}
               disabled={isAnalyzing}
               display="flex"
               align="center"

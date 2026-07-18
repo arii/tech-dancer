@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSnapshotManager } from './useSnapshotManager';
 import { initializeApp, getApps, getApp } from 'firebase/app';
@@ -197,17 +197,10 @@ export function useUXAuditor() {
     },
   });
 
-  const isThrottled = useRef(false);
-
   const runUXAudit = useCallback((targetUrl: string) => {
-    if (isThrottled.current) return;
+    if (auditMutation.isPending) return;
 
-    isThrottled.current = true;
     auditMutation.mutate(targetUrl);
-
-    setTimeout(() => {
-      isThrottled.current = false;
-    }, 2000);
   }, [auditMutation]);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
