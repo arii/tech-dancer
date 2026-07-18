@@ -54,6 +54,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
         onFocus={(e) => e.target.select()}
         className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
         flex={1}
+        minWidth={0}
         paddingX={4}
         paddingY={2}
         radius="md"
