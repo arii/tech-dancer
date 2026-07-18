@@ -486,8 +486,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full"
-        >
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full">
           {activeReport ? (
             <>
               <Stack
@@ -495,12 +494,22 @@ export default function UXAuditor() {
                 className={cardVariants()}
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
+                width="full"
+                minWidth={0}
               >
                 <Stack gap={1} minWidth="0" flex={1}>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="break-all block" title={activeReport.url}>
+                  <Text
+                    variant="sans"
+                    size="xl"
+                    weight="font-black"
+                    display="block"
+                    truncate={true}
+                    minWidth={0}
+                    title={activeReport.url}
+                  >
                     {activeReport.url}
                   </Text>
                 </Stack>
