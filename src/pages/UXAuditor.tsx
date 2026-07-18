@@ -241,8 +241,8 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
         </Text>
       </Stack>
 
-      <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+      <Stack direction={{ base: 'col', lg: 'row' }} width="full">
+        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', lg: 'r' }} minHeight={{ base: 250, lg: 400 }} width={{ base: 'full', lg: '1/2' }}>
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
