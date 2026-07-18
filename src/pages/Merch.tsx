@@ -63,7 +63,7 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap="section-spacing" width="full" maxWidth="screen-xl">
+      <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
@@ -82,7 +82,7 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={5} marginTop={{ base: 6, sm: 8 }}>
+        <Stack gap={5}>
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
@@ -103,7 +103,7 @@ export default function Merch() {
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap="section-spacing">
+          <Stack gap={12}>
             {sections.map((section) => (
               <Stack key={section.id} gap={8}>
                 <Stack gap={3}>
