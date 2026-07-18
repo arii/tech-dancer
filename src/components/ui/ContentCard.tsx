@@ -4,7 +4,7 @@ import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
-interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
+export interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
   category: string;
@@ -14,12 +14,13 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   readingTime?: string;
   image?: string;
   imageAlt?: string;
+  compact?: boolean;
   [key: string]: unknown;
 }
 
 const MotionArticle = motion.article;
 
-export function ContentCard(props: ContentCardProps) {
+export const ContentCard = (props: ContentCardProps) => {
   const {
     slug,
     title,
@@ -30,6 +31,7 @@ export function ContentCard(props: ContentCardProps) {
     readingTime,
     image,
     imageAlt,
+    compact = false,
   } = props;
 
   const motionProps = pickRest(props, [
@@ -56,7 +58,7 @@ export function ContentCard(props: ContentCardProps) {
       className="overflow-hidden"
       {...motionProps}
     >
-      {image && (
+      {!compact && image && (
         <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
           <img
             src={image}
@@ -67,52 +69,52 @@ export function ContentCard(props: ContentCardProps) {
         </Box>
       )}
 
-      <Stack gap={4} padding={6} height="full">
+      <Stack gap={compact ? 2 : 4} padding={compact ? 4 : 6} height="full">
         <Box
           paddingX={2}
-          paddingY={1}
+          paddingY={compact ? 0.5 : 1}
           radius="full"
           border
           className="border-line w-fit"
         >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
-        >
-          {category}
-        </Text>
-      </Box>
+          <Text
+            variant="mono"
+            size={compact ? "micro" : "xs"}
+            weight="font-black"
+            tracking="wide"
+            className={getTagColorClass(category)}
+          >
+            {category}
+          </Text>
+        </Box>
 
-      <Stack gap={2}>
-        <Text
-          as="h2"
-          variant="body"
-          size="lg"
-          weight="font-bold"
+        <Stack gap={compact ? 1 : 2}>
+          <Text
+            as="h2"
+            variant="body"
+            size={compact ? "base" : "lg"}
+            weight="font-bold"
             color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+          >
+            {title}
+          </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
-           {excerpt}
-        </Text>
-      </Stack>
+          <Text variant="body" size="sm" color="dim" leading="relaxed" className={compact ? "line-clamp-2" : "line-clamp-3"} maxWidth="prose">
+            {excerpt}
+          </Text>
+        </Stack>
 
-        <Box display="flex" align="center" justify="between" marginTop="auto">
+        <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={compact ? 1 : 0}>
           <Text variant="mono" size="xs" color="dim" data-testid="content-date">
             {[date, readingTime].filter(Boolean).join(' • ') || category}
           </Text>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read article
+          <Text variant="mono" size={compact ? "xs" : "sm"} weight="font-bold" color="accent" tracking="wide">
+            {compact ? "Read" : "Read article"}
           </Text>
         </Box>
       </Stack>
     </BaseCard>
   );
-}
+};

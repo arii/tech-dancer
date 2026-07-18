@@ -23,6 +23,7 @@ interface FolioGridProps {
   as?: keyof JSX.IntrinsicElements;
   renderItem?: (item: ContentItem) => ReactNode;
   searchPlaceholder?: string;
+  compact?: boolean;
 }
 
 export default function FolioGrid({
@@ -36,7 +37,8 @@ export default function FolioGrid({
   onViewChange,
   as,
   renderItem,
-  searchPlaceholder: propsSearchPlaceholder
+  searchPlaceholder: propsSearchPlaceholder,
+  compact = false
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -82,7 +84,7 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
+          <Grid cols={compact ? { base: 1, md: 2, lg: 3, xl: 4, "2xl": 5 } : { base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
             {filteredItems.map((item) => (
               <Box
                 key={item.slug}
@@ -96,6 +98,7 @@ export default function FolioGrid({
                   <ContentCard
                     {...item}
                     basePath={basePath}
+                    compact={compact}
                   />
                 )}
               </Box>

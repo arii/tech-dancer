@@ -4,6 +4,7 @@ title: "Event Travel & Packing"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Travel"
+featured: true
 excerpt: "Packing organizers and garment care items for out-of-town events."
 image: "/images/gear/sketches/compression-cubes.webp"
 imageAlt: "A set of navy blue compression packing cubes with mesh tops and double-zipper systems, shown compressing stacked clothing to minimize suitcase volume."
