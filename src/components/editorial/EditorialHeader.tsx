@@ -74,22 +74,10 @@ export function EditorialHeader({
         {tags && tags.length > 0 && (
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold">TAGS:</Text>
-            {tags.map(tag => (
-              <Box
-                key={tag}
-                paddingX={{ base: 4, sm: 2 }}
-                paddingY={{ base: 3, sm: 0.5 }}
-                minWidth={{ base: 11, sm: "auto" }}
-                minHeight={{ base: 11, sm: "auto" }}
-                display="flex"
-                align="center"
-                justify="center"
-                border
-                radius="sm"
-                className={journalVariants.tag()}
-              >
-                <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
-              </Box>
+            {tags.map((tag, index) => (
+              <Text key={tag} variant="mono" size="micro" color="dim">
+                {tag.toUpperCase()}{index < tags.length - 1 && ","}
+              </Text>
             ))}
           </Stack>
         )}
