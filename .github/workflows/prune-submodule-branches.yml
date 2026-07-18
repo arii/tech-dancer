@@ -55,11 +55,15 @@ jobs:
           done < target_branches.txt
 
           if [ $deleted_count -gt 0 ]; then
-            echo "### 🧹 Pruned Submodule Branches" >> "$GITHUB_STEP_SUMMARY"
-            echo "Successfully deleted $deleted_count orphaned automation branches:" >> "$GITHUB_STEP_SUMMARY"
-            cat deleted_branches.txt >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "### 🧹 Pruned Submodule Branches"
+              echo "Successfully deleted $deleted_count orphaned automation branches:"
+              cat deleted_branches.txt
+            } >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "### ✅ No Orphaned Branches Found" >> "$GITHUB_STEP_SUMMARY"
-            echo "No stale \`automation/update-submodule-*\` branches were found." >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "### ✅ No Orphaned Branches Found"
+              echo "No stale \`automation/update-submodule-*\` branches were found."
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
         shell: bash
