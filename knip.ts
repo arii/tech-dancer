@@ -20,7 +20,7 @@ const config: KnipConfig = {
       ],
     }
   },
-  ignoreBinaries: ['python3', 'semgrep', 'pylint', 'mypy'],
+  ignoreBinaries: ['python3', 'semgrep', 'pylint', 'mypy', 'td-cli'],
   ignoreExportsUsedInFile: true,
 };
 

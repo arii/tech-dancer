@@ -84,8 +84,7 @@ See `.agents/AGENTS.md` for the full tool mapping table.
 ```bash
 node --version                          # must match .node-version
 pnpm --version                          # must be 10.28.2
-td-cli doctor      # runtime contract check
-pnpm run check:runtime-files            # lockfile and config consistency
+td-cli doctor      # runtime contract check & lockfile/config consistency
 gh auth status                          # GitHub CLI authentication
 cat .agent-context.json | python3 -c \
   "import json,sys; d=json.load(sys.stdin); print('Index OK:', list(d.keys()))"

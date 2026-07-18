@@ -51,5 +51,5 @@ The version here must match the installed version of `@playwright/test` to avoid
 After making changes, always run the runtime files check locally:
 
 ```bash
-pnpm run check:runtime-files
+pnpm run doctor
 ```
