@@ -78,8 +78,7 @@
 - [x] Status: Compliant
 
 ## Modifications Made
-- `.github/workflows/ci.yml`: Added `cache: 'pnpm'` to the `actions/setup-node` step for the actionlint download job since it didn't use `setup-workspace`. Fixed `models: read` permission.
-- `.github/workflows/deploy.yml`: Added `cache: 'pnpm'` to the `actions/setup-node` step for the download dist artifact job since it didn't use `setup-workspace`.
+- `.github/workflows/ci.yml`: Fixed `models: read` permission. Did not add `cache: 'pnpm'` as the `pnpm` command is not available in that environment.
 
 ## Deferred Changes
 - None
