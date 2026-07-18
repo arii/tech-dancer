@@ -16,7 +16,8 @@ const config: KnipConfig = {
         'dependency-cruiser',
         '@types/pixelmatch',
         '@google/genai',
-        '@vercel/node'
+        '@vercel/node',
+        'openai'
       ],
     }
   },
