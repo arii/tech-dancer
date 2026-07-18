@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/automation/update-submodule-feat-ai-code-review-fallbacks-12789289226992995178/sitemap.xml
