@@ -336,16 +336,21 @@ jobs:
         run: pnpm run impact:github-models-code-review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         shell: bash
 
       - name: Visual Diff
         if: steps.impact_analysis.outputs.has_impact == 'true'
         run: pnpm run impact:visual-diff
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         shell: bash
 
       - name: DOM Diff
         if: steps.impact_analysis.outputs.has_impact == 'true'
         run: pnpm run impact:dom-diff
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         shell: bash
 
       - name: Check if visual changes exist
@@ -361,6 +366,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: pnpm run impact:gemini-review
         shell: bash
 
@@ -368,6 +374,7 @@ jobs:
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: pnpm run impact:github-models-review
         shell: bash
 
