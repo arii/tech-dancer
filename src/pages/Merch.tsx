@@ -63,13 +63,14 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap="section-spacing" width="full" maxWidth="screen-xl">
+      <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
+          ctaMarginTop={{ base: 8, sm: 10 }}
           cta={
-            <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
+            <Stack direction={{ base: 'col', sm: 'row' }} gap={{ base: 5, sm: 4 }} align={{ base: 'stretch', sm: 'center' }}>
               <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
                  Shop Printful Store
               </Button>
@@ -81,7 +82,7 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={3}>
+        <Stack gap={5} marginTop={{ base: 8, sm: 12 }}>
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
@@ -102,10 +103,10 @@ export default function Merch() {
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap="section-spacing">
+          <Stack gap={12}>
             {sections.map((section) => (
-              <Stack key={section.id} gap={6}>
-                <Stack gap={1}>
+              <Stack key={section.id} gap={8}>
+                <Stack gap={3}>
                   <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
                     {section.title}
                   </Text>

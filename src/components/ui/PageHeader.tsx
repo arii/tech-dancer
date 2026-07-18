@@ -13,6 +13,7 @@ interface PageHeaderProps {
   descriptionMaxWidth?: BaseProps['maxWidth'];
   titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
   cta?: ReactNode;
+  ctaMarginTop?: BaseProps['marginTop'];
 }
 
 export function PageHeader({ 
@@ -24,7 +25,8 @@ export function PageHeader({
   border = "b", 
   descriptionMaxWidth = "prose",
   titleSize = "fluid-5",
-  cta
+  cta,
+  ctaMarginTop = 6
 }: PageHeaderProps) {
   return (
     <Box
@@ -51,7 +53,7 @@ export function PageHeader({
           </Text>
         )}
         {cta && (
-          <Box marginTop={6}>
+          <Box marginTop={ctaMarginTop}>
             {cta}
           </Box>
         )}
