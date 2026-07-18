@@ -425,14 +425,7 @@ jobs:
           TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -f "scripts/send-jules-impact.py" ]; then
-            python3 scripts/send-jules-impact.py
-          elif [ -f "boomtick-pkg/scripts/send-jules-impact.py" ]; then
-            python3 "boomtick-pkg/scripts/send-jules-impact.py"
-          else
-            echo "⚠️ Skipping: send-jules-impact.py script not found"
-          fi
+        run: python3 scripts/send-jules-impact.py
         shell: bash
 
       - name: Update Impact Analysis Feedback
