@@ -74,9 +74,15 @@ export function EditorialHeader({
         {tags && tags.length > 0 && (
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-medium">TAGS:</Text>
-            {tags.map((tag, index) => (
-              <Text key={tag} variant="mono" size="micro" color="dim">
-                {tag.toUpperCase()}{index < tags.length - 1 && ","}
+            {tags.map((tag) => (
+              <Text
+                key={tag}
+                variant="mono"
+                size="micro"
+                color="dim"
+                className="after:content-[','] last:after:content-none"
+              >
+                {tag.toUpperCase()}
               </Text>
             ))}
           </Stack>
