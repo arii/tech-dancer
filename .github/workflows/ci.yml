@@ -408,6 +408,40 @@ jobs:
             } >> "$GITHUB_ENV"
           fi
 
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" | grep -oP 'jules\.google\.com/task/\K[0-9]+' | head -1 || true)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PYTHONPATH: boomtick-pkg/cli
+        run: |
+          if [ -f "scripts/send-jules-impact.py" ]; then
+            python3 scripts/send-jules-impact.py
+          elif [ -f "boomtick-pkg/scripts/send-jules-impact.py" ]; then
+            python3 boomtick-pkg/scripts/send-jules-impact.py
+          else
+            echo "⚠️ Skipping: scripts/send-jules-impact.py not found"
+          fi
+        shell: bash
+
       - name: Update Impact Analysis Feedback
         if: always() && github.event_name == 'pull_request'
         uses: ./boomtick-pkg/mcp/actions/update-pr-comment
