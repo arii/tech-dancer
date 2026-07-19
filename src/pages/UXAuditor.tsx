@@ -14,6 +14,18 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import { isValidUrl } from '@/utils/url';
+
+// A simple sanitizer helper to prevent XSS / script-injection inside title and display attributes
+const sanitizeUrlForDisplay = (urlStr: string | null | undefined): string => {
+  if (!urlStr) return '';
+  const trimmed = urlStr.trim();
+  if (isValidUrl(trimmed)) {
+    return trimmed;
+  }
+  // Safe fallback if protocol is malicious (like javascript:)
+  return 'about:blank';
+};
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -385,7 +397,7 @@ export default function UXAuditor() {
               type="url"
               autoComplete="off"
               value={url}
-              title={url}
+              title={sanitizeUrlForDisplay(url)}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               onFocus={(e) => e.target.select()}
               className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
@@ -508,7 +520,7 @@ export default function UXAuditor() {
                     display="block"
                     truncate={true}
                     minWidth={0}
-                    title={activeReport.url}
+                    title={sanitizeUrlForDisplay(activeReport.url)}
                   >
                     {activeReport.url}
                   </Text>
