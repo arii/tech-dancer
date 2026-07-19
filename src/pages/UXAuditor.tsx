@@ -14,7 +14,7 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
-import { isValidUrl, sanitizeUrlForDisplay } from '@/utils/url';
+import { sanitizeUrlForDisplay } from '@/utils/url';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
