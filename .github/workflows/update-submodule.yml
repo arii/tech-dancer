@@ -48,8 +48,11 @@ jobs:
           INPUT_REF: ${{ github.event.inputs.ref }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$INPUT_REF" ]]; then
-            TARGET_REF="$INPUT_REF"
+          # Sanitize INPUT_REF to prevent command injection and invalid branch names
+          SANITIZED_INPUT_REF=$(echo "$INPUT_REF" | tr -cd '[:alnum:]_./-')
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$SANITIZED_INPUT_REF" ]]; then
+            TARGET_REF="$SANITIZED_INPUT_REF"
           else
             TARGET_REF="main"
           fi
