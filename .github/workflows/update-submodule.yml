@@ -46,15 +46,24 @@ jobs:
         id: target
         env:
           INPUT_REF: ${{ github.event.inputs.ref }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          TARGET_REF="${INPUT_REF:-main}"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$INPUT_REF" ]]; then
+            TARGET_REF="$INPUT_REF"
+          else
+            TARGET_REF="main"
+          fi
           echo "target_ref=$TARGET_REF" >> "$GITHUB_OUTPUT"
 
-          # Replace slashes with hyphens for safe branch name
-          SAFE_REF=$(echo "$TARGET_REF" | tr '/' '-')
+          if [[ "$TARGET_REF" == "main" ]]; then
+            SAFE_REF="main"
+          else
+            # Replace slashes with hyphens for safe branch name
+            SAFE_REF=$(echo "$TARGET_REF" | tr '/' '-')
 
-          # Further sanitize to ensure a valid branch name
-          SAFE_REF=$(echo "$SAFE_REF" | tr -cd '[:alnum:]_.-')
+            # Further sanitize to ensure a valid branch name
+            SAFE_REF=$(echo "$SAFE_REF" | tr -cd '[:alnum:]_.-')
+          fi
 
           echo "safe_ref=$SAFE_REF" >> "$GITHUB_OUTPUT"
         shell: bash
