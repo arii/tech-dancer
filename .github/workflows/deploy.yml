@@ -26,7 +26,7 @@ jobs:
 
   build:
     needs: verify-changes
-    if: needs.verify-changes.outputs.has_changes == 'true'
+    if: ${{ needs.verify-changes.outputs.has_changes == 'true' && !startsWith(github.ref_name, 'automation/update-submodule-') }}
     runs-on: ubuntu-latest
     concurrency:
       # Build jobs for the same branch can be cancelled if a newer push arrives
