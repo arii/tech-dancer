@@ -14,18 +14,7 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
-import { isValidUrl } from '@/utils/url';
-
-// A simple sanitizer helper to prevent XSS / script-injection inside title and display attributes
-const sanitizeUrlForDisplay = (urlStr: string | null | undefined): string => {
-  if (!urlStr) return '';
-  const trimmed = urlStr.trim();
-  if (isValidUrl(trimmed)) {
-    return trimmed;
-  }
-  // Safe fallback if protocol is malicious (like javascript:)
-  return 'about:blank';
-};
+import { isValidUrl, sanitizeUrlForDisplay } from '@/utils/url';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
