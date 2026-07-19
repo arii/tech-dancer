@@ -39,7 +39,7 @@ export const EndpointCard = ({
           className={`text-xs font-bold tracking-wider uppercase ${
             method === 'POST'
               ? 'bg-accent/20 text-accent border border-accent/30'
-              : 'bg-primary/20 text-primary border border-primary/30'
+              : 'bg-main/20 text-main border border-main/30'
           }`}
         >
           {method}

@@ -155,7 +155,7 @@ export function HeroSection() {
               radius="none"
               className="hero-bar"
               style={ {
-                '--hero-bar-height': `${bar.height}px`,
+                '--hero-bar-height': `${bar.height / 16}rem`,
                 '--hero-bar-dur': bar.dur,
                 '--hero-bar-delay': bar.delay,
               } as React.CSSProperties }
