@@ -241,8 +241,17 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
         </Text>
       </Stack>
 
-      <Stack direction={{ base: 'col', lg: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', lg: 'r' }} minHeight={{ base: 250, lg: 400 }} width={{ base: 'full', lg: '1/2' }}>
+      <Grid cols={{ base: 1, lg: 2 }} width="full">
+        {/* Frame / Preview Side */}
+        <Stack
+          padding={8}
+          surface="muted"
+          align="center"
+          justify="center"
+          border="b"
+          className="lg:border-b-0 lg:border-r"
+          minHeight={{ base: 250, lg: 400 }}
+        >
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
@@ -260,9 +269,10 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
               </Text>
             </Stack>
           )}
-        </Box>
+        </Stack>
 
-        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+        {/* Findings / Suggestions Side */}
+        <Stack gap={6} padding={8} minWidth="0" overflow="hidden">
           {data ? (
             <>
               <Box surface="alt" padding={5} className="border border-line rounded-lg">
@@ -322,7 +332,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
             </Stack>
           )}
         </Stack>
-      </Stack>
+      </Grid>
     </Box>
   );
 }
