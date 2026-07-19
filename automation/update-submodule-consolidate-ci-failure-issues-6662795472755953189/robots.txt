@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/automation/update-submodule-consolidate-ci-failure-issues-6662795472755953189/sitemap.xml

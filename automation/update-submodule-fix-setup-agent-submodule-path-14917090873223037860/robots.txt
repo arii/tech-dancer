@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/automation/update-submodule-fix-setup-agent-submodule-path-14917090873223037860/sitemap.xml
