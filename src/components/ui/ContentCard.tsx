@@ -55,11 +55,11 @@ export const ContentCard = (props: ContentCardProps) => {
       height="full"
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
-      className="overflow-hidden"
+      overflow="hidden"
       {...motionProps}
     >
       {!compact && image && (
-        <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
+        <Box width="full" aspect="video" surface="alt" border="b" overflow="hidden">
           <img
             src={image}
             alt={imageAlt || title}

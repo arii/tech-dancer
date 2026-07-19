@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -9,11 +10,16 @@ const BlogFeed = () => {
   const { posts, categories, view, setView, activeCategory, searchTerm } = useBlog();
 
   const isInitialView = activeCategory === 'All' && !searchTerm;
-  const featuredPosts = posts.filter(post => post.featured === true);
 
-  const mainFeedPosts = isInitialView
-    ? posts.filter(post => !post.featured)
-    : posts;
+  const featuredPosts = useMemo(() =>
+    posts.filter(post => post.featured === true),
+  [posts]);
+
+  const mainFeedPosts = useMemo(() =>
+    isInitialView
+      ? posts.filter(post => !post.featured)
+      : posts,
+  [isInitialView, posts]);
 
   return (
     <>
