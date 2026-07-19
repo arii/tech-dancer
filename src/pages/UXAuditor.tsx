@@ -507,7 +507,6 @@ export default function UXAuditor() {
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
                 width="full"
-                minWidth={0}
               >
                 <Stack gap={1} minWidth="0" flex={1}>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
@@ -519,7 +518,6 @@ export default function UXAuditor() {
                     weight="font-black"
                     display="block"
                     truncate={true}
-                    minWidth={0}
                     title={sanitizeUrlForDisplay(activeReport.url)}
                   >
                     {activeReport.url}
