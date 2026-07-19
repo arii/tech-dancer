@@ -9,7 +9,7 @@ export interface EndpointCardProps {
   exampleResponse: string;
 }
 
-export const EndpointCard = React.memo(({
+export const EndpointCard = ({
   method,
   path,
   description,
@@ -94,5 +94,4 @@ export const EndpointCard = React.memo(({
       </Box>
     </Stack>
   );
-});
-EndpointCard.displayName = "EndpointCard";
+};
