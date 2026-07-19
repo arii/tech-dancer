@@ -1,0 +1,57 @@
+name: Prune Submodule Branches
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual triggering
+
+concurrency:
+  group: prune-submodule-branches
+  cancel-in-progress: true
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+
+      - name: Prune orphaned submodule update branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          deleted_count=0
+          deleted_list=""
+
+          # We use comm -23 to find branches in target_branches but not in open_prs
+          # Process substitution avoids writing to temporary files
+          while IFS= read -r branch; do
+            if [ -z "$branch" ]; then continue; fi
+
+            git push origin --delete "$branch" || {
+              echo "Failed to delete $branch" >&2
+              continue
+            }
+            deleted_count=$((deleted_count + 1))
+            deleted_list="$deleted_list\n- \`$branch\`"
+          done < <(comm -23 \
+            <(git ls-remote --heads origin 'automation/update-submodule-*' | awk '{print $2}' | sed 's|^refs/heads/||' | sort) \
+            <(gh pr list --repo ${{ github.repository }} --state open --limit 1000 --json headRefName --jq '.[].headRefName' | sort))
+
+          if [ $deleted_count -gt 0 ]; then
+            {
+              echo "### 🧹 Pruned Submodule Branches"
+              echo "Successfully deleted $deleted_count orphaned automation branches:"
+              echo -e "$deleted_list" | sed '/^$/d'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### ✅ No Orphaned Branches Found"
+              echo "No stale \`automation/update-submodule-*\` branches were found."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+        shell: bash
