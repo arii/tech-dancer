@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
@@ -9,7 +9,7 @@ export interface EndpointCardProps {
   exampleResponse: string;
 }
 
-export const EndpointCard = ({
+export const EndpointCard = React.memo(({
   method,
   path,
   description,
@@ -94,4 +94,5 @@ export const EndpointCard = ({
       </Box>
     </Stack>
   );
-};
+});
+EndpointCard.displayName = "EndpointCard";
