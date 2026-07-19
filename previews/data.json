@@ -1,145 +1,349 @@
 {
   "audit-gh-workflows-6355332771827290585": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "automation/update-submodule-consolidate-ci-failure-issues-6662795472755953189": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "automation/update-submodule-feat-local-agent-orchestrator-16677698929903772972": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "automation/update-submodule-fix-jules-tech-dancer-investigation-7809483740323265492": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "automation/update-submodule-jules-586329250098631126-a62b7210": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "automation/update-submodule-main": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "feature/blog-directory-scannability-and-layout-6386545577436537631": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix-ci-impact-analysis-15438776194719150449": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/about": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-power-charging": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "fix-td-cli-missing-submodule-2444614682019114936": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/2026-07-10-latest-version-check-skill": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/ai-devops-pipeline": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/blog-drafter": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/boomtick-blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/confidently-incorrect-v4": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/deployment-impact-analyzer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/ecommerce-automation": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/gitops-pr-reviewer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/hrm-flagship": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/repo-auditor-ai": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/research/wcs-scraper": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-missing-submodule-2444614682019114936/versiontruth": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/ux-auditor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "fix/ci-jules-api-key-15591594248780727560/versiontruth": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "jules-17597077457335403445-b8c59795": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "jules-2358150386942076189-f2e8d609": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "jules-8606747082813661780-8d785156": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "prune-stale-submodule-branches-6885861943913846960": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "skip-submodule-pr-deployments-41980663727903228": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 ,
   "update-workflows-8041188214133476081": {
-    "commitTimestamp": 1784422534,
-    "deployTimestamp": 1784422534,
+    "commitTimestamp": 1784430725,
+    "deployTimestamp": 1784430725,
     "sha": "unknown"
   }
 }
