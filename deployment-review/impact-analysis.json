@@ -1,0 +1,28 @@
+{
+  "changedFiles": [
+    "package.json",
+    "src/components/ErrorBoundaryFallback.tsx",
+    "src/components/ui/EndpointCard.tsx",
+    "src/components/ui/HeroSection.tsx",
+    "src/pages/VersionTruth.tsx"
+  ],
+  "affectedPages": [
+    "src/pages/VersionTruth.tsx",
+    "src/pages/Home.tsx"
+  ],
+  "affectedDynamicImports": [
+    "src/pages/Home.tsx",
+    "src/pages/VersionTruth.tsx"
+  ],
+  "routes": [
+    "/",
+    "/versiontruth"
+  ],
+  "visualReviewRequired": [
+    "/",
+    "/versiontruth"
+  ],
+  "impactLevel": "HIGH",
+  "sharedLayouts": [],
+  "layoutTrace": {}
+}

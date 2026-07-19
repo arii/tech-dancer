@@ -1,0 +1,7 @@
+  nav
+  nav
+  main
+    section
+    footer
+      span[testid=footer-copyright]
+      span[testid=footer-version-info]

@@ -1,0 +1,344 @@
+{
+  "routes": [
+    {
+      "route": "/",
+      "slug": "home-desktop",
+      "suffix": "",
+      "beforePath": "artifacts/visual-review/home/before.png",
+      "afterPath": "artifacts/visual-review/home/after.png",
+      "diffPath": "artifacts/visual-review/home/diff.png",
+      "beforeCroppedPath": "artifacts/visual-review/home/cropped/before.png",
+      "afterCroppedPath": "artifacts/visual-review/home/cropped/after.png",
+      "diffCroppedPath": "artifacts/visual-review/home/cropped/diff.png",
+      "diffPixels": 2027,
+      "totalPixels": 1949760,
+      "differencePercent": 0.10396151321188248,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "mainWidth": 1440,
+          "scrollHeight": 1354,
+          "viewportWidth": 1440
+        },
+        "after": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "mainWidth": 1440,
+          "scrollHeight": 1354,
+          "viewportWidth": 1440
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/ (tablet)",
+      "slug": "home-tablet",
+      "suffix": "-tablet",
+      "beforePath": "artifacts/visual-review/home/before-tablet.png",
+      "afterPath": "artifacts/visual-review/home/after-tablet.png",
+      "diffPath": "artifacts/visual-review/home/diff-tablet.png",
+      "beforeCroppedPath": "artifacts/visual-review/home/cropped-tablet/before.png",
+      "afterCroppedPath": "artifacts/visual-review/home/cropped-tablet/after.png",
+      "diffCroppedPath": "artifacts/visual-review/home/cropped-tablet/diff.png",
+      "diffPixels": 1928,
+      "totalPixels": 1477632,
+      "differencePercent": 0.13047903672903674,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "mainWidth": 768,
+          "scrollHeight": 1924,
+          "viewportWidth": 768
+        },
+        "after": {
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "mainWidth": 768,
+          "scrollHeight": 1924,
+          "viewportWidth": 768
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/ (laptop)",
+      "slug": "home-laptop",
+      "suffix": "-laptop",
+      "beforePath": "artifacts/visual-review/home/before-laptop.png",
+      "afterPath": "artifacts/visual-review/home/after-laptop.png",
+      "diffPath": "artifacts/visual-review/home/diff-laptop.png",
+      "beforeCroppedPath": "artifacts/visual-review/home/cropped-laptop/before.png",
+      "afterCroppedPath": "artifacts/visual-review/home/cropped-laptop/after.png",
+      "diffCroppedPath": "artifacts/visual-review/home/cropped-laptop/diff.png",
+      "diffPixels": 1383,
+      "totalPixels": 1726720,
+      "differencePercent": 0.08009405114899926,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1280,
+          "clientWidth": 1280,
+          "mainWidth": 1280,
+          "scrollHeight": 1349,
+          "viewportWidth": 1280
+        },
+        "after": {
+          "scrollWidth": 1280,
+          "clientWidth": 1280,
+          "mainWidth": 1280,
+          "scrollHeight": 1349,
+          "viewportWidth": 1280
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/ (mobile)",
+      "slug": "home-mobile",
+      "suffix": "-mobile",
+      "beforePath": "artifacts/visual-review/home/before-mobile.png",
+      "afterPath": "artifacts/visual-review/home/after-mobile.png",
+      "diffPath": "artifacts/visual-review/home/diff-mobile.png",
+      "beforeCroppedPath": "artifacts/visual-review/home/cropped-mobile/before.png",
+      "afterCroppedPath": "artifacts/visual-review/home/cropped-mobile/after.png",
+      "diffCroppedPath": "artifacts/visual-review/home/cropped-mobile/diff.png",
+      "diffPixels": 199,
+      "totalPixels": 933660,
+      "differencePercent": 0.021313968682389734,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "mainWidth": 390,
+          "scrollHeight": 2394,
+          "viewportWidth": 390
+        },
+        "after": {
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "mainWidth": 390,
+          "scrollHeight": 2394,
+          "viewportWidth": 390
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/versiontruth",
+      "slug": "versiontruth-desktop",
+      "suffix": "",
+      "beforePath": "artifacts/visual-review/versiontruth/before.png",
+      "afterPath": "artifacts/visual-review/versiontruth/after.png",
+      "diffPath": "artifacts/visual-review/versiontruth/diff.png",
+      "beforeCroppedPath": "artifacts/visual-review/versiontruth/cropped/before.png",
+      "afterCroppedPath": "artifacts/visual-review/versiontruth/cropped/after.png",
+      "diffCroppedPath": "artifacts/visual-review/versiontruth/cropped/diff.png",
+      "diffPixels": 53683,
+      "totalPixels": 2021760,
+      "differencePercent": 2.6552607628996516,
+      "severity": "MEDIUM",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "mainWidth": 1440,
+          "scrollHeight": 1404,
+          "viewportWidth": 1440
+        },
+        "after": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "mainWidth": 1440,
+          "scrollHeight": 1404,
+          "viewportWidth": 1440
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/ (ultrawide)",
+      "slug": "home-ultrawide",
+      "suffix": "-ultrawide",
+      "beforePath": "artifacts/visual-review/home/before-ultrawide.png",
+      "afterPath": "artifacts/visual-review/home/after-ultrawide.png",
+      "diffPath": "artifacts/visual-review/home/diff-ultrawide.png",
+      "beforeCroppedPath": "artifacts/visual-review/home/cropped-ultrawide/before.png",
+      "afterCroppedPath": "artifacts/visual-review/home/cropped-ultrawide/after.png",
+      "diffCroppedPath": "artifacts/visual-review/home/cropped-ultrawide/diff.png",
+      "diffPixels": 1617,
+      "totalPixels": 2716800,
+      "differencePercent": 0.05951855123674911,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "mainWidth": 1920,
+          "scrollHeight": 1415,
+          "viewportWidth": 1920
+        },
+        "after": {
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "mainWidth": 1920,
+          "scrollHeight": 1415,
+          "viewportWidth": 1920
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/versiontruth (laptop)",
+      "slug": "versiontruth-laptop",
+      "suffix": "-laptop",
+      "beforePath": "artifacts/visual-review/versiontruth/before-laptop.png",
+      "afterPath": "artifacts/visual-review/versiontruth/after-laptop.png",
+      "diffPath": "artifacts/visual-review/versiontruth/diff-laptop.png",
+      "beforeCroppedPath": "artifacts/visual-review/versiontruth/cropped-laptop/before.png",
+      "afterCroppedPath": "artifacts/visual-review/versiontruth/cropped-laptop/after.png",
+      "diffCroppedPath": "artifacts/visual-review/versiontruth/cropped-laptop/diff.png",
+      "diffPixels": 53542,
+      "totalPixels": 1797120,
+      "differencePercent": 2.9793224715099718,
+      "severity": "MEDIUM",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1280,
+          "clientWidth": 1280,
+          "mainWidth": 1280,
+          "scrollHeight": 1404,
+          "viewportWidth": 1280
+        },
+        "after": {
+          "scrollWidth": 1280,
+          "clientWidth": 1280,
+          "mainWidth": 1280,
+          "scrollHeight": 1404,
+          "viewportWidth": 1280
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/versiontruth (mobile)",
+      "slug": "versiontruth-mobile",
+      "suffix": "-mobile",
+      "beforePath": "artifacts/visual-review/versiontruth/before-mobile.png",
+      "afterPath": "artifacts/visual-review/versiontruth/after-mobile.png",
+      "diffPath": "artifacts/visual-review/versiontruth/diff-mobile.png",
+      "beforeCroppedPath": "artifacts/visual-review/versiontruth/cropped-mobile/before.png",
+      "afterCroppedPath": "artifacts/visual-review/versiontruth/cropped-mobile/after.png",
+      "diffCroppedPath": "artifacts/visual-review/versiontruth/cropped-mobile/diff.png",
+      "diffPixels": 190,
+      "totalPixels": 830700,
+      "differencePercent": 0.022872276393403154,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "mainWidth": 390,
+          "scrollHeight": 2130,
+          "viewportWidth": 390
+        },
+        "after": {
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "mainWidth": 390,
+          "scrollHeight": 2130,
+          "viewportWidth": 390
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/versiontruth (tablet)",
+      "slug": "versiontruth-tablet",
+      "suffix": "-tablet",
+      "beforePath": "artifacts/visual-review/versiontruth/before-tablet.png",
+      "afterPath": "artifacts/visual-review/versiontruth/after-tablet.png",
+      "diffPath": "artifacts/visual-review/versiontruth/diff-tablet.png",
+      "beforeCroppedPath": "artifacts/visual-review/versiontruth/cropped-tablet/before.png",
+      "afterCroppedPath": "artifacts/visual-review/versiontruth/cropped-tablet/after.png",
+      "diffCroppedPath": "artifacts/visual-review/versiontruth/cropped-tablet/diff.png",
+      "diffPixels": 1387,
+      "totalPixels": 1146624,
+      "differencePercent": 0.120963803304309,
+      "severity": "LOW",
+      "metrics": {
+        "before": {
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "mainWidth": 768,
+          "scrollHeight": 1493,
+          "viewportWidth": 768
+        },
+        "after": {
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "mainWidth": 768,
+          "scrollHeight": 1493,
+          "viewportWidth": 768
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    },
+    {
+      "route": "/versiontruth (ultrawide)",
+      "slug": "versiontruth-ultrawide",
+      "suffix": "-ultrawide",
+      "beforePath": "artifacts/visual-review/versiontruth/before-ultrawide.png",
+      "afterPath": "artifacts/visual-review/versiontruth/after-ultrawide.png",
+      "diffPath": "artifacts/visual-review/versiontruth/diff-ultrawide.png",
+      "beforeCroppedPath": "artifacts/visual-review/versiontruth/cropped-ultrawide/before.png",
+      "afterCroppedPath": "artifacts/visual-review/versiontruth/cropped-ultrawide/after.png",
+      "diffCroppedPath": "artifacts/visual-review/versiontruth/cropped-ultrawide/diff.png",
+      "diffPixels": 53556,
+      "totalPixels": 2695680,
+      "differencePercent": 1.9867343304843306,
+      "severity": "MEDIUM",
+      "metrics": {
+        "before": {
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "mainWidth": 1920,
+          "scrollHeight": 1404,
+          "viewportWidth": 1920
+        },
+        "after": {
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "mainWidth": 1920,
+          "scrollHeight": 1404,
+          "viewportWidth": 1920
+        }
+      },
+      "validation": {
+        "passed": true
+      }
+    }
+  ]
+}

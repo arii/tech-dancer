@@ -1,0 +1,17 @@
+{
+  "route": "/ (tablet)",
+  "slug": "home-tablet",
+  "beforeHtmlPath": "artifacts/dom-review/home-tablet/before-tablet.html",
+  "afterHtmlPath": "artifacts/dom-review/home-tablet/after-tablet.html",
+  "diffPath": "artifacts/dom-review/home-tablet/diff-tablet.txt",
+  "structureDiffPath": "artifacts/dom-review/home-tablet/structure-diff-tablet.txt",
+  "metrics": {
+    "nodesAdded": 0,
+    "nodesRemoved": 0,
+    "imagesAdded": 0,
+    "imagesRemoved": 0,
+    "linksAdded": 0,
+    "linksRemoved": 0
+  },
+  "severity": "LOW"
+}

@@ -1,0 +1,580 @@
+{
+  "passed": false,
+  "highCount": 1,
+  "routes": [],
+  "llmVerdict": "fail",
+  "isTruncated": false,
+  "state": {
+    "findings": [
+      {
+        "id": "finding-1",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Use of raw Tailwind classes for layout and styling is against design system guidelines.",
+        "status": "open",
+        "confidence": "high",
+        "line": 37,
+        "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}",
+        "fixSummary": "Replace raw Tailwind classes with <Box> components and appropriate props.",
+        "counterexample": "Previous implementation could have used <Box> components with appropriate props."
+      },
+      {
+        "id": "finding-2",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Inconsistent use of semantic tokens.",
+        "status": "open",
+        "confidence": "high",
+        "line": 57,
+        "snippet": "className=\"text-primary font-mono break-all\"",
+        "fixSummary": "Replace legacy color names with semantic tokens.",
+        "counterexample": "Previous implementation could have used className=\"text-main font-mono break-all\"."
+      },
+      {
+        "id": "finding-3",
+        "file": "src/components/ui/HeroSection.tsx",
+        "issue": "Inline styles are banned in the design guidelines.",
+        "status": "open",
+        "confidence": "high",
+        "line": 139,
+        "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+        "fixSummary": "Remove inline styles and replace them with class-based styling.",
+        "counterexample": "Previous implementation could have used class-based styling."
+      },
+      {
+        "id": "finding-4",
+        "file": "src/pages/VersionTruth.tsx",
+        "issue": "Use of hardcoded pixel values for layout dimensions is against design system guidelines.",
+        "status": "open",
+        "confidence": "high",
+        "line": 53,
+        "snippet": "maxWidth=\"1024px\"",
+        "fixSummary": "Replace hardcoded pixel values with design tokens.",
+        "counterexample": "Previous implementation could have used maxWidth=\"5xl\"."
+      },
+      {
+        "id": "finding-1",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "State management can lead to unnecessary re-renders.",
+        "status": "open",
+        "confidence": "medium",
+        "line": 12,
+        "snippet": "const [showResponse, setShowResponse] = useState(false);",
+        "fixSummary": "Consider using React.memo to prevent unnecessary re-renders.",
+        "counterexample": "If the EndpointCard is used in a list, clicking the button will re-render the entire card."
+      },
+      {
+        "id": "finding-2",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Use of raw Tailwind classes for layout and styling is against design system guidelines.",
+        "status": "open",
+        "confidence": "high",
+        "line": 37,
+        "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}",
+        "fixSummary": "Replace raw Tailwind classes with appropriate layout primitives.",
+        "counterexample": "Raw Tailwind classes can lead to inconsistencies in design."
+      },
+      {
+        "id": "finding-3",
+        "file": "src/components/ui/HeroSection.tsx",
+        "issue": "Inline styles are banned in the design guidelines.",
+        "status": "open",
+        "confidence": "high",
+        "line": 139,
+        "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+        "fixSummary": "Move styles to a CSS class or styled component.",
+        "counterexample": "Inline styles can cause layout thrashing and performance issues."
+      },
+      {
+        "id": "finding-4",
+        "file": "src/pages/VersionTruth.tsx",
+        "issue": "Hardcoded pixel values for layout dimensions are used instead of design tokens.",
+        "status": "open",
+        "confidence": "high",
+        "line": 5,
+        "snippet": "maxWidth=\"1024px\"",
+        "fixSummary": "Replace hardcoded values with design tokens or responsive values.",
+        "counterexample": "Hardcoded values can lead to responsiveness issues."
+      },
+      {
+        "id": "finding-5",
+        "file": "src/components/ErrorBoundaryFallback.tsx",
+        "issue": "Use of legacy color names instead of semantic tokens.",
+        "status": "open",
+        "confidence": "high",
+        "line": 24,
+        "snippet": "className=\"text-gray-600\"",
+        "fixSummary": "Update to use semantic tokens for text color.",
+        "counterexample": "Legacy color names can lead to inconsistencies in design."
+      },
+      {
+        "id": "finding-1",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Use of raw Tailwind layout classes instead of standard layout primitives.",
+        "status": "open",
+        "confidence": "high",
+        "line": 32,
+        "snippet": "<Box display=\"flex\" align=\"center\" gap={3}>",
+        "fixSummary": "Replace raw Tailwind layout classes with appropriate layout primitives.",
+        "counterexample": "This layout should use <Stack> or <Grid> instead of raw Tailwind classes."
+      },
+      {
+        "id": "finding-2",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Inconsistent margin and padding usage (raw numbers) instead of design tokens.",
+        "status": "open",
+        "confidence": "high",
+        "line": 62,
+        "snippet": "<Box marginTop={2}>",
+        "fixSummary": "Replace raw numbers with design tokens for margin.",
+        "counterexample": "Using raw numbers can lead to inconsistencies in spacing across the application."
+      },
+      {
+        "id": "finding-3",
+        "file": "src/components/ui/EndpointCard.tsx",
+        "issue": "Use of raw Tailwind classes for text instead of semantic tokens.",
+        "status": "open",
+        "confidence": "high",
+        "line": 62,
+        "snippet": "<Box as=\"code\" className=\"text-sm font-semibold text-main font-mono break-all\">",
+        "fixSummary": "Replace raw Tailwind classes with semantic tokens.",
+        "counterexample": "Raw Tailwind classes can lead to inconsistencies in text styling."
+      }
+    ],
+    "cache": {
+      "81a9438cc0d11946494370b224e2bc5a871150b3ee46c808c4911339bc80d1d7": {
+        "feedback": "### Review Findings\n\n#### Security Review\n- **No new untrusted input paths were introduced in this PR.** All changes appear to be internal refactoring and do not alter how data is received or processed from external sources.\n\n#### Visual & Design Guidelines Review\n\n1. **Raw Tailwind Layout Classes**\n   - **Issue:** The usage of raw Tailwind layout classes is present in the following lines:\n     - `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }` in `src/components/ui/EndpointCard.tsx`.\n     - `className=\"text-xs text-primary font-mono overflow-x-auto whitespace-pre-wrap border border-default/40\"` in `src/components/ui/EndpointCard.tsx`.\n     - `className=\"text-xs text-secondary font-mono overflow-x-auto whitespace-pre-wrap border border-default/40\"` in `src/components/ui/EndpointCard.tsx`.\n   - **Severity:** Error\n   - **Confidence:** High\n   - **Counterexample:** The use of raw Tailwind classes violates the design system mandate to use standard layout primitives. For example, the `Box` component should be used instead of raw Tailwind classes for layout.\n   - **Fix Summary:** Replace raw Tailwind classes with appropriate layout primitives like `<Box>` or `<Stack>`.\n\n2. **Inline Styles**\n   - **Issue:** The following line uses inline styles:\n     - `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}` in `src/components/ui/HeroSection.tsx`.\n   - **Severity:** Warn\n   - **Confidence:** Medium\n   - **Counterexample:** Inline styles can lead to inconsistencies and are generally discouraged in favor of CSS classes or styled components.\n   - **Fix Summary:** Move these styles to a CSS class or styled component.\n\n3. **Use of Hardcoded Pixel Values**\n   - **Issue:** The following line uses hardcoded pixel values:\n     - `style={ { '--hero-bar-height': `${bar.height}px`, ... } }` in `src/components/ui/HeroSection.tsx`.\n   - **Severity:** Warn\n   - **Confidence:** Medium\n   - **Counterexample:** Hardcoded pixel values can lead to responsiveness issues. Instead, use relative units or design tokens.\n   - **Fix Summary:** Replace hardcoded pixel values with responsive units or design tokens.\n\n### Summary of Findings\nThe changes made in this PR primarily focus on refactoring and improving the UI code. However, there are several violations of the design guidelines that need to be addressed, particularly regarding the use of raw Tailwind classes and inline styles.\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}\",\n      \"issue\": \"Usage of raw Tailwind layout classes violates design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The layout should use <Box> or <Stack> instead of raw Tailwind classes.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with appropriate layout primitives.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are used, which can lead to inconsistencies.\",\n      \"status\": \"open\",\n      \"confidence\": \"medium\",\n      \"counterexample\": \"Inline styles should be replaced with CSS classes or styled components.\",\n      \"fixSummary\": \"Move these styles to a CSS class or styled component.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={ { '--hero-bar-height': `${bar.height}px`, ... } }\",\n      \"issue\": \"Hardcoded pixel values are used, which can lead to responsiveness issues.\",\n      \"status\": \"open\",\n      \"confidence\": \"medium\",\n      \"counterexample\": \"Hardcoded pixel values should be replaced with responsive units or design tokens.\",\n      \"fixSummary\": \"Replace hardcoded pixel values with responsive units or design tokens.\"\n    }\n  ]\n}\n</findings>\n```\n\n### Final Verdict\n[VERDICT: FAIL]",
+        "role": "SECURITY",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "fail",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Usage of raw Tailwind layout classes violates design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with appropriate layout primitives.",
+              "counterexample": "The layout should use <Box> or <Stack> instead of raw Tailwind classes."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are used, which can lead to inconsistencies.",
+              "status": "open",
+              "confidence": "medium",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Move these styles to a CSS class or styled component.",
+              "counterexample": "Inline styles should be replaced with CSS classes or styled components."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Hardcoded pixel values are used, which can lead to responsiveness issues.",
+              "status": "open",
+              "confidence": "medium",
+              "line": 139,
+              "snippet": "style={ { '--hero-bar-height': `${bar.height}px`, ... } }",
+              "fixSummary": "Replace hardcoded pixel values with responsive units or design tokens.",
+              "counterexample": "Hardcoded pixel values should be replaced with responsive units or design tokens."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "f6b6c754996c7ec366a37ab8477264436c5806abaaeb639763a660974873e7da": {
+        "feedback": "Upon reviewing the provided pull request changes, I have identified several issues related to performance, adherence to design guidelines, and potential anti-patterns. Below are the findings:\n\n### Findings\n\n1. **Raw Tailwind Layout Classes**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 37\n   - **Snippet**: `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }``\n   - **Issue**: The use of raw Tailwind classes for layout and styling is against the design system guidelines. Instead, standard layout primitives should be used.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The design system mandates the use of `<Box>`, `<Stack>`, or `<Grid>` for layout instead of raw Tailwind classes.\n   - **Fix Summary**: Replace raw Tailwind classes with appropriate layout primitives.\n\n2. **Inline Styles**:\n   - **File**: `src/components/ui/HeroSection.tsx`\n   - **Line**: 139\n   - **Snippet**: `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}`\n   - **Issue**: Inline styles are used, which can lead to performance issues and are against the design guidelines. Instead, use class names or styled components.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: Inline styles can cause unnecessary re-renders and do not leverage the benefits of CSS class caching.\n   - **Fix Summary**: Move styles to a CSS class or styled component.\n\n3. **Redundant Re-renders**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 37\n   - **Snippet**: `const [showResponse, setShowResponse] = useState(false);`\n   - **Issue**: The `showResponse` state is toggled directly in the render method, which can lead to unnecessary re-renders. Consider using a callback or memoization to optimize performance.\n   - **Status**: open\n   - **Confidence**: medium\n   - **Counterexample**: If the component re-renders frequently, it can lead to performance degradation, especially if the state is not managed properly.\n   - **Fix Summary**: Optimize state management to prevent unnecessary re-renders.\n\n4. **Use of Hardcoded Values**:\n   - **File**: `src/pages/VersionTruth.tsx`\n   - **Line**: 2\n   - **Snippet**: `maxWidth=\"1024px\"`\n   - **Issue**: Hardcoded values for layout dimensions are used instead of design tokens or responsive values. This can lead to inconsistencies in the UI.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: Using hardcoded values can lead to a non-responsive design that does not adapt well to different screen sizes.\n   - **Fix Summary**: Replace hardcoded values with design tokens or responsive values.\n\n### Summary\nThe pull request introduces several changes that improve the codebase but also contains violations of the design system and potential performance issues. The use of raw Tailwind classes, inline styles, and hardcoded values should be addressed to align with the established guidelines and improve performance.\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}\",\n      \"issue\": \"Use of raw Tailwind layout classes instead of standard layout primitives.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The design system mandates the use of <Box>, <Stack>, or <Grid> for layout instead of raw Tailwind classes.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with appropriate layout primitives.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are used, which can lead to performance issues.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Inline styles can cause unnecessary re-renders and do not leverage the benefits of CSS class caching.\",\n      \"fixSummary\": \"Move styles to a CSS class or styled component.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"const [showResponse, setShowResponse] = useState(false);\",\n      \"issue\": \"State management can lead to unnecessary re-renders.\",\n      \"status\": \"open\",\n      \"confidence\": \"medium\",\n      \"counterexample\": \"If the component re-renders frequently, it can lead to performance degradation.\",\n      \"fixSummary\": \"Optimize state management to prevent unnecessary re-renders.\"\n    },\n    {\n      \"id\": \"finding-4\",\n      \"file\": \"src/pages/VersionTruth.tsx\",\n      \"line\": 2,\n      \"snippet\": \"maxWidth=\\\"1024px\\\"\",\n      \"issue\": \"Hardcoded values for layout dimensions are used instead of design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Using hardcoded values can lead to a non-responsive design.\",\n      \"fixSummary\": \"Replace hardcoded values with design tokens or responsive values.\"\n    }\n  ]\n}\n</findings>\n```\n\n[VERDICT: FAIL]",
+        "role": "PERFORMANCE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "fail",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind layout classes instead of standard layout primitives.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with appropriate layout primitives.",
+              "counterexample": "The design system mandates the use of <Box>, <Stack>, or <Grid> for layout instead of raw Tailwind classes."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are used, which can lead to performance issues.",
+              "status": "open",
+              "confidence": "high",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Move styles to a CSS class or styled component.",
+              "counterexample": "Inline styles can cause unnecessary re-renders and do not leverage the benefits of CSS class caching."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "State management can lead to unnecessary re-renders.",
+              "status": "open",
+              "confidence": "medium",
+              "line": 37,
+              "snippet": "const [showResponse, setShowResponse] = useState(false);",
+              "fixSummary": "Optimize state management to prevent unnecessary re-renders.",
+              "counterexample": "If the component re-renders frequently, it can lead to performance degradation."
+            },
+            {
+              "id": "finding-4",
+              "file": "src/pages/VersionTruth.tsx",
+              "issue": "Hardcoded values for layout dimensions are used instead of design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 2,
+              "snippet": "maxWidth=\"1024px\"",
+              "fixSummary": "Replace hardcoded values with design tokens or responsive values.",
+              "counterexample": "Using hardcoded values can lead to a non-responsive design."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "b9a4c2323c947d743e7912775890c229ed2212e71ebeab3e2498bd1690ae7824": {
+        "feedback": "Upon reviewing the provided pull request changes, I have identified several issues related to style, maintainability, and adherence to design guidelines. Below are the findings:\n\n### Findings\n\n1. **Raw Tailwind Layout Classes**\n   - **File:** `src/components/ui/EndpointCard.tsx`\n   - **Line:** 37\n   - **Snippet:** `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}`\n   - **Issue:** The usage of raw Tailwind classes for layout and styling is against the design system guidelines. Instead, standard layout primitives such as `<Box>` should be used for consistent styling.\n   - **Status:** open\n   - **Confidence:** high\n   - **Counterexample:** The previous code could have used `<Box>` components with appropriate props instead of raw Tailwind classes.\n   - **Fix Summary:** Replace raw Tailwind classes with `<Box>` components and appropriate props.\n\n2. **Inline Style Usage**\n   - **File:** `src/components/ui/HeroSection.tsx`\n   - **Line:** 139\n   - **Snippet:** `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}`\n   - **Issue:** Inline styles are used, which should be avoided in favor of class-based styling or design tokens. This violates the maintainability and readability standards.\n   - **Status:** open\n   - **Confidence:** high\n   - **Counterexample:** The previous code could have used CSS classes or design tokens to achieve the same effect without inline styles.\n   - **Fix Summary:** Remove inline styles and replace them with appropriate class names.\n\n3. **Use of Hardcoded Pixel Values**\n   - **File:** `src/pages/VersionTruth.tsx`\n   - **Line:** 53\n   - **Snippet:** `maxWidth=\"1024px\"`\n   - **Issue:** Hardcoded pixel values are used instead of design tokens. This reduces flexibility and maintainability.\n   - **Status:** open\n   - **Confidence:** high\n   - **Counterexample:** The previous code could have used a design token like `maxWidth=\"5xl\"` for better responsiveness.\n   - **Fix Summary:** Replace hardcoded pixel values with design tokens.\n\n4. **Use of Legacy Color Names**\n   - **File:** `src/components/ui/EndpointCard.tsx`\n   - **Line:** 57\n   - **Snippet:** `className=\"text-secondary\"`\n   - **Issue:** The use of legacy color names instead of semantic tokens like `text-dim` violates the design token guidelines.\n   - **Status:** open\n   - **Confidence:** high\n   - **Counterexample:** The previous code could have used `className=\"text-dim\"` for better semantic clarity.\n   - **Fix Summary:** Replace legacy color names with semantic tokens.\n\n5. **Inconsistent Margin and Padding Usage**\n   - **File:** `src/components/ui/EndpointCard.tsx`\n   - **Line:** 37\n   - **Snippet:** `paddingY={1}`\n   - **Issue:** The use of inconsistent margin and padding values (raw numbers) instead of design tokens reduces readability and maintainability.\n   - **Status:** open\n   - **Confidence:** high\n   - **Counterexample:** The previous code could have used design tokens for padding and margin.\n   - **Fix Summary:** Replace raw numbers with design tokens for padding and margin.\n\n### Summary\nThe changes made in this pull request address several anti-patterns, but there are still multiple violations of the design system and coding standards that need to be corrected. The use of raw Tailwind classes, inline styles, hardcoded values, and legacy color names detracts from the maintainability and readability of the code.\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}\",\n      \"issue\": \"Usage of raw Tailwind layout classes instead of standard layout primitives.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used <Box> components with appropriate props instead of raw Tailwind classes.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with <Box> components and appropriate props.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are used, which should be avoided in favor of class-based styling or design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used CSS classes or design tokens to achieve the same effect without inline styles.\",\n      \"fixSummary\": \"Remove inline styles and replace them with appropriate class names.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/pages/VersionTruth.tsx\",\n      \"line\": 53,\n      \"snippet\": \"maxWidth=\\\"1024px\\\"\",\n      \"issue\": \"Hardcoded pixel values are used instead of design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used a design token like maxWidth=\\\"5xl\\\" for better responsiveness.\",\n      \"fixSummary\": \"Replace hardcoded pixel values with design tokens.\"\n    },\n    {\n      \"id\": \"finding-4\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 57,\n      \"snippet\": \"className=\\\"text-secondary\\\"\",\n      \"issue\": \"Use of legacy color names instead of semantic tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used className=\\\"text-dim\\\" for better semantic clarity.\",\n      \"fixSummary\": \"Replace legacy color names with semantic tokens.\"\n    },\n    {\n      \"id\": \"finding-5\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"paddingY={1}\",\n      \"issue\": \"Inconsistent margin and padding usage (raw numbers) instead of design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used design tokens for padding and margin.\",\n      \"fixSummary\": \"Replace raw numbers with design tokens for padding and margin.\"\n    }\n  ]\n}\n</findings>\n```\n\nGiven the identified issues, I recommend addressing these concerns before merging the pull request. \n\n[VERDICT: FAIL]",
+        "role": "STYLE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "fail",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Usage of raw Tailwind layout classes instead of standard layout primitives.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with <Box> components and appropriate props.",
+              "counterexample": "The previous code could have used <Box> components with appropriate props instead of raw Tailwind classes."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are used, which should be avoided in favor of class-based styling or design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Remove inline styles and replace them with appropriate class names.",
+              "counterexample": "The previous code could have used CSS classes or design tokens to achieve the same effect without inline styles."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/pages/VersionTruth.tsx",
+              "issue": "Hardcoded pixel values are used instead of design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 53,
+              "snippet": "maxWidth=\"1024px\"",
+              "fixSummary": "Replace hardcoded pixel values with design tokens.",
+              "counterexample": "The previous code could have used a design token like maxWidth=\"5xl\" for better responsiveness."
+            },
+            {
+              "id": "finding-4",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of legacy color names instead of semantic tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 57,
+              "snippet": "className=\"text-secondary\"",
+              "fixSummary": "Replace legacy color names with semantic tokens.",
+              "counterexample": "The previous code could have used className=\"text-dim\" for better semantic clarity."
+            },
+            {
+              "id": "finding-5",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Inconsistent margin and padding usage (raw numbers) instead of design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "paddingY={1}",
+              "fixSummary": "Replace raw numbers with design tokens for padding and margin.",
+              "counterexample": "The previous code could have used design tokens for padding and margin."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "5aa04138b018ca62099d795c6f52e81d73100b491e64abd3d542efc97bdb4d5f": {
+        "feedback": "### Review of Pull Request Changes\n\n#### Summary of Changes\nThe pull request aims to fix the anti-pattern tool scope and refactor 15 UI code violations. The changes include:\n- Adjusting the `audit:anti-patterns` command in `package.json` to correctly target the parent directory.\n- Refactoring UI components to replace raw spacing classes, hardcoded pixel values, and legacy color names with semantic tokens.\n\n### Findings\n\n1. **Use of Raw Tailwind Classes**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 37\n   - **Snippet**: `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }``\n   - **Issue**: The use of raw Tailwind classes for layout and styling is against the design system guidelines. Instead, the component should utilize the `<Box>` or other layout primitives for styling.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous code could have used a combination of `<Box>` with props for `backgroundColor`, `border`, and `textColor` instead of raw Tailwind classes.\n   - **FixSummary**: Replace raw Tailwind classes with appropriate layout primitives.\n\n2. **Inconsistent Use of Semantic Tokens**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 57\n   - **Snippet**: `className=\"text-sm font-semibold text-primary font-mono break-all\"`\n   - **Issue**: The use of `text-primary` is inconsistent with the refactoring goal of migrating to semantic tokens. This should be replaced with a semantic token that reflects the design system.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous code could have used `className=\"text-main\"` to maintain consistency with the refactoring goals.\n   - **FixSummary**: Update to use semantic tokens for text color.\n\n3. **Inline Styles**:\n   - **File**: `src/components/ui/HeroSection.tsx`\n   - **Line**: 139\n   - **Snippet**: `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}`\n   - **Issue**: Inline styles are banned in the design guidelines. This should be replaced with class-based styling or layout primitives.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous code could have used class names or props to achieve the same effect without inline styles.\n   - **FixSummary**: Remove inline styles and replace with class-based styling.\n\n4. **Use of Raw Tailwind Classes for Layout**:\n   - **File**: `src/pages/VersionTruth.tsx`\n   - **Line**: 53\n   - **Snippet**: `maxWidth=\"1024px\"`\n   - **Issue**: The use of a hardcoded pixel value for `maxWidth` is against the design system guidelines. This should be replaced with a semantic token or a predefined layout primitive.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous code could have used `maxWidth=\"5xl\"` to align with the design system.\n   - **FixSummary**: Update to use semantic tokens for layout dimensions.\n\n### Conclusion\nThe changes made in this pull request are a step in the right direction towards improving the code quality and adherence to the design system. However, there are several violations of the design guidelines that need to be addressed, particularly regarding the use of raw Tailwind classes, inline styles, and hardcoded values.\n\n### Final Verdict\nGiven the identified issues, this pull request cannot be approved as it stands. The issues must be resolved to align with the established design guidelines.\n\n[VERDICT: FAIL]\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}\",\n      \"issue\": \"Use of raw Tailwind classes for layout and styling is against design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used a combination of <Box> with props for backgroundColor, border, and textColor instead of raw Tailwind classes.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with appropriate layout primitives.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 57,\n      \"snippet\": \"className=\\\"text-sm font-semibold text-primary font-mono break-all\\\"\",\n      \"issue\": \"Inconsistent use of semantic tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used className=\\\"text-main\\\" to maintain consistency with the refactoring goals.\",\n      \"fixSummary\": \"Update to use semantic tokens for text color.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are banned in the design guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used class names or props to achieve the same effect without inline styles.\",\n      \"fixSummary\": \"Remove inline styles and replace with class-based styling.\"\n    },\n    {\n      \"id\": \"finding-4\",\n      \"file\": \"src/pages/VersionTruth.tsx\",\n      \"line\": 53,\n      \"snippet\": \"maxWidth=\\\"1024px\\\"\",\n      \"issue\": \"Use of hardcoded pixel value for maxWidth is against design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"The previous code could have used maxWidth=\\\"5xl\\\" to align with the design system.\",\n      \"fixSummary\": \"Update to use semantic tokens for layout dimensions.\"\n    }\n  ]\n}\n</findings>",
+        "role": "ARCHITECTURE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "fail",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind classes for layout and styling is against design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-primary/20 text-primary border border-primary/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with appropriate layout primitives.",
+              "counterexample": "The previous code could have used a combination of <Box> with props for backgroundColor, border, and textColor instead of raw Tailwind classes."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Inconsistent use of semantic tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 57,
+              "snippet": "className=\"text-sm font-semibold text-primary font-mono break-all\"",
+              "fixSummary": "Update to use semantic tokens for text color.",
+              "counterexample": "The previous code could have used className=\"text-main\" to maintain consistency with the refactoring goals."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are banned in the design guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Remove inline styles and replace with class-based styling.",
+              "counterexample": "The previous code could have used class names or props to achieve the same effect without inline styles."
+            },
+            {
+              "id": "finding-4",
+              "file": "src/pages/VersionTruth.tsx",
+              "issue": "Use of hardcoded pixel value for maxWidth is against design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 53,
+              "snippet": "maxWidth=\"1024px\"",
+              "fixSummary": "Update to use semantic tokens for layout dimensions.",
+              "counterexample": "The previous code could have used maxWidth=\"5xl\" to align with the design system."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "dc9e163a3e039c1779da7822e956550f2718949de95ad306a0f4b10ac48088a0": {
+        "feedback": "Upon reviewing the provided pull request, I have assessed the changes made in the context of security, data validation, and adherence to the OWASP Top 10 guidelines. Here are my findings:\n\n### Review Findings\n\n1. **Security Review**:\n   - **New Untrusted Input Paths**: The changes do not introduce any new untrusted input paths. The modifications primarily involve refactoring UI components and updating the `package.json` for anti-pattern detection. There are no new data inputs being processed that could lead to security vulnerabilities.\n\n2. **Data Validation and Sanitization**:\n   - The changes do not alter any data validation or sanitization processes. The focus remains on UI refactoring and improving the design system adherence.\n\n3. **Secure Communication**:\n   - There are no changes related to secure communication protocols or practices in this pull request.\n\n### Specific Findings Related to the Changes\n\n- **Refactoring of UI Components**: The changes made in the UI components (e.g., `ErrorBoundaryFallback`, `EndpointCard`, `HeroSection`, and `VersionTruth`) primarily focus on replacing hardcoded values with semantic tokens and improving the use of layout primitives. This aligns with best practices for maintainability and design consistency.\n\n- **Adherence to Design Guidelines**: The changes reflect a commitment to the design system by replacing raw Tailwind classes with appropriate layout primitives and semantic tokens. This is a positive improvement.\n\n### Conclusion\n\nThe pull request successfully addresses the stated goal of correcting anti-patterns and refactoring UI code violations without introducing new security issues or untrusted input paths. All previous findings related to the anti-patterns have been addressed, and no new issues have been introduced.\n\n**Final Verdict**: The changes are approved as they enhance the code quality and maintainability without compromising security.\n\n```json\n<findings>\n{\n  \"findings\": []\n}\n</findings>\n```\n\n[VERDICT: PASS]",
+        "role": "SECURITY",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "pass",
+        "state": {
+          "findings": []
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "5a7cd018a72663ec22594e3e0a706cc0b2f1f02647563315d3268c5087877b97": {
+        "feedback": "Upon reviewing the provided pull request changes, I have identified several issues and confirmed the resolution of previously raised concerns. Below is a detailed analysis of the changes made, along with any new issues that have arisen.\n\n### Confirmed Resolutions\n1. **Semantic Token Usage**: The changes in `src/components/ErrorBoundaryFallback.tsx` and `src/components/ui/EndpointCard.tsx` have successfully replaced legacy color names with semantic tokens (`text-gray-600` to `text-dim` and `text-primary` to `text-main`). This resolves the previous findings regarding inconsistent use of semantic tokens.\n\n2. **Removal of Inline Styles**: The inline styles in `src/components/ui/HeroSection.tsx` have been removed, specifically the `style` attribute that was previously used for `contentVisibility` and `containIntrinsicSize`. This aligns with the design guidelines banning inline styles.\n\n3. **Hardcoded Pixel Values**: The hardcoded pixel values in `src/pages/VersionTruth.tsx` have been replaced with design tokens (e.g., `maxWidth=\"1024px\"` to `maxWidth=\"5xl\"`). This resolves the previous finding regarding the use of hardcoded pixel values.\n\n### New Issues Identified\n1. **Raw Tailwind Classes**: In `src/components/ui/EndpointCard.tsx`, the following line still contains raw Tailwind classes for layout:\n   ```tsx\n   <Box display=\"flex\" align=\"center\" gap={3}>\n   ```\n   - **Issue**: This violates the design system guidelines which mandate the use of standard layout primitives like `<Stack>`, `<Grid>`, and `<Box>`.\n   - **Status**: Open\n   - **Confidence**: High\n   - **Fix Summary**: Replace the raw Tailwind layout classes with appropriate layout primitives.\n\n2. **Inconsistent Margin and Padding Usage**: In `src/components/ui/EndpointCard.tsx`, the following line uses raw numbers for margin:\n   ```tsx\n   <Box marginTop={2}>\n   ```\n   - **Issue**: This should utilize design tokens for consistency with the design system.\n   - **Status**: Open\n   - **Confidence**: High\n   - **Fix Summary**: Replace raw numbers with design tokens for margin.\n\n3. **Use of Raw Tailwind Classes for Text**: In `src/components/ui/EndpointCard.tsx`, the following line uses raw Tailwind classes for text:\n   ```tsx\n   <Box as=\"code\" className=\"text-sm font-semibold text-main font-mono break-all\">\n   ```\n   - **Issue**: This should be replaced with semantic tokens for text color.\n   - **Status**: Open\n   - **Confidence**: High\n   - **Fix Summary**: Replace raw Tailwind classes with semantic tokens.\n\n### Summary of Findings\nThe pull request has made significant improvements by addressing several previously identified issues. However, there are still violations of the design system guidelines that need to be addressed, particularly concerning the use of raw Tailwind classes and inconsistent margin/padding usage.\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 32,\n      \"snippet\": \"<Box display=\\\"flex\\\" align=\\\"center\\\" gap={3}>\",\n      \"issue\": \"Use of raw Tailwind layout classes instead of standard layout primitives.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"This layout should use <Stack> or <Grid> instead of raw Tailwind classes.\",\n      \"fixSummary\": \"Replace raw Tailwind layout classes with appropriate layout primitives.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 62,\n      \"snippet\": \"<Box marginTop={2}>\",\n      \"issue\": \"Inconsistent margin and padding usage (raw numbers) instead of design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Using raw numbers can lead to inconsistencies in spacing across the application.\",\n      \"fixSummary\": \"Replace raw numbers with design tokens for margin.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 62,\n      \"snippet\": \"<Box as=\\\"code\\\" className=\\\"text-sm font-semibold text-main font-mono break-all\\\">\",\n      \"issue\": \"Use of raw Tailwind classes for text instead of semantic tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Raw Tailwind classes can lead to inconsistencies in text styling.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with semantic tokens.\"\n    }\n  ]\n}\n</findings>\n```\n\nFinal verdict: The pull request has made substantial improvements, but there are still unresolved issues that need to be addressed. \n\n[VERDICT: WARN]",
+        "role": "STYLE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "warn",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind layout classes instead of standard layout primitives.",
+              "status": "open",
+              "confidence": "high",
+              "line": 32,
+              "snippet": "<Box display=\"flex\" align=\"center\" gap={3}>",
+              "fixSummary": "Replace raw Tailwind layout classes with appropriate layout primitives.",
+              "counterexample": "This layout should use <Stack> or <Grid> instead of raw Tailwind classes."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Inconsistent margin and padding usage (raw numbers) instead of design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 62,
+              "snippet": "<Box marginTop={2}>",
+              "fixSummary": "Replace raw numbers with design tokens for margin.",
+              "counterexample": "Using raw numbers can lead to inconsistencies in spacing across the application."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind classes for text instead of semantic tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 62,
+              "snippet": "<Box as=\"code\" className=\"text-sm font-semibold text-main font-mono break-all\">",
+              "fixSummary": "Replace raw Tailwind classes with semantic tokens.",
+              "counterexample": "Raw Tailwind classes can lead to inconsistencies in text styling."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "9132cff5375488738ffb57e0368c8c4b3296711944d668afd28e68afbc2a51ae": {
+        "feedback": "The provided pull request includes several changes aimed at addressing anti-patterns in the codebase. Below is the review based on the specified criteria, focusing on performance, redundant re-renders, and adherence to design guidelines.\n\n### Review Findings\n\n1. **Performance and State Management in `EndpointCard.tsx`**\n   - **Line:** `const [showResponse, setShowResponse] = useState(false);`\n   - **Issue:** The state management for `showResponse` could lead to unnecessary re-renders of the `EndpointCard` component. Each time the button is clicked, the entire component re-renders, which may be inefficient if the component is complex or if it has many props.\n   - **Recommendation:** Consider using `React.memo` for the `EndpointCard` component to prevent unnecessary re-renders when props do not change. This can improve performance, especially if the component is used in a list or grid.\n   - **Confidence:** Medium\n\n2. **Use of Raw Tailwind Classes**\n   - **Line:** `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }` in `EndpointCard.tsx`\n   - **Issue:** The use of raw Tailwind classes for layout and styling is against design system guidelines. This can lead to inconsistencies and makes it harder to maintain the design system.\n   - **Recommendation:** Replace raw Tailwind classes with appropriate layout primitives like `<Box>` or `<Stack>` components to ensure consistency with the design system.\n   - **Confidence:** High\n\n3. **Inline Styles in `HeroSection.tsx`**\n   - **Line:** `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}`\n   - **Issue:** Inline styles are used, which can lead to performance issues and are against the design guidelines. Inline styles can also cause layout thrashing.\n   - **Recommendation:** Move these styles to a CSS class or styled component to improve performance and maintainability.\n   - **Confidence:** High\n\n4. **Hardcoded Pixel Values in `VersionTruth.tsx`**\n   - **Line:** `maxWidth=\"1024px\"`\n   - **Issue:** The use of hardcoded pixel values for layout dimensions is against design system guidelines. This can lead to responsiveness issues across different screen sizes.\n   - **Recommendation:** Replace hardcoded values with design tokens or responsive values to ensure better adaptability across devices.\n   - **Confidence:** High\n\n5. **Inconsistent Use of Semantic Tokens**\n   - **Line:** `className=\"text-gray-600\"` in `ErrorBoundaryFallback.tsx`\n   - **Issue:** The use of legacy color names instead of semantic tokens can lead to inconsistencies in the design and make it harder to maintain.\n   - **Recommendation:** Update to use semantic tokens for text color, ensuring consistency across the application.\n   - **Confidence:** High\n\n### Summary\nThe pull request addresses several anti-patterns, but there are still issues related to performance, state management, and adherence to design guidelines that need to be resolved. The recommendations provided aim to enhance the performance and maintainability of the code.\n\n### JSON Findings\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 12,\n      \"snippet\": \"const [showResponse, setShowResponse] = useState(false);\",\n      \"issue\": \"State management can lead to unnecessary re-renders.\",\n      \"status\": \"open\",\n      \"confidence\": \"medium\",\n      \"counterexample\": \"If the EndpointCard is used in a list, clicking the button will re-render the entire card.\",\n      \"fixSummary\": \"Consider using React.memo to prevent unnecessary re-renders.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}\",\n      \"issue\": \"Use of raw Tailwind classes for layout and styling is against design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Raw Tailwind classes can lead to inconsistencies in design.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with appropriate layout primitives.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are banned in the design guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Inline styles can cause layout thrashing and performance issues.\",\n      \"fixSummary\": \"Move styles to a CSS class or styled component.\"\n    },\n    {\n      \"id\": \"finding-4\",\n      \"file\": \"src/pages/VersionTruth.tsx\",\n      \"line\": 5,\n      \"snippet\": \"maxWidth=\\\"1024px\\\"\",\n      \"issue\": \"Hardcoded pixel values for layout dimensions are used instead of design tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Hardcoded values can lead to responsiveness issues.\",\n      \"fixSummary\": \"Replace hardcoded values with design tokens or responsive values.\"\n    },\n    {\n      \"id\": \"finding-5\",\n      \"file\": \"src/components/ErrorBoundaryFallback.tsx\",\n      \"line\": 24,\n      \"snippet\": \"className=\\\"text-gray-600\\\"\",\n      \"issue\": \"Use of legacy color names instead of semantic tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Legacy color names can lead to inconsistencies in design.\",\n      \"fixSummary\": \"Update to use semantic tokens for text color.\"\n    }\n  ]\n}\n</findings>\n```\n\n[VERDICT: WARN]",
+        "role": "PERFORMANCE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "warn",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "State management can lead to unnecessary re-renders.",
+              "status": "open",
+              "confidence": "medium",
+              "line": 12,
+              "snippet": "const [showResponse, setShowResponse] = useState(false);",
+              "fixSummary": "Consider using React.memo to prevent unnecessary re-renders.",
+              "counterexample": "If the EndpointCard is used in a list, clicking the button will re-render the entire card."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind classes for layout and styling is against design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with appropriate layout primitives.",
+              "counterexample": "Raw Tailwind classes can lead to inconsistencies in design."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are banned in the design guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Move styles to a CSS class or styled component.",
+              "counterexample": "Inline styles can cause layout thrashing and performance issues."
+            },
+            {
+              "id": "finding-4",
+              "file": "src/pages/VersionTruth.tsx",
+              "issue": "Hardcoded pixel values for layout dimensions are used instead of design tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 5,
+              "snippet": "maxWidth=\"1024px\"",
+              "fixSummary": "Replace hardcoded values with design tokens or responsive values.",
+              "counterexample": "Hardcoded values can lead to responsiveness issues."
+            },
+            {
+              "id": "finding-5",
+              "file": "src/components/ErrorBoundaryFallback.tsx",
+              "issue": "Use of legacy color names instead of semantic tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 24,
+              "snippet": "className=\"text-gray-600\"",
+              "fixSummary": "Update to use semantic tokens for text color.",
+              "counterexample": "Legacy color names can lead to inconsistencies in design."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      },
+      "c94584535399ccb23551a926c73aa0040e44cf027297d5740fbc778199c84ff7": {
+        "feedback": "Upon reviewing the provided Pull Request changes, I have identified several issues related to the adherence to the design system guidelines and the proper use of layout primitives. Below are the findings based on the changes made in the diff:\n\n### Findings\n\n1. **Use of Raw Tailwind Classes**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 37\n   - **Snippet**: `className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }``\n   - **Issue**: The use of raw Tailwind classes for layout and styling is against design system guidelines. The design system mandates the use of standard layout primitives instead of raw Tailwind classes.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous implementation could have used `<Box>` components with appropriate props for styling instead of raw Tailwind classes.\n   - **Fix Summary**: Replace raw Tailwind classes with `<Box>` components and appropriate props.\n\n2. **Inconsistent Use of Semantic Tokens**:\n   - **File**: `src/components/ui/EndpointCard.tsx`\n   - **Line**: 57\n   - **Snippet**: `className=\"text-primary font-mono break-all\"`\n   - **Issue**: The use of legacy color names instead of semantic tokens is inconsistent. The design system requires the use of semantic tokens for text color.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous implementation could have used `className=\"text-main font-mono break-all\"` to maintain consistency with the design system.\n   - **Fix Summary**: Replace legacy color names with semantic tokens.\n\n3. **Inline Styles**:\n   - **File**: `src/components/ui/HeroSection.tsx`\n   - **Line**: 139\n   - **Snippet**: `style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}`\n   - **Issue**: Inline styles are banned in the design guidelines. This can lead to performance issues and inconsistencies in styling.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous implementation could have used class-based styling or styled components to achieve the same effect.\n   - **Fix Summary**: Remove inline styles and replace them with class-based styling.\n\n4. **Hardcoded Pixel Values**:\n   - **File**: `src/pages/VersionTruth.tsx`\n   - **Line**: 53\n   - **Snippet**: `maxWidth=\"1024px\"`\n   - **Issue**: The use of hardcoded pixel values for layout dimensions is against design system guidelines. It should be replaced with semantic tokens or responsive values.\n   - **Status**: open\n   - **Confidence**: high\n   - **Counterexample**: The previous implementation could have used `maxWidth=\"5xl\"` to adhere to the design system.\n   - **Fix Summary**: Replace hardcoded pixel values with design tokens.\n\n### Summary\nThe changes made in this PR address several anti-patterns, but there are still unresolved issues related to the use of raw Tailwind classes, inconsistent use of semantic tokens, inline styles, and hardcoded pixel values. These issues need to be resolved to fully comply with the design system guidelines.\n\n```json\n<findings>\n{\n  \"findings\": [\n    {\n      \"id\": \"finding-1\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 37,\n      \"snippet\": \"className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}\",\n      \"issue\": \"Use of raw Tailwind classes for layout and styling is against design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Previous implementation could have used <Box> components with appropriate props.\",\n      \"fixSummary\": \"Replace raw Tailwind classes with <Box> components and appropriate props.\"\n    },\n    {\n      \"id\": \"finding-2\",\n      \"file\": \"src/components/ui/EndpointCard.tsx\",\n      \"line\": 57,\n      \"snippet\": \"className=\\\"text-primary font-mono break-all\\\"\",\n      \"issue\": \"Inconsistent use of semantic tokens.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Previous implementation could have used className=\\\"text-main font-mono break-all\\\".\",\n      \"fixSummary\": \"Replace legacy color names with semantic tokens.\"\n    },\n    {\n      \"id\": \"finding-3\",\n      \"file\": \"src/components/ui/HeroSection.tsx\",\n      \"line\": 139,\n      \"snippet\": \"style={{ contentVisibility: \\\"auto\\\", containIntrinsicSize: \\\"48px\\\" }}\",\n      \"issue\": \"Inline styles are banned in the design guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Previous implementation could have used class-based styling.\",\n      \"fixSummary\": \"Remove inline styles and replace them with class-based styling.\"\n    },\n    {\n      \"id\": \"finding-4\",\n      \"file\": \"src/pages/VersionTruth.tsx\",\n      \"line\": 53,\n      \"snippet\": \"maxWidth=\\\"1024px\\\"\",\n      \"issue\": \"Use of hardcoded pixel values for layout dimensions is against design system guidelines.\",\n      \"status\": \"open\",\n      \"confidence\": \"high\",\n      \"counterexample\": \"Previous implementation could have used maxWidth=\\\"5xl\\\".\",\n      \"fixSummary\": \"Replace hardcoded pixel values with design tokens.\"\n    }\n  ]\n}\n</findings>\n```\n\n[VERDICT: FAIL]",
+        "role": "ARCHITECTURE",
+        "tokens": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cacheTokens": 0,
+        "cost": 0,
+        "llmVerdict": "fail",
+        "state": {
+          "findings": [
+            {
+              "id": "finding-1",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Use of raw Tailwind classes for layout and styling is against design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 37,
+              "snippet": "className={`text-xs font-bold tracking-wider uppercase ${ method === 'POST' ? 'bg-accent/20 text-accent border border-accent/30' : 'bg-main/20 text-main border border-main/30' }`}",
+              "fixSummary": "Replace raw Tailwind classes with <Box> components and appropriate props.",
+              "counterexample": "Previous implementation could have used <Box> components with appropriate props."
+            },
+            {
+              "id": "finding-2",
+              "file": "src/components/ui/EndpointCard.tsx",
+              "issue": "Inconsistent use of semantic tokens.",
+              "status": "open",
+              "confidence": "high",
+              "line": 57,
+              "snippet": "className=\"text-primary font-mono break-all\"",
+              "fixSummary": "Replace legacy color names with semantic tokens.",
+              "counterexample": "Previous implementation could have used className=\"text-main font-mono break-all\"."
+            },
+            {
+              "id": "finding-3",
+              "file": "src/components/ui/HeroSection.tsx",
+              "issue": "Inline styles are banned in the design guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 139,
+              "snippet": "style={{ contentVisibility: \"auto\", containIntrinsicSize: \"48px\" }}",
+              "fixSummary": "Remove inline styles and replace them with class-based styling.",
+              "counterexample": "Previous implementation could have used class-based styling."
+            },
+            {
+              "id": "finding-4",
+              "file": "src/pages/VersionTruth.tsx",
+              "issue": "Use of hardcoded pixel values for layout dimensions is against design system guidelines.",
+              "status": "open",
+              "confidence": "high",
+              "line": 53,
+              "snippet": "maxWidth=\"1024px\"",
+              "fixSummary": "Replace hardcoded pixel values with design tokens.",
+              "counterexample": "Previous implementation could have used maxWidth=\"5xl\"."
+            }
+          ]
+        },
+        "modelName": "gpt-4o-mini",
+        "truncated": false
+      }
+    }
+  }
+}

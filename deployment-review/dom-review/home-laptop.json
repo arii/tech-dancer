@@ -1,0 +1,17 @@
+{
+  "route": "/ (laptop)",
+  "slug": "home-laptop",
+  "beforeHtmlPath": "artifacts/dom-review/home-laptop/before-laptop.html",
+  "afterHtmlPath": "artifacts/dom-review/home-laptop/after-laptop.html",
+  "diffPath": "artifacts/dom-review/home-laptop/diff-laptop.txt",
+  "structureDiffPath": "artifacts/dom-review/home-laptop/structure-diff-laptop.txt",
+  "metrics": {
+    "nodesAdded": 0,
+    "nodesRemoved": 0,
+    "imagesAdded": 0,
+    "imagesRemoved": 0,
+    "linksAdded": 0,
+    "linksRemoved": 0
+  },
+  "severity": "LOW"
+}

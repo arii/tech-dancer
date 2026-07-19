@@ -1,0 +1,460 @@
+  <div id="root">
+  <div class="">
+  <div class="h-full">
+  <div class="flex bg-bg relative w-full max-w-full min-h-screen overflow-x-hidden touch-pan-y">
+  <a class="rounded-sm px-6 py-3 fixed z-skip-link top-4 left-4 sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none" href="#main-content">Skip to Content</a>
+  <div aria-atomic="true" aria-live="polite" class="sr-only" id="route-announcer">
+  </div>
+  <div class="gap-4 w-full max-w-full min-h-screen overflow-x-clip flex flex-col">
+  <nav aria-label="Mobile Bottom Navigation" class="border-t border-line fixed bottom-0 left-0 right-0 z-sticky lg:hidden bg-surface/90 backdrop-blur-xl safe-bottom">
+  <ul class="h-16 w-full flex justify-around items-center">
+  <li class="flex-1">
+  <a aria-current="page" class="flex flex-col items-center justify-center h-full transition-colors tap-target text-accent" href="/">
+  <svg aria-hidden="true" class="lucide lucide-house w-6 h-6 stroke-[1.5]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8">
+  </path>
+  <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z">
+  </path>
+  </svg>
+  <span class="mt-1 font-mono tracking-widest uppercase text-micro font-bold">Home</span>
+  </a>
+  </li>
+  <li class="flex-1">
+  <a class="flex flex-col items-center justify-center h-full transition-colors tap-target text-text-dim hover:text-accent" href="/blog">
+  <svg aria-hidden="true" class="lucide lucide-book-open w-6 h-6 stroke-[1.5]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 7v14">
+  </path>
+  <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+  </path>
+  </svg>
+  <span class="mt-1 font-mono tracking-widest uppercase text-micro font-bold">Blog</span>
+  </a>
+  </li>
+  <li class="flex-1">
+  <a class="flex flex-col items-center justify-center h-full transition-colors tap-target text-text-dim hover:text-accent" href="/merch">
+  <svg aria-hidden="true" class="lucide lucide-tag w-6 h-6 stroke-[1.5]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z">
+  </path>
+  <circle cx="7.5" cy="7.5" fill="currentColor" r=".5">
+  </circle>
+  </svg>
+  <span class="mt-1 font-mono tracking-widest uppercase text-micro font-bold">Merch</span>
+  </a>
+  </li>
+  <li class="flex-1">
+  <a class="flex flex-col items-center justify-center h-full transition-colors tap-target text-text-dim hover:text-accent" href="/research">
+  <svg aria-hidden="true" class="lucide lucide-database w-6 h-6 stroke-[1.5]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="12" cy="5" rx="9" ry="3">
+  </ellipse>
+  <path d="M3 5V19A9 3 0 0 0 21 19V5">
+  </path>
+  <path d="M3 12A9 3 0 0 0 21 12">
+  </path>
+  </svg>
+  <span class="mt-1 font-mono tracking-widest uppercase text-micro font-bold">DevAI</span>
+  </a>
+  </li>
+  </ul>
+  </nav>
+  <nav aria-label="Main Navigation" class="border-b border-line fixed top-0 left-0 right-0 h-16 w-full isolate z-nav bg-bg/95 backdrop-blur-xl">
+  <div class="px-4 lg:px-8 h-full w-full max-w-full flex justify-between items-center">
+  <div class="gap-8 flex flex-row items-center">
+  <a aria-current="page" class="h-8 md:h-9 w-auto group active" href="/">
+  <svg aria-labelledby="_r_0_" class="h-full w-auto overflow-visible text-white transition-opacity group-hover:opacity-heavy" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 325 100" xmlns="http://www.w3.org/2000/svg">
+  <title id="_r_0_">BoomTick Logo</title>
+  <text class="brand-wordmark" fill="currentColor" x="0" y="75">boom<tspan class="brand-text-accent">tick</tspan>
+  <tspan class="brand-text-muted font-light">.blog</tspan>
+  </text>
+  </svg>
+  </a>
+  <ul class="gap-6 hidden lg:flex items-center">
+  <li class="">
+  <a class="relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1 text-text-dim" href="/blog">Blog Posts</a>
+  </li>
+  <li class="">
+  <a class="relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1 text-text-dim" href="/merch">Merch</a>
+  </li>
+  <li class="">
+  <a class="relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1 text-text-dim" href="/about">About</a>
+  </li>
+  <li class="">
+  <a class="relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1 text-text-dim" href="/research">DevAI Portfolio</a>
+  </li>
+  </ul>
+  </div>
+  <div class="gap-2 lg:gap-6 flex flex-row items-center">
+  <button aria-label="Open search" class="gap-2 p-3 hidden lg:flex items-center group text-text-dim transition-colors hover:text-accent" type="button">
+  <svg aria-hidden="true" class="lucide lucide-search h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="m21 21-4.34-4.34">
+  </path>
+  <circle cx="11" cy="11" r="8">
+  </circle>
+  </svg>
+  <span class="hidden xl:block font-mono tracking-widest uppercase text-text-dim text-xs">CMD+K</span>
+  </button>
+  <button aria-expanded="false" aria-label="Open menu" class="rounded-full p-3 flex lg:hidden justify-center items-center hover:bg-bg/50 active:bg-accent/10 transition-colors">
+  <svg aria-hidden="true" class="lucide lucide-menu w-6 h-6" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 5h16">
+  </path>
+  <path d="M4 12h16">
+  </path>
+  <path d="M4 19h16">
+  </path>
+  </svg>
+  </button>
+  </div>
+  </div>
+  </nav>
+  <main class="bg-bg text-text-body gap-4 pt-16 lg:pt-16 flex-1 relative w-full max-w-full overflow-x-clip isolate flex flex-col" id="main-content" tabindex="-1">
+  <div class="gap-4 pt-8 md:pt-6 pb-28 md:pb-12 px-4 md:px-6 lg:px-10 mx-auto flex-1 w-full max-w-7xl overflow-x-clip flex flex-col">
+  <div class="h-full" style="opacity: 1; transform: none;">
+  <section aria-label="Home content" class="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8">
+  <section class="gap-8 lg:gap-6 w-full max-w-full grid items-center grid-cols-1 lg:grid-cols-[minmax(0,1fr)_420px]">
+  <section aria-label="Site hero" class="relative w-full max-w-full overflow-hidden flex flex-col items-start justify-center hero-section">
+  <div class="absolute inset-0 z-0">
+  <canvas aria-hidden="true" class="block pointer-events-none" height="301" width="724">
+  </canvas>
+  </div>
+  <div aria-hidden="true" class="absolute bottom-0 left-0 right-0 z-5 hero-bottom-gradient">
+  </div>
+  <div class="pt-2 lg:pt-8 pb-0 lg:pb-0 px-4 md:px-8 lg:px-12 mx-0 xl:mx-auto relative max-w-screen-xl z-10 flex flex-col items-start">
+  <span class="pointer-events-none opacity-0 font-display text-white font-extrabold tracking-[0.05em] leading-none wordmark-hero hero-logo-anim">boom<span class="text-accent">tick</span>
+  <span class="text-text-body font-light opacity-0.8">.blog</span>
+  </span>
+  <h1 class="mt-2 lg:mt-6 w-full max-w-full pointer-events-auto opacity-0 flex flex-col items-start hero-headline-anim">
+  <span class="block font-serif font-black tracking-tight break-words text-white text-3xl md:text-fluid-5 lg:text-fluid-6">Pack smart.</span>
+  <span class="block font-serif font-black tracking-tight break-words text-text-main text-4xl md:text-fluid-6 lg:text-fluid-7">
+  <span class="hero-accent-color">Dance more.</span>
+  </span>
+  </h1>
+  <div class="rounded-full mt-2 h-1.5 w-24 pointer-events-none opacity-0 hero-line-anim">
+  </div>
+  <div class="gap-5 mt-1 lg:mt-4 max-w-2xl opacity-0 flex flex-row items-stretch hero-tagline-anim">
+  <div aria-hidden="true" class="w-0.5 bg-white/20 shrink-0">
+  </div>
+  <p class="font-sans max-w-[65ch] break-words text-text-main text-sm md:text-lg lg:text-xl font-normal text-left hero-tagline-text">The west coast swing dancer's guide to gear, travel, and better dance weekends.</p>
+  </div>
+- <div aria-hidden="true" class="gap-1 my-4 h-12 w-full max-w-full overflow-hidden pointer-events-none opacity-0 flex flex-row items-end hero-waveform-anim">
++ <div aria-hidden="true" class="gap-1 my-4 h-12 w-full max-w-full overflow-hidden pointer-events-none opacity-0 flex flex-row items-end hero-waveform-anim [content-visibility:auto] [contain-intrinsic-size:var(--spacing-12)]">
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  <div class="rounded-none hero-bar">
+  </div>
+  </div>
+  </div>
+  </section>
+  <a class="rounded-md border border-line gap-4 relative w-full overflow-hidden flex aspect-[4/3] lg:aspect-[auto] flex-col justify-end group self-stretch" href="/blog/2026-04-19-practical-tools-essentials">
+  <img alt="Overhead view of a West Coast Swing travel pack containing dance shoes, earplugs, and travel essentials" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high" fetchpriority="high" height="600" src="/assets/home/wcs-travel-pack.webp" width="420">
+  <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30">
+  </div>
+  <div class="gap-2 p-6 relative w-full z-10 flex flex-col">
+  <span class="font-mono text-accent text-xs font-black tracking-widest uppercase">FEATURED GUIDE</span>
+  <span class="font-display tracking-tighter text-text-main text-2xl md:text-xl font-black leading-tight">The WCS Travel Pack</span>
+  <span class="font-sans max-w-[65ch] break-words text-text-body text-base md:text-sm">Your checklist for a smoother, better dance weekend.</span>
+  <span class="font-mono tracking-widest uppercase text-accent text-xs font-bold mt-1 group-hover:underline">Read the guide →</span>
+  </div>
+  </a>
+  </section>
+  <div class="mt-12 lg:mt-8">
+  <a bg="surface" class="rounded-md p-3 sm:p-4 relative w-full block group transition-all hover:bg-white/5" href="/merch">
+  <div class="gap-3 sm:gap-4 flex flex-row items-center">
+  <div class="rounded-md h-10 sm:h-12 w-10 sm:w-12 overflow-hidden shrink-0 bg-white/10">
+  <img alt="" class="w-full h-full object-cover" loading="lazy" src="/assets/gear/norcal-bestcal-front.webp">
+  </div>
+  <div class="flex flex-col min-w-0" grow="1">
+  <span class="text-text-main text-sm sm:text-base font-bold leading-tight">Shop NorCal pride merch</span>
+  <span class="text-tiny sm:text-sm leading-snug line-clamp-2">Tees, hoodies, and tanks for the dance floor</span>
+  </div>
+  <div class="gap-1.5 flex flex-row items-center shrink-0">
+  <span class="font-mono tracking-widest text-micro sm:text-tiny font-bold group-hover:underline underline-offset-4 uppercase transition-all">Shop now</span>
+  <span class="shrink-0 inline-flex items-center justify-center w-3 h-3 text-accent sm:w-4 sm:h-4">
+  <svg aria-hidden="true" class="lucide lucide-arrow-right" fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14">
+  </path>
+  <path d="m12 5 7 7-7 7">
+  </path>
+  </svg>
+  </span>
+  </div>
+  </div>
+  </a>
+  </div>
+  <div class="gap-12 lg:gap-section-spacing mt-12 lg:mt-section-spacing w-full max-w-full flex flex-col">
+  <div class="gap-8 w-full max-w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]">
+  <section class="w-full max-w-full min-w-0">
+  <div class="gap-2 mb-4 flex justify-between items-center">
+  <h2 class="font-display tracking-tighter text-text-main text-2xl font-black">Latest from BoomTick</h2>
+  <a class="px-4 sm:px-0 py-4 sm:py-0 font-mono text-text-dim text-xs font-bold shrink-0 uppercase tracking-widest transition-colors hover:text-accent" href="/blog">View all →</a>
+  </div>
+  <div class="border-t flex flex-col border-line">
+  <a class="gap-4 flex items-start group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50" href="/blog/2026-06-14-the-story-behind-the-merch-page">
+  <div class="rounded-md overflow-hidden mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt">
+  <img alt="" aria-hidden="true" class="block h-full w-full max-w-full object-cover" src="/assets/events/jjo-hero.svg">
+  </div>
+  <div class="gap-1 flex flex-col min-w-0 flex-1">
+  <div class="gap-3 flex items-center">
+  <span class="font-mono tracking-widest text-accent text-xs font-bold uppercase">Community</span>
+  <span class="font-mono tracking-widest uppercase text-text-dim text-xs">2026-06-14</span>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-sm font-bold line-clamp-2 transition-colors group-hover:text-accent">The Story Behind the Merch: From Jack &amp; Jill Orama to NorCal Pride</span>
+  <span class="font-sans max-w-[65ch] break-words text-text-dim text-xs line-clamp-1">How a single T-shirt for a local event evolved into a full collection of West Coast Swing apparel celebrating NorCal roots and role-fluid energy.</span>
+  </div>
+  <svg aria-hidden="true" class="lucide lucide-arrow-right mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14">
+  </path>
+  <path d="m12 5 7 7-7 7">
+  </path>
+  </svg>
+  </a>
+  <a class="gap-4 flex items-start group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50" href="/blog/2026-06-01-event-travel-packing">
+  <div class="rounded-md overflow-hidden mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt">
+  <img alt="" aria-hidden="true" class="block h-full w-full max-w-full object-cover" src="/images/gear/sketches/compression-cubes.webp">
+  </div>
+  <div class="gap-1 flex flex-col min-w-0 flex-1">
+  <div class="gap-3 flex items-center">
+  <span class="font-mono tracking-widest text-accent text-xs font-bold uppercase">Travel</span>
+  <span class="font-mono tracking-widest uppercase text-text-dim text-xs">2026-06-01</span>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-sm font-bold line-clamp-2 transition-colors group-hover:text-accent">Event Travel &amp; Packing</span>
+  <span class="font-sans max-w-[65ch] break-words text-text-dim text-xs line-clamp-1">Packing organizers and garment care items for out-of-town events.</span>
+  </div>
+  <svg aria-hidden="true" class="lucide lucide-arrow-right mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14">
+  </path>
+  <path d="m12 5 7 7-7 7">
+  </path>
+  </svg>
+  </a>
+  <a class="gap-4 flex items-start group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50" href="/blog/2026-06-01-general-health-home-care">
+  <div class="rounded-md overflow-hidden mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt">
+  <img alt="" aria-hidden="true" class="block h-full w-full max-w-full object-cover" src="/images/gear/sketches/foam-roller.webp">
+  </div>
+  <div class="gap-1 flex flex-col min-w-0 flex-1">
+  <div class="gap-3 flex items-center">
+  <span class="font-mono tracking-widest text-accent text-xs font-bold uppercase">Health</span>
+  <span class="font-mono tracking-widest uppercase text-text-dim text-xs">2026-06-01</span>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-sm font-bold line-clamp-2 transition-colors group-hover:text-accent">General Health &amp; Home Care for Dancers</span>
+  <span class="font-sans max-w-[65ch] break-words text-text-dim text-xs line-clamp-1">Master your post-event recovery with targeted foam-rolling techniques, muscle maintenance, and professional self-care strategies designed for the active West Coast Swing dancer.</span>
+  </div>
+  <svg aria-hidden="true" class="lucide lucide-arrow-right mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 12h14">
+  </path>
+  <path d="m12 5 7 7-7 7">
+  </path>
+  </svg>
+  </a>
+  </div>
+  </section>
+  <div class="rounded-md border border-line p-5 w-full max-w-full min-w-0">
+  <div class="gap-3 flex flex-row items-center">
+  <div class="rounded-md p-2 shrink-0 bg-accent/10">
+  <svg aria-hidden="true" class="lucide lucide-terminal h-4 w-4 text-accent" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 19h8">
+  </path>
+  <path d="m4 17 6-6-6-6">
+  </path>
+  </svg>
+  </div>
+  <span class="font-mono text-accent text-xs font-bold uppercase tracking-widest">DevAI Portfolio</span>
+  </div>
+  <span class="mt-3 font-sans max-w-[65ch] break-words text-text-dim text-xs leading-relaxed">I build AI-assisted engineering infrastructure and autonomous systems. Explore my portfolio of independently led DevAI projects focusing on agentic CI/CD pipelines, LLM workflows, and automated developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.</span>
+  <div class="gap-2 mt-4 flex flex-col">
+  <div class="gap-2 flex flex-row items-start">
+  <span class="mt-1 w-20 shrink-0 text-micro font-bold tracking-widest uppercase">ROBOTICS</span>
+  <div class="gap-2.5 flex-wrap flex" grow="1">
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent-sky/10 text-accent-sky border-accent-sky/20 px-2 py-0.5 text-micro">ROS1/2</span>
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent-sky/10 text-accent-sky border-accent-sky/20 px-2 py-0.5 text-micro">C++</span>
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent-sky/10 text-accent-sky border-accent-sky/20 px-2 py-0.5 text-micro">Navigation</span>
+  </div>
+  </div>
+  <div class="gap-2 flex flex-row items-start">
+  <span class="mt-1 w-20 shrink-0 text-micro font-bold tracking-widest uppercase">AI</span>
+  <div class="gap-2.5 flex-wrap flex" grow="1">
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent-purple/10 text-accent-purple border-accent-purple/20 px-2 py-0.5 text-micro">LLM Workflows</span>
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent-purple/10 text-accent-purple border-accent-purple/20 px-2 py-0.5 text-micro">Agentic CI/CD</span>
+  </div>
+  </div>
+  <div class="gap-2 flex flex-row items-start">
+  <span class="mt-1 w-20 shrink-0 text-micro font-bold tracking-widest uppercase">INFRA</span>
+  <div class="gap-2.5 flex-wrap flex" grow="1">
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent/10 text-accent border-accent/20 px-2 py-0.5 text-micro">GitHub Actions</span>
+  <span class="inline-flex items-center justify-center rounded border font-semibold uppercase tracking-wider motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none bg-accent/10 text-accent border-accent/20 px-2 py-0.5 text-micro">Playwright</span>
+  </div>
+  </div>
+  </div>
+  <a class="px-4 sm:px-0 py-4 sm:py-0 mt-4 block font-mono tracking-widest uppercase text-accent text-xs font-bold hover:underline" href="/research">View Portfolio →</a>
+  </div>
+  </div>
+  <section class="w-full max-w-full">
+  <h2 class="mb-4 font-display text-text-main text-xl font-black tracking-wider uppercase">Explore by topic</h2>
+  <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+  <a class="rounded-md border gap-4 p-4 flex flex-row items-center group cursor-pointer bg-surface/30 border-line/30 topic-card-gear" href="/blog?category=Gear">
+  <div class="rounded-md h-10 w-10 flex shrink-0 justify-center items-center bg-accent-sky/10 group-hover:bg-accent-sky/20 transition-colors duration-300">
+  <svg aria-hidden="true" class="lucide lucide-shirt h-5 w-5 text-accent-sky group-hover:scale-110 transition-transform duration-300" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z">
+  </path>
+  </svg>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-base font-bold group-hover:text-accent transition-colors duration-300">Gear &amp; apparel</span>
+  </a>
+  <a class="rounded-md border gap-4 p-4 flex flex-row items-center group cursor-pointer bg-surface/30 border-line/30 topic-card-travel" href="/blog?category=Travel">
+  <div class="rounded-md h-10 w-10 flex shrink-0 justify-center items-center bg-accent/10 group-hover:bg-accent/20 transition-colors duration-300">
+  <svg aria-hidden="true" class="lucide lucide-plane h-5 w-5 text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z">
+  </path>
+  </svg>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-base font-bold group-hover:text-accent transition-colors duration-300">Travel &amp; packing</span>
+  </a>
+  <a class="rounded-md border gap-4 p-4 flex flex-row items-center group cursor-pointer bg-surface/30 border-line/30 topic-card-costumes" href="/blog?category=Costumes">
+  <div class="rounded-md h-10 w-10 flex shrink-0 justify-center items-center bg-accent-magenta/10 group-hover:bg-accent-magenta/20 transition-colors duration-300">
+  <svg aria-hidden="true" class="lucide lucide-venetian-mask h-5 w-5 text-accent-magenta group-hover:rotate-12 transition-transform duration-300" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18 11c-1.5 0-2.5.5-3 2">
+  </path>
+  <path d="M4 6a2 2 0 0 0-2 2v4a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V8a2 2 0 0 0-2-2h-3a8 8 0 0 0-5 2 8 8 0 0 0-5-2z">
+  </path>
+  <path d="M6 11c1.5 0 2.5.5 3 2">
+  </path>
+  </svg>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-base font-bold group-hover:text-accent transition-colors duration-300">Costumes &amp; themes</span>
+  </a>
+  <a class="rounded-md border gap-4 p-4 flex flex-row items-center group cursor-pointer bg-surface/30 border-line/30 topic-card-health" href="/blog?category=Health">
+  <div class="rounded-md h-10 w-10 flex shrink-0 justify-center items-center bg-error/10 group-hover:bg-error/20 transition-colors duration-300">
+  <svg aria-hidden="true" class="lucide lucide-heart h-5 w-5 text-error group-hover:scale-110 transition-transform duration-300" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5">
+  </path>
+  </svg>
+  </div>
+  <span class="font-sans max-w-[65ch] break-words text-text-main text-base font-bold group-hover:text-accent transition-colors duration-300">Health &amp; recovery</span>
+  </a>
+  </div>
+  </section>
+  </div>
+  </section>
+  </div>
+  <footer class="mt-auto w-full">
+  <div class="bg-bg text-text-body border-t border-line pt-12 pb-16 px-4 opacity-0.8">
+  <div class="gap-4 flex flex-col sm:flex-row items-center justify-between">
+  <div class="gap-3 flex-wrap flex flex-row items-center">
+  <span class="shrink-0 font-mono uppercase text-tiny font-semibold tracking-widest">© 2026 BOOMTICK.BLOG</span>
+  <div class="h-3 w-px hidden md:block bg-white/10">
+  </div>
+  <span class="text-micro opacity-0.8 hover:opacity-100 transition-opacity whitespace-nowrap">
+- <span class="font-mono text-text-main tracking-wider uppercase">v0.4.0 (<a class="py-4 sm:py-0 inline-block hover:text-accent transition-colors underline decoration-line/40" href="https://github.com/arii/tech-dancer/commit/52e5bb4b1b985cb913f79f7c88897f168873279a" rel="noopener noreferrer" target="_blank">52e5bb4</a>)</span> · Last updated 58 seconds ago</span>
++ <span class="font-mono text-text-main tracking-wider uppercase">v0.4.0 (<a class="py-4 sm:py-0 inline-block hover:text-accent transition-colors underline decoration-line/40" href="https://github.com/arii/tech-dancer/commit/52e5bb4b1b985cb913f79f7c88897f168873279a" rel="noopener noreferrer" target="_blank">52e5bb4</a>)</span> · Last updated 35 seconds ago</span>
+  </div>
+  <div class="">
+  <span class="font-sans max-w-[65ch] break-words text-text-dim text-xs font-medium opacity-0.8">As an Amazon Associate, I earn from qualifying purchases.</span>
+  </div>
+  <div class="gap-2 flex flex-row items-center">
+  <a class="px-4 md:px-3 py-5 md:py-2 flex cursor-pointer justify-center items-center transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-muted disabled:cursor-not-allowed bg-transparent text-text-dim hover:text-text-main hover:bg-line/10" href="/about#privacy" whiletap="[object Object]">
+  <span class="font-mono text-text-main text-xs font-bold tracking-widest uppercase">Privacy</span>
+  </a>
+  <a class="px-4 md:px-3 py-5 md:py-2 flex cursor-pointer justify-center items-center transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-muted disabled:cursor-not-allowed bg-transparent text-text-dim hover:text-text-main hover:bg-line/10" href="/about#terms" whiletap="[object Object]">
+  <span class="font-mono text-text-main text-xs font-bold tracking-widest uppercase">Terms</span>
+  </a>
+  </div>
+  </div>
+  </div>
+  </footer>
+  </div>
+  </main>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>

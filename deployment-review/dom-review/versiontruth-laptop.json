@@ -1,0 +1,17 @@
+{
+  "route": "/versiontruth (laptop)",
+  "slug": "versiontruth-laptop",
+  "beforeHtmlPath": "artifacts/dom-review/versiontruth-laptop/before-laptop.html",
+  "afterHtmlPath": "artifacts/dom-review/versiontruth-laptop/after-laptop.html",
+  "diffPath": "artifacts/dom-review/versiontruth-laptop/diff-laptop.txt",
+  "structureDiffPath": "artifacts/dom-review/versiontruth-laptop/structure-diff-laptop.txt",
+  "metrics": {
+    "nodesAdded": 0,
+    "nodesRemoved": 0,
+    "imagesAdded": 0,
+    "imagesRemoved": 0,
+    "linksAdded": 0,
+    "linksRemoved": 0
+  },
+  "severity": "LOW"
+}

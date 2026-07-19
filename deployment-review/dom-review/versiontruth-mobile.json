@@ -1,0 +1,17 @@
+{
+  "route": "/versiontruth (mobile)",
+  "slug": "versiontruth-mobile",
+  "beforeHtmlPath": "artifacts/dom-review/versiontruth-mobile/before-mobile.html",
+  "afterHtmlPath": "artifacts/dom-review/versiontruth-mobile/after-mobile.html",
+  "diffPath": "artifacts/dom-review/versiontruth-mobile/diff-mobile.txt",
+  "structureDiffPath": "artifacts/dom-review/versiontruth-mobile/structure-diff-mobile.txt",
+  "metrics": {
+    "nodesAdded": 0,
+    "nodesRemoved": 0,
+    "imagesAdded": 0,
+    "imagesRemoved": 0,
+    "linksAdded": 0,
+    "linksRemoved": 0
+  },
+  "severity": "LOW"
+}

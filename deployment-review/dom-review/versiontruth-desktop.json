@@ -1,0 +1,17 @@
+{
+  "route": "/versiontruth",
+  "slug": "versiontruth-desktop",
+  "beforeHtmlPath": "artifacts/dom-review/versiontruth-desktop/before.html",
+  "afterHtmlPath": "artifacts/dom-review/versiontruth-desktop/after.html",
+  "diffPath": "artifacts/dom-review/versiontruth-desktop/diff.txt",
+  "structureDiffPath": "artifacts/dom-review/versiontruth-desktop/structure-diff.txt",
+  "metrics": {
+    "nodesAdded": 0,
+    "nodesRemoved": 0,
+    "imagesAdded": 0,
+    "imagesRemoved": 0,
+    "linksAdded": 0,
+    "linksRemoved": 0
+  },
+  "severity": "LOW"
+}
