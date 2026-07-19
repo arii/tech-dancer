@@ -217,6 +217,8 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           height: `${height}px`,
           minWidth: `${width}px`,
           minHeight: `${height}px`,
+          maxWidth: 'none',
+          maxHeight: 'none',
         }}
       />
       <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
