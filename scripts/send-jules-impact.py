@@ -1,10 +1,12 @@
-# pylint: disable=invalid-name,logging-fstring-interpolation,missing-docstring,too-many-branches,too-many-locals,too-many-statements,wrong-import-order
-from dev_tools.services.jules import JulesClient
+# pylint: disable=invalid-name,logging-fstring-interpolation,missing-docstring,too-many-branches,too-many-locals,too-many-statements,wrong-import-order,wrong-import-position
 import glob
 import json
 import logging
 import os
 import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../boomtick-pkg/cli')))
+from dev_tools.services.jules import JulesClient
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -46,6 +48,8 @@ def main():
 
     body = "## Deployment Impact Analysis\n\n"
 
+    has_valid_content = False
+
     # Try deployment-review.md first
     deployment_review_path = os.path.join(artifacts_dir, "deployment-review.md")
     impact_md_path = os.path.join(artifacts_dir, "impact-analysis", "impact.md")
@@ -54,12 +58,14 @@ def main():
         try:
             with open(deployment_review_path, "r", encoding="utf-8") as f:
                 body += f.read() + "\n\n"
+                has_valid_content = True
         except IOError as e:
             logger.error(f"Failed to read {deployment_review_path}: {e}")
     elif os.path.isfile(impact_md_path):
         try:
             with open(impact_md_path, "r", encoding="utf-8") as f:
                 body += f.read() + "\n\n"
+                has_valid_content = True
         except IOError as e:
             logger.error(f"Failed to read {impact_md_path}: {e}")
     else:
@@ -73,8 +79,6 @@ def main():
         "github-models-code-review.md",
     ]
 
-    has_valid_reviews = False
-
     for filename in review_files:
         filepath = os.path.join(artifacts_dir, filename)
         if os.path.isfile(filepath):
@@ -83,7 +87,7 @@ def main():
                     content = f.read()
                     if not is_skipped_review(content):
                         body += content + "\n\n"
-                        has_valid_reviews = True
+                        has_valid_content = True
             except IOError as e:
                 logger.error(f"Failed to read {filepath}: {e}")
 
@@ -99,15 +103,15 @@ def main():
                     data = json.loads(content)
                     if not is_skipped_verdict(data):
                         verdicts.append((os.path.basename(filepath), content))
-                        has_valid_reviews = True
+                        has_valid_content = True
                 except Exception as e:
                     logger.error(f"Invalid JSON in verdict file {filepath}: {e}")
                     continue
         except IOError as e:
             logger.error(f"Failed to read JSON verdict {filepath}: {e}")
 
-    if not has_valid_reviews:
-        logger.info("No valid reviews found. Skipping sending impact analysis.")
+    if not has_valid_content:
+        logger.info("No valid content found to send. Skipping sending impact analysis.")
         sys.exit(0)
 
     if verdicts:

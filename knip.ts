@@ -9,7 +9,7 @@ const config: KnipConfig = {
         'src/components/Equalizer.tsx',
         'boomtick-pkg/mcp/**/*'
       ],
-      ignoreDependencies: [
+      ignoreDependencies: ['openai',
         'tw-animate-css',
         'vite-plugin-pwa',
         'workbox-window',
