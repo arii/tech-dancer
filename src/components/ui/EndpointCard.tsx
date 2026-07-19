@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
   method: string;
@@ -30,7 +30,7 @@ export const EndpointCard = ({
       surface="card"
       gap={4}
     >
-      <Box display="flex" align="center" gap={3}>
+      <Stack direction="row" align="center" gap={3}>
         <Box
           as="span"
           paddingX={2.5}
@@ -44,27 +44,29 @@ export const EndpointCard = ({
         >
           {method}
         </Box>
-        <Box as="code" className="text-sm font-semibold text-main font-mono break-all">
+        <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
           {path}
-        </Box>
-      </Box>
+        </Text>
+      </Stack>
       <Box as="p" className="text-sm text-dim">
         {description}
       </Box>
-      <Box marginTop={2}>
-        <Box as="span" marginBottom={1} className="text-xs font-semibold text-dim uppercase tracking-wider block">
+      <Stack gap={1}>
+        <Text as="span" size="xs" weight="semibold" color="dim" uppercase tracking="wider" className="block">
           Example Call
-        </Box>
-        <Box
+        </Text>
+        <Text
           padding={3}
           radius="md"
           surface="bg"
           as="pre"
-          className="text-xs text-main font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
+          size="xs"
+          color="main"
+          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
         >
           {exampleCall}
-        </Box>
-      </Box>
+        </Text>
+      </Stack>
       <Box display="flex" flexDirection="col" gap={2}>
         <Box
           as="button"
@@ -77,15 +79,17 @@ export const EndpointCard = ({
           {showResponse ? 'Hide Example Response' : 'Show Example Response'}
         </Box>
         {showResponse && (
-          <Box
+          <Text
             padding={3}
             radius="md"
             surface="bg"
             as="pre"
-            className="text-xs text-dim font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
+            size="xs"
+            color="dim"
+            className="font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
           >
             {exampleResponse}
-          </Box>
+          </Text>
         )}
       </Box>
     </Stack>
