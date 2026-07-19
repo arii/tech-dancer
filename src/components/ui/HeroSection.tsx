@@ -146,9 +146,8 @@ export function HeroSection() {
           overflow="hidden"
           opacity={0}
           pointerEvents="none"
-          className="hero-waveform-anim"
+          className="hero-waveform-anim [content-visibility:auto] [contain-intrinsic-size:var(--spacing-12)]"
           aria-hidden="true"
-          style={{ contentVisibility: "auto", containIntrinsicSize: "48px" }}
         >
           {BARS.map((bar, i) => (
             <Box

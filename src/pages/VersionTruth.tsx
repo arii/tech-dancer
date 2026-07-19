@@ -9,7 +9,7 @@ const VersionTruth = () => {
       aria-label="VersionTruth content"
       marginX="auto"
       width="full"
-      maxWidth="1024px"
+      maxWidth="5xl"
       minWidth={0}
       paddingX={{ base: 4, sm: 6, lg: 8 }}
       paddingY={10}
@@ -25,7 +25,7 @@ const VersionTruth = () => {
           <Box as="h1" emphasis="h1" className="text-3xl sm:text-4xl">
             VersionTruth
           </Box>
-          <Box as="p" emphasis="body" className="text-lg" maxWidth="800px">
+          <Box as="p" emphasis="body" className="text-lg" maxWidth="3xl">
             The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions. Exposes live, registry-fetched ground-truth so coding agents stop downgrading correct dependency versions.
           </Box>
         </Stack>
@@ -33,7 +33,7 @@ const VersionTruth = () => {
         {/* Concept Cards */}
         <Grid cols={{ base: 1, md: 2 }} gap={6} width="full">
           <Box padding={6} radius="lg" border="default" surface="card">
-            <Box as="h3" emphasis="h3" className="mb-2">
+            <Box as="h3" emphasis="h3" marginBottom={2}>
               The Fallacy
             </Box>
             <Box as="p" emphasis="body" className="text-sm">
@@ -41,7 +41,7 @@ const VersionTruth = () => {
             </Box>
           </Box>
           <Box padding={6} radius="lg" border="default" surface="card">
-            <Box as="h3" emphasis="h3" className="mb-2">
+            <Box as="h3" emphasis="h3" marginBottom={2}>
               The Remedy
             </Box>
             <Box as="p" emphasis="body" className="text-sm">

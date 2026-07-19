@@ -44,15 +44,15 @@ export const EndpointCard = ({
         >
           {method}
         </Box>
-        <Box as="code" className="text-sm font-semibold text-primary font-mono break-all">
+        <Box as="code" className="text-sm font-semibold text-main font-mono break-all">
           {path}
         </Box>
       </Box>
-      <Box as="p" className="text-sm text-secondary">
+      <Box as="p" className="text-sm text-dim">
         {description}
       </Box>
-      <Box className="mt-2">
-        <Box as="span" className="text-xs font-semibold text-dim uppercase tracking-wider block mb-1">
+      <Box marginTop={2}>
+        <Box as="span" marginBottom={1} className="text-xs font-semibold text-dim uppercase tracking-wider block">
           Example Call
         </Box>
         <Box
@@ -60,25 +60,29 @@ export const EndpointCard = ({
           radius="md"
           surface="bg"
           as="pre"
-          className="text-xs text-primary font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
+          className="text-xs text-main font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
         >
           {exampleCall}
         </Box>
       </Box>
       <Box display="flex" flexDirection="col" gap={2}>
-        <button
+        <Box
+          as="button"
+          display="flex"
+          align="center"
+          gap={1}
           onClick={handleToggleResponse}
-          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start flex align-center gap-1"
+          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start"
         >
           {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-        </button>
+        </Box>
         {showResponse && (
           <Box
             padding={3}
             radius="md"
             surface="bg"
             as="pre"
-            className="text-xs text-secondary font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
+            className="text-xs text-dim font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
           >
             {exampleResponse}
           </Box>
