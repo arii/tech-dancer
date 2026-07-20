@@ -54,6 +54,7 @@ export const buttons = {
 } as const;
 
 export const journal = {
+  // Adds a trailing comma using CSS pseudo-elements to cleanly separate lists of tags
   tagSeparator: "after:content-[','] last:after:content-none",
   share: "text-text-dim hover:text-accent group",
   tag: "border-line/50 hover:border-accent cursor-default",
