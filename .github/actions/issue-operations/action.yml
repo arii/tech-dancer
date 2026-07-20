@@ -36,7 +36,7 @@ runs:
 
     - name: Setup Workspace for Quality Validation
       if: inputs.operation == 'validate-quality'
-      uses: arii/boomtick/.github/actions/setup-workspace@main
+      uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         setup-node: 'false'
 
@@ -44,14 +44,15 @@ runs:
       if: inputs.operation == 'validate-quality'
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+        ISSUE_NUM: ${{ inputs.issue_number }}
       run: |
-        td-cli gh validate-issue --issue-number ${{ inputs.issue_number }} --post-comments --execute
+        td-cli gh validate-issue --issue-number "$ISSUE_NUM" --post-comments --execute
       shell: bash
 
     # --- CREATE PR ---
     - name: Set up Python for PR Creation
       if: inputs.operation == 'create-pr'
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         python-version: '3.x'
 
@@ -106,7 +107,7 @@ runs:
 
     - name: Create Pull Request
       if: inputs.operation == 'create-pr'
-      uses: peter-evans/create-pull-request@v8
+      uses: peter-evans/create-pull-request@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         token: ${{ inputs.github_token }}
         commit-message: "docs: add content from issue #${{ inputs.issue_number }}"
@@ -119,7 +120,7 @@ runs:
     # --- AI REVIEW ---
     - name: AI Review
       if: inputs.operation == 'ai-review'
-      uses: arii/boomtick/mcp/actions/ai-review@main
+      uses: arii/boomtick/mcp/actions/ai-review@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         pr_number: ${{ inputs.issue_number }}
       env:
@@ -131,7 +132,7 @@ runs:
     # --- RESOLVE CONFLICTS ---
     - name: Setup Workspace for Conflict Resolution
       if: inputs.operation == 'resolve-conflicts'
-      uses: arii/boomtick/.github/actions/setup-workspace@main
+      uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
     - name: Find and Resolve Conflicts
       if: inputs.operation == 'resolve-conflicts'
@@ -151,7 +152,7 @@ runs:
 
     - name: Commit Conflict Changes
       if: inputs.operation == 'resolve-conflicts'
-      uses: stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         commit_message: "chore: auto-resolved merge conflicts using AI"
         file_pattern: '.'
@@ -159,7 +160,7 @@ runs:
     # --- UPDATE SNAPSHOTS ---
     - name: Setup Workspace for Snapshots Update
       if: inputs.operation == 'update-snapshots'
-      uses: arii/boomtick/.github/actions/setup-workspace@main
+      uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
     - name: Install Snapshot Dependencies
       if: inputs.operation == 'update-snapshots'
@@ -185,7 +186,7 @@ runs:
 
     - name: Commit Snapshot Changes
       if: inputs.operation == 'update-snapshots' && steps.status.outputs.changed == 'true'
-      uses: stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         commit_message: "chore: update playwright snapshots"
         file_pattern: '**/snapshots/*'

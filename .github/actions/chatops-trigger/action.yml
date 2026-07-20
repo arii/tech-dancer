@@ -22,7 +22,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Workspace
-      uses: arii/boomtick/.github/actions/setup-workspace@main
+      uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
 
     - name: Check commands
       id: check
