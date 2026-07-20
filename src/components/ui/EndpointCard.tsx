@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
   method: string;
@@ -9,7 +9,7 @@ export interface EndpointCardProps {
   exampleResponse: string;
 }
 
-export const EndpointCard = React.memo(({
+export const EndpointCard = ({
   method,
   path,
   description,
@@ -36,19 +36,13 @@ export const EndpointCard = React.memo(({
           paddingX={2.5}
           paddingY={1}
           radius="md"
-          border
-          borderColor={method === 'POST' ? 'accent/30' : 'main/30'}
-          surface={method === 'POST' ? 'accent' : 'default'}
+          className={`text-xs font-bold tracking-wider uppercase ${
+            method === 'POST'
+              ? 'bg-accent/20 text-accent border border-accent/30'
+              : 'bg-main/20 text-main border border-main/30'
+          }`}
         >
-          <Text
-            size="xs"
-            weight="bold"
-            tracking="wider"
-            uppercase
-            color={method === 'POST' ? 'accent' : 'main'}
-          >
-            {method}
-          </Text>
+          {method}
         </Box>
         <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
           {path}
@@ -73,18 +67,17 @@ export const EndpointCard = React.memo(({
           {exampleCall}
         </Text>
       </Stack>
-      <Stack gap={2}>
-        <Button
-          variant="ghost"
-          size="sm"
-          paddingX={0}
+      <Box display="flex" flexDirection="col" gap={2}>
+        <Box
+          as="button"
+          display="flex"
+          align="center"
+          gap={1}
           onClick={handleToggleResponse}
-          className="self-start text-accent hover:text-accent/80 hover:bg-transparent transition-colors duration-200"
+          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start"
         >
-          <Text size="xs" weight="semibold" color="accent" hoverColor="accent">
-            {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-          </Text>
-        </Button>
+          {showResponse ? 'Hide Example Response' : 'Show Example Response'}
+        </Box>
         {showResponse && (
           <Text
             padding={3}
@@ -98,9 +91,7 @@ export const EndpointCard = React.memo(({
             {exampleResponse}
           </Text>
         )}
-      </Stack>
+      </Box>
     </Stack>
   );
-});
-
-EndpointCard.displayName = 'EndpointCard';
+};

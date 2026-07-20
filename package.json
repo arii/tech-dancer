@@ -30,7 +30,7 @@
     "lint:python": "pylint etl/ scripts/ tests/",
     "type-check:python": "mypy .",
     "audit:semgrep": "semgrep scan --config auto --error",
-    "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs \"$PWD/src\" \"$PWD/.github/workflows\" \"$PWD/.npmrc\"",
+    "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs $PWD/src $PWD/.github/workflows $PWD/.npmrc",
     "audit:dead-code": "pnpm exec knip",
     "audit:duplication": "jscpd .",
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
