@@ -44,7 +44,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       padding={2}
       className={cardVariants()}
     >
-      <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">{label}</Text>
+      <Text variant="mono" size="xs" color="muted" paddingLeft={2} uppercase weight="font-bold">{label}</Text>
       <Box
         as="input"
         id={id}
@@ -182,13 +182,16 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       justify="center"
       overflow="hidden"
       position="relative"
-      className="bg-surface rounded-xl shadow-2xl border border-line"
+      surface="default"
+      radius="xl"
+      shadow="2xl"
+      border={true}
     >
       {isLoading && (
         <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
           <Stack align="center" gap={3}>
              <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
-             <Text variant="sans" size="xs" color="dim" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
+             <Text variant="sans" size="xs" color="muted" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
           </Stack>
         </Box>
       )}
@@ -218,7 +221,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
            border={true}
            className="bg-bg/80 backdrop-blur-sm"
          >
-           <Text variant="sans" size="xs" color="dim">
+           <Text variant="sans" size="xs" color="muted">
              ⚠️ Some sites block embedding via CORS.
            </Text>
          </Box>
@@ -239,7 +242,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
             {vp.name} Analysis
           </Text>
         </Stack>
-        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+        <Text variant="mono" size="xs" weight="font-bold" color="muted" uppercase tracking="widest">
           {vp.width}w × {vp.height}h
         </Text>
       </Stack>
@@ -249,12 +252,12 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
-              url={activeReportUrl}
+              url={sanitizeUrlForDisplay(activeReportUrl)}
               width={vp.width}
               height={vp.height}
             />
           ) : (
-            <Stack align="center" justify="center" color="dim" className="text-center">
+            <Stack align="center" justify="center" color="muted" className="text-center">
               <Box marginBottom={2}>
                 <Icon icon={ImageIcon} size="2xl" color="muted" />
               </Box>
@@ -288,18 +291,18 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                           {imp.element}
                         </Text>
                       </Stack>
-                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="muted" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                         SEV {imp.severity}
                       </Text>
                     </Box>
-                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
+                    <Text variant="sans" size="xs" color="muted" marginBottom={3}>
                       {imp.issue}
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                       <Box surface="muted" padding={3} radius="md" border={true}>
                         <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth="0" className="overflow-hidden">
+                          <Box flex={1} minWidth={0} overflow="hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -444,7 +447,7 @@ export default function UXAuditor() {
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
         <Stack gap={4} span={{ lg: 1 }}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
+          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="muted" paddingX={1}>
             Audit History
           </Text>
           <Stack className={cardVariants({ overflow: "hidden" })} border={true}>
@@ -478,10 +481,10 @@ export default function UXAuditor() {
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
                 <Box flex={1} minWidth={0}>
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
+                  <Text variant="sans" size="sm" weight="font-bold" display="block" truncate={true} title={sanitizeUrlForDisplay(report.url)}>
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" color="muted" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -527,7 +530,7 @@ export default function UXAuditor() {
                     gap={2}
                     className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
-                    color="dim"
+                    color="muted"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
