@@ -65,7 +65,7 @@ export const EndpointCard = ({
           {exampleCall}
         </Box>
       </Box>
-      <Box display="flex" flexDirection="col" gap={2}>
+      <Stack gap={2}>
         <button
           onClick={handleToggleResponse}
           className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start flex align-center gap-1"
@@ -83,7 +83,7 @@ export const EndpointCard = ({
             {exampleResponse}
           </Box>
         )}
-      </Box>
+      </Stack>
     </Stack>
   );
 };
