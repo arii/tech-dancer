@@ -229,7 +229,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
 
 function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
+    <Box className={cardVariants({ overflow: "hidden" })}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -265,7 +265,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           )}
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
           {data ? (
             <>
               <Box surface="alt" padding={5} border={true} radius="lg">
