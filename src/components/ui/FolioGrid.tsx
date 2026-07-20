@@ -103,7 +103,7 @@ export default function FolioGrid({
                     imageAlt={'imageAlt' in item ? item.imageAlt : undefined}
                     date={'date' in item ? item.date : undefined}
                     readingTime={'readingTime' in item ? String(item.readingTime) : undefined}
-                    featured={Boolean('featured' in item ? item.featured : false)}
+                    featured={('featured' in item ? item.featured : false) === true}
                     basePath={basePath}
                     compact={compact}
                   />
