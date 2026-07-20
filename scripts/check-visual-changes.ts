@@ -1,0 +1,1 @@
+../boomtick-pkg/scripts/check-visual-changes.ts
