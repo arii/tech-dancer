@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
   method: string;
@@ -31,24 +31,25 @@ export const EndpointCard = React.memo(({
       gap={4}
     >
       <Stack direction="row" align="center" gap={3}>
-        <Text
+        <Box
           as="span"
           paddingX={2.5}
           paddingY={1}
           radius="md"
-          size="xs"
-          weight="bold"
-          tracking="wider"
-          uppercase
           border
-          className={
-            method === 'POST'
-              ? 'bg-accent/20 border-accent/30 text-accent'
-              : 'bg-main/20 border-main/30 text-main'
-          }
+          borderColor={method === 'POST' ? 'accent/30' : 'main/30'}
+          surface={method === 'POST' ? 'accent' : 'default'}
         >
-          {method}
-        </Text>
+          <Text
+            size="xs"
+            weight="bold"
+            tracking="wider"
+            uppercase
+            color={method === 'POST' ? 'accent' : 'main'}
+          >
+            {method}
+          </Text>
+        </Box>
         <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
           {path}
         </Text>
@@ -73,20 +74,17 @@ export const EndpointCard = React.memo(({
         </Text>
       </Stack>
       <Stack gap={2}>
-        <Text
-          as="button"
-          display="flex"
-          align="center"
-          gap={1}
+        <Button
+          variant="ghost"
+          size="sm"
+          paddingX={0}
           onClick={handleToggleResponse}
-          size="xs"
-          weight="semibold"
-          color="accent"
-          hoverColor="accent"
-          className="transition-colors duration-200 cursor-pointer self-start"
+          className="self-start text-accent hover:text-accent/80 hover:bg-transparent transition-colors duration-200"
         >
-          {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-        </Text>
+          <Text size="xs" weight="semibold" color="accent" hoverColor="accent">
+            {showResponse ? 'Hide Example Response' : 'Show Example Response'}
+          </Text>
+        </Button>
         {showResponse && (
           <Text
             padding={3}
