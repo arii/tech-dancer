@@ -78,7 +78,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       )}
     </Stack>
     {helpText && (
-      <Text variant="sans" size="xs" color={isPassword ? "warning" : "dim"} paddingX={2} weight={isPassword ? "font-medium" : "normal"}>
+      <Text variant="sans" size="xs" color={isPassword ? "warning" : "muted"} paddingX={2} weight={isPassword ? "font-medium" : "normal"}>
         {helpText}
       </Text>
     )}
