@@ -229,7 +229,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
 
 function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
+    <Box className={cardVariants({ overflow: "hidden" })}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -265,7 +265,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           )}
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
           {data ? (
             <>
               <Box surface="alt" padding={5} className="border border-line rounded-lg">
@@ -297,9 +297,9 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                       <Box surface="muted" padding={3} radius="md" border={true}>
-                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
+                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth="0" className="overflow-hidden">
+                          <Box flex={1} minWidth={0} className="overflow-hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -443,11 +443,11 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
+        <Stack gap={4} span={{ lg: 1 }}>
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -474,7 +474,7 @@ export default function UXAuditor() {
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
-                <Box flex={1} minWidth="0">
+                <Box flex={1} minWidth={0}>
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
                     {report.url.replace('https://', '')}
                   </Text>
@@ -489,7 +489,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full">
+        <Stack gap={6} span={{ lg: 3 }} width="full">
           {activeReport ? (
             <>
               <Stack
@@ -499,7 +499,7 @@ export default function UXAuditor() {
                 gap={6} direction={{ base: "col", md: "row" }}
                 width="full"
               >
-                <Stack gap={1} minWidth="0" flex={1}>
+                <Stack gap={1} minWidth={0} flex={1}>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
