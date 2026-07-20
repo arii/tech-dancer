@@ -28,6 +28,30 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Pre-flight Validations
+      id: validate
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+        ISSUE_NUMBER: ${{ inputs.issue_number }}
+      run: |
+        if [ -z "$GH_TOKEN" ]; then
+          echo "::error::github_token is missing."
+          exit 1
+        fi
+
+        # issue_number might be empty initially for issue creation events,
+        # but if it's provided we can validate it's numeric.
+        if [ -n "$ISSUE_NUMBER" ] && [[ ! "$ISSUE_NUMBER" =~ ^[0-9]+$ ]]; then
+          echo "::error::Invalid issue_number: must be numeric."
+          exit 1
+        fi
+
+        {
+          echo "GH_TOKEN=$GH_TOKEN"
+          echo "GITHUB_TOKEN=$GH_TOKEN"
+        } >> "$GITHUB_ENV"
+      shell: bash
+
     # --- VALIDATE QUALITY ---
     - name: Configure Git Safe Directory
       if: inputs.operation == 'validate-quality' || inputs.operation == 'resolve-conflicts'
@@ -43,7 +67,6 @@ runs:
     - name: Validate Issue
       if: inputs.operation == 'validate-quality'
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
         ISSUE_NUM: ${{ inputs.issue_number }}
       run: |
         td-cli gh validate-issue --issue-number "$ISSUE_NUM" --post-comments --execute
@@ -124,7 +147,6 @@ runs:
       with:
         pr_number: ${{ inputs.issue_number }}
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
         GEMINI_API_KEY: ${{ inputs.gemini_api_key }}
         OPENAI_API_KEY: ${{ inputs.openai_api_key }}
         GOOGLE_JULES_API_KEY: ${{ inputs.google_jules_api_key }}
@@ -136,8 +158,6 @@ runs:
 
     - name: Find and Resolve Conflicts
       if: inputs.operation == 'resolve-conflicts'
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         td-cli gh resolve
       shell: bash
