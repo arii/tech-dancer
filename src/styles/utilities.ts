@@ -54,6 +54,7 @@ export const buttons = {
 } as const;
 
 export const journal = {
+  tagSeparator: "after:content-[','] last:after:content-none",
   share: "text-text-dim hover:text-accent group",
   tag: "border-line/50 hover:border-accent cursor-default",
   nav: "group cursor-pointer",
