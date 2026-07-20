@@ -36,17 +36,17 @@ const VersionTruth = () => {
             <Box as="h3" emphasis="h3" marginBottom={2}>
               The Fallacy
             </Box>
-            <Box as="p" emphasis="body" className="text-sm">
+            <Text as="p" variant="body" size="sm">
               LLMs suffer from knowledge cutoff dates. When they encounter newer, unfamiliar releases (like v6), they confidently assume they are hallucinations or typos and revert them back to old, stale versions (like v4) that exist in their training data.
-            </Box>
+            </Text>
           </Box>
           <Box padding={6} radius="lg" border="default" surface="card">
             <Box as="h3" emphasis="h3" marginBottom={2}>
               The Remedy
             </Box>
-            <Box as="p" emphasis="body" className="text-sm">
-              VersionTruth serves as a live oracle. Before writing updates, an agent queries the API or reads the hosted <Box as="code" emphasis="mono" className="text-xs">skill.md</Box> to verify that their candidate is current and valid.
-            </Box>
+            <Text as="p" variant="body" size="sm">
+              VersionTruth serves as a live oracle. Before writing updates, an agent queries the API or reads the hosted <Box as="code" variant="mono" size="xs">skill.md</Box> to verify that their candidate is current and valid.
+            </Text>
           </Box>
         </Grid>
 
