@@ -3,7 +3,6 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
 import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
-import { escapeHtml } from '@/utils/string';
 
 interface EditorialHeaderProps {
   category: string;
@@ -75,16 +74,20 @@ export function EditorialHeader({
         {tags && tags.length > 0 && (
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-medium">TAGS:</Text>
-            {tags.map((tag, index) => (
-              <Text
-                key={`${tag}-${index}`}
-                variant="mono"
-                size="micro"
-                color="dim"
+            {tags.map((tag) => (
+              <Box
+                key={tag}
                 className={journalVariants.tagSeparator()}
               >
-                {escapeHtml(tag.toUpperCase())}
-              </Text>
+                <Text
+                  variant="mono"
+                  size="micro"
+                  color="dim"
+                  weight="font-medium"
+                >
+                  {tag}
+                </Text>
+              </Box>
             ))}
           </Stack>
         )}
