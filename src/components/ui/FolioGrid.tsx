@@ -90,7 +90,6 @@ export default function FolioGrid({
                 key={item.slug}
                 padding={4}
                 height="full"
-                className="bg-transparent"
               >
                 {renderItem ? (
                   renderItem(item)
@@ -104,7 +103,7 @@ export default function FolioGrid({
                     imageAlt={'imageAlt' in item ? item.imageAlt : undefined}
                     date={'date' in item ? item.date : undefined}
                     readingTime={'readingTime' in item ? String(item.readingTime) : undefined}
-                    featured={'featured' in item ? item.featured : undefined}
+                    featured={Boolean('featured' in item ? item.featured : false)}
                     basePath={basePath}
                     compact={compact}
                   />

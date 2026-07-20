@@ -66,7 +66,7 @@ export const ContentCard = (props: ContentCardProps) => {
             height="full"
             src={image}
             alt={imageAlt || title}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="[object-fit:cover] [transition-property:transform] [transition-duration:500ms] group-hover:[transform:scale(1.05)]"
             loading="lazy"
           />
         </Box>
