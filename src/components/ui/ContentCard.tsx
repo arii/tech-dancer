@@ -54,16 +54,19 @@ export const ContentCard = (props: ContentCardProps) => {
       direction="col"
       height="full"
       to={`${basePath}/${slug}`}
-      ariaLabel={`Read article: ${title}`}
+      aria-label={`Read article: ${title}`}
       overflow="hidden"
       {...motionProps}
     >
       {!compact && image && (
         <Box width="full" aspect="video" surface="alt" border="b" overflow="hidden">
-          <img
+          <Box
+            as="img"
+            width="full"
+            height="full"
             src={image}
             alt={imageAlt || title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="[object-fit:cover] [transition-property:transform] [transition-duration:500ms] group-hover:[transform:scale(1.05)]"
             loading="lazy"
           />
         </Box>

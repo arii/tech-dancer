@@ -90,13 +90,20 @@ export default function FolioGrid({
                 key={item.slug}
                 padding={4}
                 height="full"
-                className="bg-transparent"
               >
                 {renderItem ? (
                   renderItem(item)
                 ) : (
                   <ContentCard
-                    {...item}
+                    slug={item.slug}
+                    title={item.title}
+                    category={item.category}
+                    excerpt={'excerpt' in item ? item.excerpt : undefined}
+                    image={'image' in item ? item.image : undefined}
+                    imageAlt={'imageAlt' in item ? item.imageAlt : undefined}
+                    date={'date' in item ? item.date : undefined}
+                    readingTime={'readingTime' in item ? String(item.readingTime) : undefined}
+                    featured={('featured' in item ? item.featured : false) === true}
                     basePath={basePath}
                     compact={compact}
                   />

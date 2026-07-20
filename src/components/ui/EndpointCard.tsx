@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
   method: string;
@@ -31,59 +31,67 @@ export const EndpointCard = ({
       gap={4}
     >
       <Box display="flex" align="center" gap={3}>
-        <Box
+        <Text
           as="span"
+          size="xs"
+          weight="font-bold"
+          tracking="wider"
+          uppercase
           paddingX={2.5}
           paddingY={1}
           radius="md"
-          className={`text-xs font-bold tracking-wider uppercase ${
+          className={
             method === 'POST'
-              ? 'bg-accent/20 text-accent border border-accent/30'
-              : 'bg-primary/20 text-primary border border-primary/30'
-          }`}
+              ? '[background-color:hsl(var(--color-accent)_/_0.2)] [color:hsl(var(--color-accent))] border border-solid [border-color:hsl(var(--color-accent)_/_0.3)]'
+              : '[background-color:hsl(var(--color-main)_/_0.2)] [color:hsl(var(--color-main))] border border-solid [border-color:hsl(var(--color-main)_/_0.3)]'
+          }
         >
           {method}
-        </Box>
-        <Box as="code" className="text-sm font-semibold text-primary font-mono break-all">
+        </Text>
+        <Text as="code" size="sm" weight="font-semibold" color="main" className="font-mono break-all">
           {path}
-        </Box>
+        </Text>
       </Box>
-      <Box as="p" className="text-sm text-secondary">
+      <Text as="p" size="sm" color="dim">
         {description}
-      </Box>
-      <Box className="mt-2">
-        <Box as="span" className="text-xs font-semibold text-dim uppercase tracking-wider block mb-1">
+      </Text>
+      <Box marginTop={2}>
+        <Text as="span" marginBottom={1} display="block" size="xs" weight="font-semibold" color="dim" uppercase tracking="wider">
           Example Call
-        </Box>
+        </Text>
         <Box
           padding={3}
           radius="md"
           surface="bg"
           as="pre"
-          className="text-xs text-primary font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
+          className="text-xs text-main font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
         >
           {exampleCall}
         </Box>
       </Box>
-      <Box display="flex" flexDirection="col" gap={2}>
-        <button
+      <Stack gap={2}>
+        <Box
+          as="button"
+          display="flex"
+          align="center"
+          gap={1}
           onClick={handleToggleResponse}
-          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start flex align-center gap-1"
+          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start"
         >
           {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-        </button>
+        </Box>
         {showResponse && (
           <Box
             padding={3}
             radius="md"
             surface="bg"
             as="pre"
-            className="text-xs text-secondary font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
+            className="text-xs text-dim font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
           >
             {exampleResponse}
           </Box>
         )}
-      </Box>
+      </Stack>
     </Stack>
   );
 };
