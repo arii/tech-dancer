@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
   method: string;
@@ -31,30 +31,34 @@ export const EndpointCard = ({
       gap={4}
     >
       <Box display="flex" align="center" gap={3}>
-        <Box
+        <Text
           as="span"
+          size="xs"
+          weight="font-bold"
+          tracking="wider"
+          uppercase
           paddingX={2.5}
           paddingY={1}
           radius="md"
-          className={`text-xs font-bold tracking-wider uppercase ${
+          className={
             method === 'POST'
               ? 'bg-accent/20 text-accent border border-accent/30'
               : 'bg-main/20 text-main border border-main/30'
-          }`}
+          }
         >
           {method}
-        </Box>
-        <Box as="code" className="text-sm font-semibold text-main font-mono break-all">
+        </Text>
+        <Text as="code" size="sm" weight="font-semibold" color="main" className="font-mono break-all">
           {path}
-        </Box>
+        </Text>
       </Box>
-      <Box as="p" className="text-sm text-dim">
+      <Text as="p" size="sm" color="dim">
         {description}
-      </Box>
+      </Text>
       <Box marginTop={2}>
-        <Box as="span" marginBottom={1} display="block" className="text-xs font-semibold text-dim uppercase tracking-wider">
+        <Text as="span" marginBottom={1} display="block" size="xs" weight="font-semibold" color="dim" uppercase tracking="wider">
           Example Call
-        </Box>
+        </Text>
         <Box
           padding={3}
           radius="md"

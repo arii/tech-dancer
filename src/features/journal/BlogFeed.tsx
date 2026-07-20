@@ -53,7 +53,7 @@ const BlogFeed = () => {
           </Box>
         ) : (
           isInitialView && featuredPosts.length > 0 && (
-          <Box marginTop={12} marginBottom={8} border="b" paddingBottom={12} className="border-line">
+          <Box marginTop={12} marginBottom={8} border="b" paddingBottom={12}>
             <Box marginBottom={6}>
               <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="widest" uppercase display="block" marginBottom={2}>
                 CURATED GUIDES

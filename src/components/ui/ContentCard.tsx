@@ -60,10 +60,13 @@ export const ContentCard = (props: ContentCardProps) => {
     >
       {!compact && image && (
         <Box width="full" aspect="video" surface="alt" border="b" overflow="hidden">
-          <img
+          <Box
+            as="img"
+            width="full"
+            height="full"
             src={image}
             alt={imageAlt || title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
         </Box>

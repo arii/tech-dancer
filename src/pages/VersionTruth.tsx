@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { EndpointCard } from '@/components/ui/EndpointCard';
 
 const VersionTruth = () => {
@@ -22,12 +22,12 @@ const VersionTruth = () => {
       <Stack gap={8} width="full" maxWidth="full">
         {/* Header */}
         <Stack gap={3}>
-          <Box as="h1" emphasis="h1" className="text-3xl sm:text-4xl">
+          <Text as="h1" variant="hero" size={{ base: "3xl", sm: "4xl" }}>
             VersionTruth
-          </Box>
-          <Box as="p" emphasis="body" className="text-lg" maxWidth="3xl">
+          </Text>
+          <Text as="p" variant="body" size="lg" maxWidth="3xl">
             The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions. Exposes live, registry-fetched ground-truth so coding agents stop downgrading correct dependency versions.
-          </Box>
+          </Text>
         </Stack>
 
         {/* Concept Cards */}
