@@ -24,7 +24,7 @@ export interface BaseProps {
   gap?: ResponsiveProp<number | string>
   gapX?: ResponsiveProp<number | string>
   gapY?: ResponsiveProp<number | string>
-  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  border?: ResponsiveProp<boolean | "t" | "b" | "l" | "r" | "x" | "y">
   borderColor?: string
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -154,19 +154,19 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       });
     }
 
+    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y") => {
+      if (v === true) return "border border-line"
+      if (v) return `border-${v} border-line`
+      return ""
+    }
+
     const borderClasses = cn(
-      border === true && "border border-line",
-      border === "t" && "border-t border-line",
-      border === "b" && "border-b border-line",
-      border === "l" && "border-l border-line",
-      border === "r" && "border-r border-line",
-      border === "x" && "border-x border-line",
-      border === "y" && "border-y border-line",
+      applyResponsive(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      smBorder && `sm:border-${smBorder}`,
-      mdBorder && `md:border-${mdBorder}`,
-      lgBorder && `lg:border-${lgBorder}`,
-      xlBorder && `xl:border-${xlBorder}`
+      smBorder && (typeof smBorder === "boolean" ? `sm:border${smBorder === true ? "" : "-0"}` : (typeof smBorder === "string" ? `sm:border-${smBorder}` : "")),
+      mdBorder && (typeof mdBorder === "boolean" ? `md:border${mdBorder === true ? "" : "-0"}` : (typeof mdBorder === "string" ? `md:border-${mdBorder}` : "")),
+      lgBorder && (typeof lgBorder === "boolean" ? `lg:border${lgBorder === true ? "" : "-0"}` : (typeof lgBorder === "string" ? `lg:border-${lgBorder}` : "")),
+      xlBorder && (typeof xlBorder === "boolean" ? `xl:border${xlBorder === true ? "" : "-0"}` : (typeof xlBorder === "string" ? `xl:border-${xlBorder}` : ""))
     )
 
     // Remove props that shouldn't be spread to DOM elements

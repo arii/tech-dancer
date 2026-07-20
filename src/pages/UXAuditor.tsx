@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { isValidUrl } from '@/utils/url';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
@@ -248,14 +249,13 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           surface="muted"
           align="center"
           justify="center"
-          border="b"
-          className="lg:border-b-0 lg:border-r"
+          border={{ base: "b", lg: "r" }}
           minHeight={{ base: 250, lg: 400 }}
         >
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
-              url={activeReportUrl}
+              url={isValidUrl(activeReportUrl) ? activeReportUrl : "about:blank"}
               width={vp.width}
               height={vp.height}
             />
