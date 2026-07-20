@@ -53,7 +53,7 @@
     "impact:analysis": "tsx boomtick-pkg/scripts/impact-analysis.ts",
     "impact:build-main": "tsx boomtick-pkg/scripts/impact-build-main.ts",
     "impact:visual-diff": "tsx boomtick-pkg/scripts/impact-visual-diff.ts",
-    "impact:dom-diff": "tsx boomtick-pkg/scripts/impact-dom-diff.ts",
+    "impact:dom-diff": "NODE_OPTIONS=--max-old-space-size=4096 tsx boomtick-pkg/scripts/impact-dom-diff.ts",
     "impact:gemini-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts gemini",
     "impact:github-models-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts github-models",
     "impact:gemini-code-review": "tsx boomtick-pkg/scripts/impact-ai-code-review.ts gemini",
