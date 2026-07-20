@@ -160,20 +160,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       return ""
     }
 
-    const mapBreakpointBorder = (bp: string, v: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean } | undefined) => {
-      if (!v) return ""
-      if (typeof v === "boolean") return `${bp}:border${v === true ? "" : "-0"}`
-      if (typeof v === "string") return `${bp}:border-${v}`
-      return ""
-    }
-
     const borderClasses = cn(
       applyResponsive(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      mapBreakpointBorder("sm", smBorder),
-      mapBreakpointBorder("md", mdBorder),
-      mapBreakpointBorder("lg", lgBorder),
-      mapBreakpointBorder("xl", xlBorder)
+      smBorder && (typeof smBorder === "boolean" ? `sm:border${smBorder === true ? "" : "-0"}` : (typeof smBorder === "string" ? `sm:border-${smBorder}` : "")),
+      mdBorder && (typeof mdBorder === "boolean" ? `md:border${mdBorder === true ? "" : "-0"}` : (typeof mdBorder === "string" ? `md:border-${mdBorder}` : "")),
+      lgBorder && (typeof lgBorder === "boolean" ? `lg:border${lgBorder === true ? "" : "-0"}` : (typeof lgBorder === "string" ? `lg:border-${lgBorder}` : "")),
+      xlBorder && (typeof xlBorder === "boolean" ? `xl:border${xlBorder === true ? "" : "-0"}` : (typeof xlBorder === "string" ? `xl:border-${xlBorder}` : ""))
     )
 
     // Remove props that shouldn't be spread to DOM elements
