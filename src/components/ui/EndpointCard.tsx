@@ -42,8 +42,8 @@ export const EndpointCard = ({
           radius="md"
           className={
             method === 'POST'
-              ? '[background-color:hsl(var(--color-accent)_/_0.2)] [color:hsl(var(--color-accent))] [border-width:1px] [border-style:solid] [border-color:hsl(var(--color-accent)_/_0.3)]'
-              : '[background-color:hsl(var(--color-main)_/_0.2)] [color:hsl(var(--color-main))] [border-width:1px] [border-style:solid] [border-color:hsl(var(--color-main)_/_0.3)]'
+              ? '[background-color:hsl(var(--color-accent)_/_0.2)] [color:hsl(var(--color-accent))] border border-solid [border-color:hsl(var(--color-accent)_/_0.3)]'
+              : '[background-color:hsl(var(--color-main)_/_0.2)] [color:hsl(var(--color-main))] border border-solid [border-color:hsl(var(--color-main)_/_0.3)]'
           }
         >
           {method}
