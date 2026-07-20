@@ -38,7 +38,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run CI Repair
-        uses: ./boomtick-pkg/.github/actions/ci-repair
+        uses: ./.github/actions/ci-repair
         with:
           mode: 'auto'
           jules_api_key: ${{ secrets.JULES_API_KEY }}
@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Manual CI Repair
-        uses: ./boomtick-pkg/.github/actions/ci-repair
+        uses: ./.github/actions/ci-repair
         with:
           mode: 'manual'
           issue_number: ${{ github.event.inputs.issue_number }}

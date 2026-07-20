@@ -36,7 +36,7 @@ runs:
 
     - name: Setup Workspace for Quality Validation
       if: inputs.operation == 'validate-quality'
-      uses: ./.github/actions/setup-workspace
+      uses: arii/boomtick/.github/actions/setup-workspace@main
       with:
         setup-node: 'false'
 
@@ -119,7 +119,7 @@ runs:
     # --- AI REVIEW ---
     - name: AI Review
       if: inputs.operation == 'ai-review'
-      uses: ./mcp/actions/ai-review
+      uses: arii/boomtick/mcp/actions/ai-review@main
       with:
         pr_number: ${{ inputs.issue_number }}
       env:
@@ -131,7 +131,7 @@ runs:
     # --- RESOLVE CONFLICTS ---
     - name: Setup Workspace for Conflict Resolution
       if: inputs.operation == 'resolve-conflicts'
-      uses: ./.github/actions/setup-workspace
+      uses: arii/boomtick/.github/actions/setup-workspace@main
 
     - name: Find and Resolve Conflicts
       if: inputs.operation == 'resolve-conflicts'
@@ -159,7 +159,7 @@ runs:
     # --- UPDATE SNAPSHOTS ---
     - name: Setup Workspace for Snapshots Update
       if: inputs.operation == 'update-snapshots'
-      uses: ./.github/actions/setup-workspace
+      uses: arii/boomtick/.github/actions/setup-workspace@main
 
     - name: Install Snapshot Dependencies
       if: inputs.operation == 'update-snapshots'

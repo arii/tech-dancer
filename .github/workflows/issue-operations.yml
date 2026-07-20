@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Validate Quality
-        uses: ./boomtick-pkg/.github/actions/issue-operations
+        uses: ./.github/actions/issue-operations
         with:
           operation: 'validate-quality'
           issue_number: ${{ github.event.issue.number }}
@@ -63,7 +63,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Create PR
-        uses: ./boomtick-pkg/.github/actions/issue-operations
+        uses: ./.github/actions/issue-operations
         with:
           operation: 'create-pr'
           issue_number: ${{ github.event.issue.number }}
@@ -80,7 +80,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - AI Review
-        uses: ./boomtick-pkg/.github/actions/issue-operations
+        uses: ./.github/actions/issue-operations
         with:
           operation: 'ai-review'
           issue_number: ${{ github.event.inputs.issue_number }}
@@ -101,7 +101,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Issue Operations - Resolve Conflicts
-        uses: ./boomtick-pkg/.github/actions/issue-operations
+        uses: ./.github/actions/issue-operations
         with:
           operation: 'resolve-conflicts'
           issue_number: ${{ github.event.inputs.issue_number }}
@@ -119,7 +119,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Update Snapshots
-        uses: ./boomtick-pkg/.github/actions/issue-operations
+        uses: ./.github/actions/issue-operations
         with:
           operation: 'update-snapshots'
           issue_number: ${{ github.event.inputs.issue_number }}

@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run ChatOps Trigger Action
-        uses: ./boomtick-pkg/.github/actions/chatops-trigger
+        uses: ./.github/actions/chatops-trigger
         with:
           comment_body: ${{ github.event.comment.body }}
           author_association: ${{ github.event.comment.author_association }}
