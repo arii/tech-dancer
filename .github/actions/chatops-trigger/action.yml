@@ -3,19 +3,19 @@ description: 'Parses PR/Issue comments and dispatches actions accordingly'
 inputs:
   comment_body:
     description: 'The body of the comment'
-    required: false
+    required: true
     default: ${{ github.event.comment.body }}
   author_association:
     description: 'The author association of the comment creator'
-    required: false
+    required: true
     default: ${{ github.event.comment.author_association }}
   issue_number:
     description: 'The issue or PR number'
-    required: false
+    required: true
     default: ${{ github.event.issue.number }}
   github_token:
     description: 'The GitHub token'
-    required: false
+    required: true
     default: ${{ github.token }}
 
 runs:
@@ -31,6 +31,19 @@ runs:
         COMMENT_BODY: ${{ inputs.comment_body }}
         AUTHOR_ASSOC: ${{ inputs.author_association }}
       run: |
+        if [ -z "$GH_TOKEN" ]; then
+          echo "::error::github_token is missing."
+          exit 1
+        fi
+        if [ -z "$COMMENT_BODY" ]; then
+          echo "::error::comment_body is missing."
+          exit 1
+        fi
+        if [[ ! "$AUTHOR_ASSOC" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
+          echo "::error::Invalid author association format."
+          exit 1
+        fi
+
         RESULT=$(td-cli gh parse-comment --author-association "$AUTHOR_ASSOC")
         {
           echo "conflict_resolve=$(echo "$RESULT" | jq -r '.actions.conflict_resolve')"
@@ -47,6 +60,15 @@ runs:
         GH_TOKEN: ${{ inputs.github_token }}
         ISSUE_NUMBER: ${{ inputs.issue_number }}
       run: |
+        if [ -z "$GH_TOKEN" ]; then
+          echo "::error::github_token is missing."
+          exit 1
+        fi
+        if [[ ! "$ISSUE_NUMBER" =~ ^[0-9]+$ ]]; then
+          echo "::error::Invalid issue_number: must be numeric."
+          exit 1
+        fi
+
         PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,baseRefName || echo '{}')
         {
           echo "HEAD_REF=$(echo "$PR_JSON" | jq -r '.headRefName // empty')"
@@ -62,7 +84,9 @@ runs:
         ISSUE_NUMBER: ${{ inputs.issue_number }}
         HEAD_REF: ${{ steps.resolve_branch.outputs.HEAD_REF }}
       run: |
-        gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="resolve-conflicts" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+        if ! gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="resolve-conflicts" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY"; then
+          echo "::warning::Failed to trigger Conflict Resolver workflow."
+        fi
       shell: bash
 
     - name: Trigger Update Snapshots
@@ -73,7 +97,9 @@ runs:
         ISSUE_NUMBER: ${{ inputs.issue_number }}
         HEAD_REF: ${{ steps.resolve_branch.outputs.HEAD_REF }}
       run: |
-        gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="update-snapshots" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+        if ! gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="update-snapshots" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY"; then
+          echo "::warning::Failed to trigger Update Snapshots workflow."
+        fi
       shell: bash
 
     - name: Trigger AI ChatOps
@@ -84,7 +110,9 @@ runs:
         ISSUE_NUMBER: ${{ inputs.issue_number }}
         HEAD_REF: ${{ steps.resolve_branch.outputs.HEAD_REF }}
       run: |
-        gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="ai-review" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+        if ! gh workflow run issue-operations.yml --ref "$HEAD_REF" -f action="ai-review" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY"; then
+          echo "::warning::Failed to trigger AI ChatOps workflow."
+        fi
       shell: bash
 
     - name: Trigger Jules Fix CI
@@ -96,5 +124,7 @@ runs:
         BASE_REF: ${{ steps.resolve_branch.outputs.BASE_REF }}
       run: |
         # Dispatch to the consolidated manual fix entry point in ci-repair.yml
-        gh workflow run ci-repair.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+        if ! gh workflow run ci-repair.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY"; then
+          echo "::warning::Failed to trigger Jules Fix CI workflow."
+        fi
       shell: bash
