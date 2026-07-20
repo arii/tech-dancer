@@ -1,0 +1,191 @@
+name: 'Issue Operations'
+description: 'Unified action for validating issues, creating PRs, AI review, and auto-resolving conflicts/snapshots'
+inputs:
+  operation:
+    description: 'The operation to perform: validate-quality, create-pr, ai-review, resolve-conflicts, update-snapshots'
+    required: true
+  issue_number:
+    description: 'The issue or PR number'
+    required: false
+    default: ${{ github.event.issue.number }}
+  comment_body:
+    description: 'The comment body'
+    required: false
+  github_token:
+    description: 'The GitHub token'
+    required: false
+    default: ${{ github.token }}
+  gemini_api_key:
+    description: 'Gemini API Key'
+    required: false
+  openai_api_key:
+    description: 'OpenAI API Key'
+    required: false
+  google_jules_api_key:
+    description: 'Google Jules API Key'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    # --- VALIDATE QUALITY ---
+    - name: Configure Git Safe Directory
+      if: inputs.operation == 'validate-quality' || inputs.operation == 'resolve-conflicts'
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      shell: bash
+
+    - name: Setup Workspace for Quality Validation
+      if: inputs.operation == 'validate-quality'
+      uses: ./.github/actions/setup-workspace
+      with:
+        setup-node: 'false'
+
+    - name: Validate Issue
+      if: inputs.operation == 'validate-quality'
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        td-cli gh validate-issue --issue-number ${{ inputs.issue_number }} --post-comments --execute
+      shell: bash
+
+    # --- CREATE PR ---
+    - name: Set up Python for PR Creation
+      if: inputs.operation == 'create-pr'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.x'
+
+    - name: Parse Issue and Generate Markdown File
+      if: inputs.operation == 'create-pr'
+      env:
+        ISSUE_BODY: ${{ github.event.issue.body }}
+        ISSUE_TITLE: ${{ github.event.issue.title }}
+      shell: python
+      run: |
+        import re
+        from datetime import datetime
+        import os
+
+        body = os.environ['ISSUE_BODY']
+        title = os.environ['ISSUE_TITLE']
+        title = re.sub(r'^Draft[^:]*:\s*', '', title).strip()
+
+        match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
+        if not match:
+            print("No markdown block found in issue. Exiting.")
+            exit(1)
+
+        content = match.group(1).strip()
+
+        # Detect content type from frontmatter
+        type_match = re.search(r'^type:\s*"?(\w+)"?', content, re.MULTILINE)
+        content_type = type_match.group(1) if type_match else 'post'
+
+        # Route to the right folder
+        folder_map = {
+            'post': 'content/posts',
+            'resource': 'content/resources',
+            'study': 'content/studies',
+        }
+        folder = folder_map.get(content_type, 'content/posts')
+
+        date_str = datetime.now().strftime('%Y-%m-%d')
+        safe_title = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+        filename = f"{folder}/{date_str}-{safe_title}.md"
+
+        os.makedirs(folder, exist_ok=True)
+
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        print(f"File created: {filename}")
+
+        with open(os.environ['GITHUB_ENV'], 'a') as f:
+            f.write(f"NEW_FILE={filename}\n")
+            f.write(f"SAFE_TITLE={safe_title}\n")
+
+    - name: Create Pull Request
+      if: inputs.operation == 'create-pr'
+      uses: peter-evans/create-pull-request@v8
+      with:
+        token: ${{ inputs.github_token }}
+        commit-message: "docs: add content from issue #${{ inputs.issue_number }}"
+        title: "Content: ${{ github.event.issue.title }}"
+        body: "This PR was automatically generated from issue #${{ inputs.issue_number }}."
+        branch: "content/${{ env.SAFE_TITLE }}"
+        base: main
+        delete-branch: true
+
+    # --- AI REVIEW ---
+    - name: AI Review
+      if: inputs.operation == 'ai-review'
+      uses: ./mcp/actions/ai-review
+      with:
+        pr_number: ${{ inputs.issue_number }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GEMINI_API_KEY: ${{ inputs.gemini_api_key }}
+        OPENAI_API_KEY: ${{ inputs.openai_api_key }}
+        GOOGLE_JULES_API_KEY: ${{ inputs.google_jules_api_key }}
+
+    # --- RESOLVE CONFLICTS ---
+    - name: Setup Workspace for Conflict Resolution
+      if: inputs.operation == 'resolve-conflicts'
+      uses: ./.github/actions/setup-workspace
+
+    - name: Find and Resolve Conflicts
+      if: inputs.operation == 'resolve-conflicts'
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        td-cli gh resolve
+      shell: bash
+
+    - name: Validate Resolution
+      if: inputs.operation == 'resolve-conflicts'
+      run: |
+        pnpm install --frozen-lockfile
+        pnpm --filter @arii/boomtick-mcp run sync-contracts
+        pnpm run type-check || exit 1
+      shell: bash
+
+    - name: Commit Conflict Changes
+      if: inputs.operation == 'resolve-conflicts'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chore: auto-resolved merge conflicts using AI"
+        file_pattern: '.'
+
+    # --- UPDATE SNAPSHOTS ---
+    - name: Setup Workspace for Snapshots Update
+      if: inputs.operation == 'update-snapshots'
+      uses: ./.github/actions/setup-workspace
+
+    - name: Install Snapshot Dependencies
+      if: inputs.operation == 'update-snapshots'
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Update Snapshots
+      if: inputs.operation == 'update-snapshots'
+      run: |
+        VITE_BASE_PATH=/ pnpm run test:e2e --update-snapshots
+      shell: bash
+
+    - name: Check for Snapshot Changes
+      if: inputs.operation == 'update-snapshots'
+      id: status
+      run: |
+        if [ -z "$(git status --porcelain)" ]; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
+
+    - name: Commit Snapshot Changes
+      if: inputs.operation == 'update-snapshots' && steps.status.outputs.changed == 'true'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chore: update playwright snapshots"
+        file_pattern: '**/snapshots/*'
