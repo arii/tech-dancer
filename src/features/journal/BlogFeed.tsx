@@ -45,16 +45,23 @@ const BlogFeed = () => {
           />
         </Box>
 
-        {isInitialView && featuredPosts.length > 0 && (
-          <Box marginTop={12} marginBottom={8} border="b" className="border-line pb-12">
+        {posts.length === 0 ? (
+          <Box paddingY={12} display="flex" align="center" justify="center" minHeight="50vh">
+            <Text variant="body" size="lg" color="dim" align="center">
+              No posts found.
+            </Text>
+          </Box>
+        ) : (
+          isInitialView && featuredPosts.length > 0 && (
+          <Box marginTop={12} marginBottom={8} border="b" paddingBottom={12} className="border-line">
             <Box marginBottom={6}>
-              <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="widest" className="uppercase mb-2 block">
+              <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="widest" uppercase display="block" marginBottom={2}>
                 CURATED GUIDES
               </Text>
               <Text as="h2" variant="display" size="2xl" weight="font-black" color="main" tracking="tight">
                 Featured Essentials
               </Text>
-              <Text variant="body" size="base" color="dim" className="mt-2">
+              <Text variant="body" size="base" color="dim" marginTop={2}>
                 Handpicked, high-priority evergreen advice for local and travel events.
               </Text>
             </Box>
@@ -66,6 +73,7 @@ const BlogFeed = () => {
               ))}
             </Grid>
           </Box>
+          )
         )}
       </FolioGrid>
     </>

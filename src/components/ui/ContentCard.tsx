@@ -54,7 +54,7 @@ export const ContentCard = (props: ContentCardProps) => {
       direction="col"
       height="full"
       to={`${basePath}/${slug}`}
-      ariaLabel={`Read article: ${title}`}
+      aria-label={`Read article: ${title}`}
       overflow="hidden"
       {...motionProps}
     >
