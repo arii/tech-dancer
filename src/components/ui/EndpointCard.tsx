@@ -69,7 +69,7 @@ export const EndpointCard = ({
           {exampleCall}
         </Box>
       </Box>
-      <Box display="flex" flexDirection="col" gap={2}>
+      <Stack gap={2}>
         <Box
           as="button"
           display="flex"
@@ -91,7 +91,7 @@ export const EndpointCard = ({
             {exampleResponse}
           </Box>
         )}
-      </Box>
+      </Stack>
     </Stack>
   );
 };
