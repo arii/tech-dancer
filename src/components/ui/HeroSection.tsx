@@ -146,7 +146,7 @@ export function HeroSection() {
           overflow="hidden"
           opacity={0}
           pointerEvents="none"
-          className="hero-waveform-anim [content-visibility:auto] [contain-intrinsic-size:var(--spacing-12)]"
+          className="hero-waveform-anim [content-visibility:auto] [contain-intrinsic-size:3rem]"
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (
