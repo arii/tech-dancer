@@ -447,7 +447,7 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`}>
+          <Stack className={cardVariants({ overflow: "hidden" })} border={true}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -461,7 +461,7 @@ export default function UXAuditor() {
                 as="button"
                 direction="row"
                 onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={3} padding={4} 
+                width="full" align="center" gap={3} padding={4} border="b"
                 className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
