@@ -74,3 +74,28 @@ If Playwright browser downloads fail in your environment (e.g., due to 403 Forbi
 
 - **Audit Gate**: Compares current anti-pattern violations against `origin/main`. It fails if violations _increase_.
 - **Ratchet**: Enforces that `any` count and bundle size do not exceed the baseline variables.
+
+## 🔗 Zero-Submodule Composite Action Integration
+
+BoomTick supports **zero-submodule integration**, which decouples CI pipelines and developer workflows from filesystem submodule dependency trees. This architecture allows downstream repositories (and superprojects) to utilize automated AI review and self-healing tools as remote/local **Composite GitHub Actions** directly inside workflow definitions:
+
+### Available Composite Actions
+
+- **CI Repair (`.github/actions/ci-repair`)**: Coordinates collecting CI run failures, analyzing execution logs, validating fix branch idempotence, and dispatching Jules self-repair sessions.
+- **ChatOps Trigger (`.github/actions/chatops-trigger`)**: Parses issue/PR comments to parse command macros (such as `resolve conflicts`, `update snapshots`, etc.) and safely dispatches the target operations workflows.
+- **Issue Operations (`.github/actions/issue-operations`)**: Unifies automated specification parsing, draft issue quality validation, PR generation, AI code reviews, merge conflicts resolution, and visual layout baseline/snapshots updating.
+
+### Example Remote Integration
+
+Downstream repositories can invoke these actions directly without adding BoomTick as a submodule:
+
+```yaml
+- name: Run CI Repair
+  uses: arii/boomtick/.github/actions/ci-repair@main
+  with:
+    mode: 'auto'
+    jules_api_key: ${{ secrets.JULES_API_KEY }}
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+For detailed onboarding setup and workflows integration guidelines, see the [Developer Onboarding & Workflows](boomtick-pkg/docs/onboarding.md) guide.
