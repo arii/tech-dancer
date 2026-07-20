@@ -2,14 +2,14 @@ name: 'CI Repair'
 description: 'Automated and manual CI repair orchestration with Jules'
 inputs:
   mode:
-    description: 'Execution mode: auto or manual'
+    description: 'Execution mode: auto (dispatched on CI failure) or manual (dispatched via ChatOps/Jules)'
     required: false
     default: 'auto'
   issue_number:
     description: 'Issue or PR number for manual fix'
     required: false
   comment_body:
-    description: 'Comment body'
+    description: 'Comment body containing instructions for the fix'
     required: false
   jules_api_key:
     description: 'API key for Jules service'
@@ -22,10 +22,27 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Pre-flight Validations
+      id: validate
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+      run: |
+        if [ -z "$GH_TOKEN" ]; then
+          echo "::error::github_token is missing."
+          exit 1
+        fi
+
+        {
+          echo "GH_TOKEN=$GH_TOKEN"
+          echo "GITHUB_TOKEN=$GH_TOKEN"
+        } >> "$GITHUB_ENV"
+      shell: bash
+
     - name: Set up Python
       uses: actions/setup-python@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         python-version: '3.x'
+        cache: 'pip'
 
     - name: Install PyGithub and dependencies
       run: |
@@ -42,7 +59,6 @@ runs:
       if: inputs.mode == 'auto'
       id: context
       env:
-        GH_TOKEN: ${{ inputs.github_token }}
         RUN_ID: ${{ github.event.workflow_run.id }}
         REPO: ${{ github.repository }}
         HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
@@ -59,7 +75,7 @@ runs:
         fi
 
         # Sanitize and strictly validate the branch name to prevent shell injection.
-        if [[ "$HEAD_BRANCH" =~ ^[a-zA-Z0-9_.-/]+$ ]]; then
+        if [[ "$HEAD_BRANCH" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
           BRANCH_NAME="$HEAD_BRANCH"
         else
           BRANCH_NAME="unknown-branch"
@@ -84,7 +100,6 @@ runs:
       if: inputs.mode == 'auto'
       id: check
       env:
-        GH_TOKEN: ${{ inputs.github_token }}
         SHA: ${{ steps.context.outputs.sha }}
         IS_MAIN: ${{ steps.context.outputs.is_main }}
         PR_NUMBER_VAL: ${{ steps.context.outputs.pr_number }}
@@ -126,7 +141,6 @@ runs:
       if: inputs.mode == 'auto' && steps.check.outputs.issue_exists == 'false'
       id: create_issue
       env:
-        GH_TOKEN: ${{ inputs.github_token }}
         IS_MAIN: ${{ steps.context.outputs.is_main }}
         RUN_ID: ${{ github.event.workflow_run.id }}
         RUN_URL: ${{ github.event.workflow_run.html_url }}
@@ -169,7 +183,6 @@ runs:
     - name: Comment on Existing Issue
       if: inputs.mode == 'auto' && steps.check.outputs.issue_exists == 'true'
       env:
-        GH_TOKEN: ${{ inputs.github_token }}
         EXISTING_ISSUE: ${{ steps.check.outputs.issue_number }}
         RUN_ID: ${{ github.event.workflow_run.id }}
         RUN_URL: ${{ github.event.workflow_run.html_url }}
@@ -207,7 +220,6 @@ runs:
     - name: Dispatch Jules (Main Branch Only)
       if: inputs.mode == 'auto' && steps.context.outputs.is_main == 'true'
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
         JULES_API_KEY: ${{ inputs.jules_api_key }}
         ISSUE_NUMBER: ${{ steps.check.outputs.issue_number || steps.create_issue.outputs.issue_number }}
       run: |
@@ -225,11 +237,10 @@ runs:
     - name: Pre-check Jules Credentials
       if: inputs.mode == 'manual'
       env:
-        GITHUB_TOKEN_INPUT: ${{ inputs.github_token }}
         JULES_API_KEY_INPUT: ${{ inputs.jules_api_key }}
       run: |
         MISSING=()
-        if [ -z "$GITHUB_TOKEN_INPUT" ]; then MISSING+=("GITHUB_TOKEN"); fi
+        if [ -z "$GH_TOKEN" ]; then MISSING+=("GITHUB_TOKEN"); fi
         if [ -z "$JULES_API_KEY_INPUT" ]; then MISSING+=("JULES_API_KEY"); fi
 
         if [ ${#MISSING[@]} -ne 0 ]; then
@@ -243,7 +254,6 @@ runs:
     - name: Initialize Jules Repair Session
       if: inputs.mode == 'manual'
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
         JULES_API_KEY: ${{ inputs.jules_api_key }}
         ISSUE_NUMBER: ${{ inputs.issue_number }}
       run: |
