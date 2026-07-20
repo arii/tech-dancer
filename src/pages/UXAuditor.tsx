@@ -229,7 +229,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
 
 function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })}>
+    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -265,10 +265,10 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           )}
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
+        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
           {data ? (
             <>
-              <Box surface="alt" padding={5} className="border border-line rounded-lg">
+              <Box surface="alt" padding={5} border={true} radius="lg">
                 <Box marginBottom={3}>
                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                     Analysis Summary
@@ -297,9 +297,9 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                       <Box surface="muted" padding={3} radius="md" border={true}>
-                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
+                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth={0} className="overflow-hidden">
+                          <Box flex={1} minWidth="0" className="overflow-hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -469,7 +469,10 @@ export default function UXAuditor() {
                   height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   shrink={0}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
