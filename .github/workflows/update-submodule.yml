@@ -80,7 +80,7 @@ jobs:
           echo "Updating boomtick-pkg to ref: $TARGET_REF"
 
           cd boomtick-pkg
-          git fetch origin
+          git fetch origin "+refs/heads/*:refs/remotes/origin/*" "+refs/tags/*:refs/tags/*"
           git checkout "$TARGET_REF"
           cd ..
 

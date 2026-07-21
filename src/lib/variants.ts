@@ -253,6 +253,7 @@ export const journalVariants = {
       interactive: false
     }
   }),
+  tagSeparator: createTransitionVariants(journal.tagSeparator),
   shareAction: createTransitionVariants(journal.share),
   tag: createTransitionVariants(journal.tag),
   navLink: createTransitionVariants(journal.nav, {
