@@ -270,6 +270,12 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: GHA Container Path Shim
+        run: |
+          mkdir -p /home/runner/work 2>/dev/null || sudo mkdir -p /home/runner/work
+          ln -sf /__w/tech-dancer /home/runner/work/tech-dancer 2>/dev/null || sudo ln -sf /__w/tech-dancer /home/runner/work/tech-dancer
+        shell: bash
+
       - name: Impact Analysis
         uses: ./boomtick-pkg/mcp/actions/impact-analysis
         with:
