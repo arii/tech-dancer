@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { waitForPageReady } from '../utils/visual-helpers';
 
+import type { Page } from '@playwright/test';
+
 describe('waitForPageReady helper', () => {
   it('executes setup pipeline without throwing', async () => {
     const mockPage = {
@@ -8,7 +10,7 @@ describe('waitForPageReady helper', () => {
       addStyleTag: vi.fn().mockResolvedValue(undefined),
       evaluate: vi.fn().mockResolvedValue(undefined),
       waitForTimeout: vi.fn().mockResolvedValue(undefined),
-    } as any;
+    } as unknown as Page;
 
     await expect(
       waitForPageReady(mockPage, { mainSelector: 'main', timeout: 5000 })
