@@ -27,40 +27,40 @@ runs:
       run: |
         echo "=== Pre-flight Validations ==="
 
-        # Validate pr_number is a clean integer
-        if [[ ! "$INPUT_PR_NUMBER" =~ ^[0-9]+$ ]]; then
-          echo "❌ Error: pr_number must be a positive integer."
-          exit 1
+        # Validate pr_number is a clean integer (if provided)
+        if [[ -n "$INPUT_PR_NUMBER" ]]; then
+          if [[ ! "$INPUT_PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "❌ Error: pr_number must be a positive integer."
+            exit 1
+          fi
         fi
 
-        # Validate github_token format
-        if [[ -z "$INPUT_GITHUB_TOKEN" ]]; then
-          echo "❌ Error: github_token is empty."
-          exit 1
+        # Validate github_token (if provided)
+        if [[ -n "$INPUT_GITHUB_TOKEN" ]]; then
+          if [[ "$INPUT_GITHUB_TOKEN" == -* ]]; then
+            echo "❌ Error: github_token starts with a hyphen."
+            exit 1
+          fi
         fi
 
-        # Validate gemini_api_key format
-        if [[ -z "$INPUT_GEMINI_API_KEY" ]]; then
-          echo "❌ Error: gemini_api_key is empty."
-          exit 1
-        fi
-        if [[ "$INPUT_GEMINI_API_KEY" == -* ]]; then
-          echo "❌ Error: gemini_api_key starts with a hyphen."
-          exit 1
+        # Validate gemini_api_key format (if provided)
+        if [[ -n "$INPUT_GEMINI_API_KEY" ]]; then
+          if [[ "$INPUT_GEMINI_API_KEY" == -* ]]; then
+            echo "❌ Error: gemini_api_key starts with a hyphen."
+            exit 1
+          fi
         fi
 
-        # Validate jules_api_key format
-        if [[ -z "$INPUT_JULES_API_KEY" ]]; then
-          echo "❌ Error: jules_api_key is empty."
-          exit 1
-        fi
-        if [[ "$INPUT_JULES_API_KEY" == -* ]]; then
-          echo "❌ Error: jules_api_key starts with a hyphen."
-          exit 1
-        fi
-        if [[ ! "$INPUT_JULES_API_KEY" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
-          echo "❌ Error: jules_api_key contains invalid characters."
-          exit 1
+        # Validate jules_api_key format (if provided)
+        if [[ -n "$INPUT_JULES_API_KEY" ]]; then
+          if [[ "$INPUT_JULES_API_KEY" == -* ]]; then
+            echo "❌ Error: jules_api_key starts with a hyphen."
+            exit 1
+          fi
+          if [[ ! "$INPUT_JULES_API_KEY" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
+            echo "❌ Error: jules_api_key contains invalid characters."
+            exit 1
+          fi
         fi
 
         echo "✅ Pre-flight Validations Passed!"
