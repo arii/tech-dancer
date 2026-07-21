@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.4.0...tech-dancer-v0.4.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* **ci:** fetch all refs before checking out submodule branch ([#3893](https://github.com/arii/tech-dancer/issues/3893)) ([cfc95cf](https://github.com/arii/tech-dancer/commit/cfc95cff2056d399931cb7ed55c489de306e10df))
+
 ## [0.4.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.3.1...tech-dancer-v0.4.0) (2026-07-17)
 
 
