@@ -1,7 +1,7 @@
 {
   "name": "tech-dancer",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "scripts": {
     "release:patch": "pnpm version patch",
@@ -53,7 +53,7 @@
     "impact:analysis": "tsx boomtick-pkg/scripts/impact-analysis.ts",
     "impact:build-main": "tsx boomtick-pkg/scripts/impact-build-main.ts",
     "impact:visual-diff": "tsx boomtick-pkg/scripts/impact-visual-diff.ts",
-    "impact:dom-diff": "tsx boomtick-pkg/scripts/impact-dom-diff.ts",
+    "impact:dom-diff": "NODE_OPTIONS=--max-old-space-size=8192 tsx boomtick-pkg/scripts/impact-dom-diff.ts",
     "impact:gemini-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts gemini",
     "impact:github-models-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts github-models",
     "impact:gemini-code-review": "tsx boomtick-pkg/scripts/impact-ai-code-review.ts gemini",
@@ -147,31 +147,6 @@
     "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^4.1.5"
   },
-  "overrides": {
-    "shell-quote": ">=1.8.4",
-    "vite": "^6.4.3",
-    "hono": "^4.12.29",
-    "esbuild": "^0.27.3",
-    "@babel/plugin-transform-modules-systemjs": "^7.29.7",
-    "@babel/core": "^7.29.0",
-    "qs": "^6.15.3",
-    "js-yaml": "4.3.0",
-    "uuid": "^14.0.1",
-    "tmp": "^0.2.7",
-    "minimatch": "^10.2.4",
-    "serialize-javascript": "^7.0.4",
-    "brace-expansion": "^5.0.4",
-    "undici@^5": "5.29.0",
-    "undici@^7": "7.28.0",
-    "protobufjs": "7.6.5",
-    "fast-uri": "3.1.3",
-    "@grpc/grpc-js": "1.14.4",
-    "ws": "8.21.0",
-    "lighthouse": {
-      "ws": "7.5.11"
-    },
-    "dompurify": "3.4.12"
-  },
   "packageManager": "pnpm@10.28.2",
   "knip": {
     "ignoreDependencies": [
@@ -183,5 +158,35 @@
       "types",
       "nsTypes"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "shell-quote": ">=1.8.4",
+      "vite": "^6.4.3",
+      "hono": "^4.12.29",
+      "@babel/plugin-transform-modules-systemjs": "^7.29.7",
+      "uuid": "^14.0.1",
+      "protobufjs": "7.6.5",
+      "fast-uri": "3.1.3",
+      "@grpc/grpc-js": "1.14.4",
+      "ws": "8.21.0",
+      "lighthouse>ws": "7.5.11",
+      "dompurify": "3.4.12",
+      "esbuild": "^0.28.1",
+      "qs": "^6.15.3",
+      "js-yaml": "^4.3.0",
+      "tmp": "^0.2.7",
+      "serialize-javascript": "^7.0.5",
+      "brace-expansion": "^5.0.7",
+      "@babel/core": "^7.29.6",
+      "undici@^5": "^6.27.0",
+      "undici@^6": "^6.27.0",
+      "websocket-driver": ">=0.7.5",
+      "smol-toml": "^1.6.1",
+      "body-parser": "^1.20.6",
+      "minimatch": "^10.2.5",
+      "eslint>ajv": "^6.14.0",
+      "ajv@^8": "^8.18.0"
+    }
   }
 }
