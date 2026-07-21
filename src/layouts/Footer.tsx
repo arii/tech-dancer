@@ -33,7 +33,7 @@ export function Footer() {
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
-          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info">
+          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>
             <Text variant="mono" tracking="wider" uppercase>
               {isDev ? 'dev' : `v${appVersion}`} (
               <Box
