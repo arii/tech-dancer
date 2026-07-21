@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feature/blog-directory-scannability-and-layout-6386545577436537631-12272687266246768518/sitemap.xml
