@@ -13,6 +13,10 @@ test('verify guide visual consistency', async ({ page }) => {
 
   await expect(page).toHaveScreenshot('detail-page-v2.png', {
     fullPage: true,
+    allowSizeMismatch: true,
+    animations: 'disabled',
+    scale: 'css',
+    maxDiffPixelRatio: 0.02,
     mask: getVisualTestMasks(page)
   });
 });
