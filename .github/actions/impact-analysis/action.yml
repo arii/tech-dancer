@@ -27,6 +27,17 @@ runs:
       run: |
         echo "=== Pre-flight Validations ==="
 
+        # Mask sensitive inputs immediately to prevent any log exposure
+        if [[ -n "$INPUT_JULES_API_KEY" ]]; then
+          echo "::add-mask::$INPUT_JULES_API_KEY"
+        fi
+        if [[ -n "$INPUT_GEMINI_API_KEY" ]]; then
+          echo "::add-mask::$INPUT_GEMINI_API_KEY"
+        fi
+        if [[ -n "$INPUT_GITHUB_TOKEN" ]]; then
+          echo "::add-mask::$INPUT_GITHUB_TOKEN"
+        fi
+
         # Validate pr_number is a clean integer (if provided)
         if [[ -n "$INPUT_PR_NUMBER" ]]; then
           if [[ ! "$INPUT_PR_NUMBER" =~ ^[0-9]+$ ]]; then
@@ -51,14 +62,15 @@ runs:
           fi
         fi
 
-        # Validate jules_api_key format (if provided)
+        # Validate jules_api_key format and constraints (if provided)
         if [[ -n "$INPUT_JULES_API_KEY" ]]; then
           if [[ "$INPUT_JULES_API_KEY" == -* ]]; then
             echo "❌ Error: jules_api_key starts with a hyphen."
             exit 1
           fi
-          if [[ ! "$INPUT_JULES_API_KEY" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
-            echo "❌ Error: jules_api_key contains invalid characters."
+          # Check for forbidden shell metacharacters to prevent any injection
+          if [[ "$INPUT_JULES_API_KEY" =~ [;&\|$\(\)\<\>\'\`\"\\#] ]]; then
+            echo "❌ Error: jules_api_key contains forbidden characters."
             exit 1
           fi
         fi
