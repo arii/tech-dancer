@@ -1,0 +1,25 @@
+name: 'BoomTick Impact Analysis Wrapper'
+description: 'Comprehensive deployment impact analysis, diffing, AI reviews, and reporting (Wrapper for backward compatibility)'
+inputs:
+  github_token:
+    description: 'GitHub token'
+    required: true
+  gemini_api_key:
+    description: 'Gemini API key'
+    required: true
+  pr_number:
+    description: 'PR number'
+    required: true
+  jules_api_key:
+    description: 'Jules API key required for authenticating with the Jules API to send impact analysis results. Ensure this key is stored securely and not exposed in logs.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+      with:
+        github_token: ${{ inputs.github_token }}
+        gemini_api_key: ${{ inputs.gemini_api_key }}
+        pr_number: ${{ inputs.pr_number }}
+        jules_api_key: ${{ inputs.jules_api_key }}
