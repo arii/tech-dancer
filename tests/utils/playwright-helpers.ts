@@ -32,6 +32,8 @@ export function getVisualTestMasks(page: Page) {
     page.getByTestId('footer-version-info'),
     // Targeted masking for dynamic analysis snapshots
     page.getByTestId('ux-analysis-snapshot'),
+    // Mask generic dynamic content explicitly tagged
+    page.locator('[data-visual-mask]'),
     // Mask UX Auditor dynamic content
     page.locator('[class*="animate-pulse"]'),
     page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Matches timestamps like 12:00:00
