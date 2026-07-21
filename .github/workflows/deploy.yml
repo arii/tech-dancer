@@ -35,7 +35,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -51,7 +51,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 
@@ -118,7 +118,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0

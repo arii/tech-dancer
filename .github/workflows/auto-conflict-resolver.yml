@@ -93,7 +93,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -114,7 +114,6 @@ jobs:
 
       - name: Validate and fetch branches
         id: validate_branches
-        shell: bash
         run: |
           if ! git ls-remote --exit-code --heads origin "$TARGET" > /dev/null 2>&1; then
             echo "::warning::Target branch $TARGET missing. Skipping resolver."

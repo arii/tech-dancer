@@ -89,7 +89,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -104,13 +104,12 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Verify lockfile integrity
         run: |
@@ -118,20 +117,17 @@ jobs:
             echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
             exit 1
           fi
-        shell: bash
 
       - name: Lint & Type-check
         run: |
           pnpm run lint
           pnpm run type-check
-        shell: bash
 
       - name: Python Linting
         continue-on-error: true
         run: |
           pnpm run lint:python
           pnpm run type-check:python
-        shell: bash
 
       - name: Ratchet Any
         run: |
@@ -139,7 +135,6 @@ jobs:
           td-cli gh ratchet-any
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
 
   audit:
     name: Anti-Pattern Audit
@@ -149,7 +144,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -164,13 +159,12 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Semantic Duplicate Audit
         run: pnpm run audit:semantic
@@ -188,7 +182,6 @@ jobs:
           td-cli gh audit-gate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
 
   test-build:
     name: Build & E2E
@@ -201,7 +194,7 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -216,23 +209,20 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Ensure correct Playwright browsers
         run: pnpm exec playwright install chromium
-        shell: bash
 
       - name: Build App
         run: |
           VITE_BASE_PATH=/; export VITE_BASE_PATH
           pnpm run build
-        shell: bash
 
       - name: Bundle Size Check
         run: |
@@ -240,12 +230,10 @@ jobs:
           td gh bundle-size
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
 
       - name: Run Playwright E2E
         run: |
           VITE_BASE_PATH=/ pnpm run test:e2e
-        shell: bash
 
       - name: Run Lighthouse CI
         if: github.ref == 'refs/heads/main'
@@ -259,7 +247,6 @@ jobs:
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
 
   impact-analysis:
     if: ${{ !startsWith(github.head_ref, 'automation/update-submodule-') }}
@@ -277,13 +264,13 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Impact Analysis
-        uses: ./boomtick-pkg/mcp/actions/impact-analysis
+        uses: ./.github/actions/impact-analysis
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
@@ -302,7 +289,7 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -317,13 +304,12 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Initialize CodeQL
         if: matrix.scanner == 'semgrep'
@@ -360,7 +346,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # nosemgrep
+        uses: actions/checkout@v7 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -375,7 +361,6 @@ jobs:
           curl --retry 5 --retry-delay 5 -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
           bash download-actionlint.sh 1.7.12
           rm download-actionlint.sh
-        shell: bash
 
       - name: Lint workflow logic with actionlint
         run: |
@@ -387,4 +372,3 @@ jobs:
             -ignore 'repository_vulnerability_alert' \
             -ignore 'dependabot_alert' \
             -color
-        shell: bash

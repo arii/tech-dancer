@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           token: ${{ secrets.GH_PAT_SUBMODULE_UPDATE }}
           submodules: recursive
@@ -42,7 +42,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'false'
 
@@ -73,7 +73,6 @@ jobs:
           fi
 
           echo "safe_ref=$SAFE_REF" >> "$GITHUB_OUTPUT"
-        shell: bash
 
       - name: Update submodules
         env:
@@ -94,7 +93,6 @@ jobs:
           else
             echo "No changes in submodules."
           fi
-        shell: bash
 
       - name: Create Pull Request
         id: cpr
@@ -132,4 +130,3 @@ jobs:
               echo "No changes were detected in the submodule or lockfile."
             } >> "$GITHUB_STEP_SUMMARY"
           fi
-        shell: bash
