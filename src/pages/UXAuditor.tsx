@@ -355,7 +355,7 @@ export default function UXAuditor() {
   } = useUXAuditor();
 
   return (
-    <Stack gap={8} width="full">
+    <Stack gap={8} width="full" data-testid="ux-auditor-container">
       <SEO
         title="Visual UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
