@@ -100,7 +100,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main
         with:
           setup-python: 'true'
 
@@ -156,7 +156,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main
         with:
           setup-python: 'true'
 
@@ -204,7 +204,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main
         with:
           setup-python: 'true'
 
@@ -271,7 +271,7 @@ jobs:
           fetch-depth: 0
 
       - name: Impact Analysis
-        uses: ./boomtick-pkg/mcp/actions/impact-analysis
+        uses: arii/boomtick/mcp/actions/impact-analysis@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
@@ -301,7 +301,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main
         with:
           setup-python: 'true'
 
