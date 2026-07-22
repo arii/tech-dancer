@@ -17,7 +17,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: arii/boomtick/.github/actions/setup-workspace@main
+    - uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         setup-node: ${{ inputs.setup-node }}
         setup-python: ${{ inputs.setup-python }}
