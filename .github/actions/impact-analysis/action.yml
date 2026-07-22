@@ -1,0 +1,25 @@
+name: 'Impact Analysis Wrapper'
+description: 'Wrapper for impact analysis to handle pathing correctly'
+inputs:
+  github_token:
+    description: "GitHub Token"
+    required: true
+  pr_number:
+    description: "Pull Request Number"
+    required: true
+  jules_api_key:
+    description: "Jules API Key"
+    required: true
+  gemini_api_key:
+    description: "Gemini API Key"
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      with:
+        github_token: ${{ inputs.github_token }}
+        pr_number: ${{ inputs.pr_number }}
+        jules_api_key: ${{ inputs.jules_api_key }}
+        gemini_api_key: ${{ inputs.gemini_api_key }}
