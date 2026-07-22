@@ -17,7 +17,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ./boomtick-pkg/.github/actions/setup-workspace
+    - uses: arii/boomtick/.github/actions/setup-workspace@main
       with:
         setup-node: ${{ inputs.setup-node }}
         setup-python: ${{ inputs.setup-python }}

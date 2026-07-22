@@ -38,7 +38,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main
         with:
           setup-python: 'false'
 
