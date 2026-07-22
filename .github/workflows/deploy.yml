@@ -51,7 +51,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./boomtick-pkg/.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 

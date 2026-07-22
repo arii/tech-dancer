@@ -42,7 +42,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
         with:
           setup-python: 'false'
 
