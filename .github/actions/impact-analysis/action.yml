@@ -17,7 +17,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+    - uses: ./boomtick-pkg/mcp/actions/impact-analysis # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         github_token: ${{ inputs.github_token }}
         pr_number: ${{ inputs.pr_number }}
