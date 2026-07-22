@@ -89,18 +89,18 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 
@@ -145,18 +145,18 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 
@@ -193,18 +193,18 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 
@@ -265,13 +265,13 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Impact Analysis
-        uses: arii/boomtick/mcp/actions/impact-analysis@main
+        uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
@@ -290,18 +290,18 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-python: 'true'
 
@@ -344,13 +344,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
 

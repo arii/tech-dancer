@@ -93,14 +93,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
       - name: Setup Workspace
