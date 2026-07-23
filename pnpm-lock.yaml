@@ -41,10 +41,10 @@ importers:
         version: 2.8.0(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.4.3))
       '@langchain/core':
         specifier: ^1.2.2
-        version: 1.2.2(ws@8.21.0)
+        version: 1.2.2(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)
       '@langchain/google-genai':
         specifier: ^2.2.0
-        version: 2.2.0(@langchain/core@1.2.2(ws@8.21.0))
+        version: 2.2.0(@langchain/core@1.2.2(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0))
       '@tailwindcss/vite':
         specifier: ^4.2.2
         version: 4.2.2(vite@6.4.3(@types/node@24.13.2)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.2)(tsx@4.21.0)(yaml@2.9.0))
@@ -93,6 +93,9 @@ importers:
       motion:
         specifier: ^12.23.24
         version: 12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      openai:
+        specifier: ^6.48.0
+        version: 6.48.0(ws@8.21.0)(zod@4.4.3)
       papaparse:
         specifier: 5.5.3
         version: 5.5.3
@@ -5206,6 +5209,26 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
+  openai@6.48.0:
+    resolution: {integrity: sha512-KhVp+FyV50QrXNextvL9hIU5l6ox5HYuKQjGVk7lIqprgJol90+dQXWONV6S1lRWsKA1bXjrow8RsUT14M1hNA==}
+    peerDependencies:
+      '@aws-sdk/credential-provider-node': '>=3.972.0 <4'
+      '@smithy/hash-node': '>=4.3.0 <5'
+      '@smithy/signature-v4': '>=5.4.0 <6'
+      ws: 8.21.0
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      '@aws-sdk/credential-provider-node':
+        optional: true
+      '@smithy/hash-node':
+        optional: true
+      '@smithy/signature-v4':
+        optional: true
+      ws:
+        optional: true
+      zod:
+        optional: true
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -8297,12 +8320,12 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@langchain/core@1.2.2(ws@8.21.0)':
+  '@langchain/core@1.2.2(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       '@standard-schema/spec': 1.1.0
       js-tiktoken: 1.0.21
-      langsmith: 0.8.1(ws@8.21.0)
+      langsmith: 0.8.1(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)
       mustache: 4.2.0
       p-queue: 6.6.2
       zod: 4.4.3
@@ -8313,10 +8336,10 @@ snapshots:
       - openai
       - ws
 
-  '@langchain/google-genai@2.2.0(@langchain/core@1.2.2(ws@8.21.0))':
+  '@langchain/google-genai@2.2.0(@langchain/core@1.2.2(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0))':
     dependencies:
       '@google/generative-ai': 0.24.1
-      '@langchain/core': 1.2.2(ws@8.21.0)
+      '@langchain/core': 1.2.2(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)
 
   '@lhci/cli@0.15.1':
     dependencies:
@@ -11419,10 +11442,11 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  langsmith@0.8.1(ws@8.21.0):
+  langsmith@0.8.1(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0):
     dependencies:
       p-queue: 6.6.2
     optionalDependencies:
+      openai: 6.48.0(ws@8.21.0)(zod@4.4.3)
       ws: 8.21.0
 
   legacy-javascript@0.0.1: {}
@@ -12178,6 +12202,11 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+
+  openai@6.48.0(ws@8.21.0)(zod@4.4.3):
+    optionalDependencies:
+      ws: 8.21.0
+      zod: 4.4.3
 
   optionator@0.9.4:
     dependencies:

@@ -60,6 +60,7 @@
     "impact:github-models-code-review": "tsx boomtick-pkg/scripts/impact-ai-code-review.ts github-models"
   },
   "dependencies": {
+    "openai": "^6.48.0",
     "@google/genai": "^2.8.0",
     "@langchain/core": "^1.2.2",
     "@langchain/google-genai": "^2.2.0",
