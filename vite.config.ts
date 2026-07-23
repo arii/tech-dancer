@@ -9,6 +9,44 @@ import Sitemap from 'vite-plugin-sitemap';
 import { getAllRoutes } from './src/lib/routes-discovery';
 import { getBasePath } from './scripts/base-path.js';
 
+/**
+ * Utility to safely rewrite Vite SPA preview URLs
+ */
+function safelyRewriteSpaUrl(
+  req: import('http').IncomingMessage & { url?: string, originalUrl?: string },
+  pathname: string,
+  query: string,
+  baseWithSlash: string,
+  baseNoSlash: string
+) {
+  // 1. Rewrite bare base (no trailing slash) → canonical base with slash.
+  if (baseNoSlash && pathname === baseNoSlash) {
+    // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
+    // we rewrite the URL internally to the entry point so Vite serves it immediately.
+    // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
+    const sanitizedQuery = query.replace(/[^a-zA-Z0-9_=&?-]/g, '');
+    req.url = `${baseWithSlash}index.html${sanitizedQuery}`;
+    if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
+      // If originalUrl remains untouched, Vite might intercept it later.
+      req.originalUrl = req.originalUrl.replace(baseNoSlash, baseWithSlash);
+    }
+  }
+
+  // 2. SPA fallback: serve index.html for any non-asset path under base.
+  // Exclude paths that already end with a file extension (including .html)
+  // so that static files like previews/index.html are served directly.
+  else if (
+    pathname.startsWith(baseWithSlash) &&
+    !pathname.startsWith(`${baseWithSlash}assets/`) &&
+    !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+  ) {
+    // Keep the query string attached so that the browser/test runner doesn't lose it.
+    // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
+    const sanitizedQuery = query.replace(/[^a-zA-Z0-9_=&?-]/g, '');
+    req.url = `${baseWithSlash}index.html${sanitizedQuery}`;
+  }
+}
+
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
@@ -156,30 +194,14 @@ export default defineConfig(({mode}) => {
               const [pathname, rest] = url.split('?') as [string, string | undefined];
               const query = rest ? `?${rest}` : '';
 
-              // 1. Rewrite bare base (no trailing slash) → canonical base with slash.
-              if (baseNoSlash && pathname === baseNoSlash) {
-                // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
-                // we rewrite the URL internally to the entry point so Vite serves it immediately.
-                req.url = `${baseWithSlash}index.html${query}`;
-                if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
-                  // If originalUrl remains untouched, Vite might intercept it later.
-                  req.originalUrl = req.originalUrl.replace(baseNoSlash, baseWithSlash);
-                }
-              }
-
-              // 2. SPA fallback: serve index.html for any non-asset path under base.
-              // Exclude paths that already end with a file extension (including .html)
-              // so that static files like previews/index.html are served directly.
-              else if (
-                pathname.startsWith(baseWithSlash) &&
-                !pathname.startsWith(`${baseWithSlash}assets/`) &&
-                !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
-              ) {
-                // Keep the query string attached so that the browser/test runner doesn't lose it.
-                req.url = `${baseWithSlash}index.html${query}`;
-              }
+              safelyRewriteSpaUrl(req, pathname, query, baseWithSlash, baseNoSlash);
             } catch (error) {
               console.error('[spa-preview-fallback] Error processing URL fallback rewrite logic:', error);
+              if (!res.headersSent) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal Server Error processing URL fallback');
+                return;
+              }
             }
 
             next();
