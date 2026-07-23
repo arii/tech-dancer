@@ -225,7 +225,7 @@ Format your report in Markdown. Include a summary section and then detail findin
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not set');
   }
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
 
   const payload = {
     contents: [{ parts }]
@@ -234,7 +234,10 @@ Format your report in Markdown. Include a summary section and then detail findin
   try {
     const apiResponse = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
       body: JSON.stringify(payload)
     });
 
@@ -317,12 +320,15 @@ Do not select destructive elements.`;
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not set');
   }
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
 
   try {
     const apiResponse = await fetch(apiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
       body: JSON.stringify(payload)
     });
 
