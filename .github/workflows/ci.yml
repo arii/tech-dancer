@@ -89,7 +89,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -145,7 +145,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -193,7 +193,7 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -265,7 +265,7 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -290,7 +290,7 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -344,7 +344,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
