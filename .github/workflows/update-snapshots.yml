@@ -49,8 +49,18 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            core.exportVariable('HEAD_REF', pr.data.head.ref);
-            core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
+            const headRef = pr.data.head.ref;
+            const headRepo = pr.data.head.repo.full_name;
+            if (!/^[a-zA-Z0-9_./-]+$/.test(headRef) || headRef.startsWith('-')) {
+              core.setFailed('Invalid HEAD_REF');
+              return;
+            }
+            if (!/^[a-zA-Z0-9_./-]+$/.test(headRepo) || headRepo.startsWith('-')) {
+              core.setFailed('Invalid HEAD_REPO');
+              return;
+            }
+            core.exportVariable('HEAD_REF', headRef);
+            core.exportVariable('HEAD_REPO', headRepo);
 
       - name: Checkout source branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
