@@ -4,22 +4,26 @@ inputs:
   setup-node:
     description: "Install Node.js and pnpm"
     required: false
+    default: 'true'
   setup-python:
     description: "Install dev-tools (Python)"
     required: false
+    default: 'true'
   node-version-file:
     description: "Path to .node-version file"
     required: false
+    default: '.node-version'
   pnpm-version:
     description: "Version of pnpm to activate"
     required: false
+    default: '10.28.2'
 
 runs:
   using: 'composite'
   steps:
     - uses: ./boomtick-pkg/.github/actions/setup-workspace
       with:
-        setup-node: ${{ inputs.setup-node }}
-        setup-python: ${{ inputs.setup-python }}
-        node-version-file: ${{ inputs.node-version-file }}
-        pnpm-version: ${{ inputs.pnpm-version }}
+        setup-node: ${{ inputs.setup-node || 'true' }}
+        setup-python: ${{ inputs.setup-python || 'true' }}
+        node-version-file: ${{ inputs.node-version-file || '.node-version' }}
+        pnpm-version: ${{ inputs.pnpm-version || '10.28.2' }}
