@@ -89,12 +89,14 @@ async function cleanupSnapshots() {
 }
 
 async function runCrawler() {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
-  if (!apiKey) {
+  let apiKey: string;
+  try {
+    apiKey = getApiKey();
+    if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
+  } catch {
     console.error('Error: API Key missing.');
     process.exit(1);
   }
-  if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
 
   await cleanupSnapshots();
 
@@ -195,12 +197,31 @@ async function runCrawler() {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callGeminiAPI(modelName: string, payload: any): Promise<Response> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
+interface GeminiContentPart {
+  text?: string;
+  inlineData?: {
+    mimeType: string;
+    data: string;
+  };
+}
+
+interface GeminiPayload {
+  contents: {
+    parts: GeminiContentPart[];
+  }[];
+  generationConfig?: Record<string, unknown>;
+}
+
+function getApiKey(): string {
+  const key = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
+  if (!key) {
     throw new Error('GEMINI_API_KEY is not set');
   }
+  return key;
+}
+
+async function callGeminiAPI(modelName: string, payload: GeminiPayload): Promise<Response> {
+  const apiKey = getApiKey();
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
 
   return fetch(url, {
