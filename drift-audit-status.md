@@ -1,6 +1,6 @@
 # Drift Audit Status
 
-## Total Codebase Audit Count: 581
+## Total Codebase Audit Count: 616
 
 - [x] AGENTS.md — Verified Clean
 - [x] CHANGELOG.md — Verified Clean
@@ -39,7 +39,9 @@
 - [x] boomtick-pkg/cli/dev_tools/__pycache__/constants.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/__pycache__/models.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/__pycache__/orchestrator.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/__pycache__/pr_overlap.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/__pycache__/schema_gen.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/__pycache__/schema_utils.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/__pycache__/ux_report.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/cli-schema.json — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/cli.py — Verified Clean
@@ -56,6 +58,8 @@
 - [x] boomtick-pkg/cli/dev_tools/orchestrator.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/pr_overlap.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/resources/__init__.py — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/resources/__pycache__/__init__.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/resources/__pycache__/build-repo-context.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/resources/build-repo-context.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/resources/prompt_constants.json — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/resources/review_template.md — Verified Clean
@@ -66,6 +70,8 @@
 - [x] boomtick-pkg/cli/dev_tools/schema_utils.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/services/__init__.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/services/__pycache__/__init__.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/services/__pycache__/context_builder.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/services/__pycache__/dependency_graph.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/services/__pycache__/github.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/services/__pycache__/jules.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/services/ai_service.py — Verified Clean
@@ -86,6 +92,12 @@
 - [x] boomtick-pkg/cli/dev_tools/verify_versions.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/version_utils.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/workflows/__init__.py — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/__init__.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/context.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/graph.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/node.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/nodes.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/dev_tools/workflows/__pycache__/runner.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/workflows/context.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/workflows/graph.py — Verified Clean
 - [x] boomtick-pkg/cli/dev_tools/workflows/node.py — Verified Clean
@@ -99,6 +111,28 @@
 - [x] boomtick-pkg/cli/requirements.txt — Verified Clean
 - [x] boomtick-pkg/cli/setup-python.sh — Verified Clean
 - [x] boomtick-pkg/cli/snapshot.sh — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_build_repo_context.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_config.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_dependency_graph.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_fail_fast.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_github_diff_parser.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_github_no_gh.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_github_parser.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_install_workflows.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_issue_validation_local.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_jules_batch_send.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_labels.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_latency_mitigation.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_orchestrator_aggregation.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_orchestrator_heuristics.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_parse_comment.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_plan_issue_audit.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_pr_overlap.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_review_template_validation.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_schema_utils.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_verify_ci_metrics.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_workflow_audit.cpython-312.pyc — Verified Clean
+- [x] boomtick-pkg/cli/tests/__pycache__/test_workflow_orchestration.cpython-312.pyc — Verified Clean
 - [x] boomtick-pkg/cli/tests/services/test_ai_service_validation.py — Verified Clean
 - [x] boomtick-pkg/cli/tests/services/test_context_builder.py — Verified Clean
 - [x] boomtick-pkg/cli/tests/services/test_github.py — Verified Clean
@@ -365,6 +399,7 @@
 - [x] pnpm-workspace.yaml — Verified Clean
 - [x] project_config.json — Verified Clean
 - [x] public/404.html — Verified Clean
+- [x] public/data/wcs_prelims.parquet — Verified Clean
 - [x] public/images/gear/sketches/glow_suspenders.jpeg — Verified Clean
 - [x] public/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg — Verified Clean
 - [x] public/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpeg — Verified Clean
