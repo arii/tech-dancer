@@ -19,13 +19,33 @@ function safelyRewriteSpaUrl(
   baseWithSlash: string,
   baseNoSlash: string
 ) {
+  // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
+  let finalQuery = '';
+  if (query) {
+    try {
+      // URLSearchParams safely encodes parameters
+      const searchParams = new URLSearchParams(query);
+      // Additional validation: only allow explicit UI query parameters
+      const allowedParams = ['q', 'modal', 'collection'];
+      for (const [key] of Array.from(searchParams.entries())) {
+        if (!allowedParams.includes(key)) {
+           searchParams.delete(key);
+        }
+      }
+      const safeQueryString = searchParams.toString();
+      if (safeQueryString) {
+         finalQuery = `?${safeQueryString}`;
+      }
+    } catch {
+      // If query string parsing fails, ignore it
+      finalQuery = '';
+    }
+  }
+
   // 1. Rewrite bare base (no trailing slash) → canonical base with slash.
   if (baseNoSlash && pathname === baseNoSlash) {
     // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
     // we rewrite the URL internally to the entry point so Vite serves it immediately.
-    // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
-    const safeQuery = new URLSearchParams(query).toString();
-    const finalQuery = safeQuery ? `?${safeQuery}` : '';
     req.url = `${baseWithSlash}index.html${finalQuery}`;
     if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
       // If originalUrl remains untouched, Vite might intercept it later.
@@ -42,9 +62,6 @@ function safelyRewriteSpaUrl(
     !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
   ) {
     // Keep the query string attached so that the browser/test runner doesn't lose it.
-    // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
-    const safeQuery = new URLSearchParams(query).toString();
-    const finalQuery = safeQuery ? `?${safeQuery}` : '';
     req.url = `${baseWithSlash}index.html${finalQuery}`;
   }
 }
@@ -200,8 +217,8 @@ export default defineConfig(({mode}) => {
             } catch (error) {
               console.error('[spa-preview-fallback] Error processing URL fallback rewrite logic:', error);
               if (!res.headersSent) {
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error processing URL fallback');
+                res.writeHead(500, { 'Content-Type': 'text/plain', 'X-Content-Type-Options': 'nosniff' });
+                res.end('Internal Server Error');
                 return;
               }
             }
