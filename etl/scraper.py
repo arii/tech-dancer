@@ -489,22 +489,39 @@ class ETLPipeline:
                     results_links = self.crawler.extract_results_links(discovery_html, event_url)
 
                     event_has_new_data = False
-                    for res_url in results_links:
+
+                    semaphore = asyncio.Semaphore(5)
+
+                    async def fetch_result(res_url, sem):
                         res_id_match = re.search(r"/results/(\d+)\.html", res_url)
                         res_id = res_id_match.group(1) if res_id_match else None
-
                         if res_id and res_id in self.processed_result_ids:
-                            continue
+                            return None
 
-                        try:
-                            content = await self._fetch_page(context, res_url)
-                            raw_df = self.parser.parse_results(content, res_url, event_url=event_url, location=location)
-                            ledger_df = process_for_ledger(raw_df)
-                            self.output_manager.update_ledger(ledger_df)
-                            event_has_new_data = True
-                            await ethical_throttle()
-                        except Exception as e:
-                            logging.error(f"Failed to process {res_url}: {e}")
+                        async with sem:
+                            try:
+                                content = await self._fetch_page(context, res_url)
+                                await ethical_throttle()
+                                return (res_url, content)
+                            except Exception as e:
+                                logging.error(f"Failed to fetch {res_url}: {e}")
+                                return None
+
+                    fetch_tasks = [fetch_result(url, semaphore) for url in results_links]
+                    fetched_results = await asyncio.gather(*fetch_tasks)
+
+                    for result in fetched_results:
+                        if result is not None:
+                            res_url, content = result
+                            try:
+                                raw_df = self.parser.parse_results(
+                                    content, res_url, event_url=event_url, location=location
+                                )
+                                ledger_df = process_for_ledger(raw_df)
+                                self.output_manager.update_ledger(ledger_df)
+                                event_has_new_data = True
+                            except Exception as e:
+                                logging.error(f"Failed to process {res_url}: {e}")
 
                     if event_has_new_data:
                         processed_count += 1
