@@ -195,6 +195,24 @@ async function runCrawler() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function callGeminiAPI(modelName: string, payload: any): Promise<Response> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': apiKey
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
 async function generateVisualReview(modelName: string, screenshots: string[]): Promise<string> {
   const prompt = `
 You are a senior UI/UX engineer. You have been provided with a series of screenshots captured during an autonomous crawl of a web application.
@@ -221,28 +239,15 @@ Format your report in Markdown. Include a summary section and then detail findin
     });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set');
-  }
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-
   const payload = {
     contents: [{ parts }]
   };
 
   try {
-    const apiResponse = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify(payload)
-    });
+    const apiResponse = await callGeminiAPI(modelName, payload);
 
     if (!apiResponse.ok) {
-      console.warn(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}. Continuing gracefully.`);
+      console.error(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}`);
       return 'No review generated due to API restriction.';
     }
 
@@ -250,7 +255,7 @@ Format your report in Markdown. Include a summary section and then detail findin
     const data = await apiResponse.json() as any;
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } catch (error) {
-    console.warn(`Gemini API Request failed: ${error}. Continuing gracefully.`);
+    console.error(`Gemini API Request failed: ${error}`);
     return 'No review generated due to API request failure.';
   }
 }
@@ -316,21 +321,8 @@ Do not select destructive elements.`;
     }
   };
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set');
-  }
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-
   try {
-    const apiResponse = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify(payload)
-    });
+    const apiResponse = await callGeminiAPI(modelName, payload);
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
@@ -349,7 +341,7 @@ Do not select destructive elements.`;
       console.error('JSON parse fail', text);
     }
   } catch (error) {
-    console.error(`Gemini API Request failed: ${error}.`);
+    console.error(`Gemini API Request failed: ${error}`);
   }
 
   return { type: 'scroll', reason: 'Fallback due to parse error.' };
