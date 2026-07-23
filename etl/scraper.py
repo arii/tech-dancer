@@ -1,4 +1,4 @@
-# pylint: disable=too-many-locals,logging-fstring-interpolation,too-many-nested-blocks,pointless-string-statement,missing-function-docstring,too-few-public-methods,too-many-instance-attributes,import-outside-toplevel,too-many-statements,bare-except
+# pylint: disable=too-many-locals,logging-fstring-interpolation,too-many-nested-blocks,pointless-string-statement,missing-function-docstring,too-few-public-methods,too-many-instance-attributes,import-outside-toplevel,too-many-statements,bare-except,too-many-branches
 """Module for scraping data from external sources."""
 import argparse
 import asyncio
@@ -417,6 +417,18 @@ class ETLPipeline:
     async def run_historical(self, years=5, limit=None):
         logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
 
+        semaphore = asyncio.Semaphore(5)
+
+        async def fetch_result(res_url, context):
+            async with semaphore:
+                try:
+                    content = await self._fetch_page(context, res_url)
+                    await ethical_throttle()
+                    return (res_url, content)
+                except Exception as e:
+                    logging.error(f"Failed to fetch {res_url}: {e}")
+                    return None
+
         # Discovery Phase (Always check for NEW events, but prepend to queue)
         logging.info("Checking for new events...")
         discovered = list(
@@ -489,22 +501,32 @@ class ETLPipeline:
                     results_links = self.crawler.extract_results_links(discovery_html, event_url)
 
                     event_has_new_data = False
-                    for res_url in results_links:
-                        res_id_match = re.search(r"/results/(\d+)\.html", res_url)
-                        res_id = res_id_match.group(1) if res_id_match else None
 
+                    fetch_tasks = []
+                    for url in results_links:
+                        res_id_match = re.search(r"/results/(\d+)\.html", url)
+                        res_id = res_id_match.group(1) if res_id_match else None
                         if res_id and res_id in self.processed_result_ids:
                             continue
+                        fetch_tasks.append(fetch_result(url, context))
 
-                        try:
-                            content = await self._fetch_page(context, res_url)
-                            raw_df = self.parser.parse_results(content, res_url, event_url=event_url, location=location)
-                            ledger_df = process_for_ledger(raw_df)
-                            self.output_manager.update_ledger(ledger_df)
-                            event_has_new_data = True
-                            await ethical_throttle()
-                        except Exception as e:
-                            logging.error(f"Failed to process {res_url}: {e}")
+                    fetched_results = await asyncio.gather(*fetch_tasks, return_exceptions=True)
+
+                    for result in fetched_results:
+                        if isinstance(result, Exception):
+                            logging.error(f"Unhandled exception during fetch: {result}")
+                            continue
+                        if result is not None:
+                            res_url, content = result
+                            try:
+                                raw_df = self.parser.parse_results(
+                                    content, res_url, event_url=event_url, location=location
+                                )
+                                ledger_df = process_for_ledger(raw_df)
+                                self.output_manager.update_ledger(ledger_df)
+                                event_has_new_data = True
+                            except Exception as e:
+                                logging.error(f"Failed to process {res_url}: {e}")
 
                     if event_has_new_data:
                         processed_count += 1
