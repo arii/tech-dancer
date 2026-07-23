@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.4.1...tech-dancer-v0.5.0) (2026-07-23)
+
+
+### Features
+
+* Add masking for dynamic elements in visual testing ([#3920](https://github.com/arii/tech-dancer/issues/3920)) ([59171e3](https://github.com/arii/tech-dancer/commit/59171e3a5e17eea5f281bf5b9cbaa5d34b2c7674))
+
 ## [0.4.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.4.0...tech-dancer-v0.4.1) (2026-07-20)
 
 
