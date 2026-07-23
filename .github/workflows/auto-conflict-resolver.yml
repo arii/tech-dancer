@@ -104,7 +104,7 @@ jobs:
         with:
           node-version-file: '.node-version'
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace
         with:
           setup-python: 'false'
 
