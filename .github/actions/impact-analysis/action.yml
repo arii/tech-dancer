@@ -22,6 +22,8 @@ runs:
         sed -i 's|RESOLVED_PATH=\$(realpath "${{ github.action_path }}/../../../scripts/send-jules-impact.py")|if [ -f "\$GITHUB_WORKSPACE/boomtick-pkg/scripts/send-jules-impact.py" ]; then\n          RESOLVED_PATH="\$GITHUB_WORKSPACE/boomtick-pkg/scripts/send-jules-impact.py"\n        elif [ -f "\$GITHUB_WORKSPACE/scripts/send-jules-impact.py" ]; then\n          RESOLVED_PATH="\$GITHUB_WORKSPACE/scripts/send-jules-impact.py"\n        else\n          RESOLVED_PATH=""\n        fi|g' boomtick-pkg/mcp/actions/impact-analysis/action.yml
 
         sed -i 's|td-cli gh summary-report >> "\$GITHUB_STEP_SUMMARY"|export PATH="\$HOME/.local/bin:/github/home/.local/bin:\$PATH"\n        td-cli gh summary-report >> "\$GITHUB_STEP_SUMMARY"|g' boomtick-pkg/mcp/actions/impact-analysis/action.yml
+
+        sed -i 's|if ! td-cli gh verify-metrics; then|export PATH="\$HOME/.local/bin:/github/home/.local/bin:\$PATH"\n        if ! td-cli gh verify-metrics; then|g' boomtick-pkg/mcp/actions/impact-analysis/action.yml
       shell: bash
 
     - uses: ./boomtick-pkg/mcp/actions/impact-analysis # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
