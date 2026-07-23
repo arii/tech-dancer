@@ -89,24 +89,10 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
-      - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
-        with:
-          setup-python: 'true'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Verify lockfile integrity
         run: |
@@ -145,24 +131,10 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
-      - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
-        with:
-          setup-python: 'true'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Semantic Duplicate Audit
         run: pnpm run audit:semantic
@@ -193,24 +165,10 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
-      - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
-        with:
-          setup-python: 'true'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Ensure correct Playwright browsers
         run: pnpm exec playwright install chromium
@@ -265,7 +223,7 @@ jobs:
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
@@ -281,6 +239,8 @@ jobs:
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     permissions:
       security-events: write
       contents: read
@@ -290,24 +250,10 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
-      - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
-        with:
-          setup-python: 'true'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
 
       - name: Initialize CodeQL
         if: matrix.scanner == 'semgrep'
@@ -341,18 +287,15 @@ jobs:
   validate-workflows:
     name: Validate all workflow files
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
+        uses: actions/checkout@v4 # nosemgrep
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
 
       - name: Download actionlint
         id: get_actionlint
