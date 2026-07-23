@@ -1,4 +1,4 @@
-# pylint: disable=too-many-locals,logging-fstring-interpolation,too-many-nested-blocks,pointless-string-statement,missing-function-docstring,too-few-public-methods,too-many-instance-attributes,import-outside-toplevel,too-many-statements,bare-except
+# pylint: disable=too-many-locals,logging-fstring-interpolation,too-many-nested-blocks,pointless-string-statement,missing-function-docstring,too-few-public-methods,too-many-instance-attributes,import-outside-toplevel,too-many-statements,bare-except,too-many-branches
 """Module for scraping data from external sources."""
 import argparse
 import asyncio
@@ -417,6 +417,18 @@ class ETLPipeline:
     async def run_historical(self, years=5, limit=None):
         logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
 
+        semaphore = asyncio.Semaphore(5)
+
+        async def fetch_result(res_url, context):
+            async with semaphore:
+                try:
+                    content = await self._fetch_page(context, res_url)
+                    await ethical_throttle()
+                    return (res_url, content)
+                except Exception as e:
+                    logging.error(f"Failed to fetch {res_url}: {e}")
+                    return None
+
         # Discovery Phase (Always check for NEW events, but prepend to queue)
         logging.info("Checking for new events...")
         discovered = list(
@@ -490,27 +502,20 @@ class ETLPipeline:
 
                     event_has_new_data = False
 
-                    semaphore = asyncio.Semaphore(5)
-
-                    async def fetch_result(res_url, sem):
-                        res_id_match = re.search(r"/results/(\d+)\.html", res_url)
+                    fetch_tasks = []
+                    for url in results_links:
+                        res_id_match = re.search(r"/results/(\d+)\.html", url)
                         res_id = res_id_match.group(1) if res_id_match else None
                         if res_id and res_id in self.processed_result_ids:
-                            return None
+                            continue
+                        fetch_tasks.append(fetch_result(url, context))
 
-                        async with sem:
-                            try:
-                                content = await self._fetch_page(context, res_url)
-                                await ethical_throttle()
-                                return (res_url, content)
-                            except Exception as e:
-                                logging.error(f"Failed to fetch {res_url}: {e}")
-                                return None
-
-                    fetch_tasks = [fetch_result(url, semaphore) for url in results_links]
-                    fetched_results = await asyncio.gather(*fetch_tasks)
+                    fetched_results = await asyncio.gather(*fetch_tasks, return_exceptions=True)
 
                     for result in fetched_results:
+                        if isinstance(result, Exception):
+                            logging.error(f"Unhandled exception during fetch: {result}")
+                            continue
                         if result is not None:
                             res_url, content = result
                             try:
