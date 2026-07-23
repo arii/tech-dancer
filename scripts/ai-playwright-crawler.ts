@@ -212,6 +212,16 @@ interface GeminiPayload {
   generationConfig?: Record<string, unknown>;
 }
 
+interface GeminiResponse {
+  candidates?: {
+    content?: {
+      parts?: {
+        text?: string;
+      }[];
+    };
+  }[];
+}
+
 function getApiKey(): string {
   const key = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
   if (!key) {
@@ -272,8 +282,7 @@ Format your report in Markdown. Include a summary section and then detail findin
       return 'No review generated due to API restriction.';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await apiResponse.json() as any;
+    const data = await apiResponse.json() as GeminiResponse;
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } catch (error) {
     console.error(`Gemini API Request failed: ${error}`);
@@ -351,8 +360,7 @@ Do not select destructive elements.`;
       return { type: 'scroll', reason: 'Fallback due to API error.' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await apiResponse.json() as any;
+    const data = await apiResponse.json() as GeminiResponse;
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     try {
