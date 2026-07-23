@@ -100,7 +100,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
@@ -156,7 +156,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
@@ -204,7 +204,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
@@ -301,7 +301,7 @@ jobs:
           node-version-file: '.node-version'
 
       - name: Setup Workspace
-        uses: ./boomtick-pkg/mcp/actions/setup-workspace
+        uses: ./boomtick-pkg/.github/actions/setup-workspace
         with:
           setup-python: 'true'
 
