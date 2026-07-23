@@ -93,17 +93,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          setup-python: 'true'
-
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -149,17 +145,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          setup-python: 'true'
-
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -197,17 +189,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          setup-python: 'true'
-
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -294,17 +282,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
-
       - name: Setup Workspace
-        uses: ./boomtick-pkg/.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          setup-python: 'true'
-
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -349,10 +333,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          node-version-file: '.node-version'
+          setup-node: true
+          setup-python: false
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
 
       - name: Download actionlint
         id: get_actionlint

@@ -28,6 +28,14 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
+
       - name: Install Python Dependencies
         run: |
           python3 -m pip install -r etl/requirements.txt --break-system-packages
