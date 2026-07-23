@@ -98,15 +98,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          node-version-file: '.node-version'
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          setup-python: 'false'
+          setup-node: true
+          setup-python: false
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
 
       - name: Check active runtime
         run: |
