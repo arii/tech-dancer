@@ -142,31 +142,40 @@ export default defineConfig(({mode}) => {
       // error instead of serving index.html, breaking the Playwright reload test.
       {
         name: 'spa-preview-fallback',
-        configurePreviewServer(server: { middlewares: { use: (fn: (req: import('http').IncomingMessage & { url?: string }, res: import('http').ServerResponse, next: () => void) => void) => void } }) {
+        configurePreviewServer(server: { middlewares: { use: (fn: (req: import('http').IncomingMessage & { url?: string, originalUrl?: string }, res: import('http').ServerResponse, next: () => void) => void) => void } }) {
           const baseWithSlash = base.endsWith('/') ? base : `${base}/`;
           const baseNoSlash = baseWithSlash.slice(0, -1);
 
+          // Note: Vite 5 uses strict base checks internally in a middleware that is added
+          // very early. If a request comes to `/tech-dancer`, it will throw a 404 "did you mean"
+          // unless we rewrite the URL *before* Vite's base check middleware runs.
+          // By NOT returning a function, this middleware is injected *before* Vite's internal ones.
           server.middlewares.use((req, res, next) => {
             const url = req.url ?? '/';
             const [pathname, rest] = url.split('?') as [string, string | undefined];
             const query = rest ? `?${rest}` : '';
 
-            // 1. Redirect bare base (no trailing slash) → canonical base with slash.
+            // 1. Rewrite bare base (no trailing slash) → canonical base with slash.
             if (baseNoSlash && pathname === baseNoSlash) {
-              res.writeHead(301, { Location: `${baseWithSlash}${query}` });
-              res.end();
-              return;
+              // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
+              // we rewrite the URL internally to the entry point so Vite serves it immediately.
+              req.url = `${baseWithSlash}index.html${query}`;
+              if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
+                // If originalUrl remains untouched, Vite might intercept it later.
+                req.originalUrl = req.originalUrl.replace(baseNoSlash, baseWithSlash);
+              }
             }
 
             // 2. SPA fallback: serve index.html for any non-asset path under base.
             // Exclude paths that already end with a file extension (including .html)
             // so that static files like previews/index.html are served directly.
-            if (
+            else if (
               pathname.startsWith(baseWithSlash) &&
               !pathname.startsWith(`${baseWithSlash}assets/`) &&
               !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
             ) {
-              req.url = `${baseWithSlash}index.html`;
+              // Keep the query string attached so that the browser/test runner doesn't lose it.
+              req.url = `${baseWithSlash}index.html${query}`;
             }
 
             next();
