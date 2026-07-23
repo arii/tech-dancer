@@ -24,8 +24,9 @@ function safelyRewriteSpaUrl(
     // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
     // we rewrite the URL internally to the entry point so Vite serves it immediately.
     // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
-    const sanitizedQuery = query.replace(/[^a-zA-Z0-9_=&?-]/g, '');
-    req.url = `${baseWithSlash}index.html${sanitizedQuery}`;
+    const safeQuery = new URLSearchParams(query).toString();
+    const finalQuery = safeQuery ? `?${safeQuery}` : '';
+    req.url = `${baseWithSlash}index.html${finalQuery}`;
     if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
       // If originalUrl remains untouched, Vite might intercept it later.
       req.originalUrl = req.originalUrl.replace(baseNoSlash, baseWithSlash);
@@ -42,8 +43,9 @@ function safelyRewriteSpaUrl(
   ) {
     // Keep the query string attached so that the browser/test runner doesn't lose it.
     // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
-    const sanitizedQuery = query.replace(/[^a-zA-Z0-9_=&?-]/g, '');
-    req.url = `${baseWithSlash}index.html${sanitizedQuery}`;
+    const safeQuery = new URLSearchParams(query).toString();
+    const finalQuery = safeQuery ? `?${safeQuery}` : '';
+    req.url = `${baseWithSlash}index.html${finalQuery}`;
   }
 }
 
