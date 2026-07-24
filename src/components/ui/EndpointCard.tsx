@@ -59,7 +59,7 @@ export const EndpointCard = React.memo(({
           as="pre"
           size="xs"
           color="main"
-          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
+          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border-line/40 border"
         >
           {exampleCall}
         </Text>
@@ -81,7 +81,7 @@ export const EndpointCard = React.memo(({
             as="pre"
             size="xs"
             color="dim"
-            className="font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
+            className="font-mono overflow-x-auto whitespace-pre-wrap border-line/40 border"
           >
             {exampleResponse}
           </Text>
