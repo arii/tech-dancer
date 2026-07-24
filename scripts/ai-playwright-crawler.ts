@@ -89,12 +89,14 @@ async function cleanupSnapshots() {
 }
 
 async function runCrawler() {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
-  if (!apiKey) {
+  let apiKey: string;
+  try {
+    apiKey = getApiKey();
+    if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
+  } catch {
     console.error('Error: API Key missing.');
     process.exit(1);
   }
-  if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
 
   await cleanupSnapshots();
 
@@ -195,6 +197,53 @@ async function runCrawler() {
   }
 }
 
+interface GeminiContentPart {
+  text?: string;
+  inlineData?: {
+    mimeType: string;
+    data: string;
+  };
+}
+
+interface GeminiPayload {
+  contents: {
+    parts: GeminiContentPart[];
+  }[];
+  generationConfig?: Record<string, unknown>;
+}
+
+interface GeminiResponse {
+  candidates?: {
+    content?: {
+      parts?: {
+        text?: string;
+      }[];
+    };
+  }[];
+}
+
+function getApiKey(): string {
+  const key = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
+  if (!key) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
+  return key;
+}
+
+async function callGeminiAPI(modelName: string, payload: GeminiPayload): Promise<Response> {
+  const apiKey = getApiKey();
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': apiKey
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
 async function generateVisualReview(modelName: string, screenshots: string[]): Promise<string> {
   const prompt = `
 You are a senior UI/UX engineer. You have been provided with a series of screenshots captured during an autonomous crawl of a web application.
@@ -221,33 +270,22 @@ Format your report in Markdown. Include a summary section and then detail findin
     });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set');
-  }
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
   const payload = {
     contents: [{ parts }]
   };
 
   try {
-    const apiResponse = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const apiResponse = await callGeminiAPI(modelName, payload);
 
     if (!apiResponse.ok) {
-      console.warn(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}. Continuing gracefully.`);
+      console.error(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}`);
       return 'No review generated due to API restriction.';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await apiResponse.json() as any;
+    const data = await apiResponse.json() as GeminiResponse;
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } catch (error) {
-    console.warn(`Gemini API Request failed: ${error}. Continuing gracefully.`);
+    console.error(`Gemini API Request failed: ${error}`);
     return 'No review generated due to API request failure.';
   }
 }
@@ -313,18 +351,8 @@ Do not select destructive elements.`;
     }
   };
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set');
-  }
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
   try {
-    const apiResponse = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const apiResponse = await callGeminiAPI(modelName, payload);
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
@@ -332,8 +360,7 @@ Do not select destructive elements.`;
       return { type: 'scroll', reason: 'Fallback due to API error.' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await apiResponse.json() as any;
+    const data = await apiResponse.json() as GeminiResponse;
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     try {
@@ -343,7 +370,7 @@ Do not select destructive elements.`;
       console.error('JSON parse fail', text);
     }
   } catch (error) {
-    console.error(`Gemini API Request failed: ${error}.`);
+    console.error(`Gemini API Request failed: ${error}`);
   }
 
   return { type: 'scroll', reason: 'Fallback due to parse error.' };
