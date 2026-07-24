@@ -184,7 +184,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 
       return Object.entries(prop)
         .map(([bp, val]) => {
-          const className = mapFn(val);
+          const className = mapFn(val as T);
           if (!className) return "";
           if (bp === "base") return className;
           // Split by space and apply prefix to each class
