@@ -20,9 +20,8 @@ export const EndpointCard = React.memo(({
   exampleResponse,
 }: EndpointCardProps) => {
   // Validate path to prevent path traversal in rendering (although this is just UI)
-  const safePath = path.replace(/\.\.\//g, '');
-  const isSafePath = /^\/[-a-zA-Z0-9_./?=&]+$/.test(safePath) || /^[a-zA-Z0-9_]+$/.test(safePath);
-  const displayPath = isSafePath ? safePath : 'Invalid Path';
+  const isSafePath = !path.includes('..') && (/^\/[-a-zA-Z0-9_./?=&]+$/.test(path) || /^[a-zA-Z0-9_]+$/.test(path));
+  const displayPath = isSafePath ? path : 'Invalid Path';
   const [showResponse, setShowResponse] = useState(false);
 
   const handleToggleResponse = React.useCallback(() => {
