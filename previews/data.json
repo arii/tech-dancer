@@ -1,295 +1,349 @@
 {
   "about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "add-agent-prime-script-12915572335704980998": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/about": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "automation/wcs-etl-refresh/versiontruth": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-power-charging": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/about": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/blog": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/merch": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/preview": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/previews": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/research": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/ux-auditor": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "chore/remove-ai-slop-778656037801502517/versiontruth": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "feature/blog-directory-scannability-and-layout-6386545577436537631": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "fix-layout-maps-hardcoded-pixel-16898833701483276387": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "fix-vite-spa-fallback-10212195343924854759": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "jules-2358150386942076189-f2e8d609": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "jules-8606747082813661780-8d785156": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "perf/etl-scraper-concurrency-7271147458642589917": {
-    "commitTimestamp": 1784912841,
-    "deployTimestamp": 1784912841,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/2026-07-10-latest-version-check-skill": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/ai-devops-pipeline": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/blog-drafter": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/boomtick-blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/confidently-incorrect-v4": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/deployment-impact-analyzer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/ecommerce-automation": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/gitops-pr-reviewer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/hrm-flagship": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/repo-auditor-ai": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/wcs-scraper-initial-sync": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "research/wcs-scraper": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "ux-auditor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 ,
   "versiontruth": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1784913394,
+    "deployTimestamp": 1784913394,
     "sha": "unknown"
   }
 }
