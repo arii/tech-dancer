@@ -123,6 +123,3 @@ boomtick-pkg/cli/dev_tools/contract-schema.json
 .boomtick/*-audit-status.md
 boomtick-pkg/cli/dev_tools/cli-schema.json
 boomtick-pkg/mcp/src/tools/contract.ts
-
-# Fix: ensure .agent-context.json is ignored
-.agent-context.json
