@@ -173,13 +173,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       return ""
     }
 
-    const applyResponsiveBorder = (
-      prop: any,
-      mapFn: (val: any) => string
+    const applyResponsiveBorder = <T,>(
+      prop: ResponsiveProp<T> | undefined,
+      mapFn: (val: T) => string
     ): string => {
       if (!prop) return "";
-      if (typeof prop !== "object" || prop.$$typeof) {
-        return mapFn(prop);
+      if (typeof prop !== "object" || (prop as Record<string, unknown>).$$typeof) {
+        return mapFn(prop as T);
       }
 
       return Object.entries(prop)
