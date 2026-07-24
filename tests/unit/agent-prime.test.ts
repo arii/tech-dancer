@@ -39,7 +39,7 @@ describe('agent-prime.mjs', () => {
     it('returns context with valid git and package data', () => {
       fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify({ name: 'mocked-pkg-name' }));
 
-      vi.mocked(child_process.execSync).mockImplementation((_cmd: any, _opts: any) => {
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown, _opts?: unknown) => {
         if (_cmd === 'git rev-parse HEAD:boomtick-pkg') return 'mocked-submodule-sha\n';
         if (_cmd === 'git rev-parse HEAD') return 'mocked-git-sha\n';
         return '';
@@ -71,7 +71,7 @@ describe('agent-prime.mjs', () => {
     it('handles JSON parse error gracefully and logs warning', () => {
       fs.writeFileSync(path.join(tmpDir, 'package.json'), 'invalid-json');
 
-      vi.mocked(child_process.execSync).mockImplementation((_cmd: any) => {
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown) => {
         return 'mocked-git-sha\n';
       });
 
@@ -88,7 +88,7 @@ describe('agent-prime.mjs', () => {
 
   describe('primeAgentContext', () => {
     it('writes context to .agent-context.json', () => {
-      vi.mocked(child_process.execSync).mockImplementation((_cmd: any) => {
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown) => {
         return 'mocked-git-sha\n';
       });
 
