@@ -158,16 +158,49 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       if (v === true) return "border border-line"
       if (v === false) return "border-0"
       if (typeof v === "string") return `border-${v} border-line`
+      if (typeof v === "object" && v !== null) {
+        const classes = [];
+        if (v.t === true) classes.push("border-t border-line");
+        if (v.t === false) classes.push("border-t-0");
+        if (v.b === true) classes.push("border-b border-line");
+        if (v.b === false) classes.push("border-b-0");
+        if (v.l === true) classes.push("border-l border-line");
+        if (v.l === false) classes.push("border-l-0");
+        if (v.r === true) classes.push("border-r border-line");
+        if (v.r === false) classes.push("border-r-0");
+        return classes.join(" ");
+      }
       return ""
     }
 
+    const applyResponsiveBorder = (
+      prop: any,
+      mapFn: (val: any) => string
+    ): string => {
+      if (!prop) return "";
+      if (typeof prop !== "object" || prop.$$typeof) {
+        return mapFn(prop);
+      }
+
+      return Object.entries(prop)
+        .map(([bp, val]) => {
+          const className = mapFn(val);
+          if (!className) return "";
+          if (bp === "base") return className;
+          // Split by space and apply prefix to each class
+          return className.split(" ").map(c => `${bp}:${c}`).join(" ");
+        })
+        .filter(Boolean)
+        .join(" ");
+    }
+
     const borderClasses = cn(
-      applyResponsive(border, mapBorder),
+      applyResponsiveBorder(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      smBorder !== undefined && applyResponsive({ sm: smBorder }, mapBorder),
-      mdBorder !== undefined && applyResponsive({ md: mdBorder }, mapBorder),
-      lgBorder !== undefined && applyResponsive({ lg: lgBorder }, mapBorder),
-      xlBorder !== undefined && applyResponsive({ xl: xlBorder }, mapBorder)
+      applyResponsiveBorder(smBorder !== undefined ? { sm: smBorder } : undefined, mapBorder),
+      applyResponsiveBorder(mdBorder !== undefined ? { md: mdBorder } : undefined, mapBorder),
+      applyResponsiveBorder(lgBorder !== undefined ? { lg: lgBorder } : undefined, mapBorder),
+      applyResponsiveBorder(xlBorder !== undefined ? { xl: xlBorder } : undefined, mapBorder)
     )
 
     // Remove props that shouldn't be spread to DOM elements
