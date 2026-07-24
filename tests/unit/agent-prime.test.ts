@@ -84,6 +84,42 @@ describe('agent-prime.mjs', () => {
       consoleWarnSpy.mockRestore();
       consoleErrorSpy.mockRestore();
     });
+
+    it('handles missing name property in package.json and logs warning', () => {
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify({}));
+
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown) => {
+        return 'mocked-git-sha\n';
+      });
+
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const context = generateAgentContext(tmpDir);
+      expect(context.packageName).toBe('tech-dancer'); // defaults to tech-dancer
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('The "name" property is missing'));
+
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('handles empty package.json gracefully', () => {
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), '');
+
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown) => {
+        return 'mocked-git-sha\n';
+      });
+
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const context = generateAgentContext(tmpDir);
+      expect(context.packageName).toBe('tech-dancer');
+
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('primeAgentContext', () => {
