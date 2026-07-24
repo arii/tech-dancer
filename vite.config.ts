@@ -9,6 +9,63 @@ import Sitemap from 'vite-plugin-sitemap';
 import { getAllRoutes } from './src/lib/routes-discovery';
 import { getBasePath } from './scripts/base-path.js';
 
+/**
+ * Utility to safely rewrite Vite SPA preview URLs
+ */
+function safelyRewriteSpaUrl(
+  req: import('http').IncomingMessage & { url?: string, originalUrl?: string },
+  pathname: string,
+  query: string,
+  baseWithSlash: string,
+  baseNoSlash: string
+) {
+  // Sanitize the query string to prevent potential XSS/injection vulnerabilities.
+  let finalQuery = '';
+  if (query) {
+    try {
+      // URLSearchParams safely encodes parameters
+      const searchParams = new URLSearchParams(query);
+      // Additional validation: only allow explicit UI query parameters
+      const allowedParams = ['q', 'modal', 'collection'];
+      for (const [key] of Array.from(searchParams.entries())) {
+        if (!allowedParams.includes(key)) {
+           searchParams.delete(key);
+        }
+      }
+      const safeQueryString = searchParams.toString();
+      if (safeQueryString) {
+         finalQuery = `?${safeQueryString}`;
+      }
+    } catch {
+      // If query string parsing fails, ignore it
+      finalQuery = '';
+    }
+  }
+
+  // 1. Rewrite bare base (no trailing slash) → canonical base with slash.
+  if (baseNoSlash && pathname === baseNoSlash) {
+    // Instead of a 301 redirect which breaks Playwright reload tests when caching is involved,
+    // we rewrite the URL internally to the entry point so Vite serves it immediately.
+    req.url = `${baseWithSlash}index.html${finalQuery}`;
+    if (req.originalUrl && req.originalUrl.startsWith(baseNoSlash)) {
+      // If originalUrl remains untouched, Vite might intercept it later.
+      req.originalUrl = req.originalUrl.replace(baseNoSlash, baseWithSlash);
+    }
+  }
+
+  // 2. SPA fallback: serve index.html for any non-asset path under base.
+  // Exclude paths that already end with a file extension (including .html)
+  // so that static files like previews/index.html are served directly.
+  else if (
+    pathname.startsWith(baseWithSlash) &&
+    !pathname.startsWith(`${baseWithSlash}assets/`) &&
+    !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+  ) {
+    // Keep the query string attached so that the browser/test runner doesn't lose it.
+    req.url = `${baseWithSlash}index.html${finalQuery}`;
+  }
+}
+
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
@@ -142,31 +199,28 @@ export default defineConfig(({mode}) => {
       // error instead of serving index.html, breaking the Playwright reload test.
       {
         name: 'spa-preview-fallback',
-        configurePreviewServer(server: { middlewares: { use: (fn: (req: import('http').IncomingMessage & { url?: string }, res: import('http').ServerResponse, next: () => void) => void) => void } }) {
+        configurePreviewServer(server: { middlewares: { use: (fn: (req: import('http').IncomingMessage & { url?: string, originalUrl?: string }, res: import('http').ServerResponse, next: () => void) => void) => void } }) {
           const baseWithSlash = base.endsWith('/') ? base : `${base}/`;
           const baseNoSlash = baseWithSlash.slice(0, -1);
 
+          // Note: Vite 5 uses strict base checks internally in a middleware that is added
+          // very early. If a request comes to `/tech-dancer`, it will throw a 404 "did you mean"
+          // unless we rewrite the URL *before* Vite's base check middleware runs.
+          // By NOT returning a function, this middleware is injected *before* Vite's internal ones.
           server.middlewares.use((req, res, next) => {
-            const url = req.url ?? '/';
-            const [pathname, rest] = url.split('?') as [string, string | undefined];
-            const query = rest ? `?${rest}` : '';
+            try {
+              const url = req.url ?? '/';
+              const [pathname, rest] = url.split('?') as [string, string | undefined];
+              const query = rest ? `?${rest}` : '';
 
-            // 1. Redirect bare base (no trailing slash) → canonical base with slash.
-            if (baseNoSlash && pathname === baseNoSlash) {
-              res.writeHead(301, { Location: `${baseWithSlash}${query}` });
-              res.end();
-              return;
-            }
-
-            // 2. SPA fallback: serve index.html for any non-asset path under base.
-            // Exclude paths that already end with a file extension (including .html)
-            // so that static files like previews/index.html are served directly.
-            if (
-              pathname.startsWith(baseWithSlash) &&
-              !pathname.startsWith(`${baseWithSlash}assets/`) &&
-              !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
-            ) {
-              req.url = `${baseWithSlash}index.html`;
+              safelyRewriteSpaUrl(req, pathname, query, baseWithSlash, baseNoSlash);
+            } catch (error) {
+              console.error('[spa-preview-fallback] Error processing URL fallback rewrite logic:', error);
+              if (!res.headersSent) {
+                res.writeHead(500, { 'Content-Type': 'text/plain', 'X-Content-Type-Options': 'nosniff' });
+                res.end('Internal Server Error');
+                return;
+              }
             }
 
             next();
