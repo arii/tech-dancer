@@ -19,9 +19,8 @@ export const EndpointCard = React.memo(({
   exampleCall,
   exampleResponse,
 }: EndpointCardProps) => {
-  // Validate path to prevent path traversal in rendering (although this is just UI)
-  const isSafePath = !path.includes('..') && (/^\/[-a-zA-Z0-9_./?=&]+$/.test(path) || /^[a-zA-Z0-9_]+$/.test(path));
-  const displayPath = isSafePath ? path : 'Invalid Path';
+  // Ensure absolute safety against CodeQL path injection by stripping all '..' and restricting to basic URL chars
+  const displayPath = typeof path === 'string' && !path.includes('..') && /^\/[-a-zA-Z0-9_./?=&]+$/.test(path) ? path : 'Invalid Path';
   const [showResponse, setShowResponse] = useState(false);
 
   const handleToggleResponse = React.useCallback(() => {
