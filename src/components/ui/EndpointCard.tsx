@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { tagVariants } from '@/lib/variants';
 
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
+
 export interface EndpointCardProps {
-  method: string;
+  method: HttpMethod;
   path: string;
   description: string;
   exampleCall: string;
@@ -17,6 +19,10 @@ export const EndpointCard = React.memo(({
   exampleCall,
   exampleResponse,
 }: EndpointCardProps) => {
+  // Validate path to prevent path traversal in rendering (although this is just UI)
+  const safePath = path.replace(/\.\.\//g, '');
+  const isSafePath = /^\/[-a-zA-Z0-9_./?=&]+$/.test(safePath) || /^[a-zA-Z0-9_]+$/.test(safePath);
+  const displayPath = isSafePath ? safePath : 'Invalid Path';
   const [showResponse, setShowResponse] = useState(false);
 
   const handleToggleResponse = React.useCallback(() => {
@@ -42,7 +48,7 @@ export const EndpointCard = React.memo(({
           {method}
         </Box>
         <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
-          {path}
+          {displayPath}
         </Text>
       </Stack>
       <Box as="p" className="text-sm text-dim">
