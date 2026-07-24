@@ -106,14 +106,14 @@ function transform<T extends { date?: string; draft?: boolean }>(
         date: String(data.date || ""),
         author: String(data.author || ""),
         tags: asArray(data.tags),
-        affiliateIds: asArray(data.affiliateIds),
+        affiliateIds: asArray(data.affiliateIds).filter(id => typeof id === 'string').map(id => String(id).replace(/[^a-zA-Z0-9_-]/g, '')),
 
         // New SEO & Policy Fields
         seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
         seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
         imageAlt: data.imageAlt ? String(data.imageAlt) : undefined,
         imageFit: (data.imageFit === 'cover' || data.imageFit === 'contain') ? data.imageFit : undefined,
-        featured: data.featured === true || data.featured === 'true',
+        featured: typeof data.featured === 'boolean' ? data.featured : String(data.featured).toLowerCase() === 'true',
 
         status: normalizeStatus(data.status),
         readTime: normalizeReadTime(data.readTime),

@@ -20,6 +20,15 @@ export interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a"
 
 const MotionArticle = motion.article;
 
+
+const getTagColorClass = (cat: string) => {
+  const c = cat.toLowerCase();
+  if (c.includes('travel')) return 'text-accent-purple';
+  if (c.includes('tech')) return 'text-accent';
+  if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
+  return 'text-accent';
+};
+
 export const ContentCard = (props: ContentCardProps) => {
   const {
     slug,
@@ -40,13 +49,6 @@ export const ContentCard = (props: ContentCardProps) => {
     'basePath'
   ] as (keyof ContentCardProps)[]);
 
-  const getTagColorClass = (cat: string) => {
-    const c = cat.toLowerCase();
-    if (c.includes('travel')) return 'text-accent-purple';
-    if (c.includes('tech')) return 'text-accent';
-    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
-    return 'text-accent';
-  };
 
   return (
     <BaseCard
@@ -58,7 +60,7 @@ export const ContentCard = (props: ContentCardProps) => {
       overflow="hidden"
       {...motionProps}
     >
-      {!compact && image && (
+      {image && (
         <Box width="full" aspect="video" surface="alt" border="b" overflow="hidden">
           <Box
             as="img"

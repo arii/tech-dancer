@@ -30,7 +30,7 @@ export function SEO({
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  const url = canonical || `${BASE_URL}${pathname}`;
+  const url = canonical || `${BASE_URL}${encodeURI(pathname)}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
   const defaultImage = `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`;

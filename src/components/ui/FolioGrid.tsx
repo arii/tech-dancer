@@ -95,13 +95,7 @@ export default function FolioGrid({
                   renderItem(item)
                 ) : (
                   <ContentCard
-                    slug={item.slug}
-                    title={item.title}
-                    category={item.category}
-                    excerpt={'excerpt' in item ? item.excerpt : undefined}
-                    image={'image' in item ? item.image : undefined}
-                    imageAlt={'imageAlt' in item ? item.imageAlt : undefined}
-                    date={'date' in item ? item.date : undefined}
+                    {...item}
                     readingTime={'readingTime' in item ? String(item.readingTime) : undefined}
                     featured={('featured' in item ? item.featured : false) === true}
                     basePath={basePath}
