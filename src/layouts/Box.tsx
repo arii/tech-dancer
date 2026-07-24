@@ -197,10 +197,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const borderClasses = cn(
       applyResponsiveBorder(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      applyResponsiveBorder(smBorder !== undefined ? { sm: smBorder } : undefined, mapBorder),
-      applyResponsiveBorder(mdBorder !== undefined ? { md: mdBorder } : undefined, mapBorder),
-      applyResponsiveBorder(lgBorder !== undefined ? { lg: lgBorder } : undefined, mapBorder),
-      applyResponsiveBorder(xlBorder !== undefined ? { xl: xlBorder } : undefined, mapBorder)
+      smBorder !== undefined && applyResponsiveBorder({ sm: smBorder }, mapBorder),
+      mdBorder !== undefined && applyResponsiveBorder({ md: mdBorder }, mapBorder),
+      lgBorder !== undefined && applyResponsiveBorder({ lg: lgBorder }, mapBorder),
+      xlBorder !== undefined && applyResponsiveBorder({ xl: xlBorder }, mapBorder)
     )
 
     // Remove props that shouldn't be spread to DOM elements
