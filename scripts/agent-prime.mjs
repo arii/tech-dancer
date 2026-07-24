@@ -7,30 +7,31 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = resolve(__dirname, '..');
 
+function execSyncSafe(cmd, options, fallback) {
+  try {
+    return execSync(cmd, options).trim();
+  } catch (error) {
+    console.warn(`[agent:prime] Command failed: "${cmd}". Using fallback "${fallback}". Error: ${error.message}`);
+    return fallback;
+  }
+}
+
 export function generateAgentContext(cwd = rootDir) {
-  let gitSha = 'unknown';
-  let submoduleSha = 'unknown';
-
-  try {
-    gitSha = execSync('git rev-parse HEAD', { cwd, encoding: 'utf8' }).trim();
-  } catch {
-    // Graceful fallback if git is unavailable
-  }
-
-  try {
-    submoduleSha = execSync('git rev-parse HEAD:boomtick-pkg', { cwd, encoding: 'utf8' }).trim();
-  } catch {
-    // Graceful fallback if submodule is missing
-  }
+  const gitSha = execSyncSafe('git rev-parse HEAD', { cwd, encoding: 'utf8', stdio: 'pipe' }, 'unknown');
+  const submoduleSha = execSyncSafe('git rev-parse HEAD:boomtick-pkg', { cwd, encoding: 'utf8', stdio: 'pipe' }, 'unknown');
 
   let pkgName = 'tech-dancer';
   const pkgPath = resolve(cwd, 'package.json');
   if (existsSync(pkgPath)) {
     try {
       const pkgData = JSON.parse(readFileSync(pkgPath, 'utf8'));
-      pkgName = pkgData.name || pkgName;
-    } catch {
-      // Ignore JSON parse errors
+      if (pkgData && typeof pkgData === 'object' && typeof pkgData.name === 'string') {
+        pkgName = pkgData.name;
+      } else {
+        console.warn(`[agent:prime] Invalid package.json format. Using default name "${pkgName}".`);
+      }
+    } catch (error) {
+      console.warn(`[agent:prime] Failed to parse package.json. Using default name "${pkgName}". Error: ${error.message}`);
     }
   }
 
