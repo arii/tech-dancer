@@ -154,19 +154,20 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       });
     }
 
-    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y") => {
+    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }) => {
       if (v === true) return "border border-line"
-      if (v) return `border-${v} border-line`
+      if (v === false) return "border-0"
+      if (typeof v === "string") return `border-${v} border-line`
       return ""
     }
 
     const borderClasses = cn(
       applyResponsive(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      smBorder && (typeof smBorder === "boolean" ? `sm:border${smBorder === true ? "" : "-0"}` : (typeof smBorder === "string" ? `sm:border-${smBorder}` : "")),
-      mdBorder && (typeof mdBorder === "boolean" ? `md:border${mdBorder === true ? "" : "-0"}` : (typeof mdBorder === "string" ? `md:border-${mdBorder}` : "")),
-      lgBorder && (typeof lgBorder === "boolean" ? `lg:border${lgBorder === true ? "" : "-0"}` : (typeof lgBorder === "string" ? `lg:border-${lgBorder}` : "")),
-      xlBorder && (typeof xlBorder === "boolean" ? `xl:border${xlBorder === true ? "" : "-0"}` : (typeof xlBorder === "string" ? `xl:border-${xlBorder}` : ""))
+      smBorder !== undefined && applyResponsive({ sm: smBorder }, mapBorder),
+      mdBorder !== undefined && applyResponsive({ md: mdBorder }, mapBorder),
+      lgBorder !== undefined && applyResponsive({ lg: lgBorder }, mapBorder),
+      xlBorder !== undefined && applyResponsive({ xl: xlBorder }, mapBorder)
     )
 
     // Remove props that shouldn't be spread to DOM elements
