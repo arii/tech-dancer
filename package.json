@@ -21,6 +21,7 @@
     "prepreview": "node scripts/cleanup-ports.mjs",
     "preview": "vite preview",
     "test": "vitest run",
+    "agent:prime": "node scripts/agent-prime.mjs",
     "test:watch": "vitest",
     "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",
     "test:e2e:targeted": "playwright test",
