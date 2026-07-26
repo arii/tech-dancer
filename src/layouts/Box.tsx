@@ -154,19 +154,53 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       });
     }
 
-    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y") => {
+    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }) => {
       if (v === true) return "border border-line"
-      if (v) return `border-${v} border-line`
+      if (v === false) return "border-0"
+      if (typeof v === "string") return `border-${v} border-line`
+      if (typeof v === "object" && v !== null) {
+        const classes = [];
+        if (v.t === true) classes.push("border-t border-line");
+        if (v.t === false) classes.push("border-t-0");
+        if (v.b === true) classes.push("border-b border-line");
+        if (v.b === false) classes.push("border-b-0");
+        if (v.l === true) classes.push("border-l border-line");
+        if (v.l === false) classes.push("border-l-0");
+        if (v.r === true) classes.push("border-r border-line");
+        if (v.r === false) classes.push("border-r-0");
+        return classes.join(" ");
+      }
       return ""
     }
 
+    const applyResponsiveBorder = <T,>(
+      prop: ResponsiveProp<T> | undefined,
+      mapFn: (val: T) => string
+    ): string => {
+      if (!prop) return "";
+      if (typeof prop !== "object" || (prop as Record<string, unknown>).$$typeof) {
+        return mapFn(prop as T);
+      }
+
+      return Object.entries(prop)
+        .map(([bp, val]) => {
+          const className = mapFn(val as T);
+          if (!className) return "";
+          if (bp === "base") return className;
+          // Split by space and apply prefix to each class
+          return className.split(" ").map(c => `${bp}:${c}`).join(" ");
+        })
+        .filter(Boolean)
+        .join(" ");
+    }
+
     const borderClasses = cn(
-      applyResponsive(border, mapBorder),
+      applyResponsiveBorder(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      smBorder && (typeof smBorder === "boolean" ? `sm:border${smBorder === true ? "" : "-0"}` : (typeof smBorder === "string" ? `sm:border-${smBorder}` : "")),
-      mdBorder && (typeof mdBorder === "boolean" ? `md:border${mdBorder === true ? "" : "-0"}` : (typeof mdBorder === "string" ? `md:border-${mdBorder}` : "")),
-      lgBorder && (typeof lgBorder === "boolean" ? `lg:border${lgBorder === true ? "" : "-0"}` : (typeof lgBorder === "string" ? `lg:border-${lgBorder}` : "")),
-      xlBorder && (typeof xlBorder === "boolean" ? `xl:border${xlBorder === true ? "" : "-0"}` : (typeof xlBorder === "string" ? `xl:border-${xlBorder}` : ""))
+      smBorder !== undefined && applyResponsiveBorder({ sm: smBorder }, mapBorder),
+      mdBorder !== undefined && applyResponsiveBorder({ md: mdBorder }, mapBorder),
+      lgBorder !== undefined && applyResponsiveBorder({ lg: lgBorder }, mapBorder),
+      xlBorder !== undefined && applyResponsiveBorder({ xl: xlBorder }, mapBorder)
     )
 
     // Remove props that shouldn't be spread to DOM elements
