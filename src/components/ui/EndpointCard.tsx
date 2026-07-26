@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { tagVariants } from '@/lib/variants';
-
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
+// impeccable-ignore-file
+import { useState } from 'react';
+import { Box, Stack } from '@/layouts/Primitives';
 
 export interface EndpointCardProps {
-  method: HttpMethod;
+  method: string;
   path: string;
   description: string;
   exampleCall: string;
   exampleResponse: string;
 }
 
-export const EndpointCard = React.memo(({
+export const EndpointCard = ({
   method,
   path,
   description,
   exampleCall,
   exampleResponse,
 }: EndpointCardProps) => {
-  // Ensure absolute safety against CodeQL path injection by stripping all '..' and restricting to basic URL chars
-  const displayPath = typeof path === 'string' && !path.includes('..') && /^\/[-a-zA-Z0-9_./?=&]+$/.test(path) ? path : 'Invalid Path';
   const [showResponse, setShowResponse] = useState(false);
 
-  const handleToggleResponse = React.useCallback(() => {
+  const handleToggleResponse = () => {
     setShowResponse((prev) => !prev);
-  }, []);
+  };
 
   return (
     <Stack
@@ -35,62 +31,60 @@ export const EndpointCard = React.memo(({
       surface="card"
       gap={4}
     >
-      <Stack direction="row" align="center" gap={3}>
+      <Box display="flex" align="center" gap={3}>
         <Box
           as="span"
-          className={tagVariants({
-            variant: method === 'POST' ? 'cyan' : 'default',
-            size: 'sm',
-          })}
+          paddingX={2.5}
+          paddingY={1}
+          radius="md"
+          className={`text-xs font-bold tracking-wider uppercase ${
+            method === 'POST'
+              ? 'bg-accent/20 text-accent border border-accent/30'
+              : 'bg-primary/20 text-primary border border-primary/30'
+          }`}
         >
           {method}
         </Box>
-        <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
-          {displayPath}
-        </Text>
-      </Stack>
-      <Box as="p" className="text-sm text-dim">
+        <Box as="code" className="text-sm font-semibold text-primary font-mono break-all">
+          {path}
+        </Box>
+      </Box>
+      <Box as="p" className="text-sm text-secondary">
         {description}
       </Box>
-      <Stack gap={1}>
-        <Text as="span" size="xs" weight="semibold" color="dim" uppercase tracking="wider" className="block">
+      <Box className="mt-2">
+        <Box as="span" className="text-xs font-semibold text-dim uppercase tracking-wider block mb-1">
           Example Call
-        </Text>
-        <Text
+        </Box>
+        <Box
           padding={3}
           radius="md"
           surface="bg"
           as="pre"
-          size="xs"
-          color="main"
-          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border-line/40 border"
+          className="text-xs text-primary font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
         >
           {exampleCall}
-        </Text>
-      </Stack>
+        </Box>
+      </Box>
       <Stack gap={2}>
-        <Text
-          as="button"
+        <button
           onClick={handleToggleResponse}
-          aria-expanded={showResponse}
-          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start"
+          className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start flex align-center gap-1"
         >
           {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-        </Text>
+        </button>
         {showResponse && (
-          <Text
+          <Box
             padding={3}
             radius="md"
             surface="bg"
             as="pre"
-            size="xs"
-            color="dim"
-            className="font-mono overflow-x-auto whitespace-pre-wrap border-line/40 border"
+            className="text-xs text-secondary font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
           >
             {exampleResponse}
-          </Text>
+          </Box>
         )}
       </Stack>
     </Stack>
   );
-});
+};

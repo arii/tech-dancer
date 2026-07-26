@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { isValidUrl } from '@/utils/url';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
@@ -14,7 +15,6 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
-import { sanitizeUrlForDisplay } from '@/utils/url';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -44,7 +44,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       padding={2}
       className={cardVariants()}
     >
-      <Text variant="mono" size="xs" color="muted" paddingLeft={2} uppercase weight="font-bold">{label}</Text>
+      <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">{label}</Text>
       <Box
         as="input"
         id={id}
@@ -78,7 +78,7 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       )}
     </Stack>
     {helpText && (
-      <Text variant="sans" size="xs" color={isPassword ? "warning" : "muted"} paddingX={2} weight={isPassword ? "font-medium" : "normal"}>
+      <Text variant="sans" size="xs" color={isPassword ? "warning" : "dim"} paddingX={2} weight={isPassword ? "font-medium" : "normal"}>
         {helpText}
       </Text>
     )}
@@ -182,16 +182,13 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       justify="center"
       overflow="hidden"
       position="relative"
-      surface="default"
-      radius="xl"
-      shadow="2xl"
-      border={true}
+      className="bg-surface rounded-xl shadow-2xl border border-line"
     >
       {isLoading && (
         <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
           <Stack align="center" gap={3}>
              <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
-             <Text variant="sans" size="xs" color="muted" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
+             <Text variant="sans" size="xs" color="dim" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
           </Stack>
         </Box>
       )}
@@ -209,8 +206,6 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           height: `${height}px`,
           minWidth: `${width}px`,
           minHeight: `${height}px`,
-          maxWidth: 'none',
-          maxHeight: 'none',
         }}
       />
       <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
@@ -221,7 +216,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
            border={true}
            className="bg-bg/80 backdrop-blur-sm"
          >
-           <Text variant="sans" size="xs" color="muted">
+           <Text variant="sans" size="xs" color="dim">
              ⚠️ Some sites block embedding via CORS.
            </Text>
          </Box>
@@ -232,7 +227,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
 
 function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })}>
+    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -242,22 +237,30 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
             {vp.name} Analysis
           </Text>
         </Stack>
-        <Text variant="mono" size="xs" weight="font-bold" color="muted" uppercase tracking="widest">
+        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
           {vp.width}w × {vp.height}h
         </Text>
       </Stack>
 
-      <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+      <Grid cols={{ base: 1, lg: 2 }} width="full">
+        {/* Frame / Preview Side */}
+        <Stack
+          padding={8}
+          surface="muted"
+          align="center"
+          justify="center"
+          border={{ base: "b", lg: "r" }}
+          minHeight={{ base: 250, lg: 400 }}
+        >
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
-              url={sanitizeUrlForDisplay(activeReportUrl)}
+              url={isValidUrl(activeReportUrl) ? activeReportUrl : "about:blank"}
               width={vp.width}
               height={vp.height}
             />
           ) : (
-            <Stack align="center" justify="center" color="muted" className="text-center">
+            <Stack align="center" justify="center" color="dim" className="text-center">
               <Box marginBottom={2}>
                 <Icon icon={ImageIcon} size="2xl" color="muted" />
               </Box>
@@ -266,12 +269,13 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
               </Text>
             </Stack>
           )}
-        </Box>
+        </Stack>
 
-        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
+        {/* Findings / Suggestions Side */}
+        <Stack gap={6} padding={8} minWidth="0" overflow="hidden">
           {data ? (
             <>
-              <Box surface="alt" padding={5} border={true} radius="lg">
+              <Box surface="alt" padding={5} className="border border-line rounded-lg">
                 <Box marginBottom={3}>
                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                     Analysis Summary
@@ -291,18 +295,18 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                           {imp.element}
                         </Text>
                       </Stack>
-                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="muted" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                         SEV {imp.severity}
                       </Text>
                     </Box>
-                    <Text variant="sans" size="xs" color="muted" marginBottom={3}>
+                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
                       {imp.issue}
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                       <Box surface="muted" padding={3} radius="md" border={true}>
                         <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth={0} overflow="hidden">
+                          <Box flex={1} minWidth="0" className="overflow-hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -328,7 +332,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
             </Stack>
           )}
         </Stack>
-      </Stack>
+      </Grid>
     </Box>
   );
 }
@@ -391,7 +395,7 @@ export default function UXAuditor() {
               type="url"
               autoComplete="off"
               value={url}
-              title={sanitizeUrlForDisplay(url)}
+              title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               onFocus={(e) => e.target.select()}
               className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
@@ -446,11 +450,11 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="muted" paddingX={1}>
+        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
+          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={cardVariants({ overflow: "hidden" })} border={true}>
+          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -464,7 +468,7 @@ export default function UXAuditor() {
                 as="button"
                 direction="row"
                 onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={3} padding={4} border="b"
+                width="full" align="center" gap={3} padding={4}
                 className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
@@ -472,19 +476,16 @@ export default function UXAuditor() {
                   height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
-                  display="flex"
-                  align="center"
-                  justify="center"
+                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
                   shrink={0}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
-                <Box flex={1} minWidth={0}>
-                  <Text variant="sans" size="sm" weight="font-bold" display="block" truncate={true} title={sanitizeUrlForDisplay(report.url)}>
+                <Box flex={1} minWidth="0">
+                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="muted" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -495,7 +496,8 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} width="full">
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full"
+        >
           {activeReport ? (
             <>
               <Stack
@@ -503,20 +505,12 @@ export default function UXAuditor() {
                 className={cardVariants()}
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
-                width="full"
               >
-                <Stack gap={1} minWidth={0} flex={1}>
+                <Stack gap={1} minWidth="0" flex={1}>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text
-                    variant="sans"
-                    size="xl"
-                    weight="font-black"
-                    display="block"
-                    truncate={true}
-                    title={sanitizeUrlForDisplay(activeReport.url)}
-                  >
+                  <Text variant="sans" size="xl" weight="font-black" className="break-all block" title={activeReport.url}>
                     {activeReport.url}
                   </Text>
                 </Stack>
@@ -530,7 +524,7 @@ export default function UXAuditor() {
                     gap={2}
                     className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
-                    color="muted"
+                    color="dim"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"

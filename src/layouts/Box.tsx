@@ -24,7 +24,7 @@ export interface BaseProps {
   gap?: ResponsiveProp<number | string>
   gapX?: ResponsiveProp<number | string>
   gapY?: ResponsiveProp<number | string>
-  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  border?: ResponsiveProp<boolean | "t" | "b" | "l" | "r" | "x" | "y">
   borderColor?: string
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -154,19 +154,53 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       });
     }
 
+    const mapBorder = (v: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }) => {
+      if (v === true) return "border border-line"
+      if (v === false) return "border-0"
+      if (typeof v === "string") return `border-${v} border-line`
+      if (typeof v === "object" && v !== null) {
+        const classes = [];
+        if (v.t === true) classes.push("border-t border-line");
+        if (v.t === false) classes.push("border-t-0");
+        if (v.b === true) classes.push("border-b border-line");
+        if (v.b === false) classes.push("border-b-0");
+        if (v.l === true) classes.push("border-l border-line");
+        if (v.l === false) classes.push("border-l-0");
+        if (v.r === true) classes.push("border-r border-line");
+        if (v.r === false) classes.push("border-r-0");
+        return classes.join(" ");
+      }
+      return ""
+    }
+
+    const applyResponsiveBorder = <T,>(
+      prop: ResponsiveProp<T> | undefined,
+      mapFn: (val: T) => string
+    ): string => {
+      if (!prop) return "";
+      if (typeof prop !== "object" || (prop as Record<string, unknown>).$$typeof) {
+        return mapFn(prop as T);
+      }
+
+      return Object.entries(prop)
+        .map(([bp, val]) => {
+          const className = mapFn(val as T);
+          if (!className) return "";
+          if (bp === "base") return className;
+          // Split by space and apply prefix to each class
+          return className.split(" ").map(c => `${bp}:${c}`).join(" ");
+        })
+        .filter(Boolean)
+        .join(" ");
+    }
+
     const borderClasses = cn(
-      border === true && "border border-line",
-      border === "t" && "border-t border-line",
-      border === "b" && "border-b border-line",
-      border === "l" && "border-l border-line",
-      border === "r" && "border-r border-line",
-      border === "x" && "border-x border-line",
-      border === "y" && "border-y border-line",
+      applyResponsiveBorder(border, mapBorder),
       borderColor && resolveJIT(borderColor, "border"),
-      smBorder && `sm:border-${smBorder}`,
-      mdBorder && `md:border-${mdBorder}`,
-      lgBorder && `lg:border-${lgBorder}`,
-      xlBorder && `xl:border-${xlBorder}`
+      smBorder !== undefined && applyResponsiveBorder({ sm: smBorder }, mapBorder),
+      mdBorder !== undefined && applyResponsiveBorder({ md: mdBorder }, mapBorder),
+      lgBorder !== undefined && applyResponsiveBorder({ lg: lgBorder }, mapBorder),
+      xlBorder !== undefined && applyResponsiveBorder({ xl: xlBorder }, mapBorder)
     )
 
     // Remove props that shouldn't be spread to DOM elements
