@@ -22,3 +22,16 @@ export const isValidUrl = (url: string | null | undefined): boolean => {
     return false;
   }
 };
+
+/**
+ * A simple sanitizer helper to prevent XSS / script-injection inside title and display attributes
+ */
+export const sanitizeUrlForDisplay = (urlStr: string | null | undefined): string => {
+  if (!urlStr) return '';
+  const trimmed = urlStr.trim();
+  if (isValidUrl(trimmed)) {
+    return trimmed;
+  }
+  // Safe fallback if protocol is malicious (like javascript:)
+  return 'about:blank';
+};
