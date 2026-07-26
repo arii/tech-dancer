@@ -12,15 +12,15 @@ export function generateAgentContext(cwd = rootDir) {
   let submoduleSha = 'unknown';
 
   try {
-    gitSha = execSync('git rev-parse HEAD', { cwd, encoding: 'utf8' }).trim();
-  } catch {
-    // Graceful fallback if git is unavailable
+    gitSha = execSync('git rev-parse HEAD', { cwd, encoding: 'utf8', stdio: 'pipe' }).trim();
+  } catch (error) {
+    console.warn(`[agent:prime] Command failed: "git rev-parse HEAD". Using fallback "unknown". Error: ${error.message}`);
   }
 
   try {
-    submoduleSha = execSync('git rev-parse HEAD:boomtick-pkg', { cwd, encoding: 'utf8' }).trim();
-  } catch {
-    // Graceful fallback if submodule is missing
+    submoduleSha = execSync('git rev-parse HEAD:boomtick-pkg', { cwd, encoding: 'utf8', stdio: 'pipe' }).trim();
+  } catch (error) {
+    console.warn(`[agent:prime] Command failed: "git rev-parse HEAD:boomtick-pkg". Using fallback "unknown". Error: ${error.message}`);
   }
 
   let pkgName = 'tech-dancer';
@@ -28,9 +28,13 @@ export function generateAgentContext(cwd = rootDir) {
   if (existsSync(pkgPath)) {
     try {
       const pkgData = JSON.parse(readFileSync(pkgPath, 'utf8'));
-      pkgName = pkgData.name || pkgName;
-    } catch {
-      // Ignore JSON parse errors
+      if (pkgData && typeof pkgData === 'object' && typeof pkgData.name === 'string') {
+        pkgName = pkgData.name;
+      } else {
+        console.warn(`[agent:prime] The "name" property is missing or not a string in package.json. Using default name "${pkgName}".`);
+      }
+    } catch (error) {
+      console.warn(`[agent:prime] Failed to parse package.json. Using default name "${pkgName}". Error: ${error.message}`);
     }
   }
 
