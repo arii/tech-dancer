@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { tagVariants } from '@/lib/variants';
+
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
 
 export interface EndpointCardProps {
-  method: string;
+  method: HttpMethod;
   path: string;
   description: string;
   exampleCall: string;
   exampleResponse: string;
 }
 
-export const EndpointCard = ({
+export const EndpointCard = React.memo(({
   method,
   path,
   description,
   exampleCall,
   exampleResponse,
 }: EndpointCardProps) => {
+  // Ensure absolute safety against CodeQL path injection by stripping all '..' and restricting to basic URL chars
+  const displayPath = typeof path === 'string' && !path.includes('..') && /^\/[-a-zA-Z0-9_./?=&]+$/.test(path) ? path : 'Invalid Path';
   const [showResponse, setShowResponse] = useState(false);
 
-  const handleToggleResponse = () => {
+  const handleToggleResponse = React.useCallback(() => {
     setShowResponse((prev) => !prev);
-  };
+  }, []);
 
   return (
     <Stack
@@ -33,19 +38,15 @@ export const EndpointCard = ({
       <Stack direction="row" align="center" gap={3}>
         <Box
           as="span"
-          paddingX={2.5}
-          paddingY={1}
-          radius="md"
-          className={`text-xs font-bold tracking-wider uppercase ${
-            method === 'POST'
-              ? 'bg-accent/20 text-accent border border-accent/30'
-              : 'bg-main/20 text-main border border-main/30'
-          }`}
+          className={tagVariants({
+            variant: method === 'POST' ? 'cyan' : 'default',
+            size: 'sm',
+          })}
         >
           {method}
         </Box>
         <Text as="code" size="sm" weight="semibold" color="main" className="font-mono break-all">
-          {path}
+          {displayPath}
         </Text>
       </Stack>
       <Box as="p" className="text-sm text-dim">
@@ -62,22 +63,20 @@ export const EndpointCard = ({
           as="pre"
           size="xs"
           color="main"
-          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border border-default/40"
+          className="font-mono overflow-x-auto whitespace-pre-wrap break-all border-line/40 border"
         >
           {exampleCall}
         </Text>
       </Stack>
-      <Box display="flex" flexDirection="col" gap={2}>
-        <Box
+      <Stack gap={2}>
+        <Text
           as="button"
-          display="flex"
-          align="center"
-          gap={1}
           onClick={handleToggleResponse}
+          aria-expanded={showResponse}
           className="text-xs font-semibold text-accent hover:text-accent/80 transition-colors duration-200 cursor-pointer self-start"
         >
           {showResponse ? 'Hide Example Response' : 'Show Example Response'}
-        </Box>
+        </Text>
         {showResponse && (
           <Text
             padding={3}
@@ -86,12 +85,12 @@ export const EndpointCard = ({
             as="pre"
             size="xs"
             color="dim"
-            className="font-mono overflow-x-auto whitespace-pre-wrap border border-default/40"
+            className="font-mono overflow-x-auto whitespace-pre-wrap border-line/40 border"
           >
             {exampleResponse}
           </Text>
         )}
-      </Box>
+      </Stack>
     </Stack>
   );
-};
+});

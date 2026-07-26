@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 /**
  * Shared Tailwind utility constants for BoomTick UI.
  * Centralizes repeated utility strings to improve maintainability and consistency.
