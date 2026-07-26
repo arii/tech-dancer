@@ -1,7 +1,205 @@
 {
+  "about": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-power-charging": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
   "release-please--branches--main--components--tech-dancer": {
-    "commitTimestamp": 1785090341,
-    "deployTimestamp": 1785090341,
+    "commitTimestamp": 1785101216,
+    "deployTimestamp": 1785101216,
+    "sha": "unknown"
+  }
+,
+  "research/2026-07-10-latest-version-check-skill": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/ai-devops-pipeline": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/blog-drafter": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/boomtick-blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/confidently-incorrect-v4": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/deployment-impact-analyzer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/ecommerce-automation": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/gitops-pr-reviewer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/hrm-flagship": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/repo-auditor-ai": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper-initial-sync": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "versiontruth": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 }
