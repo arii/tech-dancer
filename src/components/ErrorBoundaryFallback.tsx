@@ -31,7 +31,7 @@ export const ErrorBoundaryFallback = memo(() => {
         </Text>
         <Text
           variant="body"
-          className="text-gray-600"
+          className="text-dim"
         >
           The application encountered an unexpected error. We have been notified and are looking into it.
         </Text>
