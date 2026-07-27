@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - .devcontainer/Dockerfile
-      - boomtick-pkg
+      - boomtick-pkg/Dockerfile
+      - boomtick-pkg/**
   workflow_dispatch:
 
 # Permissions required to write to GitHub Packages
@@ -49,8 +49,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          context: .
-          file: .devcontainer/Dockerfile
+          context: boomtick-pkg
+          file: boomtick-pkg/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

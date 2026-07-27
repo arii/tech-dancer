@@ -86,7 +86,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ghcr.io/arii/tech-dancer:latest # Central workspace runner image
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
@@ -138,7 +138,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ghcr.io/arii/tech-dancer:latest # Central workspace runner image
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
@@ -179,7 +179,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ghcr.io/arii/tech-dancer:latest # Central workspace runner image
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
@@ -244,7 +244,7 @@ jobs:
     timeout-minutes: 20
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ghcr.io/arii/tech-dancer:latest # Central workspace runner image
     env:
       DISABLE_MINIFY: true
       MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
