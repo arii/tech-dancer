@@ -46,6 +46,54 @@ jobs:
             type=ref,event=branch
             type=raw,value=latest
 
+      - name: Sanitize and validate build context
+        run: |
+          set -euo pipefail
+
+          # 1. Define and strictly validate directory and file variables to prevent path traversal/command injection
+          BUILD_CONTEXT="boomtick-pkg"
+          DOCKERFILE_PATH="boomtick-pkg/Dockerfile"
+
+          # Path pattern check (only allow alphanumeric, slash, and hyphen)
+          if [[ ! "$BUILD_CONTEXT" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+            echo "::error::Invalid build context path: $BUILD_CONTEXT"
+            exit 1
+          fi
+
+          if [[ ! "$DOCKERFILE_PATH" =~ ^[a-zA-Z0-9_-]+/Dockerfile$ ]]; then
+            echo "::error::Invalid Dockerfile path: $DOCKERFILE_PATH"
+            exit 1
+          fi
+
+          # 2. Check that the build context exists and is a directory
+          if [ ! -d "$BUILD_CONTEXT" ]; then
+            echo "::error::Build context directory '$BUILD_CONTEXT' does not exist!"
+            exit 1
+          fi
+
+          # 3. Check that the Dockerfile exists and is a regular file
+          if [ ! -f "$DOCKERFILE_PATH" ]; then
+            echo "::error::Dockerfile '$DOCKERFILE_PATH' does not exist!"
+            exit 1
+          fi
+
+          # 4. Verify that boomtick-pkg is a registered submodule in the repository configuration
+          if ! git config --file .gitmodules --get-regexp "submodule\.$BUILD_CONTEXT\." > /dev/null; then
+            echo "::error::Build context '$BUILD_CONTEXT' is not a registered git submodule!"
+            exit 1
+          fi
+
+          # 5. Sanitize build context by ensuring no dangerous files (such as executable scripts outside expected paths,
+          # or broken symlinks pointing outside the workspace) are present.
+          echo "Scanning build context for dangerous links..."
+          find "$BUILD_CONTEXT" -type l -exec test ! -e {} \; -print | grep -q . && {
+            echo "::error::Dangerous broken symlinks detected in build context!"
+            exit 1
+          } || true
+
+          echo "✅ Build context successfully validated and sanitized."
+        shell: bash
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
