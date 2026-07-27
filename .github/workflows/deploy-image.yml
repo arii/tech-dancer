@@ -86,10 +86,10 @@ jobs:
           # 5. Sanitize build context by ensuring no dangerous files (such as executable scripts outside expected paths,
           # or broken symlinks pointing outside the workspace) are present.
           echo "Scanning build context for dangerous links..."
-          find "$BUILD_CONTEXT" -type l -exec test ! -e {} \; -print | grep -q . && {
+          if find "$BUILD_CONTEXT" -type l -exec test ! -e {} \; -print | grep -q .; then
             echo "::error::Dangerous broken symlinks detected in build context!"
             exit 1
-          } || true
+          fi
 
           echo "✅ Build context successfully validated and sanitized."
         shell: bash
