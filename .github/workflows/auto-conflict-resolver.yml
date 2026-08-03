@@ -84,7 +84,7 @@ jobs:
 
       - name: Create or update comment
         if: env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -93,7 +93,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           submodules: recursive
           fetch-depth: 0
@@ -141,7 +141,7 @@ jobs:
 
       - name: Comment on validation failure
         if: steps.validate_branches.outputs.skipped == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -225,7 +225,7 @@ jobs:
 
       - name: Update comment on success
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && success() && steps.resolve.outputs.unresolved-files == '' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -236,7 +236,7 @@ jobs:
 
       - name: Update comment on failure
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != '' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: peter-evans/create-or-update-comment@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
