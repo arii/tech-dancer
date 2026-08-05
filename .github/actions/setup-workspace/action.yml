@@ -17,6 +17,10 @@ inputs:
     description: "Version of pnpm to activate"
     required: false
     default: '10.28.2'
+  force-node24:
+    description: "Force JavaScript actions to run on Node 24"
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -27,3 +31,4 @@ runs:
         setup-python: ${{ inputs.setup-python }}
         node-version-file: ${{ inputs.node-version-file }}
         pnpm-version: ${{ inputs.pnpm-version }}
+        force-node24: ${{ inputs.force-node24 }}

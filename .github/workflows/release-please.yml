@@ -10,9 +10,6 @@ permissions:
   pull-requests: write
   issues: write
 
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-
 jobs:
   release-please:
     runs-on: ubuntu-latest

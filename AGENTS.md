@@ -254,6 +254,12 @@ All workflows must use `actions/setup-node` with
 workflow files. Keep GitHub Actions pinned to their latest major versions
 (e.g. `actions/checkout@v7`, `docker/setup-buildx-action@v4`).
 
+### Deprecation Warnings & Modern Runner Policy
+
+1. **Immediate Major Version Updates**: Third-party GitHub Actions that trigger runner deprecation warnings (e.g., Node.js runner deprecations) must be updated to their next major version immediately upon release.
+2. **No Global Environment Suppressions**: Relying on global environment variables (such as `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` or global `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` blocks in the workflow `env:` configuration) to suppress deprecation warnings is strictly forbidden.
+3. **Dynamic / Localized Injection**: If a runner deprecation flag (e.g., `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`) is temporarily necessary while awaiting upstream action updates, it must be injected dynamically via a centralized composite bootstrapping action (such as `setup-workspace` with `force-node24: true`) rather than polluting global workflow files.
+
 ## Appendix: CLI Entrypoint & Packaging Standards
 
 ### 1. Deterministic Imports over sys.path Manipulation
