@@ -18,7 +18,7 @@ describe('GitHub Actions Setup Workspace Reference Check', () => {
 
       if (!parsed?.jobs) continue;
 
-      for (const [jobKey, job] of Object.entries<Record<string, unknown>>(parsed.jobs)) {
+      for (const [_jobKey, job] of Object.entries<Record<string, unknown>>(parsed.jobs)) {
         if (!job.steps || !Array.isArray(job.steps)) continue;
 
         const setupStep = job.steps.find((s: Record<string, unknown>) => s.name === 'Setup Node.js');
