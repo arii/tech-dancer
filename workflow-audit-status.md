@@ -86,6 +86,5 @@
 
 **Notes:**
 - Setup workspace properly used `node-version-file: .node-version`.
-- All actions were pinned to the latest major version returned by `resolveLatest` API.
-- All non-pnpm package managers were removed.
+- All actions were pinned to the latest major version.
 - Built-in `setup-workspace` caching used appropriately.
