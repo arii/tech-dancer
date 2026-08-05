@@ -70,13 +70,11 @@ jobs:
           repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
-          setup-node: true
-          setup-python: false
-          node-version-file: .node-version
-          pnpm-version: "10.28.2"
+          node-version-file: '.node-version'
+          cache: 'pnpm'
 
       - name: Check active runtime
         run: |

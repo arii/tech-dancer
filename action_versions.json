@@ -1,0 +1,19 @@
+{
+  "actions/github-script": "v9",
+  "googleapis/release-please-action": "v5",
+  "github/codeql-action/init": "not found",
+  "docker/setup-buildx-action": "v4",
+  "docker/login-action": "v4",
+  "VeyronSakai/conflict-resolver": "v0",
+  "github/codeql-action/analyze": "not found",
+  "peter-evans/create-pull-request": "v8",
+  "actions/create-github-app-token": "v3",
+  "docker/metadata-action": "v6",
+  "gitleaks/gitleaks-action": "v3",
+  "actions/download-artifact": "v8",
+  "actions/upload-artifact": "v7",
+  "peter-evans/create-or-update-comment": "v5",
+  "actions/checkout": "v7",
+  "docker/build-push-action": "v7",
+  "arii/boomtick/.github/actions/setup-workspace": "not found"
+}
