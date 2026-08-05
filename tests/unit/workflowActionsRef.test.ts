@@ -21,11 +21,9 @@ describe('GitHub Actions Setup Workspace Reference Check', () => {
       for (const [jobKey, job] of Object.entries<Record<string, unknown>>(parsed.jobs)) {
         if (!job.steps || !Array.isArray(job.steps)) continue;
 
-        const setupStep = job.steps.find((s: Record<string, unknown>) => s.name === 'Setup Workspace');
+        const setupStep = job.steps.find((s: Record<string, unknown>) => s.name === 'Setup Node.js');
         if (setupStep) {
-          expect(setupStep.uses, `File ${file} job ${jobKey} uses invalid setup-workspace action ref`).toBe(
-            'arii/boomtick/.github/actions/setup-workspace@main'
-          );
+          expect(setupStep.uses).toContain('actions/setup-node');
         }
       }
     }

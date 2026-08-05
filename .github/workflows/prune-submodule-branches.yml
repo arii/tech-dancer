@@ -8,6 +8,8 @@ concurrency:
   group: prune-submodule-branches
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   prune:
     runs-on: ubuntu-latest
