@@ -115,7 +115,7 @@ function showToast(message, type = 'info') {
     const toast = el('div', {
         className: `${colorClass} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in pointer-events-auto transition-opacity duration-300`
     }, [
-        el('span', { innerHTML: ICONS.warning }),
+        el('span', { unsafeSVG: ICONS.warning }),
         el('span', { className: 'text-sm font-medium' }, [message])
     ]);
     container.appendChild(toast);
@@ -204,11 +204,17 @@ function updateFilters() {
 
 // --- DOM Construction Helpers ---
 
+function parseSVG(svgString) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgString, 'image/svg+xml');
+    return doc.documentElement;
+}
+
 function el(tag, props = {}, children = []) {
     const element = document.createElement(tag);
     Object.entries(props).forEach(([key, value]) => {
         if (key === 'className') element.className = value;
-        else if (key === 'innerHTML') element.innerHTML = value;
+        else if (key === 'unsafeSVG') element.appendChild(parseSVG(value));
         else if (key === 'style' && typeof value === 'object') Object.assign(element.style, value);
         else element[key] = value;
     });
@@ -234,7 +240,7 @@ function createStatusBadge(status) {
     if (!status) return null;
     if (status === 'ERROR') {
         return el('span', { className: 'flex items-center gap-1 text-slate-600 dark:text-slate-400 text-[10px] sm:text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border border-slate-200 dark:border-slate-800' }, [
-            el('span', { innerHTML: ICONS.warning }),
+            el('span', { unsafeSVG: ICONS.warning }),
             'Status Error'
         ]);
     }
@@ -246,7 +252,7 @@ function createStatusBadge(status) {
         : { cls: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800', icon: ICONS.success, text: 'Checks Passed' };
 
     return el('span', { className: `flex items-center gap-1 text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border ${config.cls}` }, [
-        el('span', { innerHTML: config.icon }),
+        el('span', { unsafeSVG: config.icon }),
         config.text
     ]);
 }
@@ -280,11 +286,11 @@ function renderCard(deployment, isIdxEven) {
 
     const titleEl = (pr || type === 'merged')
         ? el('a', { href: (pr || deployment).html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-base sm:text-xl flex items-center gap-2 truncate outline-none focus:underline' }, [
-            el('span', { innerHTML: ICONS.pr }),
+            el('span', { unsafeSVG: ICONS.pr }),
             `PR #${(pr || deployment).number}: ${(pr || deployment).title}`
           ])
         : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-base sm:text-xl flex items-center gap-2 text-balance' }, [
-            el('span', { innerHTML: ICONS.branch }),
+            el('span', { unsafeSVG: ICONS.branch }),
             name
           ]);
 
@@ -292,23 +298,23 @@ function renderCard(deployment, isIdxEven) {
     const infoRow = el('div', { className: 'flex items-center gap-2.5 sm:gap-3 flex-wrap' }, [
         el('span', { className: 'text-[10px] sm:text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[150px] sm:max-w-[200px]' }, [name]),
         type !== 'merged' && el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
-            el('span', { innerHTML: ICONS.external }),
+            el('span', { unsafeSVG: ICONS.external }),
             'Source'
         ]),
         type !== 'merged' && el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
-            el('span', { innerHTML: ICONS.external }),
+            el('span', { unsafeSVG: ICONS.external }),
             'Compare'
         ]),
         (pr || type === 'merged') && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1' }, [
-            el('span', { innerHTML: ICONS.clock }),
+            el('span', { unsafeSVG: ICONS.clock }),
             type === 'merged' ? `Merged ${timeAgo(Math.floor(new Date(deployment.merged_at).getTime() / 1000))}` : timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))
         ]),
         deployment.commitTimestamp && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1', title: 'Source code change' }, [
-            el('span', { innerHTML: ICONS.clock }),
+            el('span', { unsafeSVG: ICONS.clock }),
             `Built from commit: ${timeAgo(deployment.commitTimestamp)}`
         ]),
         deployment.deployTimestamp && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1', title: 'GitHub Pages publish' }, [
-            el('span', { innerHTML: ICONS.clock }),
+            el('span', { unsafeSVG: ICONS.clock }),
             `Published: ${timeAgo(deployment.deployTimestamp)}`
         ]),
         el('div', { className: 'sm:hidden w-full mt-1' }, [badgeContainer.cloneNode(true)])
@@ -324,7 +330,7 @@ function renderCard(deployment, isIdxEven) {
             className: 'bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors'
         }, [
             'View PR ',
-            el('span', { innerHTML: ICONS.external })
+            el('span', { unsafeSVG: ICONS.external })
         ]);
         actionButton.appendChild(prLink);
     }
@@ -337,7 +343,7 @@ function renderCard(deployment, isIdxEven) {
             className: 'bg-slate-900 dark:bg-blue-600 text-white font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
         }, [
             'View Deployment ',
-            el('span', { innerHTML: ICONS.external })
+            el('span', { unsafeSVG: ICONS.external })
         ]);
         actionButton.appendChild(deployLink);
     }
@@ -376,7 +382,7 @@ function renderGrid() {
         return matchesSearch && matchesStatus && matchesAuto;
     });
 
-    grid.innerHTML = '';
+    grid.replaceChildren();
     const prs = filtered.filter(d => d.type === 'pr');
     const branches = filtered.filter(d => d.type === 'active');
 
@@ -384,7 +390,7 @@ function renderGrid() {
         if (!list.length) return;
         const fragment = document.createDocumentFragment();
         fragment.appendChild(el('h2', { className: 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200' }, [
-            el('span', { innerHTML: isPr ? ICONS.pr : ICONS.branch }),
+            el('span', { unsafeSVG: isPr ? ICONS.pr : ICONS.branch }),
             title
         ]));
         const stack = el('div', { className: 'flex flex-col gap-4 mb-10' });
@@ -433,7 +439,7 @@ async function init() {
 
         if (state.rateLimitRemaining < 10) {
             const warning = el('div', { className: 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium' }, [
-                el('span', { innerHTML: ICONS.warning }),
+                el('span', { unsafeSVG: ICONS.warning }),
                 `GitHub API rate limit is low (${state.rateLimitRemaining} left). CI statuses may not load correctly.`
             ]);
             grid.before(warning);

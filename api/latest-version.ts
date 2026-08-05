@@ -4,8 +4,22 @@ import { resolveLatest, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://tech-dancer.vercel.app",
+    "https://boomtick.blog",
+    "https://arii.github.io"
+  ];
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (!origin) {
+    res.setHeader("Access-Control-Allow-Origin", "https://boomtick.blog");
+  }
+
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Vary", "Origin");
   // Registry data doesn't change second-to-second — cache at the edge.
   res.setHeader("Cache-Control", "s-maxage=1800, stale-while-revalidate=3600");
 

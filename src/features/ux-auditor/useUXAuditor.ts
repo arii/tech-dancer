@@ -273,7 +273,6 @@ export function useUXAuditor() {
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      console.error("Gemini API Error:", err);
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
