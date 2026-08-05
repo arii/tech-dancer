@@ -13,7 +13,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   ];
 
   if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    const safeOrigin = allowedOrigins.find((o) => o === origin) || "https://boomtick.blog";
+    res.setHeader("Access-Control-Allow-Origin", safeOrigin);
   } else if (!origin) {
     res.setHeader("Access-Control-Allow-Origin", "https://boomtick.blog");
   }
