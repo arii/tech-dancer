@@ -93,8 +93,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
@@ -147,8 +151,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
@@ -193,8 +201,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
@@ -288,8 +300,12 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
@@ -341,8 +357,12 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
