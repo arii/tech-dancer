@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.5.0...tech-dancer-v0.6.0) (2026-08-10)
+
+
+### Features
+
+* add agent:prime script for agent-context indexing ([#3955](https://github.com/arii/tech-dancer/issues/3955)) ([28cc351](https://github.com/arii/tech-dancer/commit/28cc3518b0ee407aa4e91b31f4a8b68972d4740f))
+
+
+### Bug Fixes
+
+* correct anti-pattern tool scope and refactor 15 UI code violations ([#3853](https://github.com/arii/tech-dancer/issues/3853)) ([774b6d9](https://github.com/arii/tech-dancer/commit/774b6d962510081f29fc9f0da0147cfa7b15a1e2))
+* Vite SPA fallback for sub-path routing ([#4016](https://github.com/arii/tech-dancer/issues/4016)) ([57460d0](https://github.com/arii/tech-dancer/commit/57460d0133204886ed4aa67ed620d4bf559ef5b8))
+
 ## [0.5.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.4.1...tech-dancer-v0.5.0) (2026-07-23)
 
 
