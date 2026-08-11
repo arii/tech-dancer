@@ -1,7 +1,7 @@
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
-import { pickRest } from '@/lib/utils';
+import { cn, pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
@@ -14,6 +14,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   readingTime?: string;
   image?: string;
   imageAlt?: string;
+  excerptClamp?: number;
   [key: string]: unknown;
 }
 
@@ -30,12 +31,14 @@ export function ContentCard(props: ContentCardProps) {
     readingTime,
     image,
     imageAlt,
+    excerptClamp = 3,
   } = props;
 
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
-    'basePath'
+    'basePath',
+    'excerptClamp'
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -67,7 +70,7 @@ export function ContentCard(props: ContentCardProps) {
         </Box>
       )}
 
-      <Stack gap={4} padding={6} height="full">
+      <Stack gap={4} padding={6} flex={true}>
         <Box
           paddingX={2}
           paddingY={1}
@@ -99,7 +102,14 @@ export function ContentCard(props: ContentCardProps) {
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
+        <Text
+          variant="body"
+          size="sm"
+          color="dim"
+          leading="relaxed"
+          className={cn(excerptClamp === 2 ? "line-clamp-2" : "line-clamp-3")}
+          maxWidth="prose"
+        >
            {excerpt}
         </Text>
       </Stack>

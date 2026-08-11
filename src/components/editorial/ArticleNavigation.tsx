@@ -29,7 +29,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
   return (
     <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
       <Grid cols={{ base: 1, md: 2 }} gap={4}>
-        <Box>
+        <Box height="full">
           {previous && (
             <Stack gap={2} height="full">
               <Stack direction="row" align="center" gap={2}>
@@ -43,6 +43,8 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 </Text>
               </Stack>
               <ContentCard
+                flex={true}
+                excerptClamp={2}
                 title={previous.title}
                 slug={previous.slug}
                 basePath={previous.basePath}
@@ -56,7 +58,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
             </Stack>
           )}
         </Box>
-        <Box>
+        <Box height="full">
           {next && (
             <Stack gap={2} align="end" height="full">
               <Stack direction="row" align="center" gap={2}>
@@ -70,6 +72,8 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 />
               </Stack>
               <ContentCard
+                flex={true}
+                excerptClamp={2}
                 title={next.title}
                 slug={next.slug}
                 basePath={next.basePath}
