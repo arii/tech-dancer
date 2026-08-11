@@ -187,7 +187,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             alt="Workflow Diagram"
             radius="lg"
             maxWidth="full"
-            maxHeight={96}
+            height="auto"
             className="object-contain"
             loading="lazy"
           />
