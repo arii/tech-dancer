@@ -21,21 +21,25 @@ function applyDefaultTracking(url: URL) {
   }
 }
 
+function mapMerchToAffiliateLink(merch: MerchItem): AffiliateLink {
+  return {
+    id: merch.id,
+    name: merch.title,
+    url: merch.url,
+    category: merch.category.toLowerCase(),
+    description: merch.description,
+    image: merch.image,
+    imageMode: 'contain'
+  };
+}
+
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
     let link = AFFILIATE_DATABASE[id];
     if (!link) {
       const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
       if (merch) {
-        link = {
-          id: merch.id,
-          name: merch.title,
-          url: merch.url,
-          category: merch.category.toLowerCase(),
-          description: merch.description,
-          image: merch.image,
-          imageMode: 'contain'
-        };
+        link = mapMerchToAffiliateLink(merch);
       }
     }
     if (!link) return undefined;
@@ -56,14 +60,7 @@ export const affiliateManager = {
     if (!link) {
       const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
       if (merch) {
-        link = {
-          id: merch.id,
-          name: merch.title,
-          url: merch.url,
-          category: merch.category,
-          description: merch.description,
-          image: merch.image,
-        };
+        link = mapMerchToAffiliateLink(merch);
       }
     }
     if (!link) return '#';
