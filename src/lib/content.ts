@@ -40,6 +40,7 @@ const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   blogs: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
+  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
 };
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
@@ -145,11 +146,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
 const items = {
   posts: transform<Post>({ ...contentModules.posts, ...contentModules.blogs } as Record<string, string | ContentModule>, 'post'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
 };
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
   studies: new Map(items.studies.map(i => [i.slug, i])),
+  resources: new Map(items.resources.map(i => [i.slug, i])),
 };
 
 export const getPosts = () => items.posts;
@@ -157,7 +160,7 @@ export const getStudies = () => items.studies;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 
-export const getResources = () => [] as Resource[];
+export const getResources = () => items.resources;
 
 /**
  * Calculates estimated reading time in minutes.

@@ -23,7 +23,21 @@ function applyDefaultTracking(url: URL) {
 
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
-    const link = AFFILIATE_DATABASE[id];
+    let link = AFFILIATE_DATABASE[id];
+    if (!link) {
+      const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
+      if (merch) {
+        link = {
+          id: merch.id,
+          name: merch.title,
+          url: merch.url,
+          category: merch.category.toLowerCase(),
+          description: merch.description,
+          image: merch.image,
+          imageMode: 'contain'
+        };
+      }
+    }
     if (!link) return undefined;
 
     // Normalize image path if present and relative
@@ -38,7 +52,20 @@ export const affiliateManager = {
   },
   
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
-    const link = AFFILIATE_DATABASE[id];
+    let link = AFFILIATE_DATABASE[id];
+    if (!link) {
+      const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
+      if (merch) {
+        link = {
+          id: merch.id,
+          name: merch.title,
+          url: merch.url,
+          category: merch.category,
+          description: merch.description,
+          image: merch.image,
+        };
+      }
+    }
     if (!link) return '#';
     
     const url = new URL(link.url);
@@ -83,4 +110,56 @@ export const affiliateManager = {
 
     return '#';
   }
+};
+
+export interface MerchItem {
+  id: string;
+  title: string;
+  category: 'Apparel' | 'Accessories' | 'Gear';
+  badge: 'Merch' | 'Recommended';
+  price: string;
+  image: string;
+  url: string;
+  featured: boolean;
+  description: string;
+}
+
+export const SLOT_ERA_ITEMS: MerchItem[] = [
+  {
+    id: 'slot-era-tank-top',
+    title: "Slot Era WCS Women's Racerback Tank Top",
+    category: 'Apparel',
+    badge: 'Merch',
+    price: '$28.00',
+    image: '/assets/slot_era_racerback.webp',
+    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top',
+    featured: true,
+    description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
+  },
+  {
+    id: 'slot-era-tote-bag',
+    title: 'Slot Era WCS Tote Bag',
+    category: 'Accessories',
+    badge: 'Merch',
+    price: '$24.00',
+    image: '/assets/slot_era_tote.webp',
+    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag',
+    featured: true,
+    description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
+  },
+  {
+    id: 'slot-era-mug',
+    title: 'Slot Era Black Ceramic Mug',
+    category: 'Accessories',
+    badge: 'Merch',
+    price: '$18.00',
+    image: '/assets/slot_era_mug.webp',
+    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug',
+    featured: false,
+    description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
+  },
+];
+
+export const getMerchItems = (): MerchItem[] => {
+  return SLOT_ERA_ITEMS;
 };
