@@ -208,11 +208,10 @@ gh variable set ANY_COUNT_BASELINE --body 42
 ## 21) Repository Agnosticism & Config Enforcement
 
 All agents must strictly respect repository-agnostic layout structures.
+- **Primary Workspaces:** The user maintains multiple primary workspace repositories to enforce strict domain boundaries. `arii/boomtick` (and `arii/tech-dancer`) is focused exclusively on West Coast Swing dance, events, and lifestyle content. `arii/portfolio` is a permanent, separate repository dedicated to DevAI, technical references, research, and personal resumes. Always account for `arii/portfolio` as a primary workspace repository to avoid configuration drift.
 - **Root Configuration:** Base parameters (e.g. `github_repo`, `vite_base_path`) must be declared in `project_config.json` at the root of the repository, which is tracked under revision control.
 - **Environment Isolation:** Secrets (e.g., API keys, auth tokens) must never be committed to `project_config.json` and must remain strictly in environment variables (such as `GITHUB_TOKEN`).
 - **Fail-Fast Policy:** Both `td-cli` and `boomtick-mcp` tools are configured to fail fast with loud errors if any required config parameters are missing. Do not attempt to bypass this contract by hardcoding values.
-
----
 
 ## 22) Runtime Environment Contract
 
