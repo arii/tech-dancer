@@ -33,15 +33,14 @@ function mapMerchToAffiliateLink(merch: MerchItem): AffiliateLink {
   };
 }
 
+function findMerchLink(id: string): AffiliateLink | undefined {
+  const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
+  return merch ? mapMerchToAffiliateLink(merch) : undefined;
+}
+
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
-    let link = AFFILIATE_DATABASE[id];
-    if (!link) {
-      const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
-      if (merch) {
-        link = mapMerchToAffiliateLink(merch);
-      }
-    }
+    const link = AFFILIATE_DATABASE[id] || findMerchLink(id);
     if (!link) return undefined;
 
     // Normalize image path if present and relative
@@ -56,13 +55,7 @@ export const affiliateManager = {
   },
   
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
-    let link = AFFILIATE_DATABASE[id];
-    if (!link) {
-      const merch = SLOT_ERA_ITEMS.find(m => m.id === id);
-      if (merch) {
-        link = mapMerchToAffiliateLink(merch);
-      }
-    }
+    const link = AFFILIATE_DATABASE[id] || findMerchLink(id);
     if (!link) return '#';
     
     const url = new URL(link.url);
