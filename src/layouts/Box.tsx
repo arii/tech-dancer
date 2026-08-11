@@ -264,7 +264,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
           ...motionProps.style,
-          ...props.style
+          ...(_style as React.CSSProperties)
         }}
         {...motionProps}
         {...domProps}

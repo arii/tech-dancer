@@ -180,15 +180,23 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
 
     if (diagramUrl) {
       return (
-        <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
+        <Box
+          marginY={12}
+          width="full"
+          overflowX="auto"
+          surface="surface"
+          radius="lg"
+          padding={8}
+          className="bg-surface-alt/50 border border-line/30 scrollbar-thin"
+        >
           <Box
             as="img"
             src={diagramUrl}
             alt="Workflow Diagram"
             radius="lg"
-            maxWidth="full"
             height="auto"
-            className="object-contain"
+            className="object-contain mx-auto block max-w-none"
+            style={{ minWidth: '850px' }}
             loading="lazy"
           />
         </Box>
