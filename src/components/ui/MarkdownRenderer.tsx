@@ -13,6 +13,7 @@ import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
+import { ResponsiveDiagram } from './ResponsiveDiagram';
 
 const ALLOWED_PROPS = new Set([
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
@@ -153,55 +154,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
   const codeString = String(children).replace(/\n$/, '');
 
   if (isMermaid) {
-    let diagramUrl: string | null = null;
-    try {
-      const payload = {
-        code: codeString,
-        mermaid: {
-          theme: 'dark',
-          themeVariables: {
-            fontSize: '24px', /* impeccable-ignore */
-          },
-        },
-      };
-      const jsonString = JSON.stringify(payload);
-      const bytes = new TextEncoder().encode(jsonString);
-      let binary = '';
-      const len = bytes.byteLength;
-      for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      const rawBase64 = typeof window !== 'undefined' ? window.btoa(binary) : btoa(binary);
-      const base64 = rawBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      diagramUrl = `https://mermaid.ink/svg/${base64}`;
-    } catch (e) {
-      console.error('Failed to render mermaid diagram', e);
-    }
-
-    if (diagramUrl) {
-      return (
-        <Box
-          marginY={12}
-          width="full"
-          overflowX="auto"
-          surface="surface"
-          radius="lg"
-          padding={8}
-          className="bg-surface-alt/50 border border-line/30 scrollbar-thin"
-        >
-          <Box
-            as="img"
-            src={diagramUrl}
-            alt="Workflow Diagram"
-            radius="lg"
-            height="auto"
-            className="object-contain mx-auto block max-w-none"
-            style={{ minWidth: '850px' }}
-            loading="lazy"
-          />
-        </Box>
-      );
-    }
+    return <ResponsiveDiagram chart={codeString} />;
   }
 
   const isBlock = codeString.includes('\n') || !!language;

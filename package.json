@@ -82,6 +82,7 @@
     "jspdf": "4.2.1",
     "jspdf-autotable": "5.0.8",
     "lucide-react": "^0.546.0",
+    "mermaid": "^11.16.1",
     "motion": "^12.23.24",
     "papaparse": "5.5.3",
     "path-to-regexp": "^8.4.2",
