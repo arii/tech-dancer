@@ -112,6 +112,9 @@ gh_2.54.0_linux_amd64.tar.gz
 amazon-link-audit-report.md
 boomtick-pkg/cli/logs/workflows/*.md
 
+# Submodules / Decoupled Code
+boomtick-pkg/
+
 # Dynamic Agent Context (Untracked)
 .agent-context.json
 boomtick-pkg/mcp/.mcp/schemas/
