@@ -217,12 +217,12 @@ install_python_deps() {
   python3 -m pip uninstall -y setuptools || true
   pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
 
-  log "Installing boomtick package from PyPI..."
-  local pkg_spec="boomtick"
-  [ "$INSTALL_AI_DEPS" = "1" ] && pkg_spec="boomtick[ai]"
+  log "Installing boomtick-cli package from PyPI..."
+  local pkg_spec="boomtick-cli"
+  [ "$INSTALL_AI_DEPS" = "1" ] && pkg_spec="boomtick-cli[ai]"
 
   if pip_install --root-user-action=ignore "$pkg_spec"; then
-    STATUS_PYTHON="INSTALLED (boomtick)"
+    STATUS_PYTHON="INSTALLED (boomtick-cli)"
   else
     warn "Failed to install boomtick package from PyPI. Attempting fallback minimal dependencies..."
     pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub

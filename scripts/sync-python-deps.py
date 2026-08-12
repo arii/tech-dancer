@@ -11,7 +11,7 @@ def sync_deps():
         return
 
     repo_root = Path(__file__).parent.parent
-    print("🔄 Syncing Python dependencies by installing boomtick from PyPI...")
+    print("🔄 Syncing Python dependencies by installing boomtick-cli from PyPI...")
 
     # Try to use the virtualenv if it exists
     venv_python = repo_root / ".venv" / "bin" / "python"
@@ -19,7 +19,7 @@ def sync_deps():
         venv_python = Path(sys.executable)
 
     try:
-        # Install boomtick package from PyPI
+        # Install boomtick-cli package from PyPI
         subprocess.run(
             [
                 str(venv_python),
@@ -29,7 +29,7 @@ def sync_deps():
                 "--upgrade",
                 "--no-cache-dir",
                 "--break-system-packages",
-                "boomtick",
+                "boomtick-cli",
             ],
             check=True,
             capture_output=True,
@@ -58,7 +58,7 @@ def sync_deps():
                 timeout=300,
             )
 
-        print("✅ Python dependencies synced and 'boomtick' installed successfully.")
+        print("✅ Python dependencies synced and 'boomtick-cli' installed successfully.")
     except subprocess.TimeoutExpired:
         print("❌ Timeout syncing Python dependencies.")
     except subprocess.CalledProcessError as e:

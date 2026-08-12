@@ -47,4 +47,4 @@ runs:
       if: ${{ inputs.setup-python == 'true' }}
       shell: bash
       run: |
-        python3 -m pip install --break-system-packages boomtick
+        python3 -m pip install --break-system-packages boomtick-cli
