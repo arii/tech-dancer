@@ -25,7 +25,11 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
     // Decode base64 to verify its config payload is passed
     const url = imgElement.src;
     expect(url.startsWith('https://mermaid.ink/svg/')).toBe(true);
-    const base64Part = url.replace('https://mermaid.ink/svg/', '');
+    let base64Part = url.replace('https://mermaid.ink/svg/', '');
+    base64Part = base64Part.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64Part.length % 4 !== 0) {
+      base64Part += '=';
+    }
     const decodedStr = atob(base64Part);
     const decodedObj = JSON.parse(decodedStr);
 

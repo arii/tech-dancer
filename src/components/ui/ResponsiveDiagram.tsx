@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 
 interface ResponsiveDiagramProps {
@@ -36,7 +36,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
         binary += String.fromCharCode(bytes[i]);
       }
       const base64 = window.btoa(binary);
-      return `https://mermaid.ink/svg/${base64}`;
+      const base64url = base64
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+      return `https://mermaid.ink/svg/${base64url}`;
     } catch (e) {
       console.error('Failed to encode mermaid chart', e);
       return null;
@@ -51,13 +55,6 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Set default zoom scale when expanding
-  useEffect(() => {
-    if (isExpanded) {
-      setZoomScale(isMobile ? 2.0 : 1.2);
-    }
-  }, [isExpanded, isMobile]);
 
   // Escape key listener to close overlay
   useEffect(() => {
@@ -74,7 +71,13 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   }, [isExpanded]);
 
   const handleToggleExpand = () => {
-    setIsExpanded((prev) => !prev);
+    setIsExpanded((prev) => {
+      const next = !prev;
+      if (next) {
+        setZoomScale(isMobile ? 2.0 : 1.2);
+      }
+      return next;
+    });
   };
 
   // Close overlay when clicking outer background area
