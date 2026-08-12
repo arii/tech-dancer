@@ -6,9 +6,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
-      - 'boomtick-pkg'
-      - '.gitmodules'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -33,9 +30,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
-      - 'boomtick-pkg'
-      - '.gitmodules'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -240,40 +234,13 @@ jobs:
     if: ${{ !startsWith(github.head_ref, 'automation/update-submodule-') }}
     needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
-    timeout-minutes: 20
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
-    env:
-      DISABLE_MINIFY: true
-      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-      GITHUB_REPOSITORY: ${{ github.repository }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      GITHUB_MODELS_MODEL: gpt-4o-mini
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7 # nosemgrep
-        with:
-          submodules: recursive
-          fetch-depth: 0
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          setup-node: true
-          setup-python: true
-          node-version-file: .node-version
-          pnpm-version: "10.28.2"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --engine-strict=false
-        shell: bash
-
-      - name: Impact Analysis
-        uses: ./boomtick-pkg/mcp/actions/impact-analysis
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          pr_number: ${{ github.event.pull_request.number }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
+    uses: arii/boomtick/.github/workflows/ci.yml@main
+    with:
+      ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref_name }}
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
