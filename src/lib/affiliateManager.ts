@@ -39,6 +39,40 @@ function findMerchLink(id: string): AffiliateLink | undefined {
   return merch ? mapMerchToAffiliateLink(merch) : undefined;
 }
 
+export interface MerchItem {
+  id: string;
+  title: string;
+  category: 'Apparel' | 'Accessories' | 'Gear';
+  badge: 'Merch' | 'Recommended';
+  price: string;
+  image: string;
+  url: string;
+  featured: boolean;
+  description: string;
+}
+
+export const SLOT_ERA_ITEMS: MerchItem[] = MERCH_PRODUCTS
+  .filter(p => p.collections.includes('slot-era'))
+  .map(p => ({
+    id: p.id,
+    title: p.title,
+    category: p.tags.includes('Apparel') ? 'Apparel' : 'Accessories',
+    badge: 'Merch',
+    price: `$${p.price}`,
+    image: p.imageUrl,
+    url: p.printfulUrl,
+    featured: p.id !== 'slot-era-mug',
+    description: p.description
+  }));
+
+export const getMerchItems = (): MerchItem[] => {
+  return SLOT_ERA_ITEMS;
+};
+
+const SLOT_ERA_MAP = new Map<string, MerchItem>(
+  SLOT_ERA_ITEMS.map(item => [item.id, item])
+);
+
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
     const link = AFFILIATE_DATABASE[id] || findMerchLink(id);
@@ -104,37 +138,3 @@ export const affiliateManager = {
     return '#';
   }
 };
-
-export interface MerchItem {
-  id: string;
-  title: string;
-  category: 'Apparel' | 'Accessories' | 'Gear';
-  badge: 'Merch' | 'Recommended';
-  price: string;
-  image: string;
-  url: string;
-  featured: boolean;
-  description: string;
-}
-
-export const SLOT_ERA_ITEMS: MerchItem[] = MERCH_PRODUCTS
-  .filter(p => p.collections.includes('slot-era'))
-  .map(p => ({
-    id: p.id,
-    title: p.title,
-    category: p.tags.includes('Apparel') ? 'Apparel' : 'Accessories',
-    badge: 'Merch',
-    price: `$${p.price}`,
-    image: p.imageUrl,
-    url: p.printfulUrl,
-    featured: p.id !== 'slot-era-mug',
-    description: p.description
-  }));
-
-export const getMerchItems = (): MerchItem[] => {
-  return SLOT_ERA_ITEMS;
-};
-
-const SLOT_ERA_MAP = new Map<string, MerchItem>(
-  SLOT_ERA_ITEMS.map(item => [item.id, item])
-);
