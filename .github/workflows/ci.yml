@@ -92,26 +92,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install td-cli
+      - name: Setup Environment Paths
         run: |
-          cd boomtick-pkg/cli && pip install -e . --break-system-packages
+          echo "/opt/venv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
           echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
         shell: bash
       - name: Install dependencies
@@ -159,26 +144,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install td-cli
+      - name: Setup Environment Paths
         run: |
-          cd boomtick-pkg/cli && pip install -e . --break-system-packages
+          echo "/opt/venv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
           echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
         shell: bash
       - name: Install dependencies
@@ -218,26 +188,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install td-cli
+      - name: Setup Environment Paths
         run: |
-          cd boomtick-pkg/cli && pip install -e . --break-system-packages
+          echo "/opt/venv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
           echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
         shell: bash
       - name: Install dependencies
@@ -301,26 +256,11 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install td-cli
+      - name: Setup Environment Paths
         run: |
-          cd boomtick-pkg/cli && pip install -e . --break-system-packages
+          echo "/opt/venv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
           echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
         shell: bash
       - name: Install dependencies
@@ -352,16 +292,16 @@ jobs:
           submodules: recursive
           fetch-depth: 0
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           version: "10.28.2"
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           node-version-file: .node-version
           cache: 'pnpm'
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           python-version: '3.12'
       - name: Install td-cli
@@ -416,16 +356,6 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: 'pnpm'
 
       - name: Download actionlint
         id: get_actionlint

@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { MarkdownRenderer } from '../../src/components/ui/MarkdownRenderer';
 
 describe('MarkdownRenderer - Mermaid Diagrams', () => {
-  it('should render a mermaid graph with dark theme and increased font size in the base64 URL', () => {
+  it('should render a mermaid graph using ResponsiveDiagram component with dark theme encoded URL', () => {
     const mermaidCode = 'graph TD\n    A --> B';
     const markdownContent = `\`\`\`mermaid\n${mermaidCode}\n\`\`\``;
 
@@ -15,14 +15,16 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
       </MemoryRouter>
     );
 
-    // Get the rendered image
+    // Verify it renders the ResponsiveDiagram container structure
+    expect(screen.getByText('Workflow Diagram')).toBeDefined();
+    expect(screen.getByText('Click/Tap diagram to expand & zoom')).toBeDefined();
+
     const imgElement = screen.getByAltText('Workflow Diagram') as HTMLImageElement;
     expect(imgElement).toBeDefined();
 
-    // Decode the base64 portion of the URL to verify its JSON structure
+    // Decode base64 to verify its config payload is passed
     const url = imgElement.src;
     expect(url.startsWith('https://mermaid.ink/svg/')).toBe(true);
-
     const base64Part = url.replace('https://mermaid.ink/svg/', '');
     const decodedStr = atob(base64Part);
     const decodedObj = JSON.parse(decodedStr);
