@@ -1,6 +1,6 @@
-// impeccable-ignore-file
 import React, { useState, useEffect } from 'react';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 interface ResponsiveDiagramProps {
   chart: string;
@@ -93,120 +93,138 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   }
 
   return (
-    <div className={`my-6 rounded-xl border border-line bg-surface p-4 shadow-lg ${className}`}>
+    <Box marginY={6} radius="xl" border borderColor="line" surface="surface" padding={4} shadow="lg" className={className}>
       {/* Header Bar */}
-      <div className="mb-3 flex items-center justify-between border-b border-line pb-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-text-dim">
+      <Stack direction="row" align="center" justify="between" marginBottom={3} paddingBottom={2} border="b" borderColor="line">
+        <Text size="xs" weight="font-semibold" uppercase color="dim" tracking="wider">
           {title ?? 'Workflow Diagram'}
-        </span>
-        <button
+        </Text>
+        <Button
           onClick={handleToggleExpand}
-          type="button"
           aria-label={isExpanded ? 'Collapse diagram' : 'Expand diagram'}
-          className="flex items-center gap-1.5 rounded-lg bg-surface-alt px-2.5 py-1 text-xs font-medium text-text-main transition-colors hover:bg-line/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent"
+          variant="secondary"
+          size="sm"
         >
-          {isExpanded ? (
-            <>
-              <Minimize2 className="h-3.5 w-3.5" />
-              <span>Close</span>
-            </>
-          ) : (
-            <>
-              <Maximize2 className="h-3.5 w-3.5" />
-              <span>Full Screen</span>
-            </>
-          )}
-        </button>
-      </div>
+          <Stack direction="row" align="center" gap={1.5}>
+            {isExpanded ? (
+              <>
+                <Minimize2 className="h-3.5 w-3.5" />
+                <Text size="xs" weight="font-medium">Close</Text>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="h-3.5 w-3.5" />
+                <Text size="xs" weight="font-medium">Full Screen</Text>
+              </>
+            )}
+          </Stack>
+        </Button>
+      </Stack>
 
       {/* Embedded Render View */}
-      <div className="w-full overflow-x-auto py-2 flex justify-center">
-        <div
+      <Box width="full" overflow="auto" paddingY={2} display="flex" justify="center">
+        <Box
           onClick={handleToggleExpand}
-          className="w-full overflow-x-auto py-2 text-center cursor-pointer transition-opacity hover:opacity-90 max-h-96"
+          cursor="pointer"
+          className="transition-opacity hover:opacity-90 w-full text-center"
           title="Click/Tap to view full screen"
         >
-          <img
+          <Box
+            as="img"
             src={diagramUrl}
             alt={title ?? "Workflow Diagram"}
-            className="mx-auto max-w-full height-auto max-h-80 object-contain"
-            loading="lazy"
+            maxWidth="full"
+            height="auto"
+            className="mx-auto max-h-80 object-contain"
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {/* Helper Tip */}
-      <div className="mt-2 text-center">
-        <button
-          type="button"
+      <Box marginTop={2} display="flex" justify="center">
+        <Button
           onClick={handleToggleExpand}
-          className="inline-flex items-center gap-1 text-[11px] text-text-dim font-medium hover:text-text-main transition-colors focus:outline-none"
+          variant="ghost"
+          size="sm"
         >
-          <Maximize2 className="h-3 w-3" />
-          <span>Click/Tap diagram to expand & zoom</span>
-        </button>
-      </div>
+          <Stack direction="row" align="center" gap={1}>
+            <Maximize2 className="h-3 w-3 text-text-dim" />
+            <Text size="xs" color="dim" weight="font-medium" hoverColor="main">
+              Click/Tap diagram to expand & zoom
+            </Text>
+          </Stack>
+        </Button>
+      </Box>
 
       {/* Full-Screen Modal Overlay */}
       {isExpanded && (
-        <div
-          className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-md p-4 sm:p-8"
+        <Stack
+          className="fixed inset-0 z-50 backdrop-blur-md"
+          direction="col"
+          padding={{ base: 4, sm: 8 }}
+          style={{ backgroundColor: 'rgba(2, 6, 23, 0.95)' }} // Midnight Luster base color #020617
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
         >
-          <div className="flex items-center justify-between border-b border-line pb-4">
-            <h3 className="text-base font-semibold text-text-main">{title ?? 'Diagram View'}</h3>
-            <div className="flex items-center gap-2">
+          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={4}>
+            <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
+            <Stack direction="row" align="center" gap={2}>
               {/* Zoom Out */}
-              <button
+              <Button
                 onClick={() => setZoomScale((prev) => Math.max(0.5, prev - 0.25))}
-                type="button"
                 aria-label="Zoom out"
                 title="Zoom Out"
-                className="rounded-lg bg-surface-alt p-2 text-text-main hover:bg-line/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent"
+                variant="secondary"
+                size="sm"
               >
                 <ZoomOut className="h-5 w-5" />
-              </button>
+              </Button>
               {/* Reset Zoom */}
-              <button
+              <Button
                 onClick={() => setZoomScale(isMobile ? 2.0 : 1.2)}
-                type="button"
                 aria-label="Reset zoom"
                 title="Reset Zoom"
-                className="rounded-lg bg-surface-alt p-2 text-text-main hover:bg-line/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent"
+                variant="secondary"
+                size="sm"
               >
                 <RotateCcw className="h-5 w-5" />
-              </button>
+              </Button>
               {/* Zoom In */}
-              <button
+              <Button
                 onClick={() => setZoomScale((prev) => Math.min(4.0, prev + 0.25))}
-                type="button"
                 aria-label="Zoom in"
                 title="Zoom In"
-                className="rounded-lg bg-surface-alt p-2 text-text-main hover:bg-line/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent"
+                variant="secondary"
+                size="sm"
               >
                 <ZoomIn className="h-5 w-5" />
-              </button>
-              <div className="h-6 w-[1px] bg-line mx-1" />
+              </Button>
+              <Box height={6} width={1} className="bg-line" marginX={1} />
               {/* Close Overlay */}
-              <button
+              <Button
                 onClick={handleToggleExpand}
-                type="button"
                 aria-label="Close full screen view"
-                className="rounded-lg bg-surface-alt p-2 text-text-main hover:bg-line/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent"
+                variant="secondary"
+                size="sm"
               >
                 <Minimize2 className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+              </Button>
+            </Stack>
+          </Stack>
 
           {/* Scrollable Zoomed Container */}
-          <div
-            className="flex-1 overflow-auto p-4 sm:p-8 flex items-start justify-start select-none cursor-zoom-out"
+          <Box
+            flex={1}
+            overflow="auto"
+            padding={{ base: 4, sm: 8 }}
+            display="flex"
+            align="start"
+            justify="start"
+            className="select-none cursor-zoom-out"
             onClick={handleOverlayClick}
           >
-            <div
+            <Box
               className="m-auto transition-all duration-150 cursor-default"
               style={{
                 width: `${100 * zoomScale}%`,
@@ -215,16 +233,18 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               }}
               onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
             >
-              <img
+              <Box
+                as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                className="w-full h-auto"
+                width="full"
+                height="auto"
               />
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Stack>
       )}
-    </div>
+    </Box>
   );
 };
 
