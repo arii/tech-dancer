@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState, useEffect, useRef } from 'react';
 import mermaid from 'mermaid';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 
 export interface ResponsiveDiagramProps {
   /** Raw Mermaid.js definition string */
@@ -38,6 +38,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   const [svgContent, setSvgContent] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [zoomScale, setZoomScale] = useState<number>(1.5); // Default to a larger zoom on expand for mobile legibility
   const containerRef = useRef<HTMLDivElement>(null);
   const idRef = useRef<string>(`mermaid-${Math.random().toString(36).substring(2, 11)}`);
 
@@ -45,7 +46,10 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // Auto-set initial zoom scale to be more responsive to viewports
+      setZoomScale(mobile ? 2.0 : 1.2);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -113,29 +117,91 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       {/* Embedded Render View */}
       <div
         ref={containerRef}
-        className="w-full overflow-x-auto py-2 text-center [&_svg]:mx-auto [&_svg]:max-w-full [&_svg]:height-auto"
+        onClick={handleToggleExpand}
+        className="w-full overflow-x-auto py-2 text-center cursor-pointer transition-opacity hover:opacity-90 [&_svg]:mx-auto [&_svg]:max-w-full [&_svg]:height-auto"
         dangerouslySetInnerHTML={{ __html: svgContent }}
+        title="Click/Tap to view full screen"
       />
+
+      {/* Helper Tip */}
+      <div className="mt-2 text-center">
+        <button
+          type="button"
+          onClick={handleToggleExpand}
+          className="inline-flex items-center gap-1 text-[11px] text-slate-500 font-medium hover:text-slate-400 transition-colors focus:outline-none"
+        >
+          <Maximize2 className="h-3 w-3" />
+          <span>Click/Tap diagram to expand & zoom</span>
+        </button>
+      </div>
 
       {/* Full-Screen Modal Overlay */}
       {isExpanded && (
         <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 backdrop-blur-md p-4 sm:p-8">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h3 className="text-base font-semibold text-slate-200">{title ?? 'Diagram View'}</h3>
-            <button
-              onClick={handleToggleExpand}
-              type="button"
-              className="rounded-lg bg-slate-800 p-2 text-slate-300 hover:bg-slate-700 hover:text-white"
-            >
-              <Minimize2 className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Zoom Out */}
+              <button
+                onClick={() => setZoomScale((prev) => Math.max(0.5, prev - 0.25))}
+                type="button"
+                aria-label="Zoom out"
+                title="Zoom Out"
+                className="rounded-lg bg-slate-800 p-2 text-slate-300 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <ZoomOut className="h-5 w-5" />
+              </button>
+              {/* Reset Zoom */}
+              <button
+                onClick={() => setZoomScale(isMobile ? 2.0 : 1.2)}
+                type="button"
+                aria-label="Reset zoom"
+                title="Reset Zoom"
+                className="rounded-lg bg-slate-800 p-2 text-slate-300 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <RotateCcw className="h-5 w-5" />
+              </button>
+              {/* Zoom In */}
+              <button
+                onClick={() => setZoomScale((prev) => Math.min(4.0, prev + 0.25))}
+                type="button"
+                aria-label="Zoom in"
+                title="Zoom In"
+                className="rounded-lg bg-slate-800 p-2 text-slate-300 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <ZoomIn className="h-5 w-5" />
+              </button>
+              <div className="h-6 w-[1px] bg-slate-800 mx-1" />
+              {/* Close Overlay */}
+              <button
+                onClick={handleToggleExpand}
+                type="button"
+                aria-label="Close full screen view"
+                className="rounded-lg bg-slate-800 p-2 text-slate-300 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <Minimize2 className="h-5 w-5" />
+              </button>
+            </div>
           </div>
+
+          {/* Scrollable Zoomed Container */}
           <div
-            className="flex-1 overflow-auto py-8 flex items-center justify-center [&_svg]:max-w-none [&_svg]:w-full [&_svg]:max-h-[80vh]"
-            dangerouslySetInnerHTML={{ __html: svgContent }}
-          />
+            className="flex-1 overflow-auto p-4 sm:p-8 flex items-start justify-start select-none"
+          >
+            <div
+              className="m-auto transition-all duration-150 [&_svg]:w-full [&_svg]:h-auto"
+              style={{
+                width: `${100 * zoomScale}%`,
+                minWidth: `${360 * zoomScale}px`,
+                maxWidth: `${1400 * zoomScale}px`,
+              }}
+              dangerouslySetInnerHTML={{ __html: svgContent }}
+            />
+          </div>
         </div>
       )}
     </div>
   );
 };
+
+export default ResponsiveDiagram;
