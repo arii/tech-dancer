@@ -35,6 +35,12 @@ export default function Merch() {
         products: featuredIds.map(id => allProducts.find(p => p.id === id)).filter((p): p is NonNullable<typeof p> => !!p),
       },
       {
+        id: 'slot-era',
+        title: 'Slot Era Merchandise Collection',
+        description: 'Showcasing the retro, colorful, vibrant designs for West Coast Swing dancers.',
+        products: allProducts.filter(p => p.collections.includes('slot-era') && !featuredIds.includes(p.id)),
+      },
+      {
         id: 'lead-follow-switch',
         title: 'Lead, Follow, and Switch Dance Shirts',
         description: 'Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.',

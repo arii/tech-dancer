@@ -16,6 +16,7 @@ export interface MerchProduct {
 
 export const COLLECTIONS = [
   { id: 'all', label: 'All' },
+  { id: 'slot-era', label: 'Slot Era' },
   { id: 'lead-follow-switch', label: 'Lead/Follow/Switch' },
   { id: 'norcal-bestcal', label: 'NorCal BestCal' },
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
@@ -200,7 +201,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     ],
     imageDisplayMode: 'front-only',
     printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top',
-    collections: ['rainbow-pride'],
+    collections: ['slot-era'],
     tags: ['Apparel', 'Merch', 'Retro'],
   },
   {
@@ -214,7 +215,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     ],
     imageDisplayMode: 'front-only',
     printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag',
-    collections: ['rainbow-pride'],
+    collections: ['slot-era'],
     tags: ['Accessories', 'Merch', 'Tote'],
   },
   {
@@ -228,7 +229,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     ],
     imageDisplayMode: 'front-only',
     printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug',
-    collections: ['rainbow-pride'],
+    collections: ['slot-era'],
     tags: ['Accessories', 'Merch', 'Mug'],
   },
 ];
