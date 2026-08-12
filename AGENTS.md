@@ -163,8 +163,7 @@ If a tool failure occurs, you **must** document the failure in `progress_and_nex
 
 ### CLI Schema Authority
 
-`boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
-`cli_schema`) is the single source of truth for all `td-cli` flags.
+The CLI schema embedded in `.agent-context.json` under `cli_schema` is the single source of truth for all `td-cli` flags.
 MCP tools read this automatically. If calling Tier 2 directly, always
 read `cli_schema` from `.agent-context.json` first — never guess flags,
 never use `--help`.
@@ -223,7 +222,7 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in .githooks/ so .agent-context.json stays fresh automatically by calling
-boomtick-pkg/scripts/build-repo-context.py.
+the published context-warm command.
 
 ```bash
 ./setup-agent.sh

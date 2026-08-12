@@ -6,9 +6,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
-      - 'boomtick-pkg'
-      - '.gitmodules'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -33,9 +30,6 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'boomtick-pkg/**'
-      - 'boomtick-pkg'
-      - '.gitmodules'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -90,7 +84,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -142,7 +135,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -186,7 +178,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -254,7 +245,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -268,7 +258,7 @@ jobs:
         shell: bash
 
       - name: Impact Analysis
-        uses: ./boomtick-pkg/mcp/actions/impact-analysis
+        uses: arii/boomtick/mcp/actions/impact-analysis@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
@@ -289,7 +279,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -339,7 +328,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep
         with:
-          submodules: recursive
           fetch-depth: 0
 
       - name: Setup Workspace

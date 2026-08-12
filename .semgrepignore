@@ -1,7 +1,5 @@
 dev-tools/
 scripts/
-boomtick-pkg/lib/
-boomtick-pkg/tests/
 setup-agent.sh
 **/setup-agent.sh
 public/previews/

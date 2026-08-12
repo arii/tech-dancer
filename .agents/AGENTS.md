@@ -12,10 +12,10 @@ Before executing **any** command, agents MUST:
 
 1. **Consult `.agent-context.json`** — ground truth for repository structure,
    `file_tree`, `cli_schema`, current feature flags, and metadata. This file is
-   built by `boomtick-pkg/scripts/build-repo-context.py` and kept fresh by the git hooks in
+   built by the published context-warm command and kept fresh by the git hooks in
    `.githooks/`.
-2. **Consult `boomtick-pkg/cli/dev_tools/cli-schema.json`** — canonical authority for local CLI
-   commands. Never guess flags. Never run `--help`. The schema is also embedded
+2. **Consult `.agent-context.json` CLI schema** — canonical authority for local CLI
+   commands. Never guess flags. Never run `--help`. The schema is embedded
    in `.agent-context.json` under the `cli_schema` key, so a single read of that
    file covers both.
 
@@ -118,7 +118,7 @@ repo.read_agent_context
 ### Why This Matters
 
 `.agent-context.json` contains the full `file_tree` and `cli_schema` already
-indexed by `boomtick-pkg/scripts/build-repo-context.py`. Using `repo.read_agent_context`
+indexed by the published context-warm command. Using `repo.read_agent_context`
 provides pre-indexed structure for free — no redundant filesystem traversal,
 no duplicate diff fetches, no re-indexing on every run.
 
@@ -169,18 +169,6 @@ print(json.dumps(schema['cli_schema']['subcommands']['gh pr-diff'], indent=2))
 ```
 
 This is what `boomtick-mcp` does automatically on every call.
-
-### 🔄 MCP Tool Schema Synchronization
-
-To prevent schema drift (e.g., outdated parameters or case mismatches), MCP tool schemas are automatically synchronized from `boomtick-pkg/mcp/src/mcp/definitions.ts` to:
-1. **Global Config**: `~/.gemini/antigravity-cli/mcp/boomtick-mcp/`
-2. **Project Local**: `boomtick-pkg/mcp/.mcp/schemas/`
-
-Synchronization occurs automatically during:
-- `pnpm run verify:schemas` (pre-build gate)
-- `.githooks/update-env.sh` (triggered by git pull/checkout if MCP code changes)
-
-**Best Practice**: If your agent environment supports project-level tool configuration, configure it to prefer the schemas in `boomtick-pkg/mcp/.mcp/schemas/`. This ensures you are always using the most up-to-date tool definitions for the current branch.
 
 ## 🧠 Repository Agnosticism & Config Enforcement
 

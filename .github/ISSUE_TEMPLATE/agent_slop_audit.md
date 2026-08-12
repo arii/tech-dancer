@@ -50,10 +50,7 @@ Prevent configuration and schema drift:
    ```bash
    pnpm run doctor
    ```
-2. Verify MCP tool schemas and TypeScript contract alignment by running:
-   ```bash
-   cd boomtick-pkg && node scripts/verify-schemas.mjs
-   ```
+2. Verify that there is no configuration or schema drift.
 3. Run project build and tests to verify that no layout, component, or config files were broken by cleanups:
    ```bash
    pnpm run build
