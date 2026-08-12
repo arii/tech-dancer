@@ -27,7 +27,9 @@ async function verifySchemas() {
       try {
         execSync('command -v td-cli', { stdio: 'ignore' });
         hasTdCli = true;
-      } catch (_) {}
+      } catch {
+        // Ignored
+      }
     }
 
     if (hasTdCli) {
@@ -51,7 +53,7 @@ async function verifySchemas() {
         },
       });
     }
-  } catch (_error) {
+  } catch {
     console.error('❌ Failed to generate CLI schema.');
     process.exit(254);
   }
@@ -62,7 +64,7 @@ async function verifySchemas() {
     execSync('pnpm --filter @arii/boomtick-mcp sync-contracts', {
       stdio: 'inherit'
     });
-  } catch (_error) {
+  } catch {
     console.error('❌ Failed to synchronize TS contracts.');
     process.exit(254);
   }
@@ -73,7 +75,7 @@ async function verifySchemas() {
     execSync('pnpm --filter @arii/boomtick-mcp sync:mcp-schemas', {
       stdio: 'inherit'
     });
-  } catch (_error) {
+  } catch {
     console.error('❌ Failed to synchronize MCP schemas.');
     process.exit(254);
   }
@@ -81,7 +83,7 @@ async function verifySchemas() {
   console.log('✅ Schema validation pipeline completed successfully.');
 }
 
-verifySchemas().catch((_error) => {
+verifySchemas().catch((error) => {
   console.error('❌ Unexpected error in schema validation pipeline:', error);
   process.exit(254);
 });
