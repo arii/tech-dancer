@@ -16,6 +16,7 @@ export interface MerchProduct {
 
 export const COLLECTIONS = [
   { id: 'all', label: 'All' },
+  { id: 'slot-era', label: 'Slot Era' },
   { id: 'lead-follow-switch', label: 'Lead/Follow/Switch' },
   { id: 'norcal-bestcal', label: 'NorCal BestCal' },
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
@@ -188,5 +189,47 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Classic', 'Essential'],
+  },
+  {
+    id: 'slot-era-tank-top',
+    title: "Slot Era WCS Women's Racerback Tank Top",
+    description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
+    price: '28.00',
+    imageUrl: '/assets/slot_era_racerback.webp',
+    images: [
+      { src: '/assets/slot_era_racerback.webp', side: 'front', alt: "Front view of Slot Era WCS Women's Racerback Tank Top" },
+    ],
+    imageDisplayMode: 'front-only',
+    printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top',
+    collections: ['slot-era'],
+    tags: ['Apparel', 'Merch', 'Retro'],
+  },
+  {
+    id: 'slot-era-tote-bag',
+    title: 'Slot Era WCS Tote Bag',
+    description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
+    price: '24.00',
+    imageUrl: '/assets/slot_era_tote.webp',
+    images: [
+      { src: '/assets/slot_era_tote.webp', side: 'front', alt: 'Front view of Slot Era WCS Tote Bag' },
+    ],
+    imageDisplayMode: 'front-only',
+    printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag',
+    collections: ['slot-era'],
+    tags: ['Accessories', 'Merch', 'Tote'],
+  },
+  {
+    id: 'slot-era-mug',
+    title: 'Slot Era Black Ceramic Mug',
+    description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
+    price: '18.00',
+    imageUrl: '/assets/slot_era_mug.webp',
+    images: [
+      { src: '/assets/slot_era_mug.webp', side: 'front', alt: 'Front view of Slot Era Black Ceramic Mug' },
+    ],
+    imageDisplayMode: 'front-only',
+    printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug',
+    collections: ['slot-era'],
+    tags: ['Accessories', 'Merch', 'Mug'],
   },
 ];

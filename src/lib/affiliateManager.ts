@@ -6,6 +6,7 @@
 import { AffiliateLink } from '../types';
 import AFFILIATE_DATABASE_JSON from '../data/affiliates.json';
 import { ASSET_PREFIX } from '@/config/constants';
+import { MERCH_PRODUCTS } from '../data/merch';
 
 const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
 
@@ -21,9 +22,60 @@ function applyDefaultTracking(url: URL) {
   }
 }
 
+function mapMerchToAffiliateLink(merch: MerchItem): AffiliateLink {
+  return {
+    id: merch.id,
+    name: merch.title,
+    url: merch.url,
+    category: merch.category.toLowerCase(),
+    description: merch.description,
+    image: merch.image,
+    imageMode: 'contain'
+  };
+}
+
+function findMerchLink(id: string): AffiliateLink | undefined {
+  const merch = SLOT_ERA_MAP.get(id);
+  return merch ? mapMerchToAffiliateLink(merch) : undefined;
+}
+
+export interface MerchItem {
+  id: string;
+  title: string;
+  category: 'Apparel' | 'Accessories' | 'Gear';
+  badge: 'Merch' | 'Recommended';
+  price: string;
+  image: string;
+  url: string;
+  featured: boolean;
+  description: string;
+}
+
+export const SLOT_ERA_ITEMS: MerchItem[] = MERCH_PRODUCTS
+  .filter(p => p.collections.includes('slot-era'))
+  .map(p => ({
+    id: p.id,
+    title: p.title,
+    category: p.tags.includes('Apparel') ? 'Apparel' : 'Accessories',
+    badge: 'Merch',
+    price: `$${p.price}`,
+    image: p.imageUrl,
+    url: p.printfulUrl,
+    featured: p.id !== 'slot-era-mug',
+    description: p.description
+  }));
+
+export const getMerchItems = (): MerchItem[] => {
+  return SLOT_ERA_ITEMS;
+};
+
+const SLOT_ERA_MAP = new Map<string, MerchItem>(
+  SLOT_ERA_ITEMS.map(item => [item.id, item])
+);
+
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
-    const link = AFFILIATE_DATABASE[id];
+    const link = AFFILIATE_DATABASE[id] || findMerchLink(id);
     if (!link) return undefined;
 
     // Normalize image path if present and relative
@@ -38,14 +90,16 @@ export const affiliateManager = {
   },
   
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
-    const link = AFFILIATE_DATABASE[id];
+    const link = AFFILIATE_DATABASE[id] || findMerchLink(id);
     if (!link) return '#';
     
     const url = new URL(link.url);
 
     if (metadata) {
-      Object.entries(metadata).forEach(([key, value]) => {
-        if (!url.searchParams.has(key)) {
+      Object.entries(metadata).forEach(([rawKey, value]) => {
+        // Sanitize key: allow only alphanumeric, underscores, and hyphens to prevent parameter injection
+        const key = rawKey.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (key && !url.searchParams.has(key)) {
           url.searchParams.append(key, value);
         }
       });
