@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - .devcontainer/Dockerfile
+      - boomtick-pkg
   workflow_dispatch:
 
 # Permissions required to write to GitHub Packages

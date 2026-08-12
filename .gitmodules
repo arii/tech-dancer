@@ -1,0 +1,3 @@
+[submodule "boomtick-pkg"]
+	path = boomtick-pkg
+	url = git@github.com:arii/boomtick.git
