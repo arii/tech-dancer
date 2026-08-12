@@ -28,15 +28,13 @@ jobs:
           token: ${{ secrets.GH_PAT_SUBMODULE_UPDATE }}
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
+          setup-node: true
+          setup-python: false
           node-version-file: .node-version
-          cache: 'pnpm'
+          pnpm-version: "10.28.2"
 
       - name: Determine Target Ref
         id: target

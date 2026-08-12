@@ -25,13 +25,13 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Setup Environment Paths
-        run: |
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
 
       - name: Install Python Dependencies
         run: |

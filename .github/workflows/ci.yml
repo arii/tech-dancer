@@ -92,13 +92,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Environment Paths
-        run: |
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -144,13 +144,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Environment Paths
-        run: |
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -188,13 +188,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Environment Paths
-        run: |
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -256,19 +256,19 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Environment Paths
-        run: |
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: true
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
 
       - name: Impact Analysis
-        uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./boomtick-pkg/mcp/actions/impact-analysis
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
@@ -291,28 +291,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          version: "10.28.2"
-      - name: Setup Node.js
-        uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
+          setup-node: true
+          setup-python: true
           node-version-file: .node-version
-          cache: 'pnpm'
-      - name: Setup Python
-        uses: actions/setup-python@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          python-version: '3.12'
-      - name: Install td-cli
-        run: |
-          cd boomtick-pkg/cli && pip install -e . --break-system-packages
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
-          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
-          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
-        shell: bash
+          pnpm-version: "10.28.2"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
@@ -356,6 +341,14 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          setup-node: true
+          setup-python: false
+          node-version-file: .node-version
+          pnpm-version: "10.28.2"
 
       - name: Download actionlint
         id: get_actionlint
