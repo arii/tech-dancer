@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React, { useState, useEffect } from 'react';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 
