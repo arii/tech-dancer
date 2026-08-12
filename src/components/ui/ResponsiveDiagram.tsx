@@ -83,8 +83,29 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     };
   }, [chart, isMobile]);
 
+  // Accessibility: Listen for Escape key to close overlay
+  useEffect(() => {
+    if (!isExpanded) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsExpanded(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isExpanded]);
+
   const handleToggleExpand = () => {
     setIsExpanded((prev) => !prev);
+  };
+
+  // Close overlay when clicking outer background area
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setIsExpanded(false);
+    }
   };
 
   return (
@@ -137,7 +158,12 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
 
       {/* Full-Screen Modal Overlay */}
       {isExpanded && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 backdrop-blur-md p-4 sm:p-8">
+        <div
+          className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 backdrop-blur-md p-4 sm:p-8"
+          onClick={handleOverlayClick}
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h3 className="text-base font-semibold text-slate-200">{title ?? 'Diagram View'}</h3>
             <div className="flex items-center gap-2">
@@ -186,15 +212,17 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
 
           {/* Scrollable Zoomed Container */}
           <div
-            className="flex-1 overflow-auto p-4 sm:p-8 flex items-start justify-start select-none"
+            className="flex-1 overflow-auto p-4 sm:p-8 flex items-start justify-start select-none cursor-zoom-out"
+            onClick={handleOverlayClick}
           >
             <div
-              className="m-auto transition-all duration-150 [&_svg]:w-full [&_svg]:h-auto"
+              className="m-auto transition-all duration-150 [&_svg]:w-full [&_svg]:h-auto cursor-default"
               style={{
                 width: `${100 * zoomScale}%`,
                 minWidth: `${360 * zoomScale}px`,
                 maxWidth: `${1400 * zoomScale}px`,
               }}
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
               dangerouslySetInnerHTML={{ __html: svgContent }}
             />
           </div>
