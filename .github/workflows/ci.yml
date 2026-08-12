@@ -60,6 +60,7 @@ permissions:
   pull-requests: write
   packages: read
   models: read
+  issues: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -238,7 +239,6 @@ jobs:
     with:
       ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref_name }}
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
 
