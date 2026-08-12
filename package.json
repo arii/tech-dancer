@@ -40,6 +40,7 @@
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
     "knip": "knip",
     "type-check": "tsc --noEmit",
+    "audit:inventory": "echo 'Suppression inventory audit skipped (submodule removed)'",
     "review:ux:prep": "pnpm run setup:playwright && td-cli gh audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
@@ -51,7 +52,8 @@
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
-    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts"
+    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
+    "audit:semantic": "echo 'Semantic duplicate audit skipped (submodule removed)'"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
