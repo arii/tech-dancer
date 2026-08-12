@@ -1,19 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { MarkdownRenderer } from '../../src/components/ui/MarkdownRenderer';
 
-// Mock mermaid for MarkdownRenderer test
-vi.mock('mermaid', () => ({
-  default: {
-    initialize: vi.fn(),
-    render: vi.fn().mockResolvedValue({ svg: '<svg data-testid="mock-svg"></svg>' }),
-  },
-}));
-
 describe('MarkdownRenderer - Mermaid Diagrams', () => {
-  it('should render a mermaid graph using ResponsiveDiagram component', () => {
+  it('should render a mermaid graph with dark theme and increased font size in the base64 URL', () => {
     const mermaidCode = 'graph TD\n    A --> B';
     const markdownContent = `\`\`\`mermaid\n${mermaidCode}\n\`\`\``;
 
@@ -23,9 +15,21 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
       </MemoryRouter>
     );
 
-    // Verify it renders the ResponsiveDiagram container structure
-    expect(screen.getByText('Workflow Diagram')).toBeDefined();
-    expect(screen.getByRole('button', { name: /expand diagram/i })).toBeDefined();
+    // Get the rendered image
+    const imgElement = screen.getByAltText('Workflow Diagram') as HTMLImageElement;
+    expect(imgElement).toBeDefined();
+
+    // Decode the base64 portion of the URL to verify its JSON structure
+    const url = imgElement.src;
+    expect(url.startsWith('https://mermaid.ink/svg/')).toBe(true);
+
+    const base64Part = url.replace('https://mermaid.ink/svg/', '');
+    const decodedStr = atob(base64Part);
+    const decodedObj = JSON.parse(decodedStr);
+
+    expect(decodedObj.code).toBe(mermaidCode);
+    expect(decodedObj.mermaid.theme).toBe('dark');
+    expect(decodedObj.mermaid.themeVariables.fontSize).toBe('24px');
   });
 
   it('should render standard code blocks normally', () => {
