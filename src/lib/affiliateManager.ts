@@ -34,14 +34,7 @@ function mapMerchToAffiliateLink(merch: MerchItem): AffiliateLink {
   };
 }
 
-const SLOT_ERA_MAP = new Map<string, MerchItem>();
-
 function findMerchLink(id: string): AffiliateLink | undefined {
-  if (SLOT_ERA_MAP.size === 0) {
-    SLOT_ERA_ITEMS.forEach(item => {
-      SLOT_ERA_MAP.set(item.id, item);
-    });
-  }
   const merch = SLOT_ERA_MAP.get(id);
   return merch ? mapMerchToAffiliateLink(merch) : undefined;
 }
@@ -141,3 +134,7 @@ export const SLOT_ERA_ITEMS: MerchItem[] = MERCH_PRODUCTS
 export const getMerchItems = (): MerchItem[] => {
   return SLOT_ERA_ITEMS;
 };
+
+const SLOT_ERA_MAP = new Map<string, MerchItem>(
+  SLOT_ERA_ITEMS.map(item => [item.id, item])
+);
