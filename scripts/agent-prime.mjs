@@ -9,18 +9,11 @@ const rootDir = resolve(__dirname, '..');
 
 export function generateAgentContext(cwd = rootDir) {
   let gitSha = 'unknown';
-  let submoduleSha = 'unknown';
 
   try {
     gitSha = execSync('git rev-parse HEAD', { cwd, encoding: 'utf8', stdio: 'pipe' }).trim();
   } catch (error) {
     console.warn(`[agent:prime] Command failed: "git rev-parse HEAD". Using fallback "unknown". Error: ${error.message}`);
-  }
-
-  try {
-    submoduleSha = execSync('git rev-parse HEAD:boomtick-pkg', { cwd, encoding: 'utf8', stdio: 'pipe' }).trim();
-  } catch (error) {
-    console.warn(`[agent:prime] Command failed: "git rev-parse HEAD:boomtick-pkg". Using fallback "unknown". Error: ${error.message}`);
   }
 
   let pkgName = 'tech-dancer';
@@ -42,9 +35,7 @@ export function generateAgentContext(cwd = rootDir) {
     packageName: pkgName,
     updatedAt: new Date().toISOString(),
     gitCommit: gitSha,
-    submodules: {
-      'boomtick-pkg': submoduleSha
-    },
+    submodules: {},
     version: '1.0.0'
   };
 }

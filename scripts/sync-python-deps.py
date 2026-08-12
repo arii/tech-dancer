@@ -11,14 +11,7 @@ def sync_deps():
         return
 
     repo_root = Path(__file__).parent.parent
-    cli_dir = repo_root / "boomtick-pkg" / "cli"
-    req_file = cli_dir / "requirements.txt"
-
-    if not req_file.exists():
-        print(f"⚠️  {req_file} not found. Skipping Python dependency sync.")
-        return
-
-    print(f"🔄 Syncing Python dependencies from {req_file}...")
+    print("🔄 Syncing Python dependencies by installing boomtick from PyPI...")
 
     # Try to use the virtualenv if it exists
     venv_python = repo_root / ".venv" / "bin" / "python"
@@ -26,9 +19,7 @@ def sync_deps():
         venv_python = Path(sys.executable)
 
     try:
-        # 1. Sync requirements
-        # Using --no-cache-dir to avoid disk space issues in some environments
-        # and --upgrade to ensure latest specified versions
+        # Install boomtick package from PyPI
         subprocess.run(
             [
                 str(venv_python),
@@ -38,32 +29,36 @@ def sync_deps():
                 "--upgrade",
                 "--no-cache-dir",
                 "--break-system-packages",
-                "-r",
-                str(req_file),
+                "boomtick",
             ],
             check=True,
             capture_output=True,
             text=True,
-            timeout=600,  # Increased to 10 minutes for slow environments
+            timeout=600,
         )
 
-        # 2. Ensure CLI is installed in editable mode to register/update td-cli
-        subprocess.run(
-            [
-                str(venv_python),
-                "-m",
-                "pip",
-                "install",
-                "-e",
-                str(cli_dir),
-                "--break-system-packages",
-            ],
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=300,
-        )
-        print("✅ Python dependencies synced and 'td-cli' registered successfully.")
+        # Install requirements-dev.txt if it exists
+        req_dev = repo_root / "requirements-dev.txt"
+        if req_dev.exists():
+            subprocess.run(
+                [
+                    str(venv_python),
+                    "-m",
+                    "pip",
+                    "install",
+                    "--upgrade",
+                    "--no-cache-dir",
+                    "--break-system-packages",
+                    "-r",
+                    str(req_dev),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=300,
+            )
+
+        print("✅ Python dependencies synced and 'boomtick' installed successfully.")
     except subprocess.TimeoutExpired:
         print("❌ Timeout syncing Python dependencies.")
     except subprocess.CalledProcessError as e:

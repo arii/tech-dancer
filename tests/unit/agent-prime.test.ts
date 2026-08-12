@@ -40,14 +40,12 @@ describe('agent-prime.mjs', () => {
       fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify({ name: 'mocked-pkg-name' }));
 
       vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown, _opts?: unknown) => {
-        if (_cmd === 'git rev-parse HEAD:boomtick-pkg') return 'mocked-submodule-sha\n';
         if (_cmd === 'git rev-parse HEAD') return 'mocked-git-sha\n';
         return '';
       });
 
       const context = generateAgentContext(tmpDir);
       expect(context.gitCommit).toBe('mocked-git-sha');
-      expect(context.submodules['boomtick-pkg']).toBe('mocked-submodule-sha');
       expect(context.packageName).toBe('mocked-pkg-name');
     });
 
@@ -61,7 +59,6 @@ describe('agent-prime.mjs', () => {
 
       const context = generateAgentContext(tmpDir);
       expect(context.gitCommit).toBe('unknown');
-      expect(context.submodules['boomtick-pkg']).toBe('unknown');
       expect(context.packageName).toBe('tech-dancer');
 
       consoleWarnSpy.mockRestore();

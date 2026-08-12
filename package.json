@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.6.0",
   "dependencyComments": {
-    "openai": "Required exclusively by boomtick-pkg scripts (e.g. impact-ai-code-review.ts) running in the parent repository context during CI. It is not loaded by any application components or included in the frontend bundle."
+    "openai": "Required exclusively by development tools running in the parent repository context during CI. It is not loaded by any application components or included in the frontend bundle."
   },
   "type": "module",
   "scripts": {
@@ -34,14 +34,13 @@
     "lint:python": "pylint etl/ scripts/ tests/",
     "type-check:python": "mypy .",
     "audit:semgrep": "semgrep scan --config auto --error",
-    "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node boomtick-pkg/scripts/detect-antipatterns.mjs $PWD/src $PWD/.github/workflows $PWD/.npmrc",
+    "audit:anti-patterns": "td-cli gh audit --check-dirs src,.github/workflows,.npmrc",
     "audit:dead-code": "pnpm exec knip",
     "audit:duplication": "jscpd .",
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit:inventory": "node boomtick-pkg/scripts/check-suppression-inventory.mjs",
-    "review:ux:prep": "pnpm run setup:playwright && node boomtick-pkg/scripts/detect-antipatterns.mjs",
+    "review:ux:prep": "pnpm run setup:playwright && td-cli gh audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
     "doctor": "td-cli doctor",
@@ -52,16 +51,7 @@
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
-    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
-    "audit:semantic": "node boomtick-pkg/scripts/detect-semantic-duplicates.mjs",
-    "impact:analysis": "tsx boomtick-pkg/scripts/impact-analysis.ts",
-    "impact:build-main": "tsx boomtick-pkg/scripts/impact-build-main.ts",
-    "impact:visual-diff": "tsx boomtick-pkg/scripts/impact-visual-diff.ts",
-    "impact:dom-diff": "NODE_OPTIONS=--max-old-space-size=8192 tsx boomtick-pkg/scripts/impact-dom-diff.ts",
-    "impact:gemini-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts gemini",
-    "impact:github-models-review": "tsx boomtick-pkg/scripts/impact-ai-review.ts github-models",
-    "impact:gemini-code-review": "tsx boomtick-pkg/scripts/impact-ai-code-review.ts gemini",
-    "impact:github-models-code-review": "tsx boomtick-pkg/scripts/impact-ai-code-review.ts github-models"
+    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
