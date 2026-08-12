@@ -6,6 +6,7 @@
 import { AffiliateLink } from '../types';
 import AFFILIATE_DATABASE_JSON from '../data/affiliates.json';
 import { ASSET_PREFIX } from '@/config/constants';
+import { MERCH_PRODUCTS } from '../data/merch';
 
 const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
 
@@ -116,41 +117,19 @@ export interface MerchItem {
   description: string;
 }
 
-export const SLOT_ERA_ITEMS: MerchItem[] = [
-  {
-    id: 'slot-era-tank-top',
-    title: "Slot Era WCS Women's Racerback Tank Top",
-    category: 'Apparel',
+export const SLOT_ERA_ITEMS: MerchItem[] = MERCH_PRODUCTS
+  .filter(p => p.collections.includes('slot-era'))
+  .map(p => ({
+    id: p.id,
+    title: p.title,
+    category: p.tags.includes('Apparel') ? 'Apparel' : 'Accessories',
     badge: 'Merch',
-    price: '$28.00',
-    image: '/assets/slot_era_racerback.webp',
-    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top',
-    featured: true,
-    description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
-  },
-  {
-    id: 'slot-era-tote-bag',
-    title: 'Slot Era WCS Tote Bag',
-    category: 'Accessories',
-    badge: 'Merch',
-    price: '$24.00',
-    image: '/assets/slot_era_tote.webp',
-    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag',
-    featured: true,
-    description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
-  },
-  {
-    id: 'slot-era-mug',
-    title: 'Slot Era Black Ceramic Mug',
-    category: 'Accessories',
-    badge: 'Merch',
-    price: '$18.00',
-    image: '/assets/slot_era_mug.webp',
-    url: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug',
-    featured: false,
-    description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
-  },
-];
+    price: `$${p.price}`,
+    image: p.imageUrl,
+    url: p.printfulUrl,
+    featured: p.id !== 'slot-era-mug',
+    description: p.description
+  }));
 
 export const getMerchItems = (): MerchItem[] => {
   return SLOT_ERA_ITEMS;
