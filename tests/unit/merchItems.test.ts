@@ -5,7 +5,7 @@ import { SLOT_ERA_ITEMS, getMerchItems } from '@/lib/affiliateManager';
 describe('Slot Era Merch Registry', () => {
   it('returns all defined Slot Era merchandise items', () => {
     const items = getMerchItems();
-    expect(items.length).toBeGreaterThanOrEqual(3);
+    expect(items.length).toBe(3);
   });
 
   it('validates Printful URL formats for merch items', () => {

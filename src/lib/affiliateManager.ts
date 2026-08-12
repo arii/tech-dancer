@@ -61,8 +61,10 @@ export const affiliateManager = {
     const url = new URL(link.url);
 
     if (metadata) {
-      Object.entries(metadata).forEach(([key, value]) => {
-        if (!url.searchParams.has(key)) {
+      Object.entries(metadata).forEach(([rawKey, value]) => {
+        // Sanitize key: allow only alphanumeric, underscores, and hyphens to prevent parameter injection
+        const key = rawKey.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (key && !url.searchParams.has(key)) {
           url.searchParams.append(key, value);
         }
       });
