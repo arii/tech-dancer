@@ -37,16 +37,31 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           lfs: true
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          setup-node: true
-          setup-python: true
+          version: "10.28.2"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
           node-version-file: .node-version
-          pnpm-version: "10.28.2"
+          cache: 'pnpm'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install td-cli
+        run: |
+          cd boomtick-pkg/cli && pip install -e . --break-system-packages
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "/github/home/.local/bin" >> "$GITHUB_PATH"
+          PYTHON_SCRIPTS_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")
+          echo "$PYTHON_SCRIPTS_PATH" >> "$GITHUB_PATH"
+          echo "PYTHONPATH=$(pwd)/boomtick-pkg/cli" >> "$GITHUB_ENV"
+        shell: bash
       - name: Check active runtime
         run: |
-          pnpm run doctor
+          td-cli doctor
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -111,13 +126,15 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          setup-node: true
-          setup-python: false
+          version: "10.28.2"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
           node-version-file: .node-version
-          pnpm-version: "10.28.2"
+          cache: 'pnpm'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
