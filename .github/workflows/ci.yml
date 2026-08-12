@@ -231,16 +231,18 @@ jobs:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
 
-  impact-analysis:
+  run-boomtick-ci:
     if: ${{ !startsWith(github.head_ref, 'automation/update-submodule-') }}
     needs: [lint-typecheck, audit, test-build]
-    name: Deployment Impact Analysis
+    name: Call BoomTick Reusable Workflow
     uses: arii/boomtick/.github/workflows/ci.yml@main
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     with:
       ref: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref_name }}
-    secrets:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+    secrets: inherit # nosemgrep: yaml.github-actions.security.secrets-inherit.secrets-inherit
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
