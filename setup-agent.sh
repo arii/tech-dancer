@@ -224,7 +224,7 @@ install_python_deps() {
   if pip_install --root-user-action=ignore "$pkg_spec"; then
     STATUS_PYTHON="INSTALLED (boomtick-cli)"
   else
-    warn "Failed to install boomtick package from PyPI. Attempting fallback minimal dependencies..."
+    warn "Failed to install boomtick-cli package from PyPI. Attempting fallback minimal dependencies..."
     pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub
     STATUS_PYTHON="INSTALLED (fallback minimal)"
   fi
