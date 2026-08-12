@@ -1,5 +1,5 @@
-name: 'Setup Workspace (Legacy Wrapper)'
-description: 'Bootstraps the workspace (Wrapper for backward compatibility)'
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace natively'
 inputs:
   setup-node:
     description: "Install Node.js and pnpm"
@@ -25,10 +25,26 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: arii/boomtick/.github/actions/setup-workspace@main
+    - name: Setup Node.js
+      if: ${{ inputs.setup-node == 'true' }}
+      uses: actions/setup-node@v4
       with:
-        setup-node: ${{ inputs.setup-node }}
-        setup-python: ${{ inputs.setup-python }}
         node-version-file: ${{ inputs.node-version-file }}
-        pnpm-version: ${{ inputs.pnpm-version }}
-        force-node24: ${{ inputs.force-node24 }}
+
+    - name: Setup pnpm
+      if: ${{ inputs.setup-node == 'true' }}
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Python
+      if: ${{ inputs.setup-python == 'true' }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install boomtick CLI
+      if: ${{ inputs.setup-python == 'true' }}
+      shell: bash
+      run: |
+        python3 -m pip install --break-system-packages boomtick

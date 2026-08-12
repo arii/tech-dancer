@@ -86,7 +86,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: true
@@ -137,7 +137,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: true
@@ -180,7 +180,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: true
@@ -247,7 +247,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: true
@@ -281,7 +281,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: true
@@ -331,7 +331,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           setup-node: true
           setup-python: false
