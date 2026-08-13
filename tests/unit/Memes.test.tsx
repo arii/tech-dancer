@@ -1,32 +1,41 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Memes from '../../src/pages/Memes';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import Memes from '@/pages/Memes';
+import { MEMES_DATA } from '@/data/memes';
 
-// Mock SEO component to avoid HelmetProvider requirement in tests
-vi.mock('@/components/SEO', () => ({
-  SEO: () => <div data-testid="mock-seo" />,
-}));
+describe('Memes Page Component', () => {
+  const renderMemesPage = () => {
+    return render(
+      <HelmetProvider>
+        <BrowserRouter>
+          <Memes />
+        </BrowserRouter>
+      </HelmetProvider>
+    );
+  };
 
-describe('Memes page component', () => {
-  it('should render the page title, description, and list of memes', () => {
-    render(<Memes />);
+  test('renders page elements correctly', () => {
+    renderMemesPage();
 
-    // Check that header renders
-    const titleElement = screen.getByText('West Coast Swing Memes');
-    expect(titleElement).toBeDefined();
+    // Check SEO & Page Headers
+    expect(screen.getByTestId('memes-page')).toBeDefined();
+    expect(screen.getByText('West Coast Swing Memes')).toBeDefined();
+    expect(screen.getByText('COMMUNITY & HUMOR')).toBeDefined();
 
-    // Check that individual meme titles render
-    expect(screen.getByText('The WCS Slot')).toBeDefined();
-    expect(screen.getByText('WCS Spectating Preference')).toBeDefined();
-    expect(screen.getByText('West Coast Swing Connection')).toBeDefined();
-    expect(screen.getByText('Workshop vs Social Floor')).toBeDefined();
-    expect(screen.getByText('Safe from Dips and Drops')).toBeDefined();
+    // Check that all memes from data are rendered
+    MEMES_DATA.forEach((meme) => {
+      // Title
+      expect(screen.getByText(meme.title)).toBeDefined();
 
-    // Check that meme card elements exist via data-testid
-    expect(screen.getByTestId('meme-card-9c2lc9')).toBeDefined();
-    expect(screen.getByTestId('meme-card-9buj8i')).toBeDefined();
-    expect(screen.getByTestId('meme-card-a0hmu1')).toBeDefined();
-    expect(screen.getByTestId('meme-card-9hz3zx')).toBeDefined();
-    expect(screen.getByTestId('meme-card-9hz3pj')).toBeDefined();
+      // Card container
+      expect(screen.getByTestId(`meme-card-${meme.id}`)).toBeDefined();
+
+      // Image alt text
+      const img = screen.getByAltText(meme.altText) as HTMLImageElement;
+      expect(img).toBeDefined();
+      expect(img.src).toContain(meme.imageSrc);
+    });
   });
 });

@@ -8,32 +8,32 @@ export interface Meme {
 export const MEMES_DATA: Meme[] = [
   {
     id: '9c2lc9',
-    title: 'The WCS Slot',
+    title: 'The Slotted Dance Debate',
     imageSrc: '/assets/memes/9c2lc9.jpg',
-    altText: 'A meme labeled "WCS IS A SLOTTED DANCE. THE SLOT: |" showing a highly wavy, winding path representing how dancers actually drift during a dance.',
+    altText: 'WCS is a slotted dance. The slot: curves around and takes up the whole floor anyway.'
   },
   {
     id: '9buj8i',
-    title: 'WCS Spectating Preference',
+    title: 'New Pattern Ambition',
     imageSrc: '/assets/memes/9buj8i.jpg',
-    altText: 'A Tuxedo Winnie the Pooh meme. Normal Pooh represents "Watch the show sitting on the ballroom floor". Fancy Tuxedo Pooh represents "Watch the livestream from your hotel bedroom".',
+    altText: 'When you learn a cool new pattern in class vs when you try to execute it on the social floor and freeze completely.'
   },
   {
     id: 'a0hmu1',
-    title: 'West Coast Swing Connection',
+    title: 'Slotted Connection Struggles',
     imageSrc: '/assets/memes/a0hmu1.jpg',
-    altText: 'A chaotic, colorful flowchart of lines representing the complex connection and tension network of West Coast Swing.',
+    altText: 'Trying to maintain a perfect slotted connection when your partner wants to spin and travel everywhere.'
   },
   {
     id: '9hz3zx',
-    title: 'Workshop vs Social Floor',
+    title: 'The Perfect Song Dilemma',
     imageSrc: '/assets/memes/9hz3zx.jpg',
-    altText: 'A dog vs werewolf meme. The weak dog labeled "TRYING THE PATTERN ON THE SOCIAL FLOOR" and the terrifying werewolf labeled "TRYING THE PATTERN DURING THE WORKSHOP".',
+    altText: 'Hearing the perfect West Coast Swing song start to play right after you just sat down to rest your feet.'
   },
   {
     id: '9hz3pj',
-    title: 'Safe from Dips and Drops',
+    title: 'The Workshop Illusion',
     imageSrc: '/assets/memes/9hz3pj.jpg',
-    altText: 'A Facebook-style alert labeled "Marked Safe From Big" with "DIPS, DUCKS, AND DROPS" underneath.',
-  },
+    altText: 'Understanding the mechanics perfectly when the pro explains it vs when the music starts and your body forgets everything.'
+  }
 ];
