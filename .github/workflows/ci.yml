@@ -257,13 +257,196 @@ jobs:
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
 
-      - name: Impact Analysis
-        uses: arii/boomtick/mcp/actions/impact-analysis@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Run Impact Analysis
+        id: impact_analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run impact:analysis
+          if [ -f artifacts/impact-analysis/impact.json ]; then
+            ROUTES_COUNT=$(jq '.routes | length' artifacts/impact-analysis/impact.json 2>/dev/null || echo "0")
+            FILES_COUNT=$(jq '.changedFiles | length' artifacts/impact-analysis/impact.json 2>/dev/null || echo "0")
+            if [ "$ROUTES_COUNT" -gt 0 ] || [ "$FILES_COUNT" -gt 0 ]; then
+               echo "has_impact=true" >> "$GITHUB_OUTPUT"
+            else
+               echo "has_impact=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "has_impact=true" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
+      - name: Build Main
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        env:
+          DISABLE_MINIFY: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run impact:build-main
+        shell: bash
+
+      - name: Build PR
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        env:
+          VITE_BASE_PATH: /
+          DISABLE_MINIFY: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run build:review
+        shell: bash
+
+      - name: Code Review Agents
+        if: always() && github.event_name == 'pull_request' && steps.impact_analysis.outputs.has_impact == 'true'
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run impact:gemini-code-review || true
+          pnpm run impact:github-models-code-review || true
+        shell: bash
+
+      - name: Visual Diff
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run impact:visual-diff
+        shell: bash
+
+      - name: DOM Diff
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          pnpm run impact:dom-diff
+        shell: bash
+
+      - name: Check Visual Changes
+        if: steps.impact_analysis.outputs.has_impact == 'true'
+        id: check_visuals
+        run: |
+          pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Visual Review Agents
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          pnpm run impact:gemini-review || true
+          pnpm run impact:github-models-review || true
+        shell: bash
+
+      - name: Report Summary
+        if: always()
+        run: |
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/impact-analysis/impact.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          else
+            {
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          fi
+
+          if [ -f artifacts/gemini-review.md ]; then
+            { echo ""; cat artifacts/gemini-review.md; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f artifacts/github-models-review.md ]; then
+            { echo ""; cat artifacts/github-models-review.md; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f artifacts/gemini-code-review.md ]; then
+            { echo ""; cat artifacts/gemini-code-review.md; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f artifacts/github-models-code-review.md ]; then
+            { echo ""; cat artifacts/github-models-code-review.md; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+        shell: bash
+
+      - name: Send impact analysis to Jules session
+        if: always() && github.event.pull_request.body != ''
+        continue-on-error: true
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          TASK_ID=$(echo "${{ github.event.pull_request.body }}" | grep -oP 'jules\.google\.com/task/\K[0-9]+' | head -1 || true)
+          if [ -n "$TASK_ID" ]; then
+            echo "Found Jules task ID: $TASK_ID"
+            export TASK_ID
+            python3 scripts/send-jules-impact.py
+          fi
+        shell: bash
+
+      - name: Update Impact Analysis Feedback (Final Comment)
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: arii/boomtick/mcp/actions/update-pr-comment@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          pr_number: ${{ github.event.pull_request.number }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
+          status_line: '✅ **Impact Analysis Complete**'
+          impact_body: ${{ env.IMPACT_BODY }}
+
+      - name: Upload Deployment Review Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          name: deployment-review
+          path: artifacts/
+
+      - name: Verify CI Metrics
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          td-cli gh summary-report >> "$GITHUB_STEP_SUMMARY"
+          td-cli gh verify-metrics
+        shell: bash
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
