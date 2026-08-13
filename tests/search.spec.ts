@@ -33,7 +33,15 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
-// Test removed due to gear page decommissioning
+  test('should close search modal on route change', async ({ page }) => {
+    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
+
+    await page.goto('./gear');
+
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
+    await expect(page).toHaveURL(/.*gear/);
+  });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
@@ -105,8 +113,17 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Gear search term should persist after reload', async () => {
-    // Gear page is decommissioned, skipping this test.
-    test.skip();
+  test('Gear search term should persist after reload', async ({ page }) => {
+    await page.goto('./gear');
+
+    const searchInput = page.getByPlaceholder(/Search gear/i);
+    await expect(searchInput).toBeVisible();
+    await searchInput.fill('shoes');
+    await expect(page).toHaveURL(/search=shoes/i);
+
+    await page.reload();
+
+    const searchInputReload = page.getByPlaceholder(/Search gear/i);
+    await expect(searchInputReload).toHaveValue('shoes');
   });
 });

@@ -39,7 +39,7 @@ export function getAllRoutes() {
   const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) => {
     const actualPrefix = prefix === '/blog-internal' ? '/blog' : prefix;
     return getContentSlugs(dir, actualPrefix)
-      .filter(item => !item.slug.startsWith('/gear') && !item.slug.startsWith('/events'))
+      .filter(item => !item.slug.startsWith('/events'))
       .map(item => ({
         path: item.slug,
         lastmod: item.lastmod
@@ -59,7 +59,7 @@ export function getAllRoutes() {
   // 1. Static routes from configuration (excluding parameterized and catch-all)
   // Use canonicalPath if available
   const allStaticRoutes = routes
-    .filter(r => r.path !== '*' && !r.path.includes(':') && !r.path.startsWith('/gear') && !r.path.startsWith('/events'))
+    .filter(r => r.path !== '*' && !r.path.includes(':') && !r.path.startsWith('/events'))
     .map(r => {
       let lastmod;
       if (contentLastModMap[r.path]) {

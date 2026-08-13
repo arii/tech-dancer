@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag, ShieldCheck } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -27,7 +27,21 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/BlogPost').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
-  ...['/gear', '/gear/:slug', '/events', '/events/:slug'].map(path => ({
+  {
+    path: '/gear',
+    lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
+    label: 'Gear',
+    icon: Shirt,
+    skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
+  },
+  {
+    path: '/gear/:slug',
+    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  ...['/events', '/events/:slug'].map(path => ({
     path,
     lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
     skeleton: 'simple' as const,

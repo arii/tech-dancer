@@ -7,6 +7,7 @@ import path from 'path';
 export const CONTENT_DIR_MAP = {
   '/blog': 'content/posts',
   '/blog-internal': 'content/blog',
+  '/gear': 'content/resources',
   '/research': 'content/studies',
 } as const;
 

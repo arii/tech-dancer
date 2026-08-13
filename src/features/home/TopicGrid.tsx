@@ -7,7 +7,7 @@ const TOPICS = [
     id: "gear",
     label: "Gear & apparel",
     icon: Shirt,
-    href: "/blog?category=Gear",
+    href: "/gear",
     iconColorClass: "text-accent-sky",
     iconBgClass: "bg-accent-sky/10",
     iconHoverBgClass: "group-hover:bg-accent-sky/20",
