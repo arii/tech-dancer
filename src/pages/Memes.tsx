@@ -24,12 +24,11 @@ const Memes = () => {
             <BaseCard
               key={meme.id}
               gap={4}
-              height="full"
               padding={{ base: 4, md: 5 }}
               radius="md"
               border
               maxWidth="full"
-              className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow flex flex-col"
+              className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
               data-testid={`meme-card-${meme.id}`}
             >
               {/* Meme Image Container */}
@@ -41,17 +40,18 @@ const Memes = () => {
                 radius="md"
                 overflow="hidden"
                 className="bg-bg/50 border border-line/20"
+                maxHeight={{ base: 96, md: 108 }}
               >
                 <img
                   src={meme.imageSrc}
                   alt={meme.altText}
-                  className="w-full h-auto object-contain max-h-[350px] md:max-h-[400px] transition-transform duration-300 hover:scale-[1.02]"
+                  className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
                   loading="lazy"
                 />
               </Box>
 
               {/* Meme Info (Stretches uniformly to make cards the same height) */}
-              <Stack gap={2} flex={true} className="pt-2">
+              <Box paddingY={2} flex={true}>
                 <Text
                   variant="body"
                   size="lg"
@@ -61,7 +61,7 @@ const Memes = () => {
                 >
                   {meme.title}
                 </Text>
-              </Stack>
+              </Box>
             </BaseCard>
           ))}
         </Grid>
