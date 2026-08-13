@@ -1,4 +1,9 @@
 {
   "github_repo": "arii/tech-dancer",
-  "vite_base_path": "/tech-dancer/"
+  "vite_base_path": "/tech-dancer/",
+  "code-review-chain": {
+    "primary": "gpt-4o",
+    "fallbacks": ["deepseek-r1", "llama-3.3-70b-instruct"],
+    "max_retries": 3
+  }
 }
