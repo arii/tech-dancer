@@ -188,7 +188,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       border={true}
     >
       {isLoading && (
-        <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
+        <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted" role="status" aria-live="polite" aria-busy="true">
           <Stack align="center" gap={3}>
              <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
              <Text variant="sans" size="xs" color="muted" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>

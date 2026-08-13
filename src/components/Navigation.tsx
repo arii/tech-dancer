@@ -31,12 +31,12 @@ export default function Navigation() {
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} height={{ base: 8, md: 9 }} width="auto" className="group">
               <Logo className="text-white transition-opacity group-hover:opacity-heavy" />
             </Box>
-            <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
+            <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={8}>
               {topRoutes.map((item) => (
                 <Box as="li" key={item.path}>
                   <NavLink
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
+                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent px-3 py-2 inline-block', isActive ? 'text-accent' : 'text-text-dim')}
                   >
                     {item.label}
                   </NavLink>

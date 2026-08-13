@@ -53,8 +53,14 @@ export function Footer() {
           </Text>
         </Stack>
 
-        <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" italic={false}>
+        <Box
+          paddingX={4}
+          paddingY={2}
+          radius="md"
+          border
+          className="border-line/20 bg-surface-alt/10"
+        >
+          <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
             {DISCLOSURE_TEXT}
           </Text>
         </Box>
