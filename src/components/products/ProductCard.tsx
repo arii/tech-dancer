@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Button, type TextProps, type BoxProps } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -30,17 +31,19 @@ export function ProductCard({
     ? 'SEE OPTIONS'
     : 'VIEW ON PRINTFUL';
 
-  const parsedPrice = item.price ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : undefined;
-  const productItem = {
-    id: item.id,
-    name: item.title,
-    description: item.description,
-    imageUrl: getImageUrl(item.imageUrl),
-    url: item.href.startsWith('http') ? item.href : `${BASE_URL}${item.href}`,
-    price: parsedPrice,
-    currency: 'USD',
-    inStock: true,
-  };
+  const productItem = useMemo(() => {
+    const parsedPrice = item.price ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : undefined;
+    return {
+      id: item.id,
+      name: item.title,
+      description: item.description,
+      imageUrl: getImageUrl(item.imageUrl),
+      url: item.href.startsWith('http') ? item.href : `${BASE_URL}${item.href}`,
+      price: parsedPrice,
+      currency: 'USD',
+      inStock: true,
+    };
+  }, [item]);
 
   return (
     <BaseCard
