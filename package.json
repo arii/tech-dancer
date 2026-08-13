@@ -53,7 +53,15 @@
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
     "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
-    "audit:semantic": "node scripts/detect-semantic-duplicates.mjs"
+    "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
+    "impact:analysis": "tsx scripts/impact-analysis.ts",
+    "impact:build-main": "tsx scripts/impact-build-main.ts",
+    "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
+    "impact:dom-diff": "NODE_OPTIONS=--max-old-space-size=8192 tsx scripts/impact-dom-diff.ts",
+    "impact:gemini-review": "tsx scripts/impact-ai-review.ts gemini",
+    "impact:github-models-review": "tsx scripts/impact-ai-review.ts github-models",
+    "impact:gemini-code-review": "tsx scripts/impact-ai-code-review.ts gemini",
+    "impact:github-models-code-review": "tsx scripts/impact-ai-code-review.ts github-models"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
