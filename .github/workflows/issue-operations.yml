@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
       - name: Run Issue Operations - Validate Quality
-        uses: arii/boomtick/.github/actions/issue-operations@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           operation: 'validate-quality'
           issue_number: ${{ github.event.issue.number }}
@@ -58,12 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
       - name: Run Issue Operations - Create PR
-        uses: arii/boomtick/.github/actions/issue-operations@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           operation: 'create-pr'
           issue_number: ${{ github.event.issue.number }}
@@ -75,12 +75,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
       - name: Run Issue Operations - AI Review
-        uses: arii/boomtick/.github/actions/issue-operations@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           operation: 'ai-review'
           issue_number: ${{ github.event.inputs.issue_number }}
@@ -96,12 +96,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
       - name: Run Issue Operations - Resolve Conflicts
-        uses: arii/boomtick/.github/actions/issue-operations@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           operation: 'resolve-conflicts'
           issue_number: ${{ github.event.inputs.issue_number }}
@@ -114,12 +114,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
       - name: Run Issue Operations - Update Snapshots
-        uses: arii/boomtick/.github/actions/issue-operations@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           operation: 'update-snapshots'
           issue_number: ${{ github.event.inputs.issue_number }}

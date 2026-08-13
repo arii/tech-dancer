@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
       - name: BoomTick ChatOps Dispatcher
-        uses: arii/boomtick/.github/actions/chatops-trigger@main
+        uses: arii/boomtick/.github/actions/chatops-trigger@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           comment_body: '${{ github.event.comment.body }}'
           author_association: '${{ github.event.comment.author_association }}'

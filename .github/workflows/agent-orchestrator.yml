@@ -88,10 +88,10 @@ jobs:
       (github.event_name == 'repository_dispatch' && github.event.action == 'audit')
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
 
       - name: Resolve Environment
         id: resolve_env
@@ -184,7 +184,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 1
 
@@ -211,7 +211,7 @@ jobs:
         shell: bash
 
       - name: Run CI Repair
-        uses: arii/boomtick/.github/actions/ci-repair@main
+        uses: arii/boomtick/.github/actions/ci-repair@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           mode: ${{ steps.determine_mode.outputs.mode }}
           issue_number: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
@@ -228,7 +228,7 @@ jobs:
       (github.event_name == 'dependabot_alert')
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Validate Inputs
         env:
@@ -263,7 +263,7 @@ jobs:
         shell: bash
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main
+        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
         with:
           setup-python: 'true'
 
