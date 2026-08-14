@@ -1,52 +1,25 @@
 // impeccable-ignore-file
-import { useState, ChangeEvent, useEffect, useRef } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
-import { Post } from '@/lib/content';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { Notice } from '@/components/ui/Notice';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
+import { inputs } from '@/styles/design-tokens';
+import { cn } from '@/lib/utils';
+import { types, EVENT_TYPES } from './config';
 
-const Field = ({ label, value, onChange, placeholder, type = "text", height, ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string, height?: number }) => {
+const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
   return (
     <Stack gap={2}>
-      <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>{label}</Text>
+      <Text variant="mono" size="micro" color="dim" className="tracking-wider uppercase font-bold" marginBottom={0}>{label}</Text>
       {type === 'textarea' ? (
-        <Box
-          as="textarea"
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
-          placeholder={placeholder}
-          height={height || 40}
-          width="full"
-          surface="alt"
-          border
-          radius="lg"
-          paddingX={3}
-          paddingY={2}
-          className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y"
-          {...props}
-        />
+        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={40} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none" {...props} />
       ) : (
-        <Box
-          as="input"
-          type={type}
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-          placeholder={placeholder}
-          width="full"
-          surface="alt"
-          border
-          radius="lg"
-          paddingX={3}
-          paddingY={2}
-          className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          {...props}
-        />
+        <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
       )}
     </Stack>
   );
@@ -62,12 +35,11 @@ export function BlogDrafter() {
     saveToHistory,
     rollback,
     deleteHistoryEntry,
-    cleanPreview,
-    issueInfo
+    markdownPreview,
+    githubIssueUrl
   } = useBlogDrafter();
 
   const [copied, setCopied] = useState(false);
-  const [showClipboardNotice, setShowClipboardNotice] = useState(false);
   const [aiInput, setAiInput] = useState('');
   const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
   const [previewMode, setPreviewMode] = useState<'compact' | 'full'>('compact');
@@ -84,18 +56,11 @@ export function BlogDrafter() {
     }
   };
 
-  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const clipboardTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
-      if (clipboardTimeoutRef.current) clearTimeout(clipboardTimeoutRef.current);
-    };
-  }, []);
-
   const handleCopyPrompt = () => {
-    const typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
+    const typeSpecificPrompt =
+      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, location, city, schedule, description.` :
+      data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
+      `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
 
     const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
 Requirements:
@@ -107,36 +72,14 @@ Requirements:
 Draft Data: ${JSON.stringify(data, null, 2)}`;
     navigator.clipboard.writeText(prompt);
     setCopied(true);
-    if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
-    copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleSubmitDraft = () => {
-    const { url, issueTitle, issueBody, repoOwner, repoName } = issueInfo;
-
-    if (url.length > 2000) {
-      navigator.clipboard.writeText(issueBody);
-      setShowClipboardNotice(true);
-      if (clipboardTimeoutRef.current) clearTimeout(clipboardTimeoutRef.current);
-      clipboardTimeoutRef.current = setTimeout(() => setShowClipboardNotice(false), 8000);
-      const placeholderUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent('[PASTE_CLIPBOARD_HERE]')}`;
-      window.open(placeholderUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (previewMode === 'full') {
-    const postData: Post = {
-      ...data,
-      slug: 'preview',
-      content: data.commentary,
-    };
-
     return (
       <FullPreview
-        post={postData}
-        onBack={() => setPreviewMode('compact')}
+        {...data}
+        onClose={() => setPreviewMode('compact')}
       />
     );
   }
@@ -164,6 +107,35 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
         </Box>
 
+        {/* Type Selector */}
+        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+          {types.map((type) => {
+            const Icon = type.icon;
+            const isActive = data.type === type.id;
+            return (
+              <Box
+                key={type.id}
+                as="button"
+                onClick={() => updateField('type', type.id)}
+                display="flex"
+                align="center"
+                justify="center"
+                gap={2}
+                paddingY={2}
+                className={cn(
+                  "transition-all cursor-pointer",
+                  isActive
+                    ? "bg-accent text-bg shadow-sm"
+                    : "text-text-dim hover:text-text-main hover:bg-white/5"
+                )}
+              >
+                <Icon className="w-3 h-3" />
+                <Text variant="mono" size="micro" weight="font-bold">{type.label}</Text>
+              </Box>
+            );
+          })}
+        </Grid>
+
         <Box border padding="compact" className="bg-accent/5 border-accent/20">
            <Stack gap={2} display="flex" align="baseline" direction="row">
               <Box as="span" className="shrink-0">
@@ -176,12 +148,6 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
            </Stack>
         </Box>
       </Stack>
-
-      {showClipboardNotice && (
-        <Notice type="info">
-          <strong>DRAFT COPIED TO CLIPBOARD.</strong> Due to content size, the GitHub Issue body was truncated. Please <strong>PASTE</strong> the clipboard content into the issue description on GitHub.
-        </Notice>
-      )}
 
       <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
         {/* Form Column */}
@@ -205,37 +171,31 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Content Type</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Content Type</Text>
                 <Box
                   as="select"
                   value={data.type}
-                  width="full"
-                  surface="alt"
-                  border
-                  radius="lg"
-                  paddingX={3}
-                  paddingY={2}
-                  className="appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
+                  className={cn(inputs.base, "appearance-none")}
                 >
                   <option value="post">Blog Post</option>
+                  <option value="resource">Resource Card</option>
+                  <option value="event">Event Card</option>
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Category</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Category</Text>
                 <Box
                   as="select"
                   value={data.category}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-                  width="full"
-                  surface="alt"
-                  border
-                  radius="lg"
-                  paddingX={3}
-                  paddingY={2}
-                  className="appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={cn(inputs.base, "appearance-none")}
                 >
-                  {CONTENT_CATEGORIES.map(cat => (
+                  {data.type === 'event' ? (
+                    EVENT_TYPES.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))
+                  ) : CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
                   ))}
                 </Box>
@@ -249,27 +209,80 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Field label="Author" value={data.author} onChange={(v: string) => updateField('author', v)} />
             </Grid>
 
+            {data.type === 'resource' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Resource Metadata</Text>
+                   <Grid cols={2} gap={4}>
+                      <Field label="DURABILITY" type="number" step="0.1" value={data.durability} onChange={(v: string) => updateField('durability', parseFloat(v))} />
+                      <Field label="VALUE" type="number" step="0.1" value={data.value} onChange={(v: string) => updateField('value', parseFloat(v))} />
+                   </Grid>
+                   <Grid cols={2} gap={4}>
+                     <Field label="Price Category" value={data.priceCategory} onChange={(v: string) => updateField('priceCategory', v)} placeholder="e.g. $$$" />
+                     <Field label="Updated Date" value={data.updatedDate} onChange={(v: string) => updateField('updatedDate', v)} placeholder="Oct 2026" />
+                   </Grid>
+                   <Field label="VERDICT" value={data.verdict} onChange={(v: string) => updateField('verdict', v)} placeholder="Final summary..." />
+                   <Field label="AFFILIATE_IDS (COMMA SEPARATED)" value={(data.affiliateIds ?? []).join(', ')} onChange={(v: string) => updateField('affiliateIds', v)} placeholder="amazon, etc" />
+                   <Field label="TAGS (COMMA SEPARATED)" value={(data.tags ?? []).join(', ')} onChange={(v: string) => updateField('tags', v)} placeholder="practice, travel" />
+                </Stack>
+              </Box>
+            )}
+
+            {data.type === 'event' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Event Logistics</Text>
+                   <Field label="EVENT_START_DATE" value={data.startDate} onChange={(v: string) => updateField('startDate', v)} type="date" />
+                   <Grid cols={2} gap={4}>
+                      <Field label="EARLY_BIRD_DEADLINE" value={data.earlyBirdDate} onChange={(v: string) => updateField('earlyBirdDate', v)} type="date" />
+                      <Field label="HOTEL_CUTOFF" value={data.hotelCutoffDate} onChange={(v: string) => updateField('hotelCutoffDate', v)} type="date" />
+                   </Grid>
+                   <Field label="OFFICIAL_URL" value={data.url} onChange={(v: string) => updateField('url', v)} type="url" placeholder="https://..." />
+                </Stack>
+              </Box>
+            )}
+
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Excerpt</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Excerpt</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the content..."
-                height={32}
-                width="full"
-                surface="alt"
-                border
-                radius="lg"
-                paddingX={3}
-                paddingY={2}
-                className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y"
+                height={20}
+                className={cn(inputs.base, "resize-none")}
               />
             </Stack>
 
-            <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
+            {/* Type Specific Fields */}
+            {data.type === 'post' && (
+              <>
+                <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
 
-            <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" height={96} placeholder="Write your main content here..." />
+                <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" placeholder="Write your main content here..." />
+
+              </>
+            )}
+
+            {data.type === 'resource' && (
+              <>
+                <Field label="RESOURCE_HEADING" value={data.heading} onChange={(v: string) => updateField('heading', v)} placeholder="Practice Anywhere" />
+
+                <Field label="RESOURCE_CONTENT" value={data.content} onChange={(v: string) => updateField('content', v)} type="textarea" placeholder="Write the resource review content here..." />
+              </>
+            )}
+
+            {data.type === 'event' && (
+              <>
+                <Grid cols={2} gap={4}>
+                  <Field label="LOCATION" value={data.location} onChange={(v: string) => updateField('location', v)} placeholder="Hyatt Regency..." />
+                  <Field label="CITY" value={data.city} onChange={(v: string) => updateField('city', v)} placeholder="San Francisco, CA" />
+                </Grid>
+                <Field label="SCHEDULE" value={data.schedule} onChange={(v: string) => updateField('schedule', v)} placeholder="October 8 - 11, 2026" />
+                <Field label="DESCRIPTION" value={data.description} onChange={(v: string) => updateField('description', v)} type="textarea" placeholder="Detailed event description..." />
+
+              </>
+            )}
 
           </Stack>
 
@@ -350,13 +363,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
               placeholder="Paste AI JSON response here..."
               height={32}
-              width="full"
-              surface="alt"
-              border
-              radius="lg"
-              paddingX={3}
-              paddingY={2}
-              className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+              className={cn(inputs.base, "resize-none")}
             />
             <ActionButton
               onClick={handleApply}
@@ -397,11 +404,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             padding={6}
             overflow="y-auto"
             maxHeight="600px"
-            maxWidth="full"
-            aria-live="polite"
-            className="prose prose-sm prose-invert"
+            className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <MarkdownRenderer content={cleanPreview} />
+            <MarkdownRenderer content={markdownPreview} />
           </Box>
 
           <Grid cols={2} gap={4}>
@@ -424,10 +429,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Box>
 
             <Box
-              as="button"
-              type="button"
-              role="button"
-              onClick={handleSubmitDraft}
+              as="a"
+              href={githubIssueUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               display="flex"
               align="center"
               justify="center"
