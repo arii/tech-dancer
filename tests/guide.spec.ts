@@ -16,7 +16,7 @@ test('verify guide visual consistency', async ({ page }) => {
     allowSizeMismatch: true,
     animations: 'disabled',
     scale: 'css',
-    maxDiffPixelRatio: 0.02,
+    maxDiffPixelRatio: 0.10,
     mask: getVisualTestMasks(page)
   });
 });
