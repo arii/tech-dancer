@@ -13,6 +13,7 @@ import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
+import { ResponsiveDiagram } from './ResponsiveDiagram';
 
 const ALLOWED_PROPS = new Set([
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
@@ -153,36 +154,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
   const codeString = String(children).replace(/\n$/, '');
 
   if (isMermaid) {
-    let diagramUrl: string | null = null;
-    try {
-      const bytes = new TextEncoder().encode(codeString);
-      let binary = '';
-      const len = bytes.byteLength;
-      for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      const base64 = window.btoa(binary);
-      diagramUrl = `https://mermaid.ink/svg/${base64}`;
-    } catch (e) {
-      console.error('Failed to render mermaid diagram', e);
-    }
-
-    if (diagramUrl) {
-      return (
-        <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
-          <Box
-            as="img"
-            src={diagramUrl}
-            alt="Workflow Diagram"
-            radius="lg"
-            maxWidth="full"
-            maxHeight={96}
-            className="object-contain"
-            loading="lazy"
-          />
-        </Box>
-      );
-    }
+    return <ResponsiveDiagram chart={codeString} />;
   }
 
   const isBlock = codeString.includes('\n') || !!language;
