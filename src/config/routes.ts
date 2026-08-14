@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag, ShieldCheck } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck, Laugh } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -49,6 +49,15 @@ export const routes: RouteConfig[] = [
     icon: User,
     skeleton: 'simple',
     isTopNav: true
+  },
+  {
+    path: '/memes',
+    lazy: () => import('@/pages/Memes').then(m => ({ Component: m.default })),
+    label: 'Memes',
+    icon: Laugh,
+    skeleton: 'grid',
+    isTopNav: true,
+    isMobileVisible: true
   },
   {
     path: '/research',
