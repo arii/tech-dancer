@@ -34,8 +34,8 @@ export function EditorialHeader({
   return (
     <Stack gap={12}>
       <Stack gap={6}>
-        <Text variant="mono" size="xs" color="dim" weight="font-black" uppercase tracking="widest">
-          <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
+        <Text variant="mono" size={{ base: "xs", md: "sm" }} color="dim" weight="font-black" uppercase tracking="widest">
+          <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
         <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
@@ -72,20 +72,25 @@ export function EditorialHeader({
         </Stack>
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" align="center" gap={2} wrap>
-            <Text variant="mono" size="micro" color="dim" weight="font-medium">TAGS:</Text>
+          <Stack direction="row" align="center" gap={3} wrap>
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
             {tags.map((tag) => (
               <Box
                 key={tag}
-                className={journalVariants.tagSeparator()}
+                paddingX={2.5}
+                paddingY={1}
+                radius="sm"
+                surface="muted"
+                border
+                className="border-line/30 hover:border-accent transition-colors cursor-default"
               >
                 <Text
                   variant="mono"
                   size="micro"
                   color="dim"
-                  weight="font-medium"
+                  weight="font-semibold"
                 >
-                  {tag}
+                  {tag.toUpperCase()}
                 </Text>
               </Box>
             ))}
