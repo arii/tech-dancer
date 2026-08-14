@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Button, type TextProps, type BoxProps } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -5,6 +6,9 @@ import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { getImageUrl } from '@/utils/schema';
+import { BASE_URL } from '@/config/constants';
+import ProductJsonLd from '@/components/ProductJsonLd';
 
 export const EDITORIAL_CLAMP = 0;
 export const DEFAULT_CLAMP = 2;
@@ -27,6 +31,20 @@ export function ProductCard({
     ? 'SEE OPTIONS'
     : 'VIEW ON PRINTFUL';
 
+  const productItem = useMemo(() => {
+    const parsedPrice = item.price ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : undefined;
+    return {
+      id: item.id,
+      name: item.title,
+      description: item.description,
+      imageUrl: getImageUrl(item.imageUrl),
+      url: item.href.startsWith('http') ? item.href : `${BASE_URL}${item.href}`,
+      price: parsedPrice,
+      currency: 'USD',
+      inStock: true,
+    };
+  }, [item]);
+
   return (
     <BaseCard
       gap={isFeatured ? 5 : 4}
@@ -43,6 +61,7 @@ export function ProductCard({
       data-testid="product-card"
       {...props}
     >
+      <ProductJsonLd item={productItem} />
       <MerchImageDisplay
         title={item.title}
         href={item.href}
