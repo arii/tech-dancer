@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/add-relavel-travel-bag-to-affiliate-gear-3852221906974514165/sitemap.xml
