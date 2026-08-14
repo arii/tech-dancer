@@ -38,7 +38,7 @@ export function EditorialHeader({
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
-        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
+        <Text as="h1" variant="h1" size={{ base: "3xl", md: "6xl" }} color="main" weight="font-black" leading={{ base: "tight", md: "none" }} tracking="tighter" className="text-pretty break-words">
           {title}
         </Text>
 
@@ -55,13 +55,13 @@ export function EditorialHeader({
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
-        <Stack direction="row" align="center" gap={4} flex={1}>
+      <Stack direction={{ base: "column", md: "row" }} justify="between" align={{ base: "start", md: "center" }} gap={{ base: 6, md: 8 }} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
+        <Stack direction="row" align="center" gap={{ base: 4, md: 6 }} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
-           <Stack gap={1}>
+           <Stack gap={1.5}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
+               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()} paddingY={1.5} paddingX={2} radius="sm">
                  <Share2 className="w-3.5 h-3.5" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                    {isShared ? "COPIED!" : "SHARE"}
@@ -72,13 +72,13 @@ export function EditorialHeader({
         </Stack>
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" align="center" gap={3} wrap>
+          <Stack direction="row" align="center" gap={{ base: 3, md: 4 }} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
             {tags.map((tag) => (
               <Box
                 key={tag}
-                paddingX={2.5}
-                paddingY={1}
+                paddingX={{ base: 3.5, md: 4.5 }}
+                paddingY={{ base: 2, md: 2.5 }}
                 radius="sm"
                 surface="muted"
                 border

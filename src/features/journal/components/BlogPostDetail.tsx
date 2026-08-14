@@ -76,7 +76,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Grid>
       ) : (
-        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "video", lg: "auto" }} objectFit={post.imageFit} />
       )}
       {post.image?.includes('/sketches/') && (
         <Text variant="mono" size="xs" color="dim" className="italic">

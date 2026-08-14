@@ -6,11 +6,12 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { data: post } = useQuery({
+  const { data: post, isLoading } = useQuery({
     queryKey: ['posts', slug],
     queryFn: () => slug ? getPostBySlug(slug) : undefined,
     enabled: !!slug,
@@ -45,6 +46,14 @@ export default function BlogPost() {
       }
     };
   }, [post]);
+
+  if (isLoading) {
+    return (
+      <Box aria-live="polite" aria-busy="true" padding="panel">
+        <PageSkeleton variant="post" />
+      </Box>
+    );
+  }
 
   if (!post) {
     return (

@@ -40,7 +40,7 @@ export function EditorialLayout({
     <Box
       width="full"
       maxWidth="5xl"
-      marginX="auto"
+      marginX={{ base: "auto", lg: "0" }}
       paddingX={{ base: 5, md: 10, lg: 12 }}
       paddingY={{ base: 8, md: 16 }}
     >
@@ -53,7 +53,10 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
-            className={journalVariants.navLink()}
+            paddingY={2}
+            paddingX={3}
+            radius="sm"
+            className={`${journalVariants.navLink()} -ml-3`}
           >
             <Icon
               icon={ArrowLeft}
@@ -67,7 +70,7 @@ export function EditorialLayout({
         </Box>
 
         {/* Header */}
-        <Box width="full" marginX={!sidebar ? "auto" : undefined} maxWidth={!sidebar ? "3xl" : "full"}>
+        <Box width="full" marginX={!sidebar ? { base: "auto", lg: "0" } : undefined} maxWidth={!sidebar ? "screen-md" : "full"}>
           {header}
         </Box>
 
@@ -106,7 +109,7 @@ export function EditorialLayout({
             )}
           </Grid>
         ) : (
-          <Stack gap="section-spacing" width="full" marginX="auto" maxWidth="3xl">
+          <Stack gap="section-spacing" width="full" marginX={{ base: "auto", lg: "0" }} maxWidth="screen-md">
             <Box className="article-content-wrapper" width="full">
               {children}
             </Box>
