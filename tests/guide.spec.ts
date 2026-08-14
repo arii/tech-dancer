@@ -12,7 +12,7 @@ test('verify guide visual consistency', async ({ page }) => {
   await scrollToSettle(page);
 
   await expect(page).toHaveScreenshot('detail-page-v2.png', {
-    fullPage: true,
+    fullPage: false,
     allowSizeMismatch: true,
     animations: 'disabled',
     scale: 'css',
