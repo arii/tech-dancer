@@ -264,7 +264,7 @@
   }
 
   .prose-editorial {
-    @apply prose prose-slate prose-invert max-w-none;
+    @apply prose prose-slate prose-invert max-w-[85ch];
     @apply prose-p:font-sans prose-p:text-text-dim prose-p:leading-[1.8] prose-p:text-lg prose-p:mb-8 prose-p:text-pretty;
     @apply prose-headings:font-display prose-headings:text-text-main prose-headings:tracking-[-0.03em] prose-headings:font-black;
     @apply prose-h2:mt-16 prose-h2:mb-8;
