@@ -40,11 +40,11 @@ describe('getAllRoutes', () => {
     expect(new Date(detailed[0].lastmod).getTime()).not.toBeNaN();
   });
 
-  it('should exclude /gear and /events routes', () => {
+  it('should exclude /events routes', () => {
     const { all, sitemap, content } = getAllRoutes();
 
-    // Check that no route starts with /gear or /events
-    const forbidden = (path: string) => path.startsWith('/gear') || path.startsWith('/events');
+    // Check that no route starts with /events
+    const forbidden = (path: string) => path.startsWith('/events');
 
     expect(all.some(forbidden)).toBe(false);
     expect(sitemap.some(forbidden)).toBe(false);

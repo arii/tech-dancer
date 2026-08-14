@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -5,6 +8,8 @@ import { BaseCard } from '@/components/ui/BaseCard';
 import { MEMES_DATA } from '@/data/memes';
 
 const Memes = () => {
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="memes-page">
       <SEO
@@ -39,8 +44,9 @@ const Memes = () => {
                 justify="center"
                 radius="md"
                 overflow="hidden"
-                className="bg-bg/50 border border-line/20"
+                className="bg-bg/50 border border-line/20 cursor-zoom-in"
                 maxHeight={{ base: 96, md: 108 }}
+                onClick={() => setLightboxImage(meme.imageSrc)}
               >
                 <img
                   src={meme.imageSrc}
@@ -66,6 +72,30 @@ const Memes = () => {
           ))}
         </Grid>
       </Stack>
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <Box
+          position="fixed"
+          inset={0}
+          zIndex={100}
+          display="flex"
+          align="center"
+          justify="center"
+          className="bg-black/90 cursor-zoom-out"
+          onClick={() => setLightboxImage(null)}
+          data-testid="lightbox-overlay"
+        >
+          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
+            <Icon icon={X} size="lg" />
+          </Box>
+          <img
+            src={lightboxImage}
+            alt="Expanded meme preview"
+            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+          />
+        </Box>
+      )}
     </Box>
   );
 };
