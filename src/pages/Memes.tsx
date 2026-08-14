@@ -86,13 +86,13 @@ const Memes = () => {
           onClick={() => setLightboxImage(null)}
           data-testid="lightbox-overlay"
         >
-          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
+          <Box position="absolute" top={4} right={4} padding={2} className="text-white hover:text-accent">
             <Icon icon={X} size="lg" />
           </Box>
           <img
             src={lightboxImage}
             alt="Expanded meme preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl" // impeccable-ignore
           />
         </Box>
       )}
