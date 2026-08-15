@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
@@ -9,6 +9,18 @@ import { MEMES_DATA } from '@/data/memes';
 
 const Memes = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  // Close lightbox on Escape key press
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLightboxImage(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxImage]);
 
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="memes-page">
@@ -83,16 +95,35 @@ const Memes = () => {
           align="center"
           justify="center"
           className="bg-black/90 cursor-zoom-out"
-          onClick={() => setLightboxImage(null)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setLightboxImage(null);
+            }
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Expanded meme preview modal"
           data-testid="lightbox-overlay"
         >
-          <Box position="absolute" top={4} right={4} padding={2} className="text-white hover:text-accent">
+          <Box
+            as="button"
+            position="absolute"
+            top={4}
+            right={4}
+            padding={2}
+            className="text-white hover:text-accent cursor-pointer"
+            onClick={() => setLightboxImage(null)}
+            aria-label="Close enlarged meme view"
+            data-testid="lightbox-close-button"
+          >
             <Icon icon={X} size="lg" />
           </Box>
           <img
             src={lightboxImage}
             alt="Expanded meme preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl" // impeccable-ignore
+            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl cursor-default" // impeccable-ignore
+            onClick={(e) => e.stopPropagation()}
+            data-testid="lightbox-image"
           />
         </Box>
       )}

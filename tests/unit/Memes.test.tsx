@@ -56,11 +56,31 @@ describe('Memes Page Component', () => {
     expect(expandedImage).toBeDefined();
     expect(expandedImage.src).toContain(firstMeme.imageSrc);
 
+    // Clicking the image itself should NOT close the lightbox (stopPropagation)
+    fireEvent.click(expandedImage);
+    expect(screen.getByAltText('Expanded meme preview')).toBeDefined();
+
     // Dismiss the lightbox by clicking the overlay backdrop
     const lightboxOverlay = screen.getByTestId('lightbox-overlay');
     fireEvent.click(lightboxOverlay);
 
     // The lightbox should be gone
+    expect(screen.queryByAltText('Expanded meme preview')).toBeNull();
+  });
+
+  test('pressing Escape key closes the lightbox modal', () => {
+    renderMemesPage();
+
+    const firstMeme = MEMES_DATA[0];
+    const imageElement = screen.getAllByAltText(firstMeme.altText)[0];
+
+    fireEvent.click(imageElement);
+    expect(screen.getByAltText('Expanded meme preview')).toBeDefined();
+
+    // Press Escape
+    fireEvent.keyDown(window, { key: 'Escape' });
+
+    // Lightbox should be dismissed
     expect(screen.queryByAltText('Expanded meme preview')).toBeNull();
   });
 });
