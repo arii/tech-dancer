@@ -1,0 +1,1 @@
+const e=t=>{if(!t||typeof t!="string")return!1;try{const r=new URL(t);return!(!["http:","https:"].includes(r.protocol)||t.startsWith("//"))}catch{return!1}},s=t=>{if(!t)return"";const r=t.trim();return e(r)?r:"about:blank"};export{e as i,s};
