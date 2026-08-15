@@ -12,11 +12,11 @@ test('verify guide visual consistency', async ({ page }) => {
   await scrollToSettle(page);
 
   await expect(page).toHaveScreenshot('detail-page-v2.png', {
-    fullPage: false,
+    fullPage: true,
     allowSizeMismatch: true,
     animations: 'disabled',
     scale: 'css',
-    maxDiffPixelRatio: 0.10,
+    maxDiffPixelRatio: 0.02,
     mask: getVisualTestMasks(page)
   });
 });
