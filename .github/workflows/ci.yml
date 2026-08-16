@@ -268,7 +268,7 @@ jobs:
         shell: bash
 
       - name: Impact Analysis
-        uses: ./boomtick-pkg/mcp/actions/impact-analysis
+        uses: arii/boomtick/boomtick-pkg/mcp/actions/impact-analysis@93cac6d539b121aea11f163980da3430f3d39865 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}

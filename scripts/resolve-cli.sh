@@ -15,8 +15,18 @@ else
     if [ -f "pyproject.toml" ]; then
         printf "%s\n" "$(pwd -P)"
     else
-        # Last resort: error out
-        echo "Error: Could not resolve CLI_ROOT" >&2
-        exit 1
+        # Extra fallback: check if script is running from the known structure
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+        if [ -d "${SCRIPT_DIR}/../boomtick-pkg/cli" ]; then
+            printf "%s\n" "$(cd "${SCRIPT_DIR}/../boomtick-pkg/cli" && pwd)"
+        elif [ -d "${SCRIPT_DIR}/../cli" ]; then
+            printf "%s\n" "$(cd "${SCRIPT_DIR}/../cli" && pwd)"
+        elif [ -d "${SCRIPT_DIR}/../../cli" ]; then
+            printf "%s\n" "$(cd "${SCRIPT_DIR}/../../cli" && pwd)"
+        else
+            # Last resort: error out
+            echo "Error: Could not resolve CLI_ROOT" >&2
+            exit 1
+        fi
     fi
 fi
