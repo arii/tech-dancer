@@ -5,10 +5,17 @@
 # Find repo root if not provided
 REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)}"
 
+# Check relative to SCRIPT_DIR first for remote action context execution
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
 if [ -d "${REPO_ROOT}/boomtick-pkg/cli" ]; then
     printf "%s\n" "${REPO_ROOT}/boomtick-pkg/cli"
 elif [ -d "${REPO_ROOT}/cli" ]; then
     printf "%s\n" "${REPO_ROOT}/cli"
+elif [ -d "${SCRIPT_DIR}/../boomtick-pkg/cli" ]; then
+    printf "%s\n" "${SCRIPT_DIR}/../boomtick-pkg/cli"
+elif [ -d "${SCRIPT_DIR}/../cli" ]; then
+    printf "%s\n" "${SCRIPT_DIR}/../cli"
 else
     # Fallback to REPO_ROOT if neither is found (e.g. inside the cli dir already)
     # But only if we can find a pyproject.toml here.
