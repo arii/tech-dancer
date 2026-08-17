@@ -237,8 +237,12 @@ jobs:
     uses: arii/boomtick/.github/workflows/ci.yml@main
     permissions:
       contents: read
+      actions: read
+      statuses: write
       issues: write
       pull-requests: write
+      packages: read
+      models: read
     secrets: inherit # nosemgrep: yaml.github-actions.security.github-actions-secrets-inherit.github-actions-secrets-inherit
 
   security-scan:
