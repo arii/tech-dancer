@@ -17,13 +17,15 @@ elif [ -d "${SCRIPT_DIR}/../boomtick-pkg/cli" ]; then
 elif [ -d "${SCRIPT_DIR}/../cli" ]; then
     printf "%s\n" "${SCRIPT_DIR}/../cli"
 else
-    # Fallback to REPO_ROOT if neither is found (e.g. inside the cli dir already)
-    # But only if we can find a pyproject.toml here.
+    # Fallback to REPO_ROOT or SCRIPT_DIR/.. if pyproject.toml is in present directory or parent directory
     if [ -f "pyproject.toml" ]; then
         printf "%s\n" "$(pwd -P)"
+    elif [ -f "${REPO_ROOT}/pyproject.toml" ]; then
+        printf "%s\n" "${REPO_ROOT}"
+    elif [ -f "${SCRIPT_DIR}/../pyproject.toml" ]; then
+        printf "%s\n" "$(cd "${SCRIPT_DIR}/.." && pwd -P)"
     else
-        # Last resort: error out
-        echo "Error: Could not resolve CLI_ROOT" >&2
-        exit 1
+        # Fallback to REPO_ROOT or current working directory to avoid breaking setup-workspace when CLI is installed via PyPI
+        printf "%s\n" "${REPO_ROOT}"
     fi
 fi
