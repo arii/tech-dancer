@@ -51,7 +51,7 @@ export function GearShelf() {
               display="flex"
               align="center"
               justify="center"
-              className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40"
+              className="aspect-square max-h-48 w-full bg-surface-alt transition-all group-hover:border-accent/40"
             >
               {image ? (
                 <img

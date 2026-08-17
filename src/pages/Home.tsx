@@ -6,7 +6,7 @@ import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
 import { GearShelf } from '@/features/home/GearShelf';
 import { LatestPosts } from '@/features/home/LatestPosts';
-import { DevLabCallout } from '@/features/home/DevLabCallout';
+import { GearCallout } from '@/features/home/GearCallout';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { PromoStrip } from '@/components/ui/PromoStrip';
 
@@ -51,10 +51,7 @@ export default function Home() {
         maxWidth="full"
         minWidth={0}
       >
-        <Box
-          display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-        >
+        <Box className="w-full max-w-full min-w-0">
           <GearShelf />
         </Box>
 
@@ -67,7 +64,7 @@ export default function Home() {
           className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
-          <DevLabCallout />
+          <GearCallout />
         </Grid>
         <TopicGrid />
       </Stack>
