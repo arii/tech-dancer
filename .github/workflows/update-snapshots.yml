@@ -64,7 +64,6 @@ jobs:
       - name: Checkout source branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          submodules: recursive
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
