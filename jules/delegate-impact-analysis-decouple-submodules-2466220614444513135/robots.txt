@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/jules/delegate-impact-analysis-decouple-submodules-2466220614444513135/sitemap.xml
