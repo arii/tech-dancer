@@ -7,7 +7,7 @@ const config: KnipConfig = {
       project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}'],
       ignore: [
         'src/components/Equalizer.tsx',
-        'boomtick-pkg/mcp/**/*'
+        'src/features/home/DevLabCallout.tsx'
       ],
       ignoreDependencies: [
         'tw-animate-css',
@@ -17,7 +17,6 @@ const config: KnipConfig = {
         '@types/pixelmatch',
         '@google/genai',
         '@vercel/node',
-        'openai'
       ],
     }
   },
