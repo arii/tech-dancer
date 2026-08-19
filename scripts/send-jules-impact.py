@@ -68,9 +68,7 @@ def main():
     # Append individual review files
     review_files = [
         "gemini-review.md",
-        "github-models-review.md",
         "gemini-code-review.md",
-        "github-models-code-review.md",
     ]
 
     has_valid_reviews = False
