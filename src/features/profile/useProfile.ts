@@ -8,31 +8,8 @@ import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
-  role: "Senior roboticist · DevAI engineer · West Coast Swing",
+  role: "West Coast Swing",
   sections: [
-    {
-      id: "professional",
-      title: "Professional Summary",
-      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
-      cards: [
-        {
-          icon: 'terminal',
-          title: "Robotics & Engineering",
-          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python."
-        },
-        {
-          icon: 'zap',
-          title: "DevAI tooling (independent projects)",
-          content: "I build agentic CI/CD pipelines, LLM-assisted code review, and developer tooling as self-directed projects — the tools I wish robotics teams had. Current work: RepoAuditor AI (Gemini-driven PR auditing) and BoomTick.blog (live RAG + LLM testbed in active development). Code at github.com/arii."
-        },
-        {
-          icon: 'globe',
-          title: "DevAI for robotics",
-          content: "Most DevAI practitioners don't know ROS. Most roboticists aren't building agentic pipelines. I work at that intersection, helping robotics teams adopt AI-assisted engineering practices: automated code review, agentic CI/CD, and LLM tooling built by someone who has shipped production robotics software."
-        }
-      ],
-      availability: "Open to Staff/Senior SWE roles, robotics contracts, and DevAI consulting — especially where robotics and AI-assisted engineering overlap."
-    },
     {
       id: "dance-background",
       title: "My Dance Background",
@@ -93,9 +70,7 @@ const PROFILE_DATA: ProfileData = {
     }
   ],
   details: [
-    { label: "Location", value: "San Francisco, CA" },
-    { label: "Portfolio", value: "View Portfolio", url: "https://boomtick.blog/research" },
-    { label: "Resume", value: "View Resume", url: "https://boomtick.blog/ariel-anders-resume.pdf" }
+    { label: "Location", value: "San Francisco, CA" }
   ]
 };
 
