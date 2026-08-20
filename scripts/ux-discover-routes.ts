@@ -9,7 +9,6 @@ const STATIC_ROUTES = [
   '/',
   '/blog',
   '/gear',
-  '/research',
   '/merch',
   '/about'
 ];
@@ -17,7 +16,6 @@ const STATIC_ROUTES = [
 const CONTENT_DIRS = {
   '/blog/:slug': ['content/posts', 'content/blog'],
   '/gear/:slug': 'content/resources', // In this project, gear is mapped to resources
-  '/research/:id': 'content/studies'
 };
 
 function getSlugs(dir: string): string[] {

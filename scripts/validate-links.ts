@@ -26,7 +26,6 @@ async function main() {
     validRoutes.add(prefix); // The index page for the category
   });
 
-  validRoutes.add('/research');
   validRoutes.add('/blog');
   validRoutes.add('/gear');
 
