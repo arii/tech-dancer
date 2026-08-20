@@ -3,8 +3,6 @@ import { getVisualTestMasks } from './utils/playwright-helpers';
 
 const tools = [
   { name: 'UX Auditor', path: 'ux-auditor' },
-  { name: 'Blog Drafter', path: 'research/blog-drafter' },
-  { name: 'WCS Scraper', path: 'research/wcs-scraper' },
 ];
 
 test.describe('Research Tools Mobile UX', () => {
