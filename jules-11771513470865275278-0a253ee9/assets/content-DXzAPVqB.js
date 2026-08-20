@@ -1,4 +1,4 @@
-import{aS as f}from"./vendor-Dx4DdecR.js";import{A as u}from"./index-Bpsf2RHA.js";const y=`---
+import{aS as f}from"./vendor-Dx4DdecR.js";import{A as u}from"./index-BzL2QVHf.js";const y=`---
 type: post
 draft: true
 status: draft
