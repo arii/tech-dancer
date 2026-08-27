@@ -17,6 +17,19 @@ import { AgentDecisionTrace } from './types';
 
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'results';
 
+const PERSONA_CHIPS: PersonaChip[] = DANCE_PERSONAS.map(p => ({
+  id: p.id,
+  label: p.name,
+  answers: {
+    competition_level: p.id === 'pure-social-dancer' ? 'social_only' : p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
+    wsdc_level: p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
+    experience_level: p.id === 'pure-social-dancer' ? 'social_only' : 'novice',
+    late_night_energy: p.id === 'pure-social-dancer' || p.id === 'int-adv-competitor',
+    spectator_interest: true,
+    workshop_focus: p.id === 'workshop-enthusiast' ? ['technique', 'musicality', 'flow'] : ['technique']
+  }
+}));
+
 export const WCSNavigatorPage: React.FC = () => {
   const [step, setStep] = useState<WizardStep>('search');
   const [isMockMode, setIsMockMode] = useState<boolean>(true);
@@ -33,26 +46,10 @@ export const WCSNavigatorPage: React.FC = () => {
     MOCK_EVENT_RESULTS['south-bay-dance-fling-2026'].decisionTrace
   );
 
-  // Persona Chips Mapping
-  const personaChips: PersonaChip[] = useMemo(() => {
-    return DANCE_PERSONAS.map(p => ({
-      id: p.id,
-      label: p.name,
-      answers: {
-        competition_level: p.id === 'pure-social-dancer' ? 'social_only' : p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-        wsdc_level: p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-        experience_level: p.id === 'pure-social-dancer' ? 'social_only' : 'novice',
-        late_night_energy: p.id === 'pure-social-dancer' || p.id === 'int-adv-competitor',
-        spectator_interest: true,
-        workshop_focus: p.id === 'workshop-enthusiast' ? ['technique', 'musicality', 'flow'] : ['technique']
-      }
-    }));
-  }, []);
-
   // Discovery handlers
   const handleStartDiscovery = (eventName: string, eventId?: string) => {
     setActiveEventName(eventName);
-    if (eventId) setActiveEventId(eventId);
+    setActiveEventId(eventId || '');
     setStep('discovering');
   };
 
@@ -199,7 +196,7 @@ export const WCSNavigatorPage: React.FC = () => {
 
               <DynamicQuestionnaire
                 discoveryResponse={discoveryData}
-                personaChips={personaChips}
+                personaChips={PERSONA_CHIPS}
                 onSubmit={handleGenerateItinerary}
               />
             </Box>
