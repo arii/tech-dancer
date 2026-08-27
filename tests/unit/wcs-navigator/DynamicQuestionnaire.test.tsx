@@ -66,7 +66,7 @@ const halloweenSwingThingPreset: DiscoveryResponse = {
   ],
 };
 
-const samplePersonaChips: PersonaChip[] = [
+const _samplePersonaChips: PersonaChip[] = [
   {
     id: 'social_dancer',
     label: 'Social Party Animal',
