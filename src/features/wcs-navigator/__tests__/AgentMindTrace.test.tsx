@@ -27,12 +27,13 @@ describe('AgentMindTrace Suite', () => {
     expect(screen.getByText('Calendar Generated (.ics)')).toBeDefined();
   });
 
-  it('renders FlightBufferTimeline buffer steps and calculation toggle', () => {
+  it('renders FlightBufferTimeline buffer steps and time summary', () => {
     render(<FlightBufferTimeline />);
     expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
-    expect(screen.getByText('View calculation details')).toBeDefined();
-    expect(screen.getByText('Target Flight Landing Deadline')).toBeDefined();
-    expect(screen.getByText('Novice Strictly Swing Staging Call')).toBeDefined();
+    expect(screen.getByText(/Earliest Event Call/i)).toBeDefined();
+    expect(screen.getByText(/Target Landing Deadline/i)).toBeDefined();
+    expect(screen.getByText('Target Flight Landing')).toBeDefined();
+    expect(screen.getByText('Competition Staging Call')).toBeDefined();
   });
 
   it('toggles tabs between all, included, and filtered sessions in FilteringAuditMatrix', () => {
