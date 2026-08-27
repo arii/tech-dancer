@@ -1,5 +1,4 @@
-
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { FlightBuffer, BufferStep } from '../types';
 import { Plane, Home, Flame, Clock, Calendar, Hourglass, ShieldCheck, Car } from 'lucide-react';

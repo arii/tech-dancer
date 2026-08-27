@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { UserCheck, Sparkles, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Calendar, MapPin, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -10,7 +9,7 @@ export interface EventSelectorProps {
   onSelectEvent: (event: WCSCaliforniaEvent) => void;
 }
 
-export const EventSelector: React.FC<EventSelectorProps> = ({
+export const EventSelector = ({
   selectedEventId,
   onSelectEvent
 }) => {

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { SubTask } from '../types';
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import { Stack, Box } from '@/layouts/Primitives';
