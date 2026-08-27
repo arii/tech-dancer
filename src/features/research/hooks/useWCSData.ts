@@ -12,6 +12,7 @@ export interface WCSRecord {
   Promoted: boolean;
   event_url: string;
   location: string;
+  _searchToken?: string;
 }
 
 export function useWCSData() {
@@ -20,7 +21,30 @@ export function useWCSData() {
   const [latency, setLatency] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchParam('search');
+  const [searchInput, setSearchInput] = useState(searchTerm);
+  const [isSearching, setIsSearching] = useState(false);
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
+
+  // Keep searchInput in sync if searchTerm changes externally (e.g., URL navigation)
+  useEffect(() => {
+    setSearchInput(searchTerm);
+  }, [searchTerm]);
+
+  // Debounce local search input changes by 300ms before updating searchTerm & URL
+  useEffect(() => {
+    if (searchInput === searchTerm) {
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput);
+      setIsSearching(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput, searchTerm, setSearchTerm]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -46,10 +70,16 @@ export function useWCSData() {
           objects = await parquetReadObjects({ file: buffer });
         }
 
-        const formattedObjects = objects.map((obj: Record<string, unknown>) => ({
-          ...obj,
-          Registry_Points_Sum: Number(obj.Registry_Points_Sum)
-        }));
+        const formattedObjects = objects.map((obj: Record<string, unknown>) => {
+          const competitor = String(obj.competitor_name || '');
+          const dancerId = String(obj.Dancer_ID || '');
+          const eventTitle = String(obj.event_title || '');
+          return {
+            ...obj,
+            Registry_Points_Sum: Number(obj.Registry_Points_Sum),
+            _searchToken: `${competitor} ${dancerId} #${dancerId} ${eventTitle}`.toLowerCase()
+          };
+        });
 
         setData(formattedObjects as unknown as WCSRecord[]);
         setLatency(performance.now() - startTime);
@@ -69,13 +99,16 @@ export function useWCSData() {
     const bins = new Map<string, number>();
     const byDate = new Map<string, { total: number; count: number }>();
 
-    const searchLower = searchTerm.toLowerCase();
+    const searchLower = searchTerm.trim().toLowerCase();
 
     for (const record of data) {
       const matchesSearch =
-        record.competitor_name.toLowerCase().includes(searchLower) ||
-        record.Dancer_ID.includes(searchTerm) ||
-        record.event_title.toLowerCase().includes(searchLower);
+        !searchLower ||
+        (record._searchToken
+          ? record._searchToken.includes(searchLower)
+          : record.competitor_name.toLowerCase().includes(searchLower) ||
+            record.Dancer_ID.toLowerCase().includes(searchLower) ||
+            record.event_title.toLowerCase().includes(searchLower));
 
       const matchesFilter =
         filterPromoted === 'all' ||
@@ -155,8 +188,11 @@ export function useWCSData() {
     data,
     filteredData,
     isLoading,
+    isSearching,
     latency,
     searchTerm,
+    searchInput,
+    setSearchInput,
     setSearchTerm,
     error,
     filterPromoted,
