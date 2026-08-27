@@ -1,19 +1,30 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
-import { Icon } from '@/components/ui/Icon';
-import { useNavigate, Link } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Activity,
+  ArrowRight,
+  Cpu,
+  ExternalLink,
+  FileText,
+  FlaskConical,
+  Github,
+  Globe,
+  LucideIcon,
+  Search,
+  X,
+} from 'lucide-react';
 import { SEO } from '@/components/SEO';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { BaseCard } from '@/components/ui/BaseCard';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ActionButton } from '@/components/ui/ActionButton';
-import { useResearch } from './useResearch';
-import { cardVariants } from '@/lib/variants';
+import { BaseCard } from '@/components/ui/BaseCard';
+import { Icon } from '@/components/ui/Icon';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ResearchTool } from '@/config/research-tools';
-import { SOCIAL_LINKS } from '@/config/constants';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
+import { cardVariants } from '@/lib/variants';
+import { useResearch } from './useResearch';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -22,7 +33,13 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
-function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUrl: string; onImageClick?: (src: string) => void }) {
+export interface ToolImageProps {
+  tool: ResearchTool;
+  baseUrl: string;
+  onImageClick?: (src: string) => void;
+}
+
+const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
   if (tool.customPreview) {
     const { logo, headline, tagline } = tool.customPreview;
     return (
@@ -69,24 +86,22 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
       <img
         src={src}
         alt={alt}
-        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 w-full"
+        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 w-full object-cover max-h-52"
       />
     </Box>
   );
-}
+};
 
-function FlagshipCard({
-  tool,
-  baseUrl,
-  onImageClick
-}: {
+export interface ExperimentCardProps {
   tool: ResearchTool;
   baseUrl: string;
   onImageClick?: (src: string) => void;
-}) {
+}
+
+const ExperimentCard = ({ tool, baseUrl, onImageClick }: ExperimentCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
@@ -108,7 +123,7 @@ function FlagshipCard({
             <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
-            <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
+            <StatusBadge label={tool.status} />
           </Box>
 
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
@@ -133,7 +148,7 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
+            <Box as="button" onClick={handleToggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -155,7 +170,7 @@ function FlagshipCard({
             ))}
           </Box>
 
-          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
+          <Stack direction={{ base: "col", sm: "row" }} gap={2.5} marginTop="auto" width="full" wrap="wrap">
             {tool.externalUrl ? (
               <ActionButton
                 as="a"
@@ -168,7 +183,7 @@ function FlagshipCard({
                 zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
-                {tool.externalLinkDisplayLabel || 'Open Link'}
+                {tool.externalLinkDisplayLabel || 'Open Live Tool'}
                 <Icon icon={ExternalLink} size="sm" />
               </ActionButton>
             ) : tool.canonicalPath && (
@@ -181,8 +196,22 @@ function FlagshipCard({
                 zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
-                Read Deep-Dive
+                Open Live Tool
                 <Icon icon={ArrowRight} size="sm" />
+              </ActionButton>
+            )}
+            {tool.deepDivePath && (
+              <ActionButton
+                as={Link}
+                to={tool.deepDivePath}
+                variant="secondary"
+                paddingX={4}
+                paddingY={2}
+                zIndex="docked"
+                width={{ base: "full", sm: "auto" }}
+              >
+                Deep-Dive Article
+                <Icon icon={FileText} size="sm" />
               </ActionButton>
             )}
             {tool.sourceUrl && (
@@ -197,7 +226,7 @@ function FlagshipCard({
                 zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
-                Source Repo
+                Source
                 <Icon icon={Github} size="sm" />
               </ActionButton>
             )}
@@ -206,12 +235,14 @@ function FlagshipCard({
       </Stack>
     </BaseCard>
   );
-}
+};
 
-function ToolCard({ tool, navigate }: {
+export interface ToolCardProps {
   tool: ResearchTool;
   navigate: (path: string) => void;
-}) {
+}
+
+const ToolCard = ({ tool, navigate }: ToolCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const href = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
   const isLink = href.startsWith('http');
@@ -223,7 +254,7 @@ function ToolCard({ tool, navigate }: {
     }
   };
 
-  const toggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
@@ -262,7 +293,7 @@ function ToolCard({ tool, navigate }: {
           {tool.description}
         </Text>
         {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
+          <Box as="button" onClick={handleToggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
@@ -274,24 +305,29 @@ function ToolCard({ tool, navigate }: {
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {isLink ? 'View Source' : 'View Assets'}
+          {isLink ? 'View Source' : 'Open Tool'}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
     </Stack>
   );
-}
+};
 
 
 
 const STACK_CATEGORIES = [
-  { label: 'Stack', tags: ['React', 'Vite', 'TypeScript', 'Python'], colorClass: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
-  { label: 'Infra', tags: ['GitHub Actions', 'Vercel', 'Playwright'], colorClass: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
-  { label: 'Robotics', tags: ['ROS1/2', 'C++', 'Navigation', 'Localization'], colorClass: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
-  { label: 'AI', tags: ['LLM Workflows', 'Agentic CI/CD'], colorClass: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
+  { label: 'Stack', tags: ['React 19', 'Vite', 'TypeScript', 'Tailwind v4'], colorClass: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+  { label: 'Pipelines', tags: ['GitHub Actions', 'Playwright', 'Pixelmatch', 'Parquet ETL'], colorClass: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
+  { label: 'AI / RAG', tags: ['Ground Truth APIs', 'RAG Pipelines', 'LLM Assisted Authoring'], colorClass: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
 ];
 
-function ToolSection({ title, tools, navigate }: { title: string, tools: ResearchTool[], navigate: (path: string) => void }) {
+export interface ToolSectionProps {
+  title: string;
+  tools: ResearchTool[];
+  navigate: (path: string) => void;
+}
+
+const ToolSection = ({ title, tools, navigate }: ToolSectionProps) => {
   if (tools.length === 0) return null;
   return (
     <Stack gap={12} width="full">
@@ -306,86 +342,102 @@ function ToolSection({ title, tools, navigate }: { title: string, tools: Researc
       </Grid>
     </Stack>
   );
-}
+};
 
-export default function ResearchAnalytics() {
+const ResearchAnalytics = () => {
   const navigate = useNavigate();
-  const { studies, tools } = useResearch();
+  const { tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
-  const flagshipTools = tools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
+  const liveExperiments = tools.filter(t => t.taxonomyBucket === 'live-experiments' || t.isFeatured);
   const engineeringTools = tools.filter(t => t.taxonomyBucket === 'engineering');
-  const dataContentTools = tools.filter(t => t.taxonomyBucket === 'data-content');
   const e_commerceTools = tools.filter(t => t.taxonomyBucket === 'e-commerce');
 
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full">
       <SEO
-        title="DevAI Portfolio"
-        description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
-        keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
+        title="DevAI Experiments"
+        description="DevAI experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines."
+        keywords="DevAI, live testbeds, visual regression, VersionTruth, Playwright, pixelmatch, RAG pipelines, data engineering"
       />
       <Stack gap={16} width="full">
-        {/* Split Hero Section */}
-        <Grid cols={{ base: 1, lg: 12 }} gap={8} align="center" width="full">
-          <Stack gap={2} span={{ base: 1, lg: 7 }}>
-            <PageHeader
-              label="HIRE_ME"
-              title="DevAI Portfolio"
-              as="h1"
-              paddingBottom={0}
-              border="none"
-            />
-            <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling.
-            </Text>
-            
-            {/* Scrollable Focus Tags for Mobile */}
-            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
-              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
-                {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
-                  <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
-                ))}
-              </Box>
-            </Stack>
+        {/* Full-width Hero Section */}
+        <Stack gap={4} width="full" maxWidth="4xl">
+          <PageHeader
+            label="EXPERIMENTS"
+            title="DevAI Experiments"
+            as="h1"
+            paddingBottom={0}
+            border="none"
+          />
+          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" leading="relaxed" className="whitespace-normal break-normal">
+            An active sandbox and live testing environment for AI-assisted engineering tools, RAG pipelines, and automated developer workflows. Explore live testbeds, visual regression engines, and high-scale data telemetry systems.
+          </Text>
 
-            {/* Categorized Stack Grid for Desktop */}
-            <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
-              {STACK_CATEGORIES.map(cat => (
-                <Box key={cat.label} display="flex" align="center" gap={2} width="full">
-                  <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
-                  <Box display="flex" wrap="wrap" gap={2} width="full">
-                    {cat.tags.map(tag => (
-                      <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
-                    ))}
-                  </Box>
-                </Box>
+          {/* Official Primary Portfolio Banner */}
+          <Box
+            marginTop={2}
+            padding={4}
+            radius="md"
+            border
+            className="bg-accent/10 border-accent/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full"
+          >
+            <Stack gap={1}>
+              <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
+                Official Primary Portfolio
+              </Text>
+              <Text variant="body" size="sm" color="main" className="whitespace-normal break-normal">
+                Looking for production robotics software, autonomous systems case studies, and engineering consulting?
+              </Text>
+            </Stack>
+            <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" className="shrink-0">
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline flex items-center gap-1">
+                Visit arii.github.io →
+              </Text>
+            </Box>
+          </Box>
+          
+          {/* Scrollable Focus Tags for Mobile */}
+          <Stack direction="col" align="start" gap={2} width="full" marginTop={3} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
+            <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
+            <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+              {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
+                <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
               ))}
-            </Stack>
-
-            <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
-              <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
-                View Flagship Projects
-              </ActionButton>
-              <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
-                Read Implementation Articles
-              </ActionButton>
-            </Stack>
+            </Box>
           </Stack>
 
-        </Grid>
+          {/* Categorized Stack Grid for Desktop */}
+          <Stack gap={2} marginTop={3} marginBottom={3} width="full" display={{ base: "none", lg: "flex" }}>
+            {STACK_CATEGORIES.map(cat => (
+              <Box key={cat.label} display="flex" align="center" gap={2} width="full">
+                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
+                <Box display="flex" wrap="wrap" gap={2} width="full">
+                  {cat.tags.map(tag => (
+                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
+                  ))}
+                </Box>
+              </Box>
+            ))}
+          </Stack>
 
-        {/* Flagship Projects Section */}
-        <Stack gap={8} id="flagship" marginTop={2} width="full">
+          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
+            <ActionButton as="a" href="#experiments" variant="primary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
+              Explore Live Testbeds
+            </ActionButton>
+          </Stack>
+        </Stack>
+
+        {/* Featured Live Experiments Section */}
+        <Stack gap={8} id="experiments" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
-            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Featured Live Experiments</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">LIVE TESTBEDS</Text>
           </Box>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
-            {flagshipTools.map((tool) => (
-              <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
+            {liveExperiments.map((tool) => (
+              <ExperimentCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
           </Grid>
         </Stack>
@@ -393,129 +445,15 @@ export default function ResearchAnalytics() {
         <Box className="why-this-matters">
           <Text as="h2" size="3xl" className="label">Why this matters</Text>
           <Text as="p">
-            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration and live testing</Text>. These experiments serve as active sandbox environments to prototype RAG architectures, test hallucination mitigations, and evaluate automated developer workflows in public.
           </Text>
         </Box>
 
-        {/* Engineering Systems Section */}
-        <ToolSection title="Engineering Systems" tools={engineeringTools} navigate={navigate} />
-
-        {/* Data & Content Systems Section */}
-        <ToolSection title="Data & Content Systems" tools={dataContentTools} navigate={navigate} />
+        {/* Secondary Engineering Experiments */}
+        <ToolSection title="Automation & Pipeline Experiments" tools={engineeringTools} navigate={navigate} />
 
         {/* Ecommerce Experiments Section */}
-        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} navigate={navigate} />
-
-        {/* Articles & Research Section */}
-        {studies.length > 0 && (
-          <Stack gap={12} id="articles" width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
-            </Box>
-
-            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
-              {studies.map((study) => (
-                <Stack
-                  key={study.slug}
-                  onClick={() => {
-                    if (study.status === 'published') {
-                      navigate(`/research/${study.slug}`);
-                    }
-                  }}
-                  height="full"
-                  surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cardVariants({
-                    interactive: study.status === 'published'
-                  })}
-                  paddingTop={3.5}
-                  paddingX={4}
-                  paddingBottom={4}
-                  opacity={study.status === 'published' ? 1 : "high"}
-                  cursor={study.status === 'published' ? 'pointer' : 'default'}
-                  gap={0}
-                >
-                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    {study.status && <StatusBadge label={study.status} />}
-                  </Box>
-
-                  <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
-                    {study.title}
-                  </Text>
-                  <Box display="flex" align="center" gap={4} marginBottom={3}>
-                    <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
-                    {study.readTime && (
-                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
-                        <Icon icon={Clock} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                      </Box>
-                    )}
-                  </Box>
-
-                  <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
-                    {study.excerpt}
-                  </Text>
-
-                  {study.tags && study.tags.length > 0 && (
-                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-                      {study.tags.map(tag => (
-                        <Text key={tag} className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-                  )}
-
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {study.status === 'planned'
-                        ? 'Coming Soon'
-                        : study.status === 'draft'
-                          ? 'Draft in Progress'
-                          : 'Read Article'}
-                    </Text>
-                    <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
-                </Stack>
-              ))}
-            </Grid>
-          </Stack>
-        )}
-
-        {/* Work With Me block */}
-        <Grid cols={{ base: 1, md: 12 }} gap={10} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
-          {/* Description Column (Left) */}
-          <Stack gap={4} span={{ base: 1, md: 7 }} justify="center">
-            <Box paddingBottom={2} className="border-b border-line/10">
-              <Text as="h2" variant="headline" size="3xl" weight="font-black">Work with me</Text>
-            </Box>
-            <Text variant="body" size="lg" color="dim" leading="relaxed" maxWidth="prose">
-              These are my own projects, built to solve real problems I care about.
-              If you need a senior roboticist, DevAI engineering infrastructure,
-              or someone who can do both, I'm available for project-based contracts
-              and full-time roles.
-            </Text>
-          </Stack>
-
-          {/* Contact Details Column (Right) */}
-          <Stack gap={4} span={{ base: 1, md: 5 }} align={{ base: "start", md: "end" }} textAlign={{ base: "left", md: "right" }}>
-            <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
-            <Box display="flex" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
-              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
-              </Box>
-              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
-              </Box>
-              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
-              </Box>
-            </Box>
-          </Stack>
-        </Grid>
+        <ToolSection title="Ecommerce Automation Experiments" tools={e_commerceTools} navigate={navigate} />
       </Stack>
 
       {/* Lightbox Modal */}
@@ -542,4 +480,6 @@ export default function ResearchAnalytics() {
       )}
     </Box>
   );
-}
+};
+
+export default ResearchAnalytics;

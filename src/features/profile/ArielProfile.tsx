@@ -74,14 +74,13 @@ function ArielProfile() {
   );
 
   const hasHash = !!window.location.hash;
-  const professionalSection = bio.sections.find(s => s.id === 'professional');
-  const otherSections = bio.sections.filter(s => s.id !== 'professional');
+  const sections = bio.sections;
 
   return (
     <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
       <SEO
         title="About"
-        description="Ariel Anders, PhD: MIT Roboticist, DevAI Engineer, and West Coast Swing dancer. Expert in robotics software and agentic CI/CD pipelines."
+        description="Ariel Anders, PhD: West Coast Swing dancer, community builder, and creator of boomtick.blog. Personal site focused on dance lifestyle, travel strategies, and live web experiments."
       />
 
       <PageHeader
@@ -90,13 +89,34 @@ function ArielProfile() {
         description={bio.role}
       />
 
-      <Stack gap={16} marginTop={12}>
+      {/* Primary Portfolio CTA Banner */}
+      <Box
+        marginTop={6}
+        padding={4}
+        radius="md"
+        border
+        className="bg-accent/10 border-accent/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+      >
+        <Stack gap={1}>
+          <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
+            Professional Engineering & Robotics Inquiries
+          </Text>
+          <Text variant="body" size="sm" color="main">
+            For robotics software, agentic engineering, and technical leadership, please visit my official primary portfolio.
+          </Text>
+        </Stack>
+        <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" className="shrink-0">
+          <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline flex items-center gap-1">
+            arii.github.io →
+          </Text>
+        </Box>
+      </Box>
+
+      <Stack gap={16} marginTop={10}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             {/* Main Content Area */}
             <Stack gap={12} className="lg:col-span-8 order-2 lg:order-1">
-              {/* Professional Section (MIT PhD, Waymo, cards, availability) */}
-              {professionalSection && renderSection(professionalSection)}
 
               {/* Sidebar content injected here for mobile viewports */}
               <Box className="lg:hidden">
@@ -111,8 +131,8 @@ function ArielProfile() {
                 </Stack>
               </Box>
 
-              {/* Remaining Sections (Dance, Why, etc.) */}
-              {otherSections.map(s => {
+              {/* Sections (Dance, Why, etc.) */}
+              {sections.map(s => {
                 // Ensure the 'connect' section links are rendered as intended instead of duplicated
                 if (s.id === 'connect') return null;
                 return renderSection(s);

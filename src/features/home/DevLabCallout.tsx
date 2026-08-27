@@ -39,14 +39,14 @@ export function DevLabCallout() {
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          DevAI Portfolio
+          DevAI Experiments
         </Text>
       </Stack>
 
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed" marginTop={3}>
-        I build AI-assisted engineering infrastructure and autonomous systems. Explore my portfolio of independently led DevAI projects focusing on agentic CI/CD pipelines, LLM workflows, and automated developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+        An active sandbox and live testing environment for AI-assisted engineering tools, RAG pipelines, and automated developer workflows. Explore live testbeds and telemetry systems.
       </Text>
 
       {/* Project highlights */}
@@ -84,7 +84,7 @@ export function DevLabCallout() {
         weight="font-bold"
         className="hover:underline"
       >
-        View Portfolio →
+        View Experiments →
       </Text>
     </Box>
   );
