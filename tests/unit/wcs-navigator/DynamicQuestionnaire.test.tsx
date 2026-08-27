@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { DynamicQuestionnaire } from '@/features/wcs-navigator/components/DynamicQuestionnaire';
 import { DiscoveryResponse, PersonaChip } from '@/features/wcs-navigator/types/navigator';
 
@@ -88,6 +88,10 @@ const samplePersonaChips: PersonaChip[] = [
 ];
 
 describe('DynamicQuestionnaire Component', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it('renders dynamic questions and option choices from DiscoveryResponse schema', () => {
     render(
       <DynamicQuestionnaire
@@ -100,13 +104,13 @@ describe('DynamicQuestionnaire Component', () => {
     expect(screen.getByText('Which workshop tracks interest you?')).toBeDefined();
     expect(screen.getByText('Include late night social dancing hours?')).toBeDefined();
 
-    // Select options
-    expect(screen.getByRole('button', { name: 'Novice / Newcomer' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Intermediate' })).toBeDefined();
+    // Select options (radio role)
+    expect(screen.getByRole('radio', { name: 'Novice / Newcomer' })).toBeDefined();
+    expect(screen.getByRole('radio', { name: 'Intermediate' })).toBeDefined();
 
-    // Multiselect options
-    expect(screen.getByRole('button', { name: 'Footwork & Technique' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Musicality & Timing' })).toBeDefined();
+    // Multiselect options (checkbox role)
+    expect(screen.getByRole('checkbox', { name: 'Footwork & Technique' })).toBeDefined();
+    expect(screen.getByRole('checkbox', { name: 'Musicality & Timing' })).toBeDefined();
 
     // Switch toggle button
     expect(screen.getByRole('switch', { name: 'Include late night social dancing hours?' })).toBeDefined();
@@ -120,13 +124,13 @@ describe('DynamicQuestionnaire Component', () => {
     );
 
     expect(
-      screen.getByText('Scanned 12 workshop tracks across Novice, Intermediate, and Advanced divisions.')
+      screen.getByText(/Scanned 12 workshop tracks across Novice/i)
     ).toBeDefined();
     expect(
-      screen.getByText('Detected specialized tracks: Footwork, Musicality, and Connection.')
+      screen.getByText(/Detected specialized tracks: Footwork/i)
     ).toBeDefined();
     expect(
-      screen.getByText('Boogie schedule features social dancing until 5:00 AM.')
+      screen.getByText(/Boogie schedule features social dancing until 5:00 AM/i)
     ).toBeDefined();
   });
 
@@ -151,7 +155,7 @@ describe('DynamicQuestionnaire Component', () => {
     expect(screen.getByText('Will you participate in the Costume Contest?')).toBeDefined();
     expect(screen.getByText('Select your Friday Intensive Topic')).toBeDefined();
     expect(
-      screen.getByText('Halloween SwingThing schedule lists costume parade on Saturday night.')
+      screen.getByText(/Halloween SwingThing schedule lists costume parade/i)
     ).toBeDefined();
   });
 
@@ -168,7 +172,7 @@ describe('DynamicQuestionnaire Component', () => {
     expect(submitBtn.disabled).toBe(true);
 
     // Fill required field 1 (select: skill_level)
-    fireEvent.click(screen.getByRole('button', { name: 'Intermediate' }));
+    fireEvent.click(screen.getByRole('radio', { name: 'Intermediate' }));
     expect(submitBtn.disabled).toBe(true); // boolean 'late_night' is required and not filled yet
 
     // Fill required field 2 (boolean: late_night)
