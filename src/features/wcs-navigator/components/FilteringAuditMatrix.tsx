@@ -276,7 +276,8 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                       display="flex"
                       align="center"
                       gap={1.5}
-                      className={`text-xs font-mono font-bold shrink-0 ${
+                      shrink={0}
+                      className={`text-xs font-mono font-bold ${
                         isIncluded
                           ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40'
                           : 'bg-brand-terminal-red/10 text-brand-terminal-red border-brand-terminal-red/30'
@@ -292,11 +293,15 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
 
                   <Stack gap={1} className="text-xs text-text-dim font-mono">
                     <Box display="flex" align="center" gap={2}>
-                      <Clock className="w-3.5 h-3.5 text-accent shrink-0" />
+                      <Box as="span" shrink={0} display="flex">
+                        <Clock className="w-3.5 h-3.5 text-accent" />
+                      </Box>
                       <Box as="span">{session.time}</Box>
                     </Box>
                     <Box display="flex" align="center" gap={2}>
-                      <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
+                      <Box as="span" shrink={0} display="flex">
+                        <MapPin className="w-3.5 h-3.5 text-accent" />
+                      </Box>
                       <Box as="span">{session.location}</Box>
                     </Box>
                   </Stack>
@@ -314,7 +319,9 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                     }`}
                   >
                     <Box display="flex" align="start" gap={2}>
-                      <Filter className="w-3.5 h-3.5 shrink-0 opacity-70" />
+                      <Box as="span" shrink={0} display="flex">
+                        <Filter className="w-3.5 h-3.5 opacity-70" />
+                      </Box>
                       <Box as="span">
                         <strong className="font-semibold text-text-main">
                           {isIncluded ? 'Why this fits your profile:' : 'Exclusion reason:'}
