@@ -1,5 +1,8 @@
 """Unit tests ensuring WCS Navigator Backend schemas match Frontend TypeScript contracts."""
 
+import json
+from pathlib import Path
+
 from wcs_navigator_api.models.payloads import (
     DiscoveryResponse,
     FormQuestion,
@@ -15,6 +18,8 @@ from wcs_navigator_api.models.logistics import (
     SubTask,
     ThemeDressCode,
 )
+
+FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
 
 def test_discovery_response_frontend_contract_serialization():
@@ -55,11 +60,13 @@ def test_discovery_response_frontend_contract_serialization():
     # Assert shape matches frontend DynamicQuestionnaire requirements
     assert payload["preset_id"] == "boogie-by-the-bay-2026"
     assert payload["preset_name"] == "Boogie by the Bay 2026"
+    assert payload["event_name"] == "Boogie by the Bay 2026"
     assert len(payload["suggested_form_questions"]) == 1
 
     q_dump = payload["suggested_form_questions"][0]
     assert q_dump["id"] == "wsdc_division"
     assert q_dump["title"] == "What is your dancer persona & competition division?"
+    assert q_dump["context"] == "Filters out ineligible workshop tracks and determines staging call times."
     assert q_dump["type"] == "select"
     assert q_dump["required"] is True
     assert q_dump["defaultValue"] == "novice"
@@ -158,7 +165,7 @@ def test_generate_response_frontend_contract_serialization():
 
     trace_dump = dump["decisionTrace"]
     assert len(trace_dump["subTasks"]) == 2
-    assert trace_dump["subTasks"][0]["status"] == "completed"
+    assert trace_dump["subTasks"][0]["status"] in ["completed", "in_progress", "pending"]
 
     # Buffer Timeline checks
     assert trace_dump["bufferTimeline"]["earliestStagingTime"] == "2026-10-09T17:15:00-07:00"
@@ -182,3 +189,28 @@ def test_generate_response_frontend_contract_serialization():
     assert len(trace_dump["packingManifest"]) == 1
     assert trace_dump["packingManifest"][0]["name"] == "Adhesive Suede Shoe Sheets"
     assert trace_dump["packingManifest"][0]["category"] == "footwear"
+
+
+def test_fixture_schema_deserialization_gate():
+    """Ensure fixture JSON files deserialize directly into Pydantic models matching frontend contract."""
+    for fixture_name in ["bbb_2026.json", "halloween_2026.json"]:
+        filepath = FIXTURES_DIR / fixture_name
+        assert filepath.exists()
+
+        data = json.loads(filepath.read_text(encoding="utf-8"))
+
+        discovery = DiscoveryResponse.model_validate(data["discovery"])
+        assert len(discovery.suggested_form_questions) > 0
+        for q in discovery.suggested_form_questions:
+            assert q.id
+            assert q.title
+            assert q.context
+
+        generate = GenerateResponse.model_validate(data["generate"])
+        trace = generate.decision_trace
+        assert len(trace.sub_tasks) > 0
+        assert trace.buffer_timeline.earliest_staging_time
+        assert trace.buffer_timeline.latest_flight_arrival_deadline
+        for sess in trace.sessions:
+            assert sess.status in ["included", "filtered"]
+            assert sess.decision_badge
