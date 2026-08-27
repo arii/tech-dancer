@@ -104,7 +104,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
         )}
       </Stack>
 
-      <Grid cols={{ base: 1, sm: 2 }} gap={2} role="group" aria-label={question.title}>
+      <Grid cols={{ default: 1, sm: 2 }} gap={2.5} role="group" aria-label={question.title}>
         {options.map((option) => {
           const isSelected = selectedValues.includes(option.value);
           return (
@@ -116,13 +116,16 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
               aria-checked={isSelected}
               onClick={() => handleToggle(option.value)}
               surface={isSelected ? 'highlight' : 'subtle'}
-              radius="md"
+              radius="lg"
               paddingX={4}
               paddingY={3}
               cursor="pointer"
-              className={`min-h-[44px] text-left transition-all border tap-target flex items-center justify-between ${
+              display="flex"
+              align="center"
+              justify="between"
+              className={`min-h-[44px] text-left transition-all border tap-target ${
                 isSelected
-                  ? 'border-accent ring-1 ring-accent bg-accent/10'
+                  ? 'border-accent ring-1 ring-accent/60 bg-accent/10'
                   : 'border-line hover:border-line-hover hover:bg-surface'
               }`}
             >
@@ -132,7 +135,16 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
               >
                 {option.label}
               </Text>
-              {isSelected && <Icon icon={CheckIcon} size="sm" color="accent" />}
+              <Box
+                display="flex"
+                align="center"
+                justify="center"
+                className={`w-5 h-5 rounded border transition-colors ${
+                  isSelected ? 'bg-accent border-accent text-black' : 'border-line bg-surface'
+                }`}
+              >
+                {isSelected && <Icon icon={CheckIcon} size="xs" className="stroke-[3]" />}
+              </Box>
             </Box>
           );
         })}

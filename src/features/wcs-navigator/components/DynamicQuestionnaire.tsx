@@ -33,7 +33,6 @@ export interface DynamicQuestionnaireProps {
 export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   discoveryResponse,
   initialAnswers = {},
-  personaChips,
   onAnswersChange,
   onSubmit,
   isSubmitting = false,
@@ -50,14 +49,12 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     return { ...defaults, ...initialAnswers };
   });
 
-  const [activePersonaId, setActivePersonaId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(() => {
     // If initial answers were explicitly provided, show all; otherwise start with 1
     return Object.keys(initialAnswers).length > 0 ? questions.length : 1;
   });
   const [thinkingIndex, setThinkingIndex] = useState<number | null>(null);
   const [thinkingText, setThinkingText] = useState<string>(THINKING_MESSAGES[0]);
-  const [isPersonaThinking, setIsPersonaThinking] = useState(false);
 
   // Sync initialAnswers
   const answers = useMemo(() => {
@@ -73,7 +70,6 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   const handleFieldChange = (questionId: string, value: QuestionAnswerValue, index: number) => {
     const updated = { ...answers, [questionId]: value };
     setAnswersState(updated);
-    setActivePersonaId(null);
     if (onAnswersChange) {
       onAnswersChange(updated);
     }
@@ -88,23 +84,6 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         setVisibleCount((prev) => Math.max(prev, index + 2));
       }, 500);
     }
-  };
-
-  const handleSelectPersona = (persona: PersonaChip) => {
-    setIsPersonaThinking(true);
-    const updated = { ...answers, ...persona.answers };
-    setAnswersState(updated);
-    setActivePersonaId(persona.id);
-
-    if (onAnswersChange) {
-      onAnswersChange(updated);
-    }
-
-    // Instant/snappy auto-fill and reveal all questions after single global pause
-    setTimeout(() => {
-      setIsPersonaThinking(false);
-      setVisibleCount(questions.length);
-    }, 450);
   };
 
   // Validation: check if all required questions have valid non-empty answers
@@ -126,48 +105,10 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     }
   };
 
-  const allRevealed = visibleCount >= questions.length && !isPersonaThinking && thinkingIndex === null;
+  const allRevealed = visibleCount >= questions.length && thinkingIndex === null;
 
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" className="space-y-6 pb-20 md:pb-0">
-      {/* Quick Persona Preset Selector Chips */}
-      {personaChips && personaChips.length > 0 && (
-        <Stack gap={2.5} width="full" paddingBottom={4} border="b">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-text-dim uppercase tracking-wider">
-              <Icon icon={UserIcon} size="xs" color="accent" />
-              <span>Quick Persona Presets</span>
-            </div>
-            {isPersonaThinking && (
-              <div className="flex items-center gap-1.5 text-xs text-brand-cyan font-mono animate-pulse">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Applying persona preset...</span>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {personaChips.map((persona) => {
-              const isActive = activePersonaId === persona.id;
-              return (
-                <button
-                  key={persona.id}
-                  type="button"
-                  aria-pressed={isActive}
-                  onClick={() => handleSelectPersona(persona)}
-                  className={`min-h-[44px] px-4 py-2 rounded-full text-xs font-semibold transition-all border flex items-center justify-center cursor-pointer ${
-                    isActive
-                      ? 'border-accent text-accent font-bold ring-1 ring-accent bg-accent/10 shadow-sm'
-                      : 'border-line text-text-dim hover:text-text-main hover:border-line-hover bg-surface/60'
-                  }`}
-                >
-                  {persona.label}
-                </button>
-              );
-            })}
-          </div>
-        </Stack>
-      )}
-
       {/* Dynamic Question Inputs with Progressive Disclosure */}
       <div className="space-y-6">
         {questions.slice(0, visibleCount).map((question, index) => {

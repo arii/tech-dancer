@@ -89,7 +89,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({ question, value, onCha
         )}
       </Stack>
 
-      <Grid cols={{ base: 1, sm: 2 }} gap={2} role="radiogroup" aria-label={question.title}>
+      <Grid cols={{ default: 1, sm: 2 }} gap={3} role="radiogroup" aria-label={question.title}>
         {options.map((option) => {
           const isSelected = value === option.value;
           return (
@@ -101,22 +101,48 @@ export const SelectField: React.FC<SelectFieldProps> = ({ question, value, onCha
               aria-checked={isSelected}
               onClick={() => onChange(option.value)}
               surface={isSelected ? 'highlight' : 'subtle'}
-              radius="md"
-              paddingX={4}
-              paddingY={3}
+              radius="lg"
+              padding={4}
               cursor="pointer"
-              className={`min-h-[44px] flex items-center text-left transition-all border tap-target ${
+              display="flex"
+              direction="column"
+              justify="between"
+              gap={2}
+              className={`min-h-[56px] text-left transition-all border tap-target ${
                 isSelected
-                  ? 'border-accent ring-1 ring-accent bg-accent/10'
-                  : 'border-line hover:border-line-hover hover:bg-surface'
+                  ? 'border-accent ring-1 ring-accent/60 bg-accent/10 shadow-sm'
+                  : 'border-line hover:border-accent/40 hover:bg-surface'
               }`}
             >
-              <Text
-                variant="body-sm"
-                className={isSelected ? 'text-accent font-semibold' : 'text-text-main'}
-              >
-                {option.label}
-              </Text>
+              <Box display="flex" align="center" justify="between" width="full" gap={2}>
+                <Text
+                  variant="body-sm"
+                  weight="font-bold"
+                  className={isSelected ? 'text-accent' : 'text-text-main'}
+                >
+                  {option.label}
+                </Text>
+                {option.badge && (
+                  <Box
+                    paddingX={2}
+                    paddingY={0.5}
+                    radius="md"
+                    className={`text-[10px] font-mono font-semibold uppercase tracking-wider border ${
+                      isSelected
+                        ? 'bg-accent/20 text-accent border-accent/40'
+                        : 'bg-muted text-text-dim border-line'
+                    }`}
+                  >
+                    {option.badge}
+                  </Box>
+                )}
+              </Box>
+
+              {option.subtitle && (
+                <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
+                  {option.subtitle}
+                </Text>
+              )}
             </Box>
           );
         })}

@@ -94,13 +94,13 @@ export const WCSNavigatorPage: React.FC = () => {
             paddingX={3.5}
             paddingY={2}
             surface="muted"
-            radius="full"
+            radius="lg"
             border
             display="flex"
             align="center"
             gap={2.5}
             cursor="pointer"
-            className="min-h-[44px] border-line hover:border-accent transition-colors shrink-0"
+            className="min-h-[44px] border-line hover:border-accent transition-colors"
           >
             <Icon icon={isMockMode ? ToggleLeft : ToggleRight} size="sm" color="accent" />
             <Text variant="mono" size="xs" weight="font-bold" color="main">
@@ -132,7 +132,8 @@ export const WCSNavigatorPage: React.FC = () => {
                 display="flex"
                 align="center"
                 gap={1.5}
-                className="min-h-[44px] px-2 text-xs text-dim hover:text-white transition-colors cursor-pointer"
+                paddingX={2}
+                className="min-h-[44px] text-xs text-dim hover:text-white transition-colors cursor-pointer"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Change Event</span>

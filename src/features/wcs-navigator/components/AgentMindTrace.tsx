@@ -64,13 +64,13 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
   };
 
   return (
-    <Stack gap={8} className={`pb-20 md:pb-0 ${className || ''}`}>
+    <Stack gap={8} className={className}>
       {/* 1-Click Instant Download Visual Toast Feedback */}
       {showToast && (
         <Box
           role="status"
           aria-live="polite"
-          className="fixed bottom-32 md:bottom-8 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100"
         >
           <Box display="flex" align="start" justify="between" gap={3}>
             <Box display="flex" align="start" gap={3}>
@@ -167,30 +167,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             Download Calendar (.ics)
           </Button>
         </Stack>
-      </Box>
-
-      {/* Mobile Sticky Action CTA Bar (<md) */}
-      <Box
-        className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-line/80 px-4 py-3 shadow-2xl flex items-center justify-between gap-3"
-      >
-        <Stack gap={0.5}>
-          <Text size="micro" weight="font-bold" color="accent" uppercase tracking="wider">
-            Calendar Ready
-          </Text>
-          <Text size="xs" color="dim">
-            Apple &amp; Google Cal (.ics)
-          </Text>
-        </Stack>
-
-        <Button
-          onClick={handleDownloadCalendar}
-          variant="accent"
-          size="md"
-          icon={Download}
-          className="min-h-[44px] shrink-0 font-bold"
-        >
-          Download (.ics)
-        </Button>
       </Box>
     </Stack>
   );

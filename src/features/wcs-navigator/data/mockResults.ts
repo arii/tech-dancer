@@ -17,13 +17,14 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           id: 'competition_level',
           type: 'select',
           title: 'What is your competitive WSDC division?',
+          title: 'What is your dancer persona & competition division?',
           options: [
-            { label: 'Novice / New Competitor', value: 'novice' },
-            { label: 'Intermediate', value: 'intermediate' },
-            { label: 'Advanced / All-Star', value: 'advanced' },
-            { label: 'Pure Social Dancer (Not competing)', value: 'social_only' }
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
           ],
-          context: 'Used to filter out ineligible leveled intensive workshops and schedule Jack & Jill prelim call times.',
+          context: 'Used to filter out conflicting tracks, gate level-restricted workshops, and calculate travel staging deadlines.',
           defaultValue: 'novice',
           required: true
         },
@@ -180,12 +181,12 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         {
           id: 'wsdc_level',
           type: 'select',
-          title: 'What is your WSDC competitive level?',
+          title: 'What is your dancer persona & competition division?',
           options: [
-            { label: 'Novice', value: 'novice' },
-            { label: 'Intermediate', value: 'intermediate' },
-            { label: 'Advanced', value: 'advanced' },
-            { label: 'All-Star / Champion', value: 'allstar' }
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
           ],
           context: 'Enforces workshop level gatekeeping and flags your division check-in time.',
           defaultValue: 'novice',
@@ -295,12 +296,12 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
       {
         id: 'experience_level',
         type: 'select',
-        title: 'What is your dance & competition level?',
+        title: 'What is your dancer persona & competition division?',
         options: [
-          { label: 'Novice / Beginner', value: 'novice' },
-          { label: 'Intermediate', value: 'intermediate' },
-          { label: 'Advanced', value: 'advanced' },
-          { label: 'Social Dancer Only', value: 'social_only' }
+          { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+          { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+          { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+          { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
         ],
         context: 'Filters out ineligible advanced intensives and targets call times.',
         defaultValue: 'novice',

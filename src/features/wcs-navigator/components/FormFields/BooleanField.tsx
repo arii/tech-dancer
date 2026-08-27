@@ -97,11 +97,15 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
         aria-label={question.title}
         onClick={() => onChange(!isChecked)}
         surface="subtle"
-        radius="md"
+        radius="lg"
         paddingX={4}
         paddingY={3}
         cursor="pointer"
-        className={`min-h-[44px] w-full flex items-center justify-between border tap-target transition-all ${
+        display="flex"
+        align="center"
+        justify="between"
+        width="full"
+        className={`min-h-[44px] border tap-target transition-all ${
           isChecked
             ? 'border-accent ring-1 ring-accent bg-accent/10'
             : 'border-line hover:border-line-hover hover:bg-surface'
@@ -111,7 +115,9 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
           {isChecked ? 'Enabled' : 'Disabled'}
         </Text>
         <Box
-          className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
+          display="flex"
+          align="center"
+          className={`w-11 h-6 rounded-full p-1 transition-colors ${
             isChecked ? 'bg-accent' : 'bg-surface-subtle border border-line'
           }`}
         >
