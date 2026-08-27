@@ -5,30 +5,16 @@ import { SEO } from '@/components/SEO';
 import { Icon } from '@/components/ui/Icon';
 import { ToggleLeft, ToggleRight, ArrowLeft, RefreshCw, Layers } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS } from './data/californiaEvents';
-import { DANCE_PERSONAS } from './data/personas';
 import { MOCK_EVENT_RESULTS, createGenericMockResult, EventMockData } from './data/mockResults';
 import { EventSearchHero } from './components/EventSearchHero';
 import { AgentDiscoveryTransition } from './components/AgentDiscoveryTransition';
 import { DynamicQuestionnaire } from './components/DynamicQuestionnaire';
 import { AgentMindTrace } from './components/AgentMindTrace';
 import { WorkflowExplainer } from './components/WorkflowExplainer';
-import { DiscoveryResponse, PersonaChip, QuestionAnswerValue } from './types/navigator';
+import { DiscoveryResponse, QuestionAnswerValue } from './types/navigator';
 import { AgentDecisionTrace } from './types';
 
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'results';
-
-const PERSONA_CHIPS: PersonaChip[] = DANCE_PERSONAS.map(p => ({
-  id: p.id,
-  label: p.name,
-  answers: {
-    competition_level: p.id === 'pure-social-dancer' ? 'social_only' : p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-    wsdc_level: p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-    experience_level: p.id === 'pure-social-dancer' ? 'social_only' : 'novice',
-    late_night_energy: p.id === 'pure-social-dancer' || p.id === 'int-adv-competitor',
-    spectator_interest: true,
-    workshop_focus: p.id === 'workshop-enthusiast' ? ['technique', 'musicality', 'flow'] : ['technique']
-  }
-}));
 
 export const WCSNavigatorPage: React.FC = () => {
   const [step, setStep] = useState<WizardStep>('search');
@@ -197,7 +183,6 @@ export const WCSNavigatorPage: React.FC = () => {
 
               <DynamicQuestionnaire
                 discoveryResponse={discoveryData}
-                personaChips={PERSONA_CHIPS}
                 onSubmit={handleGenerateItinerary}
               />
             </Box>

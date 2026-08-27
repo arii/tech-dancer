@@ -99,33 +99,37 @@ This output determines what form elements are shown to the user on `boomtick.blo
 
 ```json
 {
+  "preset_id": "boogie-by-the-bay-2026",
+  "preset_name": "Boogie by the Bay 2026",
   "event_name": "Boogie by the Bay 2026",
-  "metadata": {
-    "detected_tracks": ["West Coast Swing", "Country Swing"],
-    "has_leveled_workshops": true,
-    "has_competitions": true
-  },
+  "tracks_detected": ["West Coast Swing", "Country Swing", "Hustle"],
   "suggested_form_questions": [
     {
-      "id": "selected_tracks",
+      "id": "dance_styles",
+      "title": "Which dance genres do you want on your schedule?",
       "type": "multiselect",
-      "label": "Select Dance Styles You Plan to Join",
-      "options": ["West Coast Swing", "Country Swing"],
-      "default_selection": ["West Coast Swing"]
+      "context": "Boogie is a multi-genre event; filter out non-WCS tracks if focusing purely on WCS.",
+      "required": false,
+      "defaultValue": ["wcs"],
+      "options": [
+        { "label": "West Coast Swing", "value": "wcs" },
+        { "label": "Country Swing", "value": "country" },
+        { "label": "Hustle", "value": "hustle" }
+      ]
     },
     {
-      "id": "wsdc_division",
+      "id": "wsdc_level",
+      "title": "What is your dancer persona & competition division?",
       "type": "select",
-      "label": "Your Competitive Division",
-      "options": ["Newcomer", "Novice", "Intermediate", "Advanced", "All-Star", "Champions"],
-      "default_selection": "Novice"
-    },
-    {
-      "id": "primary_goals",
-      "type": "multiselect",
-      "label": "Primary Goals for the Weekend",
-      "options": ["Competitions", "Workshops", "Social Dancing Only"],
-      "default_selection": ["Competitions", "Social Dancing Only"]
+      "context": "Enforces workshop level gatekeeping and flags your division check-in time.",
+      "required": true,
+      "defaultValue": "novice",
+      "options": [
+        { "label": "Novice Competitor", "value": "novice", "subtitle": "WSDC Novice prelims, early staging call, foundational tracks", "badge": "Novice" },
+        { "label": "Intermediate Competitor", "value": "intermediate", "subtitle": "WSDC Intermediate prelims, intensive classes, late night socials", "badge": "Intermediate" },
+        { "label": "Social Dancer Only", "value": "social_only", "subtitle": "All-levels workshops, peak party energy, no prelim staging calls", "badge": "Social" },
+        { "label": "Workshop Enthusiast", "value": "workshop_enthusiast", "subtitle": "Max daytime classes, masterclasses & technique intensives", "badge": "Workshops" }
+      ]
     }
   ]
 }
@@ -138,46 +142,74 @@ This unified payload contains both the formatted `.ics` bytes and the granular m
 {
   "ics_content": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\n...",
   "decision_trace": {
-    "evaluation_rules_applied": {
-      "retained_tracks": ["West Coast Swing"],
-      "excluded_tracks": ["Country Swing"],
-      "division_bound": "Novice"
+    "subTasks": [
+      { "id": "1", "label": "Parsed event timetable & rooms", "status": "completed", "detail": "Identified ballroom streams across the weekend" },
+      { "id": "2", "label": "Calculated airport transit & hotel buffer", "status": "completed", "detail": "20m shuttle + 90m check-in + 60m warmup" },
+      { "id": "3", "label": "Filtered workshops by division", "status": "completed", "detail": "Filtered advanced intensives" },
+      { "id": "4", "label": "Generated calendar file (.ics)", "status: "completed", "detail": "Ready for Apple & Google Calendar" }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "5:15 PM (Friday)",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 20,
+      "latestFlightArrivalDeadline": "2:25 PM (Friday)",
+      "formulaSummary": "17:15 (Staging) - (20m SFO Transit + 90m Settle + 60m Warmup) = 14:25 Target Landing",
+      "steps": [
+        { "label": "Novice Strictly Swing Staging Call", "time": "5:15 PM", "duration": "Staging", "type": "staging", "description": "Grand Peninsula Ballroom Staging" },
+        { "label": "Warmup & Floor Check", "time": "4:15 PM", "duration": "60 min", "type": "warmup", "description": "Test floor speed & stretch" },
+        { "label": "Hyatt Regency Check-in", "time": "2:45 PM", "duration": "90 min", "type": "hotel", "description": "Hotel check-in and dress change" },
+        { "label": "SFO Airport to Hyatt Shuttle Transit", "time": "2:25 PM", "duration": "20 min", "type": "transit", "description": "Direct 5-minute shuttle + buffer" },
+        { "label": "Target Flight Landing Deadline", "time": "2:25 PM", "duration": "Deadline", "type": "flight", "description": "Recommended latest flight touchdown" }
+      ]
     },
-    "logistics_math": {
-      "earliest_critical_event": "Novice Jack & Jill Staging",
-      "scheduled_time_iso": "2026-10-10T12:15:00-07:00",
-      "transit_duration_mins": 30,
-      "hotel_buffer_hours": 1.5,
-      "warmup_buffer_hours": 1.0,
-      "latest_flight_arrival_iso": "2026-10-10T09:15:00-07:00",
-      "math_breakdown_formula": "Landing = Staging (12:15) - (30m transit + 90m hotel settle + 60m warmup buffer)"
-    },
-    "sessions_included_count": 14,
-    "sessions_excluded_count": 32,
-    "sessions_details": [
+    "sessions": [
       {
-        "title": "Novice Jack & Jill - Prelims",
-        "start_time": "2026-10-10T12:30:00-07:00",
+        "id": "b1",
+        "title": "Novice Strictly Swing Prelims",
+        "time": "Friday 5:30 PM - 6:45 PM",
         "location": "Grand Peninsula Ballroom",
-        "decision": "INCLUDED",
-        "reason": "Explicit match for selected Novice division"
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Division match for Novice"
       },
       {
-        "title": "Advanced WCS Workshop with PJ & Torri",
-        "start_time": "2026-10-10T14:30:00-07:00",
+        "id": "b2",
+        "title": "Level 4/5 Champion Masterclass with Benji Schwimmer",
+        "time": "Saturday 1:00 PM - 2:15 PM",
         "location": "Regency Ballroom",
-        "decision": "EXCLUDED",
-        "reason": "Filtered: User profile division (Novice) is ineligible for Advanced level workshops"
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered: Requires Level 4/5 audition band"
       }
     ],
-    "packing_list_rationales": [
+    "themeDressCodes": [
       {
-        "item": "Suede shoe sole sticker kit",
-        "reason": "PDF schedule designates 'Sandpebble Room' with portable vinyl tiles which can cause ankle drag on regular rubber soles."
+        "id": "tb1",
+        "day": "Friday Night",
+        "themeTitle": "Bay Area Glow Social Party",
+        "category": "social_theme",
+        "description": "Friday kickoff late night social with blacklights and neon colors.",
+        "recommendedAttire": ["Neon & UV bright colors", "White accents", "Glow jewelry"],
+        "vibe": "High Energy & Electric"
       },
       {
-        "item": "Travel garment steamer",
-        "reason": "Includes a competitive division registration. Standard competition attire requires formal pressing."
+        "id": "tb2",
+        "day": "Saturday Evening",
+        "themeTitle": "Classic Champions Showcase & Cocktail Chic",
+        "category": "showcase_formal",
+        "description": "Strictly Swing & Pro Classic Showcases in the Grand Peninsula Ballroom.",
+        "recommendedAttire": ["Dress shirts & ties/vests", "Cocktail dresses", "Polished suede dance shoes"],
+        "vibe": "Glamorous & Prestigious"
+      }
+    ],
+    "packingManifest": [
+      {
+        "id": "p1",
+        "name": "Suede wire brush for dusty ballroom floor",
+        "category": "footwear",
+        "rationale": "For maintaining traction on heavily used hotel ballroom floors",
+        "quantity": 1
       }
     ]
   }

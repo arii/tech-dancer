@@ -73,18 +73,19 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 *   **Type:** Feature (Parallel)
 *   **Description:** Set up the system instructions and formatting boundaries for the pre-scan phase. Gemini 3.5 must evaluate the unstructured PDF layout to identify competitive divisions, workshop tracks, dance styles, and social themes.
 *   **Technical Details:**
-    *   Write the system prompt enforcing the `suggested_form_questions` target schema.
-    *   Instruct the model to emit a valid, raw JSON response containing custom form schema elements (`select`, `multiselect`, or `boolean`).
+    *   Write the system prompt enforcing the `suggested_form_questions` target schema with rich option objects (`label`, `value`, `subtitle`, `badge`).
+    *   Instruct the model to emit a valid, raw JSON response containing custom form schema elements (`select`, `multiselect`, or `boolean`) with `defaultValue` and `context`.
     *   Handle cases where the PDF contains multiple styles (e.g. Country Swing overlap) or leveled systems (e.g. Level 1 to 5).
-*   **DoD:** Sending a mock visual PDF (e.g. *Boogie by the Bay 2026*) returns a clean `Discovery JSON` outline showing detected categories and custom frontend question models.
+*   **DoD:** Sending a mock visual PDF (e.g. *Boogie by the Bay 2026*) returns a clean `DiscoveryResponse` payload showing detected categories and custom frontend question models ready for `DynamicQuestionnaire`.
 
 #### 🏷️ Issue WCS-202: Write the Temporal Flight Buffer Engine (Python Helper)
 *   **Type:** Task (Parallel)
 *   **Description:** Implement the pure mathematical logistics utility in Python that reads the earliest mandatory event call-time found by Gemini and computes the latest flight arrival target.
 *   **Technical Details:**
     *   Calculate: $\text{Latest Landing} = \text{Earliest Call Time} - (\text{Transit Mins} + \text{1.5h Hotel Settle} + \text{1.0h Reg Warmup})$.
+    *   Produce sequential `BufferStep` items with durations and timestamps for the visual timeline.
     *   Support ISO 8601 formatting and timezone calculation to prevent timezone offset bugs.
-*   **DoD:** Executing the buffer function with an input call-time of Saturday 10:30 AM and SFO airport transit times returns a correct, validated deadline of Saturday 7:00 AM.
+*   **DoD:** Executing the buffer function with an input call-time of Saturday 10:30 AM and SFO airport transit times returns a correct, validated deadline and step array matching `BufferCalculationResult`.
 
 #### 🏷️ Issue WCS-203: Implement `/generate` Endpoint (Generator Pass 2)
 *   **Type:** Feature (Parallel)
@@ -92,8 +93,8 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 *   **Technical Details:**
     *   Pass the questionnaire parameters as plain text instructions.
     *   Instruct Gemini to compile an RFC 5545-compliant iCal plain-text block under `ics_content`, escaping quotes properly.
-    *   Populate `decision_trace` structures with reasons for every added, skipped, or filtered activity.
-*   **DoD:** Backend returns a single JSON object containing both the RFC-compliant calendar string and a robust, trace-log explanation array.
+    *   Populate `decision_trace` structures with `sessions` (including `status: 'included' | 'filtered'`, `decisionBadge`, and `justification`), `themeDressCodes`, `packingManifest`, and `bufferTimeline`.
+*   **DoD:** Backend returns a single JSON object containing both the RFC-compliant calendar string and a complete `AgentDecisionTrace` matching the frontend visualization cards.
 
 ---
 
