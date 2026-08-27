@@ -147,7 +147,6 @@ export function HeroSection() {
           opacity={0}
           pointerEvents="none"
           className="hero-waveform-anim"
-          style={{ contentVisibility: "auto", containIntrinsicSize: "48px" } as React.CSSProperties} // impeccable-ignore
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { DynamicQuestionnaire } from '@/features/wcs-navigator/components/DynamicQuestionnaire';
-import { DiscoveryResponse, PersonaChip } from '@/features/wcs-navigator/types/navigator';
+import { DiscoveryResponse } from '@/features/wcs-navigator/types/navigator';
 
 const boogieByTheBayPreset: DiscoveryResponse = {
   preset_id: 'boogie_by_the_bay',
@@ -65,27 +65,6 @@ const halloweenSwingThingPreset: DiscoveryResponse = {
     },
   ],
 };
-
-const _samplePersonaChips: PersonaChip[] = [
-  {
-    id: 'social_dancer',
-    label: 'Social Party Animal',
-    answers: {
-      skill_level: 'intermediate',
-      focus_areas: ['social'],
-      late_night: true,
-    },
-  },
-  {
-    id: 'competitor',
-    label: 'Strict Competitor',
-    answers: {
-      skill_level: 'advanced',
-      focus_areas: ['footwork', 'musicality'],
-      late_night: false,
-    },
-  },
-];
 
 describe('DynamicQuestionnaire Component', () => {
   afterEach(() => {
