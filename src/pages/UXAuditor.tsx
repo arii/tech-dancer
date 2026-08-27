@@ -3,9 +3,9 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
-  ChevronRight, Github, Trash2
+  ChevronRight, Github, Trash2, Sliders, Layers
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis, AnalysisFocus, DesignPreset } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
@@ -19,8 +19,23 @@ import { sanitizeUrlForDisplay } from '@/utils/url';
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
   Tablet: <Icon icon={Tablet} size="md" />,
-  Desktop: <Icon icon={Monitor} size="md" />
+  Desktop: <Icon icon={Monitor} size="md" />,
+  Laptop: <Icon icon={Monitor} size="md" />,
+  Ultrawide: <Icon icon={Monitor} size="md" />,
 };
+
+const ALL_FOCI: AnalysisFocus[] = [
+  'Core Layout & Spacing',
+  'Accessibility (WCAG)',
+  'Typography',
+  'Interactive Density',
+];
+
+const ALL_PRESETS: DesignPreset[] = [
+  'Flat / Minimal',
+  'Modern Semi-Flat (Depth/Shadows)',
+  'Unrestricted',
+];
 
 interface AuditInputProps {
   label: string;
@@ -151,30 +166,24 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   );
 }
 
-function ViewportFrame({ url, width, height }: { url: string; width: number; height: number }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+interface ViewportFrameProps {
+  imageSrc?: string;
+  width: number;
+  height: number;
+  vpName: string;
+}
+
+function ViewportFrame({ imageSrc, width, height, vpName }: ViewportFrameProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    const updateScale = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const containerHeight = containerRef.current.offsetHeight;
-        const scaleX = containerWidth / width;
-        const scaleY = containerHeight / height;
-        setScale(Math.min(scaleX, scaleY, 1));
-      }
-    };
-
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, [width, height]);
+    setIsLoading(true);
+    setHasError(false);
+  }, [imageSrc]);
 
   return (
     <Box
-      ref={containerRef}
       width="full"
       height="full"
       display="flex"
@@ -186,150 +195,215 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       radius="xl"
       shadow="2xl"
       border={true}
+      padding={2}
     >
-      {isLoading && (
+      {isLoading && !hasError && imageSrc && (
         <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted" role="status" aria-live="polite" aria-busy="true">
           <Stack align="center" gap={3}>
-             <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
-             <Text variant="sans" size="xs" color="muted" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
+            <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
+            <Text variant="sans" size="xs" color="muted" weight="font-bold" uppercase tracking="wider">Loading Snapshot...</Text>
           </Stack>
         </Box>
       )}
-      <Box
-        as="iframe"
-        src={url}
-        title="Viewport Preview"
-        onLoad={() => setIsLoading(false)}
-        width={width}
-        height={height}
-        className="border-none bg-white origin-center"
-        style={{ // impeccable-ignore - Dynamic scaling for iframe preview
-          transform: `scale(${scale})`,
-          width: `${width}px`,
-          height: `${height}px`,
-          minWidth: `${width}px`,
-          minHeight: `${height}px`,
-          maxWidth: 'none',
-          maxHeight: 'none',
-        }}
-      />
-      <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
-         <Box
-           paddingX={2}
-           paddingY={1}
-           radius="sm"
-           border={true}
-           className="bg-bg/80 backdrop-blur-sm"
-         >
-           <Text variant="sans" size="xs" color="muted">
-             ⚠️ Some sites block embedding via CORS.
-           </Text>
-         </Box>
-      </Box>
+      {imageSrc && !hasError ? (
+        <Box display="flex" align="center" justify="center" width="full" height="full" overflow="auto">
+          <img
+            src={imageSrc}
+            alt={`${vpName} snapshot preview (${width}x${height})`}
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+            className="max-w-full max-h-full object-contain rounded-md shadow"
+          />
+        </Box>
+      ) : (
+        <Stack align="center" justify="center" color="muted" className="text-center" padding={6}>
+          <Icon icon={ImageIcon} size="2xl" color="muted" />
+          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+            {hasError ? 'Snapshot Error' : 'No Snapshot Available'}
+          </Text>
+        </Stack>
+      )}
     </Box>
   );
 }
 
-function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
+function SeverityBadge({ severity }: { severity: number }) {
+  if (severity >= 4.0) {
+    return (
+      <Box display="flex" align="center" gap={1} paddingX={2} paddingY={0.5} radius="full" className="bg-error/10 text-error font-mono text-xs font-bold border border-error/30">
+        <span>🔴</span>
+        <span>SEV {severity.toFixed(1)}</span>
+      </Box>
+    );
+  }
+  if (severity >= 3.0) {
+    return (
+      <Box display="flex" align="center" gap={1} paddingX={2} paddingY={0.5} radius="full" className="bg-warning/10 text-warning font-mono text-xs font-bold border border-warning/30">
+        <span>🟡</span>
+        <span>SEV {severity.toFixed(1)}</span>
+      </Box>
+    );
+  }
   return (
-    <Box className={cardVariants({ overflow: "hidden" })}>
-      <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
-        <Stack direction="row" align="center" gap={3}>
-          <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
-            {viewportIcons[vp.name as keyof typeof viewportIcons]}
-          </Box>
-          <Text variant="sans" size="base" weight="font-bold">
-            {vp.name} Analysis
-          </Text>
-        </Stack>
-        <Text variant="mono" size="xs" weight="font-bold" color="muted" uppercase tracking="widest">
-          {vp.width}w × {vp.height}h
-        </Text>
+    <Box display="flex" align="center" gap={1} paddingX={2} paddingY={0.5} radius="full" className="bg-accent/10 text-accent font-mono text-xs font-bold border border-accent/30">
+      <span>🔵</span>
+      <span>SEV {severity.toFixed(1)}</span>
+    </Box>
+  );
+}
+
+function CondensedReportMatrix({ report }: { report: any }) {
+  const [activeTab, setActiveTab] = useState<string>('All');
+
+  const availableViewports = VIEWPORTS.filter(
+    vp => report[`findings_${vp.name.toLowerCase()}`] || report[`image_${vp.name.toLowerCase()}`]
+  );
+
+  const selectedVp = VIEWPORTS.find(vp => vp.name === activeTab) || availableViewports[0] || VIEWPORTS[0];
+  const activeSnapshotSrc = report[`image_${selectedVp.name.toLowerCase()}`] as string | undefined;
+
+  const allItems = VIEWPORTS.flatMap(vp => {
+    const data = report[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis | undefined;
+    if (!data?.improvements) return [];
+    return data.improvements.map(imp => ({
+      ...imp,
+      viewportName: vp.name
+    }));
+  });
+
+  const filteredItems = activeTab === 'All'
+    ? allItems
+    : allItems.filter(i => i.viewportName === activeTab);
+
+  return (
+    <Stack gap={6} width="full">
+      {/* Viewport Tabs */}
+      <Stack direction="row" align="center" gap={2} overflow="auto" paddingBottom={1} border="b">
+        <Box
+          as="button"
+          onClick={() => setActiveTab('All')}
+          paddingX={4}
+          paddingY={2}
+          radius="md"
+          className={`font-sans text-xs font-bold transition-colors ${
+            activeTab === 'All'
+              ? 'bg-accent text-bg shadow-sm'
+              : 'surface-muted text-muted hover:text-text-main'
+          }`}
+        >
+          All Viewports ({allItems.length})
+        </Box>
+        {availableViewports.map(vp => {
+          const count = (report[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis | undefined)?.improvements?.length || 0;
+          return (
+            <Box
+              key={vp.name}
+              as="button"
+              onClick={() => setActiveTab(vp.name)}
+              display="flex"
+              align="center"
+              gap={2}
+              paddingX={4}
+              paddingY={2}
+              radius="md"
+              className={`font-sans text-xs font-bold transition-colors ${
+                activeTab === vp.name
+                  ? 'bg-accent text-bg shadow-sm'
+                  : 'surface-muted text-muted hover:text-text-main'
+              }`}
+            >
+              {viewportIcons[vp.name as keyof typeof viewportIcons]}
+              <span>{vp.name}</span>
+              <span className="opacity-75">({count})</span>
+            </Box>
+          );
+        })}
       </Stack>
 
-      <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
-          {activeReportUrl ? (
-            <ViewportFrame
-              key={`${vp.name}-${activeReportUrl}`}
-              url={sanitizeUrlForDisplay(activeReportUrl)}
-              width={vp.width}
-              height={vp.height}
-            />
-          ) : (
-            <Stack align="center" justify="center" color="muted" className="text-center">
-              <Box marginBottom={2}>
-                <Icon icon={ImageIcon} size="2xl" color="muted" />
-              </Box>
-              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
-                Awaiting Frame...
-              </Text>
-            </Stack>
-          )}
+      {/* Snapshot Preview & Compact Table Matrix */}
+      <Grid cols={{ base: 1, xl: 12 }} gap={6}>
+        {/* CORS-Free Snapshot Preview Pane */}
+        <Box span={{ base: 1, xl: 5 }} minHeight={350}>
+          <ViewportFrame
+            imageSrc={activeSnapshotSrc}
+            width={selectedVp.width}
+            height={selectedVp.height}
+            vpName={selectedVp.name}
+          />
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
-          {data ? (
-            <>
-              <Box surface="alt" padding={5} border={true} radius="lg">
-                <Box marginBottom={3}>
-                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
-                    Analysis Summary
+        {/* Compact Micro-Matrix Table */}
+        <Box span={{ base: 1, xl: 7 }} className={cardVariants({ overflow: 'hidden' })}>
+          <Box overflow="auto">
+            <Stack gap={0} width="full">
+              {/* Header */}
+              <Grid cols={12} gap={2} padding={3} border="b" surface="muted">
+                <Box span={3}>
+                  <Text variant="mono" size="xs" color="dim" uppercase weight="font-bold">Component</Text>
+                </Box>
+                <Box span={2}>
+                  <Text variant="mono" size="xs" color="dim" uppercase weight="font-bold">Viewport</Text>
+                </Box>
+                <Box span={2}>
+                  <Text variant="mono" size="xs" color="dim" uppercase weight="font-bold">Severity</Text>
+                </Box>
+                <Box span={2}>
+                  <Text variant="mono" size="xs" color="dim" uppercase weight="font-bold">Issue</Text>
+                </Box>
+                <Box span={3}>
+                  <Text variant="mono" size="xs" color="dim" uppercase weight="font-bold">Fix</Text>
+                </Box>
+              </Grid>
+
+              {/* Rows */}
+              {filteredItems.length === 0 ? (
+                <Box padding={8} display="flex" align="center" justify="center">
+                  <Text variant="sans" size="xs" color="dim">
+                    No UX findings recorded for this viewport filter.
                   </Text>
                 </Box>
-                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block">
-                  "{data.summary}"
-                </Text>
-              </Box>
-              <Stack gap={4}>
-                {data.improvements?.map((imp, idx) => (
-                  <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
-                    <Box display="flex" justify="between" align="start" marginBottom={2}>
-                      <Stack direction="row" align="center" gap={2}>
-                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
-                        <Text variant="sans" size="sm" weight="font-black">
-                          {imp.element}
-                        </Text>
-                      </Stack>
-                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="muted" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
-                        SEV {imp.severity}
+              ) : (
+                filteredItems.map((item, idx) => (
+                  <Grid key={idx} cols={12} gap={2} padding={3} border="b" className="hover:bg-surface-alt/50 transition-colors">
+                    <Box span={3}>
+                      <Text variant="sans" size="xs" weight="font-bold" color="main">
+                        {item.element}
                       </Text>
                     </Box>
-                    <Text variant="sans" size="xs" color="muted" marginBottom={3}>
-                      {imp.issue}
-                    </Text>
-                    {imp.suggestion && imp.suggestion.trim() !== '' && (
-                      <Box surface="muted" padding={3} radius="md" border={true}>
-                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
-                          <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth={0} overflow="hidden">
-                            <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
-                              {imp.suggestion}
-                            </Text>
-                            {imp.element === "Manual Audit Required" && (
-                              <CopyPromptButton suggestion={imp.suggestion} />
-                            )}
-                          </Box>
-                        </Stack>
-                      </Box>
-                    )}
-                  </Box>
-                ))}
-              </Stack>
-            </>
-          ) : (
-            <Stack gap={4} width="full">
-              <Skeleton height={20} width="full" />
-              <Stack gap={2}>
-                <Skeleton height={4} width="full" />
-                <Skeleton height={4} width="full" />
-                <Skeleton height={4} width="3/4" />
-              </Stack>
+                    <Box span={2}>
+                      <Text variant="mono" size="xs" color="dim">
+                        {item.viewportName}
+                      </Text>
+                    </Box>
+                    <Box span={2}>
+                      <SeverityBadge severity={item.severity} />
+                    </Box>
+                    <Box span={2}>
+                      <Text variant="sans" size="xs" color="dim" className="break-words">
+                        {item.issue}
+                      </Text>
+                    </Box>
+                    <Box span={3}>
+                      <Stack gap={1}>
+                        <Text variant="sans" size="xs" weight="font-medium" color="main" className="break-words">
+                          {item.suggestion}
+                        </Text>
+                        {item.element === "Manual Audit Required" && (
+                          <CopyPromptButton suggestion={item.suggestion} />
+                        )}
+                      </Stack>
+                    </Box>
+                  </Grid>
+                ))
+              )}
             </Stack>
-          )}
-        </Stack>
-      </Stack>
-    </Box>
+          </Box>
+        </Box>
+      </Grid>
+    </Stack>
   );
 }
 
@@ -347,6 +421,12 @@ export default function UXAuditor() {
     setCustomApiKey,
     snapshotService,
     setSnapshotService,
+    selectedViewports,
+    setSelectedViewports,
+    selectedFoci,
+    setSelectedFoci,
+    selectedPreset,
+    setSelectedPreset,
     isCopiedMarkdown,
     isExportingToGithub,
     runUXAudit,
@@ -494,8 +574,126 @@ export default function UXAuditor() {
           </Stack>
         </Stack>
 
-        {/* Detailed View */}
+        {/* Scoped Configuration Controls & Detailed View */}
         <Stack gap={6} span={{ lg: 3 }} width="full">
+          {/* Audit Controls & Options */}
+          <Box className={cardVariants()} padding={6}>
+            <Stack gap={4}>
+              <Stack direction="row" align="center" gap={2} border="b" paddingBottom={3}>
+                <Icon icon={Sliders} size="sm" color="accent" />
+                <Text variant="sans" size="sm" weight="font-bold" uppercase tracking="wider">
+                  Audit Evaluation Scope
+                </Text>
+              </Stack>
+
+              <Grid cols={{ base: 1, md: 3 }} gap={6}>
+                {/* Viewports */}
+                <Stack gap={2}>
+                  <Text variant="mono" size="xs" color="muted" uppercase weight="font-bold">
+                    Viewports
+                  </Text>
+                  <Stack gap={2}>
+                    {VIEWPORTS.map((vp) => {
+                      const isSelected = selectedViewports.includes(vp.name);
+                      return (
+                        <Box
+                          key={vp.name}
+                          as="label"
+                          display="flex"
+                          align="center"
+                          gap={2}
+                          className="cursor-pointer text-xs font-sans font-medium text-text-main"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => {
+                              if (isSelected) {
+                                if (selectedViewports.length > 1) {
+                                  setSelectedViewports(selectedViewports.filter(v => v !== vp.name));
+                                }
+                              } else {
+                                setSelectedViewports([...selectedViewports, vp.name]);
+                              }
+                            }}
+                            className="rounded border-border text-accent focus:ring-accent"
+                          />
+                          <span>{vp.name} ({vp.width}w × {vp.height}h)</span>
+                        </Box>
+                      );
+                    })}
+                  </Stack>
+                </Stack>
+
+                {/* Analysis Focus */}
+                <Stack gap={2}>
+                  <Text variant="mono" size="xs" color="muted" uppercase weight="font-bold">
+                    Analysis Focus
+                  </Text>
+                  <Stack gap={2}>
+                    {ALL_FOCI.map((focus) => {
+                      const isSelected = selectedFoci.includes(focus);
+                      return (
+                        <Box
+                          key={focus}
+                          as="label"
+                          display="flex"
+                          align="center"
+                          gap={2}
+                          className="cursor-pointer text-xs font-sans font-medium text-text-main"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => {
+                              if (isSelected) {
+                                if (selectedFoci.length > 1) {
+                                  setSelectedFoci(selectedFoci.filter(f => f !== focus));
+                                }
+                              } else {
+                                setSelectedFoci([...selectedFoci, focus]);
+                              }
+                            }}
+                            className="rounded border-border text-accent focus:ring-accent"
+                          />
+                          <span>{focus}</span>
+                        </Box>
+                      );
+                    })}
+                  </Stack>
+                </Stack>
+
+                {/* Design Preset */}
+                <Stack gap={2}>
+                  <Text variant="mono" size="xs" color="muted" uppercase weight="font-bold">
+                    Design System Preset
+                  </Text>
+                  <Stack gap={2}>
+                    {ALL_PRESETS.map((preset) => (
+                      <Box
+                        key={preset}
+                        as="label"
+                        display="flex"
+                        align="center"
+                        gap={2}
+                        className="cursor-pointer text-xs font-sans font-medium text-text-main"
+                      >
+                        <input
+                          type="radio"
+                          name="design-preset"
+                          checked={selectedPreset === preset}
+                          onChange={() => setSelectedPreset(preset)}
+                          className="border-border text-accent focus:ring-accent"
+                        />
+                        <span>{preset}</span>
+                      </Box>
+                    ))}
+                  </Stack>
+                </Stack>
+              </Grid>
+            </Stack>
+          </Box>
+
           {activeReport ? (
             <>
               <Stack
@@ -537,7 +735,7 @@ export default function UXAuditor() {
                     width={{ base: 'full', sm: 'auto' }}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
-                    {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
+                    {isCopiedMarkdown ? 'Copied' : 'Copy MD Matrix'}
                   </Box>
                   <Box
                     as="button"
@@ -554,28 +752,20 @@ export default function UXAuditor() {
                     width={{ base: 'full', sm: 'auto' }}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
-                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
+                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export Issue'}</span>
                   </Box>
                 </Stack>
               </Stack>
 
-              <Stack gap={8}>
-                {VIEWPORTS.map(vp => (
-                  <ViewportAnalysisCard
-                    key={vp.name}
-                    vp={vp}
-                    data={activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis}
-                    activeReportUrl={activeReport.url}
-                  />
-                ))}
-              </Stack>
+              {/* Matrix Table & Snapshot Section */}
+              <CondensedReportMatrix report={activeReport} />
             </>
           ) : (
             <EmptyState
-              minHeight={500}
+              minHeight={400}
               icon={<Icon icon={Camera} size="xl" color="muted" />}
               title="Ready to Audit"
-              description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
+              description="Configure your evaluation scope above and enter a URL to start the CORS-free visual analysis."
             />
           )}
         </Stack>

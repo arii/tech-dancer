@@ -33,6 +33,10 @@ import { DEFAULT_GEMINI_MODEL } from '@/lib/geminiModelConfig';
 
 export { VIEWPORTS };
 
+export type AnalysisFocus = 'Core Layout & Spacing' | 'Accessibility (WCAG)' | 'Typography' | 'Interactive Density';
+
+export type DesignPreset = 'Flat / Minimal' | 'Modern Semi-Flat (Depth/Shadows)' | 'Unrestricted';
+
 export interface Improvement {
   element: string;
   issue: string;
@@ -60,6 +64,9 @@ export function useUXAuditor() {
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
   const [customApiKey, setCustomApiKey] = useState(sessionStorage.getItem('ux-auditor-api-key') || "");
   const { snapshotService, setSnapshotService, getSnapshotUrl, fetchSnapshot } = useSnapshotManager();
+  const [selectedViewports, setSelectedViewports] = useState<string[]>(['Mobile', 'Tablet', 'Desktop']);
+  const [selectedFoci, setSelectedFoci] = useState<AnalysisFocus[]>(['Core Layout & Spacing', 'Accessibility (WCAG)']);
+  const [selectedPreset, setSelectedPreset] = useState<DesignPreset>('Flat / Minimal');
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 
@@ -169,7 +176,9 @@ export function useUXAuditor() {
         await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport);
       }
 
-      for (const vp of VIEWPORTS) {
+      const activeViewports = VIEWPORTS.filter(vp => selectedViewports.includes(vp.name));
+
+      for (const vp of activeViewports) {
         let mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
         let base64DataUri = "";
 
@@ -204,8 +213,26 @@ export function useUXAuditor() {
   }, [auditMutation]);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
-    const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations. Output JSON.`;
-    const userQuery = `Analyze the provided snapshot of ${targetUrl} for ${viewport.name} viewport issues.`;
+    const fociText = selectedFoci.join(', ');
+    const systemPrompt = `You are a specialized ${viewport.name} UX engineer. Analyze ONLY the attached ${viewport.name} (${viewport.width}x${viewport.height}) viewport snapshot for ${targetUrl}.
+
+Evaluation Focus Areas: ${fociText}
+Design System Constraint: ${selectedPreset}
+
+Strict Spatial & UX Rules:
+1. Centering Sickness: Prevent center-alignment on multi-line body text and nav links that break western F-shaped scanning.
+2. Grid Interval Compliance: Normalize disjointed padding/margin intervals.
+3. Ultrawide Line Length (SEV 4.0): Flag body prose exceeding 75-80 characters per line without max-w-3xl / max-w-prose limits.
+4. Tablet Breakpoint Collisions (SEV 4.5): Flag awkward or broken multi-column grid densities during intermediate tablet viewport scaling.
+5. Cardocalypse: Identify carousel cards or card stacks that overlap or exceed container boundary limits.
+6. Design Preset Enforcement:
+   - Flat / Minimal: Enforce clean borders, structural whitespace, and zero unnecessary drop-shadows or heavy gradients. Do not request shadows on flat UI.
+   - Modern Semi-Flat: Expect subtle elevation shadows and refined depth.
+   - Unrestricted: Do not police subjective visual styling unless spatial rules are broken.
+
+Limit response to the top 3-5 highest-severity, actionable issues. Respond strictly in JSON.`;
+
+    const userQuery = `Perform scoped ${viewport.name} UX analysis for ${targetUrl}. Focus on ${fociText} under ${selectedPreset} design rules.`;
 
     try {
       const effectiveApiKey = customApiKey || apiKey;
@@ -297,20 +324,21 @@ export function useUXAuditor() {
 
   const getMarkdown = () => {
     if (!activeReport) return "";
-    let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
+    let md = `# Visual UX Audit Matrix: ${activeReport.url}\n\n`;
+    md += `| Component | Viewport | Severity | Identified Issue | Structural Fix |\n`;
+    md += `| --- | --- | --- | --- | --- |\n`;
+
     VIEWPORTS.forEach(vp => {
       const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
-      if (data) {
-        md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
-        md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
-        data.improvements?.forEach(i => {
-          // Sanitize suggestions to remove large base64 strings that break GitHub URL exports
+      if (data?.improvements) {
+        data.improvements.forEach(i => {
           const sanitizedSuggestion = i.suggestion.replace(/data:image\/[^;]+;base64,[^\s|)]+/g, '[Base64 Image Omitted]');
-          md += `| ${i.element} | ${i.issue} | ${sanitizedSuggestion} | ${i.severity}/10 |\n`;
+          const sevBadge = i.severity >= 4.0 ? `🔴 SEV ${i.severity}` : i.severity >= 3.0 ? `🟡 SEV ${i.severity}` : `🔵 SEV ${i.severity}`;
+          md += `| ${i.element} | ${vp.name} | ${sevBadge} | ${i.issue} | ${sanitizedSuggestion} |\n`;
         });
-        md += `\n`;
       }
     });
+    md += `\n`;
     return md;
   };
 
@@ -363,6 +391,12 @@ export function useUXAuditor() {
     setCustomApiKey: updateApiKey,
     snapshotService,
     setSnapshotService,
+    selectedViewports,
+    setSelectedViewports,
+    selectedFoci,
+    setSelectedFoci,
+    selectedPreset,
+    setSelectedPreset,
     isCopiedMarkdown,
     isExportingToGithub,
     runUXAudit,
