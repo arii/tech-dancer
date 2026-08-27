@@ -57,7 +57,7 @@ export const WorkflowExplainer: React.FC = () => {
           {/* Architecture Visual Grid */}
           <Grid cols={{ base: 1, md: 3 }} gap={4}>
             {/* Step 1 Card */}
-            <Box surface="muted" padding={4} radius="lg" border className="border-line/50 flex flex-col justify-between">
+            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Box padding={1.5} radius="md" className="bg-brand-cyan/20 text-brand-cyan">
@@ -82,7 +82,7 @@ export const WorkflowExplainer: React.FC = () => {
             </Box>
 
             {/* Step 2 Card */}
-            <Box surface="muted" padding={4} radius="lg" border className="border-line/50 flex flex-col justify-between">
+            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Box padding={1.5} radius="md" className="bg-brand-amber/20 text-brand-amber">
@@ -107,7 +107,7 @@ export const WorkflowExplainer: React.FC = () => {
             </Box>
 
             {/* Step 3 Card */}
-            <Box surface="muted" padding={4} radius="lg" border className="border-line/50 flex flex-col justify-between">
+            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Box padding={1.5} radius="md" className="bg-brand-emerald/20 text-brand-emerald">

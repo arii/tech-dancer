@@ -44,7 +44,7 @@ export const AgentDiscoveryTransition: React.FC<AgentDiscoveryTransitionProps> =
       width="full"
       maxWidth="2xl"
       marginX="auto"
-      className="py-16"
+      paddingY={16}
     >
       <Box
         surface="surface"
@@ -79,7 +79,7 @@ export const AgentDiscoveryTransition: React.FC<AgentDiscoveryTransitionProps> =
           </Stack>
 
           {/* Real-time Agent Log Steps */}
-          <Stack gap={3} width="full" className="bg-muted/60 p-4 rounded-xl border border-line/40 text-left">
+          <Stack gap={3} width="full" surface="muted" padding={4} radius="xl" border className="border-line/40 text-left">
             {stages.map((stage, idx) => {
               const isDone = currentStage > idx;
               const isCurrent = currentStage === idx;

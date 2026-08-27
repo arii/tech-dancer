@@ -26,7 +26,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   );
 
   return (
-    <Box display="flex" flex="col" align="center" width="full" className="py-8 md:py-12">
+    <Box display="flex" flex="col" align="center" width="full" paddingY={{ base: 8, md: 12 }}>
       {/* Hero Badge & Headline */}
       <Stack gap={3} align="center" textAlign="center" maxWidth="3xl" marginX="auto" width="full">
         <Box
@@ -99,7 +99,8 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             surface="surface"
             radius="2xl"
             border
-            className="border-line/80 shadow-2xl focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all p-3"
+            padding={3}
+            className="border-line/80 shadow-2xl focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all"
           >
             <Box display="flex" align="center" gap={3} paddingX={3} paddingY={2}>
               <Icon icon={Search} size="md" color="accent" />
@@ -131,7 +132,8 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
                       display="flex"
                       align="center"
                       justify="between"
-                      className="text-left hover:bg-muted/80 transition-colors"
+                      surface="muted"
+                      className="text-left hover:opacity-90 transition-colors"
                     >
                       <Stack gap={0.5}>
                         <Text size="sm" weight="font-bold" color="main">{event.name}</Text>
@@ -199,14 +201,21 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
                 </Text>
               </Stack>
 
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => onDiscoverPreset(selectedEvent)}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-sm shadow-lg shadow-brand-cyan/10 transition-all shrink-0 hover:scale-[1.02]"
+                display="flex"
+                align="center"
+                gap={2}
+                paddingX={6}
+                paddingY={3}
+                radius="xl"
+                className="bg-brand-cyan hover:opacity-95 text-black font-bold text-sm shadow-lg shadow-brand-cyan/10 transition-all shrink-0"
               >
                 <span>Scan & Discover Schedule</span>
                 <Icon icon={ArrowRight} size="sm" />
-              </button>
+              </Box>
             </Box>
           </Box>
         </Stack>

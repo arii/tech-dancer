@@ -71,7 +71,7 @@ export const WCSNavigatorPage: React.FC = () => {
   };
 
   return (
-    <Box as="section" maxWidth="7xl" marginX="auto" width="full" className="px-4 sm:px-6">
+    <Box as="section" maxWidth="7xl" marginX="auto" width="full" paddingX={{ base: 4, sm: 6 }}>
       <SEO
         title="WCS Navigator — AI Dance Convention Itinerary & Calendar Optimizer"
         description="Google Search-style AI agent for West Coast Swing conventions. Pre-scans multi-room schedules, computes backward flight buffer math, and streams calendar files."
@@ -144,14 +144,18 @@ export const WCSNavigatorPage: React.FC = () => {
             className="border-line/70"
           >
             <Box display="flex" align="center" gap={3}>
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => setStep('search')}
-                className="flex items-center gap-1.5 text-xs text-dim hover:text-white transition-colors"
+                display="flex"
+                align="center"
+                gap={1.5}
+                className="text-xs text-dim hover:text-white transition-colors"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Change Event</span>
-              </button>
+              </Box>
               <Text size="micro" color="dim">•</Text>
               <Text size="xs" weight="font-bold" color="main">
                 {activeEventName}
@@ -159,14 +163,22 @@ export const WCSNavigatorPage: React.FC = () => {
             </Box>
 
             <Box display="flex" align="center" gap={2}>
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => setStep('search')}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono bg-muted text-dim hover:text-white transition-colors"
+                display="flex"
+                align="center"
+                gap={1.5}
+                paddingX={3}
+                paddingY={1}
+                radius="lg"
+                surface="muted"
+                className="text-xs font-mono text-dim hover:text-white transition-colors"
               >
                 <Icon icon={RefreshCw} size="xs" />
                 <span>Start Over</span>
-              </button>
+              </Box>
             </Box>
           </Box>
         )}
@@ -214,14 +226,23 @@ export const WCSNavigatorPage: React.FC = () => {
         {step === 'results' && (
           <Stack gap={6} width="full">
             <Box display="flex" justify="between" align="center" wrap="wrap" gap={3}>
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => setStep('questionnaire')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface border border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
+                display="flex"
+                align="center"
+                gap={2}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                surface="surface"
+                border
+                className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Adjust Preferences & Re-generate</span>
-              </button>
+              </Box>
             </Box>
 
             <AgentMindTrace

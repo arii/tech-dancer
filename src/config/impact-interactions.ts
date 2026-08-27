@@ -13,9 +13,8 @@ export const ROUTE_INTERACTIONS: Record<string, RouteInteractionScenario[]> = {
       name: 'Custom Ingestion Tab',
       action: async (page: Page) => {
         const customTabBtn = page.getByRole('button', { name: /Custom PDF \/ Schedule URL/i });
-        if (await customTabBtn.count() > 0) {
-          await customTabBtn.scrollIntoViewIfNeeded();
-          await customTabBtn.click({ force: true });
+        if (await customTabBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+          await customTabBtn.click({ force: true }).catch(() => {});
           await page.waitForTimeout(300);
         }
       }
@@ -25,9 +24,8 @@ export const ROUTE_INTERACTIONS: Record<string, RouteInteractionScenario[]> = {
       name: 'Expanded Architecture Explainer',
       action: async (page: Page) => {
         const archToggleBtn = page.getByRole('button', { name: /Agent Architecture & Two-Pass Intelligence/i });
-        if (await archToggleBtn.count() > 0) {
-          await archToggleBtn.scrollIntoViewIfNeeded();
-          await archToggleBtn.click({ force: true });
+        if (await archToggleBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+          await archToggleBtn.click({ force: true }).catch(() => {});
           await page.waitForTimeout(300);
         }
       }
@@ -37,10 +35,8 @@ export const ROUTE_INTERACTIONS: Record<string, RouteInteractionScenario[]> = {
       name: 'Dynamic Questionnaire & Personas',
       action: async (page: Page) => {
         const scanBtn = page.getByRole('button', { name: /Scan & Discover Schedule/i });
-        if (await scanBtn.count() > 0) {
-          await scanBtn.scrollIntoViewIfNeeded();
-          await scanBtn.click({ force: true });
-          // Wait for questionnaire stage
+        if (await scanBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+          await scanBtn.click({ force: true }).catch(() => {});
           await page.waitForSelector('text=Discovered Event Parameters', { timeout: 6000 }).catch(() => {});
           await page.waitForTimeout(400);
         }
@@ -51,19 +47,16 @@ export const ROUTE_INTERACTIONS: Record<string, RouteInteractionScenario[]> = {
       name: 'Agent Mind Decision Trace & Calendar',
       action: async (page: Page) => {
         const scanBtn = page.getByRole('button', { name: /Scan & Discover Schedule/i });
-        if (await scanBtn.count() > 0) {
-          await scanBtn.scrollIntoViewIfNeeded();
-          await scanBtn.click({ force: true });
+        if (await scanBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+          await scanBtn.click({ force: true }).catch(() => {});
           await page.waitForSelector('text=Discovered Event Parameters', { timeout: 6000 }).catch(() => {});
           const noviceChip = page.getByRole('button', { name: /Novice Competitor/i });
-          if (await noviceChip.count() > 0) {
-            await noviceChip.scrollIntoViewIfNeeded();
-            await noviceChip.click({ force: true });
+          if (await noviceChip.isVisible({ timeout: 1500 }).catch(() => false)) {
+            await noviceChip.click({ force: true }).catch(() => {});
           }
           const generateBtn = page.getByRole('button', { name: /Generate Calendar/i });
-          if (await generateBtn.count() > 0) {
-            await generateBtn.scrollIntoViewIfNeeded();
-            await generateBtn.click({ force: true });
+          if (await generateBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+            await generateBtn.click({ force: true }).catch(() => {});
             await page.waitForSelector('text=Flight & Buffer Timeline', { timeout: 6000 }).catch(() => {});
             await page.waitForTimeout(400);
           }
