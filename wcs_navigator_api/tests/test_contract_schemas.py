@@ -19,7 +19,7 @@ from wcs_navigator_api.models.logistics import (
 
 def test_discovery_response_frontend_contract_serialization():
     """Verify DiscoveryResponse matches TypeScript DiscoveryResponse & FormQuestion interfaces."""
-    question = FormQuestion(
+    question1 = FormQuestion(
         id="wsdc_division",
         title="What is your dancer persona & competition division?",
         type="select",
@@ -42,12 +42,25 @@ def test_discovery_response_frontend_contract_serialization():
         ],
     )
 
+    question2 = FormQuestion(
+        id="styles_interest",
+        title="Which dance styles do you plan to dance?",
+        type="multiselect",
+        context="Filters schedule items by selected styles.",
+        required=False,
+        defaultValue=["wcs"],
+        options=[
+            FormQuestionOption(label="WCS", value="wcs", subtitle="West Coast Swing"),
+            FormQuestionOption(label="Country", value="country", subtitle="Country Swing"),
+        ],
+    )
+
     discovery = DiscoveryResponse(
         preset_id="boogie-by-the-bay-2026",
         preset_name="Boogie by the Bay 2026",
         event_name="Boogie by the Bay 2026",
         tracks_detected=["West Coast Swing", "Country Swing", "Hustle"],
-        suggested_form_questions=[question],
+        suggested_form_questions=[question1, question2],
     )
 
     payload = discovery.model_dump(by_alias=True)
@@ -55,12 +68,15 @@ def test_discovery_response_frontend_contract_serialization():
     # Assert shape matches frontend DynamicQuestionnaire requirements
     assert payload["preset_id"] == "boogie-by-the-bay-2026"
     assert payload["preset_name"] == "Boogie by the Bay 2026"
-    assert len(payload["suggested_form_questions"]) == 1
+    assert payload["event_name"] == "Boogie by the Bay 2026"
+    assert payload["tracks_detected"] == ["West Coast Swing", "Country Swing", "Hustle"]
+    assert len(payload["suggested_form_questions"]) == 2
 
     q_dump = payload["suggested_form_questions"][0]
     assert q_dump["id"] == "wsdc_division"
     assert q_dump["title"] == "What is your dancer persona & competition division?"
     assert q_dump["type"] == "select"
+    assert q_dump["context"] == "Filters out ineligible workshop tracks and determines staging call times."
     assert q_dump["required"] is True
     assert q_dump["defaultValue"] == "novice"
     assert len(q_dump["options"]) == 2
@@ -68,6 +84,11 @@ def test_discovery_response_frontend_contract_serialization():
     assert q_dump["options"][0]["value"] == "novice"
     assert q_dump["options"][0]["badge"] == "Novice"
     assert q_dump["options"][0]["subtitle"] is not None
+
+    q2_dump = payload["suggested_form_questions"][1]
+    assert q2_dump["id"] == "styles_interest"
+    assert q2_dump["type"] == "multiselect"
+    assert q2_dump["defaultValue"] == ["wcs"]
 
 
 def test_generate_response_frontend_contract_serialization():

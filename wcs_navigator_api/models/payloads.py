@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union
+from typing import Any, List, Literal, Optional, Union
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
 from wcs_navigator_api.models.logistics import AgentDecisionTrace
@@ -28,8 +28,8 @@ class FormQuestion(BaseModel):
 
     id: str
     title: str = Field(alias="title")
-    type: str  # 'select' | 'multiselect' | 'boolean'
-    context: str
+    type: Literal["select", "multiselect", "boolean"]
+    context: str  # P0: Explainability justification for why this question exists
     required: Optional[bool] = False
     options: Optional[List[FormQuestionOption]] = Field(default_factory=list)
     default_value: Optional[Union[str, bool, int, float, List[Union[str, bool, int, float]]]] = Field(
