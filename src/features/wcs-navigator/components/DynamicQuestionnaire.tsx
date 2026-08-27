@@ -82,12 +82,18 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
       visible.push(q);
+      // A question blocks the next question if it has no valid answer yet.
       const val = answers[q.id];
-      const hasAnswer =
-        val !== undefined &&
-        val !== null &&
-        (typeof val === 'string' ? val.trim() !== '' : Array.isArray(val) ? val.length > 0 : true);
-      if (!hasAnswer) break;
+      let hasAnswer = val !== undefined && val !== null && val !== '';
+      if (Array.isArray(val)) {
+        hasAnswer = val.length > 0;
+      } else if (q.type === 'boolean') {
+        hasAnswer = val !== undefined && val !== null;
+      }
+
+      if (!hasAnswer) {
+        break;
+      }
     }
     return visible;
   }, [questions, answers]);

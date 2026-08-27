@@ -1,16 +1,5 @@
-import { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
 import { FormQuestion, QuestionAnswerValue } from '../../types/navigator';
-import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
-
-const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 16v-4" />
-    <path d="M12 8h.01" />
-  </svg>
-);
 
 export interface BooleanFieldProps {
   question: FormQuestion;
@@ -39,9 +28,11 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
           </Stack>
         </Stack>
 
-        <Text variant="caption-subtle" color="dim" className="leading-relaxed mt-1">
-          {explanationText}
-        </Text>
+        <Box paddingTop={1}>
+          <Text variant="caption-subtle" color="dim" className="leading-relaxed">
+            {explanationText}
+          </Text>
+        </Box>
       </Stack>
 
       <Box
