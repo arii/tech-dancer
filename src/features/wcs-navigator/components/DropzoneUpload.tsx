@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';

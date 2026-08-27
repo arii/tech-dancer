@@ -1,6 +1,6 @@
 """Logistics data structures for WCS Navigator API."""
 
-from typing import List, Optional
+from typing import List, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -10,7 +10,7 @@ class BufferStep(BaseModel):
     label: str
     time: str
     duration: Optional[str] = None
-    type: str  # 'staging' | 'warmup' | 'hotel' | 'transit' | 'flight'
+    type: Literal["staging", "warmup", "hotel", "transit", "flight"]
     description: Optional[str] = None
 
 
@@ -56,7 +56,7 @@ class SubTask(BaseModel):
 
     id: str
     label: str
-    status: str  # 'completed' | 'in_progress' | 'pending'
+    status: Literal["completed", "in_progress", "pending"]
     detail: Optional[str] = None
 
 
@@ -67,7 +67,7 @@ class AuditSession(BaseModel):
     title: str
     time: str
     location: str
-    status: str  # 'included' | 'filtered'
+    status: Literal["included", "filtered"]
     decision_badge: str = Field(alias="decisionBadge")
     justification: str
 
@@ -78,7 +78,7 @@ class ThemeDressCode(BaseModel):
     id: str
     day: str
     theme_title: str = Field(alias="themeTitle")
-    category: str  # 'social_theme' | 'showcase_formal' | 'competition_attire' | 'casual_sunday'
+    category: Literal["social_theme", "showcase_formal", "competition_attire", "casual_sunday"]
     description: str
     recommended_attire: List[str] = Field(default_factory=list, alias="recommendedAttire")
     vibe: str
@@ -89,7 +89,7 @@ class PackingItem(BaseModel):
 
     id: str
     name: str
-    category: str  # 'footwear' | 'attire' | 'toiletries' | 'tech' | 'essentials'
+    category: Literal["footwear", "attire", "toiletries", "tech", "essentials"]
     rationale: str
     quantity: Optional[int] = 1
 
@@ -103,4 +103,3 @@ class AgentDecisionTrace(BaseModel):
     theme_dress_codes: Optional[List[ThemeDressCode]] = Field(default_factory=list, alias="themeDressCodes")
     packing_manifest: Optional[List[PackingItem]] = Field(default_factory=list, alias="packingManifest")
     ics_content: str = Field(alias="icsContent")
-

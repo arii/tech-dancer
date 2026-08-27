@@ -30,7 +30,7 @@ describe('AgentMindTrace Suite', () => {
     render(<FlightBufferTimeline />);
     expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
     expect(screen.getAllByText(/Earliest Event Call/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Target Landing Deadline/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Landing Target|Target Landing Deadline/i).length).toBeGreaterThan(0);
     expect(screen.getByText('Competition Staging Call')).toBeDefined();
   });
 

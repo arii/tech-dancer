@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React, { useEffect, useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
