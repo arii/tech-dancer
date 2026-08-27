@@ -1,7 +1,7 @@
 """Buffer calculation arithmetic service module."""
 
 from datetime import datetime, timedelta
-from wcs_navigator_api.models.logistics import BufferCalculationResult
+from wcs_navigator_api.models.logistics import BufferCalculationResult, BufferStep
 
 
 def calculate_flight_buffer(
@@ -20,8 +20,10 @@ def calculate_flight_buffer(
     hotel_mins = int(hotel_settle_hours * 60)
     warmup_mins = int(warmup_buffer_hours * 60)
 
-    total_buffer_mins = transit_mins + hotel_mins + warmup_mins
-    latest_landing_dt = earliest_dt - timedelta(minutes=total_buffer_mins)
+    # Timeline calculation step by step backwards from call time
+    warmup_start_dt = earliest_dt - timedelta(minutes=warmup_mins)
+    hotel_start_dt = warmup_start_dt - timedelta(minutes=hotel_mins)
+    latest_landing_dt = hotel_start_dt - timedelta(minutes=transit_mins)
 
     call_time_str = earliest_dt.strftime("%H:%M")
     landing_time_str = latest_landing_dt.strftime("%H:%M")
@@ -32,11 +34,48 @@ def calculate_flight_buffer(
         f"{landing_time_str} (Landing Deadline)"
     )
 
+    steps = [
+        BufferStep(
+            label="Earliest Call / Staging",
+            time=earliest_dt.strftime("%I:%M %p").lstrip("0"),
+            type="staging",
+            description="Mandatory event call time",
+        ),
+        BufferStep(
+            label="Warmup & Registration Buffer",
+            time=warmup_start_dt.strftime("%I:%M %p").lstrip("0"),
+            duration=f"{warmup_mins}m",
+            type="warmup",
+            description="Warmup and bib pick-up buffer",
+        ),
+        BufferStep(
+            label="Hotel Check-In & Settle",
+            time=hotel_start_dt.strftime("%I:%M %p").lstrip("0"),
+            duration=f"{hotel_mins}m",
+            type="hotel",
+            description="Hotel check-in and luggage drop",
+        ),
+        BufferStep(
+            label="Airport Transit",
+            time=latest_landing_dt.strftime("%I:%M %p").lstrip("0"),
+            duration=f"{transit_mins}m",
+            type="transit",
+            description="Drive/shuttle from airport to hotel",
+        ),
+        BufferStep(
+            label="Latest Flight Landing",
+            time=latest_landing_dt.strftime("%I:%M %p").lstrip("0"),
+            type="flight",
+            description="Latest safe touchdown deadline",
+        ),
+    ]
+
     return BufferCalculationResult(
-        earliest_call_time_iso=earliest_dt.isoformat(),
-        transit_duration_mins=transit_mins,
-        hotel_buffer_hours=hotel_settle_hours,
-        warmup_buffer_hours=warmup_buffer_hours,
-        latest_flight_arrival_iso=latest_landing_dt.isoformat(),
-        math_breakdown_formula=math_formula,
+        earliestStagingTime=earliest_dt.isoformat(),
+        warmupMinutes=warmup_mins,
+        hotelSettleMinutes=hotel_mins,
+        transitMinutes=transit_mins,
+        latestFlightArrivalDeadline=latest_landing_dt.isoformat(),
+        steps=steps,
+        formulaSummary=math_formula,
     )
