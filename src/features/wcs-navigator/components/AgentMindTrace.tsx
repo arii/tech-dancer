@@ -5,7 +5,7 @@ import { AgentDecisionTrace } from '../types';
 import { ExecutionProgressBar } from './ExecutionProgressBar';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FilteringAuditMatrix } from './FilteringAuditMatrix';
-import { PackingManifestCard } from './PackingManifestCard';
+import { ThemeDressCodeCard } from './ThemeDressCodeCard';
 import { downloadIcsFile } from '../utils/icsDownloader';
 import { Download, Brain, Sparkles, CheckCircle2, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -145,8 +145,8 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
       {/* 3. Filtering Audit Matrix */}
       <FilteringAuditMatrix sessions={trace?.sessions} />
 
-      {/* 4. Packing Manifest Cards */}
-      <PackingManifestCard items={trace?.packingManifest} />
+      {/* 4. Event Themes & Dress Codes */}
+      <ThemeDressCodeCard themes={trace?.themeDressCodes} />
 
       {/* Footer Download Trigger Callout */}
       <Box padding={6} radius="lg" surface="card" border className="text-center border-line">

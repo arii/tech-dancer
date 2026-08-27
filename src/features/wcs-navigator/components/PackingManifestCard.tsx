@@ -1,176 +1,163 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
-import { PackingItem } from '../types';
-import { Footprints, Shirt, Sparkles, Laptop, Backpack, Info, Check } from 'lucide-react';
+import { ThemeDressCode } from '../types';
+import { Sparkles, Shirt, PartyPopper, Award, Info, Tag, CheckCircle2 } from 'lucide-react';
 
-export interface PackingManifestCardProps {
-  items?: PackingItem[];
+export interface ThemeDressCodeCardProps {
+  themes?: ThemeDressCode[];
   className?: string;
 }
 
-const DEFAULT_ITEMS: PackingItem[] = [
+const DEFAULT_THEMES: ThemeDressCode[] = [
   {
-    id: 'p1',
-    name: 'Suede-soled WCS Shoes (2 Pairs)',
-    category: 'footwear',
-    rationale: 'Schedule contains 8+ hours of intensive social dancing & prelims across fast wood floors.',
-    quantity: 2,
+    id: 'theme-fri',
+    day: 'Friday Night',
+    themeTitle: 'Neon / UV Glow Late Night Party',
+    category: 'social_theme',
+    description: 'The ballroom turns on blacklights for the midnight social. Dancers wear bright neon shades and UV-reactive apparel.',
+    recommendedAttire: ['Neon Yellow/Pink/Green Tops', 'White Accents / UV-glow shoes', 'Glow bracelets & accessories'],
+    vibe: 'High Energy & Vibrant',
   },
   {
-    id: 'p2',
-    name: 'Breathable Workshop & Competition Shirts',
-    category: 'attire',
-    rationale: 'Calculated 4 daytime workshops + Novice J&J Prelims requiring fresh layer changes.',
-    quantity: 5,
+    id: 'theme-sat',
+    day: 'Saturday Evening',
+    themeTitle: 'Pro Showcase Gala & Dressy Glam',
+    category: 'showcase_formal',
+    description: 'The marquee evening featuring Champions Strictly Finals and Pro Routine Showcases. Elevated dancewear and cocktail chic.',
+    recommendedAttire: ['Fitted dress shirts / vests', 'Cocktail dresses & dance jumpsuits', 'Polished suede dance shoes'],
+    vibe: 'Elegant & Sophisticated',
   },
   {
-    id: 'p3',
-    name: 'Electrolyte Packets & Portable Water Bottle',
-    category: 'essentials',
-    rationale: 'Buffer calculation highlights back-to-back late-night social sessions past 1:00 AM.',
-    quantity: 6,
-  },
+    id: 'theme-comp',
+    day: 'Sat / Sun Prelims',
+    daySubtitle: 'WSDC Divisions',
+    themeTitle: 'WSDC Competition Dress Code',
+    category: 'competition_attire',
+    description: 'Clean, smart casual dancewear adhering to WSDC guidelines. Form-fitting lines with freedom of motion for partnering.',
+    recommendedAttire: ['Breathable dance trousers / dark denim', 'Neat fitted shirts / tops', 'Secure bib placement'],
+    vibe: 'Professional & Clean',
+  } as ThemeDressCode & { daySubtitle?: string },
   {
-    id: 'p4',
-    name: 'Microfiber Towels & Mini Deodorant',
-    category: 'toiletries',
-    rationale: 'Fast 60-minute warmup buffer between registration and Marshalling.',
-    quantity: 2,
-  },
-  {
-    id: 'p5',
-    name: 'High-Speed Portable Power Bank',
-    category: 'tech',
-    rationale: 'Schedules and real-time division callouts streamed via event portal throughout the day.',
-    quantity: 1,
-  },
-  {
-    id: 'p6',
-    name: 'Compact Shoe Brush & Sole Cleaner',
-    category: 'footwear',
-    rationale: 'Ballroom floor condition note indicates high-traffic wax coating.',
-    quantity: 1,
+    id: 'theme-sun',
+    day: 'Sunday Night',
+    themeTitle: 'Survivor Social & Studio Athleisure',
+    category: 'casual_sunday',
+    description: 'Late-night chill survivors party until sunrise. Relaxed dance t-shirts, oversized hoodies, and maximum comfort.',
+    recommendedAttire: ['Event / Studio t-shirts', 'Stretch joggers / leggings', 'Flat dance sneakers / socks'],
+    vibe: 'Cozy & Laid Back',
   },
 ];
 
-const CATEGORY_STYLES = {
-  footwear: {
-    label: 'Footwear',
-    icon: Footprints,
-    badge: 'bg-accent/10 text-accent border-accent/20',
+const CATEGORY_CONFIG = {
+  social_theme: {
+    label: 'Social Theme',
+    badge: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
+    icon: PartyPopper,
+    accentBorder: 'hover:border-brand-cyan/60',
   },
-  attire: {
-    label: 'Attire',
-    icon: Shirt,
-    badge: 'bg-surface text-text-main border-line',
-  },
-  toiletries: {
-    label: 'Toiletries',
+  showcase_formal: {
+    label: 'Gala & Showcase',
+    badge: 'bg-brand-amber/20 text-brand-amber border-brand-amber/40',
     icon: Sparkles,
-    badge: 'bg-surface text-text-main border-line',
+    accentBorder: 'hover:border-brand-amber/60',
   },
-  tech: {
-    label: 'Tech & Gear',
-    icon: Laptop,
-    badge: 'bg-surface text-text-main border-line',
+  competition_attire: {
+    label: 'WSDC Official',
+    badge: 'bg-brand-emerald/20 text-brand-emerald border-brand-emerald/40',
+    icon: Award,
+    accentBorder: 'hover:border-brand-emerald/60',
   },
-  essentials: {
-    label: 'Essentials',
-    icon: Backpack,
-    badge: 'bg-accent/10 text-accent border-accent/20',
+  casual_sunday: {
+    label: 'Survivor Social',
+    badge: 'bg-surface text-text-main border-line',
+    icon: Shirt,
+    accentBorder: 'hover:border-accent/60',
   },
 };
 
-export function PackingManifestCard({ items = DEFAULT_ITEMS, className }: PackingManifestCardProps) {
-  const [checkedIds, setCheckedIds] = useState<Record<string, boolean>>({});
-
-  const toggleItem = (id: string) => {
-    setCheckedIds(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
-
-  const packedCount = items.filter(item => checkedIds[item.id]).length;
-
+export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: ThemeDressCodeCardProps) => {
   return (
     <Stack gap={4} className={className}>
+      {/* Header Banner */}
       <Box display="flex" align="center" justify="between" wrap gap={2}>
         <Stack gap={1}>
-          <Box as="h3" className="text-lg font-bold text-text-main">
-            Smart Packing Checklist
+          <Box as="h3" className="text-lg font-bold text-text-main flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-accent" />
+            <span>Event Themes &amp; Dress Codes</span>
           </Box>
           <Box as="p" className="text-xs text-text-dim">
-            Helpful essentials suggested based on your workshops, competitions, and late-night dancing
+            Official party themes, gala dress codes, and competition attire expectations
           </Box>
         </Stack>
         <Box paddingX={3} paddingY={1} radius="md" surface="card" border className="text-xs font-mono text-accent font-semibold">
-          {packedCount} / {items.length} Packed
+          {themes.length} Key Themes Identified
         </Box>
       </Box>
 
-      {/* Grid of Styled Packing Cards */}
-      <Grid cols={{ default: 1, sm: 2, lg: 3 }} gap={4}>
-        {items.map((item) => {
-          const isPacked = !!checkedIds[item.id];
-          const style = CATEGORY_STYLES[item.category] || CATEGORY_STYLES.essentials;
-          const CategoryIcon = style.icon;
+      {/* Grid of Theme & Dress Code Cards */}
+      <Grid cols={{ default: 1, sm: 2 }} gap={4}>
+        {themes.map((item) => {
+          const config = CATEGORY_CONFIG[item.category] || CATEGORY_CONFIG.social_theme;
+          const CategoryIcon = config.icon;
 
           return (
             <div
               key={item.id}
-              onClick={() => toggleItem(item.id)}
-              className={`p-4 rounded-xl border bg-surface/80 transition-all cursor-pointer select-none flex flex-col justify-between space-y-3 ${
-                isPacked
-                  ? 'border-brand-emerald/50 bg-brand-emerald/5 opacity-80'
-                  : 'border-line/70 hover:border-accent/40 shadow-sm'
-              }`}
+              className={`p-5 rounded-2xl bg-surface/90 border border-line/80 shadow-md transition-all flex flex-col justify-between space-y-4 ${config.accentBorder}`}
             >
               <div className="flex flex-col space-y-3">
-                <div className="flex items-start justify-between gap-2">
+                {/* Top Row: Day & Category Tag */}
+                <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className={`p-2 rounded-lg border ${style.badge} shrink-0`}>
+                    <div className={`p-2 rounded-xl border ${config.badge} shrink-0`}>
                       <CategoryIcon className="w-4 h-4" />
                     </div>
-                    <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${style.badge}`}>
-                      {style.label}
+                    <span className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
+                      {item.day}
                     </span>
                   </div>
 
-                  {/* Interactive Checkbox */}
-                  <div
-                    aria-label={`Mark ${item.name} as packed`}
-                    className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
-                      isPacked
-                        ? 'bg-brand-emerald border-brand-emerald text-black'
-                        : 'border-line/80 bg-muted/60 hover:border-accent'
-                    }`}
-                  >
-                    {isPacked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                  </div>
+                  <span className={`text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded border ${config.badge}`}>
+                    {config.label}
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between gap-2">
-                  <h4 className={`text-sm font-bold leading-snug transition-colors ${
-                    isPacked ? 'text-text-dim line-through' : 'text-text-main'
-                  }`}>
-                    {item.name}
+                {/* Theme Title & Vibe */}
+                <div className="space-y-1">
+                  <h4 className="text-base font-bold text-text-main leading-snug">
+                    {item.themeTitle}
                   </h4>
-                  {item.quantity && item.quantity > 1 && (
-                    <span className="text-xs font-mono text-accent font-semibold shrink-0">
-                      x{item.quantity}
-                    </span>
-                  )}
+                  <p className="text-xs text-text-dim leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
 
-                {/* Explicit Rationale Section */}
-                <div className="p-2.5 rounded-lg bg-muted/50 border border-line/40 text-xs text-text-dim leading-relaxed flex items-start gap-2">
-                  <Info className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-text-main font-semibold">Why pack this:</strong>{' '}
-                    {item.rationale}
+                {/* Recommended Attire Checklist Pills */}
+                <div className="p-3 rounded-xl bg-muted/40 border border-line/50 space-y-2">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-semibold text-text-main">
+                    <Tag className="w-3.5 h-3.5 text-accent shrink-0" />
+                    <span>Recommended Outfits:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.recommendedAttire.map((attire, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface border border-line/60 text-xs text-text-dim"
+                      >
+                        <CheckCircle2 className="w-3 h-3 text-brand-emerald shrink-0" />
+                        <span>{attire}</span>
+                      </span>
+                    ))}
                   </div>
                 </div>
+              </div>
+
+              {/* Vibe Tag Footer */}
+              <div className="pt-2 border-t border-line/40 flex items-center justify-between text-xs text-text-dim">
+                <span className="text-[11px] font-mono">Atmosphere:</span>
+                <span className="font-mono text-accent font-semibold text-xs">
+                  ✨ {item.vibe}
+                </span>
               </div>
             </div>
           );
@@ -178,5 +165,6 @@ export function PackingManifestCard({ items = DEFAULT_ITEMS, className }: Packin
       </Grid>
     </Stack>
   );
-}
+};
+
 

@@ -41,10 +41,22 @@ export interface PackingItem {
   quantity?: number;
 }
 
+export interface ThemeDressCode {
+  id: string;
+  day: string;
+  themeTitle: string;
+  category: 'social_theme' | 'showcase_formal' | 'competition_attire' | 'casual_sunday';
+  description: string;
+  recommendedAttire: string[];
+  vibe: string;
+}
+
 export interface AgentDecisionTrace {
   subTasks: SubTask[];
   bufferTimeline: FlightBuffer;
   sessions: AuditSession[];
-  packingManifest: PackingItem[];
+  themeDressCodes?: ThemeDressCode[];
+  packingManifest?: PackingItem[];
   icsContent: string;
 }
+

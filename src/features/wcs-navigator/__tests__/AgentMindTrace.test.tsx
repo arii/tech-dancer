@@ -4,7 +4,7 @@ import { AgentMindTrace } from '../components/AgentMindTrace';
 import { ExecutionProgressBar } from '../components/ExecutionProgressBar';
 import { FlightBufferTimeline } from '../components/FlightBufferTimeline';
 import { FilteringAuditMatrix } from '../components/FilteringAuditMatrix';
-import { PackingManifestCard } from '../components/PackingManifestCard';
+import { ThemeDressCodeCard } from '../components/ThemeDressCodeCard';
 import { downloadIcsFile } from '../utils/icsDownloader';
 
 describe('AgentMindTrace Suite', () => {
@@ -57,11 +57,12 @@ describe('AgentMindTrace Suite', () => {
     expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();
   });
 
-  it('renders PackingManifestCard items and rationale sections', () => {
-    render(<PackingManifestCard />);
-    expect(screen.getByText('Smart Packing Checklist')).toBeDefined();
-    expect(screen.getByText('Suede-soled WCS Shoes (2 Pairs)')).toBeDefined();
-    expect(screen.getByText(/Schedule contains 8\+ hours of intensive social dancing/i)).toBeDefined();
+  it('renders ThemeDressCodeCard items and recommendations', () => {
+    render(<ThemeDressCodeCard />);
+    expect(screen.getByText('Event Themes & Dress Codes')).toBeDefined();
+    expect(screen.getByText(/Neon \/ UV Glow Late Night Party/i)).toBeDefined();
+    expect(screen.getByText(/Pro Showcase Gala & Dressy Glam/i)).toBeDefined();
+    expect(screen.getByText(/WSDC Competition Dress Code/i)).toBeDefined();
   });
 
   it('triggers downloadIcsFile and displays visual toast notification', () => {
@@ -71,7 +72,7 @@ describe('AgentMindTrace Suite', () => {
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
     render(<AgentMindTrace />);
-    const downloadBtns = screen.getAllByText(/Download Calendar \(\.ics\)/i);
+    const downloadBtns = screen.getAllByRole('button', { name: /Download Calendar \(\.ics\)|Download \(\.ics\)/i });
     fireEvent.click(downloadBtns[0]);
 
     expect(createObjectURLMock).toHaveBeenCalled();

@@ -109,11 +109,43 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           justification: 'Matched late-night social energy preference'
         }
       ],
-      packingManifest: [
-        { id: 'p1', name: 'Adhesive Suede Sole Sheets', category: 'footwear', rationale: 'Ballroom uses temporary wood parquet over carpet; suede soles protect knee ligaments during fast pivots.', quantity: 2 },
-        { id: 'p2', name: 'Competition Bib Safety Pins', category: 'essentials', rationale: 'Scheduled for Jack & Jill competitions; safety pins required for registration bibs.', quantity: 4 },
-        { id: 'p3', name: 'Neon / UV Reactive Apparel', category: 'attire', rationale: 'Official Friday social theme is Neon & Retro Glow.', quantity: 1 },
-        { id: 'p4', name: 'Electrolyte Hydration Packets', category: 'toiletries', rationale: 'Late-night social dancing scheduled past 4:00 AM requires proactive hydration.', quantity: 6 }
+      themeDressCodes: [
+        {
+          id: 't1',
+          day: 'Friday Night',
+          themeTitle: 'Neon & Retro Glow Party',
+          category: 'social_theme',
+          description: 'Midnight social featuring blacklights and UV lighting throughout the grand ballroom.',
+          recommendedAttire: ['Neon tops & shoes', 'UV glow accessories', 'White accents'],
+          vibe: 'High Energy & Vibrant'
+        },
+        {
+          id: 't2',
+          day: 'Saturday Evening',
+          themeTitle: 'Champions Showcase Gala & Dressy Glam',
+          category: 'showcase_formal',
+          description: 'Marquee evening with Champion Jack & Jill finals and all-star pro routines.',
+          recommendedAttire: ['Fitted dress shirts & vests', 'Cocktail attire & jumpsuits', 'Clean dance shoes'],
+          vibe: 'Elegant & Sophisticated'
+        },
+        {
+          id: 't3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Smart casual dancewear adhering to official WSDC partnering guidelines.',
+          recommendedAttire: ['Breathable dance trousers / dark denim', 'Neat fitted shirts', 'Secure bib placement'],
+          vibe: 'Clean & Professional'
+        },
+        {
+          id: 't4',
+          day: 'Sunday Night',
+          themeTitle: 'Survivor Social & Studio Athleisure',
+          category: 'casual_sunday',
+          description: 'Late-night chill survivors party until sunrise with resident DJs.',
+          recommendedAttire: ['Event / Studio t-shirts', 'Stretch joggers / leggings', 'Flat dance sneakers'],
+          vibe: 'Cozy & Laid Back'
+        }
       ],
       icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nMETHOD:PUBLISH\\nBEGIN:VEVENT\\nUID:wcs-flight-deadline-001@boomtick.blog\\nDTSTART:20260904T211500Z\\nDTEND:20260904T214500Z\\nSUMMARY:✈️ Target Flight Landing Deadline (SJC)\\nDESCRIPTION:Latest recommended landing time to allow 30m transit, 90m hotel check-in, and 60m warmup before Novice Staging.\\nLOCATION:San Jose Mineta International Airport (SJC)\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nBEGIN:VEVENT\\nUID:wcs-novice-strictly-002@boomtick.blog\\nDTSTART:20260905T003000Z\\nDTEND:20260905T013000Z\\nSUMMARY:🏆 Novice Strictly Swing Prelims\\nDESCRIPTION:Report to ballroom staging area by 5:15 PM for roll call.\\nLOCATION:Grand Ballroom, South Bay Dance Fling\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nEND:VCALENDAR'
     },
@@ -202,10 +234,43 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           justification: 'Filtered: Requires Level 4/5 audition band'
         }
       ],
-      packingManifest: [
-        { id: 'p1', name: 'Suede Wire Shoe Brush', category: 'footwear', rationale: 'Large Hyatt Regency ballroom floors tend to collect talc dust by Saturday.', quantity: 1 },
-        { id: 'p2', name: 'Travel Garment Steamer', category: 'attire', rationale: 'Competition slacks and vests require pressing for spotlight finals.', quantity: 1 },
-        { id: 'p3', name: 'High-Fidelity Filter Earplugs', category: 'essentials', rationale: 'Grand Peninsula Ballroom late-night sound system operates above 90dB.', quantity: 1 }
+      themeDressCodes: [
+        {
+          id: 'tb1',
+          day: 'Friday Night',
+          themeTitle: 'Bay Area Glow Social Party',
+          category: 'social_theme',
+          description: 'Friday kickoff late night social with blacklights and neon colors.',
+          recommendedAttire: ['Neon & UV bright colors', 'White accents', 'Glow jewelry'],
+          vibe: 'High Energy & Electric'
+        },
+        {
+          id: 'tb2',
+          day: 'Saturday Evening',
+          themeTitle: 'Classic Champions Showcase & Cocktail Chic',
+          category: 'showcase_formal',
+          description: 'Strictly Swing & Pro Classic Showcases in the Grand Peninsula Ballroom.',
+          recommendedAttire: ['Dress shirts & ties/vests', 'Cocktail dresses', 'Polished suede dance shoes'],
+          vibe: 'Glamorous & Prestigious'
+        },
+        {
+          id: 'tb3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Official WSDC competition attire for Jack & Jill and Strictly Swing.',
+          recommendedAttire: ['Clean dark trousers / stretch slacks', 'Fitted neat shirts', 'Competition bibs'],
+          vibe: 'Sharp & Athletic'
+        },
+        {
+          id: 'tb4',
+          day: 'Sunday Night',
+          themeTitle: 'Survivors Sunrise Social',
+          category: 'casual_sunday',
+          description: 'Late night survivor dancing until dawn with acoustic sets.',
+          recommendedAttire: ['Boogie t-shirts / hoodies', 'Comfortable dance sneakers', 'Joggers'],
+          vibe: 'Warm & Community-Driven'
+        }
       ],
       icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline (SFO)\\nDTSTART:20261009T212500Z\\nDTEND:20261009T215500Z\\nDESCRIPTION:Landing deadline for Boogie by the Bay 2026.\\nLOCATION:San Francisco International Airport (SFO)\\nEND:VEVENT\\nEND:VCALENDAR'
     },
@@ -279,9 +344,25 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
         justification: 'Open all-levels class'
       }
     ],
-    packingManifest: [
-      { id: 'p1', name: 'Suede Dance Shoes & Brush', category: 'footwear', rationale: 'Optimized for ballroom dance flooring.', quantity: 1 },
-      { id: 'p2', name: 'Safety Pins & Electrolytes', category: 'essentials', rationale: 'Essential convention preparedness.', quantity: 1 }
+    themeDressCodes: [
+      {
+        id: 'g-theme-1',
+        day: 'Friday Night',
+        themeTitle: 'Welcome Social & Kickoff Party',
+        category: 'social_theme',
+        description: 'Casual and welcoming social dance atmosphere.',
+        recommendedAttire: ['Dance t-shirts', 'Suede dance shoes', 'Comfortable stretch jeans'],
+        vibe: 'Fun & Friendly'
+      },
+      {
+        id: 'g-theme-2',
+        day: 'Saturday Evening',
+        themeTitle: 'Main Showcase & Champions Gala',
+        category: 'showcase_formal',
+        description: 'Evening spotlight showcases and finals.',
+        recommendedAttire: ['Dress shirts / cocktail attire', 'Polished dance shoes'],
+        vibe: 'Festive & Elegant'
+      }
     ],
     icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline\\nDTSTART:20261015T210000Z\\nDTEND:20261015T213000Z\\nDESCRIPTION:Landing deadline for event.\\nEND:VEVENT\\nEND:VCALENDAR'
   },
