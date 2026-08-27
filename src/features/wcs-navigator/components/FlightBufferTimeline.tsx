@@ -139,34 +139,69 @@ export const FlightBufferTimeline = ({
 
   // Ensure chronological top-to-bottom flow (earliest flight arrival first, ending at staging call)
   const chronologicalSteps = useMemo(() => {
-    const rawSteps = buffer.steps || [];
-    const stepsToUse = rawSteps.length === 0 ? DEFAULT_BUFFER.steps : rawSteps;
+    const totalBufferMins = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
+    const deadlineWithoutOffset = formatOffsetTime(buffer.earliestStagingTime, -totalBufferMins);
+    const flightLandingTime = formatOffsetTime(deadlineWithoutOffset, activeOffset);
 
-    let ordered = [...stepsToUse];
-    if (ordered[0]?.type === 'staging' && ordered[ordered.length - 1]?.type === 'flight') {
-      ordered = ordered.reverse();
-    }
+    // Build the dynamic steps based on the calculus
+    const flightStep = {
+      type: 'flight',
+      label: 'Target Flight Landing Deadline',
+      time: flightLandingTime + ' Touchdown',
+      duration: 'Deadline Target',
+      description: 'Recommended latest wheels-down time to account for deplaning and baggage collection.',
+    };
 
-    if (activeOffset === 0) return ordered;
+    const transitStart = flightLandingTime;
+    const transitEnd = formatOffsetTime(flightLandingTime, buffer.transitMinutes || 30);
+    const transitStep = {
+      type: 'transit',
+      label: 'Airport-to-Venue Transit',
+      time: `${transitStart} → ${transitEnd}`,
+      duration: `${buffer.transitMinutes || 30} mins`,
+      description: 'Dedicated rideshare or shuttle buffer from airport terminal directly to host hotel.',
+    };
 
-    return ordered.map((step) => {
-      if (step.type === 'staging') return step; // Staging call is fixed
+    const hotelStart = transitEnd;
+    const hotelEnd = formatOffsetTime(hotelStart, buffer.hotelSettleMinutes || 90);
+    const hotelStep = {
+      type: 'hotel',
+      label: 'Hotel Check-in & Wardrobe Settle',
+      time: `${hotelStart} → ${hotelEnd}`,
+      duration: `${buffer.hotelSettleMinutes || 90} mins`,
+      description: 'Room check-in, unpacking dance wardrobe, shoe prep, and freshening up.',
+    };
 
-      // Adjust time string
-      if (step.time.includes('→')) {
-        const parts = step.time.split('→').map((p) => p.trim());
-        const adjustedStart = formatOffsetTime(parts[0], activeOffset);
-        const adjustedEnd = formatOffsetTime(parts[1], activeOffset);
-        return { ...step, time: `${adjustedStart} → ${adjustedEnd}` };
-      }
-      return { ...step, time: formatOffsetTime(step.time, activeOffset) };
-    });
-  }, [buffer.steps, activeOffset]);
+    const warmupStart = hotelEnd;
+    const warmupEnd = formatOffsetTime(warmupStart, buffer.warmupMinutes || 60);
+    const warmupStep = {
+      type: 'warmup',
+      label: 'Warmup & Floor Check',
+      time: `${warmupStart} → ${warmupEnd}`,
+      duration: `${buffer.warmupMinutes || 60} mins`,
+      description: 'Competitor bib registration, physical dynamic stretch, and ballroom floor test.',
+    };
 
-  const adjustedLandingDeadline = useMemo(
-    () => formatOffsetTime(buffer.latestFlightArrivalDeadline, activeOffset),
-    [buffer.latestFlightArrivalDeadline, activeOffset]
-  );
+    const stagingStep = {
+      type: 'staging',
+      label: 'Competition Staging Call',
+      time: buffer.earliestStagingTime + ' Staging Call',
+      duration: 'Mandatory Call',
+      description: 'Earliest division roll call. Competitors must report to ballroom marshalling.',
+    };
+
+    return [flightStep, transitStep, hotelStep, warmupStep, stagingStep];
+  }, [buffer.earliestStagingTime, buffer.transitMinutes, buffer.hotelSettleMinutes, buffer.warmupMinutes, activeOffset]);
+
+  const adjustedLandingDeadline = useMemo(() => {
+    // Calculus: T_landing_deadline = T_staging - (T_transit + T_hotel_settle + T_warmup)
+    const totalBufferMins = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
+    // T_staging is buffer.earliestStagingTime
+    // We reverse formatOffsetTime by adding negative totalBufferMins, then adding activeOffset
+    // Wait, the calculus requires deriving T_landing_deadline from earliestStagingTime directly:
+    const deadlineWithoutOffset = formatOffsetTime(buffer.earliestStagingTime, -totalBufferMins);
+    return formatOffsetTime(deadlineWithoutOffset, activeOffset);
+  }, [buffer.earliestStagingTime, buffer.transitMinutes, buffer.hotelSettleMinutes, buffer.warmupMinutes, activeOffset]);
 
   const hasScheduleConflict = activeOffset > 0;
 
@@ -270,6 +305,34 @@ export const FlightBufferTimeline = ({
               aria-label="Land 30 minutes earlier"
             >
               <Text variant="mono" size="micro">-30m</Text>
+            </Box>
+            <Box
+              as="button"
+              type="button"
+              onClick={() => handleOffsetChange(-15)}
+              paddingX={2}
+              paddingY={1}
+              radius="md"
+              surface="muted"
+              border
+              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
+              aria-label="Land 15 minutes earlier"
+            >
+              <Text variant="mono" size="micro">-15m</Text>
+            </Box>
+            <Box
+              as="button"
+              type="button"
+              onClick={() => handleOffsetChange(15)}
+              paddingX={2}
+              paddingY={1}
+              radius="md"
+              surface="muted"
+              border
+              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
+              aria-label="Land 15 minutes later"
+            >
+              <Text variant="mono" size="micro">+15m</Text>
             </Box>
             <Box
               as="button"

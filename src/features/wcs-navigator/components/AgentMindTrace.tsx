@@ -17,6 +17,7 @@ export interface AgentMindTraceProps {
 }
 
 const FRIDAY_AFTERNOON_REGEX = /(?:12|[1-6]):\d{2}\s*pm/i;
+const SUNDAY_MORNING_REGEX = /(?:12|[1-9]|10|11):\d{2}\s*am/i;
 
 const DEFAULT_ICS = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -98,20 +99,37 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
     const rawSessions = trace?.sessions;
     if (!rawSessions) return undefined;
 
-    if (flightOffset <= 0) return rawSessions;
+    if (flightOffset === 0) return rawSessions;
 
-    // Flight landed late (+30m or more): mark Friday afternoon workshops as time conflicts
     return rawSessions.map((session) => {
       const lowerTime = session.time.toLowerCase();
-      const isFridayAfternoon = lowerTime.includes('fri') && FRIDAY_AFTERNOON_REGEX.test(session.time);
-      if (isFridayAfternoon) {
-        return {
-          ...session,
-          status: 'filtered' as const,
-          decisionBadge: 'Time Conflict (Flight Delay)',
-          justification: `Flight delayed by +${flightOffset}m. Arrival/transit window overlaps with this session.`,
-        };
+
+      // Flight landed late (+30m or more): mark Friday afternoon workshops as time conflicts
+      if (flightOffset > 0) {
+        const isFridayAfternoon = lowerTime.includes('fri') && FRIDAY_AFTERNOON_REGEX.test(session.time);
+        if (isFridayAfternoon) {
+          return {
+            ...session,
+            status: 'filtered' as const,
+            decisionBadge: 'Time Conflict (Flight Delay)',
+            justification: `Flight delayed by +${flightOffset}m. Arrival/transit window overlaps with this session.`,
+          };
+        }
       }
+
+      // Flight departs early (-30m or more): mark Sunday morning workshops as time conflicts
+      if (flightOffset < 0) {
+        const isSundayMorning = lowerTime.includes('sun') && SUNDAY_MORNING_REGEX.test(session.time);
+        if (isSundayMorning) {
+          return {
+            ...session,
+            status: 'filtered' as const,
+            decisionBadge: 'Time Conflict (Early Departure)',
+            justification: `Early flight departure shifted by ${flightOffset}m. Checkout/transit window overlaps with this session.`,
+          };
+        }
+      }
+
       return session;
     });
   }, [trace?.sessions, flightOffset]);
