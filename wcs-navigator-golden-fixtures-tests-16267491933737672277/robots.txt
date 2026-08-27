@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/wcs-navigator-golden-fixtures-tests-16267491933737672277/sitemap.xml
