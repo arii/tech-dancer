@@ -223,26 +223,35 @@ Target JSON Schema:
     ],
     "themeDressCodes": [
       {
-        "id": "t1",
-        "day": "Friday Night",
-        "themeTitle": "Neon & Retro Glow Party",
-        "category": "social_theme",
-        "description": "Midnight social featuring blacklights and UV lighting.",
-        "recommendedAttire": ["Neon tops & shoes", "UV glow accessories"],
-        "vibe": "High Energy & Vibrant"
-      }
-    ],
-    "packingManifest": [
+        "id": "theme-fri-neon",
+        "night": "Friday Night",
+        "title": "Neon & Retro Glow Party",
+        "description": "Midnight social featuring blacklights and UV lighting throughout the grand ballroom.",
+        "badge": "Social Theme",
+        "category": "theme",
+        "recommendedOutfits": [
+          "Neon tops & shoes",
+          "UV glow accessories",
+          "White accents"
+        ],
+        "atmosphere": "High Energy & Vibrant"
+      },
       {
-        "id": "p1",
-        "name": "Adhesive Suede Shoe Sheets",
-        "category": "footwear",
-        "rationale": "For temporary tile ballroom flooring used at host hotel",
-        "quantity": 2
+        "id": "theme-sat-gala",
+        "night": "Saturday Evening",
+        "title": "Champions Showcase Gala & Dressy Glam",
+        "description": "Marquee evening with Champion Jack & Jill finals and all-star pro routines.",
+        "badge": "Gala & Showcase",
+        "category": "gala",
+        "recommendedOutfits": [
+          "Fitted dress shirts & vests",
+          "Cocktail attire & jumpsuits",
+          "Clean dance shoes"
+        ],
+        "atmosphere": "Elegant & Sophisticated"
       }
     ]
   }
-}
 }
 
 Strict Formatting and Logic Constraints:
@@ -254,39 +263,50 @@ Strict Formatting and Logic Constraints:
      - Each filtered competition or workshop.
      - Detected social theme nights matching their preferences.
    - Set accurate start and end DTSTART/DTEND values using the dates found on the PDF.
-2. Filtering Integrity:
-   - If the user selected 'Novice', you MUST filter out Intermediate, Advanced, All-Star, and Champion workshops and contests. Do not pollute their calendar with sessions they cannot attend.
-   - Include all-level workshops and general social dance sessions.
+2. Filtering & Travel Conflict Integrity:
+   - If the user selected 'Novice', filter out Intermediate, Advanced, All-Star, and Champion workshops and contests.
+   - If a workshop overlaps with the travel arrival & hotel settle window (before warmup starts), mark it as 'filtered' with 'Arrival Time Conflict'.
+   - Include all matched level workshops and general social dance sessions.
 3. Explainability:
-   - Make sure your reasoning inside the "decision_trace" is entirely traceable back to specific entries in the schedule PDF.
+   - Provide clear, user-centric 'justification' text for every session ('Why this fits your profile').
+   - Return structured 'themeDressCodes' for all evening themes and showcase dress expectations.
 ```
 
 ---
 
 ## 4. Visualizing Decisions: P0 Frontend UI/UX
 
-Understanding the agent’s logic is a P0 requirement. In place of a silent loading spinner, the `boomtick.blog` frontend uses the returned JSON payload to render an interactive, step-by-step **"Agent Logic Trace" UI** before initiating the `.ics` calendar download.
+Understanding the agent’s logic is a P0 requirement. In place of a silent loading spinner, the `boomtick.blog` frontend uses the returned JSON payload to render an interactive, explainable **"Agent Logic Trace" UI** before initiating the `.ics` calendar download.
 
 ```
 +-------------------------------------------------------------------------------------------------+
-|                                     WCS NAVIGATOR INTERACTIVE TRACE                             |
+|                                 WCS NAVIGATOR DECISION & TRAVEL TRACE                           |
 +-------------------------------------------------------------------------------------------------+
 |                                                                                                 |
-|   [Step 1: Evaluated Profile]                                                                   |
-|   "Identified user as Novice Competitor. Filtered out 24 ineligible workshops & events."        |
+|   [Direct Time Summary Badges]                                                                  |
+|   🏆 Earliest Event Call: 5:15 PM (Friday)                                                      |
+|   ✈️ Target Landing Deadline: 2:15 PM (Friday)                                                  |
+|   ⏱️ Total Required Buffer: 3 Hours (180 mins)                                                  |
 |                                                                                                 |
-|   [Step 2: Earliest Competition Milestone Located]                                              |
-|   "Novice Strictly Swing Prelims detected on Friday at 5:30 PM (Staging Call: 5:15 PM)."        |
-|   Source: Page 2, Friday Afternoon Tabular Grid.                                                |
+|   [Static Chronological Arrival Breakdown]                                                      |
+|   - 02:15 PM Touchdown   ➔ Target Flight Landing Deadline                                       |
+|   - 02:15 PM → 02:45 PM  ➔ Airport-to-Venue Transit (30 mins)                                   |
+|   - 02:45 PM → 04:15 PM  ➔ Hotel Check-in & Wardrobe Settle (90 mins)                            |
+|   - 04:15 PM → 05:15 PM  ➔ Warmup & Floor Check (60 mins)                                       |
+|   - 05:15 PM Staging Call ➔ Competition Staging Call (Novice Prelims)                            |
 |                                                                                                 |
-|   [Step 3: Travel Logistics Subtraction Calculation]                                            |
-|   Target Landing: Friday at 14:25 PM                                                            |
-|   Formula: 17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup Buffer)               |
-|   ==========================[ 3.0 Hour Flight Buffer Block ]==========================          |
+|   [Mathematical Validation Callout]                                                             |
+|   "Why 2:15 PM? We take your earliest mandatory time (5:15 PM) and calculate backward           |
+|    through warmup (60m), hotel logistics (90m), and transit (30m) to protect from delays."      |
 |                                                                                                 |
-|   [Step 4: Smart Packing Recommendations]                                                       |
-|   - Adhesive Suede Shoe Sheets: "For temporary tile ballroom flooring used at Hyatt Regency SFO"|
-|   - Neon Glow Wear: "For the 'Glow Night' Friday social theme listed in schedule"               |
+|   [Your Workshops & Schedule Matrix]                                                            |
+|   Tabs: [ Matched & Scheduled (4) ]  [ Filtered Out (2) ]  [ All (6) ]                          |
+|   - Novice Strictly Swing: "Matched selected competitive division (Novice)"                     |
+|   - All-Levels Workshop: "Filtered Out: Workshop runs during arrival & hotel settle window"     |
+|                                                                                                 |
+|   [Event Themes & Dress Codes]                                                                  |
+|   - Friday Night: Neon & Retro Glow Party ("Neon tops & shoes, UV glow accessories")            |
+|   - Saturday Evening: Champions Showcase Gala ("Cocktail attire, dress shirts, clean shoes")    |
 |                                                                                                 |
 +-------------------------------------------------------------------------------------------------+
 |                             [ DOWNLOAD PERSONALIZED CALENDAR (.ics) ]                           |
@@ -294,9 +314,10 @@ Understanding the agent’s logic is a P0 requirement. In place of a silent load
 ```
 
 ### Visual Components of the Frontend:
-1.  **The Filtration Summary Card:** Displays how many total calendar items were evaluated and filtered out based on the chosen persona rules, validating structural filtering integrity.
-2.  **The Interactive Travel Timeline:** A visual progression bar illustrating the flight arrival buffer math. It starts at the earliest competition staging call time and backs up step-by-step to the calculated target landing deadline.
-3.  **Logical Packing Cards:** Each recommended item is displayed as a mini-card featuring an explainable tooltip derived from schedule observations (e.g., showing a garment steamer recommendation because of formal dress rules, or electrolytes due to late-night social schedules stretching past 4:00 AM) [15, 21].
+1.  **Direct Time Summary:** 3 high-contrast metric cards highlighting Earliest Staging Call, Target Landing Deadline, and Total Buffer Hours.
+2.  **Static Arrival Flow:** Chronological sequential cards with progressive time arrows, generous icon padding, and mathematical calculation validation.
+3.  **Your Workshops & Schedule Matrix:** Interactive 3-tab filtering table (`Matched`, `Filtered Out`, `All`) with transparent "Why this fits your profile" rationale.
+4.  **Theme & Dress Code Cards:** Key evening theme nights, gala showcase attire guidelines, and recommended outfits.
 
 ---
 

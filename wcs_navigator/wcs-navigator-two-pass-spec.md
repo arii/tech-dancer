@@ -124,21 +124,42 @@ Target JSON Schema:
       "hotelSettleMinutes": 90,
       "transitMinutes": 30,
       "latestFlightArrivalDeadline": "2:15 PM (Friday)",
-      "formulaSummary": "17:15 (Staging) - (30m Transit + 90m Hotel Settle + 60m Warmup) = 14:15 Target Landing",
+      "formulaSummary": "Target Flight Landing (2:15 PM) + 30m Transit + 90m Hotel Settle + 60m Warmup = Earliest Staging (5:15 PM)",
       "steps": [
         {
-          "label": "Earliest Competition Staging Call",
-          "time": "5:15 PM",
-          "duration": "Check-in",
-          "type": "staging",
-          "description": "Novice Strictly Swing Prelims Check-in"
+          "type": "flight",
+          "label": "Target Flight Landing Deadline",
+          "time": "02:15 PM Touchdown",
+          "duration": "Deadline Target",
+          "description": "Recommended latest wheels-down time to account for deplaning and baggage collection."
         },
         {
-          "label": "Target Flight Landing Deadline",
-          "time": "2:15 PM",
-          "duration": "Deadline",
-          "type": "flight",
-          "description": "Recommended latest flight touchdown"
+          "type": "transit",
+          "label": "Airport-to-Venue Transit",
+          "time": "02:15 PM → 02:45 PM",
+          "duration": "30 mins",
+          "description": "Dedicated rideshare or shuttle buffer from airport terminal directly to host hotel."
+        },
+        {
+          "type": "hotel",
+          "label": "Hotel Check-in & Wardrobe Settle",
+          "time": "02:45 PM → 04:15 PM",
+          "duration": "90 mins",
+          "description": "Room check-in, unpacking dance wardrobe, shoe prep, and freshening up."
+        },
+        {
+          "type": "warmup",
+          "label": "Warmup & Floor Check",
+          "time": "04:15 PM → 05:15 PM",
+          "duration": "60 mins",
+          "description": "Competitor bib registration, physical dynamic stretch, and ballroom floor test."
+        },
+        {
+          "type": "staging",
+          "label": "Competition Staging Call",
+          "time": "05:15 PM Staging Call",
+          "duration": "Mandatory Call",
+          "description": "Earliest division roll call. Competitors must report to ballroom marshalling."
         }
       ]
     },
@@ -150,36 +171,55 @@ Target JSON Schema:
         "location": "Grand Ballroom",
         "status": "included",
         "decisionBadge": "Division Match",
-        "justification": "Matched selected competitive division (Novice)."
+        "justification": "Matched selected competitive division (Novice). On-time staging guaranteed."
       },
       {
         "id": "s2",
-        "title": "Advanced/All-Star Masterclass",
+        "title": "All-Levels Connection Workshop",
+        "time": "Friday 3:00 PM - 4:00 PM",
+        "location": "Grand Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Arrival Time Conflict",
+        "justification": "Filtered Out: Workshop runs during your travel arrival & hotel settle window (2:15 PM - 4:15 PM)."
+      },
+      {
+        "id": "s3",
+        "title": "Advanced & All-Star Jack & Jill",
         "time": "Saturday 11:00 AM - 12:00 PM",
-        "location": "Junior Ballroom",
+        "location": "Grand Ballroom",
         "status": "filtered",
         "decisionBadge": "Level Ineligible",
-        "justification": "Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops."
+        "justification": "User selected Novice; filtered out Advanced division prelims."
       }
     ],
     "themeDressCodes": [
       {
-        "id": "t1",
-        "day": "Friday Night",
-        "themeTitle": "Neon & Retro Glow Party",
-        "category": "social_theme",
-        "description": "Midnight social featuring blacklights and UV lighting.",
-        "recommendedAttire": ["Neon tops & shoes", "UV glow accessories"],
-        "vibe": "High Energy & Vibrant"
-      }
-    ],
-    "packingManifest": [
+        "id": "theme-fri-neon",
+        "night": "Friday Night",
+        "title": "Neon & Retro Glow Party",
+        "description": "Midnight social featuring blacklights and UV lighting throughout the grand ballroom.",
+        "badge": "Social Theme",
+        "category": "theme",
+        "recommendedOutfits": [
+          "Neon tops & shoes",
+          "UV glow accessories",
+          "White accents"
+        ],
+        "atmosphere": "High Energy & Vibrant"
+      },
       {
-        "id": "p1",
-        "name": "Adhesive Suede Shoe Sheets",
-        "category": "footwear",
-        "rationale": "For temporary tile ballroom flooring used at host hotel",
-        "quantity": 2
+        "id": "theme-sat-gala",
+        "night": "Saturday Evening",
+        "title": "Champions Showcase Gala & Dressy Glam",
+        "description": "Marquee evening with Champion Jack & Jill finals and all-star pro routines.",
+        "badge": "Gala & Showcase",
+        "category": "gala",
+        "recommendedOutfits": [
+          "Fitted dress shirts & vests",
+          "Cocktail attire & jumpsuits",
+          "Clean dance shoes"
+        ],
+        "atmosphere": "Elegant & Sophisticated"
       }
     ]
   }
@@ -194,9 +234,12 @@ Strict Formatting and Logic Constraints:
      - Each filtered competition or workshop.
      - Detected social theme nights matching their preferences.
    - Set accurate start and end DTSTART/DTEND values using the dates found on the PDF.
-2. Filtering Integrity:
-   - If the user selected 'Novice', you MUST filter out Intermediate, Advanced, All-Star, and Champion workshops and contests. Do not pollute their calendar with sessions they cannot attend.
-   - Include all-level workshops and general social dance sessions.
+2. Travel Conflict & Level Filtering Integrity:
+   - If the user selected 'Novice', filter out Intermediate, Advanced, All-Star, and Champion workshops and contests.
+   - If a workshop occurs during their transit or hotel settle window (before warmup starts), mark it as 'filtered' with 'Arrival Time Conflict'.
+   - Include all matched level workshops and general social dance sessions.
 3. Explainability:
+   - Provide clear, user-centric 'justification' text for every session ('Why this fits your profile').
+   - Provide structured 'themeDressCodes' covering all major evening social themes and competition attire guidelines.
    - Make sure your reasoning inside the "decision_trace" is entirely traceable back to specific entries in the schedule PDF.
 ```
