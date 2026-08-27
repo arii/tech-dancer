@@ -20,6 +20,7 @@ export interface FormQuestion {
 }
 
 export interface DiscoveryResponse {
+  visualScheduleMarkdown?: string;
   preset_id?: string;
   preset_name?: string;
   suggested_form_questions: FormQuestion[];
