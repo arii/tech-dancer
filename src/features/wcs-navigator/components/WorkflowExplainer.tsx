@@ -1,152 +1,194 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { Cpu, Search, Calendar, ShieldCheck, Zap, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
-export const WorkflowExplainer: React.FC = () => {
+export const WorkflowExplainer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="w-full bg-surface border border-line/70 rounded-2xl overflow-hidden shadow-md">
+    <Box width="full" surface="surface" border radius="2xl" shadow="md" className="overflow-hidden border-line/70">
       {/* Collapsible Header Banner (Balanced Vertical Alignment) */}
-      <button
+      <Box
+        as="button"
         id="workflow-explainer-trigger"
         type="button"
         aria-expanded={isExpanded}
         aria-controls="workflow-explainer-content"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-6 py-4 flex items-center justify-between bg-muted/50 hover:bg-muted/80 transition-colors text-left cursor-pointer border-b border-line/40 min-h-[56px]"
+        display="flex"
+        align="center"
+        justify="between"
+        paddingX={6}
+        paddingY={4}
+        minHeight={14}
+        surface="muted"
+        border
+        cursor="pointer"
+        className="w-full text-left transition-colors border-b border-line/40"
       >
-        <div className="flex items-center gap-3.5">
-          <div className="p-2 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan shrink-0">
+        <Box display="flex" align="center" gap={3}>
+          <Box padding={2} radius="xl" border className="bg-brand-cyan/10 border-brand-cyan/30 text-brand-cyan shrink-0">
             <Icon icon={Cpu} size="sm" />
-          </div>
-          <div className="flex flex-col space-y-0.5">
-            <div className="flex items-center gap-2.5">
-              <span className="text-sm font-bold text-text-main">
+          </Box>
+          <Stack gap={0.5}>
+            <Box display="flex" align="center" gap={2}>
+              <Text weight="font-bold" size="sm" color="main">
                 How WCS Navigator Works
-              </span>
-              <span className="text-[10px] font-mono font-bold rounded px-2 py-0.5 bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30">
+              </Text>
+              <Text variant="mono" size="micro" weight="font-bold" radius="sm" paddingX={2} paddingY={0.5} border className="bg-brand-cyan/20 text-brand-cyan border-brand-cyan/30">
                 GUIDE
-              </span>
-            </div>
-            <p className="text-xs text-text-dim">
+              </Text>
+            </Box>
+            <Text size="xs" color="dim">
               How your convention schedule is read, filtered by your dance level, and synced to your calendar.
-            </p>
-          </div>
-        </div>
+            </Text>
+          </Stack>
+        </Box>
 
-        <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-text-dim hover:text-white shrink-0">
+        <Box display="flex" align="center" gap={1.5} className="text-xs font-mono font-medium text-text-dim hover:text-white shrink-0">
           <span>{isExpanded ? 'Hide Details' : 'How It Works'}</span>
           <Icon icon={isExpanded ? ChevronUp : ChevronDown} size="xs" />
-        </div>
-      </button>
+        </Box>
+      </Box>
 
       {/* Expanded Workflow Cards & Standards (Generous 24px / p-6 Padding) */}
       {isExpanded && (
-        <div
+        <Box
           id="workflow-explainer-content"
           role="region"
           aria-labelledby="workflow-explainer-trigger"
-          className="p-6 space-y-6"
+          padding={6}
         >
-          {/* Vertical Stack Cards (No Split Columns) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Step 1 Card */}
-            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan">
-                    <Icon icon={Search} size="xs" />
-                  </div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-brand-cyan">
-                    Step 1: Schedule Reading
-                  </span>
-                </div>
-                <h4 className="text-sm font-bold text-text-main">
-                  Schedule Discovery
-                </h4>
-                <p className="text-xs text-text-dim leading-relaxed">
-                  Reads multi-room convention timetables to identify workshop levels, competitive divisions, and late-night social themes.
-                </p>
-              </div>
-              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
-                <span className="text-xs text-text-dim block">
-                  Extracts: <strong className="text-brand-cyan">Workshops, Prelims &amp; Socials</strong>
-                </span>
-              </div>
-            </div>
+          <Stack gap={6}>
+            {/* Vertical Stack Cards (No Split Columns) */}
+            <Grid cols={{ default: 1, md: 3 }} gap={5}>
+              {/* Step 1 Card */}
+              <Box
+                padding={5}
+                radius="xl"
+                surface="muted"
+                border
+                display="flex"
+                direction="col"
+                justify="between"
+                className="border-line/60 hover:border-accent/40 transition-all"
+              >
+                <Stack gap={2}>
+                  <Box display="flex" align="center" gap={2}>
+                    <Box padding={1.5} radius="lg" className="bg-brand-cyan/20 text-brand-cyan">
+                      <Icon icon={Search} size="xs" />
+                    </Box>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider" className="text-brand-cyan">
+                      Step 1: Schedule Reading
+                    </Text>
+                  </Box>
+                  <Text weight="font-bold" size="sm" color="main">
+                    Schedule Discovery
+                  </Text>
+                  <Text size="xs" color="dim" leading="relaxed">
+                    Reads multi-room convention timetables to identify workshop levels, competitive divisions, and late-night social themes.
+                  </Text>
+                </Stack>
+                <Box marginTop={4} padding={2.5} radius="lg" surface="card" border className="border-line/40">
+                  <Text size="xs" color="dim">
+                    Extracts: <strong className="text-brand-cyan">Workshops, Prelims &amp; Socials</strong>
+                  </Text>
+                </Box>
+              </Box>
 
-            {/* Step 2 Card */}
-            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-brand-amber/20 text-brand-amber">
-                    <Icon icon={Zap} size="xs" />
-                  </div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">
-                    Step 2: Buffer Calculation
-                  </span>
-                </div>
-                <h4 className="text-sm font-bold text-text-main">
-                  Travel &amp; Rest Planning
-                </h4>
-                <p className="text-xs text-text-dim leading-relaxed">
-                  Calculates backward transit, hotel check-in, and warm-up buffers before your first event so you never rush into competition calls.
-                </p>
-              </div>
-              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
-                <span className="text-xs text-text-dim block">
-                  Calculates: <strong className="text-brand-amber">Arrival Deadline &amp; Rest Times</strong>
-                </span>
-              </div>
-            </div>
+              {/* Step 2 Card */}
+              <Box
+                padding={5}
+                radius="xl"
+                surface="muted"
+                border
+                display="flex"
+                direction="col"
+                justify="between"
+                className="border-line/60 hover:border-accent/40 transition-all"
+              >
+                <Stack gap={2}>
+                  <Box display="flex" align="center" gap={2}>
+                    <Box padding={1.5} radius="lg" className="bg-brand-amber/20 text-brand-amber">
+                      <Icon icon={Zap} size="xs" />
+                    </Box>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider" className="text-brand-amber">
+                      Step 2: Buffer Calculation
+                    </Text>
+                  </Box>
+                  <Text weight="font-bold" size="sm" color="main">
+                    Travel &amp; Rest Planning
+                  </Text>
+                  <Text size="xs" color="dim" leading="relaxed">
+                    Calculates backward transit, hotel check-in, and warm-up buffers before your first event so you never rush into competition calls.
+                  </Text>
+                </Stack>
+                <Box marginTop={4} padding={2.5} radius="lg" surface="card" border className="border-line/40">
+                  <Text size="xs" color="dim">
+                    Calculates: <strong className="text-brand-amber">Arrival Deadline &amp; Rest Times</strong>
+                  </Text>
+                </Box>
+              </Box>
 
-            {/* Step 3 Card */}
-            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-brand-emerald/20 text-brand-emerald">
-                    <Icon icon={Calendar} size="xs" />
-                  </div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-brand-emerald">
-                    Step 3: Calendar Sync
-                  </span>
-                </div>
-                <h4 className="text-sm font-bold text-text-main">
-                  Ready-to-Use Calendar
-                </h4>
-                <p className="text-xs text-text-dim leading-relaxed">
-                  Generates an .ics calendar file formatted with your selected workshops, competition alarms, and packing checklist.
-                </p>
-              </div>
-              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
-                <span className="text-xs text-text-dim block">
-                  Format: <strong className="text-brand-emerald">Apple &amp; Google Calendar (.ics)</strong>
-                </span>
-              </div>
-            </div>
-          </div>
+              {/* Step 3 Card */}
+              <Box
+                padding={5}
+                radius="xl"
+                surface="muted"
+                border
+                display="flex"
+                direction="col"
+                justify="between"
+                className="border-line/60 hover:border-accent/40 transition-all"
+              >
+                <Stack gap={2}>
+                  <Box display="flex" align="center" gap={2}>
+                    <Box padding={1.5} radius="lg" className="bg-brand-emerald/20 text-brand-emerald">
+                      <Icon icon={Calendar} size="xs" />
+                    </Box>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider" className="text-brand-emerald">
+                      Step 3: Calendar Sync
+                    </Text>
+                  </Box>
+                  <Text weight="font-bold" size="sm" color="main">
+                    Ready-to-Use Calendar
+                  </Text>
+                  <Text size="xs" color="dim" leading="relaxed">
+                    Generates an .ics calendar file formatted with your selected workshops, competition alarms, and packing checklist.
+                  </Text>
+                </Stack>
+                <Box marginTop={4} padding={2.5} radius="lg" surface="card" border className="border-line/40">
+                  <Text size="xs" color="dim">
+                    Format: <strong className="text-brand-emerald">Apple &amp; Google Calendar (.ics)</strong>
+                  </Text>
+                </Box>
+              </Box>
+            </Grid>
 
-          {/* Standards & Badges Footer with Generous Padding */}
-          <div className="pt-4 border-t border-line/50 flex items-center justify-between flex-wrap gap-4 text-xs text-text-dim">
-            <div className="flex items-center gap-6 flex-wrap">
-              <div className="flex items-center gap-2">
-                <Icon icon={ShieldCheck} size="xs" color="accent" />
-                <span>Private &amp; Secure</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon icon={Sparkles} size="xs" color="accent" />
-                <span>Personalized Recommendations</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon icon={Cpu} size="xs" color="accent" />
-                <span>Instant Calendar Download</span>
-              </div>
-            </div>
-          </div>
-        </div>
+            {/* Standards & Badges Footer with Generous Padding */}
+            <Box paddingTop={4} border className="border-t border-line/50">
+              <Box display="flex" align="center" justify="between" wrap gap={4}>
+                <Box display="flex" align="center" gap={6} wrap>
+                  <Box display="flex" align="center" gap={2}>
+                    <Icon icon={ShieldCheck} size="xs" color="accent" />
+                    <Text size="xs" color="dim">Private &amp; Secure</Text>
+                  </Box>
+                  <Box display="flex" align="center" gap={2}>
+                    <Icon icon={Sparkles} size="xs" color="accent" />
+                    <Text size="xs" color="dim">Personalized Recommendations</Text>
+                  </Box>
+                  <Box display="flex" align="center" gap={2}>
+                    <Icon icon={Cpu} size="xs" color="accent" />
+                    <Text size="xs" color="dim">Instant Calendar Download</Text>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Stack>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

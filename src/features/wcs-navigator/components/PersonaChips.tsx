@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { WCSPersona, DANCE_PERSONAS } from '../data/personas';
 import { UserCheck, Sparkles, Check } from 'lucide-react';
@@ -41,8 +40,9 @@ export const PersonaChips: React.FC<PersonaChipsProps> = ({
               display="flex"
               align="start"
               cursor="pointer"
+              minHeight={11}
               className={cn(
-                "min-h-[44px] border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
+                "border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
                 isSelected ? "border-brand-purple ring-1 ring-brand-purple/40 bg-brand-purple/5" : "border-line hover:bg-surface"
               )}
             >

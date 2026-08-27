@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { ThemeDressCode } from '../types';
 import { Sparkles, Shirt, PartyPopper, Award, Tag, CheckCircle2 } from 'lucide-react';
 
@@ -80,17 +79,19 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
       {/* Header Banner */}
       <Box display="flex" align="center" justify="between" wrap gap={2}>
         <Stack gap={1}>
-          <Box as="h3" className="text-lg font-bold text-text-main flex items-center gap-2">
+          <Box display="flex" align="center" gap={2}>
             <Sparkles className="w-5 h-5 text-accent" />
-            <span>Event Themes &amp; Dress Codes</span>
+            <Text weight="font-bold" size="lg" color="main">
+              Event Themes &amp; Dress Codes
+            </Text>
           </Box>
-          <Box as="p" className="text-xs text-text-dim">
+          <Text size="xs" color="dim">
             Official party themes, gala dress codes, and competition attire expectations
-          </Box>
+          </Text>
         </Stack>
-        <Box paddingX={3} paddingY={1} radius="md" surface="card" border className="text-xs font-mono text-accent font-semibold">
+        <Text variant="mono" size="xs" color="accent" weight="font-semibold" radius="md" paddingX={3} paddingY={1} surface="card" border>
           {themes.length} Key Themes Identified
-        </Box>
+        </Text>
       </Box>
 
       {/* Grid of Theme & Dress Code Cards */}
@@ -100,65 +101,87 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
           const CategoryIcon = config.icon;
 
           return (
-            <div
+            <Box
               key={item.id}
-              className={`p-5 rounded-2xl bg-surface/90 border border-line/80 shadow-md transition-all flex flex-col justify-between space-y-4 ${config.accentBorder}`}
+              padding={5}
+              radius="xl"
+              surface="card"
+              border
+              shadow="md"
+              display="flex"
+              direction="col"
+              justify="between"
+              className={`border-line/80 transition-all ${config.accentBorder}`}
             >
-              <div className="flex flex-col space-y-3">
+              <Stack gap={3}>
                 {/* Top Row: Day & Category Tag */}
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className={`p-2 rounded-xl border ${config.badge} shrink-0`}>
+                <Box display="flex" align="center" justify="between" gap={2}>
+                  <Box display="flex" align="center" gap={2}>
+                    <Box padding={2} radius="xl" border className={`${config.badge} shrink-0`}>
                       <CategoryIcon className="w-4 h-4" />
-                    </div>
-                    <span className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
+                    </Box>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
                       {item.day}
-                    </span>
-                  </div>
+                    </Text>
+                  </Box>
 
-                  <span className={`text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded border ${config.badge}`}>
+                  <Text variant="mono" size="micro" weight="font-semibold" radius="md" paddingX={2.5} paddingY={0.5} border className={config.badge}>
                     {config.label}
-                  </span>
-                </div>
+                  </Text>
+                </Box>
 
                 {/* Theme Title & Vibe */}
-                <div className="space-y-1">
-                  <h4 className="text-base font-bold text-text-main leading-snug">
+                <Stack gap={1}>
+                  <Text weight="font-bold" size="base" color="main" leading="snug">
                     {item.themeTitle}
-                  </h4>
-                  <p className="text-xs text-text-dim leading-relaxed">
+                  </Text>
+                  <Text size="xs" color="dim" leading="relaxed">
                     {item.description}
-                  </p>
-                </div>
+                  </Text>
+                </Stack>
 
                 {/* Recommended Attire Checklist Pills */}
-                <div className="p-3 rounded-xl bg-muted/40 border border-line/50 space-y-2">
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-semibold text-text-main">
-                    <Tag className="w-3.5 h-3.5 text-accent shrink-0" />
-                    <span>Recommended Outfits:</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.recommendedAttire.map((attire, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface border border-line/60 text-xs text-text-dim"
-                      >
-                        <CheckCircle2 className="w-3 h-3 text-brand-emerald shrink-0" />
-                        <span>{attire}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+                <Box padding={3} radius="xl" surface="muted" border className="border-line/50">
+                  <Stack gap={2}>
+                    <Box display="flex" align="center" gap={1.5}>
+                      <Tag className="w-3.5 h-3.5 text-accent shrink-0" />
+                      <Text variant="mono" size="micro" weight="font-semibold" color="main">
+                        Recommended Outfits:
+                      </Text>
+                    </Box>
+                    <Box display="flex" wrap gap={1.5}>
+                      {item.recommendedAttire.map((attire, idx) => (
+                        <Box
+                          key={idx}
+                          display="inline-flex"
+                          align="center"
+                          gap={1}
+                          paddingX={2.5}
+                          paddingY={1}
+                          radius="lg"
+                          surface="card"
+                          border
+                          className="border-line/60"
+                        >
+                          <CheckCircle2 className="w-3 h-3 text-brand-emerald shrink-0" />
+                          <Text size="xs" color="dim">{attire}</Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Stack>
+                </Box>
+              </Stack>
 
               {/* Vibe Tag Footer */}
-              <div className="pt-2 border-t border-line/40 flex items-center justify-between text-xs text-text-dim">
-                <span className="text-[11px] font-mono">Atmosphere:</span>
-                <span className="font-mono text-accent font-semibold text-xs">
-                  ✨ {item.vibe}
-                </span>
-              </div>
-            </div>
+              <Box paddingTop={2} marginTop={4} border className="border-t border-line/40">
+                <Box display="flex" align="center" justify="between">
+                  <Text variant="mono" size="micro" color="dim">Atmosphere:</Text>
+                  <Text variant="mono" size="xs" color="accent" weight="font-semibold">
+                    ✨ {item.vibe}
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
           );
         })}
       </Grid>
