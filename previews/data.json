@@ -1,649 +1,1105 @@
 {
+  "about": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
   "arii/wcs-navigator/about": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/blog": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/gear": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/memes": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/merch": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/preview": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/previews": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/research": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/ux-auditor": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/versiontruth": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "arii/wcs-navigator/wcs-navigator": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-power-charging": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "feat/wcs-202-flight-buffer-engine-8826176307101851240": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-301-wcs-navigator-presets-personas-4355850352522617556": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/about": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/blog": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/gear": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/memes": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/merch": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/preview": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/previews": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/research": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/ux-auditor": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-302-dynamic-questionnaire-16587794957821650194/versiontruth": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "feat/wcs-303-agent-mind-explainer-ui-17077088173897842930": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "gear/2023-10-01-loop-earplugs": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2023-11-01-travel-steamer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-01-01-portable-speaker": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-alien-mask": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-charging-cables": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-compression-cubes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-crop-tops": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-fishnet-tights": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-foam-roller": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-green-bodysuit": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-light-up-suspenders": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-love-neon-follow-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-love-neon-lead-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-love-neon-switch-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-love-unisex-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-mesh-fishnet-top": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-nerd-set": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-bear-tank": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-bestcal-tshirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-crop-top": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-gate-crop-hoodie": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-pride-bear-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-norcal-pride-gate-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-pumpkin-headbands": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-pumpkin-stickers": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-rave-fan": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-reflective-crop-tops": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-running-belt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-shoe-dryer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-sunscreen": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-travel-bottles": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-tripod": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-visor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2024-06-01-war-eagle-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/2026-04-12-suede-shoe-diy": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/relavel-travel-bag": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/slot-era-mug": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/slot-era-tank-top": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "gear/slot-era-tote-bag": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "jules-11771513470865275278-0a253ee9": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "jules-15116343547165435394-965606fb": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "memes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-power-charging": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2023-10-01-loop-earplugs": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2023-11-01-travel-steamer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-01-01-portable-speaker": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-alien-mask": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-charging-cables": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-compression-cubes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-crop-tops": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-fishnet-tights": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-foam-roller": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-green-bodysuit": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-light-up-suspenders": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-love-neon-follow-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-love-neon-lead-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-love-neon-switch-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-love-unisex-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-mesh-fishnet-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-nerd-set": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-bear-tank": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-bestcal-tshirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-crop-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-gate-crop-hoodie": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-pride-bear-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-norcal-pride-gate-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-pumpkin-headbands": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-pumpkin-stickers": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-rave-fan": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-reflective-crop-tops": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-running-belt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-shoe-dryer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-sunscreen": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-travel-bottles": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-tripod": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-visor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2024-06-01-war-eagle-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/2026-04-12-suede-shoe-diy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/relavel-travel-bag": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/slot-era-mug": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/slot-era-tank-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/gear/slot-era-tote-bag": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/memes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/2026-07-10-latest-version-check-skill": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/ai-devops-pipeline": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/blog-drafter": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/boomtick-blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/confidently-incorrect-v4": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/deployment-impact-analyzer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/ecommerce-automation": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/gitops-pr-reviewer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/hrm-flagship": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/repo-auditor-ai": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/wcs-navigator": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/research/wcs-scraper": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/ux-auditor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer/versiontruth": {
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "release-please--branches--main--components--tech-dancer/wcs-navigator": {
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "research/2026-07-10-latest-version-check-skill": {
     "commitTimestamp": ,
     "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "release-please--branches--main--components--tech-dancer/wcs-navigator": {
+  "research/ai-devops-pipeline": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/blog-drafter": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/boomtick-blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/confidently-incorrect-v4": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/deployment-impact-analyzer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/ecommerce-automation": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/gitops-pr-reviewer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/hrm-flagship": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/repo-auditor-ai": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-navigator": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper-initial-sync": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper": {
     "commitTimestamp": ,
     "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "scaffold-wcs-navigator-api-5604201947979293357": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "versiontruth": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "wcs-102-pdf-streaming-service-8894567009627646582": {
-    "commitTimestamp": 1787813163,
-    "deployTimestamp": 1787813163,
+    "commitTimestamp": 1787813863,
+    "deployTimestamp": 1787813863,
+    "sha": "unknown"
+  }
+,
+  "wcs-navigator": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 }
