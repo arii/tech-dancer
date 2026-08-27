@@ -45,47 +45,47 @@ While the Generation Pass (`/generate`) executes, the UI shows a live progress t
 
 Once the backend responds, the React engine in `tech-dancer` renders three specific, interactive visual blocks explaining the agent's decisions [9].
 
-### A. The Flight Buffer Timeline Component
-This component visually explains the calculation behind the travel deadline, proving the "buffer math" logic directly to the user [15].
+#### A. The Flight Buffer Timeline Component
+This component visually explains the calculation behind the travel deadline with high-contrast summary metrics and a static, scannable chronological step flow:
 
 ```
-✈️ TRAVEL TIMELINE BUFFER ANALYSIS
+🏆 EARLIEST EVENT CALL: 5:15 PM (Friday)
+✈️ TARGET LANDING DEADLINE: 2:15 PM (Friday)
+⏱️ TOTAL REQUIRED BUFFER: 3 Hours (180 mins)
 ========================================================================
-Call-time: Sat 10:30 AM  [ Novice Jack & Jill Registration Cutoff ]
-           │
-           ├── [ -1.0 Hour ] ──> Reg & Physical Warm-up Window
-           │
-           ├── [ -1.5 Hours ] ──> Hotel Check-In, Wardrobe & Change
-           │
-           └── [ -0.5 Hour ] ──> Airport-to-Venue Transit (SFO -> Hyatt) [15]
-           │
-Target Landing: Sat 7:30 AM  [ LATEST FLIGHT ARRIVAL DEADLINE ] [15]
+[02:15 PM Touchdown]    ➔ Target Flight Landing Deadline (Deadline Target)
+[02:15 PM → 02:45 PM]   ➔ Airport-to-Venue Transit (30 mins)
+[02:45 PM → 04:15 PM]   ➔ Hotel Check-in & Wardrobe Settle (90 mins)
+[04:15 PM → 05:15 PM]   ➔ Warmup & Floor Check (60 mins)
+[05:15 PM Staging Call]  ➔ Competition Staging Call (Mandatory Call)
 ========================================================================
+Caption: "Why 2:15 PM? We take your earliest mandatory time (5:15 PM) and
+calculate backward through warmup (60m), hotel logistics (90m), and transit (30m)."
 ```
 
 ### B. The Filtering Audit Matrix
-Users can toggle between **"Included Sessions"** and **"Filtered Out Sessions"** to see exactly why items were selected or bypassed [15].
+Users can toggle between **"Matched & Scheduled"**, **"Filtered Out"**, and **"All Sessions"** to see exactly why items were selected or bypassed:
 
-*   **Included Tab:**
-    *   `Novice Strictly Swing - Prelims` (Friday 5:30 PM) ──> *Matched Division: Novice* [15].
-    *   `All-Levels Social Warm-Up Class` (Friday 3:00 PM) ──> *Matched Division: All Levels* [15].
-*   **Filtered Out Tab (With Grayed-Out UI):**
-    *   `Advanced/All-Star WCS Intensive` ──> ❌ *Filtered: User selected Novice (Advanced+ sessions excluded)* [15].
-    *   `Country Swing Line Dance Bootcamp` ──> ❌ *Filtered: User deselected Country Swing track* [15].
+*   **Matched & Scheduled Tab:**
+    *   `Novice Strictly Swing - Prelims` (Friday 5:30 PM) ──> *Matched Division: Novice. On-time staging guaranteed.*
+*   **Filtered Out Tab (With Contextual Warning Badges):**
+    *   `All-Levels Connection Workshop` (Friday 3:00 PM) ──> ⚠️ *Arrival Time Conflict: Runs during transit & hotel check-in window (2:15 PM - 4:15 PM).*
+    *   `Advanced/All-Star WCS Masterclass` (Saturday 11:00 AM) ──> ❌ *Filtered: Requires Advanced+ division eligibility.*
 
-### C. The Packing Manifest Cards
-Rather than a static bulleted list, the packing manifest renders as styled cards containing the agent's **explicit rationale** [15, 18]:
+### C. Event Themes & Dress Codes
+Rather than a generic packing manifest, the interface renders rich cards containing the event's **social themes and attire guidelines**:
 
 ```
-+--------------------------+  +--------------------------+  +--------------------------+
-|  🎫 Competition Bib Pins |  |  👟 Adhesive Suede Sheets|  |  💨 Travel Fabric Steamer|
-+--------------------------+  +--------------------------+  +--------------------------+
-| Rationale:               |  | Rationale:               |  | Rationale:               |
-| Detected active contest  |  | PDF schedule specifies   |  | Competition slacks and   |
-| registration for Jack &  |  | portable ballrooms with  |  | vests require formal     |
-| Jill. Safety pins are    |  | temporary vinyl tiling.  |  | pressing for spotlights. |
-| required for bib numbers.|  | Suede is joint-safe.     |  |                          |
-+--------------------------+  +--------------------------+  +--------------------------+
++------------------------------------+  +------------------------------------+
+|  🎉 Friday Night: Neon Glow Party  |  |  👔 Saturday: Champions Gala & Glam|
++------------------------------------+  +------------------------------------+
+| Category: Social Theme Night       |  | Category: Showcase Gala            |
+| Vibe: High Energy & Vibrant        |  | Vibe: Elegant & Sophisticated      |
+| Recommended Attire:                |  | Recommended Attire:                |
+| - Neon tops & shoes                |  | - Fitted dress shirts & vests      |
+| - UV glow accessories              |  | - Cocktail attire & jumpsuits      |
+| - White accents                    |  | - Clean dance shoes                |
++------------------------------------+  +------------------------------------+
 ```
 
 ---
@@ -95,7 +95,7 @@ Rather than a static bulleted list, the packing manifest renders as styled cards
 To drive this dynamic interface, the API contracts enforce highly descriptive trace payloads.
 
 ### Pass 1: Discovery Payload Schema (`/discover`)
-This output determines what form elements are shown to the user on `boomtick.blog` [9].
+This output determines what form elements are shown to the user on `boomtick.blog`:
 
 ```json
 {
@@ -104,19 +104,6 @@ This output determines what form elements are shown to the user on `boomtick.blo
   "event_name": "Boogie by the Bay 2026",
   "tracks_detected": ["West Coast Swing", "Country Swing", "Hustle"],
   "suggested_form_questions": [
-    {
-      "id": "dance_styles",
-      "title": "Which dance genres do you want on your schedule?",
-      "type": "multiselect",
-      "context": "Boogie is a multi-genre event; filter out non-WCS tracks if focusing purely on WCS.",
-      "required": false,
-      "defaultValue": ["wcs"],
-      "options": [
-        { "label": "West Coast Swing", "value": "wcs" },
-        { "label": "Country Swing", "value": "country" },
-        { "label": "Hustle", "value": "hustle" }
-      ]
-    },
     {
       "id": "wsdc_level",
       "title": "What is your dancer persona & competition division?",
@@ -136,7 +123,7 @@ This output determines what form elements are shown to the user on `boomtick.blo
 ```
 
 ### Pass 2: Generation Payload Schema (`/generate`)
-This unified payload contains both the formatted `.ics` bytes and the granular metadata backing the Explainer UX [15].
+This unified payload contains both the formatted `.ics` bytes and the granular metadata backing the Explainer UX:
 
 ```json
 {
@@ -144,23 +131,23 @@ This unified payload contains both the formatted `.ics` bytes and the granular m
   "decision_trace": {
     "subTasks": [
       { "id": "1", "label": "Parsed event timetable & rooms", "status": "completed", "detail": "Identified ballroom streams across the weekend" },
-      { "id": "2", "label": "Calculated airport transit & hotel buffer", "status": "completed", "detail": "20m shuttle + 90m check-in + 60m warmup" },
-      { "id": "3", "label": "Filtered workshops by division", "status": "completed", "detail": "Filtered advanced intensives" },
-      { "id": "4", "label": "Generated calendar file (.ics)", "status: "completed", "detail": "Ready for Apple & Google Calendar" }
+      { "id": "2", "label": "Calculated airport transit & hotel buffer", "status": "completed", "detail": "30m transit + 90m settle + 60m warmup" },
+      { "id": "3", "label": "Filtered workshops & resolved travel conflicts", "status": "completed", "detail": "Filtered advanced classes and Friday arrival overlaps" },
+      { "id": "4", "label": "Generated calendar file (.ics)", "status": "completed", "detail": "Ready for Apple & Google Calendar" }
     ],
     "bufferTimeline": {
       "earliestStagingTime": "5:15 PM (Friday)",
       "warmupMinutes": 60,
       "hotelSettleMinutes": 90,
-      "transitMinutes": 20,
-      "latestFlightArrivalDeadline": "2:25 PM (Friday)",
-      "formulaSummary": "17:15 (Staging) - (20m SFO Transit + 90m Settle + 60m Warmup) = 14:25 Target Landing",
+      "transitMinutes": 30,
+      "latestFlightArrivalDeadline": "2:15 PM (Friday)",
+      "formulaSummary": "Target Flight Landing (2:15 PM) + 30m Transit + 90m Hotel Settle + 60m Warmup = Earliest Staging (5:15 PM)",
       "steps": [
-        { "label": "Novice Strictly Swing Staging Call", "time": "5:15 PM", "duration": "Staging", "type": "staging", "description": "Grand Peninsula Ballroom Staging" },
-        { "label": "Warmup & Floor Check", "time": "4:15 PM", "duration": "60 min", "type": "warmup", "description": "Test floor speed & stretch" },
-        { "label": "Hyatt Regency Check-in", "time": "2:45 PM", "duration": "90 min", "type": "hotel", "description": "Hotel check-in and dress change" },
-        { "label": "SFO Airport to Hyatt Shuttle Transit", "time": "2:25 PM", "duration": "20 min", "type": "transit", "description": "Direct 5-minute shuttle + buffer" },
-        { "label": "Target Flight Landing Deadline", "time": "2:25 PM", "duration": "Deadline", "type": "flight", "description": "Recommended latest flight touchdown" }
+        { "label": "Target Flight Landing Deadline", "time": "02:15 PM Touchdown", "duration": "Deadline Target", "type": "flight", "description": "Recommended latest flight touchdown" },
+        { "label": "Airport-to-Venue Transit", "time": "02:15 PM → 02:45 PM", "duration": "30 mins", "type": "transit", "description": "Dedicated airport transit buffer" },
+        { "label": "Hotel Check-in & Wardrobe Settle", "time": "02:45 PM → 04:15 PM", "duration": "90 mins", "type": "hotel", "description": "Hotel check-in and dress change" },
+        { "label": "Warmup & Floor Check", "time": "04:15 PM → 05:15 PM", "duration": "60 mins", "type": "warmup", "description": "Dynamic stretch & ballroom floor check" },
+        { "label": "Competition Staging Call", "time": "05:15 PM Staging Call", "duration": "Mandatory Call", "type": "staging", "description": "Novice Strictly Swing Prelims Call" }
       ]
     },
     "sessions": [
@@ -171,45 +158,38 @@ This unified payload contains both the formatted `.ics` bytes and the granular m
         "location": "Grand Peninsula Ballroom",
         "status": "included",
         "decisionBadge": "Division Match",
-        "justification": "Division match for Novice"
+        "justification": "Division match for Novice. On-time arrival guaranteed."
       },
       {
         "id": "b2",
-        "title": "Level 4/5 Champion Masterclass with Benji Schwimmer",
-        "time": "Saturday 1:00 PM - 2:15 PM",
-        "location": "Regency Ballroom",
+        "title": "All-Levels Connection Workshop",
+        "time": "Friday 3:00 PM - 4:00 PM",
+        "location": "Junior Ballroom",
         "status": "filtered",
-        "decisionBadge": "Level Ineligible",
-        "justification": "Filtered: Requires Level 4/5 audition band"
+        "decisionBadge": "Arrival Time Conflict",
+        "justification": "Filtered Out: Workshop runs during your travel arrival & hotel settle window (2:15 PM - 4:15 PM)."
       }
     ],
     "themeDressCodes": [
       {
         "id": "tb1",
-        "day": "Friday Night",
-        "themeTitle": "Bay Area Glow Social Party",
-        "category": "social_theme",
+        "night": "Friday Night",
+        "title": "Neon & Retro Glow Party",
+        "category": "theme",
+        "badge": "Social Theme",
         "description": "Friday kickoff late night social with blacklights and neon colors.",
-        "recommendedAttire": ["Neon & UV bright colors", "White accents", "Glow jewelry"],
-        "vibe": "High Energy & Electric"
+        "recommendedOutfits": ["Neon & UV bright colors", "White accents", "Glow jewelry"],
+        "atmosphere": "High Energy & Electric"
       },
       {
         "id": "tb2",
-        "day": "Saturday Evening",
-        "themeTitle": "Classic Champions Showcase & Cocktail Chic",
-        "category": "showcase_formal",
-        "description": "Strictly Swing & Pro Classic Showcases in the Grand Peninsula Ballroom.",
-        "recommendedAttire": ["Dress shirts & ties/vests", "Cocktail dresses", "Polished suede dance shoes"],
-        "vibe": "Glamorous & Prestigious"
-      }
-    ],
-    "packingManifest": [
-      {
-        "id": "p1",
-        "name": "Suede wire brush for dusty ballroom floor",
-        "category": "footwear",
-        "rationale": "For maintaining traction on heavily used hotel ballroom floors",
-        "quantity": 1
+        "night": "Saturday Evening",
+        "title": "Champions Showcase Gala & Cocktail Chic",
+        "category": "gala",
+        "badge": "Gala & Showcase",
+        "description": "Strictly Swing & Pro Classic Showcases in the Grand Ballroom.",
+        "recommendedOutfits": ["Dress shirts & vests", "Cocktail dresses", "Polished suede dance shoes"],
+        "atmosphere": "Glamorous & Prestigious"
       }
     ]
   }
