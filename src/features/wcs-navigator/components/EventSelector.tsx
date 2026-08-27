@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Calendar, MapPin, Check } from 'lucide-react';

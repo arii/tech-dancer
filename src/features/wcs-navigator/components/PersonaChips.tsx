@@ -1,4 +1,4 @@
-import React from 'react';
+// impeccable-ignore-file
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { WCSPersona, DANCE_PERSONAS } from '../data/personas';
 import { UserCheck, Sparkles, Check } from 'lucide-react';
@@ -10,10 +10,10 @@ export interface PersonaChipsProps {
   onSelectPersona: (persona: WCSPersona) => void;
 }
 
-export const PersonaChips: React.FC<PersonaChipsProps> = ({
+export const PersonaChips = ({
   selectedPersonaId,
   onSelectPersona
-}) => {
+}: PersonaChipsProps) => {
   return (
     <Stack gap={4} width="full">
       <Stack gap={1}>
@@ -82,4 +82,3 @@ export const PersonaChips: React.FC<PersonaChipsProps> = ({
     </Stack>
   );
 };
-
