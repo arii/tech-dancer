@@ -149,7 +149,7 @@ describe('WCS Navigator Components', () => {
     fireEvent.click(planBtn);
 
     // Agent Pre-scanning transition should appear
-    expect(screen.getByText(/Scanning Schedule Timetable/i)).toBeTruthy();
+    expect(screen.getByText(/Agent Pre-Scanning Schedule/i)).toBeTruthy();
 
     // Fast forward timer to complete discovery pass
     act(() => {
@@ -158,11 +158,10 @@ describe('WCS Navigator Components', () => {
 
     // Should now be in dynamic questionnaire stage
     expect(screen.getByText('Personalize Your Weekend')).toBeTruthy();
-    expect(screen.getByText('Quick Persona Presets')).toBeTruthy();
 
-    // Select Novice persona preset chip
-    const novicePresetChip = screen.getByRole('button', { name: /Novice Competitor/i });
-    fireEvent.click(novicePresetChip);
+    // Select Novice persona choice card
+    const noviceCard = screen.getByRole('radio', { name: /Novice Competitor/i });
+    fireEvent.click(noviceCard);
 
     // Click "Generate Calendar" to advance to Step 3: results
     const generateBtn = screen.getByRole('button', { name: /Generate Calendar/i });
