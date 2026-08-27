@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
 import { Box } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';

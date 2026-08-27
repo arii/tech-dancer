@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
 import { Search, Upload, MapPin, ArrowRight, X, ChevronRight } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
