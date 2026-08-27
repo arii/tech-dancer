@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh, Compass } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -81,6 +81,21 @@ export const routes: RouteConfig[] = [
     skeleton: 'grid',
     isMobileVisible: true,
     isTopNav: true
+  },
+  {
+    path: '/research/wcs-navigator',
+    lazy: () => import('@/pages/WCSNavigator').then(m => ({ Component: m.default })),
+    label: 'WCS Navigator',
+    icon: Compass,
+    skeleton: 'grid',
+    isTopNav: false,
+    sitemap: true
+  },
+  {
+    path: '/wcs-navigator',
+    lazy: () => import('@/pages/WCSNavigator').then(m => ({ Component: m.default })),
+    skeleton: 'grid',
+    sitemap: false
   },
   {
     path: '/research/:id',
