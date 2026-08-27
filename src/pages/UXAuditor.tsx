@@ -203,7 +203,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
         width={width}
         height={height}
         className="border-none bg-white origin-center"
-        style={{ // impeccable-ignore - Dynamic scaling for iframe preview
+        style={ {
           transform: `scale(${scale})`,
           width: `${width}px`,
           height: `${height}px`,
