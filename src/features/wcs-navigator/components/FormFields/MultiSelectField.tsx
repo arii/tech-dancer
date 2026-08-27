@@ -1,6 +1,6 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { FormQuestion } from '../../types/navigator';
+import { FormQuestion, QuestionAnswerValue } from '../../types/navigator';
 
 const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -18,15 +18,15 @@ const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 interface MultiSelectFieldProps {
   question: FormQuestion;
-  value: any[];
-  onChange: (value: any[]) => void;
+  value: QuestionAnswerValue | undefined;
+  onChange: (value: QuestionAnswerValue) => void;
 }
 
 export function MultiSelectField({ question, value = [], onChange }: MultiSelectFieldProps) {
   const options = question.options || [];
   const selectedValues = Array.isArray(value) ? value : [];
 
-  const handleToggle = (optionValue: any) => {
+  const handleToggle = (optionValue: string | boolean | number) => {
     if (selectedValues.includes(optionValue)) {
       onChange(selectedValues.filter((v) => v !== optionValue));
     } else {
@@ -35,7 +35,7 @@ export function MultiSelectField({ question, value = [], onChange }: MultiSelect
   };
 
   return (
-    <Stack gap={3} className="w-full">
+    <Stack gap={3} width="full">
       <Stack gap={1.5}>
         <Stack direction="row" align="center" gap={2}>
           <Text as="h3" variant="body-bold" color="main">
@@ -53,8 +53,8 @@ export function MultiSelectField({ question, value = [], onChange }: MultiSelect
             <Stack direction="row" align="center" gap={2}>
               <Icon icon={InfoIcon} size="sm" color="accent" />
               <Text variant="caption-subtle" color="dim">
-                <Text as="span" variant="caption-bold" color="dim" className="mr-1">
-                  Why We Ask This:
+                <Text as="span" variant="caption-bold" color="dim">
+                  Why We Ask This:&nbsp;
                 </Text>
                 {question.context}
               </Text>
@@ -63,7 +63,7 @@ export function MultiSelectField({ question, value = [], onChange }: MultiSelect
         )}
       </Stack>
 
-      <Box display="grid" className="grid-cols-1 sm:grid-cols-2 gap-2" role="group" aria-label={question.title}>
+      <Grid cols={{ base: 1, sm: 2 }} gap={2} role="group" aria-label={question.title}>
         {options.map((option) => {
           const isSelected = selectedValues.includes(option.value);
           return (
@@ -95,7 +95,7 @@ export function MultiSelectField({ question, value = [], onChange }: MultiSelect
             </Box>
           );
         })}
-      </Box>
+      </Grid>
     </Stack>
   );
 }

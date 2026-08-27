@@ -1,5 +1,7 @@
 export type QuestionType = 'select' | 'multiselect' | 'boolean';
 
+export type QuestionAnswerValue = string | boolean | number | (string | boolean | number)[];
+
 export interface FormQuestionOption {
   label: string;
   value: string | boolean | number;
@@ -12,7 +14,7 @@ export interface FormQuestion {
   context: string;
   required?: boolean;
   options?: FormQuestionOption[];
-  defaultValue?: any;
+  defaultValue?: QuestionAnswerValue;
 }
 
 export interface DiscoveryResponse {
@@ -24,5 +26,5 @@ export interface DiscoveryResponse {
 export interface PersonaChip {
   id: string;
   label: string;
-  answers: Record<string, any>;
+  answers: Record<string, QuestionAnswerValue>;
 }

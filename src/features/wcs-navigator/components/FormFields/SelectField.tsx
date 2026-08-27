@@ -1,6 +1,6 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { FormQuestion } from '../../types/navigator';
+import { FormQuestion, QuestionAnswerValue } from '../../types/navigator';
 
 const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -12,15 +12,15 @@ const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 interface SelectFieldProps {
   question: FormQuestion;
-  value: any;
-  onChange: (value: any) => void;
+  value: QuestionAnswerValue | undefined;
+  onChange: (value: QuestionAnswerValue) => void;
 }
 
 export function SelectField({ question, value, onChange }: SelectFieldProps) {
   const options = question.options || [];
 
   return (
-    <Stack gap={3} className="w-full">
+    <Stack gap={3} width="full">
       <Stack gap={1.5}>
         <Stack direction="row" align="center" gap={2}>
           <Text as="h3" variant="body-bold" color="main">
@@ -38,8 +38,8 @@ export function SelectField({ question, value, onChange }: SelectFieldProps) {
             <Stack direction="row" align="center" gap={2}>
               <Icon icon={InfoIcon} size="sm" color="accent" />
               <Text variant="caption-subtle" color="dim">
-                <Text as="span" variant="caption-bold" color="dim" className="mr-1">
-                  Why We Ask This:
+                <Text as="span" variant="caption-bold" color="dim">
+                  Why We Ask This:&nbsp;
                 </Text>
                 {question.context}
               </Text>
@@ -48,7 +48,7 @@ export function SelectField({ question, value, onChange }: SelectFieldProps) {
         )}
       </Stack>
 
-      <Box display="grid" className="grid-cols-1 sm:grid-cols-2 gap-2" role="radiogroup" aria-label={question.title}>
+      <Grid cols={{ base: 1, sm: 2 }} gap={2} role="radiogroup" aria-label={question.title}>
         {options.map((option) => {
           const isSelected = value === option.value;
           return (
@@ -79,7 +79,7 @@ export function SelectField({ question, value, onChange }: SelectFieldProps) {
             </Box>
           );
         })}
-      </Box>
+      </Grid>
     </Stack>
   );
 }
