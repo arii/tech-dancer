@@ -95,11 +95,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         <Box
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl motion-safe:transition-all motion-safe:duration-300 motion-safe:transform translate-y-0 opacity-100"
+          padding={4}
+          radius="xl"
+          border
+          shadow="2xl"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border-accent/40 motion-safe:transition-all motion-safe:duration-300 motion-safe:transform translate-y-0 opacity-100"
         >
           <Box display="flex" align="start" justify="between" gap={3}>
             <Box display="flex" align="start" gap={3}>
-              <Box padding={1.5} radius="full" className="bg-accent/20 text-accent shrink-0 mt-0.5">
+              <Box padding={1.5} radius="full" className="bg-accent/20 text-accent shrink-0">
                 <Icon icon={CheckCircle2} size="sm" color="accent" />
               </Box>
               <Stack gap={0.5}>
@@ -112,14 +116,21 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
               </Stack>
             </Box>
 
-            <button
+            <Box
+              as="button"
               type="button"
               aria-label="Dismiss download notification"
               onClick={() => setShowToast(false)}
-              className="min-h-[44px] min-w-[44px] -mr-2 -mt-2 flex items-center justify-center text-dim hover:text-white transition-colors cursor-pointer"
+              minHeight={11}
+              width={11}
+              display="flex"
+              align="center"
+              justify="center"
+              cursor="pointer"
+              className="text-dim hover:text-white transition-colors"
             >
               <Icon icon={X} size="xs" />
-            </button>
+            </Box>
           </Box>
         </Box>
       )}
@@ -149,7 +160,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             variant="accent"
             size="md"
             icon={Download}
-            className="min-h-[44px]"
           >
             Download Calendar (.ics)
           </Button>
@@ -195,7 +205,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             variant="accent"
             size="lg"
             icon={Download}
-            className="min-h-[48px]"
           >
             Download Calendar (.ics)
           </Button>

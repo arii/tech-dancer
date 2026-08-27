@@ -85,7 +85,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" className="space-y-6 pb-20 md:pb-0">
+    <Box as="form" onSubmit={handleSubmit} width="full">
       {/* Dynamic Question Inputs with Progressive Disclosure & Stagger Animation */}
       <Stack gap={6}>
         {questions.map((question, index) => {
@@ -123,7 +123,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
               {/* Micro Typing Indicator / Simulated Agent Loader beneath active selection */}
               {isSimulatingAgent && isActive && (
                 <Box
-                  surface="subtle"
+                  surface="card"
                   paddingX={3.5}
                   paddingY={2.5}
                   radius="lg"
@@ -131,11 +131,12 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                   display="flex"
                   align="center"
                   gap={2.5}
-                  className="border-accent/40 bg-accent/5 animate-pulse mt-2"
+                  marginTop={2}
+                  className="border-accent/40 bg-accent/5 animate-pulse"
                 >
                   <Icon icon={Bot} size="xs" color="accent" />
                   <Icon icon={Loader2} size="xs" color="accent" className="animate-spin" />
-                  <Text variant="caption-subtle" color="accent" className="font-mono text-xs">
+                  <Text variant="mono" size="xs" color="accent">
                     Gemini AI Agent scanning ballroom timetable for next prompt...
                   </Text>
                 </Box>
@@ -146,32 +147,42 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
       </Stack>
 
       {/* Action Submit Button */}
-      <div className="pt-4 border-t border-line/60 transition-all duration-400 ease-out animate-in fade-in slide-in-from-bottom-2">
+      <Box paddingTop={4} marginTop={6} border className="border-t border-line/60 transition-all duration-400 ease-out animate-in fade-in slide-in-from-bottom-2">
         <Button
           type="submit"
           variant="primary"
           fullWidth
           disabled={!isValid || isSubmitting}
           loading={isSubmitting}
-          className="min-h-[48px]"
         >
-          <div className="flex items-center justify-center gap-2">
+          <Box display="flex" align="center" justify="center" gap={2}>
             <Sparkles className="w-4 h-4 text-black" />
-            <span className="font-bold text-sm">Generate Calendar</span>
-          </div>
+            <Text weight="font-bold" size="sm" color="main">Generate Calendar</Text>
+          </Box>
         </Button>
-      </div>
+      </Box>
 
       {/* Mobile Sticky Action CTA Bar (<md) */}
-      <div className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-line/80 px-4 py-3 shadow-2xl flex items-center justify-between gap-3">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-bold text-accent uppercase tracking-wider">
+      <Box
+        display="flex"
+        align="center"
+        justify="between"
+        gap={3}
+        paddingX={4}
+        paddingY={3}
+        surface="surface"
+        border
+        shadow="2xl"
+        className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-line/80"
+      >
+        <Stack gap={0.5}>
+          <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="wider">
             {isValid ? 'Ready to Optimize' : 'Complete Preferences'}
-          </span>
-          <span className="text-xs text-text-dim">
+          </Text>
+          <Text size="xs" color="dim">
             {isValid ? 'All required answered' : 'Personalize your weekend'}
-          </span>
-        </div>
+          </Text>
+        </Stack>
 
         <Button
           type="submit"
@@ -179,14 +190,14 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           disabled={!isValid || isSubmitting}
           loading={isSubmitting}
           size="md"
-          className="min-h-[44px] shrink-0 font-bold"
+          className="shrink-0 font-bold"
         >
-          <div className="flex items-center justify-center gap-1.5">
+          <Box display="flex" align="center" justify="center" gap={1.5}>
             <Sparkles className="w-3.5 h-3.5" />
             <span>Generate</span>
-          </div>
+          </Box>
         </Button>
-      </div>
+      </Box>
     </Box>
   );
 };
