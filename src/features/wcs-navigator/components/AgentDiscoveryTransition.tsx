@@ -3,7 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { Cpu, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
 
-interface AgentDiscoveryTransitionProps {
+export interface AgentDiscoveryTransitionProps {
   eventName: string;
   onComplete: () => void;
 }
@@ -15,9 +15,9 @@ export const AgentDiscoveryTransition: React.FC<AgentDiscoveryTransitionProps> =
   const [currentStage, setCurrentStage] = useState(0);
 
   const stages = [
-    { label: 'Ingesting timetable & rasterizing visual schedule columns...', delay: 300 },
-    { label: 'Scanning workshop leveling system & WSDC competition prelims...', delay: 600 },
-    { label: 'Identifying social theme nights & synthesizing dynamic questions...', delay: 900 }
+    { label: 'Reading workshop schedules & room tracks...', delay: 300 },
+    { label: 'Checking competition call times & skill level gates...', delay: 600 },
+    { label: 'Preparing personalized preference options...', delay: 900 }
   ];
 
   useEffect(() => {

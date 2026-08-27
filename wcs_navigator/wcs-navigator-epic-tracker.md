@@ -73,18 +73,20 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 *   **Type:** Feature (Parallel)
 *   **Description:** Set up the system instructions and formatting boundaries for the pre-scan phase. Gemini 3.5 must evaluate the unstructured PDF layout to identify competitive divisions, workshop tracks, dance styles, and social themes.
 *   **Technical Details:**
-    *   Write the system prompt enforcing the `suggested_form_questions` target schema.
-    *   Instruct the model to emit a valid, raw JSON response containing custom form schema elements (`select`, `multiselect`, or `boolean`).
+    *   Write the system prompt enforcing the `suggested_form_questions` target schema with rich option objects (`label`, `value`, `subtitle`, `badge`).
+    *   Instruct the model to emit a valid, raw JSON response containing custom form schema elements (`select`, `multiselect`, or `boolean`) with `defaultValue` and `context`.
     *   Handle cases where the PDF contains multiple styles (e.g. Country Swing overlap) or leveled systems (e.g. Level 1 to 5).
-*   **DoD:** Sending a mock visual PDF (e.g. *Boogie by the Bay 2026*) returns a clean `Discovery JSON` outline showing detected categories and custom frontend question models.
+*   **DoD:** Sending a mock visual PDF (e.g. *Boogie by the Bay 2026*) returns a clean `DiscoveryResponse` payload showing detected categories and custom frontend question models ready for `DynamicQuestionnaire`.
 
 #### 🏷️ Issue WCS-202: Write the Temporal Flight Buffer Engine (Python Helper)
 *   **Type:** Task (Parallel)
-*   **Description:** Implement the pure mathematical logistics utility in Python that reads the earliest mandatory event call-time found by Gemini and computes the latest flight arrival target.
+*   **Description:** Implement the pure mathematical logistics utility in Python that reads the earliest mandatory event call-time found by Gemini and computes the latest flight arrival target and sequential breakdown.
 *   **Technical Details:**
     *   Calculate: $\text{Latest Landing} = \text{Earliest Call Time} - (\text{Transit Mins} + \text{1.5h Hotel Settle} + \text{1.0h Reg Warmup})$.
+    *   Produce summary metrics: `earliestStagingTime`, `latestFlightArrivalDeadline`, `totalBufferHours`, `totalBufferMinutes`, and friendly `formulaSummary`.
+    *   Produce 5 sequential `BufferStep` items (`flight`, `transit`, `hotel`, `warmup`, `staging`) with progressive time displays (e.g. `02:15 PM Touchdown`, `02:15 PM → 02:45 PM`, `05:15 PM Staging Call`).
     *   Support ISO 8601 formatting and timezone calculation to prevent timezone offset bugs.
-*   **DoD:** Executing the buffer function with an input call-time of Saturday 10:30 AM and SFO airport transit times returns a correct, validated deadline of Saturday 7:00 AM.
+*   **DoD:** Executing the buffer function with an input call-time of Friday 5:15 PM and SJC airport transit times returns a correct, validated deadline and step array matching `BufferCalculationResult`.
 
 #### 🏷️ Issue WCS-203: Implement `/generate` Endpoint (Generator Pass 2)
 *   **Type:** Feature (Parallel)
@@ -92,39 +94,43 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 *   **Technical Details:**
     *   Pass the questionnaire parameters as plain text instructions.
     *   Instruct Gemini to compile an RFC 5545-compliant iCal plain-text block under `ics_content`, escaping quotes properly.
-    *   Populate `decision_trace` structures with reasons for every added, skipped, or filtered activity.
-*   **DoD:** Backend returns a single JSON object containing both the RFC-compliant calendar string and a robust, trace-log explanation array.
+    *   Populate `decision_trace` structures with:
+        *   `bufferTimeline`: High-contrast summary metrics and 5-step arrival progression.
+        *   `sessions`: Filtering decisions with status (`included` | `filtered`), `decisionBadge` (e.g. `Division Match`, `Arrival Time Conflict`, `Level Ineligible`), and friendly `justification`.
+        *   `themeDressCodes`: Structured theme attire guidance (`id`, `night`, `title`, `description`, `badge`, `category`, `recommendedOutfits`, `atmosphere`).
+*   **DoD:** Backend returns a single JSON object containing both the RFC-compliant calendar string and a complete `AgentDecisionTrace` matching the frontend visualization cards.
 
 ---
 
 ### 🖥️ Phase 3: Blog Frontend (Parallel Path B)
 *These tasks build the user interface on `boomtick.blog` and can run concurrently with Phase 2 (Backend).*
 
-#### 🏷️ Issue WCS-301: Create PDF Upload & URL Form Component
+#### 🏷️ Issue WCS-301: Create PDF Upload & Hero Event Selector Component
 *   **Type:** UI Feature (Parallel)
-*   **Description:** Implement the initial form component inside the `tech-dancer` repo workspace. This features a drag-and-drop landing area for event schedules and a simple input field to paste online schedule links.
+*   **Description:** Implement the initial form component inside the `tech-dancer` repo workspace. Features a clean, centered search input with instant preset chips and secondary PDF upload capabilities.
 *   **Technical Details:**
-    *   Build a sleek drag-and-drop panel with visual state changes (hover, active, uploading).
-    *   Integrate simple state hooks to store file bytes or the URL string locally in the DOM.
-*   **DoD:** Users can drag a PDF onto the page or paste an online URL, and clicking "Pre-Scan Schedule" fires the request to the endpoint.
+    *   Build a sleek search input with quick event tags (South Bay Dance Fling, Boogie by the Bay, etc.).
+    *   Support drag-and-drop schedule PDF uploads with visual state transitions.
+*   **DoD:** Users can select a featured California 2026 event or drop a PDF schedule, advancing seamlessly to discovery.
 
-#### 🏷️ Issue WCS-302: Implement the Dynamic Questionnaire Form Renderer
+#### 🏷️ Issue WCS-302: Implement Unified Choice Card Questionnaire Form Renderer
 *   **Type:** UI Feature (Parallel)
-*   **Description:** Build the conditional form builder that parses the `Discovery JSON` payload returned from `/discover` and renders matching form inputs on the fly.
+*   **Description:** Build the questionnaire renderer that parses the `DiscoveryResponse` schema and renders unified persona/level cards, multi-select checkboxes, and boolean switches.
 *   **Technical Details:**
-    *   Evaluate incoming question types (`select`, `multiselect`, `boolean`).
-    *   Dynamically render HTML selects, checkboxes, or toggles styled with Tailwind CSS.
-    *   Store selected user answers in a unified state object.
-*   **DoD:** Questionnaire changes dynamically depending on the uploaded file (e.g. showing "What is your workshop level?" only if leveled classes are detected).
+    *   Render Question 1 as 4 rich choice cards (Novice Competitor, Intermediate Competitor, Social Dancer Only, Workshop Enthusiast) with `subtitle` and `badge` indicators.
+    *   Include collapsible "Why We Ask This" explainability disclosures for every question.
+    *   Store selected user answers in a unified state object and gate the primary CTA until required questions are answered.
+*   **DoD:** Questionnaire renders unified choice cards and form inputs conforming to design token and layout primitive standards with 0 console warnings.
 
-#### 🏷️ Issue WCS-303: Build "Agent Mind" Decision Trace Component
+#### 🏷️ Issue WCS-303: Build "Agent Mind" Decision Trace & Arrival Buffer View
 *   **Type:** UI Feature (Parallel)
 *   **Description:** Build an explainable interface that visualizes the decision trace logs, demonstrating exactly how the agent filtered out events and calculated travel math.
 *   **Technical Details:**
-    *   Display a visual progress timeline as the API loads ("Reading structure...", "Filtering workshops...", "Calculating buffers...").
-    *   Render a vertical card-based comparison of selected workshops versus excluded workshops.
-    *   Present the calculated flight arrival buffer as a clear, colored warning timeline at the top of the schedule.
-*   **DoD:** The UI displays a detailed breakdown of *why* the itinerary was created, followed by a highlighted download button that saves the generated calendar as an `.ics` file.
+    *   **Direct Time Summary**: 3 bold metric cards displaying Earliest Event Call, Target Landing Deadline, and Total Required Buffer.
+    *   **Static Arrival Breakdown**: Sequential 5-step progression from touchdown to ballroom staging call with mathematical validation callout.
+    *   **Your Workshops & Schedule Matrix**: Tabbed view (`Matched & Scheduled`, `Filtered Out`, `All`) with clear user-centric fit rationale.
+    *   **Event Themes & Dress Codes**: Grid of convention evening party themes and competition attire recommendations.
+*   **DoD:** The UI displays a detailed breakdown of *why* the itinerary was created, followed by an immediate download button that saves the generated calendar as an `.ics` file.
 
 ---
 
@@ -132,10 +138,25 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 * **Status:** Milestone (Both Parallel Paths Must Converge)
 * **Objective:** Connect the React blog UI component to the Cloud Run API service running on a local host network.
 * **Verification Routine:**
-    1. Drag-and-drop a sample schedule (e.g., `bbb2026-schedule.pdf`).
-    2. Confirm Stage 1 questionnaire mounts dynamically with accurate options.
-    3. Select a persona profile, submit the answers, and confirm the decision trace renders beautifully.
-    4. Click download and verify that the resulting `.ics` calendar imports into Google Calendar or Apple Calendar with accurate event mappings.
+    1. **Contract Schema Gate:** Verify FastAPI Pydantic models serialize to camelCase aliases consumable by TypeScript (`DiscoveryResponse`, `AgentDecisionTrace`, `BufferCalculationResult`, `AuditSession`, `ThemeDressCode`).
+    2. **Stage 1 Discovery:** Drag-and-drop a sample schedule (e.g., `bbb2026-schedule.pdf`) or select a California 2026 preset. Confirm Stage 1 questionnaire mounts dynamically with accurate options and persona choice cards.
+    3. **Stage 2 Generation:** Select a persona profile (e.g., Novice Competitor), submit the answers, and confirm the decision trace renders beautifully (Direct Time Summary, static Arrival Buffer timeline, 3-tab Workshop Matrix, Theme & Dress Code cards).
+    4. **Calendar Download:** Click download and verify that the resulting `.ics` calendar imports into Google Calendar or Apple Calendar with accurate event mappings and flight landing deadlines.
+
+---
+
+## 🔌 Frontend-Backend Contract Verification Matrix
+
+To guarantee zero runtime breakage when moving from Mock Mode to Live Backend API, every backend issue must verify against the following schema compatibility requirements:
+
+| Endpoint & Stage | Backend Pydantic Model | Target React TypeScript Contract | Required Verification Assertions |
+| :--- | :--- | :--- | :--- |
+| **Stage 1: `/discover`** | `DiscoveryResponse` | `DiscoveryResponse` (`types/navigator.ts`) | • Contains `suggested_form_questions` array.<br>• Each question has `id`, `title`, `type` (`select` \| `multiselect` \| `boolean`), `context`, `required`, `defaultValue`.<br>• Select / Multiselect options contain `{ label, value, subtitle?, badge? }`. |
+| **Stage 2: `/generate`** | `GenerateResponse` | `AgentDecisionTrace` (`types.ts`) | • Contains `icsContent` (or `ics_content`) string with valid RFC 5545 syntax.<br>• Contains `decisionTrace` with `subTasks`, `bufferTimeline`, `sessions`, `themeDressCodes`, `packingManifest`. |
+| **Buffer Engine** | `BufferCalculationResult` | `FlightBuffer` (`types.ts`) | • Contains `earliestStagingTime`, `latestFlightArrivalDeadline`, `warmupMinutes`, `hotelSettleMinutes`, `transitMinutes`, `formulaSummary`.<br>• Contains `steps: BufferStep[]` with `label`, `time`, `type` (`staging` \| `warmup` \| `hotel` \| `transit` \| `flight`), and `duration`. |
+| **Audit Matrix** | `AuditSession` | `AuditSession` (`types.ts`) | • Contains `id`, `title`, `time`, `location`, `status` (`included` \| `filtered`), `decisionBadge`, `justification`. |
+| **Themes & Dress Codes** | `ThemeDressCode` | `ThemeDressCode` (`types.ts`) | • Contains `id`, `day`, `themeTitle`, `category` (`social_theme` \| `showcase_formal` \| `competition_attire` \| `casual_sunday`), `description`, `recommendedAttire: string[]`, `vibe`. |
+| **Packing Items** | `PackingItem` | `PackingItem` (`types.ts`) | • Contains `id`, `name`, `category` (`footwear` \| `attire` \| `toiletries` \| `tech` \| `essentials`), `rationale`, `quantity`. |
 
 ---
 
@@ -164,14 +185,15 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 ### 🧪 Phase 5: Test-Driven Validation & Demo Prep (Sequential)
 *These tasks complete the testing validations and prepare the final presentation assets.*
 
-#### 🏷️ Issue WCS-501: Write Automated Test Suite (Pytest)
+#### 🏷️ Issue WCS-501: Write Automated Test Suite (Pytest & Contract Verification)
 *   **Type:** Task (Sequential)
-*   **Description:** Build out the local test coverage validating execution outputs against the Golden Target scenarios.
+*   **Description:** Build out the test coverage validating execution outputs against the Golden Target scenarios and verifying frontend-backend JSON contract serialization.
 *   **Technical Details:**
+    *   Execute `test_contract_schemas.py` asserting exact camelCase/snake_case serialization compatibility with frontend React TypeScript definitions.
     *   Write test fixtures parsing Boogie by the Bay 2026 schedules under the "Novice Competitor" profile.
     *   Write test fixtures parsing Halloween Swing Thing 2026 under the "Pure Social Spectator" profile.
-    *   Assert that the calculations of earliest call-times, flight buffers, and generated `.ics` files match targeted strings.
-*   **DoD:** Running `pytest tests/ -v` completes successfully with a 100% pass rate.
+    *   Assert that calculations of earliest call-times, flight buffers, and generated `.ics` files match targeted strings.
+*   **DoD:** Running `pytest tests/ -v` completes successfully with a 100% pass rate across engine math, schema contracts, and mock ingestion fixtures.
 
 #### 🏷️ Issue WCS-502: Record and Script the Devpost Submission Video (4 Minutes Max)
 *   **Type:** Task (Sequential)

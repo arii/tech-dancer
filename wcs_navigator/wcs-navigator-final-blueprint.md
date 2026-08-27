@@ -105,6 +105,8 @@ Analyze the layout of the uploaded document and return ONLY a valid JSON payload
 
 Target JSON Schema:
 {
+  "preset_id": "optional-event-slug",
+  "preset_name": "Official Name of the Event",
   "event_name": "Official Name of the Event",
   "tracks_detected": ["List of distinct tracks, e.g., 'West Coast Swing', 'Country Swing', 'Line Dance', 'Hustle'"],
   "leveled_workshops_detected": {
@@ -121,25 +123,34 @@ Target JSON Schema:
   "suggested_form_questions": [
     {
       "id": "unique_question_id_string",
+      "title": "The human-readable question to ask the dancer",
       "type": "select" | "multiselect" | "boolean",
-      "label": "The human-readable question to ask the dancer",
-      "options": ["Option A", "Option B"],
-      "context": "Context for why this question is being asked based on the schedule"
+      "context": "Context for why this question is being asked based on the schedule",
+      "required": true,
+      "defaultValue": "novice",
+      "options": [
+        {
+          "label": "Novice Competitor",
+          "value": "novice",
+          "subtitle": "WSDC Novice prelims, early staging call, foundational tracks",
+          "badge": "Novice"
+        }
+      ]
     }
   ]
 }
 
 Rule Checklist for Question Generation:
 1. Multi-Style Detection: If you detect multiple dance styles (e.g. Country Swing AND West Coast Swing, or Hustle and WCS), generate a multiselect question asking which styles they want on their schedule.
-2. Workshop Levels: If workshops are divided by level (L1-L5, Novice-Champion, Intermediate/Advanced), generate a select question asking for their level so you can filter out classes they aren't eligible for.
-3. Competitions: Generate a multiselect question based on WSDC divisions found (e.g. Novice, Intermediate, Advanced, Masters, Sophisticated) to see which Jack & Jill contests they are entering.
+2. Workshop Levels: If workshops are divided by level (L1-L5, Novice-Champion, Intermediate/Advanced), generate a select question asking for their level with structured options so you can filter out classes they aren't eligible for.
+3. Competitions: Generate a select or multiselect question based on WSDC divisions found (e.g. Novice, Intermediate, Advanced, Masters, Sophisticated) to calculate call times.
 ```
 
 ---
 
 ### Pass 2: Personalized Calendar & Decision Generation
 
-*   **Endpoint:** `POST /generate-calendar/generate`
+*   **Endpoint:** `POST /generate-calendar/generate` (or `POST /api/v1/generate`)
 *   **Input:** Original PDF bytes (or URL) + Completed Questionnaire JSON payload.
 *   **Logic:** Gemini 3.5 Flash filters the raw schedule using the answers, evaluates competitive call times, executes flight arrival deadline calculations, and generates the final iCalendar stream along with a step-by-step reasoning trace [15].
 
@@ -158,28 +169,86 @@ Target JSON Schema:
 {
   "ics_content": "BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\n...",
   "decision_trace": {
-    "evaluation_summary": "High-level summary of the user's persona and what schedules were retained/ignored.",
-    "earliest_call_time": {
-      "event_name": "Name of the earliest competition or workshop session the user must attend",
-      "scheduled_time_iso": "YYYY-MM-DDTHH:MM:SS",
-      "source_reference": "Grid/row/page where this call time was located in the document"
-    },
-    "calculated_buffers": {
-      "earliest_call_time": "YYYY-MM-DDTHH:MM:SS",
-      "required_buffer_explanation": "Subtract 3 hours (30m airport transit, 90m hotel check-in/settle, 60m warm-up & check-in window)",
-      "latest_flight_arrival_deadline_iso": "YYYY-MM-DDTHH:MM:SS"
-    },
-    "custom_packing_manifest": [
+    "subTasks": [
       {
-        "item": "Item Name",
-        "rationale": "Clear logical link explaining why this item is recommended based on the schedule events (e.g., themed nights, footwear requirements)."
+        "id": "1",
+        "label": "Parsed event timetable & rooms",
+        "status": "completed",
+        "detail": "Identified ballroom streams across the weekend"
       }
     ],
-    "sessions_included": [
+    "bufferTimeline": {
+      "earliestStagingTime": "5:15 PM (Friday)",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 30,
+      "latestFlightArrivalDeadline": "2:15 PM (Friday)",
+      "formulaSummary": "17:15 (Staging) - (30m Transit + 90m Hotel Settle + 60m Warmup) = 14:15 Target Landing",
+      "steps": [
+        {
+          "label": "Earliest Competition Staging Call",
+          "time": "5:15 PM",
+          "duration": "Check-in",
+          "type": "staging",
+          "description": "Novice Strictly Swing Prelims Check-in"
+        },
+        {
+          "label": "Target Flight Landing Deadline",
+          "time": "2:15 PM",
+          "duration": "Deadline",
+          "type": "flight",
+          "description": "Recommended latest flight touchdown"
+        }
+      ]
+    },
+    "sessions": [
       {
-        "title": "Session Title",
-        "time": "Day, Date, Start-End Time",
-        "location": "Ballroom / Room name",\n        "reason_included": "Why this specific session was selected for their profile"
+        "id": "s1",
+        "title": "Novice Strictly Swing Prelims",
+        "time": "Friday 5:30 PM - 6:30 PM",
+        "location": "Grand Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Matched selected competitive division (Novice)."
+      },
+      {
+        "id": "s2",
+        "title": "Advanced/All-Star Masterclass",
+        "time": "Saturday 11:00 AM - 12:00 PM",
+        "location": "Junior Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "theme-fri-neon",
+        "night": "Friday Night",
+        "title": "Neon & Retro Glow Party",
+        "description": "Midnight social featuring blacklights and UV lighting throughout the grand ballroom.",
+        "badge": "Social Theme",
+        "category": "theme",
+        "recommendedOutfits": [
+          "Neon tops & shoes",
+          "UV glow accessories",
+          "White accents"
+        ],
+        "atmosphere": "High Energy & Vibrant"
+      },
+      {
+        "id": "theme-sat-gala",
+        "night": "Saturday Evening",
+        "title": "Champions Showcase Gala & Dressy Glam",
+        "description": "Marquee evening with Champion Jack & Jill finals and all-star pro routines.",
+        "badge": "Gala & Showcase",
+        "category": "gala",
+        "recommendedOutfits": [
+          "Fitted dress shirts & vests",
+          "Cocktail attire & jumpsuits",
+          "Clean dance shoes"
+        ],
+        "atmosphere": "Elegant & Sophisticated"
       }
     ]
   }
@@ -194,39 +263,50 @@ Strict Formatting and Logic Constraints:
      - Each filtered competition or workshop.
      - Detected social theme nights matching their preferences.
    - Set accurate start and end DTSTART/DTEND values using the dates found on the PDF.
-2. Filtering Integrity:
-   - If the user selected 'Novice', you MUST filter out Intermediate, Advanced, All-Star, and Champion workshops and contests. Do not pollute their calendar with sessions they cannot attend.
-   - Include all-level workshops and general social dance sessions.
+2. Filtering & Travel Conflict Integrity:
+   - If the user selected 'Novice', filter out Intermediate, Advanced, All-Star, and Champion workshops and contests.
+   - If a workshop overlaps with the travel arrival & hotel settle window (before warmup starts), mark it as 'filtered' with 'Arrival Time Conflict'.
+   - Include all matched level workshops and general social dance sessions.
 3. Explainability:
-   - Make sure your reasoning inside the "decision_trace" is entirely traceable back to specific entries in the schedule PDF.
+   - Provide clear, user-centric 'justification' text for every session ('Why this fits your profile').
+   - Return structured 'themeDressCodes' for all evening themes and showcase dress expectations.
 ```
 
 ---
 
 ## 4. Visualizing Decisions: P0 Frontend UI/UX
 
-Understanding the agent’s logic is a P0 requirement. In place of a silent loading spinner, the `boomtick.blog` frontend uses the returned JSON payload to render an interactive, step-by-step **"Agent Logic Trace" UI** before initiating the `.ics` calendar download.
+Understanding the agent’s logic is a P0 requirement. In place of a silent loading spinner, the `boomtick.blog` frontend uses the returned JSON payload to render an interactive, explainable **"Agent Logic Trace" UI** before initiating the `.ics` calendar download.
 
 ```
 +-------------------------------------------------------------------------------------------------+
-|                                     WCS NAVIGATOR INTERACTIVE TRACE                             |
+|                                 WCS NAVIGATOR DECISION & TRAVEL TRACE                           |
 +-------------------------------------------------------------------------------------------------+
 |                                                                                                 |
-|   [Step 1: Evaluated Profile]                                                                   |
-|   "Identified user as Novice Competitor. Filtered out 24 ineligible workshops & events."        |
+|   [Direct Time Summary Badges]                                                                  |
+|   🏆 Earliest Event Call: 5:15 PM (Friday)                                                      |
+|   ✈️ Target Landing Deadline: 2:15 PM (Friday)                                                  |
+|   ⏱️ Total Required Buffer: 3 Hours (180 mins)                                                  |
 |                                                                                                 |
-|   [Step 2: Earliest Competition Milestone Located]                                              |
-|   "Novice Strictly Swing Prelims detected on Friday at 5:30 PM (Staging Call: 5:15 PM)."        |
-|   Source: Page 2, Friday Afternoon Tabular Grid.                                                |
+|   [Static Chronological Arrival Breakdown]                                                      |
+|   - 02:15 PM Touchdown   ➔ Target Flight Landing Deadline                                       |
+|   - 02:15 PM → 02:45 PM  ➔ Airport-to-Venue Transit (30 mins)                                   |
+|   - 02:45 PM → 04:15 PM  ➔ Hotel Check-in & Wardrobe Settle (90 mins)                            |
+|   - 04:15 PM → 05:15 PM  ➔ Warmup & Floor Check (60 mins)                                       |
+|   - 05:15 PM Staging Call ➔ Competition Staging Call (Novice Prelims)                            |
 |                                                                                                 |
-|   [Step 3: Travel Logistics Subtraction Calculation]                                            |
-|   Target Landing: Friday at 14:25 PM                                                            |
-|   Formula: 17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup Buffer)               |
-|   ==========================[ 3.0 Hour Flight Buffer Block ]==========================          |
+|   [Mathematical Validation Callout]                                                             |
+|   "Why 2:15 PM? We take your earliest mandatory time (5:15 PM) and calculate backward           |
+|    through warmup (60m), hotel logistics (90m), and transit (30m) to protect from delays."      |
 |                                                                                                 |
-|   [Step 4: Smart Packing Recommendations]                                                       |
-|   - Adhesive Suede Shoe Sheets: "For temporary tile ballroom flooring used at Hyatt Regency SFO"|
-|   - Neon Glow Wear: "For the 'Glow Night' Friday social theme listed in schedule"               |
+|   [Your Workshops & Schedule Matrix]                                                            |
+|   Tabs: [ Matched & Scheduled (4) ]  [ Filtered Out (2) ]  [ All (6) ]                          |
+|   - Novice Strictly Swing: "Matched selected competitive division (Novice)"                     |
+|   - All-Levels Workshop: "Filtered Out: Workshop runs during arrival & hotel settle window"     |
+|                                                                                                 |
+|   [Event Themes & Dress Codes]                                                                  |
+|   - Friday Night: Neon & Retro Glow Party ("Neon tops & shoes, UV glow accessories")            |
+|   - Saturday Evening: Champions Showcase Gala ("Cocktail attire, dress shirts, clean shoes")    |
 |                                                                                                 |
 +-------------------------------------------------------------------------------------------------+
 |                             [ DOWNLOAD PERSONALIZED CALENDAR (.ics) ]                           |
@@ -234,9 +314,10 @@ Understanding the agent’s logic is a P0 requirement. In place of a silent load
 ```
 
 ### Visual Components of the Frontend:
-1.  **The Filtration Summary Card:** Displays how many total calendar items were evaluated and filtered out based on the chosen persona rules, validating structural filtering integrity.
-2.  **The Interactive Travel Timeline:** A visual progression bar illustrating the flight arrival buffer math. It starts at the earliest competition staging call time and backs up step-by-step to the calculated target landing deadline.
-3.  **Logical Packing Cards:** Each recommended item is displayed as a mini-card featuring an explainable tooltip derived from schedule observations (e.g., showing a garment steamer recommendation because of formal dress rules, or electrolytes due to late-night social schedules stretching past 4:00 AM) [15, 21].
+1.  **Direct Time Summary:** 3 high-contrast metric cards highlighting Earliest Staging Call, Target Landing Deadline, and Total Buffer Hours.
+2.  **Static Arrival Flow:** Chronological sequential cards with progressive time arrows, generous icon padding, and mathematical calculation validation.
+3.  **Your Workshops & Schedule Matrix:** Interactive 3-tab filtering table (`Matched`, `Filtered Out`, `All`) with transparent "Why this fits your profile" rationale.
+4.  **Theme & Dress Code Cards:** Key evening theme nights, gala showcase attire guidelines, and recommended outfits.
 
 ---
 

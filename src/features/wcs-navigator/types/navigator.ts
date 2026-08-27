@@ -5,6 +5,8 @@ export type QuestionAnswerValue = string | boolean | number | (string | boolean 
 export interface FormQuestionOption {
   label: string;
   value: string | boolean | number;
+  subtitle?: string;
+  badge?: string;
 }
 
 export interface FormQuestion {

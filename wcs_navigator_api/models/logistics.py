@@ -49,3 +49,58 @@ class BufferCalculationResult(BaseModel):
     @property
     def math_breakdown_formula(self) -> str:
         return self.formula_summary
+
+
+class SubTask(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str
+    label: str
+    status: str  # 'completed' | 'in_progress' | 'pending'
+    detail: Optional[str] = None
+
+
+class AuditSession(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str
+    title: str
+    time: str
+    location: str
+    status: str  # 'included' | 'filtered'
+    decision_badge: str = Field(alias="decisionBadge")
+    justification: str
+
+
+class ThemeDressCode(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str
+    day: str
+    theme_title: str = Field(alias="themeTitle")
+    category: str  # 'social_theme' | 'showcase_formal' | 'competition_attire' | 'casual_sunday'
+    description: str
+    recommended_attire: List[str] = Field(default_factory=list, alias="recommendedAttire")
+    vibe: str
+
+
+class PackingItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: str
+    name: str
+    category: str  # 'footwear' | 'attire' | 'toiletries' | 'tech' | 'essentials'
+    rationale: str
+    quantity: Optional[int] = 1
+
+
+class AgentDecisionTrace(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    sub_tasks: List[SubTask] = Field(default_factory=list, alias="subTasks")
+    buffer_timeline: BufferCalculationResult = Field(alias="bufferTimeline")
+    sessions: List[AuditSession] = Field(default_factory=list)
+    theme_dress_codes: Optional[List[ThemeDressCode]] = Field(default_factory=list, alias="themeDressCodes")
+    packing_manifest: Optional[List[PackingItem]] = Field(default_factory=list, alias="packingManifest")
+    ics_content: str = Field(alias="icsContent")
+

@@ -1,18 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { Icon } from '@/components/ui/Icon';
 import { ToggleLeft, ToggleRight, ArrowLeft, RefreshCw, Layers } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS } from './data/californiaEvents';
-import { DANCE_PERSONAS } from './data/personas';
 import { MOCK_EVENT_RESULTS, createGenericMockResult, EventMockData } from './data/mockResults';
 import { EventSearchHero } from './components/EventSearchHero';
 import { AgentDiscoveryTransition } from './components/AgentDiscoveryTransition';
 import { DynamicQuestionnaire } from './components/DynamicQuestionnaire';
 import { AgentMindTrace } from './components/AgentMindTrace';
 import { WorkflowExplainer } from './components/WorkflowExplainer';
-import { DiscoveryResponse, PersonaChip, QuestionAnswerValue } from './types/navigator';
+import { DiscoveryResponse, QuestionAnswerValue } from './types/navigator';
 import { AgentDecisionTrace } from './types';
 
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'results';
@@ -33,26 +32,10 @@ export const WCSNavigatorPage: React.FC = () => {
     MOCK_EVENT_RESULTS['south-bay-dance-fling-2026'].decisionTrace
   );
 
-  // Persona Chips Mapping
-  const personaChips: PersonaChip[] = useMemo(() => {
-    return DANCE_PERSONAS.map(p => ({
-      id: p.id,
-      label: p.name,
-      answers: {
-        competition_level: p.id === 'pure-social-dancer' ? 'social_only' : p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-        wsdc_level: p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
-        experience_level: p.id === 'pure-social-dancer' ? 'social_only' : 'novice',
-        late_night_energy: p.id === 'pure-social-dancer' || p.id === 'int-adv-competitor',
-        spectator_interest: true,
-        workshop_focus: p.id === 'workshop-enthusiast' ? ['technique', 'musicality', 'flow'] : ['technique']
-      }
-    }));
-  }, []);
-
   // Discovery handlers
   const handleStartDiscovery = (eventName: string, eventId?: string) => {
     setActiveEventName(eventName);
-    if (eventId) setActiveEventId(eventId);
+    setActiveEventId(eventId || '');
     setStep('discovering');
   };
 
@@ -82,48 +65,32 @@ export const WCSNavigatorPage: React.FC = () => {
         {/* Top Header & Mode Toggle Bar */}
         <Box display="flex" justify="between" align="center" wrap="wrap" gap={4} border="b" paddingBottom={4}>
           <PageHeader
-            label="DEVAI_NAVIGATOR"
-            title="WCS Navigator (California 2026)"
-            subtitle="Search an event or drop a PDF schedule. Gemini Flash discovers session structures and personalizes your weekend."
+            title="WCS Navigator"
+            subtitle="Personalized weekend schedule and travel planner for California 2026 West Coast Swing conventions."
             as="h1"
             paddingBottom={0}
             border="none"
           />
 
-          {/* Mode Switch Toggle */}
+          {/* Mode Switch Toggle (Subtle & Clean) */}
           <Box
             as="button"
             type="button"
             onClick={() => setIsMockMode(!isMockMode)}
-            paddingX={4}
-            paddingY={2.5}
+            paddingX={3.5}
+            paddingY={2}
             surface="muted"
             radius="lg"
             border
             display="flex"
             align="center"
-            gap={3}
+            gap={2.5}
             cursor="pointer"
-            className="border-line hover:border-accent transition-colors shrink-0"
+            className="min-h-[44px] border-line hover:border-accent transition-colors"
           >
-            <Box display="flex" align="center" gap={2}>
-              <Icon icon={isMockMode ? ToggleLeft : ToggleRight} size="md" color="accent" />
-              <Text variant="mono" size="xs" weight="font-bold" color="main">
-                Mode: {isMockMode ? 'Mock Preset Mode' : 'Live Backend API'}
-              </Text>
-            </Box>
-            <Text
-              size="micro"
-              radius="sm"
-              paddingX={2}
-              paddingY={0.5}
-              className={
-                isMockMode
-                  ? 'bg-brand-cyan/20 text-brand-cyan font-bold'
-                  : 'bg-brand-amber/20 text-brand-amber font-bold'
-              }
-            >
-              {isMockMode ? 'INSTANT LOCAL DEMO' : 'REMOTE API'}
+            <Icon icon={isMockMode ? ToggleLeft : ToggleRight} size="sm" color="accent" />
+            <Text variant="mono" size="xs" weight="font-bold" color="main">
+              {isMockMode ? 'Demo Data' : 'Live Data'}
             </Text>
           </Box>
         </Box>
@@ -151,7 +118,8 @@ export const WCSNavigatorPage: React.FC = () => {
                 display="flex"
                 align="center"
                 gap={1.5}
-                className="text-xs text-dim hover:text-white transition-colors"
+                paddingX={2}
+                className="min-h-[44px] text-xs text-dim hover:text-white transition-colors cursor-pointer"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Change Event</span>
@@ -170,11 +138,11 @@ export const WCSNavigatorPage: React.FC = () => {
                 display="flex"
                 align="center"
                 gap={1.5}
-                paddingX={3}
-                paddingY={1}
+                paddingX={3.5}
+                paddingY={2}
                 radius="lg"
                 surface="muted"
-                className="text-xs font-mono text-dim hover:text-white transition-colors"
+                className="min-h-[44px] text-xs font-mono text-dim hover:text-white transition-colors cursor-pointer"
               >
                 <Icon icon={RefreshCw} size="xs" />
                 <span>Start Over</span>
@@ -206,16 +174,15 @@ export const WCSNavigatorPage: React.FC = () => {
             <Box surface="surface" padding={6} radius="xl" border className="border-line/70">
               <Stack gap={2} marginBottom={4} border="b" paddingBottom={3}>
                 <Text variant="headline" size="lg" weight="font-bold" color="main">
-                  Discovered Event Parameters
+                  Personalize Your Weekend
                 </Text>
                 <Text size="xs" color="dim">
-                  Gemini Flash identified the following structure for <span className="text-white font-semibold">{activeEventName}</span>. Select your preferences to tailor your schedule.
+                  We identified the workshop tiers and competition call times for <span className="text-white font-semibold">{activeEventName}</span>. Choose your preferences to build your custom schedule.
                 </Text>
               </Stack>
 
               <DynamicQuestionnaire
                 discoveryResponse={discoveryData}
-                personaChips={personaChips}
                 onSubmit={handleGenerateItinerary}
               />
             </Box>
@@ -234,14 +201,14 @@ export const WCSNavigatorPage: React.FC = () => {
                 align="center"
                 gap={2}
                 paddingX={4}
-                paddingY={2}
+                paddingY={2.5}
                 radius="lg"
                 surface="surface"
                 border
-                className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
+                className="min-h-[44px] border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all cursor-pointer"
               >
                 <Icon icon={ArrowLeft} size="xs" />
-                <span>Adjust Preferences & Re-generate</span>
+                <span>Adjust Preferences &amp; Re-generate</span>
               </Box>
             </Box>
 
@@ -251,14 +218,14 @@ export const WCSNavigatorPage: React.FC = () => {
           </Stack>
         )}
 
-        {/* DevAI Architecture & Workflow Explainer Banner */}
+        {/* Workflow Explainer Banner */}
         <WorkflowExplainer />
 
-        {/* Footer Tag */}
+        {/* Clean Footer Tag */}
         <Box display="flex" align="center" justify="center" gap={2} paddingY={4} color="dim">
           <Icon icon={Layers} size="xs" />
           <Text size="micro" variant="mono" color="dim">
-            WCS Navigator • Two-Pass Multimodal Agent Architecture
+            WCS Navigator • Personalized Itinerary &amp; Travel Planner
           </Text>
         </Box>
       </Stack>

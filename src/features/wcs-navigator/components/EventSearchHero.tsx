@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { Search, Sparkles, Upload, Calendar, ArrowRight } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Search, Upload, MapPin, ArrowRight, X, ChevronRight } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { DropzoneUpload } from './DropzoneUpload';
 
-interface EventSearchHeroProps {
+export interface EventSearchHeroProps {
   onDiscoverPreset: (event: WCSCaliforniaEvent) => void;
   onDiscoverPdf: (file: File) => void;
   onDiscoverUrl: (url: string) => void;
@@ -14,220 +12,184 @@ interface EventSearchHeroProps {
 export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   onDiscoverPreset,
   onDiscoverPdf,
-  onDiscoverUrl
+  onDiscoverUrl,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState<WCSCaliforniaEvent>(CALIFORNIA_2026_EVENTS[0]);
-  const [activeTab, setActiveTab] = useState<'preset' | 'custom'>('preset');
+  const [selectedEvent, setSelectedEvent] = useState<WCSCaliforniaEvent | null>(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const filteredEvents = CALIFORNIA_2026_EVENTS.filter(e =>
-    e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    e.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredEvents = useMemo(() => {
+    if (!searchQuery.trim()) return CALIFORNIA_2026_EVENTS;
+    const q = searchQuery.toLowerCase();
+    return CALIFORNIA_2026_EVENTS.filter(
+      (e) =>
+        e.name.toLowerCase().includes(q) ||
+        e.location.toLowerCase().includes(q) ||
+        e.dates.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
+
+  const handleSelect = (event: WCSCaliforniaEvent) => {
+    setSelectedEvent(event);
+    setSearchQuery(event.name);
+    setIsInputFocused(false);
+  };
+
+  const handleClear = () => {
+    setSearchQuery('');
+    setSelectedEvent(null);
+  };
 
   return (
-    <Box display="flex" flex="col" align="center" width="full" paddingY={{ base: 8, md: 12 }}>
-      {/* Hero Badge & Headline */}
-      <Stack gap={3} align="center" textAlign="center" maxWidth="3xl" marginX="auto" width="full">
-        <Box
-          display="flex"
-          align="center"
-          gap={2}
-          paddingX={3}
-          paddingY={1}
-          radius="full"
-          className="bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan"
-        >
-          <Icon icon={Sparkles} size="xs" />
-          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest">
-            Two-Pass AI Convention Optimizer
-          </Text>
-        </Box>
-
-        <Text variant="headline" size="3xl" weight="font-black" color="main" className="tracking-tight sm:text-4xl">
+    <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto py-8 md:py-14">
+      {/* Centered Hero Header */}
+      <div className="flex flex-col items-center text-center max-w-2xl mx-auto w-full mb-8 space-y-2">
+        <h2 className="text-3xl sm:text-5xl font-black text-text-main tracking-tight leading-tight">
           What event are you attending?
-        </Text>
+        </h2>
+        <p className="text-sm sm:text-base text-text-dim max-w-lg leading-relaxed">
+          Search an upcoming 2026 convention or drop your schedule PDF to build a customized weekend timetable.
+        </p>
+      </div>
 
-        <Text size="sm" color="dim" maxWidth="xl" className="leading-relaxed">
-          Select a 2026 fixture or drop an event schedule PDF. The vision agent will pre-scan the timetable and build a customized question schema.
-        </Text>
-      </Stack>
-
-      {/* Ingestion Mode Tabs */}
-      <Box
-        display="flex"
-        align="center"
-        surface="muted"
-        padding={1}
-        radius="full"
-        border
-        marginTop={6}
-        marginBottom={6}
-        className="border-line/60"
-      >
-        <button
-          type="button"
-          onClick={() => setActiveTab('preset')}
-          className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all ${
-            activeTab === 'preset'
-              ? 'bg-brand-cyan text-black shadow-md'
-              : 'text-dim hover:text-white'
-          }`}
-        >
-          <Icon icon={Calendar} size="xs" />
-          <span>California 2026 Presets</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('custom')}
-          className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all ${
-            activeTab === 'custom'
-              ? 'bg-brand-cyan text-black shadow-md'
-              : 'text-dim hover:text-white'
-          }`}
-        >
-          <Icon icon={Upload} size="xs" />
-          <span>Custom PDF / Schedule URL</span>
-        </button>
-      </Box>
-
-      {/* Main Search & Ingestion Box */}
-      {activeTab === 'preset' ? (
-        <Stack gap={5} width="full" maxWidth="3xl">
-          {/* Google-Style Search Input Container */}
-          <Box
-            surface="surface"
-            radius="2xl"
-            border
-            padding={3}
-            className="border-line/80 shadow-2xl focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all"
-          >
-            <Box display="flex" align="center" gap={3} paddingX={3} paddingY={2}>
-              <Icon icon={Search} size="md" color="accent" />
-              <input
-                type="text"
-                placeholder="Search event by name or city (e.g. Boogie by the Bay, San Jose)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-sm text-white placeholder:text-dim focus:outline-none font-medium"
-              />
-            </Box>
-
-            {/* Filtered Results Dropdown or Active Preset Bar */}
+      {/* Main Action Form */}
+      <div className="w-full flex flex-col items-center space-y-4">
+        {/* Search Bar Container */}
+        <div className="relative w-full">
+          <div className="flex items-center w-full rounded-2xl bg-surface/90 border border-line hover:border-accent/60 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all shadow-lg px-4 py-3.5 gap-3">
+            <Search className="w-5 h-5 text-accent shrink-0" />
+            <input
+              type="text"
+              role="combobox"
+              aria-expanded={isInputFocused && filteredEvents.length > 0}
+              aria-label="Search convention or city"
+              placeholder="Search event or city (e.g. South Bay, Boogie by the Bay)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setTimeout(() => setIsInputFocused(false), 200)}
+              className="w-full bg-transparent text-sm sm:text-base text-text-main placeholder:text-text-dim focus:outline-none"
+            />
             {searchQuery && (
-              <Box border="t" paddingTop={3} marginTop={2} display="flex" flex="col" gap={1} className="border-line/40">
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map(event => (
-                    <Box
-                      as="button"
-                      key={event.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedEvent(event);
-                        setSearchQuery('');
-                      }}
-                      paddingX={3}
-                      paddingY={2.5}
-                      radius="lg"
-                      display="flex"
-                      align="center"
-                      justify="between"
-                      surface="muted"
-                      className="text-left hover:opacity-90 transition-colors"
-                    >
-                      <Stack gap={0.5}>
-                        <Text size="sm" weight="font-bold" color="main">{event.name}</Text>
-                        <Text size="micro" color="dim">{event.location} • {event.dates}</Text>
-                      </Stack>
-                      <Text size="micro" color="accent" weight="font-bold">Select</Text>
-                    </Box>
-                  ))
-                ) : (
-                  <Box padding={4} textAlign="center">
-                    <Text size="xs" color="dim">No matching preset found. Try searching another city or switch to Custom PDF.</Text>
-                  </Box>
-                )}
-              </Box>
+              <button
+                type="button"
+                aria-label="Clear search"
+                onClick={handleClear}
+                className="p-1 rounded-full text-text-dim hover:text-text-main hover:bg-muted/80 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             )}
-          </Box>
+          </div>
 
-          {/* Quick Select Preset Pills */}
-          <Box display="flex" flex="col" gap={2}>
-            <Text size="micro" color="dim" weight="font-bold" uppercase tracking="widest" textAlign="center">
-              Popular 2026 Weekend Fixtures
-            </Text>
-            <Box display="flex" wrap="wrap" justify="center" gap={2}>
-              {CALIFORNIA_2026_EVENTS.map(event => {
-                const isSelected = selectedEvent.id === event.id;
-                return (
+          {/* Instant Dropdown Suggestions */}
+          {isInputFocused && filteredEvents.length > 0 && (
+            <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-surface/95 backdrop-blur-md border border-line rounded-2xl shadow-2xl overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="py-2 divide-y divide-line/40 max-h-64 overflow-y-auto">
+                {filteredEvents.map((event) => (
                   <button
                     key={event.id}
                     type="button"
-                    onClick={() => setSelectedEvent(event)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                      isSelected
-                        ? 'bg-brand-cyan/20 border-brand-cyan text-brand-cyan font-bold shadow-sm'
-                        : 'bg-surface/60 border-line/50 text-dim hover:text-white hover:border-line'
-                    }`}
+                    onMouseDown={() => handleSelect(event)}
+                    className="w-full px-4 py-3 hover:bg-muted/60 flex items-center justify-between transition-colors text-left group cursor-pointer"
                   >
-                    {event.name}
+                    <div className="flex flex-col space-y-0.5">
+                      <span className="text-sm font-bold text-text-main group-hover:text-accent transition-colors">
+                        {event.name}
+                      </span>
+                      <span className="text-xs text-text-dim">
+                        📍 {event.location} • 📅 {event.dates}
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-text-dim group-hover:text-accent transition-colors" />
                   </button>
-                );
-              })}
-            </Box>
-          </Box>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
-          {/* Active Preset Preview Card & Primary CTA */}
-          <Box
-            surface="surface"
-            padding={5}
-            radius="xl"
-            border
-            className="border-line/60 bg-gradient-to-r from-surface to-muted/40"
+        {/* Subtle Upload Secondary Action Link */}
+        <div className="flex items-center justify-center gap-1.5 text-xs text-text-dim">
+          <span>Have a custom timetable?</span>
+          <button
+            type="button"
+            onClick={() => setShowUploadModal(!showUploadModal)}
+            className="text-brand-cyan hover:underline font-semibold flex items-center gap-1 cursor-pointer"
           >
-            <Box display="flex" justify="between" align="center" wrap="wrap" gap={4}>
-              <Stack gap={1}>
-                <Box display="flex" align="center" gap={2}>
-                  <Text size="micro" radius="sm" paddingX={2} paddingY={0.5} className="bg-brand-cyan/20 text-brand-cyan font-bold">
-                    SELECTED FIXTURE
-                  </Text>
-                  <Text size="micro" color="dim">{selectedEvent.dates}</Text>
-                </Box>
-                <Text variant="headline" size="lg" weight="font-bold" color="main">
-                  {selectedEvent.name}
-                </Text>
-                <Text size="xs" color="dim">
-                  {selectedEvent.location} — {selectedEvent.description}
-                </Text>
-              </Stack>
+            <Upload className="w-3.5 h-3.5" />
+            <span>{showUploadModal ? 'Back to event search' : 'Or drop a schedule PDF'}</span>
+          </button>
+        </div>
 
-              <Box
-                as="button"
-                type="button"
-                onClick={() => onDiscoverPreset(selectedEvent)}
-                display="flex"
-                align="center"
-                gap={2}
-                paddingX={6}
-                paddingY={3}
-                radius="xl"
-                className="bg-brand-cyan hover:opacity-95 text-black font-bold text-sm shadow-lg shadow-brand-cyan/10 transition-all shrink-0"
-              >
-                <span>Scan & Discover Schedule</span>
-                <Icon icon={ArrowRight} size="sm" />
-              </Box>
-            </Box>
-          </Box>
-        </Stack>
-      ) : (
-        /* Custom Upload / URL Ingestion Tab */
-        <Box width="full" maxWidth="3xl" surface="surface" padding={6} radius="2xl" border className="border-line/80">
-          <DropzoneUpload
-            onIngestPdf={(file) => onDiscoverPdf(file)}
-            onIngestUrl={(url) => onDiscoverUrl(url)}
-          />
-        </Box>
-      )}
-    </Box>
+        {/* Upload Dropzone Container (revealed conditionally when clicked) */}
+        {showUploadModal ? (
+          <div className="w-full bg-surface border border-line rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-top-2">
+            <DropzoneUpload
+              onIngestPdf={(file) => onDiscoverPdf(file)}
+              onIngestUrl={(url) => onDiscoverUrl(url)}
+            />
+          </div>
+        ) : (
+          <>
+            {/* State 1: Clean Quiet Row of Popular Events */}
+            <div className="flex items-center gap-2 w-full overflow-x-auto pt-1 pb-1 no-scrollbar text-xs">
+              <span className="text-[11px] font-bold text-text-dim shrink-0 pl-1">
+                Popular:
+              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                {CALIFORNIA_2026_EVENTS.map((event) => {
+                  const isSelected = selectedEvent?.id === event.id;
+                  return (
+                    <button
+                      key={event.id}
+                      type="button"
+                      onClick={() => handleSelect(event)}
+                      className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border flex items-center justify-center cursor-pointer whitespace-nowrap ${
+                        isSelected
+                          ? 'bg-brand-cyan/20 border-brand-cyan text-brand-cyan font-bold shadow-sm'
+                          : 'bg-surface/70 border-line/60 text-text-dim hover:text-white hover:border-line'
+                      }`}
+                    >
+                      {event.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* State 2: Active Selection -> Fade in the card right under search bar */}
+            {selectedEvent && (
+              <div className="w-full mt-2 p-5 rounded-2xl bg-surface/90 border border-line/80 shadow-xl text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] animate-in fade-in slide-in-from-top-2">
+                <div className="flex flex-col space-y-1.5 flex-1 min-w-0">
+                  <div className="flex items-center gap-2 text-xs font-mono font-medium text-accent">
+                    <MapPin className="w-3.5 h-3.5 shrink-0" />
+                    <span>{selectedEvent.location} • {selectedEvent.dates}</span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-text-main leading-snug">
+                    {selectedEvent.name}
+                  </h3>
+                  <p className="text-xs text-text-dim leading-relaxed">
+                    {selectedEvent.description}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onDiscoverPreset(selectedEvent)}
+                  className="min-h-[44px] px-5 rounded-xl bg-brand-cyan hover:opacity-95 text-black font-bold text-sm shadow-lg shadow-brand-cyan/15 flex items-center justify-center gap-2 shrink-0 self-stretch sm:self-auto cursor-pointer transition-all"
+                >
+                  <span>Plan My Weekend</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
+
+

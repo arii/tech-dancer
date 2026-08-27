@@ -102,8 +102,11 @@ describe('WCS Navigator Components', () => {
     );
 
     expect(screen.getByText('What event are you attending?')).toBeTruthy();
-    const scanBtn = screen.getByRole('button', { name: /Scan & Discover Schedule/i });
-    fireEvent.click(scanBtn);
+    const eventBtn = screen.getByRole('button', { name: 'Boogie by the Bay' });
+    fireEvent.click(eventBtn);
+
+    const planBtn = screen.getByRole('button', { name: /Plan My Weekend/i });
+    fireEvent.click(planBtn);
 
     expect(onDiscoverPreset).toHaveBeenCalled();
   });
@@ -111,15 +114,14 @@ describe('WCS Navigator Components', () => {
   it('renders WorkflowExplainer and toggles architecture breakdown', () => {
     render(<WorkflowExplainer />);
 
-    expect(screen.getByText('Agent Architecture & Two-Pass Intelligence')).toBeTruthy();
-    expect(screen.getByText('View Workflow')).toBeTruthy();
+    expect(screen.getByText('How WCS Navigator Works')).toBeTruthy();
 
-    const toggleBtn = screen.getByRole('button', { name: /Agent Architecture & Two-Pass Intelligence/i });
+    const toggleBtn = screen.getByRole('button', { name: /How WCS Navigator Works/i });
     fireEvent.click(toggleBtn);
 
-    expect(screen.getByText('Pass 1: Vision Pre-Scan')).toBeTruthy();
-    expect(screen.getByText('Pass 2: Reason & Buffer')).toBeTruthy();
-    expect(screen.getByText('In-Memory Streaming')).toBeTruthy();
+    expect(screen.getByText('Step 1: Schedule Reading')).toBeTruthy();
+    expect(screen.getByText('Step 2: Buffer Calculation')).toBeTruthy();
+    expect(screen.getByText('Step 3: Calendar Sync')).toBeTruthy();
   });
 
   it('renders WCSNavigatorPage end-to-end and navigates through wizard steps', async () => {
@@ -131,41 +133,43 @@ describe('WCS Navigator Components', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('WCS Navigator (California 2026)')).toBeTruthy();
-    expect(screen.getByText('Mode: Mock Preset Mode')).toBeTruthy();
+    expect(screen.getByText('WCS Navigator')).toBeTruthy();
+    expect(screen.getByText('Demo Data')).toBeTruthy();
 
     // Mode Toggle
-    const modeBtn = screen.getByRole('button', { name: /Mode: Mock Preset Mode/i });
+    const modeBtn = screen.getByRole('button', { name: /Demo Data/i });
     fireEvent.click(modeBtn);
-    expect(screen.getByText('Mode: Live Backend API')).toBeTruthy();
+    expect(screen.getByText('Live Data')).toBeTruthy();
 
-    // Trigger Scan & Discover
-    const scanBtn = screen.getByRole('button', { name: /Scan & Discover Schedule/i });
-    fireEvent.click(scanBtn);
+    // Select Boogie by the Bay and trigger plan
+    const eventBtn = screen.getByRole('button', { name: 'Boogie by the Bay' });
+    fireEvent.click(eventBtn);
+
+    const planBtn = screen.getByRole('button', { name: /Plan My Weekend/i });
+    fireEvent.click(planBtn);
 
     // Agent Pre-scanning transition should appear
-    expect(screen.getByText('Agent Pre-Scanning Schedule')).toBeTruthy();
+    expect(screen.getByText(/Agent Pre-Scanning Schedule/i)).toBeTruthy();
 
     // Fast forward timer to complete discovery pass
     act(() => {
-      vi.advanceTimersByTime(1600);
+      vi.advanceTimersByTime(2500);
     });
 
     // Should now be in dynamic questionnaire stage
-    expect(screen.getByText('Discovered Event Parameters')).toBeTruthy();
-    expect(screen.getByText('Quick Persona Presets')).toBeTruthy();
+    expect(screen.getByText('Personalize Your Weekend')).toBeTruthy();
 
-    // Select Novice persona preset chip
-    const novicePresetChip = screen.getByRole('button', { name: /Novice Competitor/i });
-    fireEvent.click(novicePresetChip);
+    // Select Novice persona choice card
+    const noviceCard = screen.getByRole('radio', { name: /Novice Competitor/i });
+    fireEvent.click(noviceCard);
 
     // Click "Generate Calendar" to advance to Step 3: results
     const generateBtn = screen.getByRole('button', { name: /Generate Calendar/i });
     fireEvent.click(generateBtn);
 
     // Should render Agent Mind Trace results
-    expect(screen.getByText(/WCS Navigator Reasoning & Logistics Trace/i)).toBeTruthy();
-    expect(screen.getByText('Flight & Buffer Timeline')).toBeTruthy();
+    expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeTruthy();
+    expect(screen.getByText('Travel & Arrival Timeline')).toBeTruthy();
     expect(screen.getAllByText('Download Calendar (.ics)').length).toBeGreaterThan(0);
 
     vi.useRealTimers();

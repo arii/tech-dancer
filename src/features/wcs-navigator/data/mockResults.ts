@@ -16,14 +16,14 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         {
           id: 'competition_level',
           type: 'select',
-          title: 'What is your competitive WSDC division?',
+          title: 'What is your dancer persona & competition division?',
           options: [
-            { label: 'Novice / New Competitor', value: 'novice' },
-            { label: 'Intermediate', value: 'intermediate' },
-            { label: 'Advanced / All-Star', value: 'advanced' },
-            { label: 'Pure Social Dancer (Not competing)', value: 'social_only' }
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
           ],
-          context: 'Used to filter out ineligible leveled intensive workshops and schedule Jack & Jill prelim call times.',
+          context: 'Used to filter out conflicting tracks, gate level-restricted workshops, and calculate travel staging deadlines.',
           defaultValue: 'novice',
           required: true
         },
@@ -51,10 +51,10 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
     },
     decisionTrace: {
       subTasks: [
-        { id: '1', label: 'Ingest schedule layout & parse room columns', status: 'completed', detail: 'Found 4 ballrooms, 48 total workshops, 6 competitive divisions' },
-        { id: '2', label: 'Extract WSDC prelim call times & calculate flight buffers', status: 'completed', detail: 'Computed step-down buffer: 17:15 Staging -> 14:15 Landing' },
-        { id: '3', label: 'Filter workshops by division & level gating', status: 'completed', detail: 'Filtered 18 ineligible advanced intensives' },
-        { id: '4', label: 'Assemble in-memory RFC 5545 calendar stream', status: 'completed', detail: 'Generated 14 VEVENT blocks with buffer reminders' }
+        { id: '1', label: 'Parsed event timetable & rooms', status: 'completed', detail: 'Found 4 ballrooms, 48 workshops, and 6 divisions' },
+        { id: '2', label: 'Calculated travel buffer & arrival deadline', status: 'completed', detail: 'Arrival target computed: 2:15 PM Friday' },
+        { id: '3', label: 'Filtered workshops by division level', status: 'completed', detail: 'Selected workshops matching your profile' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
       ],
       bufferTimeline: {
         earliestStagingTime: '5:15 PM (Friday)',
@@ -79,16 +79,25 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Grand Ballroom',
           status: 'included',
           decisionBadge: 'Division Match',
-          justification: 'Matched selected competitive division (Novice)'
+          justification: 'Matched selected competitive division (Novice). On-time staging guaranteed.'
         },
         {
           id: 's2',
           title: 'All-Levels Connection & Elasticity with Pro Staff',
           time: 'Friday 3:00 PM - 4:00 PM',
           location: 'Junior Ballroom',
+          status: 'filtered',
+          decisionBadge: 'Arrival Time Conflict',
+          justification: 'Filtered: Conflicts with your airport transit and hotel settle window (2:15 PM - 4:15 PM).'
+        },
+        {
+          id: 's5',
+          title: 'Saturday Flow & Connection Technique Workshop',
+          time: 'Saturday 2:00 PM - 3:15 PM',
+          location: 'Grand Ballroom',
           status: 'included',
-          decisionBadge: 'All-Levels',
-          justification: 'Open technique workshop open to all registered dancers'
+          decisionBadge: 'Workshop Match',
+          justification: 'Fits your Novice technique focus and scheduled during open Saturday afternoon slot.'
         },
         {
           id: 's3',
@@ -97,7 +106,7 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Executive Salon',
           status: 'filtered',
           decisionBadge: 'Level Ineligible',
-          justification: 'Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops'
+          justification: 'Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops.'
         },
         {
           id: 's4',
@@ -106,14 +115,46 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Grand Ballroom',
           status: 'included',
           decisionBadge: 'Social Energy',
-          justification: 'Matched late-night social energy preference'
+          justification: 'Matched late-night social energy preference.'
         }
       ],
-      packingManifest: [
-        { id: 'p1', name: 'Adhesive Suede Sole Sheets', category: 'footwear', rationale: 'Ballroom uses temporary wood parquet over carpet; suede soles protect knee ligaments during fast pivots.', quantity: 2 },
-        { id: 'p2', name: 'Competition Bib Safety Pins', category: 'essentials', rationale: 'Scheduled for Jack & Jill competitions; safety pins required for registration bibs.', quantity: 4 },
-        { id: 'p3', name: 'Neon / UV Reactive Apparel', category: 'attire', rationale: 'Official Friday social theme is Neon & Retro Glow.', quantity: 1 },
-        { id: 'p4', name: 'Electrolyte Hydration Packets', category: 'toiletries', rationale: 'Late-night social dancing scheduled past 4:00 AM requires proactive hydration.', quantity: 6 }
+      themeDressCodes: [
+        {
+          id: 't1',
+          day: 'Friday Night',
+          themeTitle: 'Neon & Retro Glow Party',
+          category: 'social_theme',
+          description: 'Midnight social featuring blacklights and UV lighting throughout the grand ballroom.',
+          recommendedAttire: ['Neon tops & shoes', 'UV glow accessories', 'White accents'],
+          vibe: 'High Energy & Vibrant'
+        },
+        {
+          id: 't2',
+          day: 'Saturday Evening',
+          themeTitle: 'Champions Showcase Gala & Dressy Glam',
+          category: 'showcase_formal',
+          description: 'Marquee evening with Champion Jack & Jill finals and all-star pro routines.',
+          recommendedAttire: ['Fitted dress shirts & vests', 'Cocktail attire & jumpsuits', 'Clean dance shoes'],
+          vibe: 'Elegant & Sophisticated'
+        },
+        {
+          id: 't3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Smart casual dancewear adhering to official WSDC partnering guidelines.',
+          recommendedAttire: ['Breathable dance trousers / dark denim', 'Neat fitted shirts', 'Secure bib placement'],
+          vibe: 'Clean & Professional'
+        },
+        {
+          id: 't4',
+          day: 'Sunday Night',
+          themeTitle: 'Survivor Social & Studio Athleisure',
+          category: 'casual_sunday',
+          description: 'Late-night chill survivors party until sunrise with resident DJs.',
+          recommendedAttire: ['Event / Studio t-shirts', 'Stretch joggers / leggings', 'Flat dance sneakers'],
+          vibe: 'Cozy & Laid Back'
+        }
       ],
       icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nMETHOD:PUBLISH\\nBEGIN:VEVENT\\nUID:wcs-flight-deadline-001@boomtick.blog\\nDTSTART:20260904T211500Z\\nDTEND:20260904T214500Z\\nSUMMARY:✈️ Target Flight Landing Deadline (SJC)\\nDESCRIPTION:Latest recommended landing time to allow 30m transit, 90m hotel check-in, and 60m warmup before Novice Staging.\\nLOCATION:San Jose Mineta International Airport (SJC)\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nBEGIN:VEVENT\\nUID:wcs-novice-strictly-002@boomtick.blog\\nDTSTART:20260905T003000Z\\nDTEND:20260905T013000Z\\nSUMMARY:🏆 Novice Strictly Swing Prelims\\nDESCRIPTION:Report to ballroom staging area by 5:15 PM for roll call.\\nLOCATION:Grand Ballroom, South Bay Dance Fling\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nEND:VCALENDAR'
     },
@@ -139,12 +180,12 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         {
           id: 'wsdc_level',
           type: 'select',
-          title: 'What is your WSDC competitive level?',
+          title: 'What is your dancer persona & competition division?',
           options: [
-            { label: 'Novice', value: 'novice' },
-            { label: 'Intermediate', value: 'intermediate' },
-            { label: 'Advanced', value: 'advanced' },
-            { label: 'All-Star / Champion', value: 'allstar' }
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
           ],
           context: 'Enforces workshop level gatekeeping and flags your division check-in time.',
           defaultValue: 'novice',
@@ -162,9 +203,10 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
     },
     decisionTrace: {
       subTasks: [
-        { id: '1', label: 'Scan multi-genre timetable (WCS, Hustle, Country)', status: 'completed', detail: 'Identified 3 ballroom streams across 4 days' },
-        { id: '2', label: 'Calculate SFO shuttle and hotel buffer', status: 'completed', detail: '20m shuttle + 90m settle + 60m warmup' },
-        { id: '3', label: 'Gate Champion masterclasses', status: 'completed', detail: 'Filtered Level 4/5 intensives' }
+        { id: '1', label: 'Scanned event timetable', status: 'completed', detail: 'Identified ballroom streams across the weekend' },
+        { id: '2', label: 'Calculated airport transit & hotel buffer', status: 'completed', detail: '20m shuttle + 90m check-in + 60m warmup' },
+        { id: '3', label: 'Filtered workshops by division', status: 'completed', detail: 'Filtered advanced intensives' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
       ],
       bufferTimeline: {
         earliestStagingTime: '5:15 PM (Friday)',
@@ -201,10 +243,43 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           justification: 'Filtered: Requires Level 4/5 audition band'
         }
       ],
-      packingManifest: [
-        { id: 'p1', name: 'Suede Wire Shoe Brush', category: 'footwear', rationale: 'Large Hyatt Regency ballroom floors tend to collect talc dust by Saturday.', quantity: 1 },
-        { id: 'p2', name: 'Travel Garment Steamer', category: 'attire', rationale: 'Competition slacks and vests require pressing for spotlight finals.', quantity: 1 },
-        { id: 'p3', name: 'High-Fidelity Filter Earplugs', category: 'essentials', rationale: 'Grand Peninsula Ballroom late-night sound system operates above 90dB.', quantity: 1 }
+      themeDressCodes: [
+        {
+          id: 'tb1',
+          day: 'Friday Night',
+          themeTitle: 'Bay Area Glow Social Party',
+          category: 'social_theme',
+          description: 'Friday kickoff late night social with blacklights and neon colors.',
+          recommendedAttire: ['Neon & UV bright colors', 'White accents', 'Glow jewelry'],
+          vibe: 'High Energy & Electric'
+        },
+        {
+          id: 'tb2',
+          day: 'Saturday Evening',
+          themeTitle: 'Classic Champions Showcase & Cocktail Chic',
+          category: 'showcase_formal',
+          description: 'Strictly Swing & Pro Classic Showcases in the Grand Peninsula Ballroom.',
+          recommendedAttire: ['Dress shirts & ties/vests', 'Cocktail dresses', 'Polished suede dance shoes'],
+          vibe: 'Glamorous & Prestigious'
+        },
+        {
+          id: 'tb3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Official WSDC competition attire for Jack & Jill and Strictly Swing.',
+          recommendedAttire: ['Clean dark trousers / stretch slacks', 'Fitted neat shirts', 'Competition bibs'],
+          vibe: 'Sharp & Athletic'
+        },
+        {
+          id: 'tb4',
+          day: 'Sunday Night',
+          themeTitle: 'Survivors Sunrise Social',
+          category: 'casual_sunday',
+          description: 'Late night survivor dancing until dawn with acoustic sets.',
+          recommendedAttire: ['Boogie t-shirts / hoodies', 'Comfortable dance sneakers', 'Joggers'],
+          vibe: 'Warm & Community-Driven'
+        }
       ],
       icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline (SFO)\\nDTSTART:20261009T212500Z\\nDTEND:20261009T215500Z\\nDESCRIPTION:Landing deadline for Boogie by the Bay 2026.\\nLOCATION:San Francisco International Airport (SFO)\\nEND:VEVENT\\nEND:VCALENDAR'
     },
@@ -220,12 +295,12 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
       {
         id: 'experience_level',
         type: 'select',
-        title: 'What is your dance & competition level?',
+        title: 'What is your dancer persona & competition division?',
         options: [
-          { label: 'Novice / Beginner', value: 'novice' },
-          { label: 'Intermediate', value: 'intermediate' },
-          { label: 'Advanced', value: 'advanced' },
-          { label: 'Social Dancer Only', value: 'social_only' }
+          { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+          { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+          { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+          { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
         ],
         context: 'Filters out ineligible advanced intensives and targets call times.',
         defaultValue: 'novice',
@@ -247,9 +322,10 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
   },
   decisionTrace: {
     subTasks: [
-      { id: '1', label: `Ingest & analyze ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
-      { id: '2', label: 'Calculate backwards arrival buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
-      { id: '3', label: 'Filter workshops & assemble calendar', status: 'completed', detail: 'Tailored schedule generated' }
+      { id: '1', label: `Analyzed ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
+      { id: '2', label: 'Calculated arrival & travel buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
+      { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Tailored schedule generated' },
+      { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
     ],
     bufferTimeline: {
       earliestStagingTime: '5:00 PM (Friday)',
@@ -277,9 +353,25 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
         justification: 'Open all-levels class'
       }
     ],
-    packingManifest: [
-      { id: 'p1', name: 'Suede Dance Shoes & Brush', category: 'footwear', rationale: 'Optimized for ballroom dance flooring.', quantity: 1 },
-      { id: 'p2', name: 'Safety Pins & Electrolytes', category: 'essentials', rationale: 'Essential convention preparedness.', quantity: 1 }
+    themeDressCodes: [
+      {
+        id: 'g-theme-1',
+        day: 'Friday Night',
+        themeTitle: 'Welcome Social & Kickoff Party',
+        category: 'social_theme',
+        description: 'Casual and welcoming social dance atmosphere.',
+        recommendedAttire: ['Dance t-shirts', 'Suede dance shoes', 'Comfortable stretch jeans'],
+        vibe: 'Fun & Friendly'
+      },
+      {
+        id: 'g-theme-2',
+        day: 'Saturday Evening',
+        themeTitle: 'Main Showcase & Champions Gala',
+        category: 'showcase_formal',
+        description: 'Evening spotlight showcases and finals.',
+        recommendedAttire: ['Dress shirts / cocktail attire', 'Polished dance shoes'],
+        vibe: 'Festive & Elegant'
+      }
     ],
     icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline\\nDTSTART:20261015T210000Z\\nDTEND:20261015T213000Z\\nDESCRIPTION:Landing deadline for event.\\nEND:VEVENT\\nEND:VCALENDAR'
   },

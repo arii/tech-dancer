@@ -116,21 +116,20 @@ describe('DynamicQuestionnaire Component', () => {
     expect(screen.getByRole('switch', { name: 'Include late night social dancing hours?' })).toBeDefined();
   });
 
-  it('renders P0 explainability "Why We Ask This" info context for all questions', () => {
+  it('renders P0 explainability "Why We Ask This" trigger buttons and toggles context', () => {
     render(
       <DynamicQuestionnaire
         discoveryResponse={boogieByTheBayPreset}
       />
     );
 
+    const whyAskTriggers = screen.getAllByRole('button', { name: /Why We Ask This/i });
+    expect(whyAskTriggers.length).toBe(3);
+
+    // Open first trigger
+    fireEvent.click(whyAskTriggers[0]);
     expect(
       screen.getByText(/Scanned 12 workshop tracks across Novice/i)
-    ).toBeDefined();
-    expect(
-      screen.getByText(/Detected specialized tracks: Footwork/i)
-    ).toBeDefined();
-    expect(
-      screen.getByText(/Boogie schedule features social dancing until 5:00 AM/i)
     ).toBeDefined();
   });
 
@@ -154,9 +153,6 @@ describe('DynamicQuestionnaire Component', () => {
     expect(screen.queryByText('What is your WCS division / skill level?')).toBeNull();
     expect(screen.getByText('Will you participate in the Costume Contest?')).toBeDefined();
     expect(screen.getByText('Select your Friday Intensive Topic')).toBeDefined();
-    expect(
-      screen.getByText(/Halloween SwingThing schedule lists costume parade/i)
-    ).toBeDefined();
   });
 
   it('disables "Generate Calendar" submit button until all required fields are filled', () => {
@@ -172,11 +168,11 @@ describe('DynamicQuestionnaire Component', () => {
     expect(submitBtn.disabled).toBe(true);
 
     // Fill required field 1 (select: skill_level)
-    fireEvent.click(screen.getByRole('radio', { name: 'Intermediate' }));
+    fireEvent.click(screen.getByRole('radio', { name: /Intermediate/i }));
     expect(submitBtn.disabled).toBe(true); // boolean 'late_night' is required and not filled yet
 
     // Fill required field 2 (boolean: late_night)
-    const switchBtn = screen.getByRole('switch', { name: 'Include late night social dancing hours?' });
+    const switchBtn = screen.getByRole('switch', { name: /Include late night social dancing hours\?/i });
     fireEvent.click(switchBtn);
 
     // Now all required fields are satisfied
@@ -189,26 +185,26 @@ describe('DynamicQuestionnaire Component', () => {
     });
   });
 
-  it('pre-fills and auto-updates answers when selecting a persona chip', () => {
-    const handleAnswersChange = vi.fn();
+  it('initializes with initialAnswers and allows immediate submit if complete', () => {
+    const handleSubmit = vi.fn();
     render(
       <DynamicQuestionnaire
         discoveryResponse={boogieByTheBayPreset}
-        personaChips={samplePersonaChips}
-        onAnswersChange={handleAnswersChange}
+        initialAnswers={{
+          skill_level: 'novice',
+          late_night: true,
+        }}
+        onSubmit={handleSubmit}
       />
     );
 
-    const personaBtn = screen.getByRole('button', { name: 'Social Party Animal' });
-    fireEvent.click(personaBtn);
-
-    expect(handleAnswersChange).toHaveBeenCalledWith({
-      skill_level: 'intermediate',
-      focus_areas: ['social'],
-      late_night: true,
-    });
-
     const submitBtn = screen.getByRole('button', { name: /Generate Calendar/i }) as HTMLButtonElement;
     expect(submitBtn.disabled).toBe(false);
+
+    fireEvent.click(submitBtn);
+    expect(handleSubmit).toHaveBeenCalledWith({
+      skill_level: 'novice',
+      late_night: true,
+    });
   });
 });
