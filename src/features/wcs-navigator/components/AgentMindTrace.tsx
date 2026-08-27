@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { AgentDecisionTrace } from '../types';
@@ -66,7 +67,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
   };
 
   // Dynamically recalculate sessions when flight arrival time is adjusted (Item 5)
-  const dynamicSessions = React.useMemo(() => {
+  const dynamicSessions = useMemo(() => {
     const rawSessions = trace?.sessions;
     if (!rawSessions) return undefined;
 
@@ -121,7 +122,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
               type="button"
               aria-label="Dismiss download notification"
               onClick={() => setShowToast(false)}
-              minHeight={11}
+              minHeight="11"
               width={11}
               display="flex"
               align="center"

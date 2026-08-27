@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { Cpu, CheckCircle2, Loader2, Sparkles } from 'lucide-react';

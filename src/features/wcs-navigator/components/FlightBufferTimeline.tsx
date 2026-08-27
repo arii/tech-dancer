@@ -1,5 +1,5 @@
-// impeccable-ignore-file
-import React, { useMemo } from 'react';
+
+import { useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { FlightBuffer, BufferStep } from '../types';
 import { Plane, Home, Flame, Clock, Calendar, Hourglass, ShieldCheck, Car } from 'lucide-react';
@@ -86,7 +86,7 @@ export const FlightBufferTimeline = ({
   flightOffsetMinutes = 0,
   onFlightOffsetChange,
 }: FlightBufferTimelineProps) => {
-  const [internalOffset, setInternalOffset] = React.useState(0);
+  const [internalOffset, setInternalOffset] = useState(0);
   const activeOffset = flightOffsetMinutes !== undefined && onFlightOffsetChange ? flightOffsetMinutes : internalOffset;
 
   const handleOffsetChange = (delta: number) => {

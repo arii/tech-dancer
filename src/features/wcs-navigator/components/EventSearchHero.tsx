@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, Upload, MapPin, ArrowRight, X, ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
@@ -242,7 +241,7 @@ export const EventSearchHero = ({
                   as="button"
                   type="button"
                   onClick={() => onDiscoverPreset(selectedEvent)}
-                  minHeight={11}
+                  minHeight="11"
                   paddingX={5}
                   radius="xl"
                   display="flex"

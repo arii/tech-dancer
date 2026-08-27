@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { AuditSession } from '../types';
 import { CheckCircle, XCircle, Clock, MapPin, Filter, Layers, AlertCircle } from 'lucide-react';
@@ -179,7 +178,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           gap={2}
           paddingX={4}
           paddingY={2.5}
-          minHeight={11}
+          minHeight="11"
           radius="xl"
           cursor="pointer"
           className={`font-semibold text-xs transition-colors border ${
@@ -203,7 +202,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           gap={2}
           paddingX={4}
           paddingY={2.5}
-          minHeight={11}
+          minHeight="11"
           radius="xl"
           cursor="pointer"
           className={`font-semibold text-xs transition-colors border ${
@@ -227,7 +226,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           gap={2}
           paddingX={4}
           paddingY={2.5}
-          minHeight={11}
+          minHeight="11"
           radius="xl"
           cursor="pointer"
           className={`font-semibold text-xs transition-colors border ${
