@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { AgentDecisionTrace } from '../types';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
@@ -160,9 +160,9 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
       </Box>
 
       {/* 2-Column Wide Desktop Layout Grid (lg+) */}
-      <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column (lg:col-span-5): Arrival Timeline & Travel Buffer Breakdown */}
-        <Box className="lg:col-span-5">
+      <Grid cols={{ default: 1, lg: 12 }} gap={8} align="start">
+        {/* Left Column (lg: 5 cols): Arrival Timeline & Travel Buffer Breakdown */}
+        <Box gridCol={{ default: 'auto', lg: 'span 5' }}>
           <FlightBufferTimeline
             buffer={trace?.bufferTimeline}
             flightOffsetMinutes={flightOffset}
@@ -170,12 +170,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
           />
         </Box>
 
-        {/* Right Column (lg:col-span-7): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
-        <Box className="lg:col-span-7 space-y-8">
-          <FilteringAuditMatrix sessions={dynamicSessions} />
-          <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+        {/* Right Column (lg: 7 cols): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
+        <Box gridCol={{ default: 'auto', lg: 'span 7' }}>
+          <Stack gap={8}>
+            <FilteringAuditMatrix sessions={dynamicSessions} />
+            <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+          </Stack>
         </Box>
-      </Box>
+      </Grid>
 
       {/* Footer Download Trigger Callout */}
       <Box padding={6} radius="lg" surface="card" border className="text-center border-line">
