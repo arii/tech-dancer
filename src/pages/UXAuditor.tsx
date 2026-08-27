@@ -1,9 +1,9 @@
 import { Icon } from '@/components/ui/Icon';
-import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
-  ChevronRight, Github, Trash2, Sliders, Layers
+  ChevronRight, Github, Trash2, Sliders
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis, AnalysisFocus, DesignPreset } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
@@ -12,7 +12,6 @@ import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
 import { sanitizeUrlForDisplay } from '@/utils/url';
 

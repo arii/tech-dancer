@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useUXAuditor, VIEWPORTS } from '../useUXAuditor';
+import { useUXAuditor } from '../useUXAuditor';
 import type { ReactNode } from 'react';
 
 function createWrapper() {
