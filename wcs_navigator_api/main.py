@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from wcs_navigator_api.config import MissingGeminiAPIKeyError, settings
+from wcs_navigator_api.routes.generate import router as generate_router
 
 app = FastAPI(
     title="WCS Navigator API",
@@ -16,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(generate_router)
 
 
 @app.exception_handler(MissingGeminiAPIKeyError)
