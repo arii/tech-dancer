@@ -1,12 +1,18 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent, act, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { CALIFORNIA_2026_EVENTS } from '@/features/wcs-navigator/data/californiaEvents';
 import { DANCE_PERSONAS } from '@/features/wcs-navigator/data/personas';
 import { EventSelector } from '@/features/wcs-navigator/components/EventSelector';
 import { PersonaChips } from '@/features/wcs-navigator/components/PersonaChips';
 import { DropzoneUpload } from '@/features/wcs-navigator/components/DropzoneUpload';
+import { EventSearchHero } from '@/features/wcs-navigator/components/EventSearchHero';
+import { WorkflowExplainer } from '@/features/wcs-navigator/components/WorkflowExplainer';
 import { WCSNavigatorPage } from '@/features/wcs-navigator/WCSNavigatorPage';
+
+afterEach(() => {
+  cleanup();
+});
 
 describe('WCS Navigator Data Fixtures', () => {
   it('contains 5 California 2026 events', () => {
@@ -82,7 +88,43 @@ describe('WCS Navigator Components', () => {
     expect(onIngestUrl).toHaveBeenCalledWith('https://southbaydancefling.com/schedule');
   });
 
-  it('renders WCSNavigatorPage end-to-end', () => {
+  it('renders EventSearchHero and handles preset discovery trigger', () => {
+    const onDiscoverPreset = vi.fn();
+    const onDiscoverPdf = vi.fn();
+    const onDiscoverUrl = vi.fn();
+
+    render(
+      <EventSearchHero
+        onDiscoverPreset={onDiscoverPreset}
+        onDiscoverPdf={onDiscoverPdf}
+        onDiscoverUrl={onDiscoverUrl}
+      />
+    );
+
+    expect(screen.getByText('What event are you attending?')).toBeTruthy();
+    const scanBtn = screen.getByRole('button', { name: /Scan & Discover Schedule/i });
+    fireEvent.click(scanBtn);
+
+    expect(onDiscoverPreset).toHaveBeenCalled();
+  });
+
+  it('renders WorkflowExplainer and toggles architecture breakdown', () => {
+    render(<WorkflowExplainer />);
+
+    expect(screen.getByText('Agent Architecture & Two-Pass Intelligence')).toBeTruthy();
+    expect(screen.getByText('View Workflow')).toBeTruthy();
+
+    const toggleBtn = screen.getByRole('button', { name: /Agent Architecture & Two-Pass Intelligence/i });
+    fireEvent.click(toggleBtn);
+
+    expect(screen.getByText('Pass 1: Vision Pre-Scan')).toBeTruthy();
+    expect(screen.getByText('Pass 2: Reason & Buffer')).toBeTruthy();
+    expect(screen.getByText('In-Memory Streaming')).toBeTruthy();
+  });
+
+  it('renders WCSNavigatorPage end-to-end and navigates through wizard steps', async () => {
+    vi.useFakeTimers();
+
     render(
       <MemoryRouter>
         <WCSNavigatorPage />
@@ -92,8 +134,40 @@ describe('WCS Navigator Components', () => {
     expect(screen.getByText('WCS Navigator (California 2026)')).toBeTruthy();
     expect(screen.getByText('Mode: Mock Preset Mode')).toBeTruthy();
 
+    // Mode Toggle
     const modeBtn = screen.getByRole('button', { name: /Mode: Mock Preset Mode/i });
     fireEvent.click(modeBtn);
     expect(screen.getByText('Mode: Live Backend API')).toBeTruthy();
+
+    // Trigger Scan & Discover
+    const scanBtn = screen.getByRole('button', { name: /Scan & Discover Schedule/i });
+    fireEvent.click(scanBtn);
+
+    // Agent Pre-scanning transition should appear
+    expect(screen.getByText('Agent Pre-Scanning Schedule')).toBeTruthy();
+
+    // Fast forward timer to complete discovery pass
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+
+    // Should now be in dynamic questionnaire stage
+    expect(screen.getByText('Discovered Event Parameters')).toBeTruthy();
+    expect(screen.getByText('Quick Persona Presets')).toBeTruthy();
+
+    // Select Novice persona preset chip
+    const novicePresetChip = screen.getByRole('button', { name: /Novice Competitor/i });
+    fireEvent.click(novicePresetChip);
+
+    // Click "Generate Calendar" to advance to Step 3: results
+    const generateBtn = screen.getByRole('button', { name: /Generate Calendar/i });
+    fireEvent.click(generateBtn);
+
+    // Should render Agent Mind Trace results
+    expect(screen.getByText(/WCS Navigator Reasoning & Logistics Trace/i)).toBeTruthy();
+    expect(screen.getByText('Flight & Buffer Timeline')).toBeTruthy();
+    expect(screen.getAllByText('Download Calendar (.ics)').length).toBeGreaterThan(0);
+
+    vi.useRealTimers();
   });
 });
