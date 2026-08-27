@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import { Box } from '@/layouts/Primitives';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { DiscoveryResponse, FormQuestion, QuestionAnswerValue } from '../types/navigator';
 import { SelectField } from './FormFields/SelectField';
 import { MultiSelectField } from './FormFields/MultiSelectField';
 import { BooleanField } from './FormFields/BooleanField';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Bot, Loader2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export interface DynamicQuestionnaireProps {
   discoveryResponse: DiscoveryResponse;
@@ -24,6 +25,9 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   isSubmitting = false,
 }) => {
   const questions = discoveryResponse.suggested_form_questions || [];
+
+  const [isSimulatingAgent, setIsSimulatingAgent] = useState<boolean>(false);
+  const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
 
   const [answersState, setAnswersState] = useState<Record<string, QuestionAnswerValue>>(() => {
     const defaults: Record<string, QuestionAnswerValue> = {};
@@ -49,9 +53,16 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   const handleFieldChange = (questionId: string, value: QuestionAnswerValue, _index: number) => {
     const updated = { ...answers, [questionId]: value };
     setAnswersState(updated);
+    setActiveQuestionId(questionId);
     if (onAnswersChange) {
       onAnswersChange(updated);
     }
+
+    // Progressive disclosure animation feedback (Item 3): trigger micro-loader simulation on tap
+    setIsSimulatingAgent(true);
+    setTimeout(() => {
+      setIsSimulatingAgent(false);
+    }, 550);
   };
 
   // Validation: check if all required questions have valid non-empty answers
@@ -75,15 +86,17 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
 
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" className="space-y-6 pb-20 md:pb-0">
-      {/* Dynamic Question Inputs */}
-      <div className="space-y-6">
+      {/* Dynamic Question Inputs with Progressive Disclosure & Stagger Animation */}
+      <Stack gap={6}>
         {questions.map((question, index) => {
           const val = answers[question.id];
+          const isActive = activeQuestionId === question.id;
 
           return (
-            <div
+            <Stack
               key={question.id}
-              className="space-y-3 transition-all duration-300 animate-in fade-in"
+              gap={3}
+              className="transition-all duration-300 animate-in fade-in slide-in-from-top-2"
             >
               {question.type === 'select' && (
                 <SelectField
@@ -106,10 +119,31 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                   onChange={(v) => handleFieldChange(question.id, v, index)}
                 />
               )}
-            </div>
+
+              {/* Micro Typing Indicator / Simulated Agent Loader beneath active selection */}
+              {isSimulatingAgent && isActive && (
+                <Box
+                  surface="subtle"
+                  paddingX={3.5}
+                  paddingY={2.5}
+                  radius="lg"
+                  border
+                  display="flex"
+                  align="center"
+                  gap={2.5}
+                  className="border-accent/40 bg-accent/5 animate-pulse mt-2"
+                >
+                  <Icon icon={Bot} size="xs" color="accent" />
+                  <Icon icon={Loader2} size="xs" color="accent" className="animate-spin" />
+                  <Text variant="caption-subtle" color="accent" className="font-mono text-xs">
+                    Gemini AI Agent scanning ballroom timetable for next prompt...
+                  </Text>
+                </Box>
+              )}
+            </Stack>
           );
         })}
-      </div>
+      </Stack>
 
       {/* Action Submit Button */}
       <div className="pt-4 border-t border-line/60 transition-all duration-400 ease-out animate-in fade-in slide-in-from-bottom-2">

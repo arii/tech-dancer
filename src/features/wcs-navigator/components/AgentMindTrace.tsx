@@ -38,6 +38,7 @@ END:VCALENDAR`;
 
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className }) => {
   const [showToast, setShowToast] = useState(false);
+  const [flightOffset, setFlightOffset] = useState<number>(0);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -61,6 +62,29 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
       setShowToast(false);
     }, 4500);
   };
+
+  // Dynamically recalculate sessions when flight arrival time is adjusted (Item 5)
+  const dynamicSessions = React.useMemo(() => {
+    const rawSessions = trace?.sessions;
+    if (!rawSessions) return undefined;
+
+    if (flightOffset <= 0) return rawSessions;
+
+    // Flight landed late (+30m or more): mark Friday afternoon workshops as time conflicts
+    return rawSessions.map((session) => {
+      const lowerTime = session.time.toLowerCase();
+      const isFridayAfternoon = lowerTime.includes('fri') && /(?:12|1|2|3|4):\d{2}\s*pm/i.test(session.time);
+      if (isFridayAfternoon) {
+        return {
+          ...session,
+          status: 'filtered' as const,
+          decisionBadge: 'Time Conflict (Flight Delay)',
+          justification: `Flight delayed by +${flightOffset}m. Arrival/transit window overlaps with this session.`,
+        };
+      }
+      return session;
+    });
+  }, [trace?.sessions, flightOffset]);
 
   return (
     <Stack gap={8} className={className}>
@@ -135,14 +159,23 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         </Box>
       </Box>
 
-      {/* 1. Flight & Buffer Timeline */}
-      <FlightBufferTimeline buffer={trace?.bufferTimeline} />
+      {/* 2-Column Wide Desktop Layout Grid (lg+) */}
+      <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column (lg:col-span-5): Arrival Timeline & Travel Buffer Breakdown */}
+        <Box className="lg:col-span-5">
+          <FlightBufferTimeline
+            buffer={trace?.bufferTimeline}
+            flightOffsetMinutes={flightOffset}
+            onFlightOffsetChange={setFlightOffset}
+          />
+        </Box>
 
-      {/* 3. Filtering Audit Matrix */}
-      <FilteringAuditMatrix sessions={trace?.sessions} />
-
-      {/* 4. Event Themes & Dress Codes */}
-      <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+        {/* Right Column (lg:col-span-7): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
+        <Box className="lg:col-span-7 space-y-8">
+          <FilteringAuditMatrix sessions={dynamicSessions} />
+          <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+        </Box>
+      </Box>
 
       {/* Footer Download Trigger Callout */}
       <Box padding={6} radius="lg" surface="card" border className="text-center border-line">
