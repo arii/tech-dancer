@@ -87,7 +87,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
     document.body.removeChild(link);
 
     showFeedbackToast(
-      'Visual Schedule Downloaded',
+      'Mobile Schedule Downloaded (.md)',
       'is ready to view on your device.',
       'wcs-visual-schedule.md'
     );
@@ -190,7 +190,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
               size="md"
               icon={Download}
             >
-              Download Calendar (.ics)
+              Add to Calendar (.ics)
             </Button>
             <Button
               onClick={handleDownloadVisualSchedule}
@@ -198,7 +198,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
               size="md"
               icon={FileText}
             >
-              Download Mobile Schedule
+              Download Mobile Schedule (.md)
             </Button>
           </Stack>
         </Box>
@@ -238,14 +238,24 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
           <Box as="p" className="text-xs text-text-dim maxWidth-md">
             Download your customized calendar (.ics) with travel buffer reminders, workshops, and competition call times.
           </Box>
-          <Button
-            onClick={handleDownloadCalendar}
-            variant="accent"
-            size="lg"
-            icon={Download}
-          >
-            Download Calendar (.ics)
-          </Button>
+          <Box display="flex" justify="center" gap={3} wrap="wrap">
+            <Button
+              onClick={handleDownloadCalendar}
+              variant="accent"
+              size="lg"
+              icon={Download}
+            >
+              Add to Calendar (.ics)
+            </Button>
+            <Button
+              onClick={handleDownloadVisualSchedule}
+              variant="primary"
+              size="lg"
+              icon={FileText}
+            >
+              Download Mobile Schedule (.md)
+            </Button>
+          </Box>
         </Stack>
       </Box>
     </Stack>

@@ -75,6 +75,13 @@ Return a valid JSON object matching the GenerateResponse schema:
    - Include a VEVENT for the Target Flight Landing Deadline:
      SUMMARY:✈️ Target Flight Landing Deadline
    - Include VEVENT entries for all included sessions.
+   - For all VEVENTs, include a 15-minute reminder using:
+     BEGIN:VALARM
+     TRIGGER:-PT15M
+     ACTION:DISPLAY
+     DESCRIPTION:Reminder
+     END:VALARM
+   - Ensure LOCATION, DESCRIPTION, and dress code tags are present in the events.
 3. THEME DRESS CODES:
    - Extract theme_dress_codes for evening socials, showcase galas, competition attire, or casual Sunday.
    - Set category to one of: 'social_theme', 'showcase_formal', 'competition_attire', 'casual_sunday'.

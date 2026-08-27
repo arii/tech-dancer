@@ -14,7 +14,7 @@ describe('AgentMindTrace Suite', () => {
   it('renders AgentMindTrace container and header correctly', () => {
     render(<AgentMindTrace />);
     expect(screen.getByText(/Personalized Schedule & Travel Buffer/i)).toBeDefined();
-    expect(screen.getAllByText(/Download Calendar \(\.ics\)|Download \(\.ics\)/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Add to Calendar \(\.ics\)/i).length).toBeGreaterThan(0);
   });
 
   it('renders ExecutionProgressBar sub-tasks', () => {
@@ -71,7 +71,7 @@ describe('AgentMindTrace Suite', () => {
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
     render(<AgentMindTrace />);
-    const downloadBtns = screen.getAllByRole('button', { name: /Download Calendar \(\.ics\)|Download \(\.ics\)/i });
+    const downloadBtns = screen.getAllByRole('button', { name: /Add to Calendar \(\.ics\)/i });
     fireEvent.click(downloadBtns[0]);
 
     expect(createObjectURLMock).toHaveBeenCalled();
