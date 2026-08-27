@@ -37,7 +37,7 @@ test.describe('WCS Navigator E2E Workflow', () => {
     // 6. Results & Trace
     await expect(page.getByText(/Personalized Schedule & Travel Buffer/i)).toBeVisible();
     await expect(page.getByText('Travel & Arrival Timeline')).toBeVisible();
-    await expect(page.getByText(/Download Calendar \(\.ics\)/i).first()).toBeVisible();
+    await expect(page.getByText(/Add to Calendar \(\.ics\)/i).first()).toBeVisible();
 
     // 7. Adjust Preferences Breadcrumb
     const adjustButton = page.getByRole('button', { name: /Adjust Preferences & Re-generate/i });
