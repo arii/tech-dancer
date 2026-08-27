@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Search, Upload, MapPin, ArrowRight, X, ChevronRight } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { DropzoneUpload } from './DropzoneUpload';
@@ -9,11 +10,11 @@ export interface EventSearchHeroProps {
   onDiscoverUrl: (url: string) => void;
 }
 
-export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
+export const EventSearchHero = ({
   onDiscoverPreset,
   onDiscoverPdf,
   onDiscoverUrl,
-}) => {
+}: EventSearchHeroProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEvent, setSelectedEvent] = useState<WCSCaliforniaEvent | null>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -42,22 +43,34 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto py-8 md:py-14">
+    <Stack gap={8} align="center" justify="center" maxWidth="2xl" marginX="auto" paddingY={{ default: 8, md: 14 }} width="full">
       {/* Centered Hero Header */}
-      <div className="flex flex-col items-center text-center max-w-2xl mx-auto w-full mb-8 space-y-2">
-        <h2 className="text-3xl sm:text-5xl font-black text-text-main tracking-tight leading-tight">
+      <Stack gap={2} align="center" textAlign="center" maxWidth="2xl" width="full">
+        <Text weight="font-black" size="3xl" color="main" tracking="tight" leading="tight" className="sm:text-5xl">
           What event are you attending?
-        </h2>
-        <p className="text-sm sm:text-base text-text-dim max-w-lg leading-relaxed">
+        </Text>
+        <Text size="sm" color="dim" maxWidth="lg" leading="relaxed" className="sm:text-base">
           Search an upcoming 2026 convention or drop your schedule PDF to build a customized weekend timetable.
-        </p>
-      </div>
+        </Text>
+      </Stack>
 
       {/* Main Action Form */}
-      <div className="w-full flex flex-col items-center space-y-4">
+      <Stack gap={4} align="center" width="full">
         {/* Search Bar Container */}
-        <div className="relative w-full">
-          <div className="flex items-center w-full rounded-2xl bg-surface/90 border border-line hover:border-accent/60 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all shadow-lg px-4 py-3.5 gap-3">
+        <Box width="full" className="relative">
+          <Box
+            display="flex"
+            align="center"
+            gap={3}
+            width="full"
+            paddingX={4}
+            paddingY={3.5}
+            radius="2xl"
+            surface="card"
+            border
+            shadow="lg"
+            className="border-line hover:border-accent/60 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all"
+          >
             <Search className="w-5 h-5 text-accent shrink-0" />
             <input
               type="text"
@@ -72,123 +85,181 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
               className="w-full bg-transparent text-sm sm:text-base text-text-main placeholder:text-text-dim focus:outline-none"
             />
             {searchQuery && (
-              <button
+              <Box
+                as="button"
                 type="button"
                 aria-label="Clear search"
                 onClick={handleClear}
-                className="p-1 rounded-full text-text-dim hover:text-text-main hover:bg-muted/80 transition-colors cursor-pointer"
+                padding={1}
+                radius="full"
+                cursor="pointer"
+                className="text-text-dim hover:text-text-main hover:bg-surface transition-colors"
               >
                 <X className="w-4 h-4" />
-              </button>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Instant Dropdown Suggestions */}
           {isInputFocused && filteredEvents.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-surface/95 backdrop-blur-md border border-line rounded-2xl shadow-2xl overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="py-2 divide-y divide-line/40 max-h-64 overflow-y-auto">
+            <Box
+              surface="card"
+              border
+              radius="2xl"
+              shadow="2xl"
+              marginTop={2}
+              className="absolute top-full left-0 right-0 z-50 backdrop-blur-md overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-200"
+            >
+              <Box paddingY={2} className="divide-y divide-line/40 max-h-64 overflow-y-auto">
                 {filteredEvents.map((event) => (
-                  <button
+                  <Box
                     key={event.id}
+                    as="button"
                     type="button"
                     onMouseDown={() => handleSelect(event)}
-                    className="w-full px-4 py-3 hover:bg-muted/60 flex items-center justify-between transition-colors text-left group cursor-pointer"
+                    display="flex"
+                    align="center"
+                    justify="between"
+                    paddingX={4}
+                    paddingY={3}
+                    cursor="pointer"
+                    className="w-full hover:bg-surface transition-colors text-left group"
                   >
-                    <div className="flex flex-col space-y-0.5">
-                      <span className="text-sm font-bold text-text-main group-hover:text-accent transition-colors">
+                    <Stack gap={0.5}>
+                      <Text weight="font-bold" size="sm" color="main" className="group-hover:text-accent transition-colors">
                         {event.name}
-                      </span>
-                      <span className="text-xs text-text-dim">
+                      </Text>
+                      <Text size="xs" color="dim">
                         📍 {event.location} • 📅 {event.dates}
-                      </span>
-                    </div>
+                      </Text>
+                    </Stack>
                     <ChevronRight className="w-4 h-4 text-text-dim group-hover:text-accent transition-colors" />
-                  </button>
+                  </Box>
                 ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
-        </div>
+        </Box>
 
         {/* Subtle Upload Secondary Action Link */}
-        <div className="flex items-center justify-center gap-1.5 text-xs text-text-dim">
-          <span>Have a custom timetable?</span>
-          <button
+        <Box display="flex" align="center" justify="center" gap={1.5}>
+          <Text size="xs" color="dim">Have a custom timetable?</Text>
+          <Box
+            as="button"
             type="button"
             onClick={() => setShowUploadModal(!showUploadModal)}
-            className="text-brand-cyan hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+            display="flex"
+            align="center"
+            gap={1}
+            cursor="pointer"
+            className="text-brand-cyan hover:underline font-semibold text-xs"
           >
             <Upload className="w-3.5 h-3.5" />
             <span>{showUploadModal ? 'Back to event search' : 'Or drop a schedule PDF'}</span>
-          </button>
-        </div>
+          </Box>
+        </Box>
 
         {/* Upload Dropzone Container (revealed conditionally when clicked) */}
         {showUploadModal ? (
-          <div className="w-full bg-surface border border-line rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-top-2">
+          <Box surface="surface" border radius="2xl" padding={6} shadow="xl" width="full" className="animate-in fade-in slide-in-from-top-2">
             <DropzoneUpload
               onIngestPdf={(file) => onDiscoverPdf(file)}
               onIngestUrl={(url) => onDiscoverUrl(url)}
             />
-          </div>
+          </Box>
         ) : (
           <>
             {/* State 1: Clean Quiet Row of Popular Events */}
-            <div className="flex items-center gap-2 w-full overflow-x-auto pt-1 pb-1 no-scrollbar text-xs">
-              <span className="text-[11px] font-bold text-text-dim shrink-0 pl-1">
+            <Box display="flex" align="center" gap={2} width="full" paddingTop={1} paddingBottom={1} className="overflow-x-auto no-scrollbar text-xs">
+              <Text variant="mono" size="micro" weight="font-bold" color="dim" paddingLeft={1} className="shrink-0">
                 Popular:
-              </span>
-              <div className="flex items-center gap-2 shrink-0">
+              </Text>
+              <Box display="flex" align="center" gap={2} className="shrink-0">
                 {CALIFORNIA_2026_EVENTS.map((event) => {
                   const isSelected = selectedEvent?.id === event.id;
                   return (
-                    <button
+                    <Box
                       key={event.id}
+                      as="button"
                       type="button"
                       onClick={() => handleSelect(event)}
-                      className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border flex items-center justify-center cursor-pointer whitespace-nowrap ${
+                      minHeight={9}
+                      paddingX={3.5}
+                      paddingY={1.5}
+                      radius="full"
+                      border
+                      display="flex"
+                      align="center"
+                      justify="center"
+                      cursor="pointer"
+                      className={`text-xs font-semibold transition-all whitespace-nowrap ${
                         isSelected
                           ? 'bg-brand-cyan/20 border-brand-cyan text-brand-cyan font-bold shadow-sm'
                           : 'bg-surface/70 border-line/60 text-text-dim hover:text-white hover:border-line'
                       }`}
                     >
                       {event.name}
-                    </button>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* State 2: Active Selection -> Fade in the card right under search bar */}
             {selectedEvent && (
-              <div className="w-full mt-2 p-5 rounded-2xl bg-surface/90 border border-line/80 shadow-xl text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] animate-in fade-in slide-in-from-top-2">
-                <div className="flex flex-col space-y-1.5 flex-1 min-w-0">
-                  <div className="flex items-center gap-2 text-xs font-mono font-medium text-accent">
-                    <MapPin className="w-3.5 h-3.5 shrink-0" />
-                    <span>{selectedEvent.location} • {selectedEvent.dates}</span>
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-text-main leading-snug">
+              <Box
+                width="full"
+                marginTop={2}
+                padding={5}
+                radius="2xl"
+                surface="card"
+                border
+                shadow="xl"
+                display="flex"
+                direction={{ default: 'col', sm: 'row' }}
+                align={{ default: 'start', sm: 'center' }}
+                justify="between"
+                gap={4}
+                className="text-left border-line/80 transition-all duration-400 animate-in fade-in slide-in-from-top-2"
+              >
+                <Stack gap={1.5} flex={1} className="min-w-0">
+                  <Box display="flex" align="center" gap={2}>
+                    <MapPin className="w-3.5 h-3.5 shrink-0 text-accent" />
+                    <Text variant="mono" size="xs" weight="font-medium" color="accent">
+                      {selectedEvent.location} • {selectedEvent.dates}
+                    </Text>
+                  </Box>
+                  <Text weight="font-bold" size="base" color="main" leading="snug" className="sm:text-lg">
                     {selectedEvent.name}
-                  </h3>
-                  <p className="text-xs text-text-dim leading-relaxed">
+                  </Text>
+                  <Text size="xs" color="dim" leading="relaxed">
                     {selectedEvent.description}
-                  </p>
-                </div>
+                  </Text>
+                </Stack>
 
-                <button
+                <Box
+                  as="button"
                   type="button"
                   onClick={() => onDiscoverPreset(selectedEvent)}
-                  className="min-h-[44px] px-5 rounded-xl bg-brand-cyan hover:opacity-95 text-black font-bold text-sm shadow-lg shadow-brand-cyan/15 flex items-center justify-center gap-2 shrink-0 self-stretch sm:self-auto cursor-pointer transition-all"
+                  minHeight={11}
+                  paddingX={5}
+                  radius="xl"
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  gap={2}
+                  cursor="pointer"
+                  className="bg-brand-cyan hover:opacity-95 text-black font-bold text-sm shadow-lg shadow-brand-cyan/15 shrink-0 self-stretch sm:self-auto transition-all"
                 >
                   <span>Plan My Weekend</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </Box>
+              </Box>
             )}
           </>
         )}
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 };
 
