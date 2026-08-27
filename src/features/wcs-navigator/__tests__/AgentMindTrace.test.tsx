@@ -20,17 +20,17 @@ describe('AgentMindTrace Suite', () => {
 
   it('renders ExecutionProgressBar sub-tasks', () => {
     render(<ExecutionProgressBar />);
-    expect(screen.getByText('Schedule Optimization Steps')).toBeDefined();
-    expect(screen.getByText('Parsed Event Timetable')).toBeDefined();
-    expect(screen.getByText('Applied Division Filters')).toBeDefined();
-    expect(screen.getByText('Calculated Travel Buffer')).toBeDefined();
-    expect(screen.getByText('Generated Calendar File')).toBeDefined();
+    expect(screen.getByText('Schedule Optimized')).toBeDefined();
+    expect(screen.getByText('Schedule Parsed')).toBeDefined();
+    expect(screen.getByText('Divisions Filtered')).toBeDefined();
+    expect(screen.getByText('Travel Buffer Calculated')).toBeDefined();
+    expect(screen.getByText('Calendar Generated (.ics)')).toBeDefined();
   });
 
-  it('renders FlightBufferTimeline buffer steps and logistics formula', () => {
+  it('renders FlightBufferTimeline buffer steps and calculation toggle', () => {
     render(<FlightBufferTimeline />);
     expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
-    expect(screen.getByText('Arrival Timeline Formula')).toBeDefined();
+    expect(screen.getByText('View calculation details')).toBeDefined();
     expect(screen.getByText('Target Flight Landing Deadline')).toBeDefined();
     expect(screen.getByText('Novice Strictly Swing Staging Call')).toBeDefined();
   });

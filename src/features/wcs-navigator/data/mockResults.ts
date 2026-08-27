@@ -79,16 +79,25 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Grand Ballroom',
           status: 'included',
           decisionBadge: 'Division Match',
-          justification: 'Matched selected competitive division (Novice)'
+          justification: 'Matched selected competitive division (Novice). On-time staging guaranteed.'
         },
         {
           id: 's2',
           title: 'All-Levels Connection & Elasticity with Pro Staff',
           time: 'Friday 3:00 PM - 4:00 PM',
           location: 'Junior Ballroom',
+          status: 'filtered',
+          decisionBadge: 'Arrival Time Conflict',
+          justification: 'Filtered: Conflicts with your airport transit and hotel settle window (2:15 PM - 4:15 PM).'
+        },
+        {
+          id: 's5',
+          title: 'Saturday Flow & Connection Technique Workshop',
+          time: 'Saturday 2:00 PM - 3:15 PM',
+          location: 'Grand Ballroom',
           status: 'included',
-          decisionBadge: 'All-Levels',
-          justification: 'Open technique workshop open to all registered dancers'
+          decisionBadge: 'Workshop Match',
+          justification: 'Fits your Novice technique focus and scheduled during open Saturday afternoon slot.'
         },
         {
           id: 's3',
@@ -97,7 +106,7 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Executive Salon',
           status: 'filtered',
           decisionBadge: 'Level Ineligible',
-          justification: 'Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops'
+          justification: 'Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops.'
         },
         {
           id: 's4',
@@ -106,7 +115,7 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Grand Ballroom',
           status: 'included',
           decisionBadge: 'Social Energy',
-          justification: 'Matched late-night social energy preference'
+          justification: 'Matched late-night social energy preference.'
         }
       ],
       themeDressCodes: [
