@@ -22,25 +22,24 @@ export function useWCSData() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [searchInput, setSearchInput] = useState(searchTerm);
-  const [isSearching, setIsSearching] = useState(false);
+  const [prevSearchTerm, setPrevSearchTerm] = useState(searchTerm);
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
-  // Keep searchInput in sync if searchTerm changes externally (e.g., URL navigation)
-  useEffect(() => {
+  // Derive active search status directly during render
+  const isSearching = searchInput !== searchTerm;
+
+  // Sync searchInput when searchTerm changes externally (e.g. back button / direct link)
+  if (searchTerm !== prevSearchTerm) {
+    setPrevSearchTerm(searchTerm);
     setSearchInput(searchTerm);
-  }, [searchTerm]);
+  }
 
   // Debounce local search input changes by 300ms before updating searchTerm & URL
   useEffect(() => {
-    if (searchInput === searchTerm) {
-      setIsSearching(false);
-      return;
-    }
+    if (searchInput === searchTerm) return;
 
-    setIsSearching(true);
     const timer = setTimeout(() => {
       setSearchTerm(searchInput);
-      setIsSearching(false);
     }, 300);
 
     return () => clearTimeout(timer);
