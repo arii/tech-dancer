@@ -133,10 +133,25 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 * **Status:** Milestone (Both Parallel Paths Must Converge)
 * **Objective:** Connect the React blog UI component to the Cloud Run API service running on a local host network.
 * **Verification Routine:**
-    1. Drag-and-drop a sample schedule (e.g., `bbb2026-schedule.pdf`).
-    2. Confirm Stage 1 questionnaire mounts dynamically with accurate options.
-    3. Select a persona profile, submit the answers, and confirm the decision trace renders beautifully.
-    4. Click download and verify that the resulting `.ics` calendar imports into Google Calendar or Apple Calendar with accurate event mappings.
+    1. **Contract Schema Gate:** Verify FastAPI Pydantic models serialize to camelCase aliases consumable by TypeScript (`DiscoveryResponse`, `AgentDecisionTrace`, `BufferCalculationResult`, `AuditSession`, `ThemeDressCode`, `PackingItem`).
+    2. **Stage 1 Discovery:** Drag-and-drop a sample schedule (e.g., `bbb2026-schedule.pdf`) or select a California 2026 preset. Confirm Stage 1 questionnaire mounts dynamically with accurate options and persona chips.
+    3. **Stage 2 Generation:** Select a persona profile (e.g., Novice Competitor), submit the answers, and confirm the decision trace renders beautifully (Flight Buffer timeline, 3-way Filtering Audit Matrix, Theme & Dress Code cards).
+    4. **Calendar Download:** Click download and verify that the resulting `.ics` calendar imports into Google Calendar or Apple Calendar with accurate event mappings and flight landing deadlines.
+
+---
+
+## 🔌 Frontend-Backend Contract Verification Matrix
+
+To guarantee zero runtime breakage when moving from Mock Mode to Live Backend API, every backend issue must verify against the following schema compatibility requirements:
+
+| Endpoint & Stage | Backend Pydantic Model | Target React TypeScript Contract | Required Verification Assertions |
+| :--- | :--- | :--- | :--- |
+| **Stage 1: `/discover`** | `DiscoveryResponse` | `DiscoveryResponse` (`types/navigator.ts`) | • Contains `suggested_form_questions` array.<br>• Each question has `id`, `title`, `type` (`select` \| `multiselect` \| `boolean`), `context`, `required`, `defaultValue`.<br>• Select / Multiselect options contain `{ label, value, subtitle?, badge? }`. |
+| **Stage 2: `/generate`** | `GenerateResponse` | `AgentDecisionTrace` (`types.ts`) | • Contains `icsContent` (or `ics_content`) string with valid RFC 5545 syntax.<br>• Contains `decisionTrace` with `subTasks`, `bufferTimeline`, `sessions`, `themeDressCodes`, `packingManifest`. |
+| **Buffer Engine** | `BufferCalculationResult` | `FlightBuffer` (`types.ts`) | • Contains `earliestStagingTime`, `latestFlightArrivalDeadline`, `warmupMinutes`, `hotelSettleMinutes`, `transitMinutes`, `formulaSummary`.<br>• Contains `steps: BufferStep[]` with `label`, `time`, `type` (`staging` \| `warmup` \| `hotel` \| `transit` \| `flight`), and `duration`. |
+| **Audit Matrix** | `AuditSession` | `AuditSession` (`types.ts`) | • Contains `id`, `title`, `time`, `location`, `status` (`included` \| `filtered`), `decisionBadge`, `justification`. |
+| **Themes & Dress Codes** | `ThemeDressCode` | `ThemeDressCode` (`types.ts`) | • Contains `id`, `day`, `themeTitle`, `category` (`social_theme` \| `showcase_formal` \| `competition_attire` \| `casual_sunday`), `description`, `recommendedAttire: string[]`, `vibe`. |
+| **Packing Items** | `PackingItem` | `PackingItem` (`types.ts`) | • Contains `id`, `name`, `category` (`footwear` \| `attire` \| `toiletries` \| `tech` \| `essentials`), `rationale`, `quantity`. |
 
 ---
 
@@ -165,14 +180,15 @@ It details the sequence of execution, explicitly distinguishing between sequenti
 ### 🧪 Phase 5: Test-Driven Validation & Demo Prep (Sequential)
 *These tasks complete the testing validations and prepare the final presentation assets.*
 
-#### 🏷️ Issue WCS-501: Write Automated Test Suite (Pytest)
+#### 🏷️ Issue WCS-501: Write Automated Test Suite (Pytest & Contract Verification)
 *   **Type:** Task (Sequential)
-*   **Description:** Build out the local test coverage validating execution outputs against the Golden Target scenarios.
+*   **Description:** Build out the test coverage validating execution outputs against the Golden Target scenarios and verifying frontend-backend JSON contract serialization.
 *   **Technical Details:**
+    *   Execute `test_contract_schemas.py` asserting exact camelCase/snake_case serialization compatibility with frontend React TypeScript definitions.
     *   Write test fixtures parsing Boogie by the Bay 2026 schedules under the "Novice Competitor" profile.
     *   Write test fixtures parsing Halloween Swing Thing 2026 under the "Pure Social Spectator" profile.
-    *   Assert that the calculations of earliest call-times, flight buffers, and generated `.ics` files match targeted strings.
-*   **DoD:** Running `pytest tests/ -v` completes successfully with a 100% pass rate.
+    *   Assert that calculations of earliest call-times, flight buffers, and generated `.ics` files match targeted strings.
+*   **DoD:** Running `pytest tests/ -v` completes successfully with a 100% pass rate across engine math, schema contracts, and mock ingestion fixtures.
 
 #### 🏷️ Issue WCS-502: Record and Script the Devpost Submission Video (4 Minutes Max)
 *   **Type:** Task (Sequential)
