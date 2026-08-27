@@ -175,13 +175,15 @@ export const FlightBufferTimeline = ({
       {/* Header Banner */}
       <Box display="flex" align="center" justify="between" wrap gap={2}>
         <Stack gap={1}>
-          <Box as="h3" className="text-lg font-bold text-text-main flex items-center gap-2">
-            <Clock className="w-5 h-5 text-accent" />
-            <span>Travel &amp; Arrival Timeline</span>
-          </Box>
-          <Box as="p" className="text-xs text-text-dim">
+          <Stack direction="row" align="center" gap={2}>
+            <Clock className="w-5 h-5 text-accent shrink-0" />
+            <Text as="h3" variant="body-lg" weight="font-bold" color="main">
+              Travel &amp; Arrival Timeline
+            </Text>
+          </Stack>
+          <Text size="xs" color="dim">
             Calculated backward from your earliest mandatory event call to guarantee zero rushing
-          </Box>
+          </Text>
         </Stack>
       </Box>
 
@@ -197,7 +199,7 @@ export const FlightBufferTimeline = ({
           gap={1}
           className="border-line bg-surface/90"
         >
-          <Text variant="caption-bold" color="dim" className="text-[11px] font-mono uppercase tracking-wider">
+          <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
             🏆 Earliest Event Call
           </Text>
           <Text variant="body-lg" weight="font-bold" color="main" className="font-mono text-base sm:text-lg">
@@ -222,10 +224,11 @@ export const FlightBufferTimeline = ({
         >
           <Box display="flex" align="center" justify="between" width="full" gap={1}>
             <Text
-              variant="caption-bold"
-              className={`text-[11px] font-mono uppercase tracking-wider ${
-                hasScheduleConflict ? 'text-brand-terminal-red' : 'text-brand-cyan'
-              }`}
+              variant="mono"
+              size="micro"
+              uppercase
+              tracking="wider"
+              className={hasScheduleConflict ? 'text-brand-terminal-red' : 'text-brand-cyan'}
             >
               ✈️ Landing Target {activeOffset !== 0 ? `(${activeOffset > 0 ? '+' : ''}${activeOffset}m)` : ''}
             </Text>
@@ -235,9 +238,9 @@ export const FlightBufferTimeline = ({
                 as="button"
                 type="button"
                 onClick={handleResetOffset}
-                className="text-[10px] font-mono underline text-text-dim hover:text-text-main cursor-pointer"
+                className="font-mono underline text-dim hover:text-main cursor-pointer"
               >
-                Reset
+                <Text variant="mono" size="micro">Reset</Text>
               </Box>
             )}
           </Box>
@@ -253,28 +256,40 @@ export const FlightBufferTimeline = ({
           </Text>
 
           {/* Time Adjustment Controls */}
-          <Box display="flex" align="center" gap={1.5} className="pt-1">
+          <Box display="flex" align="center" gap={1.5}>
             <Box
               as="button"
               type="button"
               onClick={() => handleOffsetChange(-30)}
-              className="px-2 py-1 min-h-[28px] radius-md surface-muted border border-line text-[11px] font-mono text-text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
+              paddingX={2}
+              paddingY={1}
+              radius="md"
+              surface="muted"
+              border
+              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
               aria-label="Land 30 minutes earlier"
             >
-              -30m
+              <Text variant="mono" size="micro">-30m</Text>
             </Box>
             <Box
               as="button"
               type="button"
               onClick={() => handleOffsetChange(30)}
-              className="px-2 py-1 min-h-[28px] radius-md surface-muted border border-line text-[11px] font-mono text-text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
+              paddingX={2}
+              paddingY={1}
+              radius="md"
+              surface="muted"
+              border
+              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
               aria-label="Land 30 minutes later"
             >
-              +30m
+              <Text variant="mono" size="micro">+30m</Text>
             </Box>
-            <Text variant="caption-subtle" color="dim" className="text-[10px] font-mono ml-auto">
-              Simulate flight shift
-            </Text>
+            <Box marginLeft="auto">
+              <Text variant="mono" size="micro" color="dim">
+                Simulate flight shift
+              </Text>
+            </Box>
           </Box>
         </Box>
 
@@ -288,7 +303,7 @@ export const FlightBufferTimeline = ({
           gap={1}
           className="border-line bg-surface/90"
         >
-          <Text variant="caption-bold" color="dim" className="text-[11px] font-mono uppercase tracking-wider">
+          <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
             ⏱️ Total Required Buffer
           </Text>
           <Text variant="body-lg" weight="font-bold" color="main" className="font-mono text-base sm:text-lg">
@@ -302,11 +317,11 @@ export const FlightBufferTimeline = ({
         <Box paddingX={5} paddingY={3} surface="muted" border="b" display="flex" align="center" justify="between" className="border-line">
           <Box display="flex" align="center" gap={2}>
             <Calendar className="w-4 h-4 text-brand-cyan" />
-            <Text variant="caption-bold" color="main" className="text-xs font-mono uppercase tracking-wider">
+            <Text variant="mono" size="micro" color="main" weight="font-bold" uppercase tracking="wider">
               📅 Friday Arrival &amp; Competition Day Breakdown
             </Text>
           </Box>
-          <Text variant="caption-subtle" color="dim" className="text-[11px] font-mono">
+          <Text variant="mono" size="micro" color="dim">
             {chronologicalSteps.length} Sequential Steps
           </Text>
         </Box>
@@ -314,7 +329,7 @@ export const FlightBufferTimeline = ({
         {/* Static Chronological Steps with Continuous Vertical Connector Line */}
         <Box className="relative">
           {/* Continuous vertical connector line linking icon centers */}
-          <Box className="w-0.5 bg-line/70 absolute left-[39px] top-6 bottom-6 z-0" />
+          <Box className="w-0.5 bg-line/70 absolute left-9 top-6 bottom-6 z-0" />
 
           <Stack gap={0} className="divide-y divide-line/40 relative z-10">
             {chronologicalSteps.map((step: BufferStep, idx: number) => {
@@ -331,10 +346,10 @@ export const FlightBufferTimeline = ({
                   align={{ default: 'start', sm: 'center' }}
                   justify="between"
                   gap={4}
-                  className="hover:bg-muted/30 transition-colors"
+                  className="hover:bg-surface transition-colors"
                 >
                   {/* Left Side: Icon & Time Window */}
-                  <Box display="flex" align="center" gap={4} className="min-w-[240px] shrink-0">
+                  <Box display="flex" align="center" gap={4} className="min-w-60 shrink-0">
                     <Box
                       padding={2.5}
                       radius="lg"
@@ -352,26 +367,28 @@ export const FlightBufferTimeline = ({
                         {step.time}
                       </Text>
                       {step.duration && (
-                        <Text variant="caption-subtle" color="dim" className="text-[11px] font-mono flex items-center gap-1">
+                        <Box display="flex" align="center" gap={1}>
                           <Hourglass className="w-3 h-3 text-text-dim shrink-0" />
-                          <span>{step.duration}</span>
-                        </Text>
+                          <Text variant="mono" size="micro" color="dim">{step.duration}</Text>
+                        </Box>
                       )}
                     </Stack>
                   </Box>
 
                   {/* Right Side: Title & Description */}
-                  <Stack gap={1} className="flex-1 min-w-0">
-                    <Text variant="body-sm" weight="font-bold" color="main" className="text-base">
-                      {step.label}
-                    </Text>
-
-                    {step.description && (
-                      <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
-                        {step.description}
+                  <Box flex={1} className="min-w-0">
+                    <Stack gap={1}>
+                      <Text variant="body-sm" weight="font-bold" color="main" className="text-base">
+                        {step.label}
                       </Text>
-                    )}
-                  </Stack>
+
+                      {step.description && (
+                        <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
+                          {step.description}
+                        </Text>
+                      )}
+                    </Stack>
+                  </Box>
                 </Box>
               );
             })}
@@ -390,7 +407,9 @@ export const FlightBufferTimeline = ({
         gap={3}
         className="border-line/70 bg-surface/60"
       >
-        <ShieldCheck className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+        <Box paddingTop={0.5}>
+          <ShieldCheck className="w-4 h-4 text-accent shrink-0" />
+        </Box>
         <Stack gap={1}>
           <Text variant="caption-bold" color="main" className="font-mono text-xs">
             Why {buffer.latestFlightArrivalDeadline.split(' ')[0]}?
