@@ -51,10 +51,10 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
     },
     decisionTrace: {
       subTasks: [
-        { id: '1', label: 'Ingest schedule layout & parse room columns', status: 'completed', detail: 'Found 4 ballrooms, 48 total workshops, 6 competitive divisions' },
-        { id: '2', label: 'Extract WSDC prelim call times & calculate flight buffers', status: 'completed', detail: 'Computed step-down buffer: 17:15 Staging -> 14:15 Landing' },
-        { id: '3', label: 'Filter workshops by division & level gating', status: 'completed', detail: 'Filtered 18 ineligible advanced intensives' },
-        { id: '4', label: 'Assemble in-memory RFC 5545 calendar stream', status: 'completed', detail: 'Generated 14 VEVENT blocks with buffer reminders' }
+        { id: '1', label: 'Parsed event timetable & rooms', status: 'completed', detail: 'Found 4 ballrooms, 48 workshops, and 6 divisions' },
+        { id: '2', label: 'Calculated travel buffer & arrival deadline', status: 'completed', detail: 'Arrival target computed: 2:15 PM Friday' },
+        { id: '3', label: 'Filtered workshops by division level', status: 'completed', detail: 'Selected workshops matching your profile' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
       ],
       bufferTimeline: {
         earliestStagingTime: '5:15 PM (Friday)',
@@ -162,9 +162,10 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
     },
     decisionTrace: {
       subTasks: [
-        { id: '1', label: 'Scan multi-genre timetable (WCS, Hustle, Country)', status: 'completed', detail: 'Identified 3 ballroom streams across 4 days' },
-        { id: '2', label: 'Calculate SFO shuttle and hotel buffer', status: 'completed', detail: '20m shuttle + 90m settle + 60m warmup' },
-        { id: '3', label: 'Gate Champion masterclasses', status: 'completed', detail: 'Filtered Level 4/5 intensives' }
+        { id: '1', label: 'Scanned event timetable', status: 'completed', detail: 'Identified ballroom streams across the weekend' },
+        { id: '2', label: 'Calculated airport transit & hotel buffer', status: 'completed', detail: '20m shuttle + 90m check-in + 60m warmup' },
+        { id: '3', label: 'Filtered workshops by division', status: 'completed', detail: 'Filtered advanced intensives' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
       ],
       bufferTimeline: {
         earliestStagingTime: '5:15 PM (Friday)',
@@ -247,9 +248,10 @@ export const createGenericMockResult = (eventName: string): EventMockData => ({
   },
   decisionTrace: {
     subTasks: [
-      { id: '1', label: `Ingest & analyze ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
-      { id: '2', label: 'Calculate backwards arrival buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
-      { id: '3', label: 'Filter workshops & assemble calendar', status: 'completed', detail: 'Tailored schedule generated' }
+      { id: '1', label: `Analyzed ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
+      { id: '2', label: 'Calculated arrival & travel buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
+      { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Tailored schedule generated' },
+      { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
     ],
     bufferTimeline: {
       earliestStagingTime: '5:00 PM (Friday)',

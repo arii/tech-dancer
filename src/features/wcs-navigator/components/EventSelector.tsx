@@ -1,18 +1,19 @@
+import React from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Calendar, MapPin, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { WCSCaliforniaEvent, CALIFORNIA_2026_EVENTS } from '../data/californiaEvents';
 import { cn } from '@/lib/utils';
 
-interface EventSelectorProps {
+export interface EventSelectorProps {
   selectedEventId: string;
   onSelectEvent: (event: WCSCaliforniaEvent) => void;
 }
 
-export const EventSelector = ({
+export const EventSelector: React.FC<EventSelectorProps> = ({
   selectedEventId,
   onSelectEvent
-}: EventSelectorProps) => {
+}) => {
   const selectedEvent = CALIFORNIA_2026_EVENTS.find(e => e.id === selectedEventId) || CALIFORNIA_2026_EVENTS[0];
 
   return (
@@ -26,7 +27,7 @@ export const EventSelector = ({
         </Text>
       </Stack>
 
-      {/* Select Dropdown */}
+      {/* Select Dropdown with 44px touch target */}
       <Box width="full">
         <select
           id="event-dropdown-select"
@@ -36,7 +37,7 @@ export const EventSelector = ({
             const ev = CALIFORNIA_2026_EVENTS.find(item => item.id === e.target.value);
             if (ev) onSelectEvent(ev);
           }}
-          className="w-full bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
+          className="w-full min-h-[44px] px-3 py-2.5 bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
         >
           {CALIFORNIA_2026_EVENTS.map((event) => (
             <option key={event.id} value={event.id} className="bg-surface text-white">
@@ -55,8 +56,9 @@ export const EventSelector = ({
               key={event.id}
               as="button"
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onSelectEvent(event)}
-              padding={3.5}
+              padding={4}
               surface={isSelected ? 'muted' : 'surface'}
               radius="lg"
               display="flex"
@@ -64,8 +66,8 @@ export const EventSelector = ({
               justify="between"
               cursor="pointer"
               className={cn(
-                "border text-left transition-all duration-200 hover:border-brand-cyan/50",
-                isSelected ? "border-brand-cyan ring-1 ring-brand-cyan/40 bg-brand-cyan/5" : "border-line"
+                "min-h-[44px] border text-left transition-all duration-200 hover:border-brand-cyan/50 tap-target",
+                isSelected ? "border-brand-cyan ring-1 ring-brand-cyan/40 bg-brand-cyan/5" : "border-line hover:bg-surface"
               )}
             >
               <Stack gap={1} flex={1}>
@@ -108,7 +110,7 @@ export const EventSelector = ({
                 rel="noopener noreferrer"
                 size="xs"
                 color="accent"
-                className="hover:underline font-semibold"
+                className="hover:underline font-semibold min-h-[32px] inline-flex items-center"
               >
                 Official Website →
               </Text>
@@ -129,3 +131,4 @@ export const EventSelector = ({
     </Stack>
   );
 };
+

@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { DiscoveryResponse, FormQuestion, PersonaChip, QuestionAnswerValue } from '../types/navigator';
 import { SelectField } from './FormFields/SelectField';
 import { MultiSelectField } from './FormFields/MultiSelectField';
 import { BooleanField } from './FormFields/BooleanField';
+import { Sparkles, Loader2, Cpu, CheckCircle2 } from 'lucide-react';
 
 const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -13,11 +14,12 @@ const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const SparklesIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-  </svg>
-);
+const THINKING_MESSAGES = [
+  'Analyzing workshop tracks & room levels...',
+  'Checking schedule overlaps & prelim call times...',
+  'Calculating late-night energy & arrival buffers...',
+  'Optimizing schedule tracks...',
+];
 
 export interface DynamicQuestionnaireProps {
   discoveryResponse: DiscoveryResponse;
@@ -28,40 +30,81 @@ export interface DynamicQuestionnaireProps {
   isSubmitting?: boolean;
 }
 
-export function DynamicQuestionnaire({
+export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   discoveryResponse,
   initialAnswers = {},
   personaChips,
   onAnswersChange,
   onSubmit,
   isSubmitting = false,
-}: DynamicQuestionnaireProps) {
-  const [answersState, setAnswersState] = useState<Record<string, QuestionAnswerValue>>(initialAnswers);
-  const [activePersonaId, setActivePersonaId] = useState<string | null>(null);
-
-  // Sync initialAnswers without useEffect setState anti-pattern
-  const answers = useMemo(() => {
-    return { ...initialAnswers, ...answersState };
-  }, [initialAnswers, answersState]);
-
+}) => {
   const questions = discoveryResponse.suggested_form_questions || [];
 
-  const handleFieldChange = (questionId: string, value: QuestionAnswerValue) => {
+  const [answersState, setAnswersState] = useState<Record<string, QuestionAnswerValue>>(() => {
+    const defaults: Record<string, QuestionAnswerValue> = {};
+    questions.forEach((q) => {
+      if (q.defaultValue !== undefined) {
+        defaults[q.id] = q.defaultValue;
+      }
+    });
+    return { ...defaults, ...initialAnswers };
+  });
+
+  const [activePersonaId, setActivePersonaId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(() => {
+    // If initial answers were explicitly provided, show all; otherwise start with 1
+    return Object.keys(initialAnswers).length > 0 ? questions.length : 1;
+  });
+  const [thinkingIndex, setThinkingIndex] = useState<number | null>(null);
+  const [thinkingText, setThinkingText] = useState<string>(THINKING_MESSAGES[0]);
+  const [isPersonaThinking, setIsPersonaThinking] = useState(false);
+
+  // Sync initialAnswers
+  const answers = useMemo(() => {
+    const defaults: Record<string, QuestionAnswerValue> = {};
+    questions.forEach((q) => {
+      if (q.defaultValue !== undefined) {
+        defaults[q.id] = q.defaultValue;
+      }
+    });
+    return { ...defaults, ...initialAnswers, ...answersState };
+  }, [questions, initialAnswers, answersState]);
+
+  const handleFieldChange = (questionId: string, value: QuestionAnswerValue, index: number) => {
     const updated = { ...answers, [questionId]: value };
     setAnswersState(updated);
     setActivePersonaId(null);
     if (onAnswersChange) {
       onAnswersChange(updated);
     }
+
+    // If there are more questions to reveal sequentially
+    if (index + 1 >= visibleCount && index + 1 < questions.length) {
+      setThinkingIndex(index);
+      setThinkingText(THINKING_MESSAGES[index % THINKING_MESSAGES.length]);
+
+      setTimeout(() => {
+        setThinkingIndex(null);
+        setVisibleCount((prev) => Math.max(prev, index + 2));
+      }, 500);
+    }
   };
 
   const handleSelectPersona = (persona: PersonaChip) => {
+    setIsPersonaThinking(true);
     const updated = { ...answers, ...persona.answers };
     setAnswersState(updated);
     setActivePersonaId(persona.id);
+
     if (onAnswersChange) {
       onAnswersChange(updated);
     }
+
+    // Instant/snappy auto-fill and reveal all questions after single global pause
+    setTimeout(() => {
+      setIsPersonaThinking(false);
+      setVisibleCount(questions.length);
+    }, 450);
   };
 
   // Validation: check if all required questions have valid non-empty answers
@@ -83,99 +126,139 @@ export function DynamicQuestionnaire({
     }
   };
 
+  const allRevealed = visibleCount >= questions.length && !isPersonaThinking && thinkingIndex === null;
+
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" className="space-y-6">
-      {/* Optional Preset / Persona Selector Chips */}
+    <Box as="form" onSubmit={handleSubmit} width="full" className="space-y-6 pb-20 md:pb-0">
+      {/* Quick Persona Preset Selector Chips */}
       {personaChips && personaChips.length > 0 && (
-        <Stack gap={2} width="full" paddingBottom={4} border="b">
-          <Stack direction="row" align="center" gap={1.5}>
-            <Icon icon={UserIcon} size="sm" color="accent" />
-            <Text variant="caption-bold" color="dim">
-              Quick Persona Presets
-            </Text>
-          </Stack>
-          <Box display="flex" wrap={true} gap={2}>
+        <Stack gap={2.5} width="full" paddingBottom={4} border="b">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-text-dim uppercase tracking-wider">
+              <Icon icon={UserIcon} size="xs" color="accent" />
+              <span>Quick Persona Presets</span>
+            </div>
+            {isPersonaThinking && (
+              <div className="flex items-center gap-1.5 text-xs text-brand-cyan font-mono animate-pulse">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Applying persona preset...</span>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
             {personaChips.map((persona) => {
               const isActive = activePersonaId === persona.id;
               return (
-                <Box
+                <button
                   key={persona.id}
-                  as="button"
                   type="button"
+                  aria-pressed={isActive}
                   onClick={() => handleSelectPersona(persona)}
-                  surface={isActive ? "highlight" : "subtle"}
-                  radius="full"
-                  paddingX={3}
-                  paddingY={1.5}
-                  cursor="pointer"
-                  className={`transition-all border tap-target text-xs ${
+                  className={`min-h-[44px] px-4 py-2 rounded-full text-xs font-semibold transition-all border flex items-center justify-center cursor-pointer ${
                     isActive
-                      ? 'border-accent text-accent font-semibold ring-1 ring-accent'
-                      : 'border-line text-text-dim hover:text-text-main hover:border-line-hover'
+                      ? 'border-accent text-accent font-bold ring-1 ring-accent bg-accent/10 shadow-sm'
+                      : 'border-line text-text-dim hover:text-text-main hover:border-line-hover bg-surface/60'
                   }`}
                 >
                   {persona.label}
-                </Box>
+                </button>
               );
             })}
-          </Box>
+          </div>
         </Stack>
       )}
 
-      {/* Dynamic Question Inputs */}
-      <Stack gap={6} width="full">
-        {questions.map((question) => {
+      {/* Dynamic Question Inputs with Progressive Disclosure */}
+      <div className="space-y-6">
+        {questions.slice(0, visibleCount).map((question, index) => {
           const val = answers[question.id];
+          const isCurrentThinking = thinkingIndex === index;
 
-          switch (question.type) {
-            case 'select':
-              return (
+          return (
+            <div
+              key={question.id}
+              className="space-y-3 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] animate-in fade-in slide-in-from-bottom-2"
+            >
+              {question.type === 'select' && (
                 <SelectField
-                  key={question.id}
                   question={question}
                   value={val}
-                  onChange={(v) => handleFieldChange(question.id, v)}
+                  onChange={(v) => handleFieldChange(question.id, v, index)}
                 />
-              );
-            case 'multiselect':
-              return (
+              )}
+              {question.type === 'multiselect' && (
                 <MultiSelectField
-                  key={question.id}
                   question={question}
                   value={val}
-                  onChange={(v) => handleFieldChange(question.id, v)}
+                  onChange={(v) => handleFieldChange(question.id, v, index)}
                 />
-              );
-            case 'boolean':
-              return (
+              )}
+              {question.type === 'boolean' && (
                 <BooleanField
-                  key={question.id}
                   question={question}
                   value={val}
-                  onChange={(v) => handleFieldChange(question.id, v)}
+                  onChange={(v) => handleFieldChange(question.id, v, index)}
                 />
-              );
-            default:
-              return null;
-          }
-        })}
-      </Stack>
+              )}
 
-      {/* Action Submit Button */}
-      <Box paddingTop={4} border="t">
+              {/* Micro-thinking transition indicator */}
+              {isCurrentThinking && (
+                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-mono animate-pulse">
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                  <span>{thinkingText}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Action Submit Button (Revealed when all questions are unlocked or form is valid) */}
+      {(allRevealed || isValid) && (
+        <div className="pt-4 border-t border-line/60 transition-all duration-400 ease-out animate-in fade-in slide-in-from-bottom-2">
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            disabled={!isValid || isSubmitting}
+            loading={isSubmitting}
+            className="min-h-[48px]"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 text-black" />
+              <span className="font-bold text-sm">Generate Calendar</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      {/* Mobile Sticky Action CTA Bar (<md) */}
+      <div className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-line/80 px-4 py-3 shadow-2xl flex items-center justify-between gap-3">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-bold text-accent uppercase tracking-wider">
+            {isValid ? 'Ready to Optimize' : `Step ${Math.min(visibleCount, questions.length)} of ${questions.length}`}
+          </span>
+          <span className="text-xs text-text-dim">
+            {isValid ? 'All questions answered' : 'Personalize your weekend'}
+          </span>
+        </div>
+
         <Button
           type="submit"
           variant="primary"
-          fullWidth
           disabled={!isValid || isSubmitting}
           loading={isSubmitting}
+          size="md"
+          className="min-h-[44px] shrink-0 font-bold"
         >
-          <Stack direction="row" align="center" justify="center" gap={2}>
-            <Icon icon={SparklesIcon} size="sm" />
-            <Text as="span">Generate Calendar</Text>
-          </Stack>
+          <div className="flex items-center justify-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Generate</span>
+          </div>
         </Button>
-      </Box>
+      </div>
     </Box>
   );
-}
+};
+
+

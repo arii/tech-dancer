@@ -1,18 +1,19 @@
+import React from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { WCSPersona, DANCE_PERSONAS } from '../data/personas';
 import { UserCheck, Sparkles, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
 
-interface PersonaChipsProps {
+export interface PersonaChipsProps {
   selectedPersonaId: string | null;
   onSelectPersona: (persona: WCSPersona) => void;
 }
 
-export const PersonaChips = ({
+export const PersonaChips: React.FC<PersonaChipsProps> = ({
   selectedPersonaId,
   onSelectPersona
-}: PersonaChipsProps) => {
+}) => {
   return (
     <Stack gap={4} width="full">
       <Stack gap={1}>
@@ -32,6 +33,7 @@ export const PersonaChips = ({
               key={persona.id}
               as="button"
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onSelectPersona(persona)}
               padding={4}
               surface={isSelected ? 'muted' : 'surface'}
@@ -40,8 +42,8 @@ export const PersonaChips = ({
               align="start"
               cursor="pointer"
               className={cn(
-                "border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden",
-                isSelected ? "border-brand-purple ring-1 ring-brand-purple/40 bg-brand-purple/5" : "border-line"
+                "min-h-[44px] border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
+                isSelected ? "border-brand-purple ring-1 ring-brand-purple/40 bg-brand-purple/5" : "border-line hover:bg-surface"
               )}
             >
               <Stack gap={2} flex={1}>
@@ -80,3 +82,4 @@ export const PersonaChips = ({
     </Stack>
   );
 };
+

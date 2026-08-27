@@ -1,6 +1,7 @@
+import React, { useState } from 'react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { PackingItem } from '../types';
-import { Footprints, Shirt, Sparkles, Laptop, Backpack, Info } from 'lucide-react';
+import { Footprints, Shirt, Sparkles, Laptop, Backpack, Info, Check } from 'lucide-react';
 
 export interface PackingManifestCardProps {
   items?: PackingItem[];
@@ -81,77 +82,101 @@ const CATEGORY_STYLES = {
 };
 
 export function PackingManifestCard({ items = DEFAULT_ITEMS, className }: PackingManifestCardProps) {
+  const [checkedIds, setCheckedIds] = useState<Record<string, boolean>>({});
+
+  const toggleItem = (id: string) => {
+    setCheckedIds(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const packedCount = items.filter(item => checkedIds[item.id]).length;
+
   return (
     <Stack gap={4} className={className}>
       <Box display="flex" align="center" justify="between" wrap gap={2}>
         <Stack gap={1}>
           <Box as="h3" className="text-lg font-bold text-text-main">
-            Context-Backed Packing Manifest
+            Smart Packing Checklist
           </Box>
           <Box as="p" className="text-xs text-text-dim">
-            Smart items auto-suggested based on schedule observations & travel buffer
+            Helpful essentials suggested based on your workshops, competitions, and late-night dancing
           </Box>
         </Stack>
-        <Box paddingX={3} paddingY={1} radius="md" surface="card" border className="text-xs font-mono text-text-dim">
-          {items.length} Items Calculated
+        <Box paddingX={3} paddingY={1} radius="md" surface="card" border className="text-xs font-mono text-accent font-semibold">
+          {packedCount} / {items.length} Packed
         </Box>
       </Box>
 
       {/* Grid of Styled Packing Cards */}
       <Grid cols={{ default: 1, sm: 2, lg: 3 }} gap={4}>
         {items.map((item) => {
+          const isPacked = !!checkedIds[item.id];
           const style = CATEGORY_STYLES[item.category] || CATEGORY_STYLES.essentials;
           const CategoryIcon = style.icon;
 
           return (
-            <Box
+            <div
               key={item.id}
-              padding={4}
-              radius="md"
-              surface="card"
-              border
-              className="group transition-all hover:border-accent/40 relative"
+              onClick={() => toggleItem(item.id)}
+              className={`p-4 rounded-xl border bg-surface/80 transition-all cursor-pointer select-none flex flex-col justify-between space-y-3 ${
+                isPacked
+                  ? 'border-brand-emerald/50 bg-brand-emerald/5 opacity-80'
+                  : 'border-line/70 hover:border-accent/40 shadow-sm'
+              }`}
             >
-              <Stack gap={3} justify="between" height="full">
-                <Stack gap={3}>
-                  <Box display="flex" align="start" justify="between" gap={2}>
-                    <Box padding={2} radius="md" className={`border ${style.badge} shrink-0`}>
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`p-2 rounded-lg border ${style.badge} shrink-0`}>
                       <CategoryIcon className="w-4 h-4" />
-                    </Box>
-                    <Box paddingX={2} paddingY={1} radius="md" className={`text-xs font-mono font-semibold border ${style.badge}`}>
+                    </div>
+                    <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${style.badge}`}>
                       {style.label}
-                    </Box>
-                  </Box>
+                    </span>
+                  </div>
 
-                  <Stack gap={1}>
-                    <Box display="flex" align="center" justify="between" gap={2}>
-                      <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
-                        {item.name}
-                      </Box>
-                      {item.quantity && item.quantity > 1 && (
-                        <Box as="span" className="text-xs font-mono text-accent font-semibold shrink-0">
-                          x{item.quantity}
-                        </Box>
-                      )}
-                    </Box>
-                  </Stack>
+                  {/* Interactive Checkbox */}
+                  <div
+                    aria-label={`Mark ${item.name} as packed`}
+                    className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
+                      isPacked
+                        ? 'bg-brand-emerald border-brand-emerald text-black'
+                        : 'border-line/80 bg-muted/60 hover:border-accent'
+                    }`}
+                  >
+                    {isPacked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </div>
+                </div>
 
-                  {/* Explicit Rationale Section */}
-                  <Box padding={3} radius="md" surface="subtle" border className="border-line/60">
-                    <Box display="flex" align="start" gap={2}>
-                      <Info className="w-3.5 h-3.5 text-accent shrink-0" />
-                      <Box as="p" className="text-xs text-text-dim leading-relaxed">
-                        <strong className="text-text-main font-semibold">Schedule Rationale:</strong>{' '}
-                        {item.rationale}
-                      </Box>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Stack>
-            </Box>
+                <div className="flex items-center justify-between gap-2">
+                  <h4 className={`text-sm font-bold leading-snug transition-colors ${
+                    isPacked ? 'text-text-dim line-through' : 'text-text-main'
+                  }`}>
+                    {item.name}
+                  </h4>
+                  {item.quantity && item.quantity > 1 && (
+                    <span className="text-xs font-mono text-accent font-semibold shrink-0">
+                      x{item.quantity}
+                    </span>
+                  )}
+                </div>
+
+                {/* Explicit Rationale Section */}
+                <div className="p-2.5 rounded-lg bg-muted/50 border border-line/40 text-xs text-text-dim leading-relaxed flex items-start gap-2">
+                  <Info className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-text-main font-semibold">Why pack this:</strong>{' '}
+                    {item.rationale}
+                  </div>
+                </div>
+              </div>
+            </div>
           );
         })}
       </Grid>
     </Stack>
   );
 }
+

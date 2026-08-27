@@ -14,55 +14,69 @@ describe('AgentMindTrace Suite', () => {
 
   it('renders AgentMindTrace container and header correctly', () => {
     render(<AgentMindTrace />);
-    expect(screen.getByText('WCS Navigator Reasoning & Logistics Trace')).toBeDefined();
-    expect(screen.getAllByText('Download Calendar (.ics)').length).toBeGreaterThan(0);
+    expect(screen.getByText(/Personalized Schedule & Travel Buffer/i)).toBeDefined();
+    expect(screen.getAllByText(/Download Calendar \(\.ics\)|Download \(\.ics\)/i).length).toBeGreaterThan(0);
   });
 
   it('renders ExecutionProgressBar sub-tasks', () => {
     render(<ExecutionProgressBar />);
-    expect(screen.getByText('Agent Reasoning Progress')).toBeDefined();
-    expect(screen.getByText('Extracted text from PDF')).toBeDefined();
-    expect(screen.getByText('Applied persona boundaries')).toBeDefined();
-    expect(screen.getByText('Calculated travel buffer')).toBeDefined();
-    expect(screen.getByText('Packaged RFC 5545 calendar')).toBeDefined();
+    expect(screen.getByText('Schedule Optimization Steps')).toBeDefined();
+    expect(screen.getByText('Parsed Event Timetable')).toBeDefined();
+    expect(screen.getByText('Applied Division Filters')).toBeDefined();
+    expect(screen.getByText('Calculated Travel Buffer')).toBeDefined();
+    expect(screen.getByText('Generated Calendar File')).toBeDefined();
   });
 
   it('renders FlightBufferTimeline buffer steps and logistics formula', () => {
     render(<FlightBufferTimeline />);
-    expect(screen.getByText('Flight & Buffer Timeline')).toBeDefined();
-    expect(screen.getByText('Logistics Equation')).toBeDefined();
-    expect(screen.getByText('Earliest Staging Time')).toBeDefined();
-    expect(screen.getByText('Latest Flight Arrival Deadline')).toBeDefined();
+    expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
+    expect(screen.getByText('Arrival Timeline Formula')).toBeDefined();
+    expect(screen.getByText('Target Flight Landing Deadline')).toBeDefined();
+    expect(screen.getByText('Novice Strictly Swing Staging Call')).toBeDefined();
   });
 
-  it('toggles tabs between included and filtered sessions in FilteringAuditMatrix', () => {
+  it('toggles tabs between all, included, and filtered sessions in FilteringAuditMatrix', () => {
     render(<FilteringAuditMatrix />);
     expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
 
-    const filteredTabBtn = screen.getByRole('button', { name: /Filtered Out Sessions/i });
+    const filteredTabBtn = screen.getByRole('tab', { name: /Filtered Out/i });
     fireEvent.click(filteredTabBtn);
 
     expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();
     expect(screen.getByText(/User selected Novice/i)).toBeDefined();
+
+    const includedTabBtn = screen.getByRole('tab', { name: /Matched & Scheduled/i });
+    fireEvent.click(includedTabBtn);
+
+    expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
+    expect(screen.queryByText('Advanced & All-Star Jack & Jill')).toBeNull();
+
+    const allTabBtn = screen.getByRole('tab', { name: /All/i });
+    fireEvent.click(allTabBtn);
+    expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
+    expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();
   });
 
   it('renders PackingManifestCard items and rationale sections', () => {
     render(<PackingManifestCard />);
-    expect(screen.getByText('Context-Backed Packing Manifest')).toBeDefined();
+    expect(screen.getByText('Smart Packing Checklist')).toBeDefined();
     expect(screen.getByText('Suede-soled WCS Shoes (2 Pairs)')).toBeDefined();
     expect(screen.getByText(/Schedule contains 8\+ hours of intensive social dancing/i)).toBeDefined();
   });
 
-  it('triggers downloadIcsFile Blob download correctly without throwing error', () => {
+  it('triggers downloadIcsFile and displays visual toast notification', () => {
     const createObjectURLMock = vi.fn().mockReturnValue('blob:mock-url');
     const revokeObjectURLMock = vi.fn();
     global.URL.createObjectURL = createObjectURLMock;
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
-    const icsData = 'BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR';
-    downloadIcsFile(icsData, 'test-schedule.ics');
+    render(<AgentMindTrace />);
+    const downloadBtns = screen.getAllByText(/Download Calendar \(\.ics\)/i);
+    fireEvent.click(downloadBtns[0]);
 
     expect(createObjectURLMock).toHaveBeenCalled();
-    expect(revokeObjectURLMock).toHaveBeenCalled();
+    expect(screen.getByText('Calendar Downloaded (.ics)')).toBeDefined();
+    expect(screen.getByText(/wcs-navigator-schedule\.ics/i)).toBeDefined();
   });
 });
+

@@ -1,156 +1,153 @@
 import React, { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { Cpu, Search, Sparkles, Calendar, ShieldCheck, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Cpu, Search, Calendar, ShieldCheck, Zap, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 export const WorkflowExplainer: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Box surface="surface" radius="xl" border className="border-line/70 overflow-hidden">
-      {/* Collapsible Header Banner */}
-      <Box
-        as="button"
+    <div className="w-full bg-surface border border-line/70 rounded-2xl overflow-hidden shadow-md">
+      {/* Collapsible Header Banner (Balanced Vertical Alignment) */}
+      <button
+        id="workflow-explainer-trigger"
         type="button"
+        aria-expanded={isExpanded}
+        aria-controls="workflow-explainer-content"
         onClick={() => setIsExpanded(!isExpanded)}
-        width="full"
-        paddingX={6}
-        paddingY={4}
-        display="flex"
-        align="center"
-        justify="between"
-        surface="muted"
-        className="text-left hover:bg-surface/80 transition-colors border-b border-line/40"
+        className="w-full px-6 py-4 flex items-center justify-between bg-muted/50 hover:bg-muted/80 transition-colors text-left cursor-pointer border-b border-line/40 min-h-[56px]"
       >
-        <Box display="flex" align="center" gap={3}>
-          <Box
-            padding={2}
-            radius="lg"
-            className="bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan shrink-0"
-          >
+        <div className="flex items-center gap-3.5">
+          <div className="p-2 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan shrink-0">
             <Icon icon={Cpu} size="sm" />
-          </Box>
-          <Stack gap={0.5}>
-            <Box display="flex" align="center" gap={2}>
-              <Text variant="headline" size="sm" weight="font-bold" color="main">
-                Agent Architecture & Two-Pass Intelligence
-              </Text>
-              <Text size="micro" weight="font-bold" radius="sm" paddingX={2} paddingY={0.5} className="bg-brand-cyan/20 text-brand-cyan">
-                DEMO GUIDE
-              </Text>
-            </Box>
-            <Text size="xs" color="dim">
-              How Gemini 3.5 Flash scans visual schedule PDFs, computes backward arrival buffers, and streams calendar files.
-            </Text>
-          </Stack>
-        </Box>
+          </div>
+          <div className="flex flex-col space-y-0.5">
+            <div className="flex items-center gap-2.5">
+              <span className="text-sm font-bold text-text-main">
+                How WCS Navigator Works
+              </span>
+              <span className="text-[10px] font-mono font-bold rounded px-2 py-0.5 bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30">
+                GUIDE
+              </span>
+            </div>
+            <p className="text-xs text-text-dim">
+              How your convention schedule is read, filtered by your dance level, and synced to your calendar.
+            </p>
+          </div>
+        </div>
 
-        <Box display="flex" align="center" gap={1} color="dim" className="shrink-0 text-xs font-mono font-medium">
-          <span>{isExpanded ? 'Hide Architecture' : 'View Workflow'}</span>
+        <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-text-dim hover:text-white shrink-0">
+          <span>{isExpanded ? 'Hide Details' : 'How It Works'}</span>
           <Icon icon={isExpanded ? ChevronUp : ChevronDown} size="xs" />
-        </Box>
-      </Box>
+        </div>
+      </button>
 
-      {/* Expanded Workflow Diagrams & Badges */}
+      {/* Expanded Workflow Cards & Standards (Generous 24px / p-6 Padding) */}
       {isExpanded && (
-        <Box padding={6} display="flex" flex="col" gap={6}>
-          {/* Architecture Visual Grid */}
-          <Grid cols={{ base: 1, md: 3 }} gap={4}>
+        <div
+          id="workflow-explainer-content"
+          role="region"
+          aria-labelledby="workflow-explainer-trigger"
+          className="p-6 space-y-6"
+        >
+          {/* Vertical Stack Cards (No Split Columns) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Step 1 Card */}
-            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
-              <Stack gap={2}>
-                <Box display="flex" align="center" gap={2}>
-                  <Box padding={1.5} radius="md" className="bg-brand-cyan/20 text-brand-cyan">
+            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan">
                     <Icon icon={Search} size="xs" />
-                  </Box>
-                  <Text size="xs" weight="font-bold" uppercase tracking="wider" color="accent">
-                    Pass 1: Vision Pre-Scan
-                  </Text>
-                </Box>
-                <Text size="xs" color="main" weight="font-bold">
-                  Unstructured Schedule Discovery
-                </Text>
-                <Text size="micro" color="dim" leading="relaxed">
-                  Gemini Flash scans multi-room PDF layouts to extract workshop tiers, competitive divisions, and theme nights, synthesizing a dynamic query form with &ldquo;Why We Ask This&rdquo; explainability.
-                </Text>
-              </Stack>
-              <Box marginTop={3} padding={2} radius="sm" className="bg-surface/60 border border-line/40">
-                <Text size="micro" variant="mono" color="dim">
-                  Endpoint: <span className="text-brand-cyan">POST /discover</span>
-                </Text>
-              </Box>
-            </Box>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-cyan">
+                    Step 1: Schedule Reading
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-text-main">
+                  Schedule Discovery
+                </h4>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Reads multi-room convention timetables to identify workshop levels, competitive divisions, and late-night social themes.
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
+                <span className="text-xs text-text-dim block">
+                  Extracts: <strong className="text-brand-cyan">Workshops, Prelims &amp; Socials</strong>
+                </span>
+              </div>
+            </div>
 
             {/* Step 2 Card */}
-            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
-              <Stack gap={2}>
-                <Box display="flex" align="center" gap={2}>
-                  <Box padding={1.5} radius="md" className="bg-brand-amber/20 text-brand-amber">
+            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-brand-amber/20 text-brand-amber">
                     <Icon icon={Zap} size="xs" />
-                  </Box>
-                  <Text size="xs" weight="font-bold" uppercase tracking="wider" color="accent">
-                    Pass 2: Reason & Buffer
-                  </Text>
-                </Box>
-                <Text size="xs" color="main" weight="font-bold">
-                  Temporal Logistics Math
-                </Text>
-                <Text size="micro" color="dim" leading="relaxed">
-                  Fuses your questionnaire answers with the schedule. Executes step-down backward math (Staging &minus; Transit &minus; Hotel &minus; Warmup = Target Landing) and builds an audit matrix.
-                </Text>
-              </Stack>
-              <Box marginTop={3} padding={2} radius="sm" className="bg-surface/60 border border-line/40">
-                <Text size="micro" variant="mono" color="dim">
-                  Engine: <span className="text-brand-amber">calculate_flight_buffer()</span>
-                </Text>
-              </Box>
-            </Box>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">
+                    Step 2: Buffer Calculation
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-text-main">
+                  Travel &amp; Rest Planning
+                </h4>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Calculates backward transit, hotel check-in, and warm-up buffers before your first event so you never rush into competition calls.
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
+                <span className="text-xs text-text-dim block">
+                  Calculates: <strong className="text-brand-amber">Arrival Deadline &amp; Rest Times</strong>
+                </span>
+              </div>
+            </div>
 
             {/* Step 3 Card */}
-            <Box surface="muted" padding={4} radius="lg" border display="flex" flex="col" justify="between" className="border-line/50">
-              <Stack gap={2}>
-                <Box display="flex" align="center" gap={2}>
-                  <Box padding={1.5} radius="md" className="bg-brand-emerald/20 text-brand-emerald">
+            <div className="bg-muted/40 border border-line/60 rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-accent/40 transition-all">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-brand-emerald/20 text-brand-emerald">
                     <Icon icon={Calendar} size="xs" />
-                  </Box>
-                  <Text size="xs" weight="font-bold" uppercase tracking="wider" color="accent">
-                    In-Memory Streaming
-                  </Text>
-                </Box>
-                <Text size="xs" color="main" weight="font-bold">
-                  Zero-Disk RFC 5545 Export
-                </Text>
-                <Text size="micro" color="dim" leading="relaxed">
-                  Outputs RFC 5545 valid .ics calendar content and packing manifest directly over HTTP. Zero server disk writes or database persistence, protecting user privacy.
-                </Text>
-              </Stack>
-              <Box marginTop={3} padding={2} radius="sm" className="bg-surface/60 border border-line/40">
-                <Text size="micro" variant="mono" color="dim">
-                  Output: <span className="text-brand-emerald">text/calendar (.ics)</span>
-                </Text>
-              </Box>
-            </Box>
-          </Grid>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-brand-emerald">
+                    Step 3: Calendar Sync
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-text-main">
+                  Ready-to-Use Calendar
+                </h4>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Generates an .ics calendar file formatted with your selected workshops, competition alarms, and packing checklist.
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-surface/80 border border-line/40">
+                <span className="text-xs text-text-dim block">
+                  Format: <strong className="text-brand-emerald">Apple &amp; Google Calendar (.ics)</strong>
+                </span>
+              </div>
+            </div>
+          </div>
 
-          {/* Standards & Badges Footer */}
-          <Box display="flex" align="center" justify="between" wrap="wrap" gap={3} border="t" paddingTop={4} className="border-line/40">
-            <Box display="flex" align="center" gap={4} wrap="wrap">
-              <Box display="flex" align="center" gap={1.5}>
+          {/* Standards & Badges Footer with Generous Padding */}
+          <div className="pt-4 border-t border-line/50 flex items-center justify-between flex-wrap gap-4 text-xs text-text-dim">
+            <div className="flex items-center gap-6 flex-wrap">
+              <div className="flex items-center gap-2">
                 <Icon icon={ShieldCheck} size="xs" color="accent" />
-                <Text size="micro" color="dim">Zero-Disk Privacy Guarantee</Text>
-              </Box>
-              <Box display="flex" align="center" gap={1.5}>
+                <span>Private &amp; Secure</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <Icon icon={Sparkles} size="xs" color="accent" />
-                <Text size="micro" color="dim">P0 Explainability Compliance</Text>
-              </Box>
-              <Box display="flex" align="center" gap={1.5}>
+                <span>Personalized Recommendations</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <Icon icon={Cpu} size="xs" color="accent" />
-                <Text size="micro" color="dim">Google GenAI SDK (Gemini Flash)</Text>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+                <span>Instant Calendar Download</span>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
+

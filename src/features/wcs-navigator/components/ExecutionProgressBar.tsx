@@ -8,10 +8,10 @@ export interface ExecutionProgressBarProps {
 }
 
 const DEFAULT_TASKS: SubTask[] = [
-  { id: '1', label: 'Extracted text from PDF', status: 'completed', detail: '100% parsed (34 pages)' },
-  { id: '2', label: 'Applied persona boundaries', status: 'completed', detail: 'Filtered Novice & Open Jack & Jill' },
-  { id: '3', label: 'Calculated travel buffer', status: 'completed', detail: 'Staging, Warmup, Hotel & Transit' },
-  { id: '4', label: 'Packaged RFC 5545 calendar', status: 'completed', detail: '.ics format generated' },
+  { id: '1', label: 'Parsed Event Timetable', status: 'completed', detail: 'Identified all workshops, ballrooms, and competitions' },
+  { id: '2', label: 'Applied Division Filters', status: 'completed', detail: 'Selected sessions matching your level & preferences' },
+  { id: '3', label: 'Calculated Travel Buffer', status: 'completed', detail: 'Computed warmup, check-in & transit times' },
+  { id: '4', label: 'Generated Calendar File', status: 'completed', detail: 'Ready for Apple & Google Calendar' },
 ];
 
 const TASK_ICONS = [FileText, UserCheck, Clock, Calendar];
@@ -25,10 +25,10 @@ export function ExecutionProgressBar({ tasks = DEFAULT_TASKS, className }: Execu
       <Box display="flex" align="center" justify="between">
         <Stack gap={1}>
           <Box as="h3" className="text-lg font-bold text-text-main">
-            Agent Reasoning Progress
+            Schedule Optimization Steps
           </Box>
           <Box as="p" className="text-xs text-text-dim">
-            Live sub-task execution timeline
+            Summary of how your personalized plan was organized
           </Box>
         </Stack>
         <Box paddingX={3} paddingY={1} radius="md" className="text-xs font-mono font-semibold bg-accent/10 text-accent border border-accent/20">
