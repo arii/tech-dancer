@@ -14,6 +14,8 @@ export interface AgentMindTraceProps {
   className?: string;
 }
 
+const FRIDAY_AFTERNOON_REGEX = /(?:12|[1-6]):\d{2}\s*pm/i;
+
 const DEFAULT_ICS = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//WCS Navigator//Agent Mind Calendar//EN
@@ -73,7 +75,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
     // Flight landed late (+30m or more): mark Friday afternoon workshops as time conflicts
     return rawSessions.map((session) => {
       const lowerTime = session.time.toLowerCase();
-      const isFridayAfternoon = lowerTime.includes('fri') && /(?:12|1|2|3|4):\d{2}\s*pm/i.test(session.time);
+      const isFridayAfternoon = lowerTime.includes('fri') && FRIDAY_AFTERNOON_REGEX.test(session.time);
       if (isFridayAfternoon) {
         return {
           ...session,
@@ -93,7 +95,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         <Box
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl motion-safe:transition-all motion-safe:duration-300 motion-safe:transform translate-y-0 opacity-100"
         >
           <Box display="flex" align="start" justify="between" gap={3}>
             <Box display="flex" align="start" gap={3}>
