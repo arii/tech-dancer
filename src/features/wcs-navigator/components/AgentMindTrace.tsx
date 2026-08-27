@@ -7,11 +7,12 @@ import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FilteringAuditMatrix } from './FilteringAuditMatrix';
 import { ThemeDressCodeCard } from './ThemeDressCodeCard';
 import { downloadIcsFile } from '../utils/icsDownloader';
-import { Download, Brain, Sparkles, CheckCircle2, X } from 'lucide-react';
+import { Download, Brain, Sparkles, CheckCircle2, X, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 export interface AgentMindTraceProps {
   trace?: Partial<AgentDecisionTrace>;
+  visualScheduleMarkdown?: string;
   className?: string;
 }
 
@@ -39,8 +40,9 @@ DESCRIPTION:Matched Track: All-Levels Workshop.
 END:VEVENT
 END:VCALENDAR`;
 
-export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className }) => {
+export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualScheduleMarkdown, className }) => {
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
   const [flightOffset, setFlightOffset] = useState<number>(0);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -52,11 +54,8 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
     };
   }, []);
 
-  const handleDownloadCalendar = () => {
-    const icsString = trace?.icsContent || DEFAULT_ICS;
-    downloadIcsFile(icsString, 'wcs-navigator-schedule.ics');
-
-    // Trigger instant visual toast notification feedback
+  const showFeedbackToast = (title: string, message: string, file: string) => {
+    setToastMessage({ title, message, file });
     setShowToast(true);
     if (toastTimeoutRef.current) {
       clearTimeout(toastTimeoutRef.current);
@@ -64,6 +63,34 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
     toastTimeoutRef.current = setTimeout(() => {
       setShowToast(false);
     }, 4500);
+  };
+
+  const handleDownloadCalendar = () => {
+    const icsString = trace?.icsContent || DEFAULT_ICS;
+    downloadIcsFile(icsString, 'wcs-navigator-schedule.ics');
+    showFeedbackToast(
+      'Calendar Downloaded (.ics)',
+      'is ready to import into Apple Calendar, Google Calendar, or Outlook.',
+      'wcs-navigator-schedule.ics'
+    );
+  };
+
+  const handleDownloadVisualSchedule = () => {
+    const content = visualScheduleMarkdown || "# Your WCS Visual Schedule\nNo summary available.";
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'wcs-visual-schedule.md');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showFeedbackToast(
+      'Visual Schedule Downloaded',
+      'is ready to view on your device.',
+      'wcs-visual-schedule.md'
+    );
   };
 
   // Dynamically recalculate sessions when flight arrival time is adjusted (Item 5)
@@ -109,10 +136,10 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
               </Box>
               <Stack gap={0.5}>
                 <Text weight="font-bold" size="sm" color="main">
-                  Calendar Downloaded (.ics)
+                  {toastMessage.title}
                 </Text>
                 <Text size="xs" color="dim" leading="relaxed">
-                  <span className="text-white font-mono font-semibold">wcs-navigator-schedule.ics</span> is ready to import into Apple Calendar, Google Calendar, or Outlook.
+                  <span className="text-white font-mono font-semibold">{toastMessage.file}</span> {toastMessage.message}
                 </Text>
               </Stack>
             </Box>
@@ -156,19 +183,29 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             </Box>
           </Stack>
 
-          <Button
-            onClick={handleDownloadCalendar}
-            variant="accent"
-            size="md"
-            icon={Download}
-          >
-            Download Calendar (.ics)
-          </Button>
+          <Stack gap={3}>
+            <Button
+              onClick={handleDownloadCalendar}
+              variant="accent"
+              size="md"
+              icon={Download}
+            >
+              Download Calendar (.ics)
+            </Button>
+            <Button
+              onClick={handleDownloadVisualSchedule}
+              variant="primary"
+              size="md"
+              icon={FileText}
+            >
+              Download Mobile Schedule
+            </Button>
+          </Stack>
         </Box>
 
         <Box display="flex" align="center" gap={2} marginTop={4} className="text-xs font-mono text-text-dim">
           <Sparkles className="w-3.5 h-3.5 text-accent shrink-0" />
-          <Box as="span">Ready to add directly to Apple Calendar, Google Calendar, or Outlook</Box>
+          <Box as="span">Sync calendar or save a mobile-friendly Markdown summary for your lock screen</Box>
         </Box>
       </Box>
 

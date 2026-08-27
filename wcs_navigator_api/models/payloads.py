@@ -63,4 +63,5 @@ class GenerateResponse(BaseModel):
 
     decision_trace: AgentDecisionTrace = Field(alias="decisionTrace")
     ics_content: str = Field(alias="icsContent")
+    visual_schedule_markdown: Optional[str] = Field(default="", alias="visualScheduleMarkdown")
 

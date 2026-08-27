@@ -10,7 +10,6 @@ from wcs_navigator_api.models.logistics import (
     AgentDecisionTrace,
     AuditSession,
     BufferCalculationResult,
-    PackingItem,
     SubTask,
     ThemeDressCode,
 )
@@ -166,9 +165,10 @@ async def generate_calendar(
         SubTask(**st)
         for st in raw_trace.get("subTasks", raw_trace.get("sub_tasks", []))
     ] if raw_trace.get("subTasks") or raw_trace.get("sub_tasks") else [
-        SubTask(id="1", label="Parsed schedule & matched preferences", status="completed", detail="Processed schedule against user profile"),
-        SubTask(id="2", label="Calculated travel buffer", status="completed", detail=buffer_result.formula_summary),
-        SubTask(id="3", label="Filtered workshops & assembled calendar", status="completed", detail="Tailored schedule generated"),
+        SubTask(id="1", label="[🟢 DISCOVERY]", status="completed", detail="Parsed schedule & matched preferences"),
+        SubTask(id="2", label="[🟢 FILTERING]", status="completed", detail="Processed schedule against user profile"),
+        SubTask(id="3", label="[🟢 CALCULATING BUFFER MATH]", status="completed", detail=buffer_result.formula_summary),
+        SubTask(id="4", label="[🟢 PACKAGING]", status="completed", detail="Tailored schedule generated"),
     ]
 
     sessions = [
@@ -181,24 +181,21 @@ async def generate_calendar(
         for t in raw_trace.get("themeDressCodes", raw_trace.get("theme_dress_codes", []))
     ] if raw_trace.get("themeDressCodes") or raw_trace.get("theme_dress_codes") else None
 
-    packing_manifest = [
-        PackingItem(**p)
-        for p in raw_trace.get("packingManifest", raw_trace.get("packing_manifest", []))
-    ] if raw_trace.get("packingManifest") or raw_trace.get("packing_manifest") else None
-
     raw_ics = raw_trace.get("icsContent", raw_trace.get("ics_content", response_data.get("icsContent", response_data.get("ics_content", ""))))
     ics_content = ensure_flight_deadline_in_ics(raw_ics, buffer_result)
+
+    visual_schedule_markdown = response_data.get("visualScheduleMarkdown", response_data.get("visual_schedule_markdown", ""))
 
     decision_trace = AgentDecisionTrace(
         subTasks=sub_tasks,
         bufferTimeline=buffer_result,
         sessions=sessions,
         themeDressCodes=theme_dress_codes,
-        packingManifest=packing_manifest,
         icsContent=ics_content,
     )
 
     return GenerateResponse(
         decisionTrace=decision_trace,
         icsContent=ics_content,
+        visualScheduleMarkdown=visual_schedule_markdown,
     )
