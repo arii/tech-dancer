@@ -108,17 +108,48 @@ export default function ResearchDetail() {
         />
         <EditorialLayout
           onBack={() => navigate('/research')}
-          backLabel="Back to Portfolio"
+          backLabel="Back to Experiments"
           header={
-            <EditorialHeader
-              category={study.category}
-              date={study.date}
-              readTime={rt}
-              title={study.title}
-              dek={study.excerpt}
-              author={study.author}
-              authorAvatarSrc={study.authorImage}
-            />
+            <Stack gap={4}>
+              {/* Primary Portfolio CTA Banner */}
+              <Stack
+                direction={{ base: 'col', sm: 'row' }}
+                align={{ base: 'start', sm: 'center' }}
+                justify="between"
+                gap={4}
+                marginBottom={4}
+                padding={4}
+                radius="md"
+                border
+                className="bg-accent/10 border-accent/30"
+              >
+                <Stack gap={1}>
+                  <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
+                    Official Primary Portfolio
+                  </Text>
+                  <Text variant="body" size="xs" color="main">
+                    For production software engineering, autonomous systems research, and professional inquiries, visit Ariel's main site.
+                  </Text>
+                </Stack>
+                <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" shrink={0}>
+                  <Stack direction="row" align="center" gap={1}>
+                    <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
+                      arii.github.io →
+                    </Text>
+                  </Stack>
+                </Box>
+              </Stack>
+
+              <EditorialHeader
+                category={study.category}
+                date={study.date}
+                readTime={rt}
+                title={study.title}
+                dek={study.excerpt}
+                author={study.author}
+                authorAvatarSrc={study.authorImage}
+              />
+            </Stack>
           }
           footer={
             <Stack gap={12}>
@@ -201,15 +232,39 @@ export default function ResearchDetail() {
     );
   }
 
-  if (!tool) {
+  if (!tool || tool.taxonomyBucket === 'migrated') {
+    const migratedTitle = tool?.title || 'Project Migrated';
+    const migratedUrl = tool?.migratedUrl || 'https://arii.github.io';
+
     return (
-      <Box padding="panel" textAlign="center">
+      <Box padding="panel" textAlign="center" maxWidth="3xl" marginX="auto">
+        <SEO
+          title={`${migratedTitle} - Migrated`}
+          description="This project has been migrated to Ariel Anders' primary portfolio at arii.github.io."
+        />
         <Stack gap={8} align="center">
-          <Search size={48} className="opacity-low" />
-          <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Portfolio</Text>
+          <Box width={16} height={16} surface="muted" radius="full" display="flex" align="center" justify="center">
+            <Database size={32} className="text-accent" />
           </Box>
+          <Stack gap={2}>
+            <Text variant="display" size="3xl" weight="font-black">{migratedTitle}</Text>
+            <Text variant="body" size="lg" color="dim">
+              This flagship project is hosted on Ariel's official primary portfolio for production engineering and robotics work.
+            </Text>
+          </Stack>
+
+          <Stack direction={{ base: "col", sm: "row" }} gap={4}>
+            <Box as="a" href={migratedUrl} target="_blank" rel="noopener noreferrer">
+              <ActionButton variant="primary" paddingX={6} paddingY={3}>
+                View on arii.github.io →
+              </ActionButton>
+            </Box>
+            <Box as="button" onClick={() => navigate('/research')}>
+              <ActionButton variant="secondary" paddingX={6} paddingY={3}>
+                Explore Live Experiments
+              </ActionButton>
+            </Box>
+          </Stack>
         </Stack>
       </Box>
     );
@@ -236,7 +291,7 @@ export default function ResearchDetail() {
           cursor="pointer"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Experiments</Text>
         </Box>
 
         <Box border surface="surface" radius="md" padding={{ base: 4, md: 12 }}>
