@@ -60,12 +60,16 @@ function ArielProfile() {
       />
 
       {/* Primary Portfolio CTA Banner */}
-      <Box
+      <Stack
+        direction={{ base: 'col', sm: 'row' }}
+        align={{ base: 'start', sm: 'center' }}
+        justify="between"
+        gap={4}
         marginTop={6}
         padding={4}
         radius="md"
         border
-        className="bg-accent/10 border-accent/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+        className="bg-accent/10 border-accent/30"
       >
         <Stack gap={1}>
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
@@ -75,12 +79,14 @@ function ArielProfile() {
             For robotics software, agentic engineering, and technical leadership, please visit my official primary portfolio.
           </Text>
         </Stack>
-        <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" className="shrink-0">
-          <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline flex items-center gap-1">
-            arii.github.io →
-          </Text>
+        <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" shrink={0}>
+          <Stack direction="row" align="center" gap={1}>
+            <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
+              arii.github.io →
+            </Text>
+          </Stack>
         </Box>
-      </Box>
+      </Stack>
 
       <Stack gap={16} marginTop={10}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
