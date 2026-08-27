@@ -115,7 +115,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
               Personalized Schedule &amp; Travel Buffer
             </Box>
             <Box as="p" className="text-sm text-text-dim leading-relaxed">
-              Here is your customized weekend plan: arrival buffer timeline, workshop filter breakdown, and smart packing suggestions.
+              Here is your customized weekend plan: arrival buffer timeline, workshop schedule, and party themes &amp; dress codes.
             </Box>
           </Stack>
 
