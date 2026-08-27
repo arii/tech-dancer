@@ -1,52 +1,90 @@
-import { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import React, { useState, useMemo } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
-import { Compass, ToggleLeft, ToggleRight, Sparkles, CheckCircle, ArrowRight, Layers } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { ActionButton } from '@/components/ui/ActionButton';
-import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from './data/californiaEvents';
-import { WCSPersona } from './data/personas';
-import { EventSelector } from './components/EventSelector';
-import { PersonaChips } from './components/PersonaChips';
-import { DropzoneUpload } from './components/DropzoneUpload';
+import { ToggleLeft, ToggleRight, ArrowLeft, RefreshCw, Layers } from 'lucide-react';
+import { CALIFORNIA_2026_EVENTS } from './data/californiaEvents';
+import { DANCE_PERSONAS } from './data/personas';
+import { MOCK_EVENT_RESULTS, createGenericMockResult, EventMockData } from './data/mockResults';
+import { EventSearchHero } from './components/EventSearchHero';
+import { AgentDiscoveryTransition } from './components/AgentDiscoveryTransition';
+import { DynamicQuestionnaire } from './components/DynamicQuestionnaire';
+import { AgentMindTrace } from './components/AgentMindTrace';
+import { WorkflowExplainer } from './components/WorkflowExplainer';
+import { DiscoveryResponse, PersonaChip, QuestionAnswerValue } from './types/navigator';
+import { AgentDecisionTrace } from './types';
 
-export const WCSNavigatorPage = () => {
-  const [selectedEvent, setSelectedEvent] = useState<WCSCaliforniaEvent>(CALIFORNIA_2026_EVENTS[0]);
-  const [selectedPersona, setSelectedPersona] = useState<WCSPersona | null>(null);
+type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'results';
+
+export const WCSNavigatorPage: React.FC = () => {
+  const [step, setStep] = useState<WizardStep>('search');
   const [isMockMode, setIsMockMode] = useState<boolean>(true);
-  const [customFile, setCustomFile] = useState<File | null>(null);
-  const [customUrl, setCustomUrl] = useState<string | null>(null);
-  const [questionnaire, setQuestionnaire] = useState({
-    competitionLevel: 'Novice / New Competitor',
-    workshopInterest: 'All-Levels Technique',
-    socialDanceStyle: 'Active Social Dancing (Until 2 AM)',
-    sleepSchedule: 'Standard Night',
-    goals: 'Optimize workshop schedule and competition prelim timing'
-  });
 
-  const handleSelectPersona = (persona: WCSPersona) => {
-    setSelectedPersona(persona);
-    setQuestionnaire({
-      ...persona.sampleQuestionnaire
-    });
+  // Selected State
+  const [activeEventName, setActiveEventName] = useState<string>(CALIFORNIA_2026_EVENTS[0].name);
+  const [activeEventId, setActiveEventId] = useState<string>(CALIFORNIA_2026_EVENTS[0].id);
+
+  // Data State
+  const [discoveryData, setDiscoveryData] = useState<DiscoveryResponse>(
+    MOCK_EVENT_RESULTS['south-bay-dance-fling-2026'].discovery
+  );
+  const [decisionTrace, setDecisionTrace] = useState<AgentDecisionTrace>(
+    MOCK_EVENT_RESULTS['south-bay-dance-fling-2026'].decisionTrace
+  );
+
+  // Persona Chips Mapping
+  const personaChips: PersonaChip[] = useMemo(() => {
+    return DANCE_PERSONAS.map(p => ({
+      id: p.id,
+      label: p.name,
+      answers: {
+        competition_level: p.id === 'pure-social-dancer' ? 'social_only' : p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
+        wsdc_level: p.id === 'int-adv-competitor' ? 'advanced' : 'novice',
+        experience_level: p.id === 'pure-social-dancer' ? 'social_only' : 'novice',
+        late_night_energy: p.id === 'pure-social-dancer' || p.id === 'int-adv-competitor',
+        spectator_interest: true,
+        workshop_focus: p.id === 'workshop-enthusiast' ? ['technique', 'musicality', 'flow'] : ['technique']
+      }
+    }));
+  }, []);
+
+  // Discovery handlers
+  const handleStartDiscovery = (eventName: string, eventId?: string) => {
+    setActiveEventName(eventName);
+    if (eventId) setActiveEventId(eventId);
+    setStep('discovering');
+  };
+
+  const handleDiscoveryComplete = () => {
+    const mockData: EventMockData =
+      MOCK_EVENT_RESULTS[activeEventId] || createGenericMockResult(activeEventName);
+
+    setDiscoveryData(mockData.discovery);
+    setDecisionTrace(mockData.decisionTrace);
+    setStep('questionnaire');
+  };
+
+  // Questionnaire submission handler
+  const handleGenerateItinerary = (_answers: Record<string, QuestionAnswerValue>) => {
+    setStep('results');
   };
 
   return (
-    <Box as="section" maxWidth="7xl" marginX="auto" width="full">
+    <Box as="section" maxWidth="7xl" marginX="auto" width="full" paddingX={{ base: 4, sm: 6 }}>
       <SEO
-        title="WCS Navigator — California 2026 Event Planner & Persona Selector"
-        description="Interactive WCS Navigator entry view pre-loaded with 5 California 2026 West Coast Swing events, 4 social dance personas, PDF/URL schedule ingestion, and mock vs backend mode toggle."
-        keywords="West Coast Swing, WCS Navigator, California 2026 WCS events, dance persona, schedule ingestion, South Bay Dance Fling, Boogie by the Bay, US Open Swing"
+        title="WCS Navigator — AI Dance Convention Itinerary & Calendar Optimizer"
+        description="Google Search-style AI agent for West Coast Swing conventions. Pre-scans multi-room schedules, computes backward flight buffer math, and streams calendar files."
+        keywords="West Coast Swing, WCS Navigator, AI dance optimizer, California 2026 WCS events, flight buffer engine, schedule parser"
       />
 
       <Stack gap={8} width="full">
-        {/* Header & Mode Toggle Bar */}
+        {/* Top Header & Mode Toggle Bar */}
         <Box display="flex" justify="between" align="center" wrap="wrap" gap={4} border="b" paddingBottom={4}>
           <PageHeader
             label="DEVAI_NAVIGATOR"
             title="WCS Navigator (California 2026)"
-            subtitle="Preset selector, persona questionnaire, and PDF/URL schedule parser for West Coast Swing event weekend optimization."
+            subtitle="Search an event or drop a PDF schedule. Gemini Flash discovers session structures and personalizes your weekend."
             as="h1"
             paddingBottom={0}
             border="none"
@@ -74,193 +112,155 @@ export const WCSNavigatorPage = () => {
                 Mode: {isMockMode ? 'Mock Preset Mode' : 'Live Backend API'}
               </Text>
             </Box>
-            <Text size="micro" radius="sm" paddingX={2} paddingY={0.5} className={isMockMode ? "bg-brand-cyan/20 text-brand-cyan font-bold" : "bg-brand-amber/20 text-brand-amber font-bold"}>
+            <Text
+              size="micro"
+              radius="sm"
+              paddingX={2}
+              paddingY={0.5}
+              className={
+                isMockMode
+                  ? 'bg-brand-cyan/20 text-brand-cyan font-bold'
+                  : 'bg-brand-amber/20 text-brand-amber font-bold'
+              }
+            >
               {isMockMode ? 'INSTANT LOCAL DEMO' : 'REMOTE API'}
             </Text>
           </Box>
         </Box>
 
-        {/* 1. Event Selector */}
-        <Box surface="surface" padding={6} radius="xl" border className="border-line">
-          <EventSelector
-            selectedEventId={selectedEvent.id}
-            onSelectEvent={setSelectedEvent}
-          />
-        </Box>
-
-        {/* 2. Persona Quick-Select */}
-        <Box surface="surface" padding={6} radius="xl" border className="border-line">
-          <PersonaChips
-            selectedPersonaId={selectedPersona?.id || null}
-            onSelectPersona={handleSelectPersona}
-          />
-        </Box>
-
-        {/* 3. Dropzone Upload & URL Ingestion */}
-        <Box surface="surface" padding={6} radius="xl" border className="border-line">
-          <DropzoneUpload
-            onIngestPdf={(file) => {
-              setCustomFile(file);
-              setCustomUrl(null);
-            }}
-            onIngestUrl={(url) => {
-              setCustomUrl(url);
-              setCustomFile(null);
-            }}
-          />
-        </Box>
-
-        {/* 4. Active Parameters & Questionnaire Overview */}
-        <Grid cols={{ base: 1, lg: 12 }} gap={6} width="full">
-          {/* Configured Parameters Panel */}
-          <Box span={{ base: 1, lg: 7 }} surface="surface" padding={6} radius="xl" border className="border-line">
-            <Stack gap={4}>
-              <Box display="flex" align="center" gap={2} border="b" paddingBottom={3}>
-                <Icon icon={Compass} size="md" color="accent" />
-                <Text variant="headline" size="lg" weight="font-black">
-                  Active Navigator Configuration
-                </Text>
-              </Box>
-
-              <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                <Box padding={3} surface="muted" radius="md">
-                  <Text size="micro" color="accent" uppercase tracking="widest" weight="font-bold">Target Event</Text>
-                  <Text weight="font-black" size="sm" color="main" marginTop={1}>{selectedEvent.name}</Text>
-                  <Text size="micro" color="dim">{selectedEvent.location} • {selectedEvent.dates}</Text>
-                </Box>
-
-                <Box padding={3} surface="muted" radius="md">
-                  <Text size="micro" color="accent" uppercase tracking="widest" weight="font-bold">Active Persona</Text>
-                  <Text weight="font-black" size="sm" color="main" marginTop={1}>
-                    {selectedPersona ? selectedPersona.name : 'Custom / None'}
-                  </Text>
-                  <Text size="micro" color="dim">
-                    {selectedPersona ? selectedPersona.tagline : 'Manual Questionnaire Mode'}
-                  </Text>
-                </Box>
-
-                <Box padding={3} surface="muted" radius="md">
-                  <Text size="micro" color="accent" uppercase tracking="widest" weight="font-bold">Schedule Source</Text>
-                  <Text weight="font-black" size="sm" color="main" marginTop={1}>
-                    {customFile ? `PDF: ${customFile.name}` : customUrl ? `URL: ${customUrl}` : 'Official Preset Schedule'}
-                  </Text>
-                  <Text size="micro" color="dim">
-                    {isMockMode ? 'Mock Local Engine' : 'Live Parser API'}
-                  </Text>
-                </Box>
-
-                <Box padding={3} surface="muted" radius="md">
-                  <Text size="micro" color="accent" uppercase tracking="widest" weight="font-bold">Execution Engine</Text>
-                  <Text weight="font-black" size="sm" color="main" marginTop={1}>
-                    {isMockMode ? 'Mock Preset Mode' : 'Backend API Service'}
-                  </Text>
-                  <Text size="micro" color="dim">
-                    {isMockMode ? 'Deterministic local response' : 'Delegated API client'}
-                  </Text>
-                </Box>
-              </Grid>
-
-              {/* Questionnaire Auto-fill Inputs */}
-              <Stack gap={3} marginTop={2}>
-                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-                  Tailored Preferences & Objectives
-                </Text>
-
-                <Grid cols={{ base: 1, sm: 2 }} gap={3}>
-                  <Stack gap={1}>
-                    <Text size="micro" color="dim" weight="font-bold">Competition Level</Text>
-                    <input
-                      type="text"
-                      value={questionnaire.competitionLevel}
-                      onChange={(e) => setQuestionnaire({ ...questionnaire, competitionLevel: e.target.value })}
-                      className="bg-surface border border-line rounded text-xs text-white focus:outline-none focus:border-brand-cyan"
-                    />
-                  </Stack>
-                  <Stack gap={1}>
-                    <Text size="micro" color="dim" weight="font-bold">Workshop Track Focus</Text>
-                    <input
-                      type="text"
-                      value={questionnaire.workshopInterest}
-                      onChange={(e) => setQuestionnaire({ ...questionnaire, workshopInterest: e.target.value })}
-                      className="bg-surface border border-line rounded text-xs text-white focus:outline-none focus:border-brand-cyan"
-                    />
-                  </Stack>
-                  <Stack gap={1}>
-                    <Text size="micro" color="dim" weight="font-bold">Social Dance Style</Text>
-                    <input
-                      type="text"
-                      value={questionnaire.socialDanceStyle}
-                      onChange={(e) => setQuestionnaire({ ...questionnaire, socialDanceStyle: e.target.value })}
-                      className="bg-surface border border-line rounded text-xs text-white focus:outline-none focus:border-brand-cyan"
-                    />
-                  </Stack>
-                  <Stack gap={1}>
-                    <Text size="micro" color="dim" weight="font-bold">Sleep & Energy Profile</Text>
-                    <input
-                      type="text"
-                      value={questionnaire.sleepSchedule}
-                      onChange={(e) => setQuestionnaire({ ...questionnaire, sleepSchedule: e.target.value })}
-                      className="bg-surface border border-line rounded text-xs text-white focus:outline-none focus:border-brand-cyan"
-                    />
-                  </Stack>
-                </Grid>
-              </Stack>
-            </Stack>
-          </Box>
-
-          {/* Action CTA & Summary Card */}
-          <Box span={{ base: 1, lg: 5 }} surface="muted" padding={6} radius="xl" border display="flex" flex="col" justify="between" className="border-brand-cyan/30">
-            <Stack gap={4}>
-              <Box display="flex" align="center" gap={2}>
-                <Icon icon={Sparkles} size="md" color="accent" />
-                <Text variant="headline" size="lg" weight="font-black">
-                  Generate Itinerary
-                </Text>
-              </Box>
-
-              <Text size="sm" color="dim" leading="relaxed">
-                Ready to generate your custom West Coast Swing event weekend itinerary for <Text weight="font-bold" color="main">{selectedEvent.name}</Text>?
-              </Text>
-
-              <Stack gap={2}>
-                <Box display="flex" align="center" gap={2}>
-                  <Icon icon={CheckCircle} size="xs" color="accent" />
-                  <Text size="xs" color="dim">Pre-loaded with {CALIFORNIA_2026_EVENTS.length} California 2026 fixtures</Text>
-                </Box>
-                <Box display="flex" align="center" gap={2}>
-                  <Icon icon={CheckCircle} size="xs" color="accent" />
-                  <Text size="xs" color="dim">4 Social dance personas with auto-filled questionnaire</Text>
-                </Box>
-                <Box display="flex" align="center" gap={2}>
-                  <Icon icon={CheckCircle} size="xs" color="accent" />
-                  <Text size="xs" color="dim">PDF and URL custom schedule ingestion ready</Text>
-                </Box>
-              </Stack>
-            </Stack>
-
-            <Stack gap={3} marginTop={6}>
-              <ActionButton
-                variant="primary"
-                paddingX={6}
-                paddingY={3}
-                width="full"
-                onClick={() => {
-                  alert(`[WCS Navigator] Generated itinerary for ${selectedEvent.name} (${selectedPersona ? selectedPersona.name : 'Custom Persona'}) in ${isMockMode ? 'Mock' : 'Live Backend'} mode!`);
-                }}
+        {/* Step Progression Breadcrumb (Visible when not in search) */}
+        {step !== 'search' && (
+          <Box
+            surface="surface"
+            paddingX={5}
+            paddingY={3}
+            radius="xl"
+            border
+            display="flex"
+            align="center"
+            justify="between"
+            wrap="wrap"
+            gap={3}
+            className="border-line/70"
+          >
+            <Box display="flex" align="center" gap={3}>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => setStep('search')}
+                display="flex"
+                align="center"
+                gap={1.5}
+                className="text-xs text-dim hover:text-white transition-colors"
               >
-                Generate Weekend Navigator
-                <Icon icon={ArrowRight} size="sm" />
-              </ActionButton>
-
-              <Box display="flex" align="center" justify="center" gap={1}>
-                <Icon icon={Layers} size="xs" color="dim" />
-                <Text size="micro" color="dim">
-                  WCS Navigator Infrastructure
-                </Text>
+                <Icon icon={ArrowLeft} size="xs" />
+                <span>Change Event</span>
               </Box>
-            </Stack>
+              <Text size="micro" color="dim">•</Text>
+              <Text size="xs" weight="font-bold" color="main">
+                {activeEventName}
+              </Text>
+            </Box>
+
+            <Box display="flex" align="center" gap={2}>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => setStep('search')}
+                display="flex"
+                align="center"
+                gap={1.5}
+                paddingX={3}
+                paddingY={1}
+                radius="lg"
+                surface="muted"
+                className="text-xs font-mono text-dim hover:text-white transition-colors"
+              >
+                <Icon icon={RefreshCw} size="xs" />
+                <span>Start Over</span>
+              </Box>
+            </Box>
           </Box>
-        </Grid>
+        )}
+
+        {/* STEP 1: Search & Ingestion Hero */}
+        {step === 'search' && (
+          <EventSearchHero
+            onDiscoverPreset={(event) => handleStartDiscovery(event.name, event.id)}
+            onDiscoverPdf={(file) => handleStartDiscovery(file.name.replace(/\.pdf$/i, ''))}
+            onDiscoverUrl={(url) => handleStartDiscovery(url)}
+          />
+        )}
+
+        {/* STEP 1.5: Animated Agent Discovery Scanning Transition */}
+        {step === 'discovering' && (
+          <AgentDiscoveryTransition
+            eventName={activeEventName}
+            onComplete={handleDiscoveryComplete}
+          />
+        )}
+
+        {/* STEP 2: Discovered Dynamic Questionnaire & Persona Pre-Fill */}
+        {step === 'questionnaire' && (
+          <Stack gap={6} width="full">
+            <Box surface="surface" padding={6} radius="xl" border className="border-line/70">
+              <Stack gap={2} marginBottom={4} border="b" paddingBottom={3}>
+                <Text variant="headline" size="lg" weight="font-bold" color="main">
+                  Discovered Event Parameters
+                </Text>
+                <Text size="xs" color="dim">
+                  Gemini Flash identified the following structure for <span className="text-white font-semibold">{activeEventName}</span>. Select your preferences to tailor your schedule.
+                </Text>
+              </Stack>
+
+              <DynamicQuestionnaire
+                discoveryResponse={discoveryData}
+                personaChips={personaChips}
+                onSubmit={handleGenerateItinerary}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {/* STEP 3: Agent Mind Decision Explainer & Calendar Export */}
+        {step === 'results' && (
+          <Stack gap={6} width="full">
+            <Box display="flex" justify="between" align="center" wrap="wrap" gap={3}>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => setStep('questionnaire')}
+                display="flex"
+                align="center"
+                gap={2}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                surface="surface"
+                border
+                className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
+              >
+                <Icon icon={ArrowLeft} size="xs" />
+                <span>Adjust Preferences & Re-generate</span>
+              </Box>
+            </Box>
+
+            <AgentMindTrace
+              trace={decisionTrace}
+            />
+          </Stack>
+        )}
+
+        {/* DevAI Architecture & Workflow Explainer Banner */}
+        <WorkflowExplainer />
+
+        {/* Footer Tag */}
+        <Box display="flex" align="center" justify="center" gap={2} paddingY={4} color="dim">
+          <Icon icon={Layers} size="xs" />
+          <Text size="micro" variant="mono" color="dim">
+            WCS Navigator • Two-Pass Multimodal Agent Architecture
+          </Text>
+        </Box>
       </Stack>
     </Box>
   );
