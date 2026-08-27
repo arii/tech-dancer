@@ -19,10 +19,7 @@ export interface BooleanFieldProps {
 }
 
 export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = false, onChange }) => {
-  const [isExplainOpen, setIsExplainOpen] = useState(false);
   const isChecked = Boolean(value);
-  const disclosureId = `why-ask-${question.id}`;
-  const triggerId = `why-ask-trigger-${question.id}`;
 
   const explanationText = question.context || 'Gemini Flash AI factors this preference into sleep/recovery buffer calculations and personalizes packing checklist items.';
 
@@ -35,58 +32,16 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
               {question.title}
             </Text>
             {question.required && (
-              <Text variant="caption-bold" className="text-accent font-semibold" aria-label="Required">
+              <Text variant="caption-bold" className="text-brand-cyan font-semibold" aria-label="Required">
                 *
               </Text>
             )}
           </Stack>
-
-          {/* Inline "Why We Ask This" Disclosure Badge / Trigger */}
-          <Box
-            as="button"
-            id={triggerId}
-            type="button"
-            aria-expanded={isExplainOpen}
-            aria-controls={disclosureId}
-            onClick={() => setIsExplainOpen(!isExplainOpen)}
-            paddingX={2.5}
-            paddingY={1}
-            radius="full"
-            display="flex"
-            align="center"
-            gap={1.5}
-            className="min-h-8 text-xs font-mono text-dim hover:text-accent bg-surface/80 hover:bg-accent/10 border border-line hover:border-accent/40 transition-colors cursor-pointer"
-          >
-            <Icon icon={Sparkles} size="xs" color="accent" />
-            <span>Why We Ask This</span>
-            <Icon icon={isExplainOpen ? ChevronUp : ChevronDown} size="xs" />
-          </Box>
         </Stack>
 
-        {/* Explainability Disclosure Card */}
-        {isExplainOpen && (
-          <Box
-            id={disclosureId}
-            role="region"
-            aria-labelledby={triggerId}
-            surface="subtle"
-            radius="md"
-            padding={3}
-            className="border border-accent/30 bg-accent/5 transition-all"
-          >
-            <Stack direction="row" align="start" gap={2.5}>
-              <Icon icon={InfoIcon} size="sm" color="accent" marginTop={0.5} className="shrink-0" />
-              <Stack gap={1}>
-                <Text variant="caption-bold" color="accent" className="font-mono">
-                  Gemini Flash Decision Logic:
-                </Text>
-                <Text variant="caption-subtle" color="dim" className="leading-relaxed">
-                  {explanationText}
-                </Text>
-              </Stack>
-            </Stack>
-          </Box>
-        )}
+        <Text variant="caption-subtle" color="dim" className="leading-relaxed mt-1">
+          {explanationText}
+        </Text>
       </Stack>
 
       <Box
@@ -107,18 +62,18 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
         width="full"
         className={`min-h-11 border tap-target transition-all ${
           isChecked
-            ? 'border-accent ring-1 ring-accent bg-accent/10'
-            : 'border-line hover:border-line-hover hover:bg-surface'
+            ? 'border-brand-cyan ring-1 ring-brand-cyan bg-brand-cyan/10'
+            : 'border-line hover:border-brand-cyan/50 hover:bg-surface'
         }`}
       >
-        <Text variant="body-sm" className={isChecked ? 'text-accent font-semibold' : 'text-text-main'}>
+        <Text variant="body-sm" className={isChecked ? 'text-brand-cyan font-semibold' : 'text-text-main'}>
           {isChecked ? 'Enabled' : 'Disabled'}
         </Text>
         <Box
           display="flex"
           align="center"
           className={`w-11 h-6 rounded-full p-1 transition-colors ${
-            isChecked ? 'bg-accent' : 'bg-surface-subtle border border-line'
+            isChecked ? 'bg-brand-cyan' : 'bg-surface-subtle border border-line'
           }`}
         >
           <Box

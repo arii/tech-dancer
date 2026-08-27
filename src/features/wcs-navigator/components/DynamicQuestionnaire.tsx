@@ -77,6 +77,21 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     });
   }, [questions, answers]);
 
+  const visibleQuestions = useMemo(() => {
+    const visible: FormQuestion[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      visible.push(q);
+      const val = answers[q.id];
+      const hasAnswer =
+        val !== undefined &&
+        val !== null &&
+        (typeof val === 'string' ? val.trim() !== '' : Array.isArray(val) ? val.length > 0 : true);
+      if (!hasAnswer) break;
+    }
+    return visible;
+  }, [questions, answers]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isValid && onSubmit) {
@@ -88,7 +103,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     <Box as="form" onSubmit={handleSubmit} width="full">
       {/* Dynamic Question Inputs with Progressive Disclosure & Stagger Animation */}
       <Stack gap={6}>
-        {questions.map((question, index) => {
+        {visibleQuestions.map((question, index) => {
           const val = answers[question.id];
           const isActive = activeQuestionId === question.id;
 
