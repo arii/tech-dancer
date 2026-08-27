@@ -5,7 +5,7 @@ import {
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github, Trash2, Sliders
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis, AnalysisFocus, DesignPreset } from '@/features/ux-auditor/useUXAuditor';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis, AnalysisFocus, DesignPreset, UXReport } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
@@ -176,11 +176,6 @@ function ViewportFrame({ imageSrc, width, height, vpName }: ViewportFrameProps) 
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    setHasError(false);
-  }, [imageSrc]);
-
   return (
     <Box
       width="full"
@@ -254,7 +249,7 @@ function SeverityBadge({ severity }: { severity: number }) {
   );
 }
 
-function CondensedReportMatrix({ report }: { report: any }) {
+function CondensedReportMatrix({ report }: { report: UXReport }) {
   const [activeTab, setActiveTab] = useState<string>('All');
 
   const availableViewports = VIEWPORTS.filter(
@@ -327,6 +322,7 @@ function CondensedReportMatrix({ report }: { report: any }) {
         {/* CORS-Free Snapshot Preview Pane */}
         <Box span={{ base: 1, xl: 5 }} minHeight={350}>
           <ViewportFrame
+            key={activeSnapshotSrc || selectedVp.name}
             imageSrc={activeSnapshotSrc}
             width={selectedVp.width}
             height={selectedVp.height}
