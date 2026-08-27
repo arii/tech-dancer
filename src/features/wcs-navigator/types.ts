@@ -33,14 +33,6 @@ export interface AuditSession {
   justification: string;
 }
 
-export interface PackingItem {
-  id: string;
-  name: string;
-  category: 'footwear' | 'attire' | 'toiletries' | 'tech' | 'essentials';
-  rationale: string;
-  quantity?: number;
-}
-
 export interface ThemeDressCode {
   id: string;
   day: string;
@@ -56,7 +48,11 @@ export interface AgentDecisionTrace {
   bufferTimeline: FlightBuffer;
   sessions: AuditSession[];
   themeDressCodes?: ThemeDressCode[];
-  packingManifest?: PackingItem[];
   icsContent: string;
 }
 
+export interface GenerateResponse {
+  decisionTrace: AgentDecisionTrace;
+  icsContent: string;
+  visualScheduleMarkdown?: string;
+}

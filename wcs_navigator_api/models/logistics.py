@@ -84,16 +84,6 @@ class ThemeDressCode(BaseModel):
     vibe: str
 
 
-class PackingItem(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    id: str
-    name: str
-    category: Literal["footwear", "attire", "toiletries", "tech", "essentials"]
-    rationale: str
-    quantity: Optional[int] = 1
-
-
 class AgentDecisionTrace(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -101,5 +91,4 @@ class AgentDecisionTrace(BaseModel):
     buffer_timeline: BufferCalculationResult = Field(alias="bufferTimeline")
     sessions: List[AuditSession] = Field(default_factory=list)
     theme_dress_codes: Optional[List[ThemeDressCode]] = Field(default_factory=list, alias="themeDressCodes")
-    packing_manifest: Optional[List[PackingItem]] = Field(default_factory=list, alias="packingManifest")
     ics_content: str = Field(alias="icsContent")
