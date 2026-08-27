@@ -5,7 +5,6 @@ import { ExecutionProgressBar } from '../components/ExecutionProgressBar';
 import { FlightBufferTimeline } from '../components/FlightBufferTimeline';
 import { FilteringAuditMatrix } from '../components/FilteringAuditMatrix';
 import { ThemeDressCodeCard } from '../components/ThemeDressCodeCard';
-import { downloadIcsFile } from '../utils/icsDownloader';
 
 describe('AgentMindTrace Suite', () => {
   afterEach(() => {
@@ -30,7 +29,7 @@ describe('AgentMindTrace Suite', () => {
   it('renders FlightBufferTimeline buffer steps and time summary', () => {
     render(<FlightBufferTimeline />);
     expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
-    expect(screen.getByText(/Earliest Event Call/i)).toBeDefined();
+    expect(screen.getAllByText(/Earliest Event Call/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Target Landing Deadline/i)).toBeDefined();
     expect(screen.getByText('Target Flight Landing')).toBeDefined();
     expect(screen.getByText('Competition Staging Call')).toBeDefined();

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { FlightBuffer, BufferStep } from '../types';
-import { Plane, Home, Flame, Clock, Calendar, MapPin, Hourglass, CheckCircle2, ShieldCheck, Car } from 'lucide-react';
+import { Plane, Home, Flame, Clock, Calendar, Hourglass, ShieldCheck, Car } from 'lucide-react';
 
 export interface FlightBufferTimelineProps {
   buffer?: FlightBuffer;
@@ -18,71 +18,61 @@ const DEFAULT_BUFFER: FlightBuffer = {
   steps: [
     {
       type: 'flight',
-      label: 'Target Flight Landing',
-      time: '02:15 PM',
+      label: 'Target Flight Landing Deadline',
+      time: '02:15 PM Touchdown',
       duration: 'Deadline Target',
-      description: 'Recommended latest wheels-down time to account for deplaning and baggage claim.',
+      description: 'Recommended latest wheels-down time to account for deplaning and baggage collection.',
     },
     {
       type: 'transit',
-      label: 'Airport Transit',
-      time: '02:15 PM - 02:45 PM',
+      label: 'Airport-to-Venue Transit',
+      time: '02:15 PM → 02:45 PM',
       duration: '30 mins',
-      description: 'Dedicated travel buffer from airport terminal to the host hotel.',
+      description: 'Dedicated rideshare or shuttle buffer from airport terminal directly to host hotel.',
     },
     {
       type: 'hotel',
-      label: 'Hotel Check-in & Settle',
-      time: '02:45 PM - 04:15 PM',
+      label: 'Hotel Check-in & Wardrobe Settle',
+      time: '02:45 PM → 04:15 PM',
       duration: '90 mins',
-      description: 'Time allotted for hotel check-in, unpacking, changing clothes, and freshening up.',
+      description: 'Room check-in, unpacking dance wardrobe, shoe prep, and freshening up.',
     },
     {
       type: 'warmup',
-      label: 'Warmup & Bib Pickup',
-      time: '04:15 PM - 05:15 PM',
+      label: 'Warmup & Floor Check',
+      time: '04:15 PM → 05:15 PM',
       duration: '60 mins',
-      description: 'Essential window for event registration pickup, floor scouting, and physical warmup.',
+      description: 'Competitor bib registration, physical dynamic stretch, and ballroom floor test.',
     },
     {
       type: 'staging',
       label: 'Competition Staging Call',
-      time: '05:15 PM',
-      duration: 'Event Anchor',
-      description: 'Earliest Event Call. You must be physically present in the ballroom staging area.',
+      time: '05:15 PM Staging Call',
+      duration: 'Mandatory Call',
+      description: 'Earliest division roll call. Competitors must report to ballroom marshalling.',
     },
   ],
 };
 
 const TYPE_CONFIG = {
   flight: {
-    label: 'Landing Deadline',
-    badge: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
-    dot: 'bg-brand-cyan ring-brand-cyan/30',
+    iconBg: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
     icon: Plane,
   },
   transit: {
-    label: 'Transit Window',
-    badge: 'bg-surface text-text-main border-line',
-    dot: 'bg-text-dim ring-line',
+    iconBg: 'bg-muted/70 text-text-dim border-line',
     icon: Car,
   },
   hotel: {
-    label: 'Hotel Settle',
-    badge: 'bg-surface text-text-main border-line',
-    dot: 'bg-text-dim ring-line',
+    iconBg: 'bg-muted/70 text-text-dim border-line',
     icon: Home,
   },
   warmup: {
-    label: 'Warmup Window',
-    badge: 'bg-brand-amber/20 text-brand-amber border-brand-amber/40',
-    dot: 'bg-brand-amber ring-brand-amber/30',
+    iconBg: 'bg-brand-amber/20 text-brand-amber border-brand-amber/40',
     icon: Flame,
   },
   staging: {
-    label: 'Mandatory Staging',
-    badge: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
-    dot: 'bg-brand-cyan ring-brand-cyan/30',
+    iconBg: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
     icon: Calendar,
   },
 };
@@ -174,7 +164,7 @@ export const FlightBufferTimeline = ({ buffer = DEFAULT_BUFFER, className }: Fli
         </Box>
       </Grid>
 
-      {/* 📊 2. Static Scannable Breakdown List with Connected Visual Line */}
+      {/* 📊 2. Static Scannable Breakdown List */}
       <Box surface="card" radius="xl" border className="border-line/80 overflow-hidden shadow-md">
         <Box paddingX={5} paddingY={3} surface="muted" border="b" display="flex" align="center" justify="between" className="border-line">
           <Box display="flex" align="center" gap={2}>
@@ -203,52 +193,41 @@ export const FlightBufferTimeline = ({ buffer = DEFAULT_BUFFER, className }: Fli
                 direction={{ default: 'column', sm: 'row' }}
                 align={{ default: 'start', sm: 'center' }}
                 justify="between"
-                gap={3}
+                gap={4}
                 className="hover:bg-muted/30 transition-colors"
               >
-                {/* Left Side: Step Icon & Time Window */}
-                <Box display="flex" align="center" gap={3.5} className="min-w-[180px] sm:min-w-[220px]">
+                {/* Left Side: Generous Icon & Clear Time Window */}
+                <Box display="flex" align="center" gap={4} className="min-w-[240px] shrink-0">
                   <Box
-                    padding={2}
+                    padding={2.5}
                     radius="lg"
                     border
                     display="flex"
                     align="center"
                     justify="center"
-                    className={`${config.badge} shrink-0`}
+                    className={`w-10 h-10 ${config.iconBg} shrink-0`}
                   >
-                    <StepIcon className="w-4 h-4" />
+                    <StepIcon className="w-5 h-5" />
                   </Box>
 
                   <Stack gap={0.5}>
-                    <Text variant="body-sm" weight="font-bold" color="main" className="font-mono">
+                    <Text variant="body-sm" weight="font-bold" className="font-mono text-accent text-sm sm:text-base">
                       {step.time}
                     </Text>
                     {step.duration && (
                       <Text variant="caption-subtle" color="dim" className="text-[11px] font-mono flex items-center gap-1">
-                        <Hourglass className="w-3 h-3 text-accent shrink-0" />
+                        <Hourglass className="w-3 h-3 text-text-dim shrink-0" />
                         <span>{step.duration}</span>
                       </Text>
                     )}
                   </Stack>
                 </Box>
 
-                {/* Center / Right: Step Name & Logic Purpose */}
+                {/* Right Side: Bold Title First, Then Explanation */}
                 <Stack gap={1} className="flex-1 min-w-0">
-                  <Box display="flex" align="center" gap={2} wrap>
-                    <Text variant="body-sm" weight="font-bold" color="main">
-                      {step.label}
-                    </Text>
-                    <Box
-                      paddingX={2}
-                      paddingY={0.5}
-                      radius="md"
-                      border
-                      className={`text-[10px] font-mono font-semibold uppercase tracking-wider ${config.badge}`}
-                    >
-                      {config.label}
-                    </Box>
-                  </Box>
+                  <Text variant="body-sm" weight="font-bold" color="main" className="text-base">
+                    {step.label}
+                  </Text>
 
                   {step.description && (
                     <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">

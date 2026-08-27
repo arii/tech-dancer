@@ -1,18 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { DiscoveryResponse, FormQuestion, PersonaChip, QuestionAnswerValue } from '../types/navigator';
+import { Box } from '@/layouts/Primitives';
+import { DiscoveryResponse, FormQuestion, QuestionAnswerValue } from '../types/navigator';
 import { SelectField } from './FormFields/SelectField';
 import { MultiSelectField } from './FormFields/MultiSelectField';
 import { BooleanField } from './FormFields/BooleanField';
-import { Sparkles, Loader2, Cpu, CheckCircle2 } from 'lucide-react';
-
-const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
+import { Sparkles, Loader2 } from 'lucide-react';
 
 const THINKING_MESSAGES = [
   'Analyzing workshop tracks & room levels...',

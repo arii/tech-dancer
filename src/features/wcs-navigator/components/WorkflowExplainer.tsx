@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { Cpu, Search, Calendar, ShieldCheck, Zap, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 

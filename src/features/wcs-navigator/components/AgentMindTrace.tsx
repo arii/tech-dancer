@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { AgentDecisionTrace } from '../types';
-import { ExecutionProgressBar } from './ExecutionProgressBar';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FilteringAuditMatrix } from './FilteringAuditMatrix';
 import { ThemeDressCodeCard } from './ThemeDressCodeCard';
@@ -136,10 +135,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         </Box>
       </Box>
 
-      {/* 1. Live Execution Progress Bar */}
-      <ExecutionProgressBar tasks={trace?.subTasks} />
-
-      {/* 2. Flight & Buffer Timeline */}
+      {/* 1. Flight & Buffer Timeline */}
       <FlightBufferTimeline buffer={trace?.bufferTimeline} />
 
       {/* 3. Filtering Audit Matrix */}

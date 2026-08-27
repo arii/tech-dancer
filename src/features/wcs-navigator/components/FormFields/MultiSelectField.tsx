@@ -131,7 +131,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
             >
               <Text
                 variant="body-sm"
-                className={isSelected ? 'text-accent font-semibold' : 'text-text-main'}
+                className={`flex-1 pr-2 leading-snug ${isSelected ? 'text-accent font-semibold' : 'text-text-main'}`}
               >
                 {option.label}
               </Text>
@@ -139,7 +139,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
                 display="flex"
                 align="center"
                 justify="center"
-                className={`w-5 h-5 rounded border transition-colors ${
+                className={`w-5 h-5 rounded border shrink-0 transition-colors ${
                   isSelected ? 'bg-accent border-accent text-black' : 'border-line bg-surface'
                 }`}
               >

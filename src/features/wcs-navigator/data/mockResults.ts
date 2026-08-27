@@ -16,7 +16,6 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         {
           id: 'competition_level',
           type: 'select',
-          title: 'What is your competitive WSDC division?',
           title: 'What is your dancer persona & competition division?',
           options: [
             { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
