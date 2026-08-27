@@ -1,10 +1,18 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Search,
   Download,
   FileJson,
   FileText,
-  AlertCircle
+  AlertCircle,
+  Zap,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  Database,
+  CheckCircle2,
+  Clock
 } from 'lucide-react';
 import {
   Box,
@@ -14,7 +22,6 @@ import {
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { Zap, ShieldCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
@@ -206,10 +213,12 @@ export function WCSScraperTool() {
   const {
     filteredData,
     isLoading,
+    isSearching,
     latency,
     error,
     searchTerm,
-    setSearchTerm,
+    searchInput,
+    setSearchInput,
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,
@@ -217,6 +226,8 @@ export function WCSScraperTool() {
     totalEvents,
     lastSync
   } = useWCSData();
+
+  const [isMethodologyOpen, setIsMethodologyOpen] = useState(false);
 
   useEffect(() => {
     if (!searchTerm) return;
@@ -250,6 +261,8 @@ export function WCSScraperTool() {
     );
   }
 
+  const eventsCountFormatted = (totalEvents || 6308).toLocaleString();
+
   return (
     <Stack gap={8}>
       <Box paddingBottom={8} borderBottom>
@@ -268,53 +281,181 @@ export function WCSScraperTool() {
         </Stack>
       </Box>
 
-      {/* Extraction & Impact Dashboard */}
-      <Box padding={{ base: 4, md: 8 }} border radius="xl" surface="muted" className="relative overflow-hidden">
-        <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
-          <Stack gap={6}>
-            <Stack gap={2}>
-              <Text variant="display" size="2xl" weight="font-black">Event Data</Text>
-              <Text variant="body" size="lg" color="dim">
-                We have retrieved data from {(totalEvents || 6308).toLocaleString()} events since 2023.
-                We are currently adding more past results to the database.
+      {/* Prominent KPI Callout Cards */}
+      <Grid cols={{ base: 1, lg: 3 }} gap={4}>
+        {/* Primary Metric Card */}
+        <Box border radius="xl" surface="muted" padding="card" className="lg:col-span-1">
+          <Stack gap={3}>
+            <Box display="flex" align="center" justify="between">
+              <Text variant="mono" size="micro" weight="font-bold" uppercase color="accent" tracking="widest">Indexed Corpus</Text>
+              <Database className="w-5 h-5 text-accent shrink-0" />
+            </Box>
+            <Stack gap={1}>
+              <Text variant="display" size="4xl" weight="font-black" data-testid="kpi-total-events">
+                {eventsCountFormatted}
+              </Text>
+              <Text variant="body" size="xs" color="dim">
+                Total Dance Events Indexed (Since 2023)
               </Text>
             </Stack>
-            <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          </Stack>
+        </Box>
+
+        {/* Status Indicator Grid */}
+        <Grid cols={{ base: 1, sm: 3 }} gap={4} className="lg:col-span-2">
+          <Box border radius="xl" surface="default" padding={4}>
+            <Stack gap={2}>
+              <Box display="flex" align="center" gap={2}>
+                <Zap className="w-4 h-4 text-accent shrink-0" />
+                <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim">Safe Access</Text>
+              </Box>
+              <Box display="flex" align="center" gap={2}>
+                <StatusBadge label="OPERATIONAL" />
+              </Box>
+              <Text variant="body" size="micro" color="dim">Rate-limited extraction</Text>
+            </Stack>
+          </Box>
+
+          <Box border radius="xl" surface="default" padding={4}>
+            <Stack gap={2}>
+              <Box display="flex" align="center" gap={2}>
+                <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+                <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim">Verification</Text>
+              </Box>
+              <Text variant="mono" size="sm" weight="font-bold" color="accent">
+                ACTIVE
+              </Text>
+              <Text variant="body" size="micro" color="dim">Dual Result-ID validation</Text>
+            </Stack>
+          </Box>
+
+          <Box border radius="xl" surface="default" padding={4}>
+            <Stack gap={2}>
+              <Box display="flex" align="center" gap={2}>
+                <Clock className="w-4 h-4 text-accent shrink-0" />
+                <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim">Last Sync</Text>
+              </Box>
+              <Text variant="mono" size="sm" weight="font-bold">
+                {isLoading ? 'PENDING' : lastSync || 'RECENT'}
+              </Text>
+              <Text variant="body" size="micro" color="dim">Automated Parquet update</Text>
+            </Stack>
+          </Box>
+        </Grid>
+      </Grid>
+
+      {/* Expandable Methodology & Architecture Drawer */}
+      <Box border radius="xl" surface="default" className="overflow-hidden">
+        <Box
+          as="button"
+          type="button"
+          padding={4}
+          width="full"
+          display="flex"
+          align="center"
+          justify="between"
+          onClick={() => setIsMethodologyOpen(!isMethodologyOpen)}
+          className="text-left hover:bg-line/20 motion-safe:transition-colors"
+          aria-expanded={isMethodologyOpen}
+          aria-controls="methodology-drawer-content"
+          data-testid="methodology-drawer-toggle"
+        >
+          <Box display="flex" align="center" gap={3}>
+            <ShieldCheck className="w-5 h-5 text-accent shrink-0" />
+            <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
+              View Data Integrity & Architecture Specs
+            </Text>
+          </Box>
+          {isMethodologyOpen ? (
+            <ChevronUp className="w-5 h-5 text-dim shrink-0" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-dim shrink-0" />
+          )}
+        </Box>
+
+        {isMethodologyOpen && (
+          <Box id="methodology-drawer-content" borderTop padding={6} surface="muted">
+            <Grid cols={{ base: 1, md: 3 }} gap={6}>
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={Zap} size="sm" color="accent" />
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Safe Access</Text>
                 </Box>
-                <Text size="xs" color="dim">Asynchronous extraction with intentional delays to ensure zero impact on host server performance.</Text>
+                <Text size="xs" color="dim">
+                  Asynchronous extraction with intentional delays and zero-impact rate-limiting to protect origin host server performance.
+                </Text>
               </Stack>
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={ShieldCheck} size="sm" color="accent" />
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Public Data</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Public Data Integrity</Text>
                 </Box>
-                <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate research and statistical analysis.</Text>
+                <Text size="xs" color="dim">
+                  Strictly indexing public scoring data for aggregate research and statistical trend modeling across division tiers.
+                </Text>
+              </Stack>
+              <Stack gap={2}>
+                <Box display="flex" align="center" gap={2}>
+                  <Icon icon={CheckCircle2} size="sm" color="accent" />
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Dual-ID Verification</Text>
+                </Box>
+                <Text size="xs" color="dim">
+                  We verify score fidelity across multiple data points (Result IDs, Dancer IDs, and Event URLs) to maintain zero false positives.
+                </Text>
               </Stack>
             </Grid>
-          </Stack>
-          <Stack gap={6} justify="center">
-            <Box padding={6} border radius="md" surface="surface">
-              <Stack gap={4}>
-                <Box display="flex" justify="between" align="center">
-                  <Text variant="mono" size="xs" weight="font-bold" color="dim">VERIFICATION</Text>
-                  <Text variant="mono" size="micro" color="success">ACTIVE</Text>
-                </Box>
-                <Text size="sm" color="body">
-                  We check multiple data points (Result IDs and Event URLs) to ensure the scores are accurate.
-                </Text>
-                <Box height={0.5} surface="muted" />
-                <Box display="flex" justify="between" align="center">
-                  <Text variant="mono" size="xs" weight="font-bold" color="dim">LAST SYNC</Text>
-                  <Text variant="mono" size="micro" color="accent">{isLoading ? 'PENDING' : lastSync || 'RECENT'}</Text>
-                </Box>
-              </Stack>
+          </Box>
+        )}
+      </Box>
+
+      {/* Prominent Search Bar & Filter Controls */}
+      <Box border surface="muted" padding="card" radius="xl">
+        <Stack gap={6}>
+          <Box display="flex" align="center" justify="between">
+            <Box display="flex" align="center" gap={3}>
+              <Search className="w-5 h-5 text-accent shrink-0" />
+              <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
+                Competitor Search & Filter
+              </Text>
             </Box>
-          </Stack>
-        </Grid>
+            {isSearching && (
+              <Box display="flex" align="center" gap={2} data-testid="active-search-indicator">
+                <Loader2 className="w-4 h-4 text-accent motion-safe:animate-spin shrink-0" />
+                <Text variant="mono" size="micro" color="accent" weight="font-bold">
+                  Querying {eventsCountFormatted} records...
+                </Text>
+              </Box>
+            )}
+          </Box>
+
+          <Grid cols={{ base: 1, md: 2 }} gap={4}>
+            <Box surface="default" border paddingX="compact" paddingY={3} display="flex" align="center" gap={3} radius="md" className="focus-within:border-accent motion-safe:transition-colors">
+              <Search className="w-4 h-4 text-dim shrink-0" />
+              <input
+                type="text"
+                placeholder="Search Competitor Name or Dancer ID (e.g. John Doe, ID 1234)..."
+                className="bg-transparent border-none outline-none text-sm w-full font-mono placeholder:text-text-dim/60"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                data-testid="wcs-search-input"
+              />
+            </Box>
+
+            <Stack direction="row" gap={2} width="full">
+              {(['all', 'promoted', 'not-promoted'] as const).map((filter) => (
+                <Box key={filter} flex={1}>
+                  <FilterButton
+                    variant="compact"
+                    label={filter.replace('-', ' ')}
+                    onClick={() => handleFilterChange(filter)}
+                    isActive={filterPromoted === filter}
+                    className="w-full capitalize"
+                  />
+                </Box>
+              ))}
+            </Stack>
+          </Grid>
+        </Stack>
       </Box>
 
       {isLoading ? (
@@ -331,61 +472,35 @@ export function WCSScraperTool() {
             <Skeleton height={32} width="full" />
           </Stack>
         </Grid>
+      ) : isSearching ? (
+        <Grid cols={{ base: 1, lg: 3 }} gap={8} align="start">
+          <Stack gap={8} className="lg:col-span-2">
+            <Grid cols={{ base: 1, md: 2 }} gap={{ base: 4, md: 8 }}>
+              <Skeleton height={64} width="full" />
+              <Skeleton height={64} width="full" />
+            </Grid>
+            <Skeleton height={96} width="full" />
+          </Stack>
+          <Stack gap={8}>
+            <Skeleton height={48} width="full" />
+            <Skeleton height={32} width="full" />
+          </Stack>
+        </Grid>
       ) : (
-        <>
-          <Box border surface="muted" padding="card">
-            <Stack gap={6}>
-              <Box display="flex" align="center" gap={3}>
-                <Search className="w-5 h-5 text-dim" />
-                <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
-                  Search
-                </Text>
-              </Box>
+        <Grid cols={{ base: 1, lg: 3 }} gap={8}>
+          <Stack gap={8} className="lg:col-span-2">
+            <Grid cols={{ base: 1, md: 2 }} gap={{ base: 4, md: 8 }}>
+              <ScoreDistributionChart data={scoreDistribution} />
+              <AvgScoreTrendChart data={trendData} />
+            </Grid>
+            <WCSDataTable data={filteredData} />
+          </Stack>
 
-              <Grid cols={{ base: 1, md: 2 }} gap={4}>
-                <Box surface="default" border paddingX="compact" paddingY={3} display="flex" align="center" gap={2}>
-                  <Search className="w-4 h-4 text-dim" />
-                  <input
-                    type="text"
-                    placeholder="Search by name, ID, or event..."
-                    className="bg-transparent border-none outline-none text-sm w-full font-mono"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </Box>
-
-                <Stack direction="row" gap={2} width="full">
-                  {(['all', 'promoted', 'not-promoted'] as const).map((filter) => (
-                    <Box key={filter} flex={1}>
-                      <FilterButton
-                        variant="compact"
-                        label={filter.replace('-', ' ')}
-                        onClick={() => handleFilterChange(filter)}
-                        isActive={filterPromoted === filter}
-                        className="w-full capitalize"
-                      />
-                    </Box>
-                  ))}
-                </Stack>
-              </Grid>
-            </Stack>
-          </Box>
-
-          <Grid cols={{ base: 1, lg: 3 }} gap={8}>
-            <Stack gap={8} className="lg:col-span-2">
-              <Grid cols={{ base: 1, md: 2 }} gap={{ base: 4, md: 8 }}>
-                <ScoreDistributionChart data={scoreDistribution} />
-                <AvgScoreTrendChart data={trendData} />
-              </Grid>
-              <WCSDataTable data={filteredData} />
-            </Stack>
-
-            <Stack gap={8}>
-              <WCSExportTools data={filteredData} />
-              <WCSScraperStats latency={latency} totalEvents={totalEvents} />
-            </Stack>
-          </Grid>
-        </>
+          <Stack gap={8}>
+            <WCSExportTools data={filteredData} />
+            <WCSScraperStats latency={latency} totalEvents={totalEvents} />
+          </Stack>
+        </Grid>
       )}
     </Stack>
   );
