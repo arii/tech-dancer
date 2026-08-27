@@ -168,12 +168,21 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         role="tablist"
         aria-label="Filter sessions by status"
       >
-        <button
+        <Box
+          as="button"
           type="button"
           role="tab"
           aria-selected={activeTab === 'included'}
           onClick={() => setActiveTab('included')}
-          className={`flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl font-semibold text-xs transition-colors cursor-pointer border ${
+          display="flex"
+          align="center"
+          gap={2}
+          paddingX={4}
+          paddingY={2.5}
+          minHeight={11}
+          radius="xl"
+          cursor="pointer"
+          className={`font-semibold text-xs transition-colors border ${
             activeTab === 'included'
               ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40 font-bold shadow-sm'
               : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
@@ -181,14 +190,23 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         >
           <Icon icon={CheckCircle} size="sm" />
           <span>Matched &amp; Scheduled ({includedSessions.length})</span>
-        </button>
+        </Box>
 
-        <button
+        <Box
+          as="button"
           type="button"
           role="tab"
           aria-selected={activeTab === 'filtered'}
           onClick={() => setActiveTab('filtered')}
-          className={`flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl font-semibold text-xs transition-colors cursor-pointer border ${
+          display="flex"
+          align="center"
+          gap={2}
+          paddingX={4}
+          paddingY={2.5}
+          minHeight={11}
+          radius="xl"
+          cursor="pointer"
+          className={`font-semibold text-xs transition-colors border ${
             activeTab === 'filtered'
               ? 'bg-brand-terminal-red/15 text-brand-terminal-red border-brand-terminal-red/40 font-bold shadow-sm'
               : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
@@ -196,14 +214,23 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         >
           <Icon icon={XCircle} size="sm" />
           <span>Filtered Out ({filteredSessions.length})</span>
-        </button>
+        </Box>
 
-        <button
+        <Box
+          as="button"
           type="button"
           role="tab"
           aria-selected={activeTab === 'all'}
           onClick={() => setActiveTab('all')}
-          className={`flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl font-semibold text-xs transition-colors cursor-pointer border ${
+          display="flex"
+          align="center"
+          gap={2}
+          paddingX={4}
+          paddingY={2.5}
+          minHeight={11}
+          radius="xl"
+          cursor="pointer"
+          className={`font-semibold text-xs transition-colors border ${
             activeTab === 'all'
               ? 'bg-surface text-text-main border-line font-bold shadow-sm'
               : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
@@ -211,7 +238,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         >
           <Icon icon={Layers} size="sm" />
           <span>All ({sessions.length})</span>
-        </button>
+        </Box>
       </Box>
 
       {/* Session Cards Grid */}
@@ -241,7 +268,15 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
 
                     {/* Rationale Tag / Decision Badge */}
                     <Box
-                      className={`px-2.5 py-1 min-h-[28px] rounded-full text-xs font-mono font-bold shrink-0 border flex items-center gap-1.5 ${
+                      paddingX={2.5}
+                      paddingY={1}
+                      minHeight={7}
+                      radius="full"
+                      border
+                      display="flex"
+                      align="center"
+                      gap={1.5}
+                      className={`text-xs font-mono font-bold shrink-0 ${
                         isIncluded
                           ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40'
                           : 'bg-brand-terminal-red/10 text-brand-terminal-red border-brand-terminal-red/30'
@@ -270,14 +305,16 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                   <Box
                     padding={3}
                     radius="md"
+                    surface={isIncluded ? undefined : 'muted'}
+                    border
                     className={`text-xs ${
                       isIncluded
-                        ? 'bg-accent/5 text-text-main border border-accent/15'
-                        : 'bg-muted/60 text-text-dim border border-line/60'
+                        ? 'bg-accent/5 text-text-main border-accent/15'
+                        : 'text-text-dim border-line/60'
                     }`}
                   >
                     <Box display="flex" align="start" gap={2}>
-                      <Filter className="w-3.5 h-3.5 shrink-0 opacity-70 mt-0.5" />
+                      <Filter className="w-3.5 h-3.5 shrink-0 opacity-70" />
                       <Box as="span">
                         <strong className="font-semibold text-text-main">
                           {isIncluded ? 'Why this fits your profile:' : 'Exclusion reason:'}

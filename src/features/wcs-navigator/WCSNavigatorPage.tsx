@@ -86,8 +86,9 @@ export const WCSNavigatorPage: React.FC = () => {
             display="flex"
             align="center"
             gap={2.5}
+            minHeight={11}
             cursor="pointer"
-            className="min-h-[44px] border-line hover:border-accent transition-colors"
+            className="border-line hover:border-accent transition-colors"
           >
             <Icon icon={isMockMode ? ToggleLeft : ToggleRight} size="sm" color="accent" />
             <Text variant="mono" size="xs" weight="font-bold" color="main">
@@ -120,7 +121,9 @@ export const WCSNavigatorPage: React.FC = () => {
                 align="center"
                 gap={1.5}
                 paddingX={2}
-                className="min-h-[44px] text-xs text-dim hover:text-white transition-colors cursor-pointer"
+                minHeight={11}
+                cursor="pointer"
+                className="text-xs text-dim hover:text-white transition-colors"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Change Event</span>
@@ -143,7 +146,9 @@ export const WCSNavigatorPage: React.FC = () => {
                 paddingY={2}
                 radius="lg"
                 surface="muted"
-                className="min-h-[44px] text-xs font-mono text-dim hover:text-white transition-colors cursor-pointer"
+                minHeight={11}
+                cursor="pointer"
+                className="text-xs font-mono text-dim hover:text-white transition-colors"
               >
                 <Icon icon={RefreshCw} size="xs" />
                 <span>Start Over</span>
@@ -206,7 +211,9 @@ export const WCSNavigatorPage: React.FC = () => {
                 radius="lg"
                 surface="surface"
                 border
-                className="min-h-[44px] border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all cursor-pointer"
+                minHeight={11}
+                cursor="pointer"
+                className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
               >
                 <Icon icon={ArrowLeft} size="xs" />
                 <span>Adjust Preferences &amp; Re-generate</span>

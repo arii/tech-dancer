@@ -1,9 +1,10 @@
 // impeccable-ignore-file
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { WCSPersona, DANCE_PERSONAS } from '../data/personas';
+import React from 'react';
 import { UserCheck, Sparkles, Check } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
+import { WCSPersona, DANCE_PERSONAS } from '../data/personas';
 
 export interface PersonaChipsProps {
   selectedPersonaId: string | null;
@@ -41,8 +42,9 @@ export const PersonaChips = ({
               display="flex"
               align="start"
               cursor="pointer"
+              minHeight={11}
               className={cn(
-                "min-h-[44px] border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
+                "border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
                 isSelected ? "border-brand-purple ring-1 ring-brand-purple/40 bg-brand-purple/5" : "border-line hover:bg-surface"
               )}
             >

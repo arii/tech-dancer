@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { AgentDecisionTrace } from '../types';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
@@ -14,6 +14,8 @@ export interface AgentMindTraceProps {
   trace?: Partial<AgentDecisionTrace>;
   className?: string;
 }
+
+const FRIDAY_AFTERNOON_REGEX = /(?:12|[1-6]):\d{2}\s*pm/i;
 
 const DEFAULT_ICS = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -39,6 +41,7 @@ END:VCALENDAR`;
 
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className }) => {
   const [showToast, setShowToast] = useState(false);
+  const [flightOffset, setFlightOffset] = useState<number>(0);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -63,6 +66,29 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
     }, 4500);
   };
 
+  // Dynamically recalculate sessions when flight arrival time is adjusted (Item 5)
+  const dynamicSessions = React.useMemo(() => {
+    const rawSessions = trace?.sessions;
+    if (!rawSessions) return undefined;
+
+    if (flightOffset <= 0) return rawSessions;
+
+    // Flight landed late (+30m or more): mark Friday afternoon workshops as time conflicts
+    return rawSessions.map((session) => {
+      const lowerTime = session.time.toLowerCase();
+      const isFridayAfternoon = lowerTime.includes('fri') && FRIDAY_AFTERNOON_REGEX.test(session.time);
+      if (isFridayAfternoon) {
+        return {
+          ...session,
+          status: 'filtered' as const,
+          decisionBadge: 'Time Conflict (Flight Delay)',
+          justification: `Flight delayed by +${flightOffset}m. Arrival/transit window overlaps with this session.`,
+        };
+      }
+      return session;
+    });
+  }, [trace?.sessions, flightOffset]);
+
   return (
     <Stack gap={8} className={className}>
       {/* 1-Click Instant Download Visual Toast Feedback */}
@@ -70,11 +96,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         <Box
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border border-accent/40 rounded-xl p-4 shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100"
+          padding={4}
+          radius="xl"
+          border
+          shadow="2xl"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface/95 backdrop-blur-xl border-accent/40 motion-safe:transition-all motion-safe:duration-300 motion-safe:transform translate-y-0 opacity-100"
         >
           <Box display="flex" align="start" justify="between" gap={3}>
             <Box display="flex" align="start" gap={3}>
-              <Box padding={1.5} radius="full" className="bg-accent/20 text-accent shrink-0 mt-0.5">
+              <Box padding={1.5} radius="full" className="bg-accent/20 text-accent shrink-0">
                 <Icon icon={CheckCircle2} size="sm" color="accent" />
               </Box>
               <Stack gap={0.5}>
@@ -87,14 +117,21 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
               </Stack>
             </Box>
 
-            <button
+            <Box
+              as="button"
               type="button"
               aria-label="Dismiss download notification"
               onClick={() => setShowToast(false)}
-              className="min-h-[44px] min-w-[44px] -mr-2 -mt-2 flex items-center justify-center text-dim hover:text-white transition-colors cursor-pointer"
+              minHeight={11}
+              width={11}
+              display="flex"
+              align="center"
+              justify="center"
+              cursor="pointer"
+              className="text-dim hover:text-white transition-colors"
             >
               <Icon icon={X} size="xs" />
-            </button>
+            </Box>
           </Box>
         </Box>
       )}
@@ -124,7 +161,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             variant="accent"
             size="md"
             icon={Download}
-            className="min-h-[44px]"
           >
             Download Calendar (.ics)
           </Button>
@@ -136,14 +172,25 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
         </Box>
       </Box>
 
-      {/* 1. Flight & Buffer Timeline */}
-      <FlightBufferTimeline buffer={trace?.bufferTimeline} />
+      {/* 2-Column Wide Desktop Layout Grid (lg+) */}
+      <Grid cols={{ default: 1, lg: 12 }} gap={8} align="start">
+        {/* Left Column (lg: 5 cols): Arrival Timeline & Travel Buffer Breakdown */}
+        <Box gridCol={{ default: 'auto', lg: 'span 5' }}>
+          <FlightBufferTimeline
+            buffer={trace?.bufferTimeline}
+            flightOffsetMinutes={flightOffset}
+            onFlightOffsetChange={setFlightOffset}
+          />
+        </Box>
 
-      {/* 3. Filtering Audit Matrix */}
-      <FilteringAuditMatrix sessions={trace?.sessions} />
-
-      {/* 4. Event Themes & Dress Codes */}
-      <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+        {/* Right Column (lg: 7 cols): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
+        <Box gridCol={{ default: 'auto', lg: 'span 7' }}>
+          <Stack gap={8}>
+            <FilteringAuditMatrix sessions={dynamicSessions} />
+            <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+          </Stack>
+        </Box>
+      </Grid>
 
       {/* Footer Download Trigger Callout */}
       <Box padding={6} radius="lg" surface="card" border className="text-center border-line">
@@ -159,7 +206,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, className
             variant="accent"
             size="lg"
             icon={Download}
-            className="min-h-[48px]"
           >
             Download Calendar (.ics)
           </Button>
