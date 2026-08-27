@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { FormQuestion, QuestionAnswerValue } from '../../types/navigator';
@@ -56,7 +55,7 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
             display="flex"
             align="center"
             gap={1.5}
-            className="min-h-[32px] text-xs font-mono text-dim hover:text-accent bg-surface/80 hover:bg-accent/10 border border-line hover:border-accent/40 transition-colors cursor-pointer"
+            className="min-h-8 text-xs font-mono text-dim hover:text-accent bg-surface/80 hover:bg-accent/10 border border-line hover:border-accent/40 transition-colors cursor-pointer"
           >
             <Icon icon={Sparkles} size="xs" color="accent" />
             <span>Why We Ask This</span>
@@ -76,7 +75,7 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
             className="border border-accent/30 bg-accent/5 transition-all"
           >
             <Stack direction="row" align="start" gap={2.5}>
-              <Icon icon={InfoIcon} size="sm" color="accent" className="mt-0.5 shrink-0" />
+              <Icon icon={InfoIcon} size="sm" color="accent" marginTop={0.5} className="shrink-0" />
               <Stack gap={1}>
                 <Text variant="caption-bold" color="accent" className="font-mono">
                   Gemini Flash Decision Logic:
@@ -106,7 +105,7 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
         align="center"
         justify="between"
         width="full"
-        className={`min-h-[44px] border tap-target transition-all ${
+        className={`min-h-11 border tap-target transition-all ${
           isChecked
             ? 'border-accent ring-1 ring-accent bg-accent/10'
             : 'border-line hover:border-line-hover hover:bg-surface'

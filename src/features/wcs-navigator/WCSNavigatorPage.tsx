@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
@@ -86,7 +85,7 @@ export const WCSNavigatorPage: React.FC = () => {
             display="flex"
             align="center"
             gap={2.5}
-            minHeight={11}
+            minHeight="11"
             cursor="pointer"
             className="border-line hover:border-accent transition-colors"
           >
@@ -121,7 +120,7 @@ export const WCSNavigatorPage: React.FC = () => {
                 align="center"
                 gap={1.5}
                 paddingX={2}
-                minHeight={11}
+                minHeight="11"
                 cursor="pointer"
                 className="text-xs text-dim hover:text-white transition-colors"
               >
@@ -146,7 +145,7 @@ export const WCSNavigatorPage: React.FC = () => {
                 paddingY={2}
                 radius="lg"
                 surface="muted"
-                minHeight={11}
+                minHeight="11"
                 cursor="pointer"
                 className="text-xs font-mono text-dim hover:text-white transition-colors"
               >
@@ -211,7 +210,7 @@ export const WCSNavigatorPage: React.FC = () => {
                 radius="lg"
                 surface="surface"
                 border
-                minHeight={11}
+                minHeight="11"
                 cursor="pointer"
                 className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
               >

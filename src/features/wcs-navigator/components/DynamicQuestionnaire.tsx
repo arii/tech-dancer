@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Button } from '@/layouts/Button';
 import { DiscoveryResponse, FormQuestion, QuestionAnswerValue } from '../types/navigator';

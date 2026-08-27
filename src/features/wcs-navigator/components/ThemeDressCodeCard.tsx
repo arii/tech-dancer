@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React from 'react';
+import { useState } from 'react';
 import { Sparkles, Shirt, PartyPopper, Award, Tag, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { ThemeDressCode } from '../types';
