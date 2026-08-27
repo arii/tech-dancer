@@ -112,12 +112,16 @@ export default function ResearchDetail() {
           header={
             <Stack gap={4}>
               {/* Primary Portfolio CTA Banner */}
-              <Box
+              <Stack
+                direction={{ base: 'col', sm: 'row' }}
+                align={{ base: 'start', sm: 'center' }}
+                justify="between"
+                gap={4}
                 marginBottom={4}
                 padding={4}
                 radius="md"
                 border
-                className="bg-accent/10 border-accent/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="bg-accent/10 border-accent/30"
               >
                 <Stack gap={1}>
                   <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
@@ -127,12 +131,14 @@ export default function ResearchDetail() {
                     For production software engineering, autonomous systems research, and professional inquiries, visit Ariel's main site.
                   </Text>
                 </Stack>
-                <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" className="shrink-0">
-                  <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
-                    arii.github.io →
-                  </Text>
+                <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" shrink={0}>
+                  <Stack direction="row" align="center" gap={1}>
+                    <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
+                      arii.github.io →
+                    </Text>
+                  </Stack>
                 </Box>
-              </Box>
+              </Stack>
 
               <EditorialHeader
                 category={study.category}
@@ -248,12 +254,12 @@ export default function ResearchDetail() {
           </Stack>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={4}>
-            <Box as="a" href={migratedUrl} target="_blank" rel="noopener noreferrer" className="inline-flex">
+            <Box as="a" href={migratedUrl} target="_blank" rel="noopener noreferrer">
               <ActionButton variant="primary" paddingX={6} paddingY={3}>
                 View on arii.github.io →
               </ActionButton>
             </Box>
-            <Box as="button" onClick={() => navigate('/research')} className="inline-flex">
+            <Box as="button" onClick={() => navigate('/research')}>
               <ActionButton variant="secondary" paddingX={6} paddingY={3}>
                 Explore Live Experiments
               </ActionButton>
