@@ -132,6 +132,18 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
+    id: 'wcs-navigator',
+    taxonomyBucket: 'flagship',
+    title: 'WCS Navigator',
+    subtitle: 'CALIFORNIA 2026 PRESETS & PERSONA SELECTOR',
+    description: 'Event schedule entry view pre-loaded with 5 California 2026 West Coast Swing events, 4 social dance personas, PDF/URL schedule ingestion, and mock vs backend execution mode toggle.',
+    category: 'Product Development',
+    status: 'Active',
+    tags: ['React', 'WCS Events', 'Persona Generator', 'Schedule Parsing'],
+    canonicalPath: '/research/wcs-navigator',
+    isFlagship: true
+  },
+  {
     id: 'wcs-scraper',
     taxonomyBucket: 'data-content',
     title: 'High-Scale Telemetry Ingestion ETL',
