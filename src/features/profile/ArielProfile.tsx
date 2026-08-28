@@ -3,7 +3,6 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
-import { ProfileLinks } from './components/ProfileComponents';
 
 function ArielProfile() {
   const { bio } = useProfile();
@@ -13,7 +12,6 @@ function ArielProfile() {
   const wcsLove = bio.sections.find(s => s.id === 'wcs-love');
   const whyBuilt = bio.sections.find(s => s.id === 'why-built');
   const financialStrategies = bio.sections.find(s => s.id === 'financial-strategies');
-  const connectSection = bio.sections.find(s => s.id === 'connect');
 
   return (
     <Box as="section" height="full" paddingBottom={{ base: 24, lg: 32 }}>
