@@ -10,9 +10,14 @@ RUN grep -v -E 'pytest' requirements.txt > req_prod.txt \
 # Stage 2: Minimal runtime
 FROM python:3.11-slim AS runner
 WORKDIR /app
-COPY --from=builder /root/.local /root/.local
+
+RUN useradd -m appuser
+COPY --from=builder /root/.local /home/appuser/.local
 COPY . /app/wcs_navigator_api/
-ENV PATH=/root/.local/bin:$PATH
+RUN chown -R appuser:appuser /app /home/appuser/.local
+
+USER appuser
+ENV PATH=/home/appuser/.local/bin:$PATH
 ENV PYTHONPATH=/app
 ENV PORT=8080
 EXPOSE 8080
