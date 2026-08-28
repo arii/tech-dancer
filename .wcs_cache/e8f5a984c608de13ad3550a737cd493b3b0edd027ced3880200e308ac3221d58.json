@@ -1,0 +1,173 @@
+{
+  "decisionTrace": {
+    "subTasks": [
+      {
+        "id": "1",
+        "label": "Scanned Halloween event schedule",
+        "status": "completed",
+        "detail": "Extracted social dances, costume contests, and workshops"
+      },
+      {
+        "id": "2",
+        "label": "Calculated transit buffer",
+        "status": "completed",
+        "detail": "15m transit buffer applied"
+      },
+      {
+        "id": "3",
+        "label": "Filtered out competitive divisions",
+        "status": "completed",
+        "detail": "Excluded Jack & Jill and Strictly prelims per social_only intent"
+      },
+      {
+        "id": "4",
+        "label": "Generated RFC 5545 calendar file",
+        "status": "completed",
+        "detail": "Calendar export ready"
+      }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "2026-10-30T20:00:00-07:00",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 15,
+      "latestFlightArrivalDeadline": "2026-10-30T17:15:00-07:00",
+      "formulaSummary": "20:00 (Social Kickoff) - 15m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 17:15 (Landing Deadline)",
+      "steps": [
+        {
+          "label": "Friday Spooktacular Social Kickoff",
+          "time": "8:00 PM",
+          "duration": "Social",
+          "type": "staging",
+          "description": "Main Ballroom Kickoff"
+        },
+        {
+          "label": "Warmup & Costume Preparation",
+          "time": "7:00 PM",
+          "duration": "60m",
+          "type": "warmup",
+          "description": "Costume adjustments & warm-up"
+        },
+        {
+          "label": "Hotel Room Check-in",
+          "time": "5:30 PM",
+          "duration": "90m",
+          "type": "hotel",
+          "description": "Check-in and luggage drop"
+        },
+        {
+          "label": "Airport Transit",
+          "time": "5:15 PM",
+          "duration": "15m",
+          "type": "transit",
+          "description": "Rideshare transit to venue"
+        },
+        {
+          "label": "Latest Safe Flight Landing",
+          "time": "5:15 PM",
+          "duration": "Deadline",
+          "type": "flight",
+          "description": "Recommended latest safe flight arrival"
+        }
+      ]
+    },
+    "sessions": [
+      {
+        "id": "hst-s1",
+        "title": "Novice Jack & Jill - Prelims",
+        "time": "Friday 6:00 PM - 7:30 PM",
+        "location": "Grand Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Non-Competitor",
+        "justification": "Filtered: User primary intents are social_only and spectator_shows."
+      },
+      {
+        "id": "hst-s2",
+        "title": "Novice Strictly Swing - Prelims",
+        "time": "Saturday 1:00 PM - 2:30 PM",
+        "location": "Grand Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Non-Competitor",
+        "justification": "Filtered: User primary intents are social_only and spectator_shows."
+      },
+      {
+        "id": "hst-s3",
+        "title": "Intermediate Jack & Jill - Prelims",
+        "time": "Saturday 3:00 PM - 4:30 PM",
+        "location": "Grand Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Non-Competitor",
+        "justification": "Filtered: User primary intents are social_only and spectator_shows."
+      },
+      {
+        "id": "hst-s4",
+        "title": "Advanced Jack & Jill - Prelims",
+        "time": "Saturday 4:30 PM - 5:30 PM",
+        "location": "Grand Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Non-Competitor",
+        "justification": "Filtered: User primary intents are social_only and spectator_shows."
+      },
+      {
+        "id": "hst-s5",
+        "title": "Friday Spooktacular Social Dance",
+        "time": "Friday 8:00 PM - 5:00 AM",
+        "location": "Grand Ballroom",
+        "status": "included",
+        "decisionBadge": "Social Dance",
+        "justification": "Matches social_only intent."
+      },
+      {
+        "id": "hst-s6",
+        "title": "Saturday Night Costume Contest & Showcase Exhibition",
+        "time": "Saturday 9:00 PM - 11:30 PM",
+        "location": "Grand Ballroom",
+        "status": "included",
+        "decisionBadge": "Showcase Match",
+        "justification": "Matches spectator_shows intent."
+      },
+      {
+        "id": "hst-s7",
+        "title": "Sunday Survivor Costume Social",
+        "time": "Sunday 10:00 PM - 4:00 AM",
+        "location": "Grand Ballroom",
+        "status": "included",
+        "decisionBadge": "Social Dance",
+        "justification": "Matches social_only intent."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "ht-1",
+        "day": "Saturday Night",
+        "themeTitle": "Halloween Costume Dance Party",
+        "category": "social_theme",
+        "description": "Annual Halloween costume extravaganza and dance party.",
+        "recommendedAttire": [
+          "Dance-safe Halloween costumes",
+          "Masks/props that don't obstruct dance vision",
+          "Suede dance shoes"
+        ],
+        "vibe": "Festive, Creative & Playful"
+      }
+    ],
+    "packingManifest": [
+      {
+        "id": "hp1",
+        "name": "Dance-Safe Halloween Costumes",
+        "category": "attire",
+        "rationale": "Breathable costumes safe for spin turns and partnering",
+        "quantity": 2
+      },
+      {
+        "id": "hp2",
+        "name": "Electrolyte Hydration Packets",
+        "category": "essentials",
+        "rationale": "Stay hydrated during all-night social dancing",
+        "quantity": 10
+      }
+    ],
+    "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:hst-social-kickoff-2026@boomtick.blog\nDTSTART:20261031T030000Z\nDTEND:20261031T120000Z\nSUMMARY:🎃 Friday Spooktacular Social Dance\nDESCRIPTION:Halloween SwingThing social dance kickoff.\nLOCATION:Grand Ballroom\nSTATUS:CONFIRMED\nEND:VEVENT\nBEGIN:VEVENT\nUID:hst-costume-showcase-2026@boomtick.blog\nDTSTART:20261101T040000Z\nDTEND:20261101T063000Z\nSUMMARY:🎭 Saturday Night Costume Contest & Showcase Exhibition\nDESCRIPTION:Annual Halloween costume contest and pro exhibition.\nLOCATION:Grand Ballroom\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR"
+  },
+  "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:hst-social-kickoff-2026@boomtick.blog\nDTSTART:20261031T030000Z\nDTEND:20261031T120000Z\nSUMMARY:🎃 Friday Spooktacular Social Dance\nDESCRIPTION:Halloween SwingThing social dance kickoff.\nLOCATION:Grand Ballroom\nSTATUS:CONFIRMED\nEND:VEVENT\nBEGIN:VEVENT\nUID:hst-costume-showcase-2026@boomtick.blog\nDTSTART:20261101T040000Z\nDTEND:20261101T063000Z\nSUMMARY:🎭 Saturday Night Costume Contest & Showcase Exhibition\nDESCRIPTION:Annual Halloween costume contest and pro exhibition.\nLOCATION:Grand Ballroom\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR"
+}

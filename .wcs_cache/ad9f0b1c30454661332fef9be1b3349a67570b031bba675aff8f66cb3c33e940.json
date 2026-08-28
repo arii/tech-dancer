@@ -1,0 +1,186 @@
+{
+  "decisionTrace": {
+    "subTasks": [
+      {
+        "id": "1",
+        "label": "Parsed event timetable & streams",
+        "status": "completed",
+        "detail": "Extracted 32 sessions across 3 ballrooms"
+      },
+      {
+        "id": "2",
+        "label": "Calculated travel buffer & flight deadline",
+        "status": "completed",
+        "detail": "Target landing computed: 2:25 PM Friday (14:25 ISO)"
+      },
+      {
+        "id": "3",
+        "label": "Filtered workshops by division eligibility",
+        "status": "completed",
+        "detail": "Filtered higher level audition masterclasses"
+      },
+      {
+        "id": "4",
+        "label": "Generated RFC 5545 calendar file",
+        "status": "completed",
+        "detail": "Formatted .ics stream with VEVENT blocks"
+      }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "2026-10-09T17:15:00-07:00",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 20,
+      "latestFlightArrivalDeadline": "2026-10-09T14:25:00-07:00",
+      "formulaSummary": "17:15 (Call) - 20m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:25 (Landing Deadline)",
+      "steps": [
+        {
+          "label": "Novice Strictly Swing Prelims Staging",
+          "time": "5:15 PM",
+          "duration": "Staging",
+          "type": "staging",
+          "description": "Grand Peninsula Ballroom Check-in"
+        },
+        {
+          "label": "Warmup & Registration Buffer",
+          "time": "4:15 PM",
+          "duration": "60m",
+          "type": "warmup",
+          "description": "Bib pickup and physical warmup"
+        },
+        {
+          "label": "Hotel Check-In & Settle",
+          "time": "2:45 PM",
+          "duration": "90m",
+          "type": "hotel",
+          "description": "Hyatt Regency room check-in and wardrobe change"
+        },
+        {
+          "label": "SFO Airport Transit",
+          "time": "2:25 PM",
+          "duration": "20m",
+          "type": "transit",
+          "description": "Shuttle transit from SFO to hotel"
+        },
+        {
+          "label": "Latest Safe Flight Landing",
+          "time": "2:25 PM",
+          "duration": "Deadline",
+          "type": "flight",
+          "description": "Latest safe flight touchdown deadline"
+        }
+      ]
+    },
+    "sessions": [
+      {
+        "id": "bbb-s1",
+        "title": "Novice Strictly Swing - Prelims",
+        "time": "Friday 5:30 PM - 6:45 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Matches Novice competitive division."
+      },
+      {
+        "id": "bbb-s2",
+        "title": "Novice Jack & Jill - Prelims",
+        "time": "Saturday 2:00 PM - 3:30 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Matches Novice competitive division."
+      },
+      {
+        "id": "bbb-s3",
+        "title": "Intermediate Workshop: Acceleration & Dynamic Turns",
+        "time": "Saturday 11:00 AM - 12:15 PM",
+        "location": "Regency Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered: User profile is Novice; Intermediate status required."
+      },
+      {
+        "id": "bbb-s4",
+        "title": "Advanced / All-Star Technique Intensive",
+        "time": "Saturday 1:30 PM - 3:00 PM",
+        "location": "Regency Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered: User profile is Novice; Advanced audition required."
+      },
+      {
+        "id": "bbb-s5",
+        "title": "Champion Masterclass with Benji Schwimmer",
+        "time": "Sunday 11:00 AM - 12:30 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered: User profile is Novice; Champion level required."
+      },
+      {
+        "id": "bbb-s6",
+        "title": "Friday Glow Party & Welcome Social",
+        "time": "Friday 10:00 PM - 4:00 AM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Social Match",
+        "justification": "Matches social_only preference."
+      },
+      {
+        "id": "bbb-s7",
+        "title": "Saturday Showcase Gala & Champions Exhibition",
+        "time": "Saturday 9:00 PM - 11:30 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Showcase Match",
+        "justification": "Matches spectator interest for evening showcase."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "tb-1",
+        "day": "Friday Night",
+        "themeTitle": "Friday Glow Party",
+        "category": "social_theme",
+        "description": "Kickoff party with blacklights and neon colors.",
+        "recommendedAttire": [
+          "Neon & UV bright tops",
+          "Glow accessories",
+          "White accents"
+        ],
+        "vibe": "High Energy & Electric"
+      },
+      {
+        "id": "tb-2",
+        "day": "Saturday Evening",
+        "themeTitle": "Saturday Showcase Gala",
+        "category": "showcase_formal",
+        "description": "Marquee Champions Showcase & formal dinner dance.",
+        "recommendedAttire": [
+          "Cocktail dresses",
+          "Formal dress shirts & ties",
+          "Suede dance shoes"
+        ],
+        "vibe": "Glamorous & Elegant"
+      }
+    ],
+    "packingManifest": [
+      {
+        "id": "p1",
+        "name": "Adhesive Suede Shoe Sheets",
+        "category": "footwear",
+        "rationale": "For portable ballroom vinyl tiling floor speed adjustments",
+        "quantity": 2
+      },
+      {
+        "id": "p2",
+        "name": "Garment Steamer",
+        "category": "essentials",
+        "rationale": "Quickly wrinkle-free dress shirts and formalwear for Saturday Showcase Gala",
+        "quantity": 1
+      }
+    ],
+    "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:bbb-flight-deadline-2026@boomtick.blog\nDTSTART:20261009T212500Z\nDTEND:20261009T215500Z\nSUMMARY:✈️ Target Safe Flight Landing (SFO)\nDESCRIPTION:Latest recommended landing deadline before Novice Strictly Swing Prelims Staging Call (17:15).\nLOCATION:San Francisco International Airport (SFO)\nSTATUS:CONFIRMED\nEND:VEVENT\nBEGIN:VEVENT\nUID:bbb-novice-strictly-2026@boomtick.blog\nDTSTART:20261010T003000Z\nDTEND:20261010T014500Z\nSUMMARY:🏆 Novice Strictly Swing - Prelims\nDESCRIPTION:Report to Grand Peninsula Ballroom by 17:15 for check-in.\nLOCATION:Grand Peninsula Ballroom, Hyatt Regency\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR"
+  },
+  "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:bbb-flight-deadline-2026@boomtick.blog\nDTSTART:20261009T212500Z\nDTEND:20261009T215500Z\nSUMMARY:✈️ Target Safe Flight Landing (SFO)\nDESCRIPTION:Latest recommended landing deadline before Novice Strictly Swing Prelims Staging Call (17:15).\nLOCATION:San Francisco International Airport (SFO)\nSTATUS:CONFIRMED\nEND:VEVENT\nBEGIN:VEVENT\nUID:bbb-novice-strictly-2026@boomtick.blog\nDTSTART:20261010T003000Z\nDTEND:20261010T014500Z\nSUMMARY:🏆 Novice Strictly Swing - Prelims\nDESCRIPTION:Report to Grand Peninsula Ballroom by 17:15 for check-in.\nLOCATION:Grand Peninsula Ballroom, Hyatt Regency\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR"
+}

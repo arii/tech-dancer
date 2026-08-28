@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from wcs_navigator_api.config import get_genai_client
 from wcs_navigator_api.models.payloads import DiscoverUrlRequest, DiscoveryResponse
 from wcs_navigator_api.prompts.discovery_prompt import DISCOVERY_SYSTEM_PROMPT
+from wcs_navigator_api.services.cache_service import get_cache_key, get_cached_response, set_cached_response
 from wcs_navigator_api.services.pdf_service import (
     create_genai_pdf_part,
     extract_pdf_bytes_from_upload,
@@ -62,6 +63,11 @@ async def discover_schedule(
             detail="Either PDF file upload or valid URL JSON request body required.",
         )
 
+    cache_key = get_cache_key(pdf_bytes)
+    cached_data = get_cached_response(cache_key)
+    if cached_data:
+        return DiscoveryResponse.model_validate(cached_data)
+
     pdf_part = create_genai_pdf_part(pdf_bytes)
 
     try:
@@ -80,24 +86,27 @@ async def discover_schedule(
             detail=f"Gemini API discovery pass execution failed: {err}",
         ) from err
 
+    discovery_res = None
     if hasattr(response, "parsed") and isinstance(response.parsed, DiscoveryResponse):
-        return response.parsed
-
-    if hasattr(response, "parsed") and response.parsed is not None:
+        discovery_res = response.parsed
+    elif hasattr(response, "parsed") and response.parsed is not None:
         try:
             if isinstance(response.parsed, dict):
-                return DiscoveryResponse.model_validate(response.parsed)
+                discovery_res = DiscoveryResponse.model_validate(response.parsed)
         except Exception:
             pass
-
-    if hasattr(response, "text") and response.text:
+    elif hasattr(response, "text") and response.text:
         try:
-            return DiscoveryResponse.model_validate_json(response.text)
+            discovery_res = DiscoveryResponse.model_validate_json(response.text)
         except Exception as err:
             raise HTTPException(
                 status_code=500,
                 detail=f"Failed to parse Gemini response as DiscoveryResponse: {err}",
             ) from err
+
+    if discovery_res:
+        set_cached_response(cache_key, discovery_res.model_dump(by_alias=True))
+        return discovery_res
 
     raise HTTPException(
         status_code=500,
