@@ -1,4 +1,5 @@
 import { Search, Calendar, ShieldCheck, Zap, Sparkles, Cpu } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 
@@ -114,20 +115,26 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
         </Grid>
 
         {/* Standards & Badges Footer with Generous Spacing */}
-        <div className="flex flex-wrap items-center justify-center gap-8 pt-4 mt-2 border-t border-line/30 text-text-dim text-xs">
-          <div className="flex items-center gap-2">
+        <Box display="flex" wrap align="center" justify="center" gap={8} paddingTop={4} marginTop={2} className="border-t border-line/30 text-text-dim text-xs">
+          <Stack direction="row" align="center" gap={2}>
             <Icon icon={ShieldCheck} size="xs" color="accent" />
             <span>Private &amp; Secure</span>
-          </div>
-          <div className="flex items-center gap-2">
+          </Stack>
+          <Stack direction="row" align="center" gap={2}>
             <Icon icon={Sparkles} size="xs" color="accent" />
             <span>Personalized Recommendations</span>
-          </div>
-          <div className="flex items-center gap-2">
+          </Stack>
+          <Stack direction="row" align="center" gap={2}>
             <Icon icon={Cpu} size="xs" color="accent" />
             <span>Instant Calendar Download</span>
-          </div>
-        </div>
+          </Stack>
+          <Stack direction="row" align="center" gap={2} className="hover:text-brand-cyan transition-colors">
+            <Icon icon={Cpu} size="xs" color="accent" />
+            <NavLink to="/blog/2026-08-28-wcs-navigator-architecture" className="underline underline-offset-2">
+              Architecture Deep Dive
+            </NavLink>
+          </Stack>
+        </Box>
       </Stack>
     </Box>
   );
