@@ -1,58 +1,28 @@
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
-import { ProfileSection } from './types';
-import {
-  ExperienceCards,
-  ProfileItems,
-  ProfileGallery,
-  ProfileLinks
-} from './components/ProfileComponents';
+import { ProfileLinks } from './components/ProfileComponents';
 
 function ArielProfile() {
   const { bio } = useProfile();
-  const renderSection = (section: ProfileSection) => {
-    return (
-      <Stack key={section.id} gap={6} maxWidth="prose">
-        {section.title && (
-          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
-            {section.title}
-          </Text>
-        )}
-
-        {section.content && (
-          <Text variant="body" size="lg" color="body" className="leading-relaxed">
-            {section.content}
-          </Text>
-        )}
-
-        {section.cards && <ExperienceCards cards={section.cards} />}
-
-        {section.availability && (
-          <Box padding={6} radius="md" border className="bg-accent/5 border-accent/30">
-            <Text variant="body" size="base" color="accent" weight="font-medium">
-              {section.availability}
-            </Text>
-          </Box>
-        )}
-        {section.items && <ProfileItems items={section.items} />}
-        {section.links && <ProfileLinks links={section.links} />}
-      </Stack>
-    );
-  };
-
   const hasHash = !!window.location.hash;
-  const sections = bio.sections;
+
+  const danceBackground = bio.sections.find(s => s.id === 'dance-background');
+  const wcsLove = bio.sections.find(s => s.id === 'wcs-love');
+  const whyBuilt = bio.sections.find(s => s.id === 'why-built');
+  const financialStrategies = bio.sections.find(s => s.id === 'financial-strategies');
+  const connectSection = bio.sections.find(s => s.id === 'connect');
 
   return (
-    <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
+    <Box as="section" height="full" paddingBottom={{ base: 24, lg: 32 }}>
       <SEO
         title="About"
         description="Ariel Anders, PhD: West Coast Swing dancer, community builder, and creator of boomtick.blog. Personal site focused on dance lifestyle, travel strategies, and live web experiments."
       />
 
+      {/* 1. Hero / Introduction Section (Full Width, No Photo Cluster) */}
       <PageHeader
         label="BIOGRAPHY"
         title={bio.name}
@@ -60,74 +30,165 @@ function ArielProfile() {
       />
 
       {/* Primary Portfolio CTA Banner */}
-      <Stack
-        direction={{ base: 'col', sm: 'row' }}
-        align={{ base: 'start', sm: 'center' }}
-        justify="between"
-        gap={4}
-        marginTop={6}
-        padding={4}
-        radius="md"
-        border
-        className="bg-accent/10 border-accent/30"
-      >
-        <Stack gap={1}>
-          <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
-            Professional Engineering & Robotics Inquiries
-          </Text>
-          <Text variant="body" size="sm" color="main">
-            For robotics software, agentic engineering, and technical leadership, please visit my official primary portfolio.
-          </Text>
-        </Stack>
-        <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" shrink={0}>
-          <Stack direction="row" align="center" gap={1}>
-            <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
-              arii.github.io →
-            </Text>
-          </Stack>
-        </Box>
-      </Stack>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 p-5 rounded-lg border border-line/60 bg-surface/40">
+        <div className="flex-1 min-w-0 space-y-1 pr-2">
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-text-dim">
+            Engineering &amp; Robotics Consulting
+          </span>
+          <p className="text-sm text-text-main leading-relaxed">
+            I specialize in robotics software architecture, agentic engineering, front-end development, and technical leadership. Let's build together.
+          </p>
+        </div>
+        <a
+          href="https://arii.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 px-4 py-2.5 rounded-md bg-text-main text-black font-semibold text-xs hover:opacity-90 transition-opacity flex items-center gap-1.5 shadow-sm"
+        >
+          <span>Hire Me / View Portfolio →</span>
+        </a>
+      </div>
 
-      <Stack gap={16} marginTop={10}>
+      <div className="space-y-16 mt-12">
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
-          <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            {/* Main Content Area */}
-            <Stack gap={12} className="lg:col-span-7">
+          <div className="space-y-16">
+            {/* 2. My Dance Background Section (Text Left, Photo Right) */}
+            {danceBackground && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
+                    {danceBackground.title}
+                  </h2>
+                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
+                    {danceBackground.content}
+                  </p>
+                </div>
+                {danceBackground.gallery && danceBackground.gallery[0] && (
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-lg border border-line/40 bg-surface/30 shadow-md group">
+                    <img
+                      src={danceBackground.gallery[0].src}
+                      alt={danceBackground.gallery[0].alt}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
-              {/* Sections (Dance, Why, etc.) */}
-              {sections.map(s => {
-                // Ensure the 'connect' section links are rendered as intended instead of duplicated
-                if (s.id === 'connect') return null;
-                return renderSection(s);
-              })}
-            </Stack>
+            {/* 3. What I Love About WCS Section (Photo Left, 3 Feature Items Right) */}
+            {wcsLove && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                {wcsLove.gallery && wcsLove.gallery[0] && (
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-lg border border-line/40 bg-surface/30 shadow-md group order-2 lg:order-1">
+                    <img
+                      src={wcsLove.gallery[0].src}
+                      alt={wcsLove.gallery[0].alt}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div className="space-y-4 order-1 lg:order-2">
+                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
+                    {wcsLove.title}
+                  </h2>
+                  <div className="space-y-3">
+                    {wcsLove.items?.map((item, index) => (
+                      <div
+                        key={index}
+                        className="p-3.5 rounded-lg border border-line/40 bg-surface/30 space-y-1"
+                      >
+                        <span className="text-xs font-mono font-semibold uppercase tracking-wider text-text-dim">
+                          {item.title}
+                        </span>
+                        <p className="text-sm text-text-dim leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
-            {/* Right Column: Dynamic action visuals gallery */}
-            <Box className="lg:col-span-5 relative">
-              <Stack gap={6} position="sticky" top={12}>
-                <ProfileGallery images={bio.sections.flatMap(s => s.gallery || [])} />
+            {/* 4. Why I Built This Site Section (Text Left, Photo Right) */}
+            {whyBuilt && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
+                    {whyBuilt.title}
+                  </h2>
+                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
+                    {whyBuilt.content}
+                  </p>
+                </div>
+                {whyBuilt.gallery && whyBuilt.gallery[0] && (
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-lg border border-line/40 bg-surface/30 shadow-md group">
+                    <img
+                      src={whyBuilt.gallery[0].src}
+                      alt={whyBuilt.gallery[0].alt}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 5. Financial Strategies Section (Photo Left, Text Right) */}
+            {financialStrategies && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                {financialStrategies.gallery && financialStrategies.gallery[0] && (
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-lg border border-line/40 bg-surface/30 shadow-md group order-2 lg:order-1">
+                    <img
+                      src={financialStrategies.gallery[0].src}
+                      alt={financialStrategies.gallery[0].alt}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div className="space-y-4 order-1 lg:order-2">
+                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
+                    {financialStrategies.title}
+                  </h2>
+                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
+                    {financialStrategies.content}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Connect / Links */}
+            {connectSection?.links && (
+              <Stack gap={4} marginTop={4}>
+                <Text as="h3" variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+                  Connect &amp; Social
+                </Text>
+                <ProfileLinks links={connectSection.links} />
               </Stack>
-            </Box>
-          </Grid>
+            )}
+          </div>
         </Reveal>
-      </Stack>
+      </div>
 
-      {/* Legal & Privacy Sections - Required for compliance and smoke tests */}
-      <Stack gap={12} marginTop={32} paddingX={4} border="t" paddingTop={16} className="border-line/10">
-        <Stack id="privacy" gap={4} maxWidth="prose">
+      {/* Legal & Privacy Sections - Clean spacing */}
+      <Stack gap={8} marginTop={16} paddingX={4} border="t" paddingTop={12} className="border-line/20">
+        <Stack id="privacy" gap={3} maxWidth="prose">
           <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
             Privacy Policy
           </Text>
-          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
+          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-80">
             This site (boomtick.blog) is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Any information provided through contact forms or newsletter signups is used solely for that purpose.
           </Text>
         </Stack>
 
-        <Stack id="terms" gap={4} maxWidth="prose">
+        <Stack id="terms" gap={3} maxWidth="prose">
           <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
             Terms of Use
           </Text>
-          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
+          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-80">
             Content on this site is provided for informational and entertainment purposes. While we strive for accuracy, we are not responsible for any issues arising from the use of tools, products, or travel advice mentioned.
           </Text>
         </Stack>

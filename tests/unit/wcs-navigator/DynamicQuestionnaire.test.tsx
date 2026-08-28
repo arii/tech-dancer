@@ -78,45 +78,48 @@ describe('DynamicQuestionnaire Component', () => {
       />
     );
 
-    // Initial load: Only the first question should be visible (Progressive Disclosure)
+    // Initial load: Only Step 1 is rendered
     expect(screen.getByText('What is your WCS division / skill level?')).toBeDefined();
     expect(screen.queryByText('Which workshop tracks interest you?')).toBeNull();
 
     // Select options (radio role) for the first question
     expect(screen.getByRole('radio', { name: 'Novice / Newcomer' })).toBeDefined();
     const intermediateRadio = screen.getByRole('radio', { name: 'Intermediate' });
-
-    // Answer the first question to reveal the second
     fireEvent.click(intermediateRadio);
 
-    // Now the second question should be visible
-    expect(screen.getByText('Which workshop tracks interest you?')).toBeDefined();
-    expect(screen.queryByText('Include late night social dancing hours?')).toBeNull();
+    // Advance to Step 2
+    const nextBtn1 = screen.getByRole('button', { name: /Next/i });
+    fireEvent.click(nextBtn1);
 
-    // Answer the second question
+    // Now Step 2 is active
+    expect(screen.getByText('Which workshop tracks interest you?')).toBeDefined();
+    expect(screen.queryByText('What is your WCS division / skill level?')).toBeNull();
+
+    // Select workshop option
     const footworkCheckbox = screen.getByRole('checkbox', { name: 'Footwork & Technique' });
     fireEvent.click(footworkCheckbox);
 
-    // Now the third question should be visible
+    // Advance to Step 3
+    const nextBtn2 = screen.getByRole('button', { name: /Next/i });
+    fireEvent.click(nextBtn2);
+
+    // Now Step 3 is active
     expect(screen.getByText('Include late night social dancing hours?')).toBeDefined();
-
-    // Multiselect options (checkbox role)
-    expect(screen.getByRole('checkbox', { name: 'Musicality & Timing' })).toBeDefined();
-
-    // Switch toggle button
     expect(screen.getByRole('switch', { name: 'Include late night social dancing hours?' })).toBeDefined();
   });
 
-  it('renders P0 explainability context as inline hints', () => {
+  it('renders clean question title and options in step flow', () => {
     render(
       <DynamicQuestionnaire
         discoveryResponse={boogieByTheBayPreset}
       />
     );
 
-    // The inline context for the first question should be present without clicking any buttons
     expect(
-      screen.getByText(/Scanned 12 workshop tracks across Novice/i)
+      screen.getByText('What is your WCS division / skill level?')
+    ).toBeDefined();
+    expect(
+      screen.getByRole('radio', { name: /Novice \/ Newcomer/i })
     ).toBeDefined();
   });
 
@@ -138,12 +141,13 @@ describe('DynamicQuestionnaire Component', () => {
     );
 
     expect(screen.queryByText('What is your WCS division / skill level?')).toBeNull();
-    // First question of the new preset
     expect(screen.getByText('Will you participate in the Costume Contest?')).toBeDefined();
-    // Answer first question to reveal second
-    fireEvent.click(screen.getByRole('switch', { name: 'Will you participate in the Costume Contest?' }));
 
-    // Now second question should be revealed
+    // Toggle switch and advance to step 2
+    fireEvent.click(screen.getByRole('switch', { name: 'Will you participate in the Costume Contest?' }));
+    const nextBtn = screen.getByRole('button', { name: /Next/i });
+    fireEvent.click(nextBtn);
+
     expect(screen.getByText('Select your Friday Intensive Topic')).toBeDefined();
   });
 
@@ -156,24 +160,29 @@ describe('DynamicQuestionnaire Component', () => {
       />
     );
 
+    // On Step 1: required field
+    const intermediateRadio = screen.getByRole('radio', { name: /Intermediate/i });
+    fireEvent.click(intermediateRadio);
+
+    // Move to Step 2
+    fireEvent.click(screen.getByRole('button', { name: /Next/i }));
+
+    // On Step 2: optional field
+    fireEvent.click(screen.getByRole('checkbox', { name: /Footwork & Technique/i }));
+
+    // Move to Step 3 (final step)
+    fireEvent.click(screen.getByRole('button', { name: /Next/i }));
+
     const submitBtn = screen.getByRole('button', { name: /Generate Calendar/i }) as HTMLButtonElement;
     expect(submitBtn.disabled).toBe(true);
 
-    // Fill required field 1 (select: skill_level)
-    fireEvent.click(screen.getByRole('radio', { name: /Intermediate/i }));
-    expect(submitBtn.disabled).toBe(true); // boolean 'late_night' is required and not filled yet
-
-    // Fill field 2 (multiselect: focus_areas - not required, but needs answer to reveal field 3)
-    fireEvent.click(screen.getByRole('checkbox', { name: /Footwork & Technique/i }));
-
-    // Fill required field 3 (boolean: late_night)
+    // Fill required boolean on step 3
     const switchBtn = screen.getByRole('switch', { name: /Include late night social dancing hours\?/i });
     fireEvent.click(switchBtn);
 
-    // Now all required fields are satisfied
     expect(submitBtn.disabled).toBe(false);
-
     fireEvent.click(submitBtn);
+
     expect(handleSubmit).toHaveBeenCalledWith({
       skill_level: 'intermediate',
       focus_areas: ['footwork'],
@@ -181,7 +190,7 @@ describe('DynamicQuestionnaire Component', () => {
     });
   });
 
-  it('initializes with initialAnswers and allows immediate submit if complete', () => {
+  it('initializes with initialAnswers and allows step navigation to submit', () => {
     const handleSubmit = vi.fn();
     render(
       <DynamicQuestionnaire
@@ -193,6 +202,11 @@ describe('DynamicQuestionnaire Component', () => {
         onSubmit={handleSubmit}
       />
     );
+
+    // Step 1 -> Step 2
+    fireEvent.click(screen.getByRole('button', { name: /Next/i }));
+    // Step 2 -> Step 3
+    fireEvent.click(screen.getByRole('button', { name: /Next/i }));
 
     const submitBtn = screen.getByRole('button', { name: /Generate Calendar/i }) as HTMLButtonElement;
     expect(submitBtn.disabled).toBe(false);

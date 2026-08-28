@@ -9,29 +9,18 @@ export interface SelectFieldProps {
 
 export const SelectField: React.FC<SelectFieldProps> = ({ question, value, onChange }) => {
   const options = question.options || [];
-  const explanationText = question.context || 'Gemini Flash AI uses this response to filter out conflicting tracks, gate level-restricted workshops, and compute staging buffer times.';
 
   return (
-    <Stack gap={3} width="full">
-      <Stack gap={1.5}>
-        <Stack direction="row" align="center" justify="between" wrap gap={2}>
-          <Stack direction="row" align="center" gap={2}>
-            <Text as="h3" variant="body-bold" color="main">
-              {question.title}
-            </Text>
-            {question.required && (
-              <Text variant="caption-bold" className="text-brand-cyan font-semibold" aria-label="Required">
-                *
-              </Text>
-            )}
-          </Stack>
-        </Stack>
-
-        <Box paddingTop={1}>
-          <Text variant="caption-subtle" color="dim" className="leading-relaxed">
-            {explanationText}
+    <Stack gap={4} width="full">
+      <Stack direction="row" align="center" gap={2}>
+        <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
+          {question.title}
+        </Text>
+        {question.required && (
+          <Text variant="caption-bold" className="text-text-dim font-semibold" aria-label="Required">
+            *
           </Text>
-        </Box>
+        )}
       </Stack>
 
       <Grid cols={{ default: 1, sm: 2 }} gap={3} role="radiogroup" aria-label={question.title}>
@@ -45,47 +34,33 @@ export const SelectField: React.FC<SelectFieldProps> = ({ question, value, onCha
               role="radio"
               aria-checked={isSelected}
               onClick={() => onChange(option.value)}
-              surface={isSelected ? 'highlight' : 'subtle'}
               radius="lg"
               padding={4}
               cursor="pointer"
               display="flex"
-              direction="column"
+              align="center"
               justify="between"
-              gap={2}
-              className={`min-h-14 text-left transition-all border tap-target ${
+              gap={3}
+              className={`min-h-14 text-left transition-all border ${
                 isSelected
-                  ? 'border-brand-cyan ring-1 ring-brand-cyan/60 bg-brand-cyan/10 shadow-sm'
-                  : 'border-line hover:border-brand-cyan/50 hover:bg-surface'
+                  ? 'bg-surface-subtle border-line-strong text-text-main ring-1 ring-line-strong'
+                  : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface text-text-dim hover:text-text-main'
               }`}
             >
-              <Box display="flex" align="center" justify="between" width="full" gap={2}>
+              <Text
+                variant="body-sm"
+                weight={isSelected ? 'font-bold' : 'font-medium'}
+                className={isSelected ? 'text-text-main' : 'text-text-dim'}
+              >
+                {option.label}
+              </Text>
+              {option.badge && (
                 <Text
-                  variant="body-sm"
-                  weight="font-bold"
-                  className={isSelected ? 'text-brand-cyan' : 'text-text-main'}
+                  variant="mono"
+                  size="micro"
+                  className="text-xs font-mono text-text-dim uppercase tracking-wider shrink-0"
                 >
-                  {option.label}
-                </Text>
-                {option.badge && (
-                  <Box
-                    paddingX={2}
-                    paddingY={0.5}
-                    radius="md"
-                    className={`text-xs font-mono font-semibold uppercase tracking-wider border ${
-                      isSelected
-                        ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40'
-                        : 'bg-muted text-text-dim border-line'
-                    }`}
-                  >
-                    {option.badge}
-                  </Box>
-                )}
-              </Box>
-
-              {option.subtitle && (
-                <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
-                  {option.subtitle}
+                  {option.badge}
                 </Text>
               )}
             </Box>

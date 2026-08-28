@@ -1,14 +1,12 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
-import { Button } from '@/layouts/Button';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AgentDecisionTrace } from '../types';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FilteringAuditMatrix } from './FilteringAuditMatrix';
 import { ThemeDressCodeCard } from './ThemeDressCodeCard';
-import { ExecutionProgressBar } from './ExecutionProgressBar';
 import { downloadIcsFile } from '../utils/icsDownloader';
-import { Download, Brain, Sparkles, CheckCircle2, X, FileText } from 'lucide-react';
+import { Download, CheckCircle2, X, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 export interface AgentMindTraceProps {
@@ -137,7 +135,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
 
   return (
     <Stack gap={8} className={className}>
-      <ExecutionProgressBar tasks={trace?.subTasks} />
       {/* 1-Click Instant Download Visual Toast Feedback */}
       {showToast && (
         <Box
@@ -183,101 +180,57 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
         </Box>
       )}
 
-      {/* Header Banner */}
-      <Box padding={6} radius="lg" surface="card" border className="border-accent/30 bg-gradient-to-r from-accent/10 via-surface to-surface relative overflow-hidden">
-        <Box display="flex" align="start" justify="between" wrap gap={4}>
-          <Stack gap={2} maxWidth="2xl">
-            <Box display="flex" align="center" gap={2}>
-              <Box padding={1} radius="md" className="bg-accent/10 text-accent border border-accent/20">
-                <Brain className="w-5 h-5" />
-              </Box>
-              <Box as="span" className="text-xs font-mono font-bold uppercase tracking-wider text-accent">
-                Your Weekend Plan
-              </Box>
-            </Box>
-            <Box as="h2" className="text-2xl font-black text-text-main tracking-tight">
-              Personalized Schedule &amp; Travel Buffer
-            </Box>
-            <Box as="p" className="text-sm text-text-dim leading-relaxed">
-              Here is your customized weekend plan: arrival buffer timeline, workshop schedule, and party themes &amp; dress codes.
-            </Box>
-          </Stack>
-
-          <Stack gap={3}>
-            <Button
-              onClick={handleDownloadCalendar}
-              variant="accent"
-              size="md"
-              icon={Download}
-            >
-              Add to Calendar (.ics)
-            </Button>
-            <Button
-              onClick={handleDownloadVisualSchedule}
-              variant="primary"
-              size="md"
-              icon={FileText}
-            >
-              Download Mobile Schedule (.md)
-            </Button>
-          </Stack>
-        </Box>
-
-        <Box display="flex" align="center" gap={2} marginTop={4} className="text-xs font-mono text-text-dim">
-          <Sparkles className="w-3.5 h-3.5 text-accent shrink-0" />
-          <Box as="span">Sync calendar or save a mobile-friendly Markdown summary for your lock screen</Box>
-        </Box>
-      </Box>
-
-      {/* 2-Column Wide Desktop Layout Grid (lg+) */}
-      <Grid cols={{ default: 1, lg: 12 }} gap={8} align="start">
-        {/* Left Column (lg: 5 cols): Arrival Timeline & Travel Buffer Breakdown */}
-        <Box span={{ default: 12, lg: 5 }}>
-          <FlightBufferTimeline
-            buffer={trace?.bufferTimeline}
-            flightOffsetMinutes={flightOffset}
-            onFlightOffsetChange={setFlightOffset}
-          />
-        </Box>
-
-        {/* Right Column (lg: 7 cols): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
-        <Box span={{ default: 12, lg: 7 }}>
-          <Stack gap={8}>
-            <FilteringAuditMatrix sessions={dynamicSessions} />
-            <ThemeDressCodeCard themes={trace?.themeDressCodes} />
-          </Stack>
-        </Box>
-      </Grid>
-
-      {/* Footer Download Trigger Callout */}
-      <Box padding={6} radius="lg" surface="card" border className="text-center border-line">
-        <Stack gap={3} align="center">
-          <Box as="h3" className="text-lg font-bold text-text-main">
-            Ready to Sync Your Schedule?
+      {/* Editorial Header & Action Bar sitting directly on the canvas */}
+      <Box display="flex" align="start" justify="between" wrap gap={4} className="pb-6 border-b border-line/40">
+        <Stack gap={1.5} maxWidth="2xl">
+          <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
+            Custom Itinerary
+          </Text>
+          <Box as="h2" className="text-2xl sm:text-3xl font-bold text-text-main tracking-tight">
+            Personalized Schedule &amp; Travel Buffer
           </Box>
-          <Box as="p" className="text-xs text-text-dim maxWidth-md">
-            Download your customized calendar (.ics) with travel buffer reminders, workshops, and competition call times.
-          </Box>
-          <Box display="flex" justify="center" gap={3} wrap="wrap">
-            <Button
-              onClick={handleDownloadCalendar}
-              variant="accent"
-              size="lg"
-              icon={Download}
-            >
-              Add to Calendar (.ics)
-            </Button>
-            <Button
-              onClick={handleDownloadVisualSchedule}
-              variant="primary"
-              size="lg"
-              icon={FileText}
-            >
-              Download Mobile Schedule (.md)
-            </Button>
-          </Box>
+          <Text size="sm" color="dim" className="leading-relaxed">
+            Arrival buffer breakdown, workshop recommendations, and party themes tailored to your profile.
+          </Text>
         </Stack>
+
+        <Box display="flex" align="center" gap={3} wrap className="pt-1">
+          <Box
+            as="button"
+            type="button"
+            onClick={handleDownloadCalendar}
+            className="text-xs font-mono text-text-main hover:text-white bg-surface border border-line/60 hover:border-line-strong px-3.5 py-2 rounded-md flex items-center gap-2 cursor-pointer transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Add to Calendar (.ics)</span>
+          </Box>
+          <Box
+            as="button"
+            type="button"
+            onClick={handleDownloadVisualSchedule}
+            className="text-xs font-mono text-text-dim hover:text-text-main flex items-center gap-1.5 cursor-pointer transition-colors py-2 px-1"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span className="underline underline-offset-2">Download Schedule (.md)</span>
+          </Box>
+        </Box>
       </Box>
+
+      {/* Full Width Clean Flow (No Squished Split Columns) */}
+      <Stack gap={8} width="full">
+        {/* Arrival Timeline & Travel Buffer Breakdown */}
+        <FlightBufferTimeline
+          buffer={trace?.bufferTimeline}
+          flightOffsetMinutes={flightOffset}
+          onFlightOffsetChange={setFlightOffset}
+        />
+
+        {/* Matched Workshops & Schedule Matrix */}
+        <FilteringAuditMatrix sessions={dynamicSessions} />
+
+        {/* Event Themes & Dress Codes */}
+        <ThemeDressCodeCard themes={trace?.themeDressCodes} />
+      </Stack>
     </Stack>
   );
 };

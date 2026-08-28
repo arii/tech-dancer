@@ -10,29 +10,17 @@ export interface BooleanFieldProps {
 export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = false, onChange }) => {
   const isChecked = Boolean(value);
 
-  const explanationText = question.context || 'Gemini Flash AI factors this preference into sleep/recovery buffer calculations and personalizes packing checklist items.';
-
   return (
-    <Stack gap={3} width="full">
-      <Stack gap={1.5}>
-        <Stack direction="row" align="center" justify="between" wrap gap={2}>
-          <Stack direction="row" align="center" gap={2}>
-            <Text as="h3" variant="body-bold" color="main">
-              {question.title}
-            </Text>
-            {question.required && (
-              <Text variant="caption-bold" className="text-brand-cyan font-semibold" aria-label="Required">
-                *
-              </Text>
-            )}
-          </Stack>
-        </Stack>
-
-        <Box paddingTop={1}>
-          <Text variant="caption-subtle" color="dim" className="leading-relaxed">
-            {explanationText}
+    <Stack gap={4} width="full">
+      <Stack direction="row" align="center" gap={2}>
+        <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
+          {question.title}
+        </Text>
+        {question.required && (
+          <Text variant="caption-bold" className="text-text-dim font-semibold" aria-label="Required">
+            *
           </Text>
-        </Box>
+        )}
       </Stack>
 
       <Box
@@ -42,34 +30,33 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
         aria-checked={isChecked}
         aria-label={question.title}
         onClick={() => onChange(!isChecked)}
-        surface="subtle"
         radius="lg"
-        paddingX={4}
-        paddingY={3}
+        paddingX={5}
+        paddingY={4}
         cursor="pointer"
         display="flex"
         align="center"
         justify="between"
         width="full"
-        className={`min-h-11 border tap-target transition-all ${
+        className={`min-h-14 transition-all border ${
           isChecked
-            ? 'border-brand-cyan ring-1 ring-brand-cyan bg-brand-cyan/10'
-            : 'border-line hover:border-brand-cyan/50 hover:bg-surface'
+            ? 'bg-surface-subtle border-line-strong ring-1 ring-line-strong'
+            : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface'
         }`}
       >
-        <Text variant="body-sm" className={isChecked ? 'text-brand-cyan font-semibold' : 'text-text-main'}>
-          {isChecked ? 'Enabled' : 'Disabled'}
+        <Text variant="body-sm" weight={isChecked ? 'font-bold' : 'font-medium'} className={isChecked ? 'text-text-main' : 'text-text-dim'}>
+          {isChecked ? 'Yes, include in schedule' : 'No, skip late night'}
         </Text>
         <Box
           display="flex"
           align="center"
-          className={`w-11 h-6 rounded-full p-1 transition-colors ${
-            isChecked ? 'bg-brand-cyan' : 'bg-surface-subtle border border-line'
+          className={`w-11 h-6 rounded-full p-0.5 transition-colors ${
+            isChecked ? 'bg-text-main' : 'bg-surface-muted border border-line'
           }`}
         >
           <Box
-            className={`bg-text-main w-4 h-4 rounded-full shadow-md transform transition-transform ${
-              isChecked ? 'translate-x-5' : 'translate-x-0'
+            className={`w-5 h-5 rounded-full shadow-sm transform transition-transform ${
+              isChecked ? 'bg-black translate-x-5' : 'bg-text-dim translate-x-0'
             }`}
           />
         </Box>

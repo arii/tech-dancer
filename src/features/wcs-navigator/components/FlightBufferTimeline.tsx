@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
-import { FlightBuffer, BufferStep } from '../types';
-import { Plane, Home, Flame, Clock, Calendar, Hourglass, ShieldCheck, Car } from 'lucide-react';
+import { useState } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { FlightBuffer } from '../types';
 
 export interface FlightBufferTimelineProps {
   buffer?: FlightBuffer;
@@ -21,62 +20,39 @@ const DEFAULT_BUFFER: FlightBuffer = {
     {
       type: 'flight',
       label: 'Target Flight Landing Deadline',
-      time: '02:15 PM Touchdown',
-      duration: 'Deadline Target',
-      description: 'Recommended latest wheels-down time to account for deplaning and baggage collection.',
+      time: '02:15 PM',
+      duration: '',
+      description: '',
     },
     {
       type: 'transit',
       label: 'Airport-to-Venue Transit',
-      time: '02:15 PM → 02:45 PM',
-      duration: '30 mins',
-      description: 'Dedicated rideshare or shuttle buffer from airport terminal directly to host hotel.',
+      time: '02:15 PM',
+      duration: '',
+      description: '',
     },
     {
       type: 'hotel',
       label: 'Hotel Check-in & Wardrobe Settle',
-      time: '02:45 PM → 04:15 PM',
-      duration: '90 mins',
-      description: 'Room check-in, unpacking dance wardrobe, shoe prep, and freshening up.',
+      time: '02:45 PM',
+      duration: '',
+      description: '',
     },
     {
       type: 'warmup',
       label: 'Warmup & Floor Check',
-      time: '04:15 PM → 05:15 PM',
-      duration: '60 mins',
-      description: 'Competitor bib registration, physical dynamic stretch, and ballroom floor test.',
+      time: '04:15 PM',
+      duration: '',
+      description: '',
     },
     {
       type: 'staging',
       label: 'Competition Staging Call',
-      time: '05:15 PM Staging Call',
-      duration: 'Mandatory Call',
-      description: 'Earliest division roll call. Competitors must report to ballroom marshalling.',
+      time: '05:15 PM',
+      duration: '',
+      description: '',
     },
   ],
-};
-
-const TYPE_CONFIG = {
-  flight: {
-    iconBg: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
-    icon: Plane,
-  },
-  transit: {
-    iconBg: 'bg-muted/70 text-text-dim border-line',
-    icon: Car,
-  },
-  hotel: {
-    iconBg: 'bg-muted/70 text-text-dim border-line',
-    icon: Home,
-  },
-  warmup: {
-    iconBg: 'bg-brand-amber/20 text-brand-amber border-brand-amber/40',
-    icon: Flame,
-  },
-  staging: {
-    iconBg: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
-    icon: Calendar,
-  },
 };
 
 export const FlightBufferTimeline = ({
@@ -108,7 +84,6 @@ export const FlightBufferTimeline = ({
   const totalBufferMinutes = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
   const totalBufferHours = (totalBufferMinutes / 60).toFixed(1).replace('.0', '');
 
-  // Helper to parse time string like "02:15 PM" or "2:15 PM (Friday)" and add offset minutes
   const formatOffsetTime = (timeStr: string, offsetMins: number): string => {
     if (offsetMins === 0) return timeStr;
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
@@ -137,354 +112,131 @@ export const FlightBufferTimeline = ({
     return timeStr.replace(/(\d{1,2}):(\d{2})\s*(AM|PM)/i, `${formattedHours}:${formattedMins} ${newAmpm}`);
   };
 
-  // Ensure chronological top-to-bottom flow (earliest flight arrival first, ending at staging call)
-  const chronologicalSteps = useMemo(() => {
-    const totalBufferMins = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
-    const deadlineWithoutOffset = formatOffsetTime(buffer.earliestStagingTime, -totalBufferMins);
-    const flightLandingTime = formatOffsetTime(deadlineWithoutOffset, activeOffset);
+  const cleanTime = (t: string) => {
+    const m = t.match(/\d{1,2}:\d{2}\s*(?:AM|PM)/i);
+    return m ? m[0] : t;
+  };
 
-    // Build the dynamic steps based on the calculus
-    const flightStep = {
-      type: 'flight',
-      label: 'Target Flight Landing Deadline',
-      time: flightLandingTime + ' Touchdown',
-      duration: 'Deadline Target',
-      description: 'Recommended latest wheels-down time to account for deplaning and baggage collection.',
-    };
+  const totalBufferMins = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
+  const deadlineWithoutOffset = formatOffsetTime(buffer.earliestStagingTime, -totalBufferMins);
+  const flightLandingTime = formatOffsetTime(deadlineWithoutOffset, activeOffset);
 
-    const transitStart = flightLandingTime;
-    const transitEnd = formatOffsetTime(flightLandingTime, buffer.transitMinutes || 30);
-    const transitStep = {
-      type: 'transit',
-      label: 'Airport-to-Venue Transit',
-      time: `${transitStart} → ${transitEnd}`,
-      duration: `${buffer.transitMinutes || 30} mins`,
-      description: 'Dedicated rideshare or shuttle buffer from airport terminal directly to host hotel.',
-    };
+  const transitStart = flightLandingTime;
+  const hotelStart = formatOffsetTime(transitStart, buffer.transitMinutes || 30);
+  const warmupStart = formatOffsetTime(hotelStart, buffer.hotelSettleMinutes || 90);
+  const stagingTime = buffer.earliestStagingTime;
 
-    const hotelStart = transitEnd;
-    const hotelEnd = formatOffsetTime(hotelStart, buffer.hotelSettleMinutes || 90);
-    const hotelStep = {
-      type: 'hotel',
-      label: 'Hotel Check-in & Wardrobe Settle',
-      time: `${hotelStart} → ${hotelEnd}`,
-      duration: `${buffer.hotelSettleMinutes || 90} mins`,
-      description: 'Room check-in, unpacking dance wardrobe, shoe prep, and freshening up.',
-    };
-
-    const warmupStart = hotelEnd;
-    const warmupEnd = formatOffsetTime(warmupStart, buffer.warmupMinutes || 60);
-    const warmupStep = {
-      type: 'warmup',
-      label: 'Warmup & Floor Check',
-      time: `${warmupStart} → ${warmupEnd}`,
-      duration: `${buffer.warmupMinutes || 60} mins`,
-      description: 'Competitor bib registration, physical dynamic stretch, and ballroom floor test.',
-    };
-
-    const stagingStep = {
-      type: 'staging',
+  const steps = [
+    {
+      id: 'flight',
+      label: 'Flight Touchdown Target',
+      time: cleanTime(flightLandingTime),
+      isFlight: true,
+    },
+    {
+      id: 'transit',
+      label: `Airport to Venue Transit (${buffer.transitMinutes || 30}m)`,
+      time: cleanTime(transitStart),
+    },
+    {
+      id: 'hotel',
+      label: `Hotel Check-in & Wardrobe (${buffer.hotelSettleMinutes || 90}m)`,
+      time: cleanTime(hotelStart),
+    },
+    {
+      id: 'warmup',
+      label: `Warmup & Floor Check (${buffer.warmupMinutes || 60}m)`,
+      time: cleanTime(warmupStart),
+    },
+    {
+      id: 'staging',
       label: 'Competition Staging Call',
-      time: buffer.earliestStagingTime + ' Staging Call',
-      duration: 'Mandatory Call',
-      description: 'Earliest division roll call. Competitors must report to ballroom marshalling.',
-    };
-
-    return [flightStep, transitStep, hotelStep, warmupStep, stagingStep];
-  }, [buffer.earliestStagingTime, buffer.transitMinutes, buffer.hotelSettleMinutes, buffer.warmupMinutes, activeOffset]);
-
-  const adjustedLandingDeadline = useMemo(() => {
-    // Calculus: T_landing_deadline = T_staging - (T_transit + T_hotel_settle + T_warmup)
-    const totalBufferMins = (buffer.transitMinutes || 30) + (buffer.hotelSettleMinutes || 90) + (buffer.warmupMinutes || 60);
-    // T_staging is buffer.earliestStagingTime
-    // We reverse formatOffsetTime by adding negative totalBufferMins, then adding activeOffset
-    // Wait, the calculus requires deriving T_landing_deadline from earliestStagingTime directly:
-    const deadlineWithoutOffset = formatOffsetTime(buffer.earliestStagingTime, -totalBufferMins);
-    return formatOffsetTime(deadlineWithoutOffset, activeOffset);
-  }, [buffer.earliestStagingTime, buffer.transitMinutes, buffer.hotelSettleMinutes, buffer.warmupMinutes, activeOffset]);
-
-  const hasScheduleConflict = activeOffset > 0;
+      time: cleanTime(stagingTime),
+      isStaging: true,
+    },
+  ];
 
   return (
-    <Stack gap={4} className={className}>
-      {/* Header Banner */}
-      <Box display="flex" align="center" justify="between" wrap gap={2}>
-        <Stack gap={1}>
-          <Stack direction="row" align="center" gap={2}>
-            <Clock className="w-5 h-5 text-accent shrink-0" />
-            <Text as="h3" variant="body-lg" weight="font-bold" color="main">
-              Travel &amp; Arrival Timeline
-            </Text>
-          </Stack>
+    <Stack gap={5} width="full" className={className}>
+      {/* Editorial Header */}
+      <Box display="flex" align="start" justify="between" wrap gap={2} className="pb-2 border-b border-line/40">
+        <Stack gap={0.5}>
+          <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
+            Travel &amp; Arrival Timeline
+          </Text>
           <Text size="xs" color="dim">
-            Calculated backward from your earliest mandatory event call to guarantee zero rushing
+            Calculated backward from your earliest call ({buffer.earliestStagingTime}) • Total required buffer: <span className="text-text-main font-semibold">{totalBufferHours}h ({totalBufferMinutes}m)</span>
           </Text>
         </Stack>
       </Box>
 
-      {/* ⏱️ 1. Direct Time Summary Row (High Contrast) */}
-      <Grid cols={{ default: 1, sm: 3 }} gap={3}>
-        <Box
-          padding={4}
-          radius="lg"
-          surface="card"
-          border
-          display="flex"
-          direction="column"
-          gap={1}
-          className="border-line bg-surface/90"
-        >
-          <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
-            🏆 Earliest Event Call
-          </Text>
-          <Text variant="body-lg" weight="font-bold" color="main" className="font-mono text-base sm:text-lg">
-            {buffer.earliestStagingTime}
-          </Text>
-        </Box>
-
-        <Box
-          padding={4}
-          radius="lg"
-          surface="card"
-          border
-          display="flex"
-          direction="column"
-          justify="between"
-          gap={2}
-          className={`transition-all shadow-sm ${
-            hasScheduleConflict
-              ? 'border-brand-terminal-red/50 bg-brand-terminal-red/10'
-              : 'border-brand-cyan/40 bg-brand-cyan/10'
-          }`}
-        >
-          <Box display="flex" align="center" justify="between" width="full" gap={1}>
-            <Text
-              variant="mono"
-              size="micro"
-              uppercase
-              tracking="wider"
-              className={hasScheduleConflict ? 'text-brand-terminal-red' : 'text-brand-cyan'}
-            >
-              ✈️ Landing Target {activeOffset !== 0 ? `(${activeOffset > 0 ? '+' : ''}${activeOffset}m)` : ''}
-            </Text>
-
-            {activeOffset !== 0 && (
+      {/* Editorial Continuous Vertical Line Timeline */}
+      <Box className="relative pl-6 border-l border-line/60 space-y-6 my-2">
+        {steps.map((step) => {
+          return (
+            <Box key={step.id} className="relative group">
+              {/* Subtle timeline node marker */}
               <Box
-                as="button"
-                type="button"
-                onClick={handleResetOffset}
-                className="font-mono underline text-dim hover:text-main cursor-pointer"
-              >
-                <Text variant="mono" size="micro">Reset</Text>
-              </Box>
-            )}
-          </Box>
+                className={`w-2 h-2 rounded-full absolute -left-[29px] top-1.5 ring-4 ring-bg transition-colors ${
+                  step.isFlight || step.isStaging ? 'bg-text-main' : 'bg-slate-500 group-hover:bg-text-main'
+                }`}
+              />
 
-          <Text
-            variant="body-lg"
-            weight="font-bold"
-            className={`font-mono text-base sm:text-lg ${
-              hasScheduleConflict ? 'text-brand-terminal-red' : 'text-brand-cyan'
-            }`}
-          >
-            {adjustedLandingDeadline}
-          </Text>
-
-          {/* Time Adjustment Controls */}
-          <Box display="flex" align="center" gap={1.5}>
-            <Box
-              as="button"
-              type="button"
-              onClick={() => handleOffsetChange(-30)}
-              paddingX={2}
-              paddingY={1}
-              radius="md"
-              surface="muted"
-              border
-              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
-              aria-label="Land 30 minutes earlier"
-            >
-              <Text variant="mono" size="micro">-30m</Text>
-            </Box>
-            <Box
-              as="button"
-              type="button"
-              onClick={() => handleOffsetChange(-15)}
-              paddingX={2}
-              paddingY={1}
-              radius="md"
-              surface="muted"
-              border
-              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
-              aria-label="Land 15 minutes earlier"
-            >
-              <Text variant="mono" size="micro">-15m</Text>
-            </Box>
-            <Box
-              as="button"
-              type="button"
-              onClick={() => handleOffsetChange(15)}
-              paddingX={2}
-              paddingY={1}
-              radius="md"
-              surface="muted"
-              border
-              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
-              aria-label="Land 15 minutes later"
-            >
-              <Text variant="mono" size="micro">+15m</Text>
-            </Box>
-            <Box
-              as="button"
-              type="button"
-              onClick={() => handleOffsetChange(30)}
-              paddingX={2}
-              paddingY={1}
-              radius="md"
-              surface="muted"
-              border
-              className="min-h-7 border-line text-main hover:border-accent hover:text-accent cursor-pointer transition-colors"
-              aria-label="Land 30 minutes later"
-            >
-              <Text variant="mono" size="micro">+30m</Text>
-            </Box>
-            <Box marginLeft="auto">
-              <Text variant="mono" size="micro" color="dim">
-                Simulate flight shift
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box
-          padding={4}
-          radius="lg"
-          surface="card"
-          border
-          display="flex"
-          direction="column"
-          gap={1}
-          className="border-line bg-surface/90"
-        >
-          <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
-            ⏱️ Total Required Buffer
-          </Text>
-          <Text variant="body-lg" weight="font-bold" color="main" className="font-mono text-base sm:text-lg">
-            {totalBufferHours} Hours ({totalBufferMinutes} mins)
-          </Text>
-        </Box>
-      </Grid>
-
-      {/* 📊 2. Static Scannable Breakdown List */}
-      <Box surface="card" radius="xl" border className="border-line/80 overflow-hidden shadow-md">
-        <Box paddingX={5} paddingY={3} surface="muted" border="b" display="flex" align="center" justify="between" className="border-line">
-          <Box display="flex" align="center" gap={2}>
-            <Calendar className="w-4 h-4 text-brand-cyan" />
-            <Text variant="mono" size="micro" color="main" weight="font-bold" uppercase tracking="wider">
-              📅 Friday Arrival &amp; Competition Day Breakdown
-            </Text>
-          </Box>
-          <Text variant="mono" size="micro" color="dim">
-            {chronologicalSteps.length} Sequential Steps
-          </Text>
-        </Box>
-
-        {/* Static Chronological Steps with Continuous Vertical Connector Line */}
-        <Box className="relative">
-          {/* Continuous vertical connector line linking icon centers */}
-          <Box className="w-0.5 bg-line/70 absolute left-9 top-6 bottom-6 z-0" />
-
-          <Stack gap={0} className="divide-y divide-line/40 relative z-10">
-            {chronologicalSteps.map((step: BufferStep, idx: number) => {
-              const config = TYPE_CONFIG[step.type] || TYPE_CONFIG.staging;
-              const StepIcon = config.icon;
-
-              return (
-                <Box
-                  key={idx}
-                  paddingX={5}
-                  paddingY={4}
-                  display="flex"
-                  direction={{ default: 'column', sm: 'row' }}
-                  align={{ default: 'start', sm: 'center' }}
-                  justify="between"
-                  gap={4}
-                  className="hover:bg-surface transition-colors"
-                >
-                  {/* Left Side: Icon & Time Window */}
-                  <Box display="flex" align="center" gap={4} className="min-w-60 shrink-0">
-                    <Box
-                      padding={2.5}
-                      radius="lg"
-                      border
-                      display="flex"
-                      align="center"
-                      justify="center"
-                      className={`w-10 h-10 ${config.iconBg} shrink-0 relative z-10 bg-surface`}
+              <Box display="flex" align="start" justify="between" wrap gap={3}>
+                <Stack gap={1} flex={1} className="min-w-0">
+                  <Box display="flex" align="center" gap={2} wrap>
+                    <Text
+                      weight={step.isFlight || step.isStaging ? 'font-bold' : 'font-medium'}
+                      size="sm"
+                      className={step.isFlight || step.isStaging ? 'text-text-main' : 'text-text-dim'}
                     >
-                      <StepIcon className="w-5 h-5" />
-                    </Box>
+                      {step.label}
+                    </Text>
 
-                    <Stack gap={0.5}>
-                      <Text variant="body-sm" weight="font-bold" className="font-mono text-accent text-sm sm:text-base">
-                        {step.time}
-                      </Text>
-                      {step.duration && (
-                        <Box display="flex" align="center" gap={1}>
-                          <Hourglass className="w-3 h-3 text-text-dim shrink-0" />
-                          <Text variant="mono" size="micro" color="dim">{step.duration}</Text>
-                        </Box>
-                      )}
-                    </Stack>
+                    {/* Inline Flight Shift Modifiers directly in row */}
+                    {step.isFlight && (
+                      <Box display="flex" align="center" gap={1.5} className="text-xs font-mono text-text-dim">
+                        <span className="text-line">|</span>
+                        <span>Shift:</span>
+                        {[-30, -15, 15, 30].map((delta) => (
+                          <Box
+                            key={delta}
+                            as="button"
+                            type="button"
+                            onClick={() => handleOffsetChange(delta)}
+                            className="hover:text-text-main text-text-dim cursor-pointer underline-offset-2 hover:underline"
+                          >
+                            {delta > 0 ? `+${delta}m` : `${delta}m`}
+                          </Box>
+                        ))}
+                        {activeOffset !== 0 && (
+                          <Box
+                            as="button"
+                            type="button"
+                            onClick={handleResetOffset}
+                            className="text-brand-terminal-red underline hover:opacity-80 cursor-pointer ml-1"
+                          >
+                            Reset
+                          </Box>
+                        )}
+                      </Box>
+                    )}
                   </Box>
+                </Stack>
 
-                  {/* Right Side: Title & Description */}
-                  <Box flex={1} className="min-w-0">
-                    <Stack gap={1}>
-                      <Text variant="body-sm" weight="font-bold" color="main" className="text-base">
-                        {step.label}
-                      </Text>
-
-                      {step.description && (
-                        <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
-                          {step.description}
-                        </Text>
-                      )}
-                    </Stack>
-                  </Box>
-                </Box>
-              );
-            })}
-          </Stack>
-        </Box>
-      </Box>
-
-      {/* 💡 3. Friendly Mathematical Validation Text Callout */}
-      <Box
-        padding={4}
-        radius="lg"
-        surface="muted"
-        border
-        display="flex"
-        align="start"
-        gap={3}
-        className="border-line/70 bg-surface/60"
-      >
-        <Box paddingTop={0.5}>
-          <ShieldCheck className="w-4 h-4 text-accent shrink-0" />
-        </Box>
-        <Stack gap={1}>
-          <Text variant="caption-bold" color="main" className="font-mono text-xs">
-            Why {buffer.latestFlightArrivalDeadline.split(' ')[0]}?
-          </Text>
-          <Text variant="caption-subtle" color="dim" className="text-xs leading-relaxed">
-            We take your earliest mandatory call time (<span className="text-text-main font-semibold">{buffer.earliestStagingTime}</span>) and calculate backward through warmup ({buffer.warmupMinutes}m), hotel logistics ({buffer.hotelSettleMinutes}m), and transit ({buffer.transitMinutes}m) to guarantee you are never rushed on competition day.
-          </Text>
-        </Stack>
+                <Text
+                  variant="mono"
+                  size="xs"
+                  weight="font-bold"
+                  className={`shrink-0 ${step.isFlight || step.isStaging ? 'text-text-main font-bold' : 'text-text-dim'}`}
+                >
+                  {step.time}
+                </Text>
+              </Box>
+            </Box>
+          );
+        })}
       </Box>
     </Stack>
   );
 };
-
-
-

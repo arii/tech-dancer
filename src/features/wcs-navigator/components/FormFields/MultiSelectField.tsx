@@ -18,8 +18,6 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
   const options = question.options || [];
   const selectedValues = Array.isArray(value) ? value : [];
 
-  const explanationText = question.context || 'Gemini Flash AI scans simultaneous ballroom schedules and prioritizes your chosen workshop topics while resolving schedule conflicts.';
-
   const handleToggle = (optionValue: string | boolean | number) => {
     if (selectedValues.includes(optionValue)) {
       onChange(selectedValues.filter((v) => v !== optionValue));
@@ -29,29 +27,19 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
   };
 
   return (
-    <Stack gap={3} width="full">
-      <Stack gap={1.5}>
-        <Stack direction="row" align="center" justify="between" wrap gap={2}>
-          <Stack direction="row" align="center" gap={2}>
-            <Text as="h3" variant="body-bold" color="main">
-              {question.title}
-            </Text>
-            {question.required && (
-              <Text variant="caption-bold" className="text-brand-cyan font-semibold" aria-label="Required">
-                *
-              </Text>
-            )}
-          </Stack>
-        </Stack>
-
-        <Box paddingTop={1}>
-          <Text variant="caption-subtle" color="dim" className="leading-relaxed">
-            {explanationText}
+    <Stack gap={4} width="full">
+      <Stack direction="row" align="center" gap={2}>
+        <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
+          {question.title}
+        </Text>
+        {question.required && (
+          <Text variant="caption-bold" className="text-text-dim font-semibold" aria-label="Required">
+            *
           </Text>
-        </Box>
+        )}
       </Stack>
 
-      <Grid cols={{ default: 1, sm: 2 }} gap={2.5} role="group" aria-label={question.title}>
+      <Grid cols={{ default: 1, sm: 2 }} gap={3} role="group" aria-label={question.title}>
         {options.map((option) => {
           const isSelected = selectedValues.includes(option.value);
           return (
@@ -62,23 +50,22 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
               role="checkbox"
               aria-checked={isSelected}
               onClick={() => handleToggle(option.value)}
-              surface={isSelected ? 'highlight' : 'subtle'}
               radius="lg"
               paddingX={4}
-              paddingY={3}
+              paddingY={3.5}
               cursor="pointer"
               display="flex"
               align="center"
               justify="between"
-              className={`min-h-11 text-left transition-all border tap-target ${
+              className={`min-h-12 text-left transition-all border ${
                 isSelected
-                  ? 'border-brand-cyan ring-1 ring-brand-cyan/60 bg-brand-cyan/10'
-                  : 'border-line hover:border-brand-cyan/50 hover:bg-surface'
+                  ? 'bg-surface-subtle border-line-strong text-text-main ring-1 ring-line-strong'
+                  : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface text-text-dim hover:text-text-main'
               }`}
             >
               <Text
                 variant="body-sm"
-                className={`flex-1 pr-2 leading-snug ${isSelected ? 'text-brand-cyan font-semibold' : 'text-text-main'}`}
+                className={`flex-1 pr-2 leading-snug ${isSelected ? 'text-text-main font-semibold' : 'text-text-dim'}`}
               >
                 {option.label}
               </Text>
@@ -86,11 +73,11 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
                 display="flex"
                 align="center"
                 justify="center"
-                className={`w-5 h-5 rounded border shrink-0 transition-colors ${
-                  isSelected ? 'bg-brand-cyan border-brand-cyan text-black' : 'border-line bg-surface'
+                className={`w-4 h-4 rounded border shrink-0 transition-colors ${
+                  isSelected ? 'bg-text-main border-text-main text-black' : 'border-line/70 bg-surface/60'
                 }`}
               >
-                {isSelected && <Icon icon={CheckIcon} size="xs" className="stroke-2" />}
+                {isSelected && <Icon icon={CheckIcon} size="xs" className="stroke-[3]" />}
               </Box>
             </Box>
           );

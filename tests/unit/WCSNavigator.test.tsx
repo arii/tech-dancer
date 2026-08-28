@@ -111,17 +111,18 @@ describe('WCS Navigator Components', () => {
     expect(onDiscoverPreset).toHaveBeenCalled();
   });
 
-  it('renders WorkflowExplainer and toggles architecture breakdown', () => {
-    render(<WorkflowExplainer />);
+  it('renders WorkflowExplainer and closes on hide details click', () => {
+    const onClose = vi.fn();
+    render(<WorkflowExplainer onClose={onClose} />);
 
     expect(screen.getByText('How WCS Navigator Works')).toBeTruthy();
-
-    const toggleBtn = screen.getByRole('button', { name: /How WCS Navigator Works/i });
-    fireEvent.click(toggleBtn);
-
     expect(screen.getByText('Step 1: Schedule Reading')).toBeTruthy();
     expect(screen.getByText('Step 2: Buffer Calculation')).toBeTruthy();
     expect(screen.getByText('Step 3: Calendar Sync')).toBeTruthy();
+
+    const hideBtn = screen.getByRole('button', { name: /Hide Details/i });
+    fireEvent.click(hideBtn);
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('renders WCSNavigatorPage end-to-end and navigates through wizard steps', async () => {
@@ -156,20 +157,22 @@ describe('WCS Navigator Components', () => {
       vi.advanceTimersByTime(2500);
     });
 
-    // Should now be in dynamic questionnaire stage
-    expect(screen.getByText('Personalize Your Weekend')).toBeTruthy();
+    // Select West Coast Swing checkbox on Step 1 (for Boogie by the Bay)
+    const wcsCheckbox = screen.getByRole('checkbox', { name: /West Coast Swing/i });
+    fireEvent.click(wcsCheckbox);
 
-    // Select Novice persona choice card
-    const noviceCard = screen.getByRole('radio', { name: /Novice Competitor/i });
-    fireEvent.click(noviceCard);
+    // Step 1 -> Step 2
+    fireEvent.click(screen.getByRole('button', { name: /Next Question/i }));
+    // Step 2 -> Step 3
+    fireEvent.click(screen.getByRole('button', { name: /Next Question/i }));
 
-    // Click "Generate Calendar" to advance to Step 3: results
+    // Click "Generate Calendar" on final step to advance to Step 3: results
     const generateBtn = screen.getByRole('button', { name: /Generate Calendar/i });
     fireEvent.click(generateBtn);
 
     // Should render Agent Mind Trace results
     expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeTruthy();
-    expect(screen.getByText('Travel & Arrival Timeline')).toBeTruthy();
+    expect(screen.getByText('Flight Touchdown Target')).toBeTruthy();
     expect(screen.getAllByText('Add to Calendar (.ics)').length).toBeGreaterThan(0);
 
     vi.useRealTimers();
