@@ -1,0 +1,10 @@
+<<<<<<< SEARCH
+  return (
+    <Stack gap={8} className={className}>
+      {/* 1-Click Instant Download Visual Toast Feedback */}
+=======
+  return (
+    <Stack gap={8} className={className}>
+      <ExecutionProgressBar tasks={trace?.subTasks} />
+      {/* 1-Click Instant Download Visual Toast Feedback */}
+>>>>>>> REPLACE

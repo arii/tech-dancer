@@ -6,6 +6,7 @@ import { AgentDecisionTrace } from '../types';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FilteringAuditMatrix } from './FilteringAuditMatrix';
 import { ThemeDressCodeCard } from './ThemeDressCodeCard';
+import { ExecutionProgressBar } from './ExecutionProgressBar';
 import { downloadIcsFile } from '../utils/icsDownloader';
 import { Download, Brain, Sparkles, CheckCircle2, X, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -136,6 +137,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
 
   return (
     <Stack gap={8} className={className}>
+      <ExecutionProgressBar tasks={trace?.subTasks} />
       {/* 1-Click Instant Download Visual Toast Feedback */}
       {showToast && (
         <Box
@@ -230,7 +232,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
       {/* 2-Column Wide Desktop Layout Grid (lg+) */}
       <Grid cols={{ default: 1, lg: 12 }} gap={8} align="start">
         {/* Left Column (lg: 5 cols): Arrival Timeline & Travel Buffer Breakdown */}
-        <Box gridCol={{ default: 'auto', lg: 'span 5' }}>
+        <Box span={{ default: 12, lg: 5 }}>
           <FlightBufferTimeline
             buffer={trace?.bufferTimeline}
             flightOffsetMinutes={flightOffset}
@@ -239,7 +241,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
         </Box>
 
         {/* Right Column (lg: 7 cols): Matched Workshops & Schedule Matrix + Event Themes & Dress Codes */}
-        <Box gridCol={{ default: 'auto', lg: 'span 7' }}>
+        <Box span={{ default: 12, lg: 7 }}>
           <Stack gap={8}>
             <FilteringAuditMatrix sessions={dynamicSessions} />
             <ThemeDressCodeCard themes={trace?.themeDressCodes} />
