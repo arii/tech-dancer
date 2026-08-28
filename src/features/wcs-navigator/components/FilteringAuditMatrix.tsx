@@ -227,7 +227,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           }`}
         >
           <Icon icon={Layers} size="xs" />
-          <span>All ({sessions.length})</span>
+          <span>Full Schedule ({sessions.length})</span>
         </Box>
       </Box>
 
@@ -243,15 +243,34 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                 padding={5}
                 radius="lg"
                 border
-                className={`transition-all bg-surface/30 border-line/50 hover:border-line flex flex-col justify-between ${
-                  !isIncluded ? 'opacity-75' : ''
+                className={`transition-all bg-surface/30 flex flex-col justify-between ${
+                  isIncluded
+                    ? 'border-line/60 hover:border-line'
+                    : 'border-line/30 opacity-75'
+                } ${
+                  activeTab === 'all' && isIncluded
+                    ? 'ring-1 ring-brand-cyan/40 bg-brand-cyan/[0.03]'
+                    : ''
                 }`}
               >
                 <Stack gap={3.5}>
                   <Box display="flex" align="start" justify="between" gap={3}>
-                    <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
-                      {session.title}
-                    </Box>
+                    <Stack gap={1}>
+                      {activeTab === 'all' && (
+                        <span
+                          className={`text-[10px] font-mono font-bold uppercase tracking-wider w-fit px-1.5 py-0.5 rounded ${
+                            isIncluded
+                              ? 'bg-brand-cyan/20 text-brand-cyan'
+                              : 'bg-white/[0.05] text-text-dim'
+                          }`}
+                        >
+                          {isIncluded ? '★ Selected for Your Plan' : 'Filtered Out'}
+                        </span>
+                      )}
+                      <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
+                        {session.title}
+                      </Box>
+                    </Stack>
 
                     {/* Rationale Tag (Clean unbordered monospace) */}
                     <Text
@@ -281,7 +300,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                     className="text-xs text-text-dim bg-surface/40 border border-line/30 leading-relaxed"
                   >
                     <strong className="font-semibold text-text-main">
-                      {isIncluded ? 'Profile Match:' : 'Reason:'}
+                      {isIncluded ? 'Selection Reason:' : 'Filter Reason:'}
                     </strong>{' '}
                     {session.justification}
                   </Box>

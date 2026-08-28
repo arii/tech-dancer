@@ -371,6 +371,167 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
       icsContent: boogieIcs
     },
     icsContent: boogieIcs
+  },
+  'the-open-2026': {
+    discovery: {
+      preset_id: 'the-open-2026',
+      preset_name: 'The Open (US Open Swing Dance Championships)',
+      suggested_form_questions: [
+        {
+          id: 'wsdc_level',
+          type: 'select',
+          title: 'What is your dancer persona & competition division?',
+          options: [
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
+          ],
+          context: 'Used to filter out conflicting tracks, gate level-restricted workshops, and calculate travel staging deadlines.',
+          defaultValue: 'novice',
+          required: true
+        },
+        {
+          id: 'workshop_focus',
+          type: 'multiselect',
+          title: 'Which workshop tracks do you plan to prioritize?',
+          options: [
+            { label: 'Lead & Follow Connection', value: 'connection' },
+            { label: 'Musicality & Accents', value: 'musicality' },
+            { label: 'Speed & Footwork', value: 'footwork' }
+          ],
+          context: 'Schedule contains simultaneous workshop rooms; filters out conflicting tracks.',
+          defaultValue: ['connection', 'musicality']
+        },
+        {
+          id: 'spectator_interest',
+          type: 'boolean',
+          title: 'Include Saturday night US Open Classic Showcase Finals in your schedule?',
+          options: [],
+          context: 'The premier championship showcase division (8:00 PM - 11:30 PM).',
+          defaultValue: true
+        }
+      ]
+    },
+    decisionTrace: {
+      subTasks: [
+        { id: '1', label: 'Analyzed US Open timetable & ballrooms', status: 'completed', detail: 'Found Burbank Marriott Convention Hall, 52 workshops, and 8 divisions' },
+        { id: '2', label: 'Calculated BUR transit & warmup buffer', status: 'completed', detail: '15m transit + 90m hotel settle + 60m warmup' },
+        { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Selected workshops matching your division' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '4:15 PM (Friday)',
+        warmupMinutes: 60,
+        hotelSettleMinutes: 90,
+        transitMinutes: 15,
+        latestFlightArrivalDeadline: '1:30 PM (Friday)',
+        formulaSummary: '16:15 (Novice Strictly Staging) - (15m BUR Transit + 90m Settle + 60m Warmup) = 13:30 Target Arrival',
+        steps: [
+          { label: 'US Open Strictly Swing Staging Call', time: '4:15 PM', duration: 'Staging', type: 'staging', description: 'Grand Ballroom Check-in & Warmup' },
+          { label: 'Warmup & Floor Check', time: '3:15 PM', duration: '60 min', type: 'warmup', description: 'Test floor speed & stretch' },
+          { label: 'Burbank Marriott Check-in & Wardrobe', time: '1:45 PM', duration: '90 min', type: 'hotel', description: 'Unpack dance attire & freshen up' },
+          { label: 'BUR Airport to Marriott Transit', time: '1:30 PM', duration: '15 min', type: 'transit', description: 'Direct 5-minute shuttle / taxi buffer' },
+          { label: 'Recommended Venue Arrival', time: '1:30 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest arrival deadline' }
+        ]
+      },
+      sessions: [
+        {
+          id: 'uo1',
+          title: 'Friday Afternoon WCS Foundations & Flow Workshop',
+          time: 'Friday 1:30 PM - 2:45 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Fits foundational technique focus prior to evening competitions.'
+        },
+        {
+          id: 'uo2',
+          title: 'US Open Strictly Swing Prelims (Novice & Intermediate)',
+          time: 'Friday 4:15 PM - 6:45 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Division Match',
+          justification: 'Division match for Novice. Check-in call at 4:15 PM.'
+        },
+        {
+          id: 'uo3',
+          title: 'US Open Classic Division Routines & Late Night Kickoff',
+          time: 'Friday 8:30 PM - 5:00 AM',
+          location: 'Convention Hall',
+          status: 'included',
+          decisionBadge: 'Social Energy',
+          justification: 'Marquee evening pro routines followed by open late-night social dancing.'
+        },
+        {
+          id: 'uo4',
+          title: 'Champions Musicality & Micro-Phrasing Workshop',
+          time: 'Saturday 11:30 AM - 12:45 PM',
+          location: 'Academy Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Matches your Musicality & Accents preference.'
+        },
+        {
+          id: 'uo5',
+          title: 'Level 4/5 Champion Masterclass with Benji Schwimmer',
+          time: 'Saturday 3:45 PM - 5:00 PM',
+          location: 'Academy Ballroom',
+          status: 'filtered',
+          decisionBadge: 'Level Ineligible',
+          justification: 'Requires Level 4/5 audition wristband or Advanced WSDC points.'
+        },
+        {
+          id: 'uo6',
+          title: 'US Open Showcase Division Finals & Gala Show',
+          time: 'Saturday 8:00 PM - 11:30 PM',
+          location: 'Convention Hall',
+          status: 'included',
+          decisionBadge: 'Showcase Event',
+          justification: 'The premier worldwide championship showcase division.'
+        }
+      ],
+      themeDressCodes: [
+        {
+          id: 'tuo1',
+          day: 'Friday Night',
+          themeTitle: 'Friday Kickoff & Classic Showcases',
+          category: 'social_theme',
+          description: 'High-energy kickoff evening featuring Classic pro routines and midnight social.',
+          recommendedAttire: ['Smart casual dancewear', 'Clean suede shoes', 'Breathable shirts'],
+          vibe: 'Exciting & Welcoming'
+        },
+        {
+          id: 'tuo2',
+          day: 'Saturday Evening',
+          themeTitle: 'US Open Showcase Gala & Formal Glam',
+          category: 'showcase_formal',
+          description: 'The pinnacle gala evening of the US Open Swing Dance Championships.',
+          recommendedAttire: ['Suits & fitted jackets', 'Cocktail gowns / dressy jumpsuits', 'Polished ballroom dance shoes'],
+          vibe: 'World-Class Championship Prestigious'
+        },
+        {
+          id: 'tuo3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Official Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Official WSDC competition attire for Jack & Jill and Strictly Swing.',
+          recommendedAttire: ['Dark slacks / dance trousers', 'Neat fitted button-down shirts', 'Competition bibs'],
+          vibe: 'Athletic & Professional'
+        },
+        {
+          id: 'tuo4',
+          day: 'Sunday Night',
+          themeTitle: 'Thanksgiving Weekend Survivor Social',
+          category: 'casual_sunday',
+          description: 'Survivor dancing until dawn to close out the US Open weekend.',
+          recommendedAttire: ['US Open event tees', 'Comfortable joggers & dance sneakers'],
+          vibe: 'Warm & Festive'
+        }
+      ],
+      icsContent: southBayIcs
+    },
+    icsContent: southBayIcs
   }
 };
 

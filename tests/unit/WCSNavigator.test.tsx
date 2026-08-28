@@ -172,7 +172,7 @@ describe('WCS Navigator Components', () => {
 
     // Should render Agent Mind Trace results
     expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeTruthy();
-    expect(screen.getByText('Flight Touchdown Target')).toBeTruthy();
+    expect(screen.getByText('First Event / Competition Staging Call')).toBeTruthy();
     expect(screen.getAllByText('Add to Calendar (.ics)').length).toBeGreaterThan(0);
 
     vi.useRealTimers();

@@ -28,10 +28,10 @@ describe('AgentMindTrace Suite', () => {
 
   it('renders FlightBufferTimeline buffer steps and time summary', () => {
     render(<FlightBufferTimeline />);
-    expect(screen.getAllByText(/Flight Touchdown Target/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Recommended Arrival Time/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Total required buffer/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('Competition Staging Call')).toBeDefined();
-    expect(screen.getByText('Airport to Venue Transit (30m)')).toBeDefined();
+    expect(screen.getByText('First Event / Competition Staging Call')).toBeDefined();
+    expect(screen.getByText('Warmup & Floor Check (60m)')).toBeDefined();
   });
 
   it('toggles tabs between all, included, and filtered sessions in FilteringAuditMatrix', () => {
@@ -50,7 +50,7 @@ describe('AgentMindTrace Suite', () => {
     expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
     expect(screen.queryByText('Advanced & All-Star Jack & Jill')).toBeNull();
 
-    const allTabBtn = screen.getByRole('tab', { name: /All/i });
+    const allTabBtn = screen.getByRole('tab', { name: /Full Schedule/i });
     fireEvent.click(allTabBtn);
     expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
     expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();

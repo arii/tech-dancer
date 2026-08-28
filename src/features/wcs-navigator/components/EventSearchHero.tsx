@@ -236,23 +236,14 @@ export const EventSearchHero = ({
                     </Text>
                   </Stack>
 
-                  <Box
-                    as="button"
+                  <button
                     type="button"
                     onClick={() => onDiscoverPreset(selectedEvent)}
-                    paddingX={5}
-                    paddingY={2.5}
-                    radius="md"
-                    display="flex"
-                    align="center"
-                    justify="center"
-                    gap={2}
-                    cursor="pointer"
-                    className="bg-text-main text-black hover:opacity-90 font-mono font-semibold text-xs whitespace-nowrap shrink-0 self-stretch sm:self-auto transition-colors shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-text-main text-black font-semibold text-xs whitespace-nowrap hover:opacity-90 transition-opacity shadow-sm cursor-pointer shrink-0 self-stretch sm:self-auto"
                   >
                     <span>Plan My Weekend</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </Box>
+                  </button>
                 </Stack>
               </Box>
             )}
