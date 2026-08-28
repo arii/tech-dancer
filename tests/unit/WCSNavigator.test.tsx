@@ -113,7 +113,11 @@ describe('WCS Navigator Components', () => {
 
   it('renders WorkflowExplainer and closes on hide details click', () => {
     const onClose = vi.fn();
-    render(<WorkflowExplainer onClose={onClose} />);
+    render(
+      <MemoryRouter>
+        <WorkflowExplainer onClose={onClose} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText('How WCS Navigator Works')).toBeTruthy();
     expect(screen.getByText('Step 1: Schedule Reading')).toBeTruthy();
