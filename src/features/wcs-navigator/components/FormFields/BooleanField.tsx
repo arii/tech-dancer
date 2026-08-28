@@ -38,7 +38,7 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ question, value = fa
         align="center"
         justify="between"
         width="full"
-        className={`min-h-14 transition-all border ${
+        className={`min-h-11 transition-all border ${
           isChecked
             ? 'bg-surface-subtle border-line-strong ring-1 ring-line-strong'
             : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface'

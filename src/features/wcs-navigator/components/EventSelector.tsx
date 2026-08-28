@@ -36,7 +36,7 @@ export const EventSelector = ({
             const ev = CALIFORNIA_2026_EVENTS.find(item => item.id === e.target.value);
             if (ev) onSelectEvent(ev);
           }}
-          minHeight="11" paddingX={3} paddingY={2.5} className="w-full border bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
+          className="w-full border bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer min-h-11 px-3 py-2.5"
         >
           {CALIFORNIA_2026_EVENTS.map((event) => (
             <option key={event.id} value={event.id} className="bg-surface text-white">
@@ -109,7 +109,7 @@ export const EventSelector = ({
                 rel="noopener noreferrer"
                 size="xs"
                 color="accent"
-                className="hover:underline font-semibold" minHeight="8" display="inline-flex" align="center"
+                className="hover:underline font-semibold min-h-8" display="inline-flex" align="center"
               >
                 Official Website →
               </Text>

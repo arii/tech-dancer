@@ -57,7 +57,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
               display="flex"
               align="center"
               justify="between"
-              className={`min-h-12 text-left transition-all border ${
+              className={`min-h-11 text-left transition-all border ${
                 isSelected
                   ? 'bg-surface-subtle border-line-strong text-text-main ring-1 ring-line-strong'
                   : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface text-text-dim hover:text-text-main'

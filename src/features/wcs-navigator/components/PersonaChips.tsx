@@ -40,7 +40,7 @@ export const PersonaChips = ({
               display="flex"
               align="start"
               cursor="pointer"
-              minHeight="11"
+              minHeight={11}
               className={cn(
                 "border text-left transition-all duration-200 hover:border-brand-purple/50 relative overflow-hidden tap-target",
                 isSelected ? "border-brand-purple ring-1 ring-brand-purple/40 bg-brand-purple/5" : "border-line hover:bg-surface"
