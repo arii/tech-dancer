@@ -257,15 +257,24 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                   <Box display="flex" align="start" justify="between" gap={3}>
                     <Stack gap={1}>
                       {activeTab === 'all' && (
-                        <span
-                          className={`text-[10px] font-mono font-bold uppercase tracking-wider w-fit px-1.5 py-0.5 rounded ${
+                        <Text
+                          as="span"
+                          variant="mono"
+                          size="xs"
+                          weight="font-bold"
+                          uppercase
+                          tracking="widest"
+                          paddingX={1.5}
+                          paddingY={0.5}
+                          radius="sm"
+                          className={`w-fit ${
                             isIncluded
                               ? 'bg-brand-cyan/20 text-brand-cyan'
                               : 'bg-white/[0.05] text-text-dim'
                           }`}
                         >
                           {isIncluded ? '★ Selected for Your Plan' : 'Filtered Out'}
-                        </span>
+                        </Text>
                       )}
                       <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
                         {session.title}

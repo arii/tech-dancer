@@ -49,73 +49,73 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
       <Stack gap={6}>
         <Grid cols={{ default: 1, md: 3 }} gap={5}>
           {/* Step 1 Card */}
-          <div className="flex flex-col justify-between h-full p-6 rounded-xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 mb-3">
+          <Stack direction="col" justify="between" height="full" padding={6} radius="xl" border className="bg-surface-alt/70 border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
+            <Stack gap={3}>
+              <Stack direction="row" align="center" gap={2} marginBottom={3}>
                 <Box padding={1.5} radius="md" className="bg-brand-cyan/20 text-brand-cyan shrink-0">
                   <Icon icon={Search} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-cyan uppercase tracking-wider">
                   Step 1: Schedule Reading
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-base font-bold text-white">
                 Schedule Discovery
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-text-dim leading-relaxed">
                 Reads multi-room convention timetables to identify workshop levels, competitive divisions, and late-night social themes.
               </p>
-            </div>
-            <div className="mt-5 p-3 rounded-lg bg-white/[0.03] border border-white/10 text-xs text-slate-300">
+            </Stack>
+            <Box marginTop={5} padding={3} radius="lg" border className="bg-white/[0.03] border-white/10 text-xs text-text-dim">
               Extracts: <strong className="text-white font-mono">Workshops, Prelims &amp; Socials</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
 
           {/* Step 2 Card */}
-          <div className="flex flex-col justify-between h-full p-6 rounded-xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 mb-3">
+          <Stack direction="col" justify="between" height="full" padding={6} radius="xl" border className="bg-surface-alt/70 border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
+            <Stack gap={3}>
+              <Stack direction="row" align="center" gap={2} marginBottom={3}>
                 <Box padding={1.5} radius="md" className="bg-brand-amber/20 text-brand-amber shrink-0">
                   <Icon icon={Zap} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-amber uppercase tracking-wider">
                   Step 2: Buffer Calculation
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-base font-bold text-white">
                 Travel &amp; Rest Planning
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-text-dim leading-relaxed">
                 Calculates backward transit, hotel check-in, and warm-up buffers before your first event so you never rush into competition calls.
               </p>
-            </div>
-            <div className="mt-5 p-3 rounded-lg bg-white/[0.03] border border-white/10 text-xs text-slate-300">
+            </Stack>
+            <Box marginTop={5} padding={3} radius="lg" border className="bg-white/[0.03] border-white/10 text-xs text-text-dim">
               Calculates: <strong className="text-white font-mono">Arrival Deadline &amp; Rest Times</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
 
           {/* Step 3 Card */}
-          <div className="flex flex-col justify-between h-full p-6 rounded-xl bg-slate-900/70 border border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 mb-3">
+          <Stack direction="col" justify="between" height="full" padding={6} radius="xl" border className="bg-surface-alt/70 border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
+            <Stack gap={3}>
+              <Stack direction="row" align="center" gap={2} marginBottom={3}>
                 <Box padding={1.5} radius="md" className="bg-brand-emerald/20 text-brand-emerald shrink-0">
                   <Icon icon={Calendar} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-emerald uppercase tracking-wider">
                   Step 3: Calendar Sync
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-base font-bold text-white">
                 Ready-to-Use Calendar
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-text-dim leading-relaxed">
                 Generates an .ics calendar file formatted with your selected workshops, competition alarms, and packing checklist.
               </p>
-            </div>
-            <div className="mt-5 p-3 rounded-lg bg-white/[0.03] border border-white/10 text-xs text-slate-300">
+            </Stack>
+            <Box marginTop={5} padding={3} radius="lg" border className="bg-white/[0.03] border-white/10 text-xs text-text-dim">
               Format: <strong className="text-white font-mono">Apple &amp; Google Calendar (.ics)</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
         </Grid>
 
         {/* Standards & Badges Footer with Generous Spacing */}

@@ -139,9 +139,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
       session.title.toLowerCase().includes('staging');
 
     return (
-      <div
+      <Box
         key={session.id}
-        className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+        padding={4}
+        radius="xl"
+        border
+        display="flex"
+        flexWrap="wrap"
+        className={`transition-all flex flex-col justify-between ${
           isCompetition
             ? 'bg-amber-950/15 border-brand-amber/35 shadow-sm'
             : 'bg-slate-900/70 border-white/10 hover:border-brand-cyan/40'
@@ -152,18 +157,18 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             {session.title}
           </h4>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-400 pt-0.5">
-            <div className="flex items-center gap-1.5">
+          <Stack direction="row" align="center" gap={4} paddingTop={0.5} className="text-xs font-mono text-text-dim">
+            <Stack direction="row" align="center" gap={1.5}>
               <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
               <span>{session.time}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            </Stack>
+            <Stack direction="row" align="center" gap={1.5}>
+              <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
               <span>{session.location}</span>
-            </div>
-          </div>
+            </Stack>
+          </Stack>
         </Stack>
-      </div>
+      </Box>
     );
   };
 
@@ -171,27 +176,43 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     if (!theme) return null;
 
     return (
-      <div className="p-3 rounded-xl bg-slate-900/60 border border-white/10 text-xs my-1 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Shirt className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        align="center"
+        justify="between"
+        gap={2}
+        padding={3}
+        radius="xl"
+        marginY={1}
+        className="bg-surface-alt/60 border border-white/10 text-xs"
+      >
+        <Stack direction="row" align="center" gap={2}>
+          <Shirt className="w-3.5 h-3.5 text-text-dim shrink-0" />
           <span className="font-bold text-xs text-white font-mono">
             {theme.day} Theme: {theme.themeTitle}
           </span>
-          <span className="text-[10px] font-mono text-slate-400">
+          <Text as="span" variant="mono" size="xs" color="dim">
             ({theme.vibe})
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
+          </Text>
+        </Stack>
+        <Box display="flex" wrap gap={1.5} align="center">
           {theme.recommendedAttire.map((attire, i) => (
-            <span
+            <Text
+              as="span"
               key={i}
-              className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-slate-300"
+              variant="mono"
+              size="xs"
+              color="dim"
+              paddingX={2}
+              paddingY={0.5}
+              className="rounded-full bg-white/[0.04] border border-white/10"
             >
               {attire}
-            </span>
+            </Text>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   };
 
@@ -206,7 +227,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           radius="xl"
           border
           shadow="2xl"
-          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-slate-900/95 backdrop-blur-xl border-brand-cyan/40 motion-safe:transition-all"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface-alt/95 backdrop-blur-xl border-brand-cyan/40 motion-safe:transition-all"
         >
           <Box display="flex" align="start" justify="between" gap={3}>
             <Box display="flex" align="start" gap={3}>
@@ -236,56 +257,76 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
       {/* Clean Context Header & Action Bar */}
       <Box
+        display="flex"
+        flexWrap="wrap"
+        align="center"
+        justify="between"
+        gap={4}
         padding={4}
         radius="xl"
         border
-        className="bg-slate-900/80 border-line/70 backdrop-blur-md flex flex-wrap items-center justify-between gap-4"
+        className="bg-surface-alt/80 border-line/70 backdrop-blur-md"
       >
-        <div className="flex items-center flex-wrap gap-2 text-xs font-mono">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/15 text-brand-cyan font-bold border border-brand-cyan/30">
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs font-mono">
+          <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Profile: {selectedDivision.toUpperCase()} {selectedRole.toUpperCase()}</span>
-          </span>
+          </Stack>
           <span className="text-text-dim">•</span>
           <span className="text-text-dim">✈️ Landing Target: <strong className="text-text-main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</strong></span>
           <span className="text-text-dim">•</span>
           <span className="text-text-dim">🌙 Late-Night: <strong className="text-text-main">Active</strong></span>
-        </div>
+        </Stack>
 
         {/* Action Buttons: Primary (.ics) & Secondary (.md) */}
-        <div className="flex items-center gap-3">
-          <button
+        <Stack direction="row" align="center" gap={3}>
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={2}
+            paddingX={5}
+            paddingY={2.5}
+            radius="lg"
             type="button"
             onClick={handleDownloadCalendar}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs font-mono shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_25px_rgba(0,255,255,0.5)] transition-all cursor-pointer"
+            className="bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs font-mono shadow-glow hover:opacity-90 transition-all cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Add to Calendar (.ics)</span>
-          </button>
-          <button
+          </Stack>
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={2}
+            radius="lg"
+            border
             type="button"
             onClick={handleDownloadVisualSchedule}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
+            className="bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>Markdown (.md)</span>
-          </button>
-        </div>
+          </Stack>
+        </Stack>
       </Box>
 
       {/* UNIFIED CHRONOLOGICAL DAY-BY-DAY FEED */}
       <Stack gap={6} width="full">
         {/* FRIDAY SECTION */}
-        <Stack gap={4} width="full" className="rounded-xl bg-slate-900/30 border border-line/40 p-5">
-          <div className="flex items-center justify-between pb-2 border-b border-line/30">
-            <div className="flex items-center gap-2">
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
                 Friday — Arrival, Warmup &amp; Prelims
               </h3>
-            </div>
+            </Stack>
             <span className="text-xs font-mono text-text-dim">Day 1</span>
-          </div>
+          </Stack>
 
           {/* Event-Based Local Transit & Logistics */}
           <FlightBufferTimeline activeEventName={activeEventName} />
@@ -302,16 +343,16 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Stack>
 
         {/* SATURDAY SECTION */}
-        <Stack gap={4} width="full" className="rounded-xl bg-slate-900/30 border border-line/40 p-5">
-          <div className="flex items-center justify-between pb-2 border-b border-line/30">
-            <div className="flex items-center gap-2">
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
                 Saturday — Daytime Workshops &amp; Champions Gala
               </h3>
-            </div>
+            </Stack>
             <span className="text-xs font-mono text-text-dim">Day 2</span>
-          </div>
+          </Stack>
 
           {/* Saturday Sessions */}
           {sessionsByDay.saturday.length > 0 && (
@@ -325,16 +366,16 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Stack>
 
         {/* SUNDAY SECTION */}
-        <Stack gap={4} width="full" className="rounded-xl bg-slate-900/30 border border-line/40 p-5">
-          <div className="flex items-center justify-between pb-2 border-b border-line/30">
-            <div className="flex items-center gap-2">
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
                 Sunday — Intensive Masterclasses &amp; Survivor Social
               </h3>
-            </div>
+            </Stack>
             <span className="text-xs font-mono text-text-dim">Day 3</span>
-          </div>
+          </Stack>
 
           {/* Sunday Sessions */}
           {sessionsByDay.sunday.length > 0 && (

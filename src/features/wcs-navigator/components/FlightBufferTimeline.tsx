@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { MapPin, Navigation, Luggage, Coffee } from 'lucide-react';
 
@@ -76,51 +75,55 @@ export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
         padding={4}
         radius="xl"
         border
-        className="bg-slate-950/70 border-white/10 backdrop-blur-md"
+        className="bg-surface-alt/70 border-white/10 backdrop-blur-md"
       >
         <Stack gap={3}>
           {/* Header without redundant badge */}
-          <div className="flex items-center gap-2 pb-2 border-b border-line/40">
+          <Stack direction="row" align="center" gap={2} paddingBottom={2} className="border-b border-line/40">
             <MapPin className="w-4 h-4 text-brand-cyan shrink-0" />
             <h4 className="font-bold text-sm text-white">
               Pre-Event Transit Logistics — {logistics.venueName}
             </h4>
-          </div>
+          </Stack>
 
           {/* Clean 2-Column Text Grid (No heavy nested box borders) */}
           <Grid cols={{ default: 1, md: 2 }} gap={4}>
             {/* Transit & Airport Column */}
-            <div className="flex items-start gap-2.5 text-xs">
-              <Navigation className="w-4 h-4 text-brand-cyan shrink-0 mt-0.5" />
-              <div className="space-y-1">
+            <Stack direction="row" align="start" gap={2.5} className="text-xs">
+              <Box marginTop={0.5} className="shrink-0">
+                <Navigation className="w-4 h-4 text-brand-cyan" />
+              </Box>
+              <Stack gap={1}>
                 <span className="font-bold text-white font-mono">
                   {logistics.primaryAirport}
                 </span>
-                <p className="text-slate-300 leading-relaxed">
+                <p className="text-text-dim leading-relaxed">
                   {logistics.transitTip}
                 </p>
-              </div>
-            </div>
+              </Stack>
+            </Stack>
 
             {/* Baggage & Staging Column */}
-            <div className="flex items-start gap-2.5 text-xs">
-              <Luggage className="w-4 h-4 text-brand-cyan shrink-0 mt-0.5" />
-              <div className="space-y-1">
+            <Stack direction="row" align="start" gap={2.5} className="text-xs">
+              <Box marginTop={0.5} className="shrink-0">
+                <Luggage className="w-4 h-4 text-brand-cyan" />
+              </Box>
+              <Stack gap={1}>
                 <span className="font-bold text-white font-mono">
                   Arrival, Luggage &amp; Ballroom Access
                 </span>
-                <p className="text-slate-300 leading-relaxed">
+                <p className="text-text-dim leading-relaxed">
                   {logistics.baggageAndCheckin}
                 </p>
-              </div>
-            </div>
+              </Stack>
+            </Stack>
           </Grid>
 
           {/* Bottom Helpful Dancer Tips */}
-          <div className="flex items-center gap-2 pt-1 border-t border-line/20 text-xs text-slate-300">
-            <Coffee className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <Stack direction="row" align="center" gap={2} paddingTop={1} className="border-t border-line/20 text-xs text-text-dim">
+            <Coffee className="w-3.5 h-3.5 text-text-dim shrink-0" />
             <span><strong className="text-white font-mono">Pro Tip:</strong> {logistics.travelBuffer}</span>
-          </div>
+          </Stack>
         </Stack>
       </Box>
     </Stack>
