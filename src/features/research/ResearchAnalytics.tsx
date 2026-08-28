@@ -49,31 +49,28 @@ const ResearchAnalytics = () => {
           </Text>
 
           {/* Main Portfolio & Projects Banner */}
-          <Box
-            marginTop={2}
-            padding={4}
-            radius="lg"
-            border
-            className="bg-surface-subtle border-brand-cyan/40 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full"
-          >
-            <Stack gap={1}>
-              <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
-                MAIN PORTFOLIO &amp; PROJECTS
-              </Text>
-              <Text variant="body" size="sm" color="main" className="whitespace-normal break-normal">
-                Looking for my production robotics software, autonomous systems case studies, or engineering consulting?
-              </Text>
-            </Stack>
-            <Box
-              as="a"
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 rounded-xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 shadow-lg backdrop-blur-sm my-4 w-full">
+            <div className="flex flex-col gap-1 max-w-2xl">
+              <span className="text-xs uppercase tracking-widest text-brand-cyan font-semibold">
+                Production Software &amp; Case Studies
+              </span>
+              <h3 className="text-lg font-bold text-text-main">
+                Robotics &amp; Autonomous Systems Portfolio
+              </h3>
+              <p className="text-sm text-text-dim leading-relaxed">
+                Explore production robotics software, onboard motion planning architectures, high-accuracy state estimation systems, and technical consulting.
+              </p>
+            </div>
+            <a
               href="https://arii.github.io"
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 px-3.5 py-2 rounded-md bg-brand-cyan text-black font-bold text-xs hover:opacity-90 transition-opacity whitespace-nowrap shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-brand-cyan text-black font-semibold text-xs whitespace-nowrap hover:opacity-90 transition-all shadow-sm shrink-0 self-stretch sm:self-auto"
             >
-              <span>VISIT ARII.GITHUB.IO →</span>
-            </Box>
-          </Box>
+              <span>View Robotics Portfolio</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
           
 
         </Stack>
