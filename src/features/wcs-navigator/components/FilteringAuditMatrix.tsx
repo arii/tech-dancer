@@ -311,17 +311,17 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                     radius="md"
                     surface={isIncluded ? undefined : 'muted'}
                     border
-                    className={`text-xs ${
+                    className={`text-xs min-w-0 break-words ${
                       isIncluded
                         ? 'bg-accent/5 text-text-main border-accent/15'
                         : 'text-text-dim border-line/60'
                     }`}
                   >
-                    <Box display="flex" align="start" gap={2}>
+                    <Box display="flex" align="start" gap={2} className="min-w-0">
                       <Box as="span" shrink={0} display="flex">
                         <Filter className="w-3.5 h-3.5 opacity-70" />
                       </Box>
-                      <Box as="span">
+                      <Box as="span" className="min-w-0 break-words">
                         <strong className="font-semibold text-text-main">
                           {isIncluded ? 'Why this fits your profile:' : 'Exclusion reason:'}
                         </strong>{' '}
