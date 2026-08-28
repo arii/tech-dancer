@@ -96,42 +96,69 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         >
           {activeQuestion.question}
         </Text>
+        {activeQuestion.subtitle && (
+          <Text variant="mono" size="xs" color="dim" className="mt-1">
+            {activeQuestion.subtitle}
+          </Text>
+        )}
       </Stack>
 
       {/* Balanced, Highly Interactive Large Card Stack */}
-      <div className="grid grid-cols-1 gap-3.5 animate-in fade-in slide-in-from-right-3 duration-150">
-        {activeQuestion.options.map((opt) => {
-          const isSelected = selectedOptionId === opt.id || answers[activeQuestion.id] === opt.id;
+      {activeQuestion.options.length > 0 ? (
+        <div className="grid grid-cols-1 gap-3.5 animate-in fade-in slide-in-from-right-3 duration-150">
+          {activeQuestion.options.map((opt) => {
+            const isSelected = selectedOptionId === opt.id || answers[activeQuestion.id] === opt.id;
 
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => handleSelectOption(opt.id)}
-              className={`group w-full flex items-center p-4 rounded-xl text-left transition-all duration-150 cursor-pointer border ${
-                isSelected
-                  ? 'bg-brand-cyan/15 border-brand-cyan ring-2 ring-brand-cyan/20'
-                  : 'bg-slate-950/80 border-line/60 hover:border-brand-cyan/60 hover:bg-slate-900/60'
-              }`}
-            >
-              <span className="text-2xl mr-4 bg-slate-900/90 border border-line/40 p-2.5 rounded-xl group-hover:border-brand-cyan/40 transition-colors shrink-0">
-                {opt.icon}
-              </span>
-              <div className="flex-1 min-w-0 pr-2">
-                <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors">
-                  {opt.title}
-                </h4>
-                <p className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors mt-0.5">
-                  {opt.desc}
-                </p>
-              </div>
-              <span className="text-text-dim/60 group-hover:text-brand-cyan text-base transition-all transform translate-x-0 group-hover:translate-x-1 duration-150 shrink-0">
-                →
-              </span>
-            </button>
-          );
-        })}
-      </div>
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => handleSelectOption(opt.id)}
+                className={`group w-full flex items-center p-4 rounded-xl text-left transition-all duration-150 cursor-pointer border ${
+                  isSelected
+                    ? 'bg-brand-cyan/15 border-brand-cyan ring-2 ring-brand-cyan/20'
+                    : 'bg-slate-950/80 border-line/60 hover:border-brand-cyan/60 hover:bg-slate-900/60'
+                }`}
+              >
+                <span className="text-2xl mr-4 bg-slate-900/90 border border-line/40 p-2.5 rounded-xl group-hover:border-brand-cyan/40 transition-colors shrink-0">
+                  {opt.icon}
+                </span>
+                <div className="flex-1 min-w-0 pr-2">
+                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors">
+                    {opt.title}
+                  </h4>
+                  <p className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors mt-0.5">
+                    {opt.desc}
+                  </p>
+                </div>
+                <span className="text-text-dim/60 group-hover:text-brand-cyan text-base transition-all transform translate-x-0 group-hover:translate-x-1 duration-150 shrink-0">
+                  →
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        /* Fallback: safety net for boolean/empty-options questions — never leaves user stranded */
+        <div className="flex flex-col sm:flex-row gap-3 mt-2 animate-in fade-in duration-150">
+          <button
+            type="button"
+            onClick={() => handleSelectOption('yes')}
+            className="flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer"
+          >
+            <span className="text-xl">✅</span>
+            <span>Yes, include it</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSelectOption('no')}
+            className="flex-1 flex items-center justify-center gap-3 p-4 rounded-xl border border-line/60 bg-slate-950/80 hover:border-brand-cyan/40 hover:bg-slate-900/60 text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer"
+          >
+            <span className="text-xl">⏭️</span>
+            <span>No, skip it</span>
+          </button>
+        </div>
+      )}
     </Box>
   );
 };
