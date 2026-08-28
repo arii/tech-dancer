@@ -41,7 +41,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({ question, value, onCha
               align="center"
               justify="between"
               gap={3}
-              className={`min-h-14 text-left transition-all border ${
+              className={`min-h-11 text-left transition-all border ${
                 isSelected
                   ? 'bg-surface-subtle border-line-strong text-text-main ring-1 ring-line-strong'
                   : 'bg-surface/40 border-line/50 hover:border-line hover:bg-surface text-text-dim hover:text-text-main'

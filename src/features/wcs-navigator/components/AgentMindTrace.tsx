@@ -166,7 +166,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({ trace, visualSch
               type="button"
               aria-label="Dismiss download notification"
               onClick={() => setShowToast(false)}
-              minHeight="11"
+              minHeight={11}
               width={11}
               display="flex"
               align="center"
