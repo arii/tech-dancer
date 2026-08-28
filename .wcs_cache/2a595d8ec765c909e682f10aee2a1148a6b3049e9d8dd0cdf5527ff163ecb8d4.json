@@ -1,0 +1,40 @@
+{
+  "preset_id": "boogie-by-the-bay-2026",
+  "preset_name": "Boogie by the Bay 2026",
+  "event_name": "Boogie by the Bay 2026",
+  "tracks_detected": [
+    "West Coast Swing",
+    "Country Swing",
+    "Hustle"
+  ],
+  "suggested_form_questions": [
+    {
+      "id": "wsdc_division",
+      "title": "What is your dancer persona & competition division?",
+      "type": "select",
+      "context": "Enforces workshop level gatekeeping and flags your division check-in time.",
+      "required": true,
+      "defaultValue": "Novice",
+      "options": [
+        {
+          "label": "Novice Competitor",
+          "value": "Novice",
+          "subtitle": "WSDC Novice prelims, early staging call, foundational tracks",
+          "badge": "Novice"
+        },
+        {
+          "label": "Intermediate Competitor",
+          "value": "Intermediate",
+          "subtitle": "WSDC Intermediate prelims, intensive classes, late night socials",
+          "badge": "Intermediate"
+        },
+        {
+          "label": "Social Dancer Only",
+          "value": "Social",
+          "subtitle": "All-levels workshops, peak party energy, no prelim staging calls",
+          "badge": "Social"
+        }
+      ]
+    }
+  ]
+}

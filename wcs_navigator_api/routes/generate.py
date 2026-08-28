@@ -19,6 +19,7 @@ from wcs_navigator_api.prompts.generation_prompt import (
     build_generation_prompt,
 )
 from wcs_navigator_api.services.buffer_engine import calculate_flight_buffer
+from wcs_navigator_api.services.cache_service import get_cache_key, get_cached_response, set_cached_response
 from wcs_navigator_api.services.pdf_service import (
     create_genai_pdf_part,
     extract_pdf_bytes_from_upload,
@@ -117,6 +118,11 @@ async def generate_calendar(
                 detail="Request must provide either a multipart PDF file or a JSON payload with a valid schedule URL.",
             ) from err
 
+    cache_key = get_cache_key(pdf_bytes, responses_dict)
+    cached_data = get_cached_response(cache_key)
+    if cached_data:
+        return GenerateResponse.model_validate(cached_data)
+
     # Calculate travel buffer
     earliest_call = responses_dict.get(
         "earliest_call_time_iso",
@@ -194,8 +200,11 @@ async def generate_calendar(
         icsContent=ics_content,
     )
 
-    return GenerateResponse(
+    generate_res = GenerateResponse(
         decisionTrace=decision_trace,
         icsContent=ics_content,
         visualScheduleMarkdown=visual_schedule_markdown,
     )
+
+    set_cached_response(cache_key, generate_res.model_dump(by_alias=True))
+    return generate_res
