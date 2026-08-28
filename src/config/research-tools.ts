@@ -72,7 +72,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     taxonomyBucket: 'live-experiments',
     title: 'WCS Navigator',
     subtitle: 'CALIFORNIA 2026 PRESETS & PERSONA SELECTOR',
-    description: 'Event schedule entry view pre-loaded with California 2026 West Coast Swing events, social dance personas, PDF/URL schedule ingestion, and execution mode toggles.',
+    description: 'Explore how WCS Navigator uses a stateless, zero-dependency Python FastAPI backend and Gemini 2.5 Flash to process raw convention schedules into personalized RFC 5545 calendar files entirely in-memory.',
     category: 'Live Testbed',
     status: 'Live Tool',
     tags: ['React', 'WCS Events', 'Persona Generator', 'Schedule Parsing'],
