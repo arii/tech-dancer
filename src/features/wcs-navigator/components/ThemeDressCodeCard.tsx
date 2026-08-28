@@ -49,7 +49,7 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
   return (
     <Stack gap={5} width="full" className={className}>
       {/* Editorial Header */}
-      <Box display="flex" align="start" justify="between" wrap gap={2} className="pb-2 border-b border-line/40">
+      <Box display="flex" align="start" justify="between" wrap gap={2} paddingBottom={2} className="border-b border-line/40">
         <Stack gap={0.5}>
           <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
             Event Themes &amp; Dress Codes
@@ -64,12 +64,14 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
       <Grid cols={{ default: 1, md: 2 }} gap={4}>
         {themes.map((item) => {
           return (
-            <Box
+            <Stack
               key={item.id}
+              direction="col"
+              justify="between"
               padding={5}
               radius="lg"
               border
-              className="bg-surface/30 border-line/50 flex flex-col justify-between"
+              className="bg-surface/30 border-line/50"
             >
               <Stack gap={3}>
                 <Box display="flex" align="center" justify="between" gap={2}>
@@ -88,16 +90,16 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
                 </Stack>
 
                 {/* Clean Outfits Bullet List */}
-                <Stack gap={1} className="pt-2">
+                <Stack gap={1} paddingTop={2}>
                   <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
                     Recommended Outfits:
                   </Text>
-                  <Box as="ul" className="space-y-1 pl-1">
+                  <Box as="ul" paddingLeft={1} className="space-y-1">
                     {item.recommendedAttire.map((attire, idx) => (
-                      <Text as="li" key={idx} size="xs" color="dim" className="list-none flex items-center gap-1.5">
-                        <span className="text-text-dim text-xs">•</span>
-                        <span>{attire}</span>
-                      </Text>
+                      <Stack direction="row" align="center" gap={1.5} as="li" key={idx}>
+                        <Text size="xs" color="dim" className="list-none text-text-dim text-xs">•</Text>
+                        <Text size="xs" color="dim" className="list-none">{attire}</Text>
+                      </Stack>
                     ))}
                   </Box>
                 </Stack>
@@ -109,7 +111,7 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
                   Atmosphere: <span className="text-text-main font-medium">{item.vibe}</span>
                 </Text>
               </Box>
-            </Box>
+            </Stack>
           );
         })}
       </Grid>
