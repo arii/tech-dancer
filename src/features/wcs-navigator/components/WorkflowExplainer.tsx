@@ -9,14 +9,14 @@ export interface WorkflowExplainerProps {
 
 export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
   return (
-    <Box width="full" radius="xl" border shadow="sm" className="overflow-hidden border-line/60 bg-surface/40 p-6 animate-in fade-in">
+    <Box width="full" radius="xl" border shadow="sm" padding={6} className="overflow-hidden border-line/60 bg-surface/40 animate-in fade-in">
       {/* Single Consolidated Header Row */}
-      <Box display="flex" align="start" justify="between" className="border-b border-line/50 pb-4 mb-6" wrap gap={4}>
+      <Box display="flex" align="start" justify="between" paddingBottom={4} marginBottom={6} className="border-b border-line/50" wrap gap={4}>
         <Stack gap={1}>
           <Box display="flex" align="center" gap={2}>
-            <span className="px-2 py-0.5 text-xs font-bold font-mono tracking-wider bg-brand-cyan/20 text-brand-cyan rounded">
+            <Box as="span" paddingX={2} paddingY={0.5} radius="sm" className="text-xs font-bold font-mono tracking-wider bg-brand-cyan/20 text-brand-cyan">
               GUIDE
-            </span>
+            </Box>
             <Text as="h2" weight="font-bold" size="md" color="main" className="text-base sm:text-lg">
               How WCS Navigator Works
             </Text>
@@ -28,16 +28,20 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
 
         {/* One Unified Close Button */}
         {onClose && (
-          <Box
+          <Stack
             as="button"
             type="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingY={1}
             aria-label="Hide Details"
             onClick={onClose}
-            className="text-xs font-mono text-text-dim hover:text-text-main flex items-center gap-1.5 cursor-pointer transition-colors shrink-0 py-1"
+            className="text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
           >
             <span>Hide Details</span>
             <span>✕</span>
-          </Box>
+          </Stack>
         )}
       </Box>
 
@@ -45,73 +49,73 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
       <Stack gap={6}>
         <Grid cols={{ default: 1, md: 3 }} gap={5}>
           {/* Step 1 Card */}
-          <div className="flex flex-col justify-between min-h-full p-6 rounded-lg bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2.5">
+          <Stack direction="col" justify="between" padding={6} radius="lg" className="min-h-full bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
+            <Stack gap={2.5}>
+              <Stack direction="row" align="center" gap={2.5}>
                 <Box padding={1.5} radius="md" className="bg-brand-cyan/20 text-brand-cyan shrink-0">
                   <Icon icon={Search} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-cyan uppercase tracking-wider">
                   Step 1: Schedule Reading
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-sm font-bold text-text-main">
                 Schedule Discovery
               </h3>
               <p className="text-xs text-text-dim leading-relaxed">
                 Reads multi-room convention timetables to identify workshop levels, competitive divisions, and late-night social themes.
               </p>
-            </div>
-            <div className="mt-4 p-3 rounded-md bg-white/[0.04] border border-white/10 text-xs text-text-dim">
+            </Stack>
+            <Box marginTop={4} padding={3} radius="md" className="bg-white/[0.04] border border-white/10 text-xs text-text-dim">
               Extracts: <strong className="text-brand-cyan">Workshops, Prelims &amp; Socials</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
 
           {/* Step 2 Card */}
-          <div className="flex flex-col justify-between min-h-full p-6 rounded-lg bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2.5">
+          <Stack direction="col" justify="between" padding={6} radius="lg" className="min-h-full bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
+            <Stack gap={2.5}>
+              <Stack direction="row" align="center" gap={2.5}>
                 <Box padding={1.5} radius="md" className="bg-brand-amber/20 text-brand-amber shrink-0">
                   <Icon icon={Zap} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-amber uppercase tracking-wider">
                   Step 2: Buffer Calculation
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-sm font-bold text-text-main">
                 Travel &amp; Rest Planning
               </h3>
               <p className="text-xs text-text-dim leading-relaxed">
                 Calculates backward transit, hotel check-in, and warm-up buffers before your first event so you never rush into competition calls.
               </p>
-            </div>
-            <div className="mt-4 p-3 rounded-md bg-white/[0.04] border border-white/10 text-xs text-text-dim">
+            </Stack>
+            <Box marginTop={4} padding={3} radius="md" className="bg-white/[0.04] border border-white/10 text-xs text-text-dim">
               Calculates: <strong className="text-brand-amber">Arrival Deadline &amp; Rest Times</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
 
           {/* Step 3 Card */}
-          <div className="flex flex-col justify-between min-h-full p-6 rounded-lg bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2.5">
+          <Stack direction="col" justify="between" padding={6} radius="lg" className="min-h-full bg-surface/40 border border-line/40 hover:border-line/70 transition-all">
+            <Stack gap={2.5}>
+              <Stack direction="row" align="center" gap={2.5}>
                 <Box padding={1.5} radius="md" className="bg-brand-emerald/20 text-brand-emerald shrink-0">
                   <Icon icon={Calendar} size="xs" />
                 </Box>
                 <span className="text-xs font-mono font-bold text-brand-emerald uppercase tracking-wider">
                   Step 3: Calendar Sync
                 </span>
-              </div>
+              </Stack>
               <h3 className="text-sm font-bold text-text-main">
                 Ready-to-Use Calendar
               </h3>
               <p className="text-xs text-text-dim leading-relaxed">
                 Generates an .ics calendar file formatted with your selected workshops, competition alarms, and packing checklist.
               </p>
-            </div>
-            <div className="mt-4 p-3 rounded-md bg-white/[0.04] border border-white/10 text-xs text-text-dim">
+            </Stack>
+            <Box marginTop={4} padding={3} radius="md" className="bg-white/[0.04] border border-white/10 text-xs text-text-dim">
               Format: <strong className="text-brand-emerald">Apple &amp; Google Calendar (.ics)</strong>
-            </div>
-          </div>
+            </Box>
+          </Stack>
         </Grid>
 
         {/* Standards & Badges Footer with Generous Spacing */}

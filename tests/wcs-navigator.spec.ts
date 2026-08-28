@@ -22,12 +22,14 @@ test.describe('WCS Navigator E2E Workflow', () => {
     await expect(page.getByText('Agent Pre-Scanning Schedule')).toBeVisible();
 
     // 5. Dynamic Questionnaire Stage
-    await expect(page.getByText('Personalize Your Weekend')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Which dance genres do you want on your schedule?')).toBeVisible({ timeout: 10000 });
 
     // Select Novice Competitor choice card
+    await page.getByRole('button', { name: 'Next Question' }).click();
     const noviceCard = page.getByRole('radio', { name: /Novice Competitor/i });
     await expect(noviceCard).toBeVisible();
     await noviceCard.click();
+    await page.getByRole('button', { name: 'Next Question' }).click();
 
     // Click Generate Calendar
     const generateButton = page.getByRole('button', { name: /Generate Calendar/i }).first();
@@ -45,6 +47,6 @@ test.describe('WCS Navigator E2E Workflow', () => {
     await adjustButton.click();
 
     // Back in Questionnaire
-    await expect(page.getByText('Personalize Your Weekend')).toBeVisible();
+    await expect(page.getByText('Which dance genres do you want on your schedule?')).toBeVisible();
   });
 });

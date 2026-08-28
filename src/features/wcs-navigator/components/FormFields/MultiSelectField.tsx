@@ -77,7 +77,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ question, va
                   isSelected ? 'bg-text-main border-text-main text-black' : 'border-line/70 bg-surface/60'
                 }`}
               >
-                {isSelected && <Icon icon={CheckIcon} size="xs" className="stroke-[3]" />}
+                {isSelected && <Icon icon={CheckIcon} size="xs" className="stroke-2" />}
               </Box>
             </Box>
           );

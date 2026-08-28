@@ -49,28 +49,53 @@ const ResearchAnalytics = () => {
           </Text>
 
           {/* Main Portfolio & Projects Banner */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 rounded-xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 shadow-lg backdrop-blur-sm my-4 w-full">
-            <div className="flex flex-col gap-1 max-w-2xl">
-              <span className="text-xs uppercase tracking-widest text-brand-cyan font-semibold">
-                Production Software &amp; Case Studies
-              </span>
-              <h3 className="text-lg font-bold text-text-main">
-                Robotics &amp; Autonomous Systems Portfolio
-              </h3>
-              <p className="text-sm text-text-dim leading-relaxed">
+          <Box
+            display="flex"
+            direction={{ base: "col", sm: "row" }}
+            align={{ base: "start", sm: "center" }}
+            justify="between"
+            gap={6}
+            padding={6}
+            radius="xl"
+            className="bg-gradient-to-br from-white/[0.04] to-black/20 border border-brand-cyan/20 shadow-[0_0_15px_rgba(0,255,255,0.05)] backdrop-blur-md my-4 w-full relative overflow-hidden"
+          >
+            <Stack gap={3} className="max-w-2xl relative z-10">
+              <Box display="flex" align="center" gap={2}>
+                <Box className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse shrink-0" />
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+                  Production Software & Case Studies
+                </Text>
+              </Box>
+              <Text as="h3" variant="display" size="xl" weight="font-bold" color="main">
+                Robotics & Autonomous Systems Portfolio
+              </Text>
+              <Text variant="body" size="sm" color="dim" leading="relaxed">
                 Explore production robotics software, onboard motion planning architectures, high-accuracy state estimation systems, and technical consulting.
-              </p>
-            </div>
-            <a
+              </Text>
+              <Box display="flex" wrap="wrap" gap={2} marginTop={1}>
+                {['ROS 2', 'Motion Planning', 'State Estimation', 'Consulting'].map((tech) => (
+                  <Box key={tech} paddingX={2.5} paddingY={1} radius="full" className="bg-white/5 border border-white/10 text-xs text-text-muted font-medium">
+                    {tech}
+                  </Box>
+                ))}
+              </Box>
+            </Stack>
+            <ActionButton
+              as="a"
               href="https://arii.github.io"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-brand-cyan text-black font-semibold text-xs whitespace-nowrap hover:opacity-90 transition-all shadow-sm shrink-0 self-stretch sm:self-auto"
+              variant="primary"
+              paddingX={8}
+              paddingY={4}
+              className="bg-brand-cyan hover:bg-brand-cyan hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] text-black border-brand-cyan font-black text-sm whitespace-nowrap transition-all duration-300 shrink-0 self-stretch sm:self-auto relative z-10"
             >
-              <span>View Robotics Portfolio</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
+              <Box display="flex" align="center" justify="center" gap={2} width="full">
+                <span>View Robotics Portfolio</span>
+                <Icon icon={ArrowRight} size="sm" />
+              </Box>
+            </ActionButton>
+          </Box>
           
 
         </Stack>
