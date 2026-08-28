@@ -28,7 +28,7 @@ test.describe('Research Tools Mobile UX', () => {
       } else if (tool.path.includes('blog-drafter')) {
         await page.getByText(/CONTENT PIPELINE/i).first().waitFor({ state: 'visible', timeout: 45000 });
       } else if (tool.path.includes('wcs-navigator')) {
-        await page.getByText(/What event are you attending/i).first().waitFor({ state: 'visible', timeout: 45000 });
+        await page.getByRole('combobox').first().waitFor({ state: 'visible', timeout: 45000 });
       } else if (tool.path.includes('wcs-scraper')) {
         // Wait for Scraper shell label or error state if data fails to sync
         await page.locator('text=/Scoring Tool|Data Synchronisation Failed/i').first().waitFor({ state: 'visible', timeout: 45000 });

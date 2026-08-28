@@ -37,16 +37,36 @@ function mapFormQuestionToStep(fq: FormQuestion): DynamicQuestionStep {
     all_tracks: '🎯'
   };
 
+  // For boolean type with no options (Yes/No gate), synthesize two choice cards
+  const rawOptions = fq.options ?? [];
+  const resolvedOptions: DynamicQuestionOption[] =
+    fq.type === 'boolean' && rawOptions.length === 0
+      ? [
+          {
+            id: 'yes',
+            title: 'Yes, include it',
+            desc: fq.context ?? '',
+            icon: '✅'
+          },
+          {
+            id: 'no',
+            title: 'No, skip it',
+            desc: 'This block will be excluded from your itinerary.',
+            icon: '⏭️'
+          }
+        ]
+      : rawOptions.map((opt, idx) => ({
+          id: String(opt.value),
+          title: opt.label,
+          desc: opt.subtitle ?? (opt.badge ? `Badge: ${opt.badge}` : ''),
+          icon: iconMap[String(opt.value).toLowerCase()] ?? (idx === 0 ? '✨' : idx === 1 ? '🎯' : idx === 2 ? '⚡' : '🌟')
+        }));
+
   return {
     id: fq.id,
     question: fq.title,
     subtitle: fq.context,
-    options: (fq.options || []).map((opt, idx) => ({
-      id: String(opt.value),
-      title: opt.label,
-      desc: opt.subtitle || (opt.badge ? `Badge: ${opt.badge}` : ''),
-      icon: iconMap[String(opt.value).toLowerCase()] || (idx === 0 ? '✨' : idx === 1 ? '🎯' : idx === 2 ? '⚡' : '🌟')
-    }))
+    options: resolvedOptions
   };
 }
 

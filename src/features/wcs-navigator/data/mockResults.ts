@@ -287,28 +287,6 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           context: 'Resolves workshop timetable clashes across Grand Peninsula, Regency, and Sandpebble ballrooms.',
           defaultValue: 'competitor_workshops',
           required: true
-        },
-        {
-          id: 'wsdc_level',
-          type: 'select',
-          title: 'What is your dancer persona & competition division?',
-          options: [
-            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
-            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
-            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
-            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
-          ],
-          context: 'Enforces workshop level gatekeeping and flags your division check-in time.',
-          defaultValue: 'novice',
-          required: true
-        },
-        {
-          id: 'spectator_interest',
-          type: 'boolean',
-          title: 'Include Saturday night Champion Showcase in your schedule?',
-          options: [],
-          context: 'Prime-time spectator event (9:00 PM - 11:30 PM) which pauses general social dancing.',
-          defaultValue: true
         }
       ]
     },
