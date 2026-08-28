@@ -146,7 +146,7 @@ async def generate_calendar(
         buffer_timeline_json=buffer_result.model_dump_json(by_alias=True),
     )
 
-    model_name = getattr(settings, "GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = getattr(settings, "GEMINI_MODEL", "gemini-3.5-flash")
 
     try:
         response = client.models.generate_content(

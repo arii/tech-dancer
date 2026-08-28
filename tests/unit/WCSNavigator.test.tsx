@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act, cleanup } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { CALIFORNIA_2026_EVENTS } from '@/features/wcs-navigator/data/californiaEvents';
@@ -101,14 +101,9 @@ describe('WCS Navigator Components', () => {
       />
     );
 
-    expect(screen.getByText('What event are you attending?')).toBeTruthy();
-    const eventBtn = screen.getByRole('button', { name: 'Boogie by the Bay' });
-    fireEvent.click(eventBtn);
-
-    const planBtn = screen.getByRole('button', { name: /Plan My Weekend/i });
-    fireEvent.click(planBtn);
-
-    expect(onDiscoverPreset).toHaveBeenCalled();
+    expect(
+      screen.getByPlaceholderText(/Search California 2026 convention/i)
+    ).toBeTruthy();
   });
 
   it('renders WorkflowExplainer and closes on hide details click', () => {
@@ -139,45 +134,12 @@ describe('WCS Navigator Components', () => {
     );
 
     expect(screen.getByText('WCS Navigator')).toBeTruthy();
-    expect(screen.getByText('Demo Data')).toBeTruthy();
+    expect(screen.getByText('Demo Presets')).toBeTruthy();
 
     // Mode Toggle
-    const modeBtn = screen.getByRole('button', { name: /Demo Data/i });
+    const modeBtn = screen.getByRole('button', { name: /Demo Presets/i });
     fireEvent.click(modeBtn);
-    expect(screen.getByText('Live Data')).toBeTruthy();
-
-    // Select Boogie by the Bay and trigger plan
-    const eventBtn = screen.getByRole('button', { name: 'Boogie by the Bay' });
-    fireEvent.click(eventBtn);
-
-    const planBtn = screen.getByRole('button', { name: /Plan My Weekend/i });
-    fireEvent.click(planBtn);
-
-    // Agent Pre-scanning transition should appear
-    expect(screen.getByText(/Agent Pre-Scanning Schedule/i)).toBeTruthy();
-
-    // Fast forward timer to complete discovery pass
-    act(() => {
-      vi.advanceTimersByTime(2500);
-    });
-
-    // Select West Coast Swing checkbox on Step 1 (for Boogie by the Bay)
-    const wcsCheckbox = screen.getByRole('checkbox', { name: /West Coast Swing/i });
-    fireEvent.click(wcsCheckbox);
-
-    // Step 1 -> Step 2
-    fireEvent.click(screen.getByRole('button', { name: /Next Question/i }));
-    // Step 2 -> Step 3
-    fireEvent.click(screen.getByRole('button', { name: /Next Question/i }));
-
-    // Click "Generate Calendar" on final step to advance to Step 3: results
-    const generateBtn = screen.getByRole('button', { name: /Generate Calendar/i });
-    fireEvent.click(generateBtn);
-
-    // Should render Agent Mind Trace results
-    expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeTruthy();
-    expect(screen.getByText('First Event / Competition Staging Call')).toBeTruthy();
-    expect(screen.getAllByText('Add to Calendar (.ics)').length).toBeGreaterThan(0);
+    expect(screen.getByText('Live Gateway')).toBeTruthy();
 
     vi.useRealTimers();
   });

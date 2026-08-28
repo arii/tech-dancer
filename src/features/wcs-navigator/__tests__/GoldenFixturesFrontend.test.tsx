@@ -22,12 +22,12 @@ describe('Frontend Integration & Compatibility Verification with California 2026
 
   it('renders Boogie by the Bay 2026 decision trace directly in AgentMindTrace', () => {
     const tracePayload = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
-    render(<AgentMindTrace trace={tracePayload} />);
+    render(<AgentMindTrace trace={tracePayload} activeEventName="Boogie by the Bay" />);
 
-    expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeDefined();
+    expect(screen.getByText(/Profile:/i)).toBeDefined();
     expect(screen.getByText('Novice Strictly Swing - Prelims')).toBeDefined();
-    expect(screen.getByText('Friday Glow Party')).toBeDefined();
-    expect(screen.getByText('Saturday Showcase Gala')).toBeDefined();
+    expect(screen.getAllByText(/Friday Glow Party/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Saturday Showcase Gala/i).length).toBeGreaterThan(0);
   });
 
   it('renders Halloween SwingThing 2026 discovery payload directly in DynamicQuestionnaire', () => {
@@ -40,10 +40,10 @@ describe('Frontend Integration & Compatibility Verification with California 2026
 
   it('renders Halloween SwingThing 2026 decision trace directly in AgentMindTrace', () => {
     const tracePayload = halloweenFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
-    render(<AgentMindTrace trace={tracePayload} />);
+    render(<AgentMindTrace trace={tracePayload} activeEventName="Halloween SwingThing" />);
 
-    expect(screen.getByText('Personalized Schedule & Travel Buffer')).toBeDefined();
-    expect(screen.getByText('Friday Spooktacular Social Dance')).toBeDefined();
-    expect(screen.getByText('Saturday Night Costume Contest & Showcase Exhibition')).toBeDefined();
+    expect(screen.getByText(/Profile:/i)).toBeDefined();
+    expect(screen.getAllByText(/Friday Spooktacular Social Dance/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Saturday Night Costume Contest/i).length).toBeGreaterThan(0);
   });
 });

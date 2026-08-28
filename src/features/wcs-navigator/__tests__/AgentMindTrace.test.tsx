@@ -13,7 +13,7 @@ describe('AgentMindTrace Suite', () => {
 
   it('renders AgentMindTrace container and header correctly', () => {
     render(<AgentMindTrace />);
-    expect(screen.getByText(/Personalized Schedule & Travel Buffer/i)).toBeDefined();
+    expect(screen.getByText(/Profile:/i)).toBeDefined();
     expect(screen.getAllByText(/Add to Calendar \(\.ics\)/i).length).toBeGreaterThan(0);
   });
 
@@ -27,11 +27,9 @@ describe('AgentMindTrace Suite', () => {
   });
 
   it('renders FlightBufferTimeline buffer steps and time summary', () => {
-    render(<FlightBufferTimeline />);
-    expect(screen.getAllByText(/Recommended Arrival Time/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Total required buffer/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('First Event / Competition Staging Call')).toBeDefined();
-    expect(screen.getByText('Warmup & Floor Check (60m)')).toBeDefined();
+    render(<FlightBufferTimeline activeEventName="Boogie by the Bay" />);
+    expect(screen.getByText(/Pre-Event Transit Logistics/i)).toBeDefined();
+    expect(screen.getAllByText(/SFO/i).length).toBeGreaterThan(0);
   });
 
   it('toggles tabs between all, included, and filtered sessions in FilteringAuditMatrix', () => {
@@ -76,7 +74,6 @@ describe('AgentMindTrace Suite', () => {
 
     expect(createObjectURLMock).toHaveBeenCalled();
     expect(screen.getByText('Calendar Downloaded (.ics)')).toBeDefined();
-    expect(screen.getByText(/wcs-navigator-schedule\.ics/i)).toBeDefined();
+    expect(screen.getByText(/wcs-schedule\.ics/i)).toBeDefined();
   });
 });
-

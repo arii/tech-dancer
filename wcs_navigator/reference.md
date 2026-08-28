@@ -1,38 +1,119 @@
-Here is a compiled directory of all the **highly relevant links, URLs, and resources** extracted directly from your project materials. These resources are categorized to support your local development, Cloud Run setup, and final Devpost submission.
+# WCS Navigator: Reference Architecture & Engineering Guide
 
-### 1. Hackathon Portal & Google Cloud Developer Resources
-These links are essential for managing your participation, claiming developer credits, attending technical deep-dives, and monitoring platform announcements.
-
-| Category | Resource Name | Direct URL Link | Hackathon Relevance & Notes |
-| :--- | :--- | :--- | :--- |
-| **Hackathon Portal** | All Things Agentic Hackathon on Devpost | [allthingsagentichackathon.devpost.com](https://allthingsagentichackathon.devpost.com/resources) | The main landing page for submission rules, track definitions, resources, and updates. |
-| **GCP Credits** | Google Cloud Credits Request Form | [forms.gle/riGhgDSHkHeMx8Ca6](https://forms.gle/riGhgDSHkHeMx8Ca6) | Use this form to request **\$150 in Google Cloud credits** for your project backend (Vertex AI, Cloud Run). |
-| **GCP Trial** | Google Cloud Free Trial Sign-up | [cloud.google.com/free](https://cloud.google.com/free) | Alternative route to set up your Google Cloud sandbox account with standard \$300 trial credits. |
-| **Technical Workshops** | Cloud on Air Workshop Series | [cloudonair.withgoogle.com/...](https://cloudonair.withgoogle.com/events/architecting-agent-memory-session-state-vector-search-managed-cloud-memory) | Deep-dive webinars covering state management, memory, and GCP-native vector storage. |
-| **Interactive QA** | Reddit r/googlecloud Hackathon AMA Thread | [reddit.com/r/googlecloud/...](https://www.reddit.com/r/googlecloud/comments/1vxfi88/ama_about_hackathons_at_google_cloud_thu_aug_27/) | Active Q&A thread hosted by Tilde Thurium (Google Developer Relations) covering scoping, MVPs, and GCP deployment tips. |
-| **Submission Help** | Devpost: Adding Projects to Portfolio | [devpost.helpscoutdocs.com/.../116](https://devpost.helpscoutdocs.com/article/116-adding-projects-to-your-portfolio) | Official instructions on how to package, edit, and link your repository for your portfolio. |
-| **Submission Help** | Devpost: Know Your Submission Steps | [devpost.helpscoutdocs.com/.../126](https://devpost.helpscoutdocs.com/article/126-know-your-submission-steps) | Step-by-step checklist to ensure you don't miss mandatory submission fields or video links. |
+This document defines the comprehensive reference architecture, API contracts, frontend component hierarchy, and runtime execution pipelines for **WCS Navigator** — an intelligent schedule optimizer and calendar streaming agent for West Coast Swing dance conventions.
 
 ---
 
-### 2. Live Platform Portfolio & Source Code Repositories
-These repositories represent the base platforms you are integrating. Your final frontend UI for the WCS Navigator will be deployed into the `tech-dancer` static blog ecosystem.
+## 1. End-to-End User Flow & Runtime Stages
 
-| Category | Platform / Repository | Direct URL Link | Role in WCS Navigator MVP |
-| :--- | :--- | :--- | :--- |
-| **Main Frontend & Blog** | `tech-dancer` GitHub Repository | [github.com/arii/tech-dancer](https://github.com/arii/tech-dancer) | **Your active portfolio platform**. This repository hosts the React code behind `boomtick.blog` where you will build the dynamic pre-scan uploader and interactive logic visualizer. |
-| **Live Blog Site** | BoomTick.blog Homepage | [boomtick.blog](https://boomtick.blog/) | The live, production-deployed portal that will house the final browser interface for streaming calendar files. |
-| **DevAI Portfolio** | BoomTick.blog DevAI Portfolio Hub | [boomtick.blog/research](https://boomtick.blog/research) | Dedicated section on your blog showcasing automated developer tools and agentic benchmark datasets. |
-| **DevAI Console** | `RepoAuditor AI` Repository (formerly `hrm-project-management`) | [github.com/arii/hrm-project-management](https://github.com/arii/hrm-project-management) | Your React + Vite workflow console. This shows your prior implementation of local environment settings storage and local `.env.local` credential flows. |
-| **Live Console** | RepoAuditor AI Deployment | [hrm-project-management.vercel.app](https://hrm-project-management.vercel.app/) | The live-deployed DevAI console for repository reviews and Jules coding agent session coordination. |
+```
++-----------------------------------------------------------------------------------+
+| 1. SEARCH-FIRST LANDING STATE (EventSearchHero.tsx)                               |
+| - Clean, Google-style Omnibox with Autocomplete & Presets                         |
+| - Header Controls (Logo, How It Works Modal, Preset Jump)                        |
+| - Collapsible Custom Schedule Upload Drawer (Drag-and-Drop / URL Ingestion)       |
++-----------------------------------------------------------------------------------+
+                                         │
+                                         ▼ (Event Selected or File Uploaded)
++-----------------------------------------------------------------------------------+
+| 2. PRE-FLIGHT FOOTPRINT ANALYSIS & DISCOVERY SCAN (AgentDiscoveryTransition.tsx)  |
+| - Scans timetable rooms, track taxonomy, audition bands, and featured champions   |
+| - Analyzes host venue transit conditions and airport proximity                    |
++-----------------------------------------------------------------------------------+
+                                         │
+                                         ▼ (Payload Extracted)
++-----------------------------------------------------------------------------------+
+| 3. DYNAMIC CONTEXTUAL QUESTIONNAIRE (DynamicQuestionnaire.tsx)                    |
+| - Step 1: Audition Placement / Targeted Division (Novice, Int, Adv, Social)       |
+| - Step 2: Event-Specific Parallel Track Streams (Footwork, Musicality, Flow)      |
+| - Step 3: Featured Champion Instructor Lineup (Headlining staff for the weekend)  |
+| - Step 4: Venue-Specific Friday Arrival Logistics (Target landing deadline)       |
+| - Interaction: Large single-column cards with instant auto-advancing on click     |
++-----------------------------------------------------------------------------------+
+                                         │
+                                         ▼ (Auto-advances through final step)
++-----------------------------------------------------------------------------------+
+| 4. TAILORED SCHEDULE & USABILITY DASHBOARD (AgentMindTrace.tsx)                   |
+| - Event-Based Local Transit & Venue Insight Card (FlightBufferTimeline.tsx)       |
+| - Ultra-Clean Chronological Schedule: Friday Prelims -> Saturday Workshops -> Sun|
+| - Session Cards: Title, Time (Clock), Ballroom Location (MapPin)                  |
+| - Single-Click Tools: .ics Apple/Google Calendar Export & .md Itinerary Download  |
++-----------------------------------------------------------------------------------+
+```
 
 ---
 
-### 3. Target Travel & Packing Guides (In-Memory Ingestion Context)
-Use these existing travel packs and lifestyle guides on `boomtick.blog` to ground Gemini 3.5's packing list generation (e.g., verifying references to adhesive suede shoe modifications or travel steamers):
+## 2. Frontend Component Hierarchy & Responsibilities
 
-*   **Featured Travel Guide:** [The WCS Travel Pack Gear Checklist](https://boomtick.blog/blog/2026-04-19-gear-essentials) — Highly specific packing parameters, covering shoe maintenance, travel hygiene, and performance tech.
-*   **Essential Footwear Guide:** [Make Any Shoe a Dance Shoe with Adhesive Suede](https://boomtick.blog/blog/2026-04-18-make-shoe-dance) — Essential reading on joint-safe DIY footwear modifications used as logical justification for your packing manifest generator.
-*   **Theme Apparel Guide:** [WCS-Safe Halloween Costumes](https://boomtick.blog/blog/2026-04-18-halloween-costumes) — Scoped parameters for styling low-effort, breathable dance outfits for thematic events like *Halloween Swing Thing*.
+| Component Path | Role & Key Responsibilities |
+| :--- | :--- |
+| [`src/features/wcs-navigator/WCSNavigatorPage.tsx`](file:///home/ari/tech-dancer/src/features/wcs-navigator/WCSNavigatorPage.tsx) | **Master Orchestrator**: Manages progressive step machine (`landing` → `discovering` → `questionnaire` → `results`), active event state, and questionnaire synthesis. |
+| [`src/features/wcs-navigator/components/EventSearchHero.tsx`](file:///home/ari/tech-dancer/src/features/wcs-navigator/components/EventSearchHero.tsx) | **Search-First Omnibox**: Renders the standalone search hero, California 2026 event autocomplete, and collapsible PDF/timetable uploader. |
+| [`src/features/wcs-navigator/components/DynamicQuestionnaire.tsx`](file:///home/ari/tech-dancer/src/features/wcs-navigator/components/DynamicQuestionnaire.tsx) | **Fluid Card Questionnaire**: Centered single-column layout with auto-advancing large cards, tactile hover transitions, and progress indicator. |
+| [`src/features/wcs-navigator/utils/questionGenerator.ts`](file:///home/ari/tech-dancer/src/features/wcs-navigator/utils/questionGenerator.ts) | **Footprint Taxonomy Analyzer**: Analyzes event payload to dynamically assemble questions for audition tiers, parallel tracks, headliners, and venue arrival. |
+| [`src/features/wcs-navigator/components/FlightBufferTimeline.tsx`](file:///home/ari/tech-dancer/src/features/wcs-navigator/components/FlightBufferTimeline.tsx) | **Local Transit & Logistics Card**: Provides verified host venue tips (airport shuttles, bag drops, ballroom access, and late-night amenities). |
+| [`src/features/wcs-navigator/components/AgentMindTrace.tsx`](file:///home/ari/tech-dancer/src/features/wcs-navigator/components/AgentMindTrace.tsx) | **Tailored Itinerary Viewer**: Displays decluttered session cards grouped by day, profile context badge, and calendar streaming export buttons. |
 
---
+---
+
+## 3. Backend API Contract & Data Schemas
+
+### Endpoint 1: Pre-Flight Footprint Discovery
+- **Route:** `POST /api/generate-calendar/discover`
+- **Request Body:** Form data with `schedule_pdf` (file) or `preset_id` / `url` (string).
+- **Response Schema:**
+```json
+{
+  "preset_id": "boogie-by-the-bay-2026",
+  "preset_name": "Boogie by the Bay 2026",
+  "has_auditions": true,
+  "available_tracks": [
+    "Musicality & Phrasing Stream",
+    "Connection & Slot Mechanics",
+    "Styling, Dips & Flow Accents"
+  ],
+  "featured_instructors": [
+    "Benji Schwimmer",
+    "Jordan Frisbee & Tatiana Mollmann",
+    "Thibault Ramirez & Nicole Ramirez",
+    "Glenn Ball & Emily Huang"
+  ],
+  "venue_logistics": {
+    "hotel_name": "Hyatt Regency San Francisco Airport",
+    "primary_airport": "SFO",
+    "transit_mode": "Complimentary 24/7 Shuttle (5 mins)",
+    "earliest_staging_time": "5:15 PM Friday"
+  }
+}
+```
+
+### Endpoint 2: Contextual Generation & Calendar Streaming
+- **Route:** `POST /api/generate-calendar/generate`
+- **Request Body:**
+```json
+{
+  "preset_id": "boogie-by-the-bay-2026",
+  "answers": {
+    "division": "novice",
+    "role": "lead",
+    "track": "technique",
+    "instructor": "benji",
+    "arrival": "early"
+  }
+}
+```
+- **Response Headers:** `Content-Type: text/calendar; charset=utf-8`, `Content-Disposition: attachment; filename="boogie-by-the-bay-schedule.ics"`
+- **Response Body:** RFC 5545 valid VCALENDAR payload with formatted VEVENT sessions, room alarms, and travel buffers.
+
+---
+
+## 4. Key Reference Links & Hackathon Resources
+
+| Category | Resource Name | Link |
+| :--- | :--- | :--- |
+| **Hackathon Portal** | All Things Agentic Hackathon on Devpost | [allthingsagentichackathon.devpost.com](https://allthingsagentichackathon.devpost.com/resources) |
+| **GCP Credits** | Google Cloud Credits Request Form | [forms.gle/riGhgDSHkHeMx8Ca6](https://forms.gle/riGhgDSHkHeMx8Ca6) |
+| **Source Repository** | tech-dancer GitHub Repository | [github.com/arii/tech-dancer](https://github.com/arii/tech-dancer) |
+| **Live Deployment** | BoomTick.blog Live Site | [boomtick.blog/research/wcs-navigator](https://boomtick.blog/research/wcs-navigator) |
+| **Footwear Science** | Adhesive Suede DIY Dance Shoes | [boomtick.blog/blog/2026-04-18-make-shoe-dance](https://boomtick.blog/blog/2026-04-18-make-shoe-dance) |
+| **Packing Essentials** | WCS Convention Gear Checklist | [boomtick.blog/blog/2026-06-01-wcs-essentials](https://boomtick.blog/blog/2026-06-01-wcs-essentials) |

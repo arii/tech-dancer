@@ -235,16 +235,58 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
       preset_name: 'Boogie by the Bay 2026',
       suggested_form_questions: [
         {
-          id: 'dance_styles',
-          type: 'multiselect',
-          title: 'Which dance genres do you want on your schedule?',
+          id: 'intensive',
+          type: 'select',
+          title: 'Are you attending any Friday pre-convention intensives at Boogie by the Bay?',
           options: [
-            { label: 'West Coast Swing', value: 'wcs' },
-            { label: 'Country Swing', value: 'country' },
-            { label: 'Hustle', value: 'hustle' }
+            { label: 'Jordan & Tatiana "Mastering the Blues" (Fri 10:00 AM - 1:00 PM)', subtitle: 'Regency Ballroom • Requires flight landing by 8:30 AM', value: 'blues_intensive', badge: 'Intensive' },
+            { label: 'Kelly Casanova Judging Intensive (Fri 1:00 PM - 4:00 PM)', subtitle: 'Harbour Room A • Requires arrival by 12:00 PM', value: 'judging_intensive', badge: 'Judging' },
+            { label: 'Competitor Leveled Afternoon Tracks (Fri 1:00 PM - 5:00 PM)', subtitle: 'Sandpebble ABC • Novice 1pm, Int 2pm, Adv 3pm, All-Star 4pm', value: 'competitor_workshops', badge: 'Leveled' },
+            { label: 'No Daytime Intensives (Standard Friday Evening Arrival)', subtitle: 'Arrive in time for 6:30 PM Strictly Prelims or 9:00 PM Social Kickoff', value: 'no_intensives', badge: 'Evening' }
           ],
-          context: 'Boogie is a multi-genre event; filter out non-WCS tracks if focusing purely on WCS.',
-          defaultValue: ['wcs']
+          context: 'Used to configure early morning travel buffer alerts and pre-convention calendar items.',
+          defaultValue: 'no_intensives',
+          required: true
+        },
+        {
+          id: 'division',
+          type: 'select',
+          title: 'Which competitive divisions are you entering this weekend?',
+          options: [
+            { label: 'Novice Competitor Track', subtitle: 'Friday 6:30 PM Strictly Prelims + Saturday 12:30 PM J&J Prelims', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor Track', subtitle: 'Friday 6:30 PM Strictly Prelims + Saturday 2:15 PM J&J Prelims', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Advanced / All-Star Competitor', subtitle: 'Friday 8:00 PM Strictly + Saturday 4:00 PM J&J Prelims', value: 'advanced_allstar', badge: 'Adv/All-Star' },
+            { label: 'Social Dancer / Non-Competitor', subtitle: 'All-levels workshops, Champions Gala, and late-night socials (no staging calls)', value: 'social_only', badge: 'Social' }
+          ],
+          context: 'Calculates your earliest competition marshalling call and filters leveled workshops.',
+          defaultValue: 'novice',
+          required: true
+        },
+        {
+          id: 'arrival',
+          type: 'select',
+          title: 'When is your Friday arrival target at Hyatt Regency SFO?',
+          options: [
+            { label: 'Early Afternoon (Flight landing before 2:30 PM)', subtitle: 'Full 3.5h buffer for SFO transit, hotel check-in, unpack & warmup before 6:30 PM Strictly', value: 'early', badge: 'Recommended' },
+            { label: 'Friday Evening Arrival (6:00 PM – 8:00 PM)', subtitle: 'Check in for evening masterclasses and 9:00 PM kickoff social', value: 'evening', badge: 'Evening' },
+            { label: 'Local Bay Area Commute / Drive-In', subtitle: 'Driving in locally from SF/Bay Area; no airport buffer needed', value: 'local', badge: 'Drive-In' }
+          ],
+          context: 'Generates backward staging timeline and sets automatic flight touchdown alarms.',
+          defaultValue: 'early',
+          required: true
+        },
+        {
+          id: 'track',
+          type: 'select',
+          title: 'Boogie by the Bay runs 3 simultaneous daytime tracks. Which stream should we prioritize?',
+          options: [
+            { label: 'Competitor Leveled Workshops', subtitle: 'Sandpebble ABC • Division-targeted technique & strategy classes', value: 'competitor_workshops', badge: 'Technique' },
+            { label: 'Main Ballroom Masterclasses', subtitle: 'Grand Peninsula • Musicality, phrasing & partner connection classes', value: 'all_levels_ballroom', badge: 'Musicality' },
+            { label: 'Curated All-Around Mix', subtitle: 'Optimal balance across all rooms and touring instructors', value: 'balanced_mix', badge: 'Curated' }
+          ],
+          context: 'Resolves workshop timetable clashes across Grand Peninsula, Regency, and Sandpebble ballrooms.',
+          defaultValue: 'competitor_workshops',
+          required: true
         },
         {
           id: 'wsdc_level',

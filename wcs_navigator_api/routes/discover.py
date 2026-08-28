@@ -73,7 +73,7 @@ async def discover_schedule(
     try:
         client = get_genai_client()
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=settings.GEMINI_MODEL,
             contents=[pdf_part, DISCOVERY_SYSTEM_PROMPT],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",

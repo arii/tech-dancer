@@ -1,24 +1,86 @@
-import { useState, useMemo } from 'react';
-import { Search, Upload, MapPin, ArrowRight, X, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { Search, Upload, X, ChevronRight } from 'lucide-react';
+import { Box, Stack } from '@/layouts/Primitives';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { DropzoneUpload } from './DropzoneUpload';
 
-export interface EventSearchHeroProps {
-  onDiscoverPreset: (event: WCSCaliforniaEvent) => void;
-  onDiscoverPdf: (file: File) => void;
-  onDiscoverUrl: (url: string) => void;
+export interface UserPreferences {
+  division: 'novice' | 'intermediate' | 'advanced' | 'allstar' | 'social_only';
+  role: 'lead' | 'follow' | 'switch';
+  lateNight: boolean;
+  focusTrack: string;
 }
 
-export const EventSearchHero = ({
+export interface EventSearchHeroProps {
+  onDiscoverPreset: (event: WCSCaliforniaEvent, preferences?: Partial<UserPreferences>) => void;
+  onDiscoverPdf: (file: File) => void;
+  onDiscoverUrl: (url: string) => void;
+  initialPreferences?: UserPreferences;
+}
+
+const DEFAULT_PREFERENCES: UserPreferences = {
+  division: 'novice',
+  role: 'lead',
+  lateNight: true,
+  focusTrack: 'technique',
+};
+
+export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   onDiscoverPreset,
   onDiscoverPdf,
   onDiscoverUrl,
-}: EventSearchHeroProps) => {
+  initialPreferences = DEFAULT_PREFERENCES,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState<WCSCaliforniaEvent | null>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [activeTab, setActiveTab] = useState<'search' | 'upload'>('search');
+  const [isUploadDrawerOpen, setIsUploadDrawerOpen] = useState(false);
+  const [preferences, setPreferences] = useState<UserPreferences>(initialPreferences);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsInputFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Intent parsing: extract division or role when typing into search query
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    const q = value.toLowerCase();
+    setPreferences((prev) => {
+      let updatedDivision = prev.division;
+      let updatedRole = prev.role;
+
+      if (q.includes('intermediate')) {
+        updatedDivision = 'intermediate';
+      } else if (q.includes('advanced')) {
+        updatedDivision = 'advanced';
+      } else if (q.includes('novice')) {
+        updatedDivision = 'novice';
+      } else if (q.includes('social only') || q.includes('social')) {
+        updatedDivision = 'social_only';
+      }
+
+      if (q.includes('follow')) {
+        updatedRole = 'follow';
+      } else if (q.includes('lead')) {
+        updatedRole = 'lead';
+      } else if (q.includes('switch')) {
+        updatedRole = 'switch';
+      }
+
+      if (updatedDivision !== prev.division || updatedRole !== prev.role) {
+        return { ...prev, division: updatedDivision, role: updatedRole };
+      }
+      return prev;
+    });
+  };
 
   const filteredEvents = useMemo(() => {
     if (!searchQuery.trim()) return CALIFORNIA_2026_EVENTS;
@@ -27,231 +89,143 @@ export const EventSearchHero = ({
       (e) =>
         e.name.toLowerCase().includes(q) ||
         e.location.toLowerCase().includes(q) ||
-        e.dates.toLowerCase().includes(q)
+        e.dates.toLowerCase().includes(q) ||
+        e.description.toLowerCase().includes(q)
     );
   }, [searchQuery]);
 
-  const handleSelect = (event: WCSCaliforniaEvent) => {
-    setSelectedEvent(event);
-    setSearchQuery(event.name);
+  const handleSelectEvent = (event: WCSCaliforniaEvent) => {
     setIsInputFocused(false);
+    onDiscoverPreset(event, preferences);
   };
 
   const handleClear = () => {
     setSearchQuery('');
-    setSelectedEvent(null);
   };
 
   return (
-    <Stack gap={6} align="center" justify="center" maxWidth="2xl" marginX="auto" paddingY={{ default: 6, md: 10 }} width="full">
-      {/* Centered Hero Header */}
-      <Stack gap={2} align="center" textAlign="center" maxWidth="2xl" width="full">
-        <Text weight="font-black" size="3xl" color="main" tracking="tight" leading="tight" className="sm:text-4xl">
-          What event are you attending?
-        </Text>
-        <Text size="sm" color="dim" maxWidth="lg" leading="relaxed" className="sm:text-base">
-          Search an upcoming convention or upload your schedule PDF to build a customized weekend timetable.
-        </Text>
-      </Stack>
+    <Stack
+      ref={containerRef}
+      gap={8}
+      align="center"
+      justify="center"
+      maxWidth="2xl"
+      marginX="auto"
+      paddingY={{ default: 12, md: 20 }}
+      width="full"
+      className="relative min-h-[40vh] flex flex-col justify-center"
+    >
+      {/* Clean, Standalone Google-Style Search Omnibox */}
+      <Box width="full" className="relative">
+        <Box
+          display="flex"
+          align="center"
+          gap={3}
+          width="full"
+          paddingX={5}
+          paddingY={4}
+          radius="2xl"
+          surface="card"
+          border
+          shadow="2xl"
+          className="border-line/80 hover:border-brand-cyan/70 focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all bg-slate-900/90 backdrop-blur-xl"
+        >
+          <Search className="w-5 h-5 text-brand-cyan shrink-0" />
+          <input
+            type="text"
+            role="combobox"
+            aria-expanded={isInputFocused && filteredEvents.length > 0}
+            aria-label="Search convention or city"
+            placeholder="Search California 2026 convention (e.g. South Bay, Boogie, Capital Swing)..."
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            onFocus={() => setIsInputFocused(true)}
+            className="w-full bg-transparent text-base sm:text-lg text-text-main placeholder:text-text-dim/60 focus:outline-none"
+          />
 
-      {/* Mode Switch Tabs: Search Event vs Upload PDF */}
-      <Box display="flex" align="center" gap={2} padding={1} radius="lg" surface="muted" border className="border-line/60">
-        <Box
-          as="button"
-          type="button"
-          onClick={() => setActiveTab('search')}
-          paddingX={4}
-          paddingY={1.5}
-          radius="md"
-          cursor="pointer"
-          className={`text-xs font-semibold transition-all ${
-            activeTab === 'search'
-              ? 'bg-brand-cyan text-black font-bold shadow-sm'
-              : 'text-text-dim hover:text-text-main'
-          }`}
-        >
-          Select Event
+          {searchQuery && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={handleClear}
+              className="text-text-dim hover:text-text-main p-1 transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </Box>
-        <Box
-          as="button"
-          type="button"
-          onClick={() => setActiveTab('upload')}
-          paddingX={4}
-          paddingY={1.5}
-          radius="md"
-          cursor="pointer"
-          className={`text-xs font-semibold transition-all flex items-center gap-1.5 ${
-            activeTab === 'upload'
-              ? 'bg-brand-cyan text-black font-bold shadow-sm'
-              : 'text-text-dim hover:text-text-main'
-          }`}
-        >
-          <Upload className="w-3.5 h-3.5" />
-          <span>Upload PDF</span>
-        </Box>
+
+        {/* Autocomplete Dropdown with Custom Dark Scrollbar */}
+        {isInputFocused && filteredEvents.length > 0 && (
+          <Box
+            surface="card"
+            border
+            radius="xl"
+            shadow="2xl"
+            marginTop={2}
+            className="absolute top-full left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/98 border-line/80 overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-150"
+          >
+            <Box className="divide-y divide-line/40 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900/40">
+              {filteredEvents.map((event) => (
+                <button
+                  key={event.id}
+                  type="button"
+                  onMouseDown={() => handleSelectEvent(event)}
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-left group cursor-pointer"
+                >
+                  <Stack gap={0.5} className="min-w-0 pr-2">
+                    <Box display="flex" align="center" gap={2}>
+                      <span className="font-bold text-sm text-text-main group-hover:text-brand-cyan transition-colors">
+                        {event.name}
+                      </span>
+                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan">
+                        Configure Plan
+                      </span>
+                    </Box>
+                    <span className="text-xs text-text-dim">
+                      📍 {event.location} • 📅 {event.dates}
+                    </span>
+                  </Stack>
+                  <ChevronRight className="w-4 h-4 text-text-dim group-hover:text-brand-cyan transition-colors shrink-0" />
+                </button>
+              ))}
+            </Box>
+          </Box>
+        )}
       </Box>
 
-      {/* Main Action Area */}
-      <Stack gap={4} align="center" width="full">
-        {activeTab === 'upload' ? (
-          <Box surface="surface" border radius="2xl" padding={6} shadow="xl" width="full" className="animate-in fade-in slide-in-from-top-2">
+      {/* Progressive Disclosure: Custom PDF / URL Ingestion Drawer Toggle */}
+      <Box width="full" className="flex flex-col items-center">
+        <button
+          type="button"
+          onClick={() => setIsUploadDrawerOpen(!isUploadDrawerOpen)}
+          className="text-xs font-mono text-text-dim/80 hover:text-brand-cyan flex items-center gap-1.5 transition-colors cursor-pointer py-1"
+        >
+          <Upload className="w-3.5 h-3.5" />
+          <span>{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF / URL ▼'}</span>
+        </button>
+
+        {isUploadDrawerOpen && (
+          <Box width="full" marginTop={4} className="animate-in fade-in slide-in-from-top-3 duration-200">
             <DropzoneUpload
-              onIngestPdf={(file) => onDiscoverPdf(file)}
-              onIngestUrl={(url) => onDiscoverUrl(url)}
+              onIngestPdf={(file) => {
+                setIsUploadDrawerOpen(false);
+                if (onDiscoverPdf) onDiscoverPdf(file);
+              }}
+              onIngestUrl={(url) => {
+                setIsUploadDrawerOpen(false);
+                if (onDiscoverUrl) onDiscoverUrl(url);
+              }}
             />
           </Box>
-        ) : (
-          <>
-            {/* Search Bar Container */}
-            <Box width="full" className="relative">
-              <Box
-                display="flex"
-                align="center"
-                gap={3}
-                width="full"
-                paddingX={4}
-                paddingY={3}
-                radius="xl"
-                surface="card"
-                border
-                shadow="md"
-                className="border-line hover:border-accent/60 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all"
-              >
-                <Search className="w-5 h-5 text-accent shrink-0" />
-                <input
-                  type="text"
-                  role="combobox"
-                  aria-expanded={isInputFocused && filteredEvents.length > 0}
-                  aria-label="Search convention or city"
-                  placeholder="Search convention (e.g. Boogie by the Bay, The Open)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setTimeout(() => setIsInputFocused(false), 200)}
-                  className="w-full bg-transparent text-sm sm:text-base text-text-main placeholder:text-text-dim focus:outline-none"
-                />
-                {searchQuery && (
-                  <Box
-                    as="button"
-                    type="button"
-                    aria-label="Clear search"
-                    onClick={handleClear}
-                    padding={1}
-                    radius="full"
-                    cursor="pointer"
-                    className="text-text-dim hover:text-text-main hover:bg-surface transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </Box>
-                )}
-              </Box>
-
-              {/* Dropdown Suggestions */}
-              {isInputFocused && filteredEvents.length > 0 && (
-                <Box
-                  surface="card"
-                  border
-                  radius="xl"
-                  shadow="2xl"
-                  marginTop={2}
-                  className="absolute top-full left-0 right-0 z-50 backdrop-blur-md overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-200"
-                >
-                  <Box paddingY={2} className="divide-y divide-line/40 max-h-64 overflow-y-auto">
-                    {filteredEvents.map((event) => (
-                      <Box
-                        key={event.id}
-                        as="button"
-                        type="button"
-                        onMouseDown={() => handleSelect(event)}
-                        display="flex"
-                        align="center"
-                        justify="between"
-                        paddingX={4}
-                        paddingY={3}
-                        cursor="pointer"
-                        className="w-full hover:bg-surface transition-colors text-left group"
-                      >
-                        <Stack gap={0.5} className="min-w-0 pr-2">
-                          <Text weight="font-bold" size="sm" color="main" className="group-hover:text-accent transition-colors break-words">
-                            {event.name}
-                          </Text>
-                          <Text size="xs" color="dim">
-                            📍 {event.location} • 📅 {event.dates}
-                          </Text>
-                        </Stack>
-                        <ChevronRight className="w-4 h-4 text-text-dim group-hover:text-accent transition-colors shrink-0" />
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              )}
-            </Box>
-
-            {/* Quick Selection Filter Pills */}
-            {!searchQuery && (
-              <Box display="flex" align="center" gap={1.5} width="full" wrap="wrap" className="text-xs pt-1">
-                <Text variant="mono" size="micro" color="dim" className="shrink-0">Quick picks:</Text>
-                {CALIFORNIA_2026_EVENTS.slice(0, 4).map((event) => (
-                  <Box
-                    key={event.id}
-                    as="button"
-                    type="button"
-                    onClick={() => handleSelect(event)}
-                    onMouseDown={() => handleSelect(event)}
-                    paddingX={2.5}
-                    paddingY={1}
-                    radius="md"
-                    border
-                    className="border-line/50 bg-surface/40 text-xs font-mono text-text-dim hover:text-text-main hover:border-line cursor-pointer transition-colors"
-                  >
-                    {event.name}
-                  </Box>
-                ))}
-              </Box>
-            )}
-
-            {/* Selected Event Card */}
-            {selectedEvent && (
-              <Box
-                width="full"
-                marginTop={1}
-                padding={5}
-                radius="lg"
-                border
-                className="text-left bg-surface/40 border-line/60 transition-all duration-300 animate-in fade-in slide-in-from-top-2"
-              >
-                <Stack direction={{ default: 'col', sm: 'row' }} align={{ default: 'start', sm: 'center' }} justify="between" gap={4}>
-                  <Stack gap={1.5} flex={1} className="min-w-0">
-                    <Box display="flex" align="center" gap={2}>
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-text-dim" />
-                      <Text variant="mono" size="xs" color="dim">
-                        {selectedEvent.location} • {selectedEvent.dates}
-                      </Text>
-                    </Box>
-                    <Text weight="font-bold" size="lg" color="main" leading="snug" className="break-words [overflow-wrap:break-word]">
-                      {selectedEvent.name}
-                    </Text>
-                    <Text size="xs" color="dim" leading="relaxed">
-                      {selectedEvent.description}
-                    </Text>
-                  </Stack>
-
-                  <button
-                    type="button"
-                    onClick={() => onDiscoverPreset(selectedEvent)}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-text-main text-black font-semibold text-xs whitespace-nowrap hover:opacity-90 transition-opacity shadow-sm cursor-pointer shrink-0 self-stretch sm:self-auto"
-                  >
-                    <span>Plan My Weekend</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </Stack>
-              </Box>
-            )}
-          </>
         )}
-      </Stack>
+      </Box>
     </Stack>
   );
 };
+
+export default EventSearchHero;
+
+
 
 
