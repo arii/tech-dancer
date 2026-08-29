@@ -90,7 +90,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
         direction="col"
         width="full"
         maxWidth="4xl"
-        maxHeight="screen"
+        maxHeight="full"
         surface="surface"
         border
         radius="2xl"
