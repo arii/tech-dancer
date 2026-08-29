@@ -12,10 +12,14 @@ FROM python:3.11-slim AS runner
 WORKDIR /app
 COPY --from=builder /root/.local /root/.local
 COPY . /app/wcs_navigator_api/
+ENV HOME=/root
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/app
 ENV PORT=8080
 EXPOSE 8080
-RUN useradd -m non-root
+RUN useradd -m non-root \
+    && chmod o+rx /root \
+    && chmod -R o+rX /root/.local \
+    && chown -R non-root:non-root /app
 USER non-root
 CMD ["uvicorn", "wcs_navigator_api.main:app", "--host", "0.0.0.0", "--port", "8080"]

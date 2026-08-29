@@ -6,6 +6,8 @@ on:
     paths:
       - .devcontainer/Dockerfile
       - boomtick-pkg
+      - wcs_navigator_api/Dockerfile
+      - wcs_navigator_api/**
   workflow_dispatch:
 
 # Permissions required to write to GitHub Packages
@@ -15,8 +17,20 @@ permissions:
 
 jobs:
   push-to-registry:
-    name: Push Docker image to GitHub Container Registry
+    name: Push ${{ matrix.name }} Docker image to GitHub Container Registry
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: tech-dancer
+            dockerfile: .devcontainer/Dockerfile
+            context: .
+            image: ghcr.io/${{ github.repository }}
+          - name: wcs-navigator-api
+            dockerfile: Dockerfile
+            context: wcs_navigator_api
+            image: ghcr.io/${{ github.repository }}/wcs-navigator-api
     steps:
       - name: Check out the repo
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -38,7 +52,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ matrix.image }}
           tags: |
             type=ref,event=branch
             type=raw,value=latest
@@ -46,10 +60,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          context: .
-          file: .devcontainer/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.ref_name }}
-          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}
+          cache-from: type=gha,scope=${{ github.ref_name }}-${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.name }}
