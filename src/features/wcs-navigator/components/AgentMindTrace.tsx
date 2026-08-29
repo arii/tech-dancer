@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
@@ -415,14 +414,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
                 </Text>
               </Stack>
             </Box>
-            <button
+            <Box
+              as="button"
               type="button"
               aria-label="Dismiss notification"
               onClick={() => setShowToast(false)}
-              className="text-text-dim hover:text-white"
+              className="text-text-dim hover:text-white cursor-pointer"
             >
               <Icon icon={X} size="xs" />
-            </button>
+            </Box>
           </Box>
         </Box>
       )}

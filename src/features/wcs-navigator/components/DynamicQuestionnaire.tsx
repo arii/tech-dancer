@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
@@ -221,6 +220,17 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         borderColor="line"
         className="border-line/40 text-xs"
       >
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
+          type="button"
+          onClick={handleSkipQuestion}
         <button
           type="button"
           onClick={handleSkipQuestion}
@@ -230,6 +240,17 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           <ChevronRight className="w-3.5 h-3.5" />
         </button>
 
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
+          type="button"
+          onClick={handleSkipToItinerary}
         <button
           type="button"
           onClick={handleSkipToItinerary}
