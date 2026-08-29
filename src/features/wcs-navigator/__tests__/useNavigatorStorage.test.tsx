@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { useNavigatorStorage } from '../hooks/useNavigatorStorage';
 import { adaptTraceToUserPreferences } from '../utils/scheduleRuleEngine';
@@ -11,6 +11,7 @@ describe('useNavigatorStorage Hook', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.useRealTimers();
   });
 
