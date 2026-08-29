@@ -5,10 +5,10 @@ import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEv
 import { DropzoneUpload } from './DropzoneUpload';
 
 export interface UserPreferences {
-  division: 'novice' | 'intermediate' | 'advanced' | 'allstar' | 'social_only';
-  role: 'lead' | 'follow' | 'switch';
-  lateNight: boolean;
-  focusTrack: string;
+  division?: 'novice' | 'intermediate' | 'advanced' | 'allstar' | 'social_only';
+  role?: 'lead' | 'follow' | 'switch' | '';
+  lateNight?: boolean;
+  focusTrack?: string;
 }
 
 export interface EventSearchHeroProps {
@@ -20,6 +20,7 @@ export interface EventSearchHeroProps {
 
 const DEFAULT_PREFERENCES: UserPreferences = {
   lateNight: true,
+  role: '',
 };
 
 export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
