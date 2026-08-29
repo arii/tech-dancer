@@ -119,12 +119,17 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           </button>
         </Box>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation with 44px (min-h-11) Mobile Ergonomics */}
         <Box display="flex" flexWrap="wrap" gap={2} border="b" borderColor="line" paddingBottom={2}>
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
             type="button"
             onClick={() => setActiveTab('inputs')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer tap-target ${
               activeTab === 'inputs'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -132,12 +137,17 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           >
             <Icon icon={Sparkles} size="xs" />
             <span>1. Confirmed Inputs ({Object.keys(answers).length})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
             type="button"
             onClick={() => setActiveTab('telemetry')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer tap-target ${
               activeTab === 'telemetry'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -145,12 +155,17 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           >
             <Icon icon={Activity} size="xs" />
             <span>2. Gateway & Engine ({telemetry?.httpStatus ? `HTTP ${telemetry.httpStatus}` : 'Local'})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
             type="button"
             onClick={() => setActiveTab('filtering')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer tap-target ${
               activeTab === 'filtering'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -158,12 +173,17 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           >
             <Icon icon={Filter} size="xs" />
             <span>3. Rule Engine Audit ({includedSessions.length} / {sessions.length})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
             type="button"
             onClick={() => setActiveTab('json')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer tap-target ${
               activeTab === 'json'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -171,7 +191,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           >
             <Icon icon={Terminal} size="xs" />
             <span>4. Raw JSON Schemas</span>
-          </button>
+          </Stack>
         </Box>
 
         {/* TAB 1: CONFIRMED INPUTS */}

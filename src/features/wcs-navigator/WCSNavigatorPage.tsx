@@ -226,8 +226,8 @@ export const WCSNavigatorPage: React.FC = () => {
 
       <Stack gap={6} width="full">
         {/* Top Header & Minimal Utility Bar */}
-        <Box display="flex" justify="between" align="center" wrap="wrap" gap={3} paddingBottom={2} className="border-b border-line/40">
-          <Box display="flex" align="center" gap={3}>
+        <Box display="flex" justify="between" align="center" wrap="wrap" gap={3} paddingBottom={2} className="border-b border-line/40 min-w-0">
+          <Box display="flex" align="center" gap={3} className="min-w-0">
             <PageHeader
               title="WCS Navigator"
               as="h1"
@@ -236,30 +236,31 @@ export const WCSNavigatorPage: React.FC = () => {
             />
             <Stack
               as="button"
-              align="center"
               direction="row"
+              align="center"
               gap={1}
+              paddingX={2}
               type="button"
               aria-label="How WCS Navigator Works guide"
               onClick={() => setIsGuideOpen(!isGuideOpen)}
-              className="text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors"
+              className="min-h-11 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
             >
               <Icon icon={HelpCircle} size="xs" />
               <span className="underline underline-offset-2">How It Works</span>
             </Stack>
           </Box>
 
-          <Stack align="center" direction="row" gap={3}>
+          <Stack align="center" direction="row" gap={3} className="shrink-0">
             {/* Mode Switch: Text-only utility link */}
             <Stack
               as="button"
-              align="center"
               direction="row"
+              align="center"
               gap={2}
-              paddingY={1}
+              paddingX={2}
               type="button"
               onClick={() => setIsMockMode(!isMockMode)}
-              className="text-xs font-mono text-text-dim hover:text-text-main transition-colors cursor-pointer"
+              className="min-h-11 text-xs font-mono text-text-dim hover:text-text-main transition-colors cursor-pointer"
             >
               <span className={`w-2 h-2 rounded-full ${isMockMode ? 'bg-text-dim' : 'bg-brand-emerald'}`} />
               <span>{isMockMode ? 'Demo Presets' : 'Live Gateway'}</span>
@@ -279,37 +280,38 @@ export const WCSNavigatorPage: React.FC = () => {
             align="center"
             justify="between"
             wrap="wrap"
-            gap={3}
-            paddingY={1}
-            className="text-xs font-mono text-text-dim"
+            gap={2}
+            className="text-xs font-mono text-text-dim min-w-0"
           >
-            <Box display="flex" align="center" gap={2}>
+            <Box display="flex" align="center" gap={2} className="min-w-0">
               <Stack
                 as="button"
-                align="center"
                 direction="row"
+                align="center"
                 gap={1}
+                paddingX={1}
                 type="button"
                 onClick={() => setStep('search')}
-                className="text-text-dim hover:text-white transition-colors cursor-pointer"
+                className="min-h-11 text-text-dim hover:text-white transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Change Event</span>
               </Stack>
-              <span className="text-line">/</span>
-              <span className="text-brand-cyan font-bold">{activeEventName}</span>
+              <span className="text-line shrink-0">/</span>
+              <span className="text-brand-cyan font-bold truncate min-w-0">{activeEventName}</span>
             </Box>
 
-            <Box display="flex" align="center" gap={3}>
+            <Box display="flex" align="center" gap={2} className="shrink-0">
               {step === 'results' && (
                 <Stack
                   as="button"
-                  align="center"
                   direction="row"
+                  align="center"
                   gap={1}
+                  paddingX={1}
                   type="button"
                   onClick={() => setStep('questionnaire')}
-                  className="text-text-dim hover:text-white transition-colors cursor-pointer"
+                  className="min-h-11 text-text-dim hover:text-white transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Edit Questionnaire</span>
@@ -317,12 +319,13 @@ export const WCSNavigatorPage: React.FC = () => {
               )}
               <Stack
                 as="button"
-                align="center"
                 direction="row"
+                align="center"
                 gap={1}
+                paddingX={1}
                 type="button"
                 onClick={() => setStep('search')}
-                className="text-text-dim hover:text-white transition-colors cursor-pointer"
+                className="min-h-11 text-text-dim hover:text-white transition-colors cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Search Again</span>

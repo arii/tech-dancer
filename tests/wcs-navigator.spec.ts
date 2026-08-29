@@ -47,7 +47,7 @@ test.describe('WCS Navigator E2E Workflow', () => {
 
     // Switch to Rule Engine Audit tab
     await page.getByRole('button', { name: /3\. Rule Engine Audit/i }).click();
-    await expect(page.getByPlaceholderText(/Search audit sessions/i)).toBeVisible();
+    await expect(page.getByPlaceholder(/Search audit sessions/i)).toBeVisible();
 
     // 5. Open Full Schedule Modal Customizer
     const fullScheduleBtn = page.getByRole('button', { name: /View All Schedule/i });
