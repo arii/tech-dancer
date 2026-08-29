@@ -19,7 +19,7 @@ interface ReasoningStage {
 export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps> = ({
   eventName,
   division = 'novice',
-  role = 'lead',
+  role,
   onComplete,
 }) => {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
@@ -115,7 +115,7 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
               Agent Synthesizing Custom Plan
             </Text>
             <Text size="xs" color="dim" variant="mono">
-              Optimizing for <strong className="text-white">{division.toUpperCase()} {role.toUpperCase()}</strong> at <span className="text-brand-cyan font-bold">{eventName}</span>
+              Optimizing for <strong className="text-white">{role ? `${division.toUpperCase()} • ${role.toUpperCase()}` : division.toUpperCase()}</strong> at <span className="text-brand-cyan font-bold">{eventName}</span>
             </Text>
           </Stack>
 

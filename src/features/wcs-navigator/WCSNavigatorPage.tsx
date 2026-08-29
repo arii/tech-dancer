@@ -17,6 +17,7 @@ import { DiscoveryResponse, QuestionAnswerValue } from './types/navigator';
 import { AgentDecisionTrace } from './types';
 import { discoverSchedule, generateSchedule } from './services/wcsApiClient';
 import { useNavigatorStorage } from './hooks/useNavigatorStorage';
+import { adaptTraceToUserPreferences } from './utils/scheduleRuleEngine';
 
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'generating' | 'results';
 
@@ -29,7 +30,7 @@ export const WCSNavigatorPage: React.FC = () => {
   const [activeEventName, setActiveEventName] = useState<string>(CALIFORNIA_2026_EVENTS[0].name);
   const [activeEventId, setActiveEventId] = useState<string>(CALIFORNIA_2026_EVENTS[0].id);
   const [activeDivision, setActiveDivision] = useState<string>('novice');
-  const [activeRole, setActiveRole] = useState<string>('lead');
+  const [activeRole, setActiveRole] = useState<string>('');
 
   // Custom Upload & Live Gateway State
   const [uploadedPayload, setUploadedPayload] = useState<File | string | null>(null);
@@ -57,6 +58,7 @@ export const WCSNavigatorPage: React.FC = () => {
     setDiscoveryErrorReason(undefined);
     if (prefs?.division) setActiveDivision(prefs.division);
     if (prefs?.role) setActiveRole(prefs.role);
+    else setActiveRole('');
 
     const mockData: EventMockData =
       MOCK_EVENT_RESULTS[event.id] || createGenericMockResult(event.name);
@@ -130,6 +132,9 @@ export const WCSNavigatorPage: React.FC = () => {
       const mockData = MOCK_EVENT_RESULTS[activeEventId] || createGenericMockResult(activeEventName);
       activeTrace = customTrace || mockData.decisionTrace;
     }
+
+    // Dynamically adapt sessions, division titles and flight buffer staging call to user's questionnaire choices
+    activeTrace = adaptTraceToUserPreferences(activeTrace, answers, activeEventName);
 
     // If "All Workshops" option was chosen, ensure all eligible daytime classes are included
     const trackVal = String(answers.track || answers.workshop_focus || '');

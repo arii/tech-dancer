@@ -106,7 +106,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             onClick={handleSkipQuestion}
             className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
           >
-            Skip Question ⏭️
+            Skip this question (Next Step →)
           </button>
           <span className="text-text-dim/40">•</span>
           <Text variant="mono" size="xs" color="dim">
@@ -243,7 +243,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
         >
           <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>No Preference (Skip Step)</span>
+          <span>Skip this question (Next Step →)</span>
         </button>
 
         <button
@@ -252,7 +252,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
         >
           <FastForward className="w-3.5 h-3.5" />
-          <span>Generate with Defaults ⚡</span>
+          <span>⚡ Skip All &amp; Generate Itinerary</span>
         </button>
       </Box>
     </Box>

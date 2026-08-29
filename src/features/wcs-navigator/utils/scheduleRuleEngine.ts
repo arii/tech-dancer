@@ -259,3 +259,101 @@ export function evaluateScheduleRules(
     lateNightClosingHour: '5:00 AM'
   };
 }
+
+/**
+ * Dynamically adjusts a Decision Trace (buffer timeline, session titles, and justifications)
+ * to match the user's specific answers from the questionnaire.
+ */
+export function adaptTraceToUserPreferences(
+  baseTrace: import('../types').AgentDecisionTrace,
+  answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
+  eventName: string = 'WCS Event'
+): import('../types').AgentDecisionTrace {
+  const divisionKey = String(answers.division || answers.experience_level || answers.wsdc_level || 'novice').toLowerCase();
+
+  // Format division label
+  let divisionLabel = 'Novice';
+  if (divisionKey.includes('intermediate')) divisionLabel = 'Intermediate';
+  else if (divisionKey.includes('advanced') || divisionKey.includes('allstar')) divisionLabel = 'Advanced / All-Star';
+  else if (divisionKey.includes('social')) divisionLabel = 'Social Dancer';
+  else if (divisionKey.includes('pro_am')) divisionLabel = 'Pro-Am Spotlight';
+  else if (divisionKey.includes('workshop')) divisionLabel = 'Workshop Enthusiast';
+
+  const isSocialOnly = divisionKey.includes('social') || divisionKey === 'social_only';
+  const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');
+
+  // Adapt Buffer Timeline
+  const updatedSteps = (baseTrace.bufferTimeline?.steps || []).map((step) => {
+    if (step.type === 'staging' || step.label.toLowerCase().includes('staging') || step.label.toLowerCase().includes('prelim')) {
+      if (isSocialOnly) {
+        return {
+          ...step,
+          label: 'Friday Social Kickoff & Evening Mixer',
+          description: 'Friday Welcome Dance & Social Kickoff'
+        };
+      }
+      return {
+        ...step,
+        label: `${divisionLabel} Strictly Swing Staging Call`,
+        description: `${divisionLabel} division marshalling check-in`
+      };
+    }
+    return step;
+  });
+
+  // Adapt Sessions
+  const updatedSessions = (baseTrace.sessions || []).map((session) => {
+    const isComp =
+      session.decisionBadge === 'Competition Call' ||
+      session.title.toLowerCase().includes('strictly') ||
+      session.title.toLowerCase().includes('jack & jill') ||
+      session.title.toLowerCase().includes('prelim');
+
+    if (isComp) {
+      if (isSocialOnly) {
+        return {
+          ...session,
+          status: 'filtered' as const,
+          decisionBadge: 'Not Competing' as const,
+          justification: 'Filtered out because Social Dancer persona was selected (no contest calls).'
+        };
+      }
+
+      let newTitle = session.title;
+      if (session.title.toLowerCase().includes('strictly')) {
+        newTitle = `${divisionLabel} Strictly Swing Preliminaries`;
+      } else if (session.title.toLowerCase().includes('jack & jill') || session.title.toLowerCase().includes('j&j')) {
+        newTitle = `${divisionLabel} Jack & Jill Preliminaries & Semifinals`;
+      }
+
+      return {
+        ...session,
+        title: newTitle,
+        status: 'included' as const,
+        decisionBadge: 'Competition Call' as const,
+        justification: `Division match for ${divisionLabel}. Marshalling call on time.`
+      };
+    }
+
+    if (isAllWorkshops && (session.decisionBadge === 'Workshop Match' || session.decisionBadge === 'Workshop Class')) {
+      return {
+        ...session,
+        status: 'included' as const
+      };
+    }
+
+    return session;
+  });
+
+  return {
+    ...baseTrace,
+    bufferTimeline: baseTrace.bufferTimeline
+      ? {
+          ...baseTrace.bufferTimeline,
+          steps: updatedSteps
+        }
+      : baseTrace.bufferTimeline,
+    sessions: updatedSessions
+  };
+}
+

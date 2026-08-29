@@ -689,6 +689,408 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
       icsContent: southBayIcs
     },
     icsContent: southBayIcs
+  },
+  'halloween-swingthing-2026': {
+    discovery: {
+      preset_id: 'halloween-swingthing-2026',
+      preset_name: 'Halloween SwingThing 2026',
+      suggested_form_questions: [
+        {
+          id: 'intensive',
+          type: 'select',
+          title: 'Are you registered for any Friday pre-convention intensives at Halloween SwingThing?',
+          options: [
+            { label: 'No — Not attending any special intensives or bootcamps', subtitle: 'Standard arrival for evening Costume Strictly and social kickoff', value: 'no_intensives', badge: 'None' },
+            { label: 'Ben Morris Masterclass Intensive (Fri 1:00 PM - 4:00 PM)', subtitle: 'Hyatt Grand Ballroom • Requires flight landing by 11:30 AM', value: 'ben_morris_intensive', badge: 'Intensive' },
+            { label: 'Costume Styling & Routine Lab (Fri 2:00 PM - 4:30 PM)', subtitle: 'Pacific Room • Requires arrival by 1:00 PM', value: 'costume_lab', badge: 'Lab' }
+          ],
+          context: 'Configures travel arrival buffer math and pre-convention calendar sessions.',
+          defaultValue: 'no_intensives',
+          required: true
+        },
+        {
+          id: 'division',
+          type: 'select',
+          title: 'Which competitive divisions or showcases are you entering?',
+          options: [
+            { label: 'Novice Competitor + Friday Costume Strictly', subtitle: 'Friday 6:00 PM Strictly Prelims + Saturday 12:30 PM J&J Prelims', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate / Advanced Competitor Track', subtitle: 'Friday 7:30 PM Strictly + Saturday 2:30 PM J&J Prelims', value: 'intermediate', badge: 'Int/Adv' },
+            { label: 'Pro-Am Spotlight Routine Competitor', subtitle: 'Friday Evening Floor trials + Pro-Am Spotlights', value: 'pro_am', badge: 'Pro-Am' },
+            { label: 'Social Dancer / Costume Party Spectator', subtitle: 'Workshops, Monster Mash costume contests, all-night socials (No contest calls)', value: 'social_only', badge: 'Social' }
+          ],
+          context: 'Calculates earliest staging marshalling deadlines and gates leveled workshops.',
+          defaultValue: 'novice',
+          required: true
+        },
+        {
+          id: 'track',
+          type: 'select',
+          title: 'Which daytime workshop track fits your goals?',
+          options: [
+            { label: 'All Workshops (Include all daytime workshops)', subtitle: 'Includes all non-conflicting masterclasses, technique & musicality classes', value: 'all_workshops', badge: 'All' },
+            { label: 'Rhythm & Syncopation Masterclasses', subtitle: 'Footwork syncopation, speed control & polyrhythmic phrasing', value: 'rhythm', badge: 'Rhythm' },
+            { label: 'Connection Dynamics & Elasticity Flow', subtitle: 'Leverage, compression & smooth slot physics with Ben & Victoria', value: 'connection', badge: 'Connection' },
+            { label: 'Performance Styling & Dramatic Accents', subtitle: 'Spooky accents, theatrical extensions & performance charisma', value: 'styling', badge: 'Styling' }
+          ],
+          context: 'Filters workshop streams and resolves room schedule conflicts.',
+          defaultValue: 'all_workshops',
+          required: true
+        },
+        {
+          id: 'social_preference',
+          type: 'select',
+          title: 'What is your social dancing and late-night party plan?',
+          options: [
+            { label: 'All-Night Monster Mash Socials (Dancing until 5:30 AM)', subtitle: 'Peak late-night DJ sets, acoustic soul rooms & costume dancing', value: 'latenight', badge: 'Late Night' },
+            { label: 'Evening Socials & Gala Spectator (Until 2:00 AM)', subtitle: 'Costume contest viewing, showcase gala & moderate social dancing', value: 'moderate', badge: 'Moderate' }
+          ],
+          context: 'Adds social dance sessions and rest buffer recommendations.',
+          defaultValue: 'latenight',
+          required: true
+        }
+      ]
+    },
+    decisionTrace: {
+      subTasks: [
+        { id: '1', label: 'Analyzed Halloween SwingThing 2026 timetable', status: 'completed', detail: 'Identified 4 workshop tracks, Costume Strictly, and 3 late-night parties' },
+        { id: '2', label: 'Calculated flight buffer for SNA Airport', status: 'completed', detail: '5m transit + 90m hotel settle + 60m warmup' },
+        { id: '3', label: 'Injected social dancing & meal breaks', status: 'completed', detail: 'Friday/Sat/Sun social dancing & dinner/lunch rest periods' },
+        { id: '4', label: 'Generated calendar stream (.ics)', status: 'completed', detail: 'Ready for 1-click import' }
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '5:30 PM (Friday)',
+        warmupMinutes: 60,
+        hotelSettleMinutes: 90,
+        transitMinutes: 15,
+        latestFlightArrivalDeadline: '2:45 PM (Friday)',
+        formulaSummary: '17:30 Staging - (15m Transit + 90m Hotel + 60m Warmup) = 14:45 Landing',
+        steps: [
+          { label: 'Earliest Competition Check-in', time: '5:30 PM', duration: 'Staging', type: 'staging', description: 'Costume Strictly Competitor Staging Call' },
+          { label: 'Physical Warmup & Bibs', time: '4:30 PM', duration: '60 min', type: 'warmup', description: 'Warmup & Costume adjustment' },
+          { label: 'Hotel Check-in & Costume Prep', time: '3:00 PM', duration: '90 min', type: 'hotel', description: 'Unpack Halloween wardrobe' },
+          { label: 'SNA Airport to Hotel Transit', time: '2:45 PM', duration: '15 min', type: 'transit', description: 'Short rideshare from John Wayne Airport' },
+          { label: 'Recommended Flight Touchdown', time: '2:45 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest flight landing' }
+        ]
+      },
+      sessions: [
+        {
+          id: 'hw1',
+          title: 'Friday Costume Strictly Swing Prelims & Finals',
+          time: 'Friday 6:00 PM - 8:00 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Competition Call',
+          justification: 'The legendary Halloween Costume Strictly Swing contest.'
+        },
+        {
+          id: 'hw_fri_dinner',
+          title: 'Friday Dinner & Costume Prep Break',
+          time: 'Friday 8:00 PM - 9:30 PM',
+          location: 'Hotel Bistro / Foyer',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Dinner and Halloween costume adjustments before party kickoff.'
+        },
+        {
+          id: 'hw2',
+          title: 'Monster Mash Halloween Costume Party & All-Night Social Dancing',
+          time: 'Friday 9:30 PM - 5:00 AM',
+          location: 'Grand Ballroom & Spooky Lounge',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Opening costume theme social dancing marathon.'
+        },
+        {
+          id: 'hw3',
+          title: 'Connection Dynamics & Elasticity Flow with Ben & Victoria',
+          time: 'Saturday 11:30 AM - 12:45 PM',
+          location: 'Pacific Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Matches your Connection & Flow preference.'
+        },
+        {
+          id: 'hw_sat_lunch',
+          title: 'Saturday Lunch & Afternoon Rest Break',
+          time: 'Saturday 1:00 PM - 2:15 PM',
+          location: 'Hyatt Courtyard',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Lunch nutrition and hydration buffer before afternoon prelims.'
+        },
+        {
+          id: 'hw4',
+          title: 'Novice & Intermediate Jack & Jill Preliminaries',
+          time: 'Saturday 2:30 PM - 5:00 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Competition Call',
+          justification: 'Official WSDC Jack & Jill competition rounds.'
+        },
+        {
+          id: 'hw_sat_dinner',
+          title: 'Saturday Dinner & Gala Seating Break',
+          time: 'Saturday 6:00 PM - 8:00 PM',
+          location: 'Main Pavilion',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Dinner buffer before Champions Showcase Gala.'
+        },
+        {
+          id: 'hw5',
+          title: 'Halloween Champions Showcase Gala & All-Night Social Dancing',
+          time: 'Saturday 9:00 PM - 5:30 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Champions showcase performances and late-night social dancing.'
+        },
+        {
+          id: 'hw6',
+          title: 'Sunday Rhythm Syncopation Masterclass',
+          time: 'Sunday 11:30 AM - 12:45 PM',
+          location: 'Pacific Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Daytime rhythm and musical phrasing workshop.'
+        },
+        {
+          id: 'hw_sun_lunch',
+          title: 'Sunday Lunch & Afternoon Rest Break',
+          time: 'Sunday 1:00 PM - 2:30 PM',
+          location: 'Hyatt Courtyard',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Afternoon rest buffer before Sunday evening survivor party.'
+        },
+        {
+          id: 'hw7',
+          title: 'Sunday Halloween Survivor Sunrise Social Dancing',
+          time: 'Sunday 10:00 PM - 5:00 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Survivor closing dance marathon with late-night DJ sets.'
+        }
+      ],
+      themeDressCodes: [
+        {
+          id: 'thw1',
+          day: 'Friday Night',
+          themeTitle: 'Monster Mash Costume Extravaganza',
+          category: 'social_theme',
+          description: 'The premier costume party night of the weekend. Dress up in your full creative costume!',
+          recommendedAttire: ['Halloween costumes', 'Danceable themed accessories', 'Suede / flat dance shoes'],
+          vibe: 'Festive, Creative & High-Energy'
+        },
+        {
+          id: 'thw2',
+          day: 'Saturday Evening',
+          themeTitle: 'Gothic Glamour Champions Showcase',
+          category: 'showcase_formal',
+          description: 'Saturday night champions showcase performances and formal evening.',
+          recommendedAttire: ['Gothic chic / dark elegant cocktail wear', 'Fitted dark shirts & trousers', 'Polished suede shoes'],
+          vibe: 'Glamorous & Theatrical'
+        },
+        {
+          id: 'thw3',
+          day: 'Saturday Night',
+          themeTitle: 'Midnight Spooky Glow Social',
+          category: 'social_theme',
+          description: 'Late night social dancing with UV blacklights and neon accents.',
+          recommendedAttire: ['Neon / UV-reactive dance tops', 'Comfortable stretch bottoms', 'Dance sneakers'],
+          vibe: 'Electric & Immersive'
+        },
+        {
+          id: 'thw4',
+          day: 'Sunday Night',
+          themeTitle: 'Halloween Survivor Cozy Social',
+          category: 'casual_sunday',
+          description: 'Relaxed final night dancing with cozy, comfortable dance attire.',
+          recommendedAttire: ['Halloween swing tees', 'Comfortable joggers & dance shoes'],
+          vibe: 'Warm & Community-Centric'
+        }
+      ],
+      icsContent: southBayIcs
+    },
+    icsContent: southBayIcs
+  },
+  'the-after-party-2026': {
+    discovery: {
+      preset_id: 'the-after-party-2026',
+      preset_name: 'The After Party 2026',
+      suggested_form_questions: [
+        {
+          id: 'intensive',
+          type: 'select',
+          title: 'Are you registered for any daytime peer labs or masterclasses at The After Party?',
+          options: [
+            { label: 'No — Not attending daytime intensives (Pure Social Arrival)', subtitle: 'Standard arrival for evening social dance marathon', value: 'no_intensives', badge: 'None' },
+            { label: 'Peer Practice & Video Feedback Lab (Fri 2:00 PM - 5:00 PM)', subtitle: 'Daytime coaching lab with peer critique and video review', value: 'peer_lab', badge: 'Lab' }
+          ],
+          context: 'Configures travel arrival buffer math and pre-convention calendar sessions.',
+          defaultValue: 'no_intensives',
+          required: true
+        },
+        {
+          id: 'division',
+          type: 'select',
+          title: 'What is your primary weekend participation focus?',
+          options: [
+            { label: 'Pure Social Marathoner (Sunrise sets until 7:00 AM)', subtitle: 'Maximize late-night social dancing and sunrise DJ acoustic sets', value: 'social_only', badge: 'Social' },
+            { label: 'Novice / Intermediate Competitor Track', subtitle: 'Saturday Afternoon Jack & Jill prelims and finals', value: 'novice', badge: 'Competitor' },
+            { label: 'Relaxed Dance Vacation & Daytime Labs', subtitle: 'Low-stress daytime learning and relaxed evening socials', value: 'relaxed', badge: 'Vacation' }
+          ],
+          context: 'Calculates staging calls and shapes personalized itinerary.',
+          defaultValue: 'social_only',
+          required: true
+        },
+        {
+          id: 'track',
+          type: 'select',
+          title: 'Which daytime workshop topics would you like to prioritize?',
+          options: [
+            { label: 'All Workshops (Include all daytime classes)', subtitle: 'Includes all daytime masterclasses and peer feedback labs', value: 'all_workshops', badge: 'All' },
+            { label: 'Connection & Dynamic Elasticity Mechanics', subtitle: 'Elasticity, momentum flow and slot control with Sean & Alyssa', value: 'connection', badge: 'Connection' },
+            { label: 'Late-Night DJ Music Phrasing & Micro-Musicality', subtitle: 'Interpreting modern acoustic, blues, and R&B tracks', value: 'musicality', badge: 'Musicality' }
+          ],
+          context: 'Filters workshop streams and resolves room schedule conflicts.',
+          defaultValue: 'all_workshops',
+          required: true
+        },
+        {
+          id: 'stamina_target',
+          type: 'select',
+          title: 'What is your social dance stamina target?',
+          options: [
+            { label: 'Sunrise Survivor (Dancing until 7:00 AM each morning)', subtitle: 'All-night dancing through the sunrise acoustic DJ sessions', value: 'sunrise', badge: 'Survivor' },
+            { label: 'Balanced Night Owl (Dancing until 3:30 AM)', subtitle: 'Solid evening and late-night dancing with restorative sleep', value: 'balanced', badge: 'Balanced' }
+          ],
+          context: 'Optimizes daily sleep and meal rest buffers.',
+          defaultValue: 'sunrise',
+          required: true
+        }
+      ]
+    },
+    decisionTrace: {
+      subTasks: [
+        { id: '1', label: 'Analyzed The After Party 2026 timetable', status: 'completed', detail: 'Indexed 3 sunrise social marathons and peer growth labs' },
+        { id: '2', label: 'Calculated flight buffer for SNA Airport', status: 'completed', detail: '10m transit + 90m hotel settle + 60m warmup' },
+        { id: '3', label: 'Injected social dancing & meal breaks', status: 'completed', detail: 'Friday/Sat/Sun social dancing & dinner/lunch rest periods' },
+        { id: '4', label: 'Generated calendar stream (.ics)', status: 'completed', detail: 'Ready for 1-click import' }
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '6:00 PM (Friday)',
+        warmupMinutes: 60,
+        hotelSettleMinutes: 90,
+        transitMinutes: 15,
+        latestFlightArrivalDeadline: '3:15 PM (Friday)',
+        formulaSummary: '18:00 Staging - (15m Transit + 90m Hotel + 60m Warmup) = 15:15 Landing',
+        steps: [
+          { label: 'Earliest Event Activity', time: '6:00 PM', duration: 'Staging', type: 'staging', description: 'Friday Welcome Session' },
+          { label: 'Warmup & Prep', time: '5:00 PM', duration: '60 min', type: 'warmup', description: 'Freshen up & warm up' },
+          { label: 'Hotel Check-in', time: '3:30 PM', duration: '90 min', type: 'hotel', description: 'Hotel room unpack' },
+          { label: 'Airport Transit', time: '3:15 PM', duration: '15 min', type: 'transit', description: 'Transit from SNA' },
+          { label: 'Recommended Flight Touchdown', time: '3:15 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest flight touchdown' }
+        ]
+      },
+      sessions: [
+        {
+          id: 'ap1',
+          title: 'Friday Welcome Social & Opening Peer Jam',
+          time: 'Friday 6:00 PM - 8:00 PM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Energy',
+          justification: 'Opening mixer and social dancing kickoff.'
+        },
+        {
+          id: 'ap_fri_dinner',
+          title: 'Friday Dinner & Relaxation Break',
+          time: 'Friday 8:00 PM - 9:30 PM',
+          location: 'Hotel Lounge',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Dinner and nutrition buffer before all-night dancing.'
+        },
+        {
+          id: 'ap2',
+          title: 'Friday Night All-Night Social Dancing (Until Sunrise)',
+          time: 'Friday 9:30 PM - 7:00 AM',
+          location: 'Main Ballroom & Late Lounge',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Legendary After Party sunrise social dancing session.'
+        },
+        {
+          id: 'ap3',
+          title: 'Connection & Dynamic Elasticity Masterclass',
+          time: 'Saturday 1:30 PM - 2:45 PM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Matches your Connection & Elasticity preference.'
+        },
+        {
+          id: 'ap_sat_lunch',
+          title: 'Saturday Lunch & Afternoon Rest Break',
+          time: 'Saturday 3:00 PM - 4:30 PM',
+          location: 'Courtyard Café',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Afternoon nourishment and recovery window.'
+        },
+        {
+          id: 'ap4',
+          title: 'Saturday Night Champions Showcase & Sunrise Social Marathon',
+          time: 'Saturday 10:00 PM - 7:00 AM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Saturday marquee pro showcase and all-night dancing until 7 AM.'
+        },
+        {
+          id: 'ap5',
+          title: 'Sunday Survivors Sunrise Farewell Social',
+          time: 'Sunday 10:00 PM - 6:00 AM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Closing survivor dance party to wrap up the weekend.'
+        }
+      ],
+      themeDressCodes: [
+        {
+          id: 'tap1',
+          day: 'Friday Night',
+          themeTitle: 'After Party Neon Glow Kickoff',
+          category: 'social_theme',
+          description: 'Vibrant neon and glowing accessories to kick off the weekend.',
+          recommendedAttire: ['Neon tees / crops', 'Comfortable sneakers & suede shoes', 'Glow jewelry'],
+          vibe: 'High-Energy & Electric'
+        },
+        {
+          id: 'tap2',
+          day: 'Saturday Night',
+          themeTitle: 'Saturday Night Fever Showcase & Social',
+          category: 'showcase_formal',
+          description: 'Dressy cocktail attire for champions showcase followed by late dancing.',
+          recommendedAttire: ['Smart casual cocktail wear', 'Fitted shirts & dark jeans/slacks'],
+          vibe: 'Chic & Festive'
+        },
+        {
+          id: 'tap3',
+          day: 'Sunday Night',
+          themeTitle: 'Survivors Pajama & Cozy Jam',
+          category: 'casual_sunday',
+          description: 'Maximum comfort for the final sunrise dance session.',
+          recommendedAttire: ['Silk / flannel pajamas', 'Cozy hoodies & sweatpants', 'Dance socks / sneakers'],
+          vibe: 'Cozy, Warm & Intimate'
+        }
+      ],
+      icsContent: southBayIcs
+    },
+    icsContent: southBayIcs
   }
 };
 
@@ -707,30 +1109,56 @@ export const createGenericMockResult = (eventName: string): EventMockData => {
       preset_name: eventName || 'Custom Event Schedule',
       suggested_form_questions: [
         {
-          id: 'experience_level',
+          id: 'intensive',
           type: 'select',
-          title: 'What is your dancer persona & competition division?',
+          title: `Are you registered for any Friday pre-convention intensives or bootcamps at ${eventName}?`,
           options: [
-            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
-            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
-            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
-            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
+            { label: 'No — Not attending any special intensives or bootcamps', subtitle: 'Standard arrival for regular workshops, competitions, or social dancing kickoff', value: 'no_intensives', badge: 'None' },
+            { label: 'Friday Afternoon Intensive Masterclass (1:00 PM - 4:00 PM)', subtitle: 'Requires flight arrival by 11:30 AM Friday', value: 'intensive', badge: 'Intensive' }
           ],
-          context: 'Filters out ineligible advanced intensives and targets call times.',
+          context: 'Configures travel arrival buffers and pre-convention calendar sessions.',
+          defaultValue: 'no_intensives',
+          required: true
+        },
+        {
+          id: 'division',
+          type: 'select',
+          title: 'Which competitive divisions are you entering this weekend?',
+          options: [
+            { label: 'Novice Competitor Track', subtitle: 'Friday Strictly Prelims + Saturday J&J Prelims', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate / Advanced Competitor Track', subtitle: 'Friday Evening Strictly + Saturday Afternoon J&J Prelims', value: 'intermediate', badge: 'Int/Adv' },
+            { label: 'Social Dancer / Non-Competitor', subtitle: 'All-levels workshops, Champions Gala, and late-night socials (no staging calls)', value: 'social_only', badge: 'Social' },
+            { label: 'All-Day Workshop Enthusiast', subtitle: 'Maximize daytime classes across technique & musicality rooms', value: 'workshop_enthusiast', badge: 'Workshops' }
+          ],
+          context: 'Calculates your earliest competition marshalling call and filters leveled workshops.',
           defaultValue: 'novice',
           required: true
         },
         {
-          id: 'workshop_selection',
-          type: 'multiselect',
-          title: 'Select your preferred workshop topics:',
+          id: 'track',
+          type: 'select',
+          title: 'Which workshop topics or tracks do you plan to prioritize?',
           options: [
-            { label: 'Lead & Follow Connection', value: 'connection' },
-            { label: 'Musicality & Accents', value: 'musicality' },
-            { label: 'Speed & Footwork', value: 'footwork' }
+            { label: 'All Workshops (Include all non-conflicting daytime classes)', subtitle: 'Includes all leveled technique, musicality & connection classes', value: 'all_workshops', badge: 'All' },
+            { label: 'Lead & Follow Connection & Elasticity', subtitle: 'Frame, compression, leverage & smooth momentum control', value: 'connection', badge: 'Connection' },
+            { label: 'Musicality & Phrasing Accents', subtitle: 'Micro-timing, dynamic accents & song structure mapping', value: 'musicality', badge: 'Musicality' }
           ],
-          context: 'Resolves simultaneous class schedule conflicts.',
-          defaultValue: ['connection', 'musicality']
+          context: 'Filters workshop streams and resolves room schedule conflicts.',
+          defaultValue: 'all_workshops',
+          required: true
+        },
+        {
+          id: 'role',
+          type: 'select',
+          title: 'What is your primary dance role for competitions and workshops?',
+          options: [
+            { label: 'Leader', subtitle: 'Primary dance role: Lead', value: 'lead', badge: 'Lead' },
+            { label: 'Follower', subtitle: 'Primary dance role: Follow', value: 'follow', badge: 'Follow' },
+            { label: 'Switch / Both', subtitle: 'Lead in some divisions, Follow in others', value: 'switch', badge: 'Switch' }
+          ],
+          context: 'Customizes workshop focus and competition call notes.',
+          defaultValue: 'lead',
+          required: true
         }
       ]
     },

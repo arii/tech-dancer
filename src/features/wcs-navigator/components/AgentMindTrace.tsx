@@ -88,7 +88,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   className,
   activeEventName = 'South Bay Dance Fling 2026',
   selectedDivision = 'novice',
-  selectedRole = 'lead',
+  selectedRole,
 }) => {
   const { getSavedSchedule, saveCustomSchedule, clearCustomSchedule } =
     useNavigatorStorage(activeEventName);
@@ -439,7 +439,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs font-mono">
           <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Profile: {selectedDivision.toUpperCase()} {selectedRole.toUpperCase()}</span>
+            <span>Profile: {selectedRole ? `${selectedDivision.toUpperCase()} • ${selectedRole.toUpperCase()}` : selectedDivision.toUpperCase()}</span>
           </Stack>
           <span className="text-text-dim">•</span>
           <span className="text-text-dim">✈️ Landing Target: <strong className="text-text-main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</strong></span>
