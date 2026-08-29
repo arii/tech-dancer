@@ -76,7 +76,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
           await nextOrSkipBtn.click();
         }
       }
-      await page.waitForTimeout(300);
+      await expect(page.locator('body')).toBeVisible();
     }
 
     // Step 2.5 & Step 3: Generation & Personalized Itinerary Timeline
@@ -104,7 +104,6 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     const auditSearch = page.getByPlaceholder(/Search audit sessions/i);
     await expect(auditSearch).toBeVisible();
     await auditSearch.fill('Strictly');
-    await page.waitForTimeout(200);
 
     // Tab 4: Raw JSON Schemas
     await page.getByRole('button', { name: /4\. Raw JSON Schemas/i }).click();
@@ -170,7 +169,6 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
       if ((await optBtn.count()) > 0 && await optBtn.isVisible()) {
         await optBtn.click();
       }
-      await page.waitForTimeout(200);
     }
 
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
@@ -211,7 +209,6 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
       if ((await optionBtn.count()) > 0) {
         await optionBtn.click();
       }
-      await page.waitForTimeout(200);
     }
 
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
