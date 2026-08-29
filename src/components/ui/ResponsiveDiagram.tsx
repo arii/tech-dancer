@@ -144,6 +144,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       {/* Full-Screen Modal Overlay */}
       {isExpanded && typeof document !== 'undefined' && createPortal(
         <Stack
+        <Stack
           position="fixed"
           inset
           zIndex={100}
