@@ -85,7 +85,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             <button
               type="button"
               onClick={handleBack}
-              className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors cursor-pointer mr-2"
+              className="flex items-center gap-1.5 min-h-[44px] text-xs text-text-dim hover:text-white transition-colors cursor-pointer mr-2"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -224,7 +224,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         <button
           type="button"
           onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/60"
+          className="flex items-center gap-1.5 min-h-[44px] text-text-dim hover:text-white transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/60"
         >
           <span>Next / Skip</span>
           <ChevronRight className="w-3.5 h-3.5" />
@@ -233,7 +233,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         <button
           type="button"
           onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-text-main hover:text-white transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-surface-alt hover:bg-surface border border-line/60 font-medium"
+          className="flex items-center gap-1.5 min-h-[44px] text-text-main hover:text-white transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-surface-alt hover:bg-surface border border-line/60 font-medium"
         >
           <FastForward className="w-3.5 h-3.5 text-text-dim" />
           <span>Skip All &amp; Generate Itinerary</span>
