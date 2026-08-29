@@ -98,15 +98,16 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         },
         {
           id: 'workshop_focus',
-          type: 'multiselect',
+          type: 'select',
           title: 'Which workshop tracks do you plan to prioritize?',
           options: [
-            { label: 'Footwork & Connection Technique', value: 'technique' },
-            { label: 'Musicality & Phrasing', value: 'musicality' },
-            { label: 'Dips, Tricks & Flow', value: 'flow' }
+            { label: 'All Workshops & Masterclasses (Comprehensive Schedule)', subtitle: 'Include full daytime workshop schedule across all rooms (no theme filtering)', value: 'all_workshops', badge: 'All Tracks' },
+            { label: 'Footwork & Connection Technique', subtitle: 'Focus on partner connection mechanics and turns', value: 'technique', badge: 'Technique' },
+            { label: 'Musicality & Phrasing', subtitle: 'Focus on musical expression and timing', value: 'musicality', badge: 'Musicality' },
+            { label: 'Dips, Tricks & Flow', subtitle: 'Elasticity, momentum and styling', value: 'flow', badge: 'Flow' }
           ],
           context: 'Schedule contains simultaneous workshop rooms; filters out conflicting tracks.',
-          defaultValue: ['technique', 'musicality']
+          defaultValue: 'all_workshops'
         },
         {
           id: 'late_night_energy',
@@ -147,17 +148,44 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           time: 'Friday 5:30 PM - 6:30 PM',
           location: 'Grand Ballroom',
           status: 'included',
-          decisionBadge: 'Division Match',
+          decisionBadge: 'Competition Call',
           justification: 'Matched selected competitive division (Novice). On-time staging guaranteed.'
         },
         {
-          id: 's2',
-          title: 'All-Levels Connection & Elasticity with Pro Staff',
-          time: 'Friday 3:00 PM - 4:00 PM',
-          location: 'Junior Ballroom',
-          status: 'filtered',
-          decisionBadge: 'Arrival Time Conflict',
-          justification: 'Filtered: Conflicts with your airport transit and hotel settle window (2:15 PM - 4:15 PM).'
+          id: 's_fri_dinner',
+          title: 'Friday Dinner & Evening Social Warmup Break',
+          time: 'Friday 6:30 PM - 8:30 PM',
+          location: 'Hotel Concourse',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Scheduled dinner break and social warmup.'
+        },
+        {
+          id: 's4',
+          title: 'Friday Neon Glow Late Night Social',
+          time: 'Friday 10:30 PM - 5:00 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Friday kickoff late-night social dancing.'
+        },
+        {
+          id: 's_sat_ws1',
+          title: 'All-Levels Phrasing & Micro-Musicality',
+          time: 'Saturday 10:00 AM - 11:15 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Foundational phrasing workshop in main ballroom.'
+        },
+        {
+          id: 's_sat_lunch',
+          title: 'Saturday Midday Lunch & Practice Floor Break',
+          time: 'Saturday 12:30 PM - 2:00 PM',
+          location: 'Pavilion Area',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Midday meal and practice break.'
         },
         {
           id: 's5',
@@ -166,7 +194,52 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           location: 'Grand Ballroom',
           status: 'included',
           decisionBadge: 'Workshop Match',
-          justification: 'Fits your Novice technique focus and scheduled during open Saturday afternoon slot.'
+          justification: 'Fits your technique focus and scheduled during open Saturday afternoon slot.'
+        },
+        {
+          id: 's_sat_dinner',
+          title: 'Saturday Dinner & Champions Showcase Seating Break',
+          time: 'Saturday 6:00 PM - 8:30 PM',
+          location: 'Grand Ballroom Foyer',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Dinner break and cocktail formal gala dress change.'
+        },
+        {
+          id: 's_sat_social',
+          title: 'Saturday Champions Showcase & Late-Night Social Dancing',
+          time: 'Saturday 10:30 PM - 5:30 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Marquee Saturday champions showcase gala and social dancing.'
+        },
+        {
+          id: 's_sun_ws1',
+          title: 'Sunday Morning Technique & Elasticity Masterclass',
+          time: 'Sunday 11:30 AM - 12:45 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Open masterclass on partner elasticity.'
+        },
+        {
+          id: 's_sun_lunch',
+          title: 'Sunday Lunch & Afternoon Rest Break',
+          time: 'Sunday 1:00 PM - 2:30 PM',
+          location: 'Pavilion Area',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Afternoon rest and meal break.'
+        },
+        {
+          id: 's_sun_social',
+          title: 'Sunday Survivors Sunrise Social Dancing',
+          time: 'Sunday 10:00 PM - 5:00 AM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Survivor dance party until sunrise.'
         },
         {
           id: 's3',
@@ -176,15 +249,6 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           status: 'filtered',
           decisionBadge: 'Level Ineligible',
           justification: 'Filtered: User profile (Novice) is ineligible for Advanced+ audition workshops.'
-        },
-        {
-          id: 's4',
-          title: 'Friday Neon Glow Late Night Social',
-          time: 'Friday 10:30 PM - 5:00 AM',
-          location: 'Grand Ballroom',
-          status: 'included',
-          decisionBadge: 'Social Energy',
-          justification: 'Matched late-night social energy preference.'
         }
       ],
       themeDressCodes: [
@@ -237,12 +301,12 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
         {
           id: 'intensive',
           type: 'select',
-          title: 'Are you attending any Friday pre-convention intensives at Boogie by the Bay?',
+          title: 'Are you registered for any special pre-convention intensives or bootcamps at Boogie by the Bay?',
           options: [
+            { label: 'No — Not attending any special intensives or bootcamps', subtitle: 'Standard arrival for regular workshops, competitions, or social dancing kickoff', value: 'no_intensives', badge: 'None' },
             { label: 'Jordan & Tatiana "Mastering the Blues" (Fri 10:00 AM - 1:00 PM)', subtitle: 'Regency Ballroom • Requires flight landing by 8:30 AM', value: 'blues_intensive', badge: 'Intensive' },
             { label: 'Kelly Casanova Judging Intensive (Fri 1:00 PM - 4:00 PM)', subtitle: 'Harbour Room A • Requires arrival by 12:00 PM', value: 'judging_intensive', badge: 'Judging' },
-            { label: 'Competitor Leveled Afternoon Tracks (Fri 1:00 PM - 5:00 PM)', subtitle: 'Sandpebble ABC • Novice 1pm, Int 2pm, Adv 3pm, All-Star 4pm', value: 'competitor_workshops', badge: 'Leveled' },
-            { label: 'No Daytime Intensives (Standard Friday Evening Arrival)', subtitle: 'Arrive in time for 6:30 PM Strictly Prelims or 9:00 PM Social Kickoff', value: 'no_intensives', badge: 'Evening' }
+            { label: 'Competitor Leveled Afternoon Tracks (Fri 1:00 PM - 5:00 PM)', subtitle: 'Sandpebble ABC • Novice 1pm, Int 2pm, Adv 3pm, All-Star 4pm', value: 'competitor_workshops', badge: 'Leveled' }
           ],
           context: 'Used to configure early morning travel buffer alerts and pre-convention calendar items.',
           defaultValue: 'no_intensives',
@@ -280,12 +344,13 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           type: 'select',
           title: 'Boogie by the Bay runs 3 simultaneous daytime tracks. Which stream should we prioritize?',
           options: [
+            { label: 'All Workshops & Masterclasses (Comprehensive Schedule)', subtitle: 'Include full daytime workshop schedule across Grand Peninsula, Regency, and Sandpebble ballrooms', value: 'all_workshops', badge: 'All Tracks' },
             { label: 'Competitor Leveled Workshops', subtitle: 'Sandpebble ABC • Division-targeted technique & strategy classes', value: 'competitor_workshops', badge: 'Technique' },
             { label: 'Main Ballroom Masterclasses', subtitle: 'Grand Peninsula • Musicality, phrasing & partner connection classes', value: 'all_levels_ballroom', badge: 'Musicality' },
             { label: 'Curated All-Around Mix', subtitle: 'Optimal balance across all rooms and touring instructors', value: 'balanced_mix', badge: 'Curated' }
           ],
           context: 'Resolves workshop timetable clashes across Grand Peninsula, Regency, and Sandpebble ballrooms.',
-          defaultValue: 'competitor_workshops',
+          defaultValue: 'all_workshops',
           required: true
         }
       ]
@@ -319,17 +384,26 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           time: 'Friday 5:30 PM - 6:45 PM',
           location: 'Grand Peninsula Ballroom',
           status: 'included',
-          decisionBadge: 'Division Match',
-          justification: 'Division match for Novice'
+          decisionBadge: 'Competition Call',
+          justification: 'Division match for Novice. Marshalling call on time.'
         },
         {
-          id: 'b2',
-          title: 'Level 4/5 Champion Masterclass with Benji Schwimmer',
-          time: 'Saturday 1:00 PM - 2:15 PM',
-          location: 'Regency Ballroom',
-          status: 'filtered',
-          decisionBadge: 'Level Ineligible',
-          justification: 'Filtered: Requires Level 4/5 audition band'
+          id: 'b_fri_dinner',
+          title: 'Friday Dinner & Evening Social Warmup Break',
+          time: 'Friday 6:45 PM - 8:30 PM',
+          location: 'Atrium Dining & Lounge',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Scheduled dinner and social warmup before evening dance.'
+        },
+        {
+          id: 'b4',
+          title: 'Bay Area Glow Social Party & Late-Night Dancing',
+          time: 'Friday 10:30 PM - 5:00 AM',
+          location: 'Grand Peninsula & Regency Soul Room',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Friday kickoff late night social party with dual ballrooms.'
         },
         {
           id: 'b3',
@@ -341,13 +415,76 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           justification: 'Matched all-levels musicality focus.'
         },
         {
-          id: 'b4',
-          title: 'Bay Area Glow Social Party',
-          time: 'Friday 10:30 PM - 5:00 AM',
+          id: 'b_sat_lunch',
+          title: 'Saturday Midday Lunch & Floor Check Break',
+          time: 'Saturday 12:45 PM - 2:00 PM',
+          location: 'Grand Atrium',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Midday meal and practice warmup break.'
+        },
+        {
+          id: 'b_sat_ws2',
+          title: 'Competitor Strategy & Dynamic Footwork in Sandpebble',
+          time: 'Saturday 2:15 PM - 3:30 PM',
+          location: 'Sandpebble Room ABC',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Division-targeted competitor workshop.'
+        },
+        {
+          id: 'b_sat_dinner',
+          title: 'Saturday Dinner & Champions Showcase Seating Break',
+          time: 'Saturday 6:00 PM - 8:30 PM',
+          location: 'Grand Peninsula Foyer',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Dinner and formal cocktail attire preparation.'
+        },
+        {
+          id: 'b_sat_social',
+          title: 'Classic Champions Showcase & Cocktail Chic Gala Social',
+          time: 'Saturday 10:30 PM - 5:30 AM',
           location: 'Grand Peninsula Ballroom',
           status: 'included',
-          decisionBadge: 'Social Energy',
-          justification: 'Friday kickoff late night social.'
+          decisionBadge: 'Social Dancing',
+          justification: 'Champions showcase gala followed by late-night social dancing.'
+        },
+        {
+          id: 'b_sun_ws1',
+          title: 'Sunday Morning Flow & Phrasing with Jordan & Tatiana',
+          time: 'Sunday 11:30 AM - 12:45 PM',
+          location: 'Grand Peninsula Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Sunday morning connection masterclass.'
+        },
+        {
+          id: 'b_sun_lunch',
+          title: 'Sunday Lunch & Afternoon Rest Break',
+          time: 'Sunday 1:00 PM - 2:30 PM',
+          location: 'Grand Atrium',
+          status: 'included',
+          decisionBadge: 'Meal / Rest Break',
+          justification: 'Afternoon lunch and rest break.'
+        },
+        {
+          id: 'b_sun_social',
+          title: 'Sunday Survivors Sunrise Social Dancing',
+          time: 'Sunday 10:00 PM - 5:00 AM',
+          location: 'Grand Peninsula Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Dancing',
+          justification: 'Survivor social dancing until dawn.'
+        },
+        {
+          id: 'b2',
+          title: 'Level 4/5 Champion Masterclass with Benji Schwimmer',
+          time: 'Saturday 1:00 PM - 2:15 PM',
+          location: 'Regency Ballroom',
+          status: 'filtered',
+          decisionBadge: 'Level Ineligible',
+          justification: 'Filtered: Requires Level 4/5 audition band'
         }
       ],
       themeDressCodes: [

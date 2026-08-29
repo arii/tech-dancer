@@ -10,7 +10,7 @@ export interface NormalizedSession {
   end_hour: number;
   end_minute: number;
   location: string;
-  category: 'workshop' | 'competition' | 'intensive' | 'social' | 'showcase' | 'other';
+  category: 'workshop' | 'competition' | 'intensive' | 'social' | 'showcase' | 'break' | 'other';
   level?: string;
   instructors?: string[];
   description?: string;
@@ -93,8 +93,8 @@ export function evaluateScheduleRules(
 
     intensiveOptions.push({
       id: 'no_intensives',
-      title: 'No Daytime Intensives (Standard Arrival)',
-      desc: 'Arriving in time for evening competitions or social dancing kickoff.',
+      title: 'No — Not attending any special intensives or bootcamps',
+      desc: 'Standard arrival for regular workshops, competitions, or social dancing kickoff.',
       icon: '✈️'
     });
 
@@ -189,6 +189,12 @@ export function evaluateScheduleRules(
       question: `${eventName} runs simultaneous sessions across multiple rooms. Which stream should we prioritize?`,
       subtitle: `Concurrent ballrooms: ${parallelRooms.slice(0, 3).join(', ')}.`,
       options: [
+        {
+          id: 'all_workshops',
+          title: 'All Workshops & Masterclasses',
+          desc: 'Include full daytime workshop schedule across all ballrooms (no theme filtering)',
+          icon: '🌟'
+        },
         {
           id: 'competitor_workshops',
           title: 'Competitor Leveled Workshops',

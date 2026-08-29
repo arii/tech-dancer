@@ -34,7 +34,9 @@ function mapFormQuestionToStep(fq: FormQuestion): DynamicQuestionStep {
     musicality: '🎵',
     connection: '🤝',
     styling: '✨',
-    all_tracks: '🎯'
+    all_tracks: '🎯',
+    all_workshops: '🌟',
+    workshop_enthusiast: '🧠'
   };
 
   // For boolean type with no options (Yes/No gate), synthesize two choice cards

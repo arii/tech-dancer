@@ -18,27 +18,39 @@ test.describe('WCS Navigator E2E Workflow', () => {
     await boogieButton.click();
 
     // 3. Observe Discovery Transition & Answer Dynamic Questionnaire
-    // Wait for questionnaire to appear (agent pre-scanning → Step 1)
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
 
-    // Loop through all questionnaire steps (up to 8) — click first option each time,
-    // break early when we hit the results dashboard.
+    // Step through questionnaire options
     for (let i = 0; i < 8; i++) {
-      // If results page already rendered, stop
       if (await page.getByText(/Pre-Event Transit Logistics/i).isVisible()) break;
 
       const optionBtn = page.locator('button:has(h4)').first();
-      if (await optionBtn.count() === 0) break;
+      if ((await optionBtn.count()) === 0) break;
       await optionBtn.click();
-      await page.waitForTimeout(600);
+      await page.waitForTimeout(500);
     }
 
     // 4. Results & Itinerary Dashboard
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
     await expect(page.getByText(/Add to Calendar \(\.ics\)/i)).toBeVisible();
-    await expect(page.getByText(/Markdown \(\.md\)/i)).toBeVisible();
+    await expect(page.getByText(/View All Schedule/i)).toBeVisible();
 
-    // 5. Edit Questionnaire Breadcrumb
+    // 5. Open Full Schedule Modal Customizer
+    const fullScheduleBtn = page.getByRole('button', { name: /View All Schedule/i });
+    await expect(fullScheduleBtn).toBeVisible();
+    await fullScheduleBtn.click();
+
+    // Modal should be open
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByText(/Full Event Timetable/i)).toBeVisible();
+
+    // Close modal
+    const doneBtn = page.getByRole('button', { name: /Done Customizing/i });
+    await expect(doneBtn).toBeVisible();
+    await doneBtn.click();
+    await expect(page.getByRole('dialog')).not.toBeVisible();
+
+    // 6. Edit Questionnaire Breadcrumb
     const editButton = page.getByRole('button', { name: /Edit Questionnaire/i });
     await expect(editButton).toBeVisible();
     await editButton.click();
@@ -47,3 +59,4 @@ test.describe('WCS Navigator E2E Workflow', () => {
     await expect(page.getByText(/Step 1/i)).toBeVisible();
   });
 });
+

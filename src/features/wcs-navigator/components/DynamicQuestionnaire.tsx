@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FastForward, SkipForward } from 'lucide-react';
 import { analyzeEventFootprint } from '../utils/questionGenerator';
 
 export interface DynamicQuestionnaireProps {
@@ -43,6 +43,31 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
     }, 180);
   };
 
+  const handleSkipQuestion = () => {
+    const defaultVal = activeQuestion.options[0]?.id || 'no_preference';
+    const updatedAnswers = { ...answers, [activeQuestion.id]: answers[activeQuestion.id] || defaultVal };
+    setAnswers(updatedAnswers);
+
+    if (currentStep < totalSteps - 1) {
+      setCurrentStep((prev) => prev + 1);
+    } else if (onSubmit) {
+      onSubmit(updatedAnswers);
+    }
+  };
+
+  const handleSkipToItinerary = () => {
+    const filledAnswers: Record<string, QuestionAnswerValue> = { ...answers };
+    steps.forEach((st) => {
+      if (!filledAnswers[st.id]) {
+        filledAnswers[st.id] = st.options[0]?.id || 'all_workshops';
+      }
+    });
+
+    if (onSubmit) {
+      onSubmit(filledAnswers);
+    }
+  };
+
   const handleBack = () => {
     if (currentStep > 0) {
       setSelectedOptionId(null);
@@ -51,7 +76,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   };
 
   return (
-    <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 8, md: 12 }} width="full">
+    <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 6, md: 10 }} width="full">
       {/* Sleek Progress Topline */}
       <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5}>
         <Box display="flex" align="center" gap={2}>
@@ -74,13 +99,24 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             Step {currentStep + 1} of {totalSteps}
           </Text>
         </Box>
-        <Text variant="mono" size="xs" color="dim">
-          {progressPercent}% Complete
-        </Text>
+
+        <Stack direction="row" align="center" gap={3}>
+          <button
+            type="button"
+            onClick={handleSkipQuestion}
+            className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
+          >
+            Skip Question ⏭️
+          </button>
+          <span className="text-text-dim/40">•</span>
+          <Text variant="mono" size="xs" color="dim">
+            {progressPercent}%
+          </Text>
+        </Stack>
       </Box>
 
       {/* Clean Progress Line */}
-      <Box width="full" height={1} radius="full" marginBottom={8} className="bg-surface-alt overflow-hidden">
+      <Box width="full" height={1} radius="full" marginBottom={6} className="bg-surface-alt overflow-hidden">
         <Box
           height="full"
           radius="full"
@@ -108,9 +144,9 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         )}
       </Stack>
 
-      {/* Balanced, Highly Interactive Large Card Stack */}
+      {/* Interactive Card Options */}
       {activeQuestion.options.length > 0 ? (
-        <Grid cols={1} gap={3.5} className="animate-in fade-in slide-in-from-right-3 duration-150">
+        <Grid cols={1} gap={3} className="animate-in fade-in slide-in-from-right-3 duration-150">
           {activeQuestion.options.map((opt) => {
             const isSelected = selectedOptionId === opt.id || answers[activeQuestion.id] === opt.id;
 
@@ -151,7 +187,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           })}
         </Grid>
       ) : (
-        /* Fallback: safety net for boolean/empty-options questions — never leaves user stranded */
+        /* Fallback for boolean/empty questions */
         <Stack direction={{ default: "col", sm: "row" }} gap={3} marginTop={2} className="animate-in fade-in duration-150">
           <Stack
             as="button"
@@ -189,10 +225,41 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           </Stack>
         </Stack>
       )}
+
+      {/* Bottom Questionnaire Controls: Skip Step or Skip All */}
+      <Box
+        display="flex"
+        align="center"
+        justify="between"
+        paddingTop={6}
+        marginTop={6}
+        border="t"
+        borderColor="line"
+        className="border-line/40 text-xs font-mono"
+      >
+        <button
+          type="button"
+          onClick={handleSkipQuestion}
+          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+        >
+          <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
+          <span>No Preference (Skip Step)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleSkipToItinerary}
+          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
+        >
+          <FastForward className="w-3.5 h-3.5" />
+          <span>Generate with Defaults ⚡</span>
+        </button>
+      </Box>
     </Box>
   );
 };
 
 export default DynamicQuestionnaire;
+
 
 
