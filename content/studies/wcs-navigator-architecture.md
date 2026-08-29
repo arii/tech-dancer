@@ -20,6 +20,10 @@ To achieve production reliability and eliminate UX friction, we designed an inte
 3. **Two-Pass Dual Gateway & Dynamic Arrival Buffer Engine**
 4. **Real-Time Taskmaker Debug Inspector & Tailored Itinerary Dashboard**
 
+### Live Interactive Workflow Overview
+
+![WCS Navigator Interactive Workflow Animation](/assets/research/wcs-navigator/wcs-navigator-demo.gif)
+
 ---
 
 ## 1. Search-First Omnibox & Multi-Modal Ingestion
