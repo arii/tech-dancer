@@ -161,7 +161,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       {/* Full-Screen Modal Overlay */}
       {isExpanded && typeof document !== 'undefined' && createPortal(
         <Stack
-          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between"
+          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between items-center"
           direction="col"
           padding={{ base: 4, sm: 8 }}
           onClick={handleOverlayClick}
