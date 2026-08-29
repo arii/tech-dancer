@@ -149,7 +149,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             type="text"
             role="combobox"
             aria-expanded={isInputFocused && filteredEvents.length > 0}
-            aria-label="Search convention or paste PDF URL"
+            aria-label="Search convention or city or paste PDF URL"
             placeholder="Search WCS event name or paste PDF URL..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
