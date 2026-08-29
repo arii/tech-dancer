@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ServiceTelemetry } from '../services/wcsApiClient';
@@ -89,7 +88,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
       padding={5}
       radius="2xl"
       border
-      className={`bg-slate-950/95 border-brand-cyan/40 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 ${className || ''}`}
+      className={`bg-surface-alt/95 border-brand-cyan/40 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 ${className || ''}`}
       width="full"
     >
       <Stack gap={4} width="full">
@@ -109,69 +108,105 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
             </Stack>
           </Box>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={1.5}
+            radius="lg"
+            border
             type="button"
             onClick={() => handleCopy(JSON.stringify(fullDebugState, null, 2), 'all_debug')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line/60 bg-surface hover:bg-surface-alt text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
+            className="border-line/60 bg-surface hover:bg-surface-alt text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
           >
             <Icon icon={copiedKey === 'all_debug' ? Check : Copy} size="xs" />
             <span>{copiedKey === 'all_debug' ? 'Copied Full Trace' : 'Copy Full Trace'}</span>
-          </button>
+          </Stack>
         </Box>
 
         {/* Tab Navigation */}
         <Box display="flex" flexWrap="wrap" gap={2} border="b" borderColor="line" paddingBottom={2}>
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={1.5}
+            radius="lg"
             type="button"
             onClick={() => setActiveTab('inputs')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'inputs'
-                ? 'bg-brand-cyan text-slate-950 shadow-sm'
+                ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
             }`}
           >
             <Icon icon={Sparkles} size="xs" />
             <span>1. Confirmed Inputs ({Object.keys(answers).length})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={1.5}
+            radius="lg"
             type="button"
             onClick={() => setActiveTab('telemetry')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'telemetry'
-                ? 'bg-brand-cyan text-slate-950 shadow-sm'
+                ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
             }`}
           >
             <Icon icon={Activity} size="xs" />
             <span>2. Gateway & Engine ({telemetry?.httpStatus ? `HTTP ${telemetry.httpStatus}` : 'Local'})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={1.5}
+            radius="lg"
             type="button"
             onClick={() => setActiveTab('filtering')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'filtering'
-                ? 'bg-brand-cyan text-slate-950 shadow-sm'
+                ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
             }`}
           >
             <Icon icon={Filter} size="xs" />
             <span>3. Rule Engine Audit ({includedSessions.length} / {sessions.length})</span>
-          </button>
+          </Stack>
 
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={1.5}
+            radius="lg"
             type="button"
             onClick={() => setActiveTab('json')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'json'
-                ? 'bg-brand-cyan text-slate-950 shadow-sm'
+                ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
             }`}
           >
             <Icon icon={Terminal} size="xs" />
             <span>4. Raw JSON Schemas</span>
-          </button>
+          </Stack>
         </Box>
 
         {/* TAB 1: CONFIRMED INPUTS */}
@@ -230,9 +265,9 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                         className={`text-xs font-mono ${idx > 0 ? 'border-t border-line/30' : ''}`}
                       >
                         <span className="text-brand-cyan font-bold">{key}</span>
-                        <span className="text-text-main bg-white/5 px-2 py-1 rounded">
+                        <Box as="span" paddingX={2} paddingY={1} radius="md" className="text-text-main bg-white/5">
                           {Array.isArray(val) ? val.join(', ') : String(val)}
-                        </span>
+                        </Box>
                       </Box>
                     ))}
                   </Stack>
@@ -285,44 +320,56 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
 
             {/* Collapsible Request Payload */}
             <Box radius="xl" border className="bg-surface/40 border-line/50 overflow-hidden">
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => setShowRequestPayload(!showRequestPayload)}
-                className="w-full flex items-center justify-between p-3.5 text-xs font-mono text-left hover:bg-white/5 cursor-pointer"
+                width="full"
+                padding={3.5}
+                display="flex"
+                align="center"
+                justify="between"
+                className="text-xs font-mono text-left hover:bg-white/5 cursor-pointer"
               >
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={showRequestPayload ? ChevronDown : ChevronRight} size="xs" />
                   <span className="font-bold text-text-main">Sent Request Payload</span>
                 </Box>
-                <span className="text-text-dim text-micro">Click to toggle</span>
-              </button>
+                <Text size="xs" color="dim">Click to toggle</Text>
+              </Box>
               {showRequestPayload && (
-                <Box padding={3} border="t" borderColor="line" className="bg-slate-950/80">
-                  <pre className="text-xs font-mono text-text-dim overflow-x-auto p-2">
+                <Box padding={3} border="t" borderColor="line" className="bg-surface-alt/80">
+                  <Box as="pre" padding={2} className="text-xs font-mono text-text-dim overflow-x-auto">
                     {JSON.stringify(telemetry?.requestPayload || { eventName, answers }, null, 2)}
-                  </pre>
+                  </Box>
                 </Box>
               )}
             </Box>
 
             {/* Collapsible Response Payload */}
             <Box radius="xl" border className="bg-surface/40 border-line/50 overflow-hidden">
-              <button
+              <Box
+                as="button"
                 type="button"
                 onClick={() => setShowResponsePayload(!showResponsePayload)}
-                className="w-full flex items-center justify-between p-3.5 text-xs font-mono text-left hover:bg-white/5 cursor-pointer"
+                width="full"
+                padding={3.5}
+                display="flex"
+                align="center"
+                justify="between"
+                className="text-xs font-mono text-left hover:bg-white/5 cursor-pointer"
               >
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={showResponsePayload ? ChevronDown : ChevronRight} size="xs" />
                   <span className="font-bold text-text-main">Received Response Payload</span>
                 </Box>
-                <span className="text-text-dim text-micro">Click to toggle</span>
-              </button>
+                <Text size="xs" color="dim">Click to toggle</Text>
+              </Box>
               {showResponsePayload && (
-                <Box padding={3} border="t" borderColor="line" className="bg-slate-950/80">
-                  <pre className="text-xs font-mono text-text-dim overflow-x-auto p-2 max-h-60">
+                <Box padding={3} border="t" borderColor="line" className="bg-surface-alt/80">
+                  <Box as="pre" padding={2} className="text-xs font-mono text-text-dim overflow-x-auto max-h-60">
                     {JSON.stringify(telemetry?.responsePayload || discoveryData || decisionTrace, null, 2)}
-                  </pre>
+                  </Box>
                 </Box>
               )}
             </Box>
@@ -333,12 +380,19 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
         {activeTab === 'filtering' && (
           <Stack gap={3} width="full" className="animate-in fade-in duration-150">
             <Box display="flex" align="center" justify="between" gap={3} flexWrap="wrap">
-              <input
+              <Box
+                as="input"
                 type="text"
                 placeholder="Search audit sessions or rule justifications..."
                 value={filterQuery}
-                onChange={(e) => setFilterQuery(e.target.value)}
-                className="bg-slate-900 border border-line/60 rounded-lg px-3 py-1.5 text-xs font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan max-w-sm w-full"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterQuery(e.target.value)}
+                paddingX={3}
+                paddingY={1.5}
+                radius="lg"
+                maxWidth="sm"
+                width="full"
+                border
+                className="bg-surface border-line/60 text-xs font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan"
               />
               <Text size="xs" color="dim" variant="mono">
                 Showing {filteredSessionList.length} of {sessions.length} evaluated sessions
@@ -365,21 +419,27 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                       <Box display="flex" align="start" justify="between" gap={2}>
                         <Stack gap={0.5} minWidth={0}>
                           <span className="font-bold text-text-main">{session.title}</span>
-                          <span className="text-text-dim text-micro">
+                          <Text size="xs" color="dim">
                             🕒 {session.time} • 📍 {session.location}
-                          </span>
+                          </Text>
                         </Stack>
-                        <span
-                          className={`px-2 py-0.5 rounded text-micro font-bold shrink-0 ${
+                        <Box
+                          as="span"
+                          paddingX={2}
+                          paddingY={0.5}
+                          radius="md"
+                          shrink={0}
+                          border
+                          className={`text-xs font-bold ${
                             session.status === 'included'
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                              : 'bg-red-500/20 text-red-300 border-red-500/30'
                           }`}
                         >
                           {session.status === 'included' ? '✅ Included' : '⛔ Filtered Out'}
-                        </span>
+                        </Box>
                       </Box>
-                      <Box marginTop={1} className="text-micro text-text-dim/90 bg-white/5 p-1.5 rounded">
+                      <Box marginTop={1} padding={1.5} radius="md" className="text-xs text-text-dim/90 bg-white/5">
                         <strong className="text-white/80">Rule Reason:</strong> {session.justification}
                       </Box>
                     </Box>
@@ -397,19 +457,23 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
               <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                 Raw Decision Trace Schema
               </Text>
-              <button
+              <Stack
+                as="button"
+                direction="row"
+                align="center"
+                gap={1}
                 type="button"
                 onClick={() => handleCopy(JSON.stringify(decisionTrace, null, 2), 'trace_json')}
-                className="flex items-center gap-1 text-xs font-mono text-brand-cyan hover:underline cursor-pointer"
+                className="text-xs font-mono text-brand-cyan hover:underline cursor-pointer"
               >
                 <Icon icon={copiedKey === 'trace_json' ? Check : Copy} size="xs" />
                 <span>{copiedKey === 'trace_json' ? 'Copied' : 'Copy JSON'}</span>
-              </button>
+              </Stack>
             </Box>
-            <Box padding={3} radius="xl" border className="bg-slate-950 border-line/60">
-              <pre className="text-xs font-mono text-text-dim overflow-x-auto p-2 max-h-72">
+            <Box padding={3} radius="xl" border className="bg-surface-alt border-line/60">
+              <Box as="pre" padding={2} className="text-xs font-mono text-text-dim overflow-x-auto max-h-72">
                 {JSON.stringify(decisionTrace, null, 2)}
-              </pre>
+              </Box>
             </Box>
           </Stack>
         )}

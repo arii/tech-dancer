@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
@@ -238,23 +237,39 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         borderColor="line"
         className="border-line/40 text-xs font-mono"
       >
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+          className="text-text-dim hover:text-white transition-colors cursor-pointer hover:bg-surface-alt border-transparent hover:border-line/50"
         >
           <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
           <span>Skip this question (Next Step →)</span>
-        </button>
+        </Stack>
 
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
+          className="text-brand-cyan hover:text-white transition-colors cursor-pointer bg-brand-cyan/10 hover:bg-brand-cyan/20 border-brand-cyan/30"
         >
           <FastForward className="w-3.5 h-3.5" />
           <span>⚡ Skip All &amp; Generate Itinerary</span>
-        </button>
+        </Stack>
       </Box>
     </Box>
   );

@@ -3,8 +3,7 @@ import { getVisualTestMasks, scrollToSettle } from './utils/playwright-helpers';
 
 const HOMEPAGE_URL = './';
 
-// Visual comparison snapshot is skipped due to ongoing layout updates
-test.skip('verify homepage visual consistency', async ({ page }) => {
+test('verify homepage visual consistency', async ({ page }) => {
   await page.goto(HOMEPAGE_URL);
   await page.waitForLoadState('networkidle');
 

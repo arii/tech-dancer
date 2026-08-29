@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
@@ -140,7 +139,8 @@ const ArielProfile = () => {
                           overflow="hidden"
                           radius="2xl"
                           border
-                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'aspect-square max-w-md mx-auto' : 'aspect-[4/3]'}`}
+                          aspect={isSquare ? "square" : "4/3"}
+                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'max-w-md mx-auto' : ''}`}
                         >
                           <img
                             src={img.src}
@@ -166,7 +166,8 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm aspect-[2/3]"
+                      aspect="2/3"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm"
                     >
                       <img
                         src={wcsLove.gallery[0].src}
@@ -221,7 +222,8 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="3/2"
+                      className="bg-surface border-line/40 shadow-lg group aspect-video max-w-xl"
                     >
                       <img
                         src={whyBuilt.gallery[0].src}
@@ -245,7 +247,8 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="3/2"
+                      className="bg-surface border-line/40 shadow-lg group aspect-video max-w-xl"
                     >
                       <img
                         src={financialStrategies.gallery[0].src}

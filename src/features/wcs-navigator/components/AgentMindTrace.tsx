@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
@@ -307,18 +306,27 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
       >
         <Stack gap={2}>
           <Box display="flex" align="center" justify="between" gap={2}>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
+            <Box
+              as="span"
+              paddingX={2}
+              paddingY={0.5}
+              radius="md"
+              className="text-xs font-mono font-bold bg-white/10"
+            >
               {badge}
-            </span>
-            <button
+            </Box>
+            <Box
+              as="button"
               type="button"
               onClick={() => handleToggleSession(session.id)}
               aria-label={`Remove ${session.title}`}
               title="Remove from my schedule"
-              className="text-text-dim hover:text-red-400 p-1 rounded transition-colors cursor-pointer"
+              padding={1}
+              radius="md"
+              className="text-text-dim hover:text-red-500 transition-colors cursor-pointer"
             >
               <Icon icon={X} size="xs" />
-            </button>
+            </Box>
           </Box>
 
           <h4 className="font-bold text-sm text-white leading-snug">
@@ -411,14 +419,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
                 </Text>
               </Stack>
             </Box>
-            <button
+            <Box
+              as="button"
               type="button"
               aria-label="Dismiss notification"
               onClick={() => setShowToast(false)}
-              className="text-text-dim hover:text-white"
+              className="text-text-dim hover:text-white cursor-pointer"
             >
               <Icon icon={X} size="xs" />
-            </button>
+            </Box>
           </Box>
         </Box>
       )}
