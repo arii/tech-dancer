@@ -109,36 +109,26 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
 
-  // Initialize and maintain local sessions list with localStorage persistence
-  const [allSessions, setAllSessions] = useState<AuditSession[]>(() => {
+  // Maintain custom session inclusions with localStorage persistence without setState in useEffect
+  const [customOverrides, setCustomOverrides] = useState<Record<string, 'included' | 'filtered'>>({});
+
+  const allSessions = useMemo(() => {
     const raw = trace?.sessions || [];
     const savedIncludedIds = getSavedSchedule(activeEventName);
 
-    if (savedIncludedIds && savedIncludedIds.length > 0) {
-      return raw.map((s) => ({
-        ...s,
-        status: savedIncludedIds.includes(s.id) ? ('included' as const) : ('filtered' as const),
-      }));
-    }
-    return raw;
-  });
-
-  // Sync state when new trace arrives
-  useEffect(() => {
-    if (trace?.sessions && trace.sessions.length > 0) {
-      const savedIncludedIds = getSavedSchedule(activeEventName);
-      if (savedIncludedIds && savedIncludedIds.length > 0) {
-        setAllSessions(
-          trace.sessions.map((s) => ({
-            ...s,
-            status: savedIncludedIds.includes(s.id) ? ('included' as const) : ('filtered' as const),
-          }))
-        );
-      } else {
-        setAllSessions(trace.sessions);
+    return raw.map((s) => {
+      if (customOverrides[s.id]) {
+        return { ...s, status: customOverrides[s.id] };
       }
-    }
-  }, [trace?.sessions, activeEventName, getSavedSchedule]);
+      if (savedIncludedIds && savedIncludedIds.length > 0) {
+        return {
+          ...s,
+          status: savedIncludedIds.includes(s.id) ? ('included' as const) : ('filtered' as const),
+        };
+      }
+      return s;
+    });
+  }, [trace?.sessions, customOverrides, activeEventName, getSavedSchedule]);
 
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -164,43 +154,40 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   // Toggle session inclusion in custom schedule
   const handleToggleSession = useCallback(
     (sessionId: string) => {
-      setAllSessions((prev) => {
-        const next = prev.map((s) => {
-          if (s.id === sessionId) {
-            const nextStatus = s.status === 'included' ? ('filtered' as const) : ('included' as const);
-            return { ...s, status: nextStatus };
-          }
-          return s;
-        });
+      const currentSession = allSessions.find((s) => s.id === sessionId);
+      const nextStatus = currentSession?.status === 'included' ? ('filtered' as const) : ('included' as const);
 
-        const includedIds = next.filter((s) => s.status === 'included').map((s) => s.id);
-        saveCustomSchedule(activeEventName, includedIds);
+      setCustomOverrides((prev) => ({
+        ...prev,
+        [sessionId]: nextStatus,
+      }));
 
-        const target = next.find((s) => s.id === sessionId);
-        const actionLabel = target?.status === 'included' ? 'Added to' : 'Removed from';
-        showFeedbackToast(
-          'Itinerary Updated',
-          `${actionLabel} your schedule: ${target?.title || 'Session'}`,
-          'schedule.ics'
-        );
+      const updatedIncludedIds = allSessions
+        .map((s) => (s.id === sessionId ? { ...s, status: nextStatus } : s))
+        .filter((s) => s.status === 'included')
+        .map((s) => s.id);
 
-        return next;
-      });
+      saveCustomSchedule(activeEventName, updatedIncludedIds);
+
+      const actionLabel = nextStatus === 'included' ? 'Added to' : 'Removed from';
+      showFeedbackToast(
+        'Itinerary Updated',
+        `${actionLabel} your schedule: ${currentSession?.title || 'Session'}`,
+        'schedule.ics'
+      );
     },
-    [activeEventName, saveCustomSchedule]
+    [activeEventName, allSessions, saveCustomSchedule]
   );
 
   const handleResetToAiPlan = useCallback(() => {
     clearCustomSchedule(activeEventName);
-    if (trace?.sessions) {
-      setAllSessions(trace.sessions);
-    }
+    setCustomOverrides({});
     showFeedbackToast(
       'Schedule Reset',
       'Restored original AI recommended schedule.',
       'wcs-schedule.ics'
     );
-  }, [activeEventName, clearCustomSchedule, trace?.sessions]);
+  }, [activeEventName, clearCustomSchedule]);
 
   // Active included sessions
   const includedSessions = useMemo(() => {

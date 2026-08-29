@@ -328,7 +328,7 @@ export function extractUserRole(answers: Record<string, import('../types/navigat
 export function adaptTraceToUserPreferences(
   baseTrace: import('../types').AgentDecisionTrace,
   answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
-  eventName: string = 'WCS Event'
+  _eventName: string = 'WCS Event'
 ): import('../types').AgentDecisionTrace {
   const divisionKey = extractUserDivision(answers).toLowerCase();
 

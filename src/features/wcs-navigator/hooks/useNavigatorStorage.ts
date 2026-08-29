@@ -50,7 +50,7 @@ function safeRemoveItem(key: string): void {
   }
 }
 
-export function useNavigatorStorage(activeEventId?: string) {
+export function useNavigatorStorage(_activeEventId?: string) {
   const [draft, setDraft] = useState<NavigatorDraftState | null>(() => {
     const raw = safeGetItem(DRAFT_STORAGE_KEY);
     if (raw) {
@@ -84,8 +84,8 @@ export function useNavigatorStorage(activeEventId?: string) {
           eventId: draftData.eventId ?? prev?.eventId ?? '',
           eventName: draftData.eventName ?? prev?.eventName ?? '',
           division: draftData.division ?? prev?.division ?? 'novice',
-          role: draftData.role ?? prev?.role ?? 'lead',
-          answers: { ...(prev?.answers || {}), ...(draftData.answers || {}) },
+          role: draftData.role ?? prev?.role ?? '',
+          answers: { ...prev?.answers, ...draftData.answers },
           timestamp: Date.now(),
         };
         safeSetItem(DRAFT_STORAGE_KEY, JSON.stringify(next));

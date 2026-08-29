@@ -133,7 +133,6 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
             {stages.map((stage, idx) => {
               const isDone = currentStageIndex > idx;
               const isCurrent = currentStageIndex === idx;
-              const isPending = currentStageIndex < idx;
 
               return (
                 <Box

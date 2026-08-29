@@ -25,7 +25,7 @@ export async function extractScheduleFromDocument(
   rawContent?: string
 ): Promise<ExtractedSchedulePayload> {
   const content = rawContent || fileNameOrText;
-  let cleanName = fileNameOrText;
+  let cleanName: string;
   if (fileNameOrText.startsWith('http://') || fileNameOrText.startsWith('https://')) {
     try {
       const urlObj = new URL(fileNameOrText);
