@@ -10,7 +10,7 @@ export interface NormalizedSession {
   end_hour: number;
   end_minute: number;
   location: string;
-  category: 'workshop' | 'competition' | 'intensive' | 'social' | 'showcase' | 'other';
+  category: 'workshop' | 'competition' | 'intensive' | 'social' | 'showcase' | 'break' | 'other';
   level?: string;
   instructors?: string[];
   description?: string;
@@ -93,8 +93,8 @@ export function evaluateScheduleRules(
 
     intensiveOptions.push({
       id: 'no_intensives',
-      title: 'No Daytime Intensives (Standard Arrival)',
-      desc: 'Arriving in time for evening competitions or social dancing kickoff.',
+      title: 'No — Not attending any special intensives or bootcamps',
+      desc: 'Standard arrival for regular workshops, competitions, or social dancing kickoff.',
       icon: '✈️'
     });
 
@@ -190,6 +190,12 @@ export function evaluateScheduleRules(
       subtitle: `Concurrent ballrooms: ${parallelRooms.slice(0, 3).join(', ')}.`,
       options: [
         {
+          id: 'all_workshops',
+          title: 'All Workshops & Masterclasses',
+          desc: 'Include full daytime workshop schedule across all ballrooms (no theme filtering)',
+          icon: '🌟'
+        },
+        {
           id: 'competitor_workshops',
           title: 'Competitor Leveled Workshops',
           desc: 'Division-targeted technique & strategy classes',
@@ -253,3 +259,255 @@ export function evaluateScheduleRules(
     lateNightClosingHour: '5:00 AM'
   };
 }
+
+/**
+ * Robustly extracts the intended WCS division from any questionnaire answer key/values.
+ */
+export function extractUserDivision(answers: Record<string, import('../types/navigator').QuestionAnswerValue>): string {
+  const candidates = [
+    answers.division,
+    answers.competition_divisions,
+    answers.competition_division,
+    answers.workshop_level,
+    answers.experience_level,
+    answers.wsdc_level,
+    answers.level,
+    answers.skill_level,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const str = (Array.isArray(candidate) ? candidate.join(' ') : String(candidate)).toLowerCase();
+    if (str.includes('intermediate')) return 'intermediate';
+    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
+    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
+    if (str.includes('masters')) return 'masters';
+    if (str.includes('champion')) return 'champions';
+    if (str.includes('social')) return 'social_only';
+    if (str.includes('pro_am')) return 'pro_am';
+  }
+
+  for (const val of Object.values(answers)) {
+    if (!val) continue;
+    const str = (Array.isArray(val) ? val.join(' ') : String(val)).toLowerCase();
+    if (str.includes('intermediate')) return 'intermediate';
+    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
+    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
+    if (str.includes('social')) return 'social_only';
+  }
+
+  return 'novice';
+}
+
+/**
+ * Robustly extracts the dancer role (lead/follow/switch) if explicitly answered.
+ */
+export function extractUserRole(answers: Record<string, import('../types/navigator').QuestionAnswerValue>): string {
+  const candidates = [answers.role, answers.dance_role, answers.preferred_role];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const str = String(candidate).toLowerCase();
+    if (str.includes('lead')) return 'lead';
+    if (str.includes('follow')) return 'follow';
+    if (str.includes('switch')) return 'switch';
+  }
+  for (const val of Object.values(answers)) {
+    if (!val) continue;
+    const str = String(val).toLowerCase();
+    if (str === 'lead' || str.includes('leader')) return 'lead';
+    if (str === 'follow' || str.includes('follower')) return 'follow';
+    if (str === 'switch') return 'switch';
+  }
+  return '';
+}
+
+/**
+ * Dynamically adjusts a Decision Trace (buffer timeline, session titles, and justifications)
+ * to match the user's specific answers from the questionnaire.
+ */
+export function adaptTraceToUserPreferences(
+  baseTrace: import('../types').AgentDecisionTrace,
+  answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
+  _eventName: string = 'WCS Event'
+): import('../types').AgentDecisionTrace {
+  const divisionKey = extractUserDivision(answers).toLowerCase();
+
+  // Format division label
+  let divisionLabel = 'Novice';
+  if (divisionKey.includes('intermediate')) divisionLabel = 'Intermediate';
+  else if (divisionKey.includes('advanced') || divisionKey.includes('allstar')) divisionLabel = 'Advanced / All-Star';
+  else if (divisionKey.includes('social')) divisionLabel = 'Social Dancer';
+  else if (divisionKey.includes('pro_am')) divisionLabel = 'Pro-Am Spotlight';
+  else if (divisionKey.includes('workshop')) divisionLabel = 'Workshop Enthusiast';
+  else if (divisionKey.includes('masters')) divisionLabel = 'Masters';
+  else if (divisionKey.includes('champion')) divisionLabel = 'Champions';
+
+  const isSocialOnly = divisionKey.includes('social') || divisionKey === 'social_only';
+  const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');
+
+  // Detect Arrival Mode & Intensive Registration
+  const arrivalVal = String(answers.arrival || answers.arrival_target || answers.arrival_time || '').toLowerCase();
+  const intensiveVal = String(answers.intensive || answers.intensives || answers.masterclass || '').toLowerCase();
+  const hasIntensive = intensiveVal.includes('yes') || intensiveVal === 'yes_masterclass' || intensiveVal === 'intensive_registered';
+  const isLocalCommute = arrivalVal.includes('local') || arrivalVal === 'drive' || arrivalVal === 'commute';
+  const isEveningArrival = arrivalVal.includes('evening') || arrivalVal.includes('after_work') || arrivalVal === 'friday_evening';
+
+  let calculatedArrivalDeadline = '2:15 PM Friday';
+  let calculatedStagingTime = '5:15 PM Friday';
+
+  if (isLocalCommute) {
+    calculatedArrivalDeadline = 'Local Commute (Drive-In)';
+    calculatedStagingTime = '5:15 PM Friday';
+  } else if (hasIntensive) {
+    calculatedArrivalDeadline = '12:00 PM Friday';
+    calculatedStagingTime = '1:45 PM Friday';
+  } else if (isEveningArrival) {
+    calculatedArrivalDeadline = '6:30 PM Friday';
+    calculatedStagingTime = '8:00 PM Friday';
+  }
+
+  // Adapt Buffer Timeline Steps
+  const updatedSteps = (baseTrace.bufferTimeline?.steps || []).map((step) => {
+    if (step.type === 'transit' || step.label.toLowerCase().includes('flight') || step.label.toLowerCase().includes('touchdown')) {
+      if (isLocalCommute) {
+        return {
+          ...step,
+          time: '4:15 PM',
+          label: 'Local Hotel / Venue Arrival Buffer',
+          description: 'Drive in, park, and complete registration before staging check-in.'
+        };
+      }
+      if (hasIntensive) {
+        return {
+          ...step,
+          time: '12:00 PM',
+          label: 'Midday Flight Touchdown for Intensive',
+          description: 'Land early to settle into hotel before 2:00 PM Intensive workshops.'
+        };
+      }
+      if (isEveningArrival) {
+        return {
+          ...step,
+          time: '6:30 PM',
+          label: 'Evening Flight Touchdown & Transit',
+          description: 'Evening arrival buffer for social dancing and late-night mixer.'
+        };
+      }
+    }
+
+    if (step.type === 'staging' || step.label.toLowerCase().includes('staging') || step.label.toLowerCase().includes('prelim')) {
+      if (isSocialOnly) {
+        return {
+          ...step,
+          time: isEveningArrival ? '9:00 PM' : '8:00 PM',
+          label: 'Friday Social Kickoff & Evening Mixer',
+          description: 'Friday Welcome Dance & Social Kickoff'
+        };
+      }
+      return {
+        ...step,
+        time: calculatedStagingTime,
+        label: `${divisionLabel} Strictly Swing Staging Call`,
+        description: `${divisionLabel} division marshalling check-in`
+      };
+    }
+    return step;
+  });
+
+  // Adapt Sessions
+  const updatedSessions = (baseTrace.sessions || []).map((session) => {
+    const isComp =
+      session.decisionBadge === 'Competition Call' ||
+      session.title.toLowerCase().includes('strictly') ||
+      session.title.toLowerCase().includes('jack & jill') ||
+      session.title.toLowerCase().includes('prelim');
+
+    if (isComp) {
+      if (isSocialOnly) {
+        return {
+          ...session,
+          status: 'filtered' as const,
+          decisionBadge: 'Not Competing' as const,
+          justification: 'Filtered out because Social Dancer persona was selected (no contest calls).'
+        };
+      }
+
+      let newTitle = session.title;
+      if (session.title.toLowerCase().includes('strictly')) {
+        newTitle = `${divisionLabel} Strictly Swing Preliminaries`;
+      } else if (session.title.toLowerCase().includes('jack & jill') || session.title.toLowerCase().includes('j&j')) {
+        newTitle = `${divisionLabel} Jack & Jill Preliminaries & Semifinals`;
+      }
+
+      return {
+        ...session,
+        title: newTitle,
+        status: 'included' as const,
+        decisionBadge: 'Competition Call' as const,
+        justification: `Division match for ${divisionLabel}. Marshalling call on time.`
+      };
+    }
+
+    if (isAllWorkshops && (session.decisionBadge === 'Workshop Match' || session.decisionBadge === 'Workshop Class')) {
+      return {
+        ...session,
+        status: 'included' as const
+      };
+    }
+
+    return session;
+  });
+
+  return {
+    ...baseTrace,
+    bufferTimeline: {
+      latestFlightArrivalDeadline: calculatedArrivalDeadline,
+      earliestStagingTime: calculatedStagingTime,
+      transitMinutes: isLocalCommute ? 45 : (baseTrace.bufferTimeline?.transitMinutes || 30),
+      hotelSettleMinutes: baseTrace.bufferTimeline?.hotelSettleMinutes || 90,
+      warmupMinutes: baseTrace.bufferTimeline?.warmupMinutes || 45,
+      steps:
+        updatedSteps.length > 0
+          ? updatedSteps
+          : [
+              {
+                time: isLocalCommute ? '4:15 PM' : (hasIntensive ? '12:00 PM' : '2:15 PM'),
+                type: isLocalCommute ? 'local_arrival' : 'transit',
+                label: isLocalCommute
+                  ? 'Local Hotel / Venue Arrival Buffer'
+                  : (hasIntensive ? 'Midday Flight Touchdown for Intensive' : 'Target Safe Flight Landing'),
+                description: isLocalCommute
+                  ? 'Drive in, park, and complete registration before staging check-in.'
+                  : 'Recommended landing time before Friday evening workshops & competitions.',
+                bufferMinutes: isLocalCommute ? 45 : 30,
+                iconName: isLocalCommute ? 'Car' : 'Plane',
+              },
+              {
+                time: isLocalCommute ? '4:30 PM' : (hasIntensive ? '1:00 PM' : '3:00 PM'),
+                type: 'hotel',
+                label: 'Hotel Check-In & Bag Drop',
+                description: 'Check in or store bags with bell desk and change into dance gear.',
+                bufferMinutes: 45,
+                iconName: 'Building',
+              },
+              {
+                time: isLocalCommute ? '4:45 PM' : (hasIntensive ? '1:30 PM' : '4:30 PM'),
+                type: 'warmup',
+                label: 'Footwear & Dynamic Warmup',
+                description: 'Suede shoe check, dynamic stretching, and rhythm calibration in practice hall.',
+                bufferMinutes: 45,
+                iconName: 'Activity',
+              },
+              {
+                time: calculatedStagingTime,
+                type: 'staging',
+                label: isSocialOnly ? 'Friday Social Kickoff & Evening Mixer' : `${divisionLabel} Strictly Swing Staging Call`,
+                description: isSocialOnly ? 'Friday Welcome Dance & Social Kickoff' : `${divisionLabel} division marshalling check-in`,
+                iconName: isSocialOnly ? 'Music' : 'Trophy',
+              },
+            ],
+    },
+    sessions: updatedSessions,
+  };
+}
+

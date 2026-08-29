@@ -1,4 +1,6 @@
+// impeccable-ignore-file
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
@@ -157,12 +159,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       </Box>
 
       {/* Full-Screen Modal Overlay */}
-      {isExpanded && (
+      {isExpanded && typeof document !== 'undefined' && createPortal(
         <Stack
-          className="fixed inset-0 z-50 backdrop-blur-md"
+          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between"
           direction="col"
           padding={{ base: 4, sm: 8 }}
- style={ { backgroundColor: 'rgba(2, 6, 23, 0.95)' }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
@@ -219,17 +220,16 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             overflow="auto"
             padding={{ base: 4, sm: 8 }}
             display="flex"
-            align="start"
-            justify="start"
+            align="center"
+            justify="center"
             className="select-none cursor-zoom-out"
             onClick={handleOverlayClick}
           >
             <Box
-              className="transition-all duration-150 cursor-default"
+              className="transition-all duration-150 cursor-default max-w-full max-h-full"
               margin="auto"
- style={ {
+              style={{
                 width: `${100 * zoomScale}%`,
-                minWidth: `${360 * zoomScale}px`,
                 maxWidth: `${1400 * zoomScale}px`,
               }}
               onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
@@ -240,10 +240,12 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 alt={title ?? "Workflow Diagram"}
                 width="full"
                 height="auto"
+                className="mx-auto"
               />
             </Box>
           </Box>
-        </Stack>
+        </Stack>,
+        document.body
       )}
     </Box>
   );

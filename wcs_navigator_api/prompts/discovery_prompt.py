@@ -29,7 +29,10 @@ Your task is to analyze the provided event schedule document/PDF and perform a S
       - EVERY generated question MUST include a non-empty `context` string.
       - The `context` field MUST explain why the question exists and how the answer affects downstream schedule filtering, staging call calculations, or conflict resolution (e.g., "Filters out ineligible workshop tracks and calculates prelim staging calls.").
 
+   e) Pre-Convention Intensives & Bootcamps (P0 Rule):
+      - If asking about pre-convention intensives or specialty masterclasses, you MUST ALWAYS include a clear "No" option (e.g., `label: "No — Not attending any special intensives or bootcamps"`, `value: "no_intensives"`, `subtitle: "Standard arrival for regular workshops, competitions, or social dancing kickoff"`, `badge: "None"`).
+
 3. JSON Output Formatting:
    - Return valid JSON strictly matching the DiscoveryResponse schema.
-   - Set sensible `defaultValue` fields where appropriate (e.g., 'novice' or primary style).
+   - Set sensible `defaultValue` fields where appropriate (e.g., 'no_intensives', 'novice', or primary style).
 """

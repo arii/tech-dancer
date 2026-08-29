@@ -1,0 +1,171 @@
+{
+  "decisionTrace": {
+    "subTasks": [
+      {
+        "id": "1",
+        "label": "Schedule Extraction",
+        "status": "completed",
+        "detail": "Extracted all workshops, intensives, competitions, and evening events for Boogie by the Bay 2026."
+      },
+      {
+        "id": "2",
+        "label": "User Preference Analysis",
+        "status": "completed",
+        "detail": "Analyzed user level (Intermediate/Masters), selected JT intensive, and competition entries."
+      },
+      {
+        "id": "3",
+        "label": "Filtering & Audit",
+        "status": "completed",
+        "detail": "Filtered out ineligible Advanced/All-Star/Champions content while keeping All-Levels, JT Intensive, and Intermediate/Masters specific content."
+      }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "2026-10-09T17:15:00-07:00",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 30,
+      "latestFlightArrivalDeadline": "2026-10-09T14:15:00-07:00",
+      "steps": [
+        {
+          "label": "Earliest Call / Staging",
+          "time": "5:15 PM",
+          "duration": null,
+          "type": "staging",
+          "description": "Mandatory event call time"
+        },
+        {
+          "label": "Warmup & Registration Buffer",
+          "time": "4:15 PM",
+          "duration": "60m",
+          "type": "warmup",
+          "description": "Warmup and bib pick-up buffer"
+        },
+        {
+          "label": "Hotel Check-In & Settle",
+          "time": "2:45 PM",
+          "duration": "90m",
+          "type": "hotel",
+          "description": "Hotel check-in and luggage drop"
+        },
+        {
+          "label": "Airport Transit",
+          "time": "2:15 PM",
+          "duration": "30m",
+          "type": "transit",
+          "description": "Drive/shuttle from airport to hotel"
+        },
+        {
+          "label": "Latest Flight Landing",
+          "time": "2:15 PM",
+          "duration": null,
+          "type": "flight",
+          "description": "Latest safe touchdown deadline"
+        }
+      ],
+      "formulaSummary": "17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:15 (Landing Deadline)"
+    },
+    "sessions": [
+      {
+        "id": "jt-intensive",
+        "title": "Intensive with Jordan Frisbee & Tatiana Mollmann 'Mastering the Blues'",
+        "time": "Friday 10:00 AM - 1:00 PM",
+        "location": "Regency Ballroom",
+        "status": "included",
+        "decisionBadge": "Special Intensive",
+        "justification": "Direct match for Jordan & Tatiana intensive preference. Note: Flight arrival timeline indicates you may miss this session if arriving on the recommended deadline flight."
+      },
+      {
+        "id": "inter-comp-wkshp",
+        "title": "Intermediate Competitors Workshop",
+        "time": "Friday 2:00 PM - 3:00 PM",
+        "location": "Sandpebble Room ABC",
+        "status": "included",
+        "decisionBadge": "Level Match",
+        "justification": "Matches user's selected Intermediate track."
+      },
+      {
+        "id": "adv-comp-wkshp-fri",
+        "title": "Advanced Competitors Workshop",
+        "time": "Friday 3:00 PM - 4:00 PM",
+        "location": "Sandpebble Room ABC",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered out because user's track is Intermediate/Masters."
+      },
+      {
+        "id": "allstar-comp-wkshp-fri",
+        "title": "All-Star Competitors Workshop",
+        "time": "Friday 4:00 PM - 5:00 PM",
+        "location": "Sandpebble Room ABC",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered out because user's track is Intermediate/Masters."
+      },
+      {
+        "id": "strictly-swing-im-prelims",
+        "title": "Newcomer/Novice, Intermediate, and Masters Strictly Swing - Prelims and Finals",
+        "time": "Friday 6:30 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Direct match for Intermediate/Masters Strictly competition."
+      },
+      {
+        "id": "inter-masters-jj-prelims",
+        "title": "Intermediate and Masters Jack & Jill - Prelims and Semifinals",
+        "time": "Saturday 2:15 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Main competitive division match."
+      },
+      {
+        "id": "adv-allstar-jj-sat",
+        "title": "Advanced and All-Stars Jack & Jill - Prelims and Semifinals",
+        "time": "Saturday 4:00 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered out because user is registered for Intermediate/Masters."
+      },
+      {
+        "id": "inter-jj-finals",
+        "title": "Intermediate Jack & Jill - Finals",
+        "time": "Sunday 2:15 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Intermediate finals scheduling."
+      },
+      {
+        "id": "masters-jj-finals",
+        "title": "Masters Jack & Jill - Finals",
+        "time": "Sunday 3:00 PM",
+        "location": "Grand Peninsula Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Masters finals scheduling."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "theme-1",
+        "day": "Saturday Night",
+        "themeTitle": "Saturday Night Dance - Dress to Impress",
+        "category": "social_theme",
+        "description": "Main Saturday night social and showcase evening. Optional dress up theme.",
+        "recommendedAttire": [
+          "Elegant evening wear",
+          "Dress shirts",
+          "Cocktail dresses",
+          "Sophisticated swing attire"
+        ],
+        "vibe": "Classy & Sparkly"
+      }
+    ],
+    "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:flight-landing-deadline-2026\nDTSTART;TZID=America/Los_Angeles:20261009T141500\nDTEND;TZID=America/Los_Angeles:20261009T141500\nSUMMARY:✈️ Target Flight Landing Deadline\nDESCRIPTION:Latest arrival window to buffer for transit\\, check-in\\, and competition check-in.\nLOCATION:SFO/OAK Airport\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:jt-intensive-2026\nDTSTART;TZID=America/Los_Angeles:20261009T100000\nDTEND;TZID=America/Los_Angeles:20261009T130000\nSUMMARY:Jordan & Tatiana Intensive: Mastering the Blues\nDESCRIPTION:Separate admission intensive focusing on blues dancing mechanics.\nLOCATION:Regency Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:inter-comp-wkshp-2026\nDTSTART;TZID=America/Los_Angeles:20261009T140000\nDTEND;TZID=America/Los_Angeles:20261009T150000\nSUMMARY:Intermediate Competitors Workshop\nDESCRIPTION:Focused technical workshop tailored for Intermediate division dancers.\nLOCATION:Sandpebble Room ABC\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:strictly-im-2026\nDTSTART;TZID=America/Los_Angeles:20261009T183000\nDTEND;TZID=America/Los_Angeles:20261009T200000\nSUMMARY:Intermediate/Masters Strictly Swing (Prelims & Finals)\nDESCRIPTION:Strictly swing competitive division for Intermediate and Masters dancers.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sat-jj-prelims-2026\nDTSTART;TZID=America/Los_Angeles:20261010T141500\nDTEND;TZID=America/Los_Angeles:20261010T153000\nSUMMARY:Intermediate & Masters Jack & Jill - Prelims & Semis\nDESCRIPTION:Competitive Jack & Jill prelims. Ensure you are warmed up and staged 15 mins early.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sat-night-dance-theme-2026\nDTSTART;TZID=America/Los_Angeles:20261010T193000\nDTEND;TZID=America/Los_Angeles:20261010T233000\nSUMMARY:Saturday Night Dance (Theme: Dress to Impress)\nDESCRIPTION:Social dancing, Pro routines, and Showcase classic divisions.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sun-inter-finals-2026\nDTSTART;TZID=America/Los_Angeles:20261011T141500\nDTEND;TZID=America/Los_Angeles:20261011T150000\nSUMMARY:Intermediate Jack & Jill - Finals\nDESCRIPTION:Intermediate Jack & Jill final showdown.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sun-masters-finals-2026\nDTSTART;TZID=America/Los_Angeles:20261011T150000\nDTEND;TZID=America/Los_Angeles:20261011T154500\nSUMMARY:Masters Jack & Jill - Finals\nDESCRIPTION:Masters Jack & Jill final showdown.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR"
+  },
+  "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:flight-landing-deadline-2026\nDTSTART;TZID=America/Los_Angeles:20261009T141500\nDTEND;TZID=America/Los_Angeles:20261009T141500\nSUMMARY:✈️ Target Flight Landing Deadline\nDESCRIPTION:Latest arrival window to buffer for transit\\, check-in\\, and competition check-in.\nLOCATION:SFO/OAK Airport\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:jt-intensive-2026\nDTSTART;TZID=America/Los_Angeles:20261009T100000\nDTEND;TZID=America/Los_Angeles:20261009T130000\nSUMMARY:Jordan & Tatiana Intensive: Mastering the Blues\nDESCRIPTION:Separate admission intensive focusing on blues dancing mechanics.\nLOCATION:Regency Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:inter-comp-wkshp-2026\nDTSTART;TZID=America/Los_Angeles:20261009T140000\nDTEND;TZID=America/Los_Angeles:20261009T150000\nSUMMARY:Intermediate Competitors Workshop\nDESCRIPTION:Focused technical workshop tailored for Intermediate division dancers.\nLOCATION:Sandpebble Room ABC\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:strictly-im-2026\nDTSTART;TZID=America/Los_Angeles:20261009T183000\nDTEND;TZID=America/Los_Angeles:20261009T200000\nSUMMARY:Intermediate/Masters Strictly Swing (Prelims & Finals)\nDESCRIPTION:Strictly swing competitive division for Intermediate and Masters dancers.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sat-jj-prelims-2026\nDTSTART;TZID=America/Los_Angeles:20261010T141500\nDTEND;TZID=America/Los_Angeles:20261010T153000\nSUMMARY:Intermediate & Masters Jack & Jill - Prelims & Semis\nDESCRIPTION:Competitive Jack & Jill prelims. Ensure you are warmed up and staged 15 mins early.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sat-night-dance-theme-2026\nDTSTART;TZID=America/Los_Angeles:20261010T193000\nDTEND;TZID=America/Los_Angeles:20261010T233000\nSUMMARY:Saturday Night Dance (Theme: Dress to Impress)\nDESCRIPTION:Social dancing, Pro routines, and Showcase classic divisions.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sun-inter-finals-2026\nDTSTART;TZID=America/Los_Angeles:20261011T141500\nDTEND;TZID=America/Los_Angeles:20261011T150000\nSUMMARY:Intermediate Jack & Jill - Finals\nDESCRIPTION:Intermediate Jack & Jill final showdown.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:sun-masters-finals-2026\nDTSTART;TZID=America/Los_Angeles:20261011T150000\nDTEND;TZID=America/Los_Angeles:20261011T154500\nSUMMARY:Masters Jack & Jill - Finals\nDESCRIPTION:Masters Jack & Jill final showdown.\nLOCATION:Grand Peninsula Ballroom\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR",
+  "visualScheduleMarkdown": "## My Boogie by the Bay 2026 Weekend Guide\n\n### ✈️ Friday, October 9\n* **10:00 AM - 1:00 PM** | 🎓 *Jordan & Tatiana Intensive* (Regency Ballroom) - *Note: Early arrival required!*\n* **2:15 PM** | ✈️ **Flight Landing Deadline**\n* **2:00 PM - 3:00 PM** | 👟 Intermediate Competitors Workshop (Sandpebble ABC)\n* **6:30 PM** | 🏆 **Intermediate/Masters Strictly Swing (Prelims & Finals)** (Grand Ballroom)\n* **12:00 AM** | 🕺 Late Night Social Dance\n\n### 🕺 Saturday, October 10\n* **11:00 AM** | 👟 Intermediate Competitors Workshop (Sandpebble ABC)\n* **2:15 PM** | 🏆 **Intermediate & Masters J&J (Prelims/Semis)** (Grand Ballroom)\n* **7:30 PM** | ✨ **Saturday Night Dance - Dress to Impress** (Grand Ballroom)\n\n### 🏆 Sunday, October 11\n* **2:15 PM** | 🥇 **Intermediate Jack & Jill - Finals** (Grand Ballroom)\n* **3:00 PM** | 🥇 **Masters Jack & Jill - Finals** (Grand Ballroom)\n* **6:00 PM** | 🎖️ **Awards Ceremony**"
+}

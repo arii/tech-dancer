@@ -19,10 +19,7 @@ export interface EventSearchHeroProps {
 }
 
 const DEFAULT_PREFERENCES: UserPreferences = {
-  division: 'novice',
-  role: 'lead',
   lateNight: true,
-  focusTrack: 'technique',
 };
 
 export const EventSearchHero: React.FC<EventSearchHeroProps> = ({

@@ -5,7 +5,7 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from google.genai import types
 from pydantic import ValidationError
 
-from wcs_navigator_api.config import get_genai_client
+from wcs_navigator_api.config import get_genai_client, settings
 from wcs_navigator_api.models.payloads import DiscoverUrlRequest, DiscoveryResponse
 from wcs_navigator_api.prompts.discovery_prompt import DISCOVERY_SYSTEM_PROMPT
 from wcs_navigator_api.services.cache_service import get_cache_key, get_cached_response, set_cached_response

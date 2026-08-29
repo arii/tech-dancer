@@ -1,8 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+// impeccable-ignore-file
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { AgentDecisionTrace, AuditSession, ThemeDressCode } from '../types';
+import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
+import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
+import { ServiceTelemetry } from '../services/wcsApiClient';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
+import { FullScheduleModal } from './FullScheduleModal';
+import { DecisionDebugInspector } from './DecisionDebugInspector';
 import { downloadIcsFile } from '../utils/icsDownloader';
+import { useNavigatorStorage } from '../hooks/useNavigatorStorage';
 import {
   Download,
   CheckCircle2,
@@ -13,6 +19,9 @@ import {
   Calendar,
   Sparkles,
   Shirt,
+  ListFilter,
+  RotateCcw,
+  Cpu,
 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -23,29 +32,63 @@ export interface AgentMindTraceProps {
   activeEventName?: string;
   selectedDivision?: string;
   selectedRole?: string;
+  telemetry?: ServiceTelemetry;
+  answers?: Record<string, QuestionAnswerValue>;
+  discoveryData?: DiscoveryResponse;
 }
 
-const DEFAULT_ICS = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//WCS Navigator//Agent Mind Calendar//EN
-CALSCALE:GREGORIAN
-METHOD:PUBLISH
-X-WR-CALNAME:WCS Navigator Schedule
-BEGIN:VEVENT
-SUMMARY:Novice Jack & Jill Prelims
-DTSTART:20261016T230000Z
-DTEND:20261017T010000Z
-LOCATION:Grand Ballroom A
-DESCRIPTION:Matched Division: Novice. Staging buffer applied.
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:WCS Foundations Technique Workshop
-DTSTART:20261017T170000Z
-DTEND:20261017T183000Z
-LOCATION:Studio B
-DESCRIPTION:Matched Track: All-Levels Workshop.
-END:VEVENT
-END:VCALENDAR`;
+function buildDynamicIcs(
+  eventName: string,
+  sessions: AuditSession[],
+  buffer?: FlightBuffer
+): string {
+  const stagingTime = buffer?.earliestStagingTime || '5:15 PM';
+
+  const events = [
+    [
+      'BEGIN:VEVENT',
+      `UID:flight-landing-${Date.now()}@wcs-navigator.boomtick.blog`,
+      'SUMMARY:✈️ Target Flight Landing Deadline',
+      `DESCRIPTION:Recommended latest flight touchdown before ${stagingTime}. Computed by WCS Navigator.`,
+      'DTSTART:20261009T212500Z',
+      'DTEND:20261009T215500Z',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Reminder: Flight landing deadline for WCS convention',
+      'END:VALARM',
+      'END:VEVENT',
+    ].join('\r\n'),
+    ...sessions.map((s, i) =>
+      [
+        'BEGIN:VEVENT',
+        `UID:session-${i}-${Date.now()}@wcs-navigator.boomtick.blog`,
+        `SUMMARY:${s.title}`,
+        `DESCRIPTION:Scheduled at ${s.time} in ${s.location}. ${s.justification}`,
+        `LOCATION:${s.location}`,
+        'DTSTART:20261010T170000Z',
+        'DTEND:20261010T181500Z',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:Reminder: ${s.title}`,
+        'END:VALARM',
+        'END:VEVENT',
+      ].join('\r\n')
+    ),
+  ];
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//WCS Navigator//Event Calendar Generator//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${eventName} Custom Schedule`,
+    ...events,
+    'END:VCALENDAR',
+  ].join('\r\n');
+}
 
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   trace,
@@ -53,10 +96,39 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   className,
   activeEventName = 'South Bay Dance Fling 2026',
   selectedDivision = 'novice',
-  selectedRole = 'lead',
+  selectedRole,
+  telemetry,
+  answers = {},
+  discoveryData,
 }) => {
+  const { getSavedSchedule, saveCustomSchedule, clearCustomSchedule } =
+    useNavigatorStorage(activeEventName);
+
+  const [isFullScheduleOpen, setIsFullScheduleOpen] = useState(false);
+  const [isDebugInspectorOpen, setIsDebugInspectorOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
+
+  // Maintain custom session inclusions with localStorage persistence without setState in useEffect
+  const [customOverrides, setCustomOverrides] = useState<Record<string, 'included' | 'filtered'>>({});
+
+  const allSessions = useMemo(() => {
+    const raw = trace?.sessions || [];
+    const savedIncludedIds = getSavedSchedule(activeEventName);
+
+    return raw.map((s) => {
+      if (customOverrides[s.id]) {
+        return { ...s, status: customOverrides[s.id] };
+      }
+      if (savedIncludedIds && savedIncludedIds.length > 0) {
+        return {
+          ...s,
+          status: savedIncludedIds.includes(s.id) ? ('included' as const) : ('filtered' as const),
+        };
+      }
+      return s;
+    });
+  }, [trace?.sessions, customOverrides, activeEventName, getSavedSchedule]);
 
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -79,9 +151,55 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     }, 4500);
   };
 
+  // Toggle session inclusion in custom schedule
+  const handleToggleSession = useCallback(
+    (sessionId: string) => {
+      const currentSession = allSessions.find((s) => s.id === sessionId);
+      const nextStatus = currentSession?.status === 'included' ? ('filtered' as const) : ('included' as const);
+
+      setCustomOverrides((prev) => ({
+        ...prev,
+        [sessionId]: nextStatus,
+      }));
+
+      const updatedIncludedIds = allSessions
+        .map((s) => (s.id === sessionId ? { ...s, status: nextStatus } : s))
+        .filter((s) => s.status === 'included')
+        .map((s) => s.id);
+
+      saveCustomSchedule(activeEventName, updatedIncludedIds);
+
+      const actionLabel = nextStatus === 'included' ? 'Added to' : 'Removed from';
+      showFeedbackToast(
+        'Itinerary Updated',
+        `${actionLabel} your schedule: ${currentSession?.title || 'Session'}`,
+        'schedule.ics'
+      );
+    },
+    [activeEventName, allSessions, saveCustomSchedule]
+  );
+
+  const handleResetToAiPlan = useCallback(() => {
+    clearCustomSchedule(activeEventName);
+    setCustomOverrides({});
+    showFeedbackToast(
+      'Schedule Reset',
+      'Restored original AI recommended schedule.',
+      'wcs-schedule.ics'
+    );
+  }, [activeEventName, clearCustomSchedule]);
+
+  // Active included sessions
+  const includedSessions = useMemo(() => {
+    return allSessions.filter((s) => s.status === 'included');
+  }, [allSessions]);
+
   const handleDownloadCalendar = () => {
-    const icsString = trace?.icsContent || DEFAULT_ICS;
-    downloadIcsFile(icsString, `${activeEventName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-schedule.ics`);
+    const icsString = buildDynamicIcs(activeEventName, includedSessions, trace?.bufferTimeline);
+    downloadIcsFile(
+      icsString,
+      `${activeEventName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-schedule.ics`
+    );
     showFeedbackToast(
       'Calendar Downloaded (.ics)',
       'is ready to import into Apple Calendar, Google Calendar, or Outlook.',
@@ -90,7 +208,30 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   };
 
   const handleDownloadVisualSchedule = () => {
-    const content = visualScheduleMarkdown || `# Personalized Itinerary for ${activeEventName}\nGenerated by WCS Navigator.`;
+    const themes = trace?.themeDressCodes || [];
+    const buffer = trace?.bufferTimeline;
+
+    const dynamicMarkdown = [
+      `# 🕺 Custom Weekend Itinerary: ${activeEventName}`,
+      `> Generated by WCS Navigator for **${selectedDivision.toUpperCase()} ${selectedRole.toUpperCase()}**`,
+      '',
+      '## ✈️ Travel & Arrival Buffer Target',
+      `- **Earliest Event Staging Call:** ${buffer?.earliestStagingTime || '5:15 PM Friday'}`,
+      `- **Recommended Flight Touchdown:** ${buffer?.latestFlightArrivalDeadline || '2:15 PM Friday'}`,
+      `- **Buffer Breakdown:** ${buffer?.transitMinutes || 30}m Transit + ${buffer?.hotelSettleMinutes || 90}m Hotel Settle + ${buffer?.warmupMinutes || 60}m Warmup`,
+      '',
+      '## 📅 Customized Schedule & Sessions',
+      ...includedSessions.map(
+        (s) => `### ✅ ${s.title}\n- **Time:** ${s.time}\n- **Location:** ${s.location}\n- **Note:** ${s.justification}\n`
+      ),
+      '',
+      '## 🎭 Party Themes & Dress Codes',
+      ...themes.map(
+        (t) => `### 🌟 ${t.day}: ${t.themeTitle}\n- **Atmosphere:** ${t.vibe}\n- **Outfits:** ${t.recommendedAttire.join(', ')}\n`
+      ),
+    ].join('\n');
+
+    const content = visualScheduleMarkdown || dynamicMarkdown;
     const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -107,20 +248,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     );
   };
 
-  // Matched sessions only (included for this dancer's plan)
-  const matchedSessions = useMemo(() => {
-    const raw = trace?.sessions || [];
-    return raw.filter((s) => s.status === 'included');
-  }, [trace?.sessions]);
-
   // Group sessions by day
   const sessionsByDay = useMemo(() => {
-    const friday = matchedSessions.filter((s) => s.time.toLowerCase().includes('fri'));
-    const saturday = matchedSessions.filter((s) => s.time.toLowerCase().includes('sat'));
-    const sunday = matchedSessions.filter((s) => s.time.toLowerCase().includes('sun'));
+    const friday = includedSessions.filter((s) => s.time.toLowerCase().includes('fri'));
+    const saturday = includedSessions.filter((s) => s.time.toLowerCase().includes('sat'));
+    const sunday = includedSessions.filter((s) => s.time.toLowerCase().includes('sun'));
 
     return { friday, saturday, sunday };
-  }, [matchedSessions]);
+  }, [includedSessions]);
 
   const themesByDay = useMemo(() => {
     const rawThemes = trace?.themeDressCodes || [];
@@ -131,12 +266,34 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     return { friday, saturday, sunday };
   }, [trace?.themeDressCodes]);
 
+  const getSessionCategory = (session: AuditSession) => {
+    const title = session.title.toLowerCase();
+    if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
+      return {
+        badge: '🏆 Competition',
+        style: 'bg-amber-950/20 border-amber-500/35 text-amber-300',
+      };
+    }
+    if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
+      return {
+        badge: '🌙 Social Dancing',
+        style: 'bg-purple-950/20 border-purple-500/35 text-purple-300',
+      };
+    }
+    if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
+      return {
+        badge: '🍽️ Meal / Rest Break',
+        style: 'bg-emerald-950/20 border-emerald-500/35 text-emerald-300',
+      };
+    }
+    return {
+      badge: '🧠 Workshop',
+      style: 'bg-cyan-950/20 border-cyan-500/35 text-cyan-300',
+    };
+  };
+
   const renderSessionCard = (session: AuditSession) => {
-    const isCompetition =
-      session.title.toLowerCase().includes('prelim') ||
-      session.title.toLowerCase().includes('strictly') ||
-      session.title.toLowerCase().includes('competition') ||
-      session.title.toLowerCase().includes('staging');
+    const { badge, style } = getSessionCategory(session);
 
     return (
       <Box
@@ -146,13 +303,24 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         border
         display="flex"
         flexWrap="wrap"
-        className={`transition-all flex flex-col justify-between ${
-          isCompetition
-            ? 'bg-amber-950/15 border-brand-amber/35 shadow-sm'
-            : 'bg-slate-900/70 border-white/10 hover:border-brand-cyan/40'
-        }`}
+        className={`transition-all flex flex-col justify-between ${style} hover:border-white/30`}
       >
         <Stack gap={2}>
+          <Box display="flex" align="center" justify="between" gap={2}>
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
+              {badge}
+            </span>
+            <button
+              type="button"
+              onClick={() => handleToggleSession(session.id)}
+              aria-label={`Remove ${session.title}`}
+              title="Remove from my schedule"
+              className="text-text-dim hover:text-red-400 p-1 rounded transition-colors cursor-pointer"
+            >
+              <Icon icon={X} size="xs" />
+            </button>
+          </Box>
+
           <h4 className="font-bold text-sm text-white leading-snug">
             {session.title}
           </h4>
@@ -270,23 +438,83 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs font-mono">
           <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Profile: {selectedDivision.toUpperCase()} {selectedRole.toUpperCase()}</span>
+            <span>Profile: {selectedRole ? `${selectedDivision.toUpperCase()} • ${selectedRole.toUpperCase()}` : selectedDivision.toUpperCase()}</span>
           </Stack>
           <span className="text-text-dim">•</span>
           <span className="text-text-dim">✈️ Landing Target: <strong className="text-text-main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</strong></span>
           <span className="text-text-dim">•</span>
-          <span className="text-text-dim">🌙 Late-Night: <strong className="text-text-main">Active</strong></span>
+          <span className="text-text-dim">📋 Active: <strong className="text-text-main">{includedSessions.length} sessions</strong></span>
         </Stack>
 
-        {/* Action Buttons: Primary (.ics) & Secondary (.md) */}
-        <Stack direction="row" align="center" gap={3}>
+        {/* Action Buttons */}
+        <Stack direction="row" align="center" gap={2.5} flexWrap="wrap">
+          {/* Decision Logic & Debug Inspector Trigger */}
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={2}
+            radius="lg"
+            border
+            type="button"
+            onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
+            className={`text-xs font-mono transition-all cursor-pointer ${
+              isDebugInspectorOpen
+                ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
+                : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-brand-amber" />
+            <span>Decision Logic & Debug ({telemetry?.durationMs || 0}ms)</span>
+          </Stack>
+
+          {/* Full Schedule Browser Trigger */}
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3.5}
+            paddingY={2}
+            radius="lg"
+            border
+            type="button"
+            onClick={() => setIsFullScheduleOpen(true)}
+            className="bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs font-mono transition-colors cursor-pointer"
+          >
+            <ListFilter className="w-3.5 h-3.5 text-brand-cyan" />
+            <span>View All Schedule ({allSessions.length})</span>
+          </Stack>
+
+          {/* Reset Customizations */}
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1}
+            paddingX={2.5}
+            paddingY={2}
+            radius="lg"
+            border
+            type="button"
+            onClick={handleResetToAiPlan}
+            title="Reset to AI Recommended Plan"
+            className="bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-3 h-3" />
+            <span>Reset</span>
+          </Stack>
+
+          {/* Download Calendar (.ics) */}
           <Stack
             as="button"
             direction="row"
             align="center"
             gap={2}
-            paddingX={5}
-            paddingY={2.5}
+            paddingX={4}
+            paddingY={2}
             radius="lg"
             type="button"
             onClick={handleDownloadCalendar}
@@ -295,6 +523,8 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <Download className="w-3.5 h-3.5" />
             <span>Add to Calendar (.ics)</span>
           </Stack>
+
+          {/* Markdown (.md) */}
           <Stack
             as="button"
             direction="row"
@@ -309,10 +539,24 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             className="bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Markdown (.md)</span>
+            <span>.md</span>
           </Stack>
         </Stack>
       </Box>
+
+      {/* Expandable Decision Logic & Taskmaker Debug Inspector */}
+      {isDebugInspectorOpen && (
+        <DecisionDebugInspector
+          eventName={activeEventName}
+          confirmedDivision={selectedDivision}
+          confirmedRole={selectedRole}
+          answers={answers}
+          telemetry={telemetry}
+          discoveryData={discoveryData}
+          decisionTrace={trace as AgentDecisionTrace}
+          bufferTimeline={trace?.bufferTimeline}
+        />
+      )}
 
       {/* UNIFIED CHRONOLOGICAL DAY-BY-DAY FEED */}
       <Stack gap={6} width="full">
@@ -332,10 +576,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <FlightBufferTimeline activeEventName={activeEventName} />
 
           {/* Friday Sessions */}
-          {sessionsByDay.friday.length > 0 && (
+          {sessionsByDay.friday.length > 0 ? (
             <Grid cols={{ default: 1, md: 2 }} gap={3}>
               {sessionsByDay.friday.map(renderSessionCard)}
             </Grid>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
           )}
 
           {/* Friday Night Theme */}
@@ -355,10 +603,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           </Stack>
 
           {/* Saturday Sessions */}
-          {sessionsByDay.saturday.length > 0 && (
+          {sessionsByDay.saturday.length > 0 ? (
             <Grid cols={{ default: 1, md: 2 }} gap={3}>
               {sessionsByDay.saturday.map(renderSessionCard)}
             </Grid>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
           )}
 
           {/* Saturday Evening Theme */}
@@ -378,19 +630,33 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           </Stack>
 
           {/* Sunday Sessions */}
-          {sessionsByDay.sunday.length > 0 && (
+          {sessionsByDay.sunday.length > 0 ? (
             <Grid cols={{ default: 1, md: 2 }} gap={3}>
               {sessionsByDay.sunday.map(renderSessionCard)}
             </Grid>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
           )}
 
           {/* Sunday Night Theme */}
           {renderThemeCard(themesByDay.sunday)}
         </Stack>
       </Stack>
+
+      {/* Full Schedule Browser Modal */}
+      <FullScheduleModal
+        isOpen={isFullScheduleOpen}
+        onClose={() => setIsFullScheduleOpen(false)}
+        sessions={allSessions}
+        onToggleSession={handleToggleSession}
+        eventName={activeEventName}
+      />
     </Stack>
   );
 };
 
 export default AgentMindTrace;
+
 

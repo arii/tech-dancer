@@ -48,26 +48,53 @@ const EVENT_LOGISTICS_MAP: Record<string, EventLogistics> = {
     foodAndHydration: 'Multiple dining options on Hollywood Way; hotel market stocked with dancer hydration essentials.',
     travelBuffer: 'Book flights into BUR for the fastest gate-to-ballroom transition in the WCS circuit.',
   },
+  'the-after-party': {
+    venueName: 'Holiday Inn Orange County Airport (Santa Ana, CA)',
+    primaryAirport: 'SNA (John Wayne Airport) — 6 mins away',
+    transitTip: 'Complimentary hotel shuttle to/from John Wayne Airport (SNA).',
+    baggageAndCheckin: 'Bell desk baggage check-in and early dancer check-in suites.',
+    foodAndHydration: 'On-site hotel lounge & dining; local cafes nearby on Dyer Road.',
+    travelBuffer: 'Target SNA touchdown by 3:15 PM Friday for evening peer jam and welcome mixer.',
+  },
+  'aloha-open': {
+    venueName: 'Wailea Beach Resort, Marriott Maui & Maui Coast Hotel (Kihei / Wailea, Maui, HI)',
+    primaryAirport: 'OGG (Kahului Airport, Maui) — 25-30 mins away',
+    transitTip: 'Take a rideshare, shuttle, or rental car via Route 311/31 south towards Kihei/Wailea.',
+    baggageAndCheckin: 'Complimentary bell desk luggage holding available at Wailea Beach Resort before standard 4:00 PM check-in.',
+    foodAndHydration: 'Multiple oceanfront restaurants, resort dining, and Kihei food trucks nearby.',
+    travelBuffer: 'Land at OGG by 1:30 PM Friday to allow for 30m island transit and settling in before 5:00 PM Hawaiian Blessing.',
+  },
 };
 
 const DEFAULT_LOGISTICS: EventLogistics = {
   venueName: 'Host Hotel & Convention Center',
-  primaryAirport: 'Nearest Major Airport — 10-20 mins away',
-  transitTip: 'Check hotel shuttle availability or schedule a direct rideshare to the main hotel lobby entrance.',
-  baggageAndCheckin: 'Early luggage holding available at bell desk if arriving before room check-in time.',
+  primaryAirport: 'Nearest Major Regional Airport — 15-25 mins away',
+  transitTip: 'Check host hotel airport shuttle schedule or arrange direct rideshare to the main registration lobby.',
+  baggageAndCheckin: 'Early luggage holding available at bell desk if arriving prior to standard afternoon check-in.',
   foodAndHydration: 'On-site convenience market and water refill stations located near the main ballroom foyer.',
-  travelBuffer: 'Target landing 2.5 to 3 hours before your first scheduled competition call or workshop.',
+  travelBuffer: 'Target landing 2.5 to 3 hours before your earliest scheduled competition marshalling call or workshop.',
 };
 
 export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
   activeEventName = 'South Bay Dance Fling 2026',
   className,
 }) => {
-  const eventKey = Object.keys(EVENT_LOGISTICS_MAP).find((k) =>
-    activeEventName.toLowerCase().replace(/[^a-z0-9]+/g, '-').includes(k)
-  ) || 'south-bay-dance-fling';
+  const norm = activeEventName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-  const logistics = EVENT_LOGISTICS_MAP[eventKey] || DEFAULT_LOGISTICS;
+  let logistics = DEFAULT_LOGISTICS;
+  if (norm.includes('aloha')) {
+    logistics = EVENT_LOGISTICS_MAP['aloha-open'];
+  } else if (norm.includes('boogie')) {
+    logistics = EVENT_LOGISTICS_MAP['boogie-by-the-bay'];
+  } else if (norm.includes('south-bay') || norm.includes('fling')) {
+    logistics = EVENT_LOGISTICS_MAP['south-bay-dance-fling'];
+  } else if (norm.includes('halloween') || norm.includes('swingthing')) {
+    logistics = EVENT_LOGISTICS_MAP['halloween-swingthing'];
+  } else if (norm.includes('us-open') || norm.includes('usopen') || (norm.includes('open') && !norm.includes('aloha'))) {
+    logistics = EVENT_LOGISTICS_MAP['the-open'];
+  } else if (norm.includes('after-party') || norm.includes('afterparty')) {
+    logistics = EVENT_LOGISTICS_MAP['the-after-party'];
+  }
 
   return (
     <Stack gap={3} width="full" className={className}>
