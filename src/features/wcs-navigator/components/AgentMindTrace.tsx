@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
 import { ServiceTelemetry } from '../services/wcsApiClient';
@@ -292,50 +292,60 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     };
   };
 
+  const toTitleCase = (str: string) =>
+    str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+
   const renderSessionCard = (session: AuditSession) => {
     const { badge, style } = getSessionCategory(session);
 
     return (
       <Box
         key={session.id}
-        padding={4}
+        padding={3.5}
         radius="xl"
         border
-        display="flex"
-        flexWrap="wrap"
-        className={`transition-all flex flex-col justify-between ${style} hover:border-white/30`}
+        className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3`}
       >
-        <Stack gap={2}>
-          <Box display="flex" align="center" justify="between" gap={2}>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
-              {badge}
-            </span>
-            <button
-              type="button"
-              onClick={() => handleToggleSession(session.id)}
-              aria-label={`Remove ${session.title}`}
-              title="Remove from my schedule"
-              className="text-text-dim hover:text-red-400 p-1 rounded transition-colors cursor-pointer"
-            >
-              <Icon icon={X} size="xs" />
-            </button>
-          </Box>
+        {/* Dedicated Left Time & Category Column */}
+        <div className="sm:w-44 shrink-0 flex sm:flex-col items-center sm:items-start justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r border-white/10 pb-2 sm:pb-0 sm:pr-4">
+          <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+            <span>{session.time}</span>
+          </span>
+          <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/10 w-fit">
+            {badge}
+          </span>
+        </div>
 
-          <h4 className="font-bold text-sm text-white leading-snug">
+        {/* Center: Title & High-Contrast Details */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+          <h4 className="font-bold text-sm sm:text-base text-white leading-snug">
             {session.title}
           </h4>
+          <div className="flex items-center gap-2 text-xs text-slate-300">
+            <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
+            <span className="font-medium text-slate-200">{session.location}</span>
+            {session.justification && (
+              <span className="hidden md:inline text-slate-400 border-l border-white/10 pl-2 truncate">
+                {session.justification}
+              </span>
+            )}
+          </div>
+        </div>
 
-          <Stack direction="row" align="center" gap={4} paddingTop={0.5} className="text-xs font-mono text-text-dim">
-            <Stack direction="row" align="center" gap={1.5}>
-              <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-              <span>{session.time}</span>
-            </Stack>
-            <Stack direction="row" align="center" gap={1.5}>
-              <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
-              <span>{session.location}</span>
-            </Stack>
-          </Stack>
-        </Stack>
+        {/* Right: Quick Remove Action Button */}
+        <div className="shrink-0 flex items-center justify-end border-t sm:border-t-0 border-white/10 pt-2 sm:pt-0">
+          <button
+            type="button"
+            onClick={() => handleToggleSession(session.id)}
+            aria-label={`Remove ${session.title}`}
+            title="Remove from my schedule"
+            className="flex items-center gap-1 text-xs text-text-dim hover:text-red-400 px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-line/40"
+          >
+            <Icon icon={X} size="xs" />
+            <span className="sm:hidden md:inline">Remove</span>
+          </button>
+        </div>
       </Box>
     );
   };
@@ -346,38 +356,32 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     return (
       <Box
         display="flex"
-        flexWrap="wrap"
-        align="center"
-        justify="between"
-        gap={2}
-        padding={3}
+        flex="col"
+        align="start"
+        gap={2.5}
+        padding={3.5}
         radius="xl"
         marginY={1}
-        className="bg-surface-alt/60 border border-white/10 text-xs"
+        width="full"
+        className="bg-surface-alt/70 border border-white/10 text-xs"
       >
-        <Stack direction="row" align="center" gap={2}>
-          <Shirt className="w-3.5 h-3.5 text-text-dim shrink-0" />
-          <span className="font-bold text-xs text-white font-mono">
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap">
+          <Shirt className="w-4 h-4 text-brand-cyan shrink-0" />
+          <span className="font-semibold text-xs sm:text-sm text-white">
             {theme.day} Theme: {theme.themeTitle}
           </span>
-          <Text as="span" variant="mono" size="xs" color="dim">
+          <Text as="span" size="xs" color="dim">
             ({theme.vibe})
           </Text>
         </Stack>
         <Box display="flex" wrap gap={1.5} align="center">
           {theme.recommendedAttire.map((attire, i) => (
-            <Text
-              as="span"
+            <span
               key={i}
-              variant="mono"
-              size="xs"
-              color="dim"
-              paddingX={2}
-              paddingY={0.5}
-              className="rounded-full bg-white/[0.04] border border-white/10"
+              className="text-xs text-slate-200 font-medium px-3 py-1 rounded-full bg-surface border border-line/60 shadow-sm"
             >
-              {attire}
-            </Text>
+              {toTitleCase(attire)}
+            </span>
           ))}
         </Box>
       </Box>
@@ -435,10 +439,10 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         border
         className="bg-surface-alt/80 border-line/70 backdrop-blur-md"
       >
-        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs font-mono">
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs">
           <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Profile: {selectedRole ? `${selectedDivision.toUpperCase()} • ${selectedRole.toUpperCase()}` : selectedDivision.toUpperCase()}</span>
+            <span>Profile: {selectedRole ? `${toTitleCase(selectedDivision)} • ${toTitleCase(selectedRole)}` : toTitleCase(selectedDivision)}</span>
           </Stack>
           <span className="text-text-dim">•</span>
           <span className="text-text-dim">✈️ Landing Target: <strong className="text-text-main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</strong></span>
@@ -454,13 +458,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             direction="row"
             align="center"
             gap={1.5}
-            paddingX={3}
-            paddingY={2}
+            paddingX={3.5}
+            paddingY={3}
+            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
-            className={`text-xs font-mono transition-all cursor-pointer ${
+            className={`text-xs transition-all cursor-pointer ${
               isDebugInspectorOpen
                 ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
                 : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
@@ -477,12 +482,13 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1.5}
             paddingX={3.5}
-            paddingY={2}
+            paddingY={3}
+            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={() => setIsFullScheduleOpen(true)}
-            className="bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs font-mono transition-colors cursor-pointer"
+            className="bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs transition-colors cursor-pointer"
           >
             <ListFilter className="w-3.5 h-3.5 text-brand-cyan" />
             <span>View All Schedule ({allSessions.length})</span>
@@ -495,13 +501,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1}
             paddingX={2.5}
-            paddingY={2}
+            paddingY={3}
+            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={handleResetToAiPlan}
             title="Reset to AI Recommended Plan"
-            className="bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
+            className="bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3 h-3" />
             <span>Reset</span>
@@ -514,11 +521,12 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={2}
             paddingX={4}
-            paddingY={2}
+            paddingY={3.5}
+            minHeight={11}
             radius="lg"
             type="button"
             onClick={handleDownloadCalendar}
-            className="bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs font-mono shadow-glow hover:opacity-90 transition-all cursor-pointer"
+            className="bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs shadow-glow hover:opacity-90 transition-all cursor-pointer min-h-[44px]"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Add to Calendar (.ics)</span>
@@ -531,12 +539,13 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1.5}
             paddingX={3}
-            paddingY={2}
+            paddingY={3}
+            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={handleDownloadVisualSchedule}
-            className="bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer"
+            className="bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs transition-colors cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>.md</span>
@@ -569,7 +578,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
                 Friday — Arrival, Warmup &amp; Prelims
               </h3>
             </Stack>
-            <span className="text-xs font-mono text-text-dim">Day 1</span>
+            <span className="text-xs text-text-dim">Day 1</span>
           </Stack>
 
           {/* Event-Based Local Transit & Logistics */}
@@ -577,9 +586,9 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
           {/* Friday Sessions */}
           {sessionsByDay.friday.length > 0 ? (
-            <Grid cols={{ default: 1, md: 2 }} gap={3}>
+            <Stack gap={2.5} width="full">
               {sessionsByDay.friday.map(renderSessionCard)}
-            </Grid>
+            </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
@@ -599,14 +608,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
                 Saturday — Daytime Workshops &amp; Champions Gala
               </h3>
             </Stack>
-            <span className="text-xs font-mono text-text-dim">Day 2</span>
+            <span className="text-xs text-text-dim">Day 2</span>
           </Stack>
 
           {/* Saturday Sessions */}
           {sessionsByDay.saturday.length > 0 ? (
-            <Grid cols={{ default: 1, md: 2 }} gap={3}>
+            <Stack gap={2.5} width="full">
               {sessionsByDay.saturday.map(renderSessionCard)}
-            </Grid>
+            </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
@@ -626,14 +635,14 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
                 Sunday — Intensive Masterclasses &amp; Survivor Social
               </h3>
             </Stack>
-            <span className="text-xs font-mono text-text-dim">Day 3</span>
+            <span className="text-xs text-text-dim">Day 3</span>
           </Stack>
 
           {/* Sunday Sessions */}
           {sessionsByDay.sunday.length > 0 ? (
-            <Grid cols={{ default: 1, md: 2 }} gap={3}>
+            <Stack gap={2.5} width="full">
               {sessionsByDay.sunday.map(renderSessionCard)}
-            </Grid>
+            </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>

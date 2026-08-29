@@ -49,7 +49,7 @@ describe('DecisionDebugInspector Suite', () => {
     method: 'POST',
     timestamp: '2026-08-28T19:15:00.000Z',
     durationMs: 342,
-    engine: 'FastAPI / Gemini-2.5-Pro Stage 2 Optimization',
+    engine: 'FastAPI / Gemini-3.5-Flash Stage 2 Optimization',
     httpStatus: 200,
     requestPayload: { workshop_level: 'intermediate' },
     responsePayload: { status: 'success' },
@@ -104,7 +104,7 @@ describe('DecisionDebugInspector Suite', () => {
     fireEvent.click(telemetryTabBtn);
 
     expect(screen.getByText('342 ms')).toBeDefined();
-    expect(screen.getByText('FastAPI / Gemini-2.5-Pro Stage 2 Optimization')).toBeDefined();
+    expect(screen.getByText('FastAPI / Gemini-3.5-Flash Stage 2 Optimization')).toBeDefined();
     expect(screen.getByText('HTTP 200')).toBeDefined();
   });
 

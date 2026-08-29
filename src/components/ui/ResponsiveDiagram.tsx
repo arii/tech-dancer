@@ -76,7 +76,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     setIsExpanded((prev) => {
       const next = !prev;
       if (next) {
-        setZoomScale(isMobile ? 2.0 : 1.2);
+        setZoomScale(isMobile ? 1.5 : 1.25);
       }
       return next;
     });
@@ -187,7 +187,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               </Button>
               {/* Reset Zoom */}
               <Button
-                onClick={() => setZoomScale(isMobile ? 2.0 : 1.2)}
+                onClick={() => setZoomScale(isMobile ? 1.5 : 1.25)}
                 aria-label="Reset zoom"
                 title="Reset Zoom"
                 variant="secondary"
@@ -226,15 +226,15 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             display="flex"
             align="center"
             justify="center"
-            className="select-none cursor-zoom-out"
+            className="select-none cursor-zoom-out w-full h-full"
             onClick={handleOverlayClick}
           >
             <Box
-              className="transition-all duration-150 cursor-default max-w-full max-h-full"
+              className="transition-transform duration-150 cursor-default p-4 my-auto shrink-0"
               marginX="auto"
               style={{ // impeccable-ignore - Dynamic zoom scaling
-                width: `${100 * zoomScale}%`,
-                maxWidth: `${1400 * zoomScale}px`,
+                transform: `scale(${zoomScale})`,
+                transformOrigin: 'center center',
               }}
               onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
             >
@@ -242,9 +242,10 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                width="full"
-                height="auto"
-                marginX="auto"
+                className="max-w-none h-auto mx-auto shadow-2xl rounded-lg bg-surface/80 p-2"
+                style={{
+                  width: `${isMobile ? 340 : 850}px`,
+                }}
               />
             </Box>
           </Box>

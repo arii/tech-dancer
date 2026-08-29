@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { AuditSession } from '../types';
 import { X, Clock, MapPin, Search, Check, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -167,7 +167,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
               </Text>
             </Box>
           ) : (
-            <Grid cols={{ default: 1, md: 2 }} gap={3}>
+            <Stack gap={2.5} width="full">
               {filteredSessions.map((session) => {
                 const isIncluded = session.status === 'included';
                 const { badge, style } = getCategoryTheme(session);
@@ -175,16 +175,21 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                 return (
                   <Box
                     key={session.id}
-                    padding={4}
+                    padding={3.5}
                     radius="xl"
                     border
-                    className={`flex flex-col justify-between transition-all ${style} ${
-                      isIncluded ? 'ring-1 ring-white/20' : 'opacity-80 hover:opacity-100'
-                    }`}
+                    className={`transition-all ${style} ${
+                      isIncluded ? 'ring-1 ring-white/20' : 'opacity-75 hover:opacity-100'
+                    } flex flex-col sm:flex-row sm:items-center justify-between gap-3`}
                   >
-                    <Stack gap={2}>
-                      <Box display="flex" align="center" justify="between" gap={2}>
-                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
+                    {/* Left: Time & Badge Column */}
+                    <div className="sm:w-44 shrink-0 flex sm:flex-col items-center sm:items-start justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r border-white/10 pb-2 sm:pb-0 sm:pr-4">
+                      <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                        <span>{session.time}</span>
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/10">
                           {badge}
                         </span>
                         <span
@@ -196,32 +201,29 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                         >
                           {isIncluded ? '✓ In Itinerary' : 'Excluded'}
                         </span>
-                      </Box>
+                      </div>
+                    </div>
 
-                      <h4 className="font-bold text-sm text-white leading-snug">
+                    {/* Center: Title & Location */}
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+                      <h4 className="font-bold text-sm sm:text-base text-white leading-snug">
                         {session.title}
                       </h4>
+                      <div className="flex items-center gap-2 text-xs text-slate-300">
+                        <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
+                        <span className="font-medium text-slate-200">{session.location}</span>
+                      </div>
+                    </div>
 
-                      <Stack direction="row" align="center" gap={3} className="text-xs font-mono text-text-dim">
-                        <Stack direction="row" align="center" gap={1}>
-                          <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                          <span>{session.time}</span>
-                        </Stack>
-                        <Stack direction="row" align="center" gap={1}>
-                          <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
-                          <span>{session.location}</span>
-                        </Stack>
-                      </Stack>
-                    </Stack>
-
-                    <Box marginTop={3} paddingTop={2} border="t" borderColor="line" display="flex" justify="end">
+                    {/* Right: Quieter Modal Action Button */}
+                    <div className="shrink-0 flex items-center justify-end border-t sm:border-t-0 border-white/10 pt-2 sm:pt-0">
                       <button
                         type="button"
                         onClick={() => onToggleSession(session.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-colors cursor-pointer ${
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                           isIncluded
-                            ? 'bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-500/30'
-                            : 'bg-brand-cyan/20 hover:bg-brand-cyan/30 text-brand-cyan border border-brand-cyan/40'
+                            ? 'bg-surface-alt/70 hover:bg-surface text-text-dim hover:text-red-400 border border-line/60'
+                            : 'bg-brand-cyan/15 hover:bg-brand-cyan/25 text-brand-cyan border border-brand-cyan/30'
                         }`}
                       >
                         {isIncluded ? (
@@ -236,11 +238,11 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                           </>
                         )}
                       </button>
-                    </Box>
+                    </div>
                   </Box>
                 );
               })}
-            </Grid>
+            </Stack>
           )}
         </Box>
 

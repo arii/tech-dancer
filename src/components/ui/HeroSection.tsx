@@ -92,17 +92,6 @@ export function HeroSection() {
           </Text>
         </Stack>
 
-        {/* Gradient Accent Line below headline */}
-        <Box
-          width={24}
-          height={1.5}
-          marginTop={2}
-          radius="full"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-line-anim"
-        />
-
         {/* Tagline with Vertical Accent Bar */}
         <Stack
           direction="row"

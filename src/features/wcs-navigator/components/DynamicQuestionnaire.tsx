@@ -1,8 +1,8 @@
 // impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
-import { ArrowLeft, FastForward, SkipForward } from 'lucide-react';
 import { analyzeEventFootprint } from '../utils/questionGenerator';
 
 export interface DynamicQuestionnaireProps {
@@ -82,38 +82,23 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
       <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5}>
         <Box display="flex" align="center" gap={2}>
           {currentStep > 0 && (
-            <Stack
-              as="button"
-              direction="row"
-              align="center"
-              gap={1}
+            <button
               type="button"
               onClick={handleBack}
-              marginRight={2}
-              className="text-xs font-mono text-text-dim hover:text-white cursor-pointer transition-colors"
+              className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors cursor-pointer mr-2"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
-            </Stack>
+            </button>
           )}
-          <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
+          <span className="text-xs text-text-dim">
             Step {currentStep + 1} of {totalSteps}
-          </Text>
+          </span>
         </Box>
 
-        <Stack direction="row" align="center" gap={3}>
-          <button
-            type="button"
-            onClick={handleSkipQuestion}
-            className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
-          >
-            Skip this question (Next Step →)
-          </button>
-          <span className="text-text-dim/40">•</span>
-          <Text variant="mono" size="xs" color="dim">
-            {progressPercent}%
-          </Text>
-        </Stack>
+        <span className="text-xs text-text-dim font-medium">
+          {progressPercent}%
+        </span>
       </Box>
 
       {/* Clean Progress Line */}
@@ -139,9 +124,9 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           {activeQuestion.question}
         </Text>
         {activeQuestion.subtitle && (
-          <Text variant="mono" size="xs" color="dim" marginTop={1}>
+          <p className="text-xs sm:text-sm text-text-dim leading-relaxed mt-1">
             {activeQuestion.subtitle}
-          </Text>
+          </p>
         )}
       </Stack>
 
@@ -180,9 +165,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                     {opt.desc}
                   </Box>
                 </Box>
-                <span className="text-text-dim/60 group-hover:text-brand-cyan text-base transition-all transform translate-x-0 group-hover:translate-x-1 duration-150 shrink-0">
-                  →
-                </span>
+                <ChevronRight className="w-4 h-4 text-text-dim/60 group-hover:text-brand-cyan transition-all transform group-hover:translate-x-0.5 duration-150 shrink-0" />
               </Stack>
             );
           })}
@@ -236,24 +219,24 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         marginTop={6}
         border="t"
         borderColor="line"
-        className="border-line/40 text-xs font-mono"
+        className="border-line/40 text-xs"
       >
         <button
           type="button"
           onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/60"
         >
-          <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip this question (Next Step →)</span>
+          <span>Next / Skip</span>
+          <ChevronRight className="w-3.5 h-3.5" />
         </button>
 
         <button
           type="button"
           onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
+          className="flex items-center gap-1.5 text-text-main hover:text-white transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-surface-alt hover:bg-surface border border-line/60 font-medium"
         >
-          <FastForward className="w-3.5 h-3.5" />
-          <span>⚡ Skip All &amp; Generate Itinerary</span>
+          <FastForward className="w-3.5 h-3.5 text-text-dim" />
+          <span>Skip All &amp; Generate Itinerary</span>
         </button>
       </Box>
     </Box>

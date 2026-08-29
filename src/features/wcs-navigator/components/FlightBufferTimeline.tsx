@@ -121,7 +121,7 @@ export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
                 <Navigation className="w-4 h-4 text-brand-cyan" />
               </Box>
               <Stack gap={1}>
-                <span className="font-bold text-white font-mono">
+                <span className="font-semibold text-white">
                   {logistics.primaryAirport}
                 </span>
                 <p className="text-text-dim leading-relaxed">
@@ -136,7 +136,7 @@ export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
                 <Luggage className="w-4 h-4 text-brand-cyan" />
               </Box>
               <Stack gap={1}>
-                <span className="font-bold text-white font-mono">
+                <span className="font-semibold text-white">
                   Arrival, Luggage &amp; Ballroom Access
                 </span>
                 <p className="text-text-dim leading-relaxed">
@@ -149,7 +149,7 @@ export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
           {/* Bottom Helpful Dancer Tips */}
           <Stack direction="row" align="center" gap={2} paddingTop={1} className="border-t border-line/20 text-xs text-text-dim">
             <Coffee className="w-3.5 h-3.5 text-text-dim shrink-0" />
-            <span><strong className="text-white font-mono">Pro Tip:</strong> {logistics.travelBuffer}</span>
+            <span><strong className="text-white font-semibold">Pro Tip:</strong> {logistics.travelBuffer}</span>
           </Stack>
         </Stack>
       </Box>

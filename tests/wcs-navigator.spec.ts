@@ -25,19 +25,17 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
   });
 
-  test('Step 1.5: Custom Schedule PDF/URL Ingestion Drawer Toggle', async ({ page }) => {
-    const uploadToggleBtn = page.getByRole('button', { name: /Or upload custom schedule PDF \/ URL/i });
+  test('Step 1.5: Custom Schedule PDF Ingestion Drawer Toggle & URL Search Ingestion', async ({ page }) => {
+    const uploadToggleBtn = page.getByRole('button', { name: /Or upload custom schedule PDF/i });
     await expect(uploadToggleBtn).toBeVisible();
     await uploadToggleBtn.click();
 
     await expect(page.getByText(/Drop Event Schedule PDF here/i)).toBeVisible();
-    await expect(page.getByPlaceholder('https://event.com/schedule.pdf')).toBeVisible();
 
-    // Test URL Ingestion
-    const urlInput = page.getByPlaceholder('https://event.com/schedule.pdf');
-    await urlInput.fill('https://boogiebythebay.org/schedule.pdf');
-    const analyzeBtn = page.getByRole('button', { name: /Fetch & Ingest URL/i });
-    await analyzeBtn.click();
+    // Test URL Ingestion via Search Box Omnibox
+    const searchInput = page.getByRole('combobox', { name: /Search convention or paste PDF URL/i });
+    await searchInput.fill('https://boogiebythebay.org/schedule.pdf');
+    await searchInput.press('Enter');
 
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
   });
