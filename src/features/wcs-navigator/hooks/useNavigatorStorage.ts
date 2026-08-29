@@ -25,7 +25,7 @@ function safeGetItem(key: string): string | null {
       return window.localStorage.getItem(key);
     }
   } catch (err) {
-    console.warn(`[useNavigatorStorage] Failed to read ${key} from localStorage:`, err);
+    console.warn('[useNavigatorStorage] Failed to read from localStorage key:', key, err);
   }
   return null;
 }
@@ -36,7 +36,7 @@ function safeSetItem(key: string, value: string): void {
       window.localStorage.setItem(key, value);
     }
   } catch (err) {
-    console.warn(`[useNavigatorStorage] Failed to save ${key} to localStorage:`, err);
+    console.warn('[useNavigatorStorage] Failed to save to localStorage key:', key, err);
   }
 }
 
@@ -46,7 +46,7 @@ function safeRemoveItem(key: string): void {
       window.localStorage.removeItem(key);
     }
   } catch (err) {
-    console.warn(`[useNavigatorStorage] Failed to remove ${key} from localStorage:`, err);
+    console.warn('[useNavigatorStorage] Failed to remove from localStorage key:', key, err);
   }
 }
 
