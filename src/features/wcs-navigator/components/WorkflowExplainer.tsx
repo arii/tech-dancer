@@ -34,10 +34,10 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
             direction="row"
             align="center"
             gap={1.5}
-            paddingY={1}
+            paddingX={2.5}
             aria-label="Hide Details"
             onClick={onClose}
-            className="text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
+            className="min-h-11 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0 rounded-lg hover:bg-surface-alt border border-line/40"
           >
             <span>Hide Details</span>
             <span>✕</span>
@@ -118,21 +118,21 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
           </Stack>
         </Grid>
 
-        {/* Standards & Badges Footer with Generous Spacing */}
-        <Box display="flex" wrap align="center" justify="center" gap={8} paddingTop={4} marginTop={2} className="border-t border-line/30 text-text-dim text-xs">
-          <Stack direction="row" align="center" gap={2}>
+        {/* Standards & Badges Footer with Generous Mobile Spacing */}
+        <Box display="flex" wrap align="center" justify="center" gap={4} paddingTop={4} marginTop={2} className="border-t border-line/30 text-text-dim text-xs min-w-0">
+          <Stack direction="row" align="center" gap={2} className="shrink-0">
             <Icon icon={ShieldCheck} size="xs" color="accent" />
             <span>Private &amp; Secure</span>
           </Stack>
-          <Stack direction="row" align="center" gap={2}>
+          <Stack direction="row" align="center" gap={2} className="shrink-0">
             <Icon icon={Sparkles} size="xs" color="accent" />
             <span>Personalized Recommendations</span>
           </Stack>
-          <Stack direction="row" align="center" gap={2}>
+          <Stack direction="row" align="center" gap={2} className="shrink-0">
             <Icon icon={Cpu} size="xs" color="accent" />
             <span>Instant Calendar Download</span>
           </Stack>
-          <Stack direction="row" align="center" gap={2} className="hover:text-brand-cyan transition-colors">
+          <Stack direction="row" align="center" gap={2} className="hover:text-brand-cyan transition-colors shrink-0">
             <Icon icon={Cpu} size="xs" color="accent" />
             <NavLink to="/blog/2026-08-28-wcs-navigator-architecture" className="underline underline-offset-2">
               Architecture Deep Dive

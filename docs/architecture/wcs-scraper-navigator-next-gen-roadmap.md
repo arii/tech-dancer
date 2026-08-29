@@ -2,7 +2,7 @@
 
 **Status:** Architecture Blueprint & Next-Phase Execution Plan  
 **Target Milestone:** WCS Suite 2.0 / DevAI Live Experiments Integration  
-**Dependencies:** Consolidated Epic PR #4383, Gemini 3.5 / 2.5 Flash GenAI SDK, Google Cloud Run
+**Dependencies:** Consolidated Epic PR #4383, Gemini 3.5 Flash GenAI SDK, Google Cloud Run
 
 ---
 

@@ -1,24 +1,19 @@
-// impeccable-ignore-file
-import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { ActionButton } from '@/components/ui/ActionButton';
+import { useState, useRef, DragEvent, ChangeEvent } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Upload, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
 
 interface DropzoneUploadProps {
   onIngestPdf: (file: File) => void;
-  onIngestUrl: (url: string) => void;
+  onIngestUrl?: (url: string) => void;
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
 export const DropzoneUpload = ({
   onIngestPdf,
-  onIngestUrl
 }: DropzoneUploadProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [urlInput, setUrlInput] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -28,17 +23,17 @@ export const DropzoneUpload = ({
     setSuccessMsg(null);
 
     if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
-      setErrorMsg('Invalid file type. Please upload a PDF schedule file (.pdf).');
+      setErrorMsg('Please upload a PDF schedule file (.pdf).');
       return;
     }
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
-      setErrorMsg('File size exceeds maximum limit of 10MB.');
+      setErrorMsg('File size exceeds 10MB limit.');
       return;
     }
 
     setPdfFile(file);
-    setSuccessMsg(`Loaded schedule PDF: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+    setSuccessMsg(`Loaded ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
     onIngestPdf(file);
   };
 
@@ -66,29 +61,6 @@ export const DropzoneUpload = ({
     }
   };
 
-  const handleUrlSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    if (!urlInput.trim()) {
-      setErrorMsg('Please enter a valid schedule URL.');
-      return;
-    }
-
-    try {
-      const parsedUrl = new URL(urlInput.trim());
-      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
-        setErrorMsg('URL must start with http:// or https://');
-        return;
-      }
-      setSuccessMsg(`Submitted schedule URL: ${parsedUrl.toString()}`);
-      onIngestUrl(parsedUrl.toString());
-    } catch {
-      setErrorMsg('Invalid URL format. Please enter a full URL (e.g. https://example.com/schedule.pdf).');
-    }
-  };
-
   const clearFile = () => {
     setPdfFile(null);
     setSuccessMsg(null);
@@ -97,134 +69,95 @@ export const DropzoneUpload = ({
   };
 
   return (
-    <Stack gap={4} width="full">
-      <Stack gap={1}>
-        <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-          Custom Ingestion (PDF / Schedule URL)
-        </Text>
-        <Text size="sm" color="dim">
-          Upload an official event schedule PDF or paste a schedule URL to parse custom weekend tracks.
-        </Text>
-      </Stack>
+    <Stack gap={3} width="full">
+      {/* PDF Drag & Drop Zone */}
+      <Box
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+        padding={6}
+        surface="surface"
+        radius="xl"
+        border
+        display="flex"
+        align="center"
+        justify="center"
+        cursor="pointer"
+        className={`border-dashed transition-all duration-200 text-center bg-surface-alt/80 ${
+          isDragOver ? 'border-brand-cyan bg-brand-cyan/10' : 'border-line/80 hover:border-brand-cyan/60 hover:bg-surface'
+        }`}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf,application/pdf"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
 
-      <Grid cols={{ base: 1, md: 2 }} gap={4} width="full">
-        {/* PDF Drag & Drop Zone */}
-        <Box
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          padding={6}
-          surface="surface"
-          radius="lg"
-          border
-          display="flex"
-          align="center"
-          justify="center"
-          cursor="pointer"
-          className={`border-dashed transition-colors duration-200 text-center ${
-            isDragOver ? 'border-brand-cyan bg-brand-cyan/10' : 'border-line hover:border-brand-cyan/50'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,application/pdf"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-
-          {pdfFile ? (
-            <Stack gap={2} align="center">
-              <Icon icon={FileText} size="lg" color="accent" />
+        {pdfFile ? (
+          <Stack gap={2} align="center">
+            <FileText className="w-8 h-8 text-brand-cyan" />
+            <Text weight="font-bold" size="sm" color="main">
+              {pdfFile.name}
+            </Text>
+            <Text size="xs" color="dim">
+              {(pdfFile.size / 1024).toFixed(1)} KB
+            </Text>
+            <Stack
+              direction="row"
+              align="center"
+              gap={1}
+              paddingX={3}
+              paddingY={1}
+              radius="lg"
+              surface="surface"
+              border
+              borderColor="line"
+              cursor="pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                clearFile();
+              }}
+              className="text-xs text-text-dim hover:text-white hover:bg-surface-alt transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+              <Text size="xs" color="dim">Remove PDF</Text>
+            </Stack>
+          </Stack>
+        ) : (
+          <Stack gap={2} align="center">
+            <Box width={10} height={10} radius="full" display="flex" align="center" justify="center" className="bg-brand-cyan/10 text-brand-cyan">
+              <Upload className="w-5 h-5" />
+            </Box>
+            <Stack gap={0.5} align="center">
               <Text weight="font-bold" size="sm" color="main">
-                {pdfFile.name}
+                Drop Event Schedule PDF here
               </Text>
               <Text size="xs" color="dim">
-                {(pdfFile.size / 1024).toFixed(1)} KB
+                or click to browse (.pdf up to 10MB)
               </Text>
-              <ActionButton
-                variant="secondary"
-                paddingX={3}
-                paddingY={1}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clearFile();
-                }}
-              >
-                <Icon icon={X} size="xs" />
-                Remove PDF
-              </ActionButton>
             </Stack>
-          ) : (
-            <Stack gap={2} align="center">
-              <Box width={12} height={12} radius="full" surface="muted" display="flex" align="center" justify="center">
-                <Icon icon={Upload} size="md" color="accent" />
-              </Box>
-              <Stack gap={0.5} align="center">
-                <Text weight="font-bold" size="sm" color="main">
-                  Drop Event Schedule PDF here
-                </Text>
-                <Text size="xs" color="dim">
-                  or click to browse (.pdf up to 10MB)
-                </Text>
-              </Stack>
-            </Stack>
-          )}
-        </Box>
-
-        {/* Schedule URL Input Form */}
-        <Box padding={6} surface="surface" radius="lg" border className="border-line">
-          <Box as="form" onSubmit={handleUrlSubmit} height="full" display="flex" flex="col" justify="between" gap={4}>
-            <Stack gap={2}>
-              <Box display="flex" align="center" gap={2}>
-                <Icon icon={LinkIcon} size="sm" color="accent" />
-                <Text weight="font-bold" size="sm" color="main">
-                  Ingest Schedule via URL
-                </Text>
-              </Box>
-              <Box position="relative" width="full">
-                <input
-                  type="url"
-                  placeholder="https://event.com/schedule.pdf"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  onBlur={() => setUrlInput((prev) => prev.trim())}
-                  className="w-full bg-slate-950/90 border border-white/20 rounded-lg px-3.5 py-2.5 text-sm font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
-                />
-                {urlInput && (
-                  <button
-                    type="button"
-                    onClick={() => setUrlInput('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim hover:text-white p-0.5"
-                    title="Clear URL"
-                  >
-                    <Icon icon={X} size="xs" />
-                  </button>
-                )}
-              </Box>
-            </Stack>
-            <ActionButton type="submit" variant="primary" paddingX={4} paddingY={2} width="full">
-              Fetch & Ingest URL
-            </ActionButton>
-          </Box>
-        </Box>
-      </Grid>
+          </Stack>
+        )}
+      </Box>
 
       {/* Validation Feedback Banners */}
       {errorMsg && (
-        <Box padding={3} surface="muted" radius="md" border className="border-error/40 bg-error/10" display="flex" align="center" gap={2}>
-          <Icon icon={AlertCircle} size="sm" color="accent" className="shrink-0" />
+        <Stack direction="row" align="center" gap={2} padding={3} radius="md" border className="border-error/40 bg-error/10">
+          <AlertCircle className="w-4 h-4 text-error shrink-0" />
           <Text size="xs" color="dim" weight="font-semibold">{errorMsg}</Text>
-        </Box>
+        </Stack>
       )}
 
       {successMsg && (
-        <Box padding={3} surface="muted" radius="md" border className="border-brand-green/40 bg-brand-green/10" display="flex" align="center" gap={2}>
-          <Icon icon={CheckCircle2} size="sm" color="accent" className="shrink-0" />
+        <Stack direction="row" align="center" gap={2} padding={3} radius="md" border className="border-brand-green/40 bg-brand-green/10">
+          <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0" />
           <Text size="xs" color="dim" weight="font-semibold">{successMsg}</Text>
-        </Box>
+        </Stack>
       )}
     </Stack>
   );
 };
+

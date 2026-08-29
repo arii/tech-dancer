@@ -72,7 +72,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     taxonomyBucket: 'live-experiments',
     title: 'WCS Navigator',
     subtitle: 'CALIFORNIA 2026 PRESETS & PERSONA SELECTOR',
-    description: 'Explore how WCS Navigator uses a stateless, zero-dependency Python FastAPI backend and Gemini 2.5 Flash to process raw convention schedules into personalized RFC 5545 calendar files entirely in-memory.',
+    description: 'Explore how WCS Navigator uses a stateless, zero-dependency Python FastAPI backend and Gemini 3.5 Flash to process raw convention schedules into personalized RFC 5545 calendar files entirely in-memory.',
     category: 'Live Testbed',
     status: 'Live Tool',
     tags: ['React', 'WCS Events', 'Persona Generator', 'Schedule Parsing'],

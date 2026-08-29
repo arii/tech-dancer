@@ -1,8 +1,7 @@
-// impeccable-ignore-file
 import React, { useState, useMemo } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
-import { ArrowLeft, FastForward, SkipForward } from 'lucide-react';
 import { analyzeEventFootprint } from '../utils/questionGenerator';
 
 export interface DynamicQuestionnaireProps {
@@ -79,36 +78,40 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   return (
     <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 6, md: 10 }} width="full">
       {/* Sleek Progress Topline */}
-      <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5}>
-        <Box display="flex" align="center" gap={2}>
+      <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5} className="min-w-0">
+        <Box display="flex" align="center" gap={2} className="min-w-0 shrink-0">
           {currentStep > 0 && (
             <Stack
               as="button"
               direction="row"
               align="center"
               gap={1}
+              paddingX={2}
               type="button"
               onClick={handleBack}
-              marginRight={2}
-              className="text-xs font-mono text-text-dim hover:text-white cursor-pointer transition-colors"
+              className="min-h-11 h-11 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
             </Stack>
           )}
-          <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
+          <Text variant="mono" size="xs" color="dim" uppercase tracking="wider" className="shrink-0">
             Step {currentStep + 1} of {totalSteps}
           </Text>
         </Box>
 
-        <Stack direction="row" align="center" gap={3}>
-          <button
+        <Stack direction="row" align="center" gap={3} className="shrink-0">
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            paddingX={2}
             type="button"
             onClick={handleSkipQuestion}
-            className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
+            className="min-h-11 h-11 text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
           >
-            Skip this question (Next Step →)
-          </button>
+            Skip question →
+          </Stack>
           <span className="text-text-dim/40">•</span>
           <Text variant="mono" size="xs" color="dim">
             {progressPercent}%
@@ -127,19 +130,19 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
       </Box>
 
       {/* Direct, Uncluttered Question Header */}
-      <Stack gap={1.5} marginBottom={6}>
+      <Stack gap={1.5} marginBottom={6} className="min-w-0 break-words">
         <Text
           as="h3"
           weight="font-bold"
           size="2xl"
           color="main"
           tracking="tight"
-          className="leading-snug"
+          className="leading-snug text-xl sm:text-2xl break-words"
         >
           {activeQuestion.question}
         </Text>
         {activeQuestion.subtitle && (
-          <Text variant="mono" size="xs" color="dim" marginTop={1}>
+          <Text variant="mono" size="xs" color="dim" marginTop={1} className="break-words">
             {activeQuestion.subtitle}
           </Text>
         )}
@@ -163,26 +166,24 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                 radius="xl"
                 border
                 width="full"
-                className={`group text-left transition-all duration-150 cursor-pointer ${
+                className={`group text-left transition-all duration-150 cursor-pointer min-h-11 tap-target ${
                   isSelected
                     ? 'bg-brand-cyan/15 border-brand-cyan ring-2 ring-brand-cyan/20'
                     : 'bg-surface-alt border-line/60 hover:border-brand-cyan/60 hover:bg-surface'
                 }`}
               >
-                <Box as="span" padding={2.5} radius="xl" border marginRight={4} className="text-2xl bg-surface border-line/40 group-hover:border-brand-cyan/40 transition-colors shrink-0">
+                <Box as="span" padding={2.5} radius="xl" border marginRight={3} className="text-xl sm:text-2xl bg-surface border-line/40 group-hover:border-brand-cyan/40 transition-colors shrink-0">
                   {opt.icon}
                 </Box>
-                <Box flex={1} minWidth={0} paddingRight={2}>
-                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors">
+                <Box flex={1} minWidth={0} paddingRight={2} className="break-words">
+                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors break-words">
                     {opt.title}
                   </h4>
-                  <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors">
+                  <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors break-words">
                     {opt.desc}
                   </Box>
                 </Box>
-                <span className="text-text-dim/60 group-hover:text-brand-cyan text-base transition-all transform translate-x-0 group-hover:translate-x-1 duration-150 shrink-0">
-                  →
-                </span>
+                <ChevronRight className="w-4 h-4 text-text-dim/60 group-hover:text-brand-cyan transition-all transform group-hover:translate-x-0.5 duration-150 shrink-0" />
               </Stack>
             );
           })}
@@ -202,7 +203,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             flex={1}
             type="button"
             onClick={() => handleSelectOption('yes')}
-            className="border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer"
+            className="min-h-11 border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer"
           >
             <span className="text-xl">✅</span>
             <span>Yes, include it</span>
@@ -219,7 +220,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             flex={1}
             type="button"
             onClick={() => handleSelectOption('no')}
-            className="border-line/60 bg-surface-alt hover:border-brand-cyan/40 hover:bg-surface text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer"
+            className="min-h-11 border-line/60 bg-surface-alt hover:border-brand-cyan/40 hover:bg-surface text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer"
           >
             <span className="text-xl">⏭️</span>
             <span>No, skip it</span>
@@ -227,34 +228,52 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         </Stack>
       )}
 
-      {/* Bottom Questionnaire Controls: Skip Step or Skip All */}
+      {/* Bottom Questionnaire Action Bar for Ergonomic Navigation */}
       <Box
         display="flex"
         align="center"
         justify="between"
-        paddingTop={6}
-        marginTop={6}
+        paddingX={{ base: 4, sm: 0 }}
+        paddingY={{ base: 3, sm: 0 }}
+        marginTop={{ base: 0, sm: 6 }}
+        paddingTop={{ base: 0, sm: 6 }}
         border="t"
         borderColor="line"
-        className="border-line/40 text-xs font-mono"
+        className="sticky bottom-0 z-20 bg-surface-alt/95 backdrop-blur-md shadow-lg sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none text-xs font-mono"
       >
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={2}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+          className="min-h-11 h-11 text-text-dim hover:text-text-main transition-colors cursor-pointer hover:bg-surface border-line/50 shrink-0"
         >
-          <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip this question (Next Step →)</span>
-        </button>
+          <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
+          <span>Skip Step →</span>
+        </Stack>
 
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3.5}
+          paddingY={2}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
+          className="min-h-11 h-11 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer bg-brand-cyan/15 hover:bg-brand-cyan/25 border-brand-cyan/40 shrink-0"
         >
-          <FastForward className="w-3.5 h-3.5" />
-          <span>⚡ Skip All &amp; Generate Itinerary</span>
-        </button>
+          <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
+          <span>Skip All &amp; Generate Itinerary</span>
+        </Stack>
       </Box>
     </Box>
   );

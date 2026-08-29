@@ -14,6 +14,8 @@ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
+import { ActionButton } from '@/components/ui/ActionButton';
+import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -112,33 +114,9 @@ export default function ResearchDetail() {
           header={
             <Stack gap={4}>
               {/* Primary Portfolio CTA Banner */}
-              <Stack
-                direction={{ base: 'col', sm: 'row' }}
-                align={{ base: 'start', sm: 'center' }}
-                justify="between"
-                gap={4}
-                marginBottom={4}
-                padding={4}
-                radius="md"
-                border
-                className="bg-accent/10 border-accent/30"
-              >
-                <Stack gap={1}>
-                  <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wider">
-                    Official Primary Portfolio
-                  </Text>
-                  <Text variant="body" size="xs" color="main">
-                    For production software engineering, autonomous systems research, and professional inquiries, visit Ariel's main site.
-                  </Text>
-                </Stack>
-                <Box as="a" href="https://arii.github.io" target="_blank" rel="noopener noreferrer" shrink={0}>
-                  <Stack direction="row" align="center" gap={1}>
-                    <Text variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">
-                      arii.github.io →
-                    </Text>
-                  </Stack>
-                </Box>
-              </Stack>
+              <Box marginBottom={2}>
+                <RoboticsPortfolioCard />
+              </Box>
 
               <EditorialHeader
                 category={study.category}

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Search, Upload, X, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { DropzoneUpload } from './DropzoneUpload';
 
@@ -79,6 +79,11 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
     });
   };
 
+  const isUrlQuery = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return /^(https?:\/\/|www\.)/i.test(q) || q.endsWith('.pdf');
+  }, [searchQuery]);
+
   const filteredEvents = useMemo(() => {
     if (!searchQuery.trim()) return CALIFORNIA_2026_EVENTS;
     const q = searchQuery.toLowerCase();
@@ -94,6 +99,17 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   const handleSelectEvent = (event: WCSCaliforniaEvent) => {
     setIsInputFocused(false);
     onDiscoverPreset(event, preferences);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const query = searchQuery.trim();
+      if (/^(https?:\/\/|www\.)/i.test(query) || query.endsWith('.pdf')) {
+        const fullUrl = query.startsWith('www.') ? `https://${query}` : query;
+        setIsInputFocused(false);
+        onDiscoverUrl(fullUrl);
+      }
+    }
   };
 
   const handleClear = () => {
@@ -133,10 +149,11 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             type="text"
             role="combobox"
             aria-expanded={isInputFocused && filteredEvents.length > 0}
-            aria-label="Search convention or city"
-            placeholder="Search California 2026 convention (e.g. South Bay, Boogie, Capital Swing)..."
+            aria-label="Search convention or city or paste PDF URL"
+            placeholder="Search WCS event name or paste PDF URL..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
+            onKeyDown={handleKeyDown}
             onFocus={() => setIsInputFocused(true)}
             className="w-full bg-transparent text-base sm:text-lg text-text-main placeholder:text-text-dim/60 focus:outline-none"
           />
@@ -156,7 +173,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
         </Box>
 
         {/* Autocomplete Dropdown with Custom Dark Scrollbar */}
-        {isInputFocused && filteredEvents.length > 0 && (
+        {isInputFocused && (filteredEvents.length > 0 || isUrlQuery) && (
           <Box
             surface="card"
             border
@@ -166,6 +183,33 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             className="absolute top-full left-0 right-0 z-50 backdrop-blur-xl bg-surface-alt/95 border-line/80 overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-150"
           >
             <Box className="divide-y divide-line/40 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-surface-alt scrollbar-track-surface/40">
+              {isUrlQuery && (
+                <Stack
+                  as="button"
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  width="full"
+                  paddingX={4}
+                  paddingY={3.5}
+                  type="button"
+                  onMouseDown={() => {
+                    const fullUrl = searchQuery.trim().startsWith('www.') ? `https://${searchQuery.trim()}` : searchQuery.trim();
+                    setIsInputFocused(false);
+                    onDiscoverUrl(fullUrl);
+                  }}
+                  className="bg-brand-cyan/10 hover:bg-brand-cyan/20 border-b border-line/40 transition-colors text-left group cursor-pointer"
+                >
+                  <Stack direction="row" align="center" gap={2} minWidth={0}>
+                    <Upload className="w-4 h-4 text-brand-cyan shrink-0" />
+                    <span className="font-bold text-sm text-brand-cyan truncate">
+                      Fetch &amp; Ingest PDF URL: <span className="text-white font-mono underline">{searchQuery.trim()}</span>
+                    </span>
+                  </Stack>
+                  <ChevronRight className="w-4 h-4 text-brand-cyan shrink-0" />
+                </Stack>
+              )}
+
               {filteredEvents.map((event) => (
                 <Stack
                   as="button"
@@ -181,14 +225,9 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
                   className="hover:bg-white/5 transition-colors text-left group cursor-pointer"
                 >
                   <Stack gap={0.5} minWidth={0} paddingRight={2}>
-                    <Box display="flex" align="center" gap={2}>
-                      <span className="font-bold text-sm text-text-main group-hover:text-brand-cyan transition-colors">
-                        {event.name}
-                      </span>
-                      <Text as="span" variant="mono" size="xs" color="main" paddingX={2} paddingY={0.5} className="font-semibold rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan">
-                        Configure Plan
-                      </Text>
-                    </Box>
+                    <span className="font-bold text-sm text-text-main group-hover:text-brand-cyan transition-colors">
+                      {event.name}
+                    </span>
                     <span className="text-xs text-text-dim">
                       📍 {event.location} • 📅 {event.dates}
                     </span>
@@ -211,10 +250,10 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
           paddingY={1}
           type="button"
           onClick={() => setIsUploadDrawerOpen(!isUploadDrawerOpen)}
-          className="text-xs font-mono text-text-dim/80 hover:text-brand-cyan transition-colors cursor-pointer"
+          className="text-xs text-text-dim hover:text-white transition-colors cursor-pointer"
         >
           <Upload className="w-3.5 h-3.5" />
-          <span>{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF / URL ▼'}</span>
+          <span>{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF ▼'}</span>
         </Stack>
 
         {isUploadDrawerOpen && (

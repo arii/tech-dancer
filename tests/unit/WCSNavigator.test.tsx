@@ -69,24 +69,25 @@ describe('WCS Navigator Components', () => {
     expect(handleSelect).toHaveBeenCalledWith(DANCE_PERSONAS[0]);
   });
 
-  it('handles DropzoneUpload PDF and URL validation', () => {
+  it('handles DropzoneUpload PDF validation and selection', () => {
     const onIngestPdf = vi.fn();
-    const onIngestUrl = vi.fn();
 
     render(
       <DropzoneUpload
         onIngestPdf={onIngestPdf}
-        onIngestUrl={onIngestUrl}
       />
     );
 
-    const input = screen.getByPlaceholderText(/https:\/\/event\.com\/schedule/i);
-    const submitBtn = screen.getByRole('button', { name: /Fetch & Ingest URL/i });
+    expect(screen.getByText('Drop Event Schedule PDF here')).toBeTruthy();
 
-    fireEvent.change(input, { target: { value: 'https://southbaydancefling.com/schedule' } });
-    fireEvent.click(submitBtn);
+    const file = new File(['fake pdf content'], 'test-schedule.pdf', { type: 'application/pdf' });
+    const dropzoneBox = screen.getByText('Drop Event Schedule PDF here').closest('div');
+    const input = dropzoneBox?.querySelector('input[type="file"]') as HTMLInputElement;
 
-    expect(onIngestUrl).toHaveBeenCalledWith('https://southbaydancefling.com/schedule');
+    if (input) {
+      fireEvent.change(input, { target: { files: [file] } });
+      expect(onIngestPdf).toHaveBeenCalledWith(file);
+    }
   });
 
   it('renders EventSearchHero and handles preset discovery trigger', () => {
@@ -103,7 +104,7 @@ describe('WCS Navigator Components', () => {
     );
 
     expect(
-      screen.getByPlaceholderText(/Search California 2026 convention/i)
+      screen.getByPlaceholderText(/Search WCS event name or paste PDF URL/i)
     ).toBeTruthy();
   });
 

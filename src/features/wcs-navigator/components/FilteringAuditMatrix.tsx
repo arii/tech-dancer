@@ -145,25 +145,25 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
   }, [activeTab, sessions, includedSessions, filteredSessions]);
 
   return (
-    <Stack gap={4} className={className}>
-      <Box display="flex" align="center" justify="between" wrap gap={2}>
-        <Stack gap={1}>
-          <Box as="h3" className="text-lg font-bold text-text-main">
+    <Stack gap={4} className={`w-full min-w-0 ${className || ''}`}>
+      <Box display="flex" align="center" justify="between" wrap gap={2} className="min-w-0">
+        <Stack gap={1} className="min-w-0">
+          <Box as="h3" className="text-base sm:text-lg font-bold text-text-main break-words">
             Your Workshops &amp; Schedule
           </Box>
-          <Box as="p" className="text-xs text-text-dim">
+          <Box as="p" className="text-xs text-text-dim break-words">
             Personalized workshop recommendations, division calls, and social dance times tailored to your profile
           </Box>
         </Stack>
       </Box>
 
-      {/* Minimal Sleek Tabs Bar */}
+      {/* Minimal Sleek Tabs Bar with 44px (min-h-11) Mobile Ergonomics */}
       <Box
         display="flex"
-        gap={4}
+        gap={2}
         paddingBottom={0}
         wrap
-        className="border-b border-line/60"
+        className="border-b border-line/60 overflow-x-auto min-w-0"
         role="tablist"
         aria-label="Filter sessions by status"
       >
@@ -176,9 +176,9 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           display="flex"
           align="center"
           gap={1.5}
-          paddingY={2}
+          px={3}
           cursor="pointer"
-          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px min-h-11 tap-target ${
             activeTab === 'included'
               ? 'border-text-main text-text-main font-bold'
               : 'border-transparent text-text-dim hover:text-text-main'
@@ -197,9 +197,9 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           display="flex"
           align="center"
           gap={1.5}
-          paddingY={2}
+          px={3}
           cursor="pointer"
-          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px min-h-11 tap-target ${
             activeTab === 'filtered'
               ? 'border-text-dim text-text-dim font-bold'
               : 'border-transparent text-text-dim/60 hover:text-text-main'
@@ -218,9 +218,9 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           display="flex"
           align="center"
           gap={1.5}
-          paddingY={2}
+          px={3}
           cursor="pointer"
-          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px min-h-11 tap-target ${
             activeTab === 'all'
               ? 'border-text-main text-text-main font-bold'
               : 'border-transparent text-text-dim hover:text-text-main'
@@ -231,19 +231,19 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         </Box>
       </Box>
 
-      {/* Session Cards Grid */}
+      {/* Session Cards Grid (Single-column on mobile default, 2-cols on md) */}
       {displayedSessions.length > 0 ? (
-        <Grid cols={{ default: 1, md: 2 }} gap={4}>
+        <Grid cols={{ default: 1, md: 2 }} gap={4} className="min-w-0">
           {displayedSessions.map((session) => {
             const isIncluded = session.status === 'included';
 
             return (
               <Box
                 key={session.id}
-                padding={5}
+                padding={4}
                 radius="lg"
                 border
-                className={`transition-all bg-surface/30 flex flex-col justify-between ${
+                className={`transition-all bg-surface/30 flex flex-col justify-between min-w-0 break-words ${
                   isIncluded
                     ? 'border-line/60 hover:border-line'
                     : 'border-line/30 opacity-75'
@@ -253,9 +253,9 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                     : ''
                 }`}
               >
-                <Stack gap={3.5}>
-                  <Box display="flex" align="start" justify="between" gap={3}>
-                    <Stack gap={1}>
+                <Stack gap={3.5} className="min-w-0">
+                  <Box display="flex" align="start" justify="between" gap={2} wrap className="min-w-0">
+                    <Stack gap={1} flex={1} className="min-w-0">
                       {activeTab === 'all' && (
                         <Text
                           as="span"
@@ -267,7 +267,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                           paddingX={1.5}
                           paddingY={0.5}
                           radius="sm"
-                          className={`w-fit ${
+                          className={`w-fit break-words ${
                             isIncluded
                               ? 'bg-brand-cyan/20 text-brand-cyan'
                               : 'bg-white/[0.05] text-text-dim'
@@ -276,29 +276,29 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                           {isIncluded ? '★ Selected for Your Plan' : 'Filtered Out'}
                         </Text>
                       )}
-                      <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
+                      <Box as="h4" className="text-sm font-bold text-text-main leading-snug break-words">
                         {session.title}
                       </Box>
                     </Stack>
 
-                    {/* Rationale Tag (Clean unbordered monospace) */}
+                    {/* Rationale Tag */}
                     <Text
                       variant="mono"
                       size="micro"
-                      className="text-xs font-mono text-text-dim shrink-0 uppercase tracking-wider"
+                      className="text-xs font-mono text-text-dim uppercase tracking-wider break-words max-w-full"
                     >
                       {session.decisionBadge}
                     </Text>
                   </Box>
 
-                  <Stack gap={1} className="text-xs text-text-dim font-mono">
-                    <Box display="flex" align="center" gap={2}>
-                      <Clock className="w-3.5 h-3.5 text-text-dim" />
-                      <span>{session.time}</span>
+                  <Stack gap={1} className="text-xs text-text-dim font-mono min-w-0">
+                    <Box display="flex" align="center" gap={2} className="min-w-0">
+                      <Clock className="w-3.5 h-3.5 text-text-dim shrink-0" />
+                      <span className="break-words min-w-0">{session.time}</span>
                     </Box>
-                    <Box display="flex" align="center" gap={2}>
-                      <MapPin className="w-3.5 h-3.5 text-text-dim" />
-                      <span>{session.location}</span>
+                    <Box display="flex" align="center" gap={2} className="min-w-0">
+                      <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
+                      <span className="break-words min-w-0">{session.location}</span>
                     </Box>
                   </Stack>
 
@@ -306,7 +306,7 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                   <Box
                     padding={3}
                     radius="md"
-                    className="text-xs text-text-dim bg-surface/40 border border-line/30 leading-relaxed"
+                    className="text-xs text-text-dim bg-surface/40 border border-line/30 leading-relaxed min-w-0 break-words"
                   >
                     <strong className="font-semibold text-text-main">
                       {isIncluded ? 'Selection Reason:' : 'Filter Reason:'}
