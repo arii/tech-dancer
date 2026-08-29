@@ -471,12 +471,12 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs">
           <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Profile: {selectedRole ? `${toTitleCase(selectedDivision)} • ${toTitleCase(selectedRole)}` : toTitleCase(selectedDivision)}</span>
+            <Text as="span" size="xs" weight="font-bold">Profile: {selectedRole ? `${toTitleCase(selectedDivision)} • ${toTitleCase(selectedRole)}` : toTitleCase(selectedDivision)}</Text>
           </Stack>
-          <span className="text-text-dim">•</span>
-          <span className="text-text-dim">✈️ Landing Target: <strong className="text-text-main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</strong></span>
-          <span className="text-text-dim">•</span>
-          <span className="text-text-dim">📋 Active: <strong className="text-text-main">{includedSessions.length} sessions</strong></span>
+          <Text size="xs" color="dim">•</Text>
+          <Text size="xs" color="dim">✈️ Landing Target: <Text as="strong" color="main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</Text></Text>
+          <Text size="xs" color="dim">•</Text>
+          <Text size="xs" color="dim">📋 Active: <Text as="strong" color="main">{includedSessions.length} sessions</Text></Text>
         </Stack>
 
         {/* Action Buttons with 44px (min-h-11) Ergonomics */}
@@ -593,11 +593,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
-              <h3 className="font-bold text-base text-text-main">
+              <Text as="h3" weight="font-bold" size="base" color="main">
                 Friday — Arrival, Warmup &amp; Prelims
-              </h3>
+              </Text>
             </Stack>
-            <span className="text-xs text-text-dim">Day 1</span>
+            <Text size="xs" color="dim">Day 1</Text>
           </Stack>
 
           {/* Event-Based Local Transit & Logistics */}
@@ -623,11 +623,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
-              <h3 className="font-bold text-base text-text-main">
+              <Text as="h3" weight="font-bold" size="base" color="main">
                 Saturday — Daytime Workshops &amp; Champions Gala
-              </h3>
+              </Text>
             </Stack>
-            <span className="text-xs text-text-dim">Day 2</span>
+            <Text size="xs" color="dim">Day 2</Text>
           </Stack>
 
           {/* Saturday Sessions */}
@@ -650,11 +650,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
-              <h3 className="font-bold text-base text-text-main">
+              <Text as="h3" weight="font-bold" size="base" color="main">
                 Sunday — Intensive Masterclasses &amp; Survivor Social
-              </h3>
+              </Text>
             </Stack>
-            <span className="text-xs text-text-dim">Day 3</span>
+            <Text size="xs" color="dim">Day 3</Text>
           </Stack>
 
           {/* Sunday Sessions */}

@@ -112,7 +112,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           >
             Skip question →
           </Stack>
-          <span className="text-text-dim/40">•</span>
+          <Text size="xs" color="dim">•</Text>
           <Text variant="mono" size="xs" color="dim">
             {progressPercent}%
           </Text>
@@ -176,9 +176,9 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                   {opt.icon}
                 </Box>
                 <Box flex={1} minWidth={0} paddingRight={2} className="break-words">
-                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors break-words">
+                  <Text as="h4" weight="font-bold" className="text-sm sm:text-base text-text-main group-hover:text-white transition-colors break-words">
                     {opt.title}
-                  </h4>
+                  </Text>
                   <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors break-words">
                     {opt.desc}
                   </Box>
