@@ -204,6 +204,10 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           {/* Scrollable Diagram Viewer */}
           <Box
             flex={1}
+            width="full"
+            height="full"
+            minHeight={0}
+            minWidth={0}
             overflow="auto"
             padding={4}
             display="flex"
@@ -211,7 +215,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             justify="center"
             cursor="pointer"
             onClick={handleOverlayClick}
-            className="w-full h-full select-none overflow-auto"
+            className="select-none"
           >
             <Box
               padding={4}
@@ -220,11 +224,8 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               borderColor="line"
               surface="surface"
               shadow="2xl"
-              display="flex"
-              align="center"
-              justify="center"
               onClick={(e) => e.stopPropagation()}
-              className="max-w-full max-h-full transition-transform duration-150 ease-out"
+              className="transition-transform duration-150 ease-out"
               style={{ // impeccable-ignore - Dynamic zoom scaling transform
                 transform: `scale(${zoomScale})`,
                 transformOrigin: 'center center',
@@ -234,7 +235,8 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                className="max-w-full max-h-full w-auto h-auto object-contain rounded-md"
+                width="full"
+                className="max-w-full rounded-md block"
               />
             </Box>
           </Box>
