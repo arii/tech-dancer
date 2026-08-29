@@ -35,6 +35,8 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
             align="center"
             gap={1.5}
             paddingY={1}
+            paddingX={2}
+            minHeight={11}
             aria-label="Hide Details"
             onClick={onClose}
             className="text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
@@ -46,8 +48,8 @@ export const WorkflowExplainer = ({ onClose }: WorkflowExplainerProps) => {
       </Box>
 
       {/* Three-Step Grid Content Rows */}
-      <Stack gap={6}>
-        <Grid cols={{ default: 1, md: 3 }} gap={5}>
+      <Stack gap={6} className="min-w-0">
+        <Grid cols={{ default: 1, md: 3 }} gap={5} className="min-w-0">
           {/* Step 1 Card */}
           <Stack direction="col" justify="between" height="full" padding={6} radius="xl" border className="bg-surface-alt/70 border-white/10 backdrop-blur-md hover:border-brand-cyan/40 transition-all">
             <Stack gap={3}>

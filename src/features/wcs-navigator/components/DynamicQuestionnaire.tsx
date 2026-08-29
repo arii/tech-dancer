@@ -77,10 +77,10 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   };
 
   return (
-    <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 6, md: 10 }} width="full">
+    <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 6, md: 10 }} paddingBottom={{ default: 24, md: 10 }} width="full" className="min-w-0">
       {/* Sleek Progress Topline */}
-      <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5}>
-        <Box display="flex" align="center" gap={2}>
+      <Box display="flex" align="center" justify="between" wrap gap={2} width="full" marginBottom={2.5}>
+        <Box display="flex" align="center" gap={2} className="shrink-0">
           {currentStep > 0 && (
             <Stack
               as="button"
@@ -90,7 +90,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
               type="button"
               onClick={handleBack}
               marginRight={2}
-              className="text-xs font-mono text-text-dim hover:text-white cursor-pointer transition-colors"
+              className="text-xs font-mono text-text-dim hover:text-white cursor-pointer transition-colors min-h-11 items-center px-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -101,13 +101,13 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           </Text>
         </Box>
 
-        <Stack direction="row" align="center" gap={3}>
+        <Stack direction="row" align="center" gap={2} className="shrink-0">
           <button
             type="button"
             onClick={handleSkipQuestion}
-            className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
+            className="text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer min-h-11 flex items-center px-1"
           >
-            Skip this question (Next Step →)
+            Skip this question →
           </button>
           <span className="text-text-dim/40">•</span>
           <Text variant="mono" size="xs" color="dim">
@@ -127,19 +127,19 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
       </Box>
 
       {/* Direct, Uncluttered Question Header */}
-      <Stack gap={1.5} marginBottom={6}>
+      <Stack gap={1.5} marginBottom={6} className="min-w-0">
         <Text
           as="h3"
           weight="font-bold"
           size="2xl"
           color="main"
           tracking="tight"
-          className="leading-snug"
+          className="leading-snug break-words min-w-0"
         >
           {activeQuestion.question}
         </Text>
         {activeQuestion.subtitle && (
-          <Text variant="mono" size="xs" color="dim" marginTop={1}>
+          <Text variant="mono" size="xs" color="dim" marginTop={1} className="break-words min-w-0">
             {activeQuestion.subtitle}
           </Text>
         )}
@@ -147,7 +147,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
 
       {/* Interactive Card Options */}
       {activeQuestion.options.length > 0 ? (
-        <Grid cols={1} gap={3} className="animate-in fade-in slide-in-from-right-3 duration-150">
+        <Grid cols={1} gap={3} className="animate-in fade-in slide-in-from-right-3 duration-150 min-w-0">
           {activeQuestion.options.map((opt) => {
             const isSelected = selectedOptionId === opt.id || answers[activeQuestion.id] === opt.id;
 
@@ -163,7 +163,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                 radius="xl"
                 border
                 width="full"
-                className={`group text-left transition-all duration-150 cursor-pointer ${
+                className={`group text-left transition-all duration-150 cursor-pointer min-h-11 min-w-0 ${
                   isSelected
                     ? 'bg-brand-cyan/15 border-brand-cyan ring-2 ring-brand-cyan/20'
                     : 'bg-surface-alt border-line/60 hover:border-brand-cyan/60 hover:bg-surface'
@@ -173,10 +173,10 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
                   {opt.icon}
                 </Box>
                 <Box flex={1} minWidth={0} paddingRight={2}>
-                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors">
+                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors break-words">
                     {opt.title}
                   </h4>
-                  <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors">
+                  <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors break-words">
                     {opt.desc}
                   </Box>
                 </Box>
@@ -189,7 +189,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         </Grid>
       ) : (
         /* Fallback for boolean/empty questions */
-        <Stack direction={{ default: "col", sm: "row" }} gap={3} marginTop={2} className="animate-in fade-in duration-150">
+        <Stack direction={{ default: "col", sm: "row" }} gap={3} marginTop={2} className="animate-in fade-in duration-150 min-w-0">
           <Stack
             as="button"
             direction="row"
@@ -202,7 +202,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             flex={1}
             type="button"
             onClick={() => handleSelectOption('yes')}
-            className="border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer"
+            className="border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer min-h-11"
           >
             <span className="text-xl">✅</span>
             <span>Yes, include it</span>
@@ -219,7 +219,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             flex={1}
             type="button"
             onClick={() => handleSelectOption('no')}
-            className="border-line/60 bg-surface-alt hover:border-brand-cyan/40 hover:bg-surface text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer"
+            className="border-line/60 bg-surface-alt hover:border-brand-cyan/40 hover:bg-surface text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer min-h-11"
           >
             <span className="text-xl">⏭️</span>
             <span>No, skip it</span>
@@ -227,34 +227,39 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         </Stack>
       )}
 
-      {/* Bottom Questionnaire Controls: Skip Step or Skip All */}
+      {/* Sticky Bottom Action Bar for Thumb-Friendly Mobile Advancement */}
       <Box
-        display="flex"
-        align="center"
-        justify="between"
-        paddingTop={6}
-        marginTop={6}
-        border="t"
-        borderColor="line"
-        className="border-line/40 text-xs font-mono"
+        className="fixed bottom-0 left-0 right-0 z-40 p-3 bg-surface-alt/95 backdrop-blur-md border-t border-line/60 md:static md:bg-transparent md:border-0 md:p-0 md:mt-6 md:pt-6 md:border-t md:border-line/40"
       >
-        <button
-          type="button"
-          onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+        <Box
+          display="flex"
+          align="center"
+          justify="between"
+          gap={2}
+          maxWidth="xl"
+          marginX="auto"
+          className="text-xs font-mono"
         >
-          <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip this question (Next Step →)</span>
-        </button>
+          <button
+            type="button"
+            onClick={handleSkipQuestion}
+            className="flex items-center justify-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer min-h-11 px-3 rounded-lg hover:bg-surface border border-line/40 shrink-0"
+          >
+            <SkipForward className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+            <span className="hidden sm:inline">Skip this question (Next Step →)</span>
+            <span className="sm:hidden">Skip</span>
+          </button>
 
-        <button
-          type="button"
-          onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
-        >
-          <FastForward className="w-3.5 h-3.5" />
-          <span>⚡ Skip All &amp; Generate Itinerary</span>
-        </button>
+          <button
+            type="button"
+            onClick={handleSkipToItinerary}
+            className="flex items-center justify-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer min-h-11 px-3.5 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/40 font-semibold"
+          >
+            <FastForward className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden sm:inline">⚡ Skip All &amp; Generate Itinerary</span>
+            <span className="sm:hidden">⚡ Generate Itinerary</span>
+          </button>
+        </Box>
       </Box>
     </Box>
   );

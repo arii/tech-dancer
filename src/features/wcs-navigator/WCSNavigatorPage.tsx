@@ -278,35 +278,39 @@ export const WCSNavigatorPage: React.FC = () => {
             display="flex"
             align="center"
             justify="between"
-            wrap="wrap"
-            gap={3}
+            wrap
+            gap={2}
             paddingY={1}
-            className="text-xs font-mono text-text-dim"
+            className="text-xs font-mono text-text-dim min-w-0"
           >
-            <Box display="flex" align="center" gap={2}>
+            <Box display="flex" align="center" wrap gap={2} className="min-w-0">
               <Stack
                 as="button"
                 align="center"
                 direction="row"
                 gap={1}
+                paddingX={1}
+                minHeight={11}
                 type="button"
                 onClick={() => setStep('search')}
-                className="text-text-dim hover:text-white transition-colors cursor-pointer"
+                className="text-text-dim hover:text-white transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Change Event</span>
               </Stack>
-              <span className="text-line">/</span>
-              <span className="text-brand-cyan font-bold">{activeEventName}</span>
+              <span className="text-line shrink-0">/</span>
+              <span className="text-brand-cyan font-bold break-words min-w-0">{activeEventName}</span>
             </Box>
 
-            <Box display="flex" align="center" gap={3}>
+            <Box display="flex" align="center" wrap gap={2} className="shrink-0">
               {step === 'results' && (
                 <Stack
                   as="button"
                   align="center"
                   direction="row"
                   gap={1}
+                  paddingX={1}
+                  minHeight={11}
                   type="button"
                   onClick={() => setStep('questionnaire')}
                   className="text-text-dim hover:text-white transition-colors cursor-pointer"
@@ -320,6 +324,8 @@ export const WCSNavigatorPage: React.FC = () => {
                 align="center"
                 direction="row"
                 gap={1}
+                paddingX={1}
+                minHeight={11}
                 type="button"
                 onClick={() => setStep('search')}
                 className="text-text-dim hover:text-white transition-colors cursor-pointer"

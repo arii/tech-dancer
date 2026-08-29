@@ -120,13 +120,13 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
           align="center"
           gap={3}
           width="full"
-          paddingX={5}
-          paddingY={4}
+          paddingX={{ default: 3.5, sm: 5 }}
+          paddingY={3.5}
           radius="2xl"
           surface="card"
           border
           shadow="2xl"
-          className="border-line/80 hover:border-brand-cyan/70 focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all bg-surface-alt/90 backdrop-blur-xl"
+          className="min-h-11 border-line/80 hover:border-brand-cyan/70 focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all bg-surface-alt/90 backdrop-blur-xl"
         >
           <Search className="w-5 h-5 text-brand-cyan shrink-0" />
           <input
@@ -134,24 +134,27 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             role="combobox"
             aria-expanded={isInputFocused && filteredEvents.length > 0}
             aria-label="Search convention or city"
-            placeholder="Search California 2026 convention (e.g. South Bay, Boogie, Capital Swing)..."
+            placeholder="Search California 2026 convention..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => setIsInputFocused(true)}
-            className="w-full bg-transparent text-base sm:text-lg text-text-main placeholder:text-text-dim/60 focus:outline-none"
+            className="w-full bg-transparent text-sm sm:text-lg text-text-main placeholder:text-text-dim/60 focus:outline-none min-w-0"
           />
 
           {searchQuery && (
-            <Box
+            <Stack
               as="button"
               type="button"
               aria-label="Clear search"
               onClick={handleClear}
-              padding={1}
-              className="text-text-dim hover:text-text-main transition-colors cursor-pointer"
+              align="center"
+              justify="center"
+              paddingX={2}
+              minHeight={11}
+              className="text-text-dim hover:text-text-main transition-colors cursor-pointer shrink-0"
             >
               <X className="w-4 h-4" />
-            </Box>
+            </Stack>
           )}
         </Box>
 
@@ -207,18 +210,21 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
           as="button"
           direction="row"
           align="center"
+          justify="center"
           gap={1.5}
           paddingY={1}
+          paddingX={3}
+          minHeight={11}
           type="button"
           onClick={() => setIsUploadDrawerOpen(!isUploadDrawerOpen)}
           className="text-xs font-mono text-text-dim/80 hover:text-brand-cyan transition-colors cursor-pointer"
         >
-          <Upload className="w-3.5 h-3.5" />
-          <span>{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF / URL ▼'}</span>
+          <Upload className="w-3.5 h-3.5 shrink-0" />
+          <span className="break-words">{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF / URL ▼'}</span>
         </Stack>
 
         {isUploadDrawerOpen && (
-          <Box width="full" marginTop={4} className="animate-in fade-in slide-in-from-top-3 duration-200">
+          <Box width="full" marginTop={4} className="animate-in fade-in slide-in-from-top-3 duration-200 min-w-0">
             <DropzoneUpload
               onIngestPdf={(file) => {
                 setIsUploadDrawerOpen(false);
