@@ -126,7 +126,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           </Stack>
         </Box>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation with 44px (min-h-11) Mobile Ergonomics */}
         <Box display="flex" flexWrap="wrap" gap={2} border="b" borderColor="line" paddingBottom={2}>
           <Stack
             as="button"

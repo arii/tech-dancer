@@ -130,11 +130,7 @@ describe('useNavigatorStorage Hook Suite', () => {
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.stringContaining('Failed to save'),
-      expect.anything(),
-      expect.anything()
-    );
       expect.anything(),
       expect.anything()
     );

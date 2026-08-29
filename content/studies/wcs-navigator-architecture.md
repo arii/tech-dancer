@@ -55,11 +55,7 @@ sequenceDiagram
 ```
 
 ### Key Architectural Characteristics
-<<<<<<< HEAD
 - **Stage 1 Discovery (`/api/v1/discover`)**: Fast timetable extraction utilizing Gemini-3.5-Flash, PyPDF, or client heuristic extractors to build the event footprint (audition bands, parallel track streams, headlining champions, and airport logistics).
-=======
-- **Stage 1 Discovery (`/api/v1/discover`)**: Fast timetable extraction utilizing Gemini-2.5-Pro, PyPDF, or client heuristic extractors to build the event footprint (audition bands, parallel track streams, headlining champions, and airport logistics).
->>>>>>> origin/docs/wcs-navigator-architecture-update-10604771613681517063
 - **Stage 2 Generation (`/api/v1/generate`)**: Constraint-optimized schedule synthesis, returning personalized RFC 5545 `.ics` streams and mobile Markdown (`.md`) itineraries.
 - **Transparent Gateway Fallback**: If the live FastAPI backend is offline or unreachable, the application smoothly transitions using `GatewayFallbackBanner` to client-side heuristic extraction without disrupting user workflow.
 

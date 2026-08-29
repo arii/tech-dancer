@@ -450,8 +450,8 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <span className="text-text-dim">📋 Active: <strong className="text-text-main">{includedSessions.length} sessions</strong></span>
         </Stack>
 
-        {/* Action Buttons */}
-        <Stack direction="row" align="center" gap={2.5} flexWrap="wrap">
+        {/* Action Buttons with 44px (min-h-11) Ergonomics */}
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="w-full sm:w-auto">
           {/* Decision Logic & Debug Inspector Trigger */}
           <Stack
             as="button"
@@ -459,20 +459,18 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1.5}
             paddingX={3.5}
-            paddingY={3}
-            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
-            className={`text-xs transition-all cursor-pointer ${
+            className={`min-h-[44px] text-xs font-mono transition-all cursor-pointer shrink-0 ${
               isDebugInspectorOpen
                 ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
                 : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
             }`}
           >
             <Cpu className="w-3.5 h-3.5 text-brand-amber" />
-            <span>Decision Logic & Debug ({telemetry?.durationMs || 0}ms)</span>
+            <span>Decision Logic &amp; Debug ({telemetry?.durationMs || 0}ms)</span>
           </Stack>
 
           {/* Full Schedule Browser Trigger */}
@@ -482,13 +480,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1.5}
             paddingX={3.5}
-            paddingY={3}
-            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={() => setIsFullScheduleOpen(true)}
-            className="bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs transition-colors cursor-pointer"
+            className="min-h-[44px] bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs font-mono transition-colors cursor-pointer shrink-0"
           >
             <ListFilter className="w-3.5 h-3.5 text-brand-cyan" />
             <span>View All Schedule ({allSessions.length})</span>
@@ -501,14 +497,12 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1}
             paddingX={2.5}
-            paddingY={3}
-            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={handleResetToAiPlan}
             title="Reset to AI Recommended Plan"
-            className="bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs transition-colors cursor-pointer"
+            className="min-h-[44px] bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer shrink-0"
           >
             <RotateCcw className="w-3 h-3" />
             <span>Reset</span>
@@ -521,12 +515,10 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={2}
             paddingX={4}
-            paddingY={3.5}
-            minHeight={11}
             radius="lg"
             type="button"
             onClick={handleDownloadCalendar}
-            className="bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs shadow-glow hover:opacity-90 transition-all cursor-pointer min-h-[44px]"
+            className="min-h-[44px] bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs font-mono shadow-glow hover:opacity-90 transition-all cursor-pointer shrink-0"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Add to Calendar (.ics)</span>
@@ -539,13 +531,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             align="center"
             gap={1.5}
             paddingX={3}
-            paddingY={3}
-            minHeight={11}
             radius="lg"
             border
             type="button"
             onClick={handleDownloadVisualSchedule}
-            className="bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs transition-colors cursor-pointer"
+            className="min-h-[44px] bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer shrink-0"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>.md</span>

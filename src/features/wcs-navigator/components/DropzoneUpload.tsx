@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 import { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Upload, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
-=======
-import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { ActionButton } from '@/components/ui/ActionButton';
->>>>>>> origin/jules-12681908217477206759-1599d167
 
 interface DropzoneUploadProps {
   onIngestPdf: (file: File) => void;
