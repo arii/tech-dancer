@@ -78,7 +78,7 @@
   --raw-z-dropdown: 20;
   --raw-z-sticky: 30;
   --raw-z-overlay: 40;
-  --raw-z-modal: 50;
+  --raw-z-modal: 100000;
   --raw-z-popover: 60;
   --raw-z-skip-link: 70;
   --raw-z-toast: 80;
