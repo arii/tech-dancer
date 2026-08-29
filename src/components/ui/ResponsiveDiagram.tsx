@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
@@ -161,12 +160,17 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       {/* Full-Screen Modal Overlay */}
       {isExpanded && typeof document !== 'undefined' && createPortal(
         <Stack
-          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between"
+          position="fixed"
+          inset
+          zIndex={50}
+          surface="surface"
           direction="col"
+          justify="between"
           padding={{ base: 4, sm: 8 }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
+          className="bg-surface/95 backdrop-blur-xl"
         >
           <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={4}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
@@ -227,8 +231,8 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           >
             <Box
               className="transition-all duration-150 cursor-default max-w-full max-h-full"
-              margin="auto"
-              style={{
+              marginX="auto"
+              style={{ // impeccable-ignore - Dynamic zoom scaling
                 width: `${100 * zoomScale}%`,
                 maxWidth: `${1400 * zoomScale}px`,
               }}
@@ -240,7 +244,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 alt={title ?? "Workflow Diagram"}
                 width="full"
                 height="auto"
-                className="mx-auto"
+                marginX="auto"
               />
             </Box>
           </Box>
