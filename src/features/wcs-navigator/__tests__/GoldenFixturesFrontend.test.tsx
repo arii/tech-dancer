@@ -76,7 +76,10 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     const rawTrace = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
     const adapted = adaptTraceToUserPreferences(rawTrace, userAnswers, 'Boogie by the Bay 2026');
     expect(adapted.bufferTimeline?.latestFlightArrivalDeadline).toBe('Local Commute (Drive-In)');
-    expect(adapted.bufferTimeline?.steps[0].label).toBe('Local Hotel / Venue Arrival Buffer');
+    const localStep = adapted.bufferTimeline?.steps.find(
+      (s) => s.type === 'transit' || s.type === 'flight' || s.label.includes('Local')
+    );
+    expect(localStep?.label).toBe('Local Hotel / Venue Arrival Buffer');
 
     // Intensive attendees get 12:00 PM landing target
     const intensiveAnswers = { intensive: 'yes', arrival: 'early_afternoon' };

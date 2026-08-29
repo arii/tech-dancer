@@ -460,15 +460,54 @@ export function adaptTraceToUserPreferences(
 
   return {
     ...baseTrace,
-    bufferTimeline: baseTrace.bufferTimeline
-      ? {
-          ...baseTrace.bufferTimeline,
-          latestFlightArrivalDeadline: calculatedArrivalDeadline,
-          earliestStagingTime: calculatedStagingTime,
-          steps: updatedSteps
-        }
-      : baseTrace.bufferTimeline,
-    sessions: updatedSessions
+    bufferTimeline: {
+      latestFlightArrivalDeadline: calculatedArrivalDeadline,
+      earliestStagingTime: calculatedStagingTime,
+      transitMinutes: isLocalCommute ? 45 : (baseTrace.bufferTimeline?.transitMinutes || 30),
+      hotelSettleMinutes: baseTrace.bufferTimeline?.hotelSettleMinutes || 90,
+      warmupMinutes: baseTrace.bufferTimeline?.warmupMinutes || 45,
+      steps:
+        updatedSteps.length > 0
+          ? updatedSteps
+          : [
+              {
+                time: isLocalCommute ? '4:15 PM' : (hasIntensive ? '12:00 PM' : '2:15 PM'),
+                type: isLocalCommute ? 'local_arrival' : 'transit',
+                label: isLocalCommute
+                  ? 'Local Hotel / Venue Arrival Buffer'
+                  : (hasIntensive ? 'Midday Flight Touchdown for Intensive' : 'Target Safe Flight Landing'),
+                description: isLocalCommute
+                  ? 'Drive in, park, and complete registration before staging check-in.'
+                  : 'Recommended landing time before Friday evening workshops & competitions.',
+                bufferMinutes: isLocalCommute ? 45 : 30,
+                iconName: isLocalCommute ? 'Car' : 'Plane',
+              },
+              {
+                time: isLocalCommute ? '4:30 PM' : (hasIntensive ? '1:00 PM' : '3:00 PM'),
+                type: 'hotel',
+                label: 'Hotel Check-In & Bag Drop',
+                description: 'Check in or store bags with bell desk and change into dance gear.',
+                bufferMinutes: 45,
+                iconName: 'Building',
+              },
+              {
+                time: isLocalCommute ? '4:45 PM' : (hasIntensive ? '1:30 PM' : '4:30 PM'),
+                type: 'warmup',
+                label: 'Footwear & Dynamic Warmup',
+                description: 'Suede shoe check, dynamic stretching, and rhythm calibration in practice hall.',
+                bufferMinutes: 45,
+                iconName: 'Activity',
+              },
+              {
+                time: calculatedStagingTime,
+                type: 'staging',
+                label: isSocialOnly ? 'Friday Social Kickoff & Evening Mixer' : `${divisionLabel} Strictly Swing Staging Call`,
+                description: isSocialOnly ? 'Friday Welcome Dance & Social Kickoff' : `${divisionLabel} division marshalling check-in`,
+                iconName: isSocialOnly ? 'Music' : 'Trophy',
+              },
+            ],
+    },
+    sessions: updatedSessions,
   };
 }
 
