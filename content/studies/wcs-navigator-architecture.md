@@ -55,7 +55,11 @@ sequenceDiagram
 ```
 
 ### Key Architectural Characteristics
+<<<<<<< HEAD
 - **Stage 1 Discovery (`/api/v1/discover`)**: Fast timetable extraction utilizing Gemini-3.5-Flash, PyPDF, or client heuristic extractors to build the event footprint (audition bands, parallel track streams, headlining champions, and airport logistics).
+=======
+- **Stage 1 Discovery (`/api/v1/discover`)**: Fast timetable extraction utilizing Gemini-2.5-Pro, PyPDF, or client heuristic extractors to build the event footprint (audition bands, parallel track streams, headlining champions, and airport logistics).
+>>>>>>> origin/docs/wcs-navigator-architecture-update-10604771613681517063
 - **Stage 2 Generation (`/api/v1/generate`)**: Constraint-optimized schedule synthesis, returning personalized RFC 5545 `.ics` streams and mobile Markdown (`.md`) itineraries.
 - **Transparent Gateway Fallback**: If the live FastAPI backend is offline or unreachable, the application smoothly transitions using `GatewayFallbackBanner` to client-side heuristic extraction without disrupting user workflow.
 
@@ -128,7 +132,11 @@ To ensure complete transparency and satisfy WCS Navigator's **Explainability Fir
 
 ### The 4-Tab Inspector Architecture
 1. **🎯 Confirmed Inputs & Persona Extraction**: Displays extracted competitor divisions, explicit or universal dance roles, computed arrival targets, and raw questionnaire answer mappings.
+<<<<<<< HEAD
 2. **⚡ Gateway & Engine Telemetry (`ServiceTelemetry`)**: Tracks real-time service endpoints (e.g., `/api/v1/discover`, `/api/v1/generate`), execution latency (`durationMs`), HTTP response statuses (e.g., `200 OK`), active processing engine (`FastAPI / Gemini-3.5-Flash` vs. `Client Rule Engine`), and collapsible request/response payloads.
+=======
+2. **⚡ Gateway & Engine Telemetry (`ServiceTelemetry`)**: Tracks real-time service endpoints (e.g., `/api/v1/discover`, `/api/v1/generate`), execution latency (`durationMs`), HTTP response statuses (e.g., `200 OK`), active processing engine (`FastAPI / Gemini-2.5-Pro` vs. `Client Rule Engine`), and collapsible request/response payloads.
+>>>>>>> origin/docs/wcs-navigator-architecture-update-10604771613681517063
 3. **🔍 Rule Engine Filtering Audit Matrix**: Step-by-step human-readable justification matrix listing every session evaluated, showing inclusion (`✅ Included`) or filtering (`⛔ Filtered Out`) status alongside specific rule reasons.
 4. **📦 Raw JSON Schemas**: Interactive schema inspection and one-click clipboard export for `DiscoveryResponse`, `AgentDecisionTrace`, and `FlightBuffer` structures.
 
