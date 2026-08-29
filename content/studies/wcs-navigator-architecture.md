@@ -1,17 +1,13 @@
 ---
-type: post
+type: study
 title: "WCS Navigator Architecture Deep Dive"
 date: "2026-08-28"
 author: "Ariel Anders, PhD"
-category: "Tech"
+category: "DevAI"
+tags: ["DevAI", "FastAPI", "Gemini", "React", "WCS", "Automation"]
 excerpt: "Explore how WCS Navigator uses a search-first UI, pre-flight footprint analysis, auto-advancing card questionnaires, and stateless in-memory calendar streaming to deliver personalized convention itineraries."
-image: ""
-tags:
-  - automation
-  - wcs
-  - fastapi
-  - gemini
-  - devai
+readTime: 6
+status: "published"
 ---
 
 ## Building a Stateless Multi-Modal Agent

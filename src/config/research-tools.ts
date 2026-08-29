@@ -77,6 +77,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Live Tool',
     tags: ['React', 'WCS Events', 'Persona Generator', 'Schedule Parsing'],
     canonicalPath: '/wcs-navigator',
+    deepDivePath: '/research/wcs-navigator-architecture',
     isFeatured: true,
     image: '/assets/research/wcs-navigator-preview.png',
     imageAlt: 'Screenshot of the WCS Navigator interactive schedule explorer and persona presets'

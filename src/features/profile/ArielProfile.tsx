@@ -8,8 +8,7 @@ const PortfolioCta = () => (
   <Box
     display="flex"
     wrap="wrap"
-    align="start"
-    align={{ sm: "center" }}
+    align={{ base: "start", sm: "center" }}
     justify="between"
     gap={4}
     marginTop={6}
@@ -140,8 +139,7 @@ const ArielProfile = () => {
                           overflow="hidden"
                           radius="2xl"
                           border
-                          aspect={isSquare ? "square" : "4/3"}
-                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'max-w-md mx-auto' : ''}`}
+                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'aspect-square max-w-md mx-auto' : 'aspect-[4/3]'}`}
                         >
                           <img
                             src={img.src}
@@ -167,8 +165,7 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="2/3"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm aspect-[2/3]"
                     >
                       <img
                         src={wcsLove.gallery[0].src}
@@ -223,8 +220,7 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="3/2"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
+                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
                     >
                       <img
                         src={whyBuilt.gallery[0].src}
@@ -248,8 +244,7 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="3/2"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
+                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
                     >
                       <img
                         src={financialStrategies.gallery[0].src}

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Search, Upload, X, ChevronRight } from 'lucide-react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { DropzoneUpload } from './DropzoneUpload';
 
