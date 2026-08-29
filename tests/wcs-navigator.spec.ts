@@ -8,7 +8,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
   test('Step 1: Ingestion & Preset Selection with ARIA combobox semantics', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /WCS Navigator/i })).toBeVisible();
 
-    const searchInput = page.getByRole('combobox', { name: /Search convention or city/i });
+    const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await expect(searchInput).toBeVisible();
     await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
 
@@ -33,7 +33,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await expect(page.getByText(/Drop Event Schedule PDF here/i)).toBeVisible();
 
     // Test URL Ingestion via Search Box Omnibox
-    const searchInput = page.getByRole('combobox', { name: /Search convention or paste PDF URL/i });
+    const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await searchInput.fill('https://boogiebythebay.org/schedule.pdf');
     await searchInput.press('Enter');
 
@@ -42,7 +42,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
 
   test('Step 2 - Step 6: Full multi-step user journey, debug inspector tabs, modal customization, and edit recovery', async ({ page }) => {
     // Step 1: Preset Selection (South Bay Dance Fling)
-    const searchInput = page.getByRole('combobox', { name: /Search convention or city/i });
+    const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await searchInput.click();
     await searchInput.fill('South Bay');
     await page.getByRole('button', { name: /South Bay Dance Fling/i }).first().click();
@@ -143,7 +143,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     // Set viewport to mobile screen (375x812 iPhone)
     await page.setViewportSize({ width: 375, height: 812 });
 
-    const searchInput = page.getByRole('combobox', { name: /Search convention or city/i });
+    const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await searchInput.click();
     await searchInput.fill('Boogie');
     await page.getByRole('button', { name: /Boogie by the Bay/i }).first().click();
@@ -188,7 +188,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await page.getByRole('button', { name: /Hide Details/i }).click();
 
     // Select preset to advance to results and test FullScheduleModal dismiss button
-    const searchInput = page.getByRole('combobox', { name: /Search convention or city/i });
+    const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await searchInput.click();
     await searchInput.fill('Halloween');
     await page.getByRole('button', { name: /Halloween SwingThing/i }).first().click();

@@ -90,12 +90,12 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
         direction="col"
         width="full"
         maxWidth="4xl"
-        maxHeight="screen"
         surface="surface"
         border
         radius="2xl"
         shadow="2xl"
         overflow="hidden"
+        className="max-h-[90vh] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -269,7 +269,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                         {isIncluded ? (
                           <>
                             <Icon icon={X} size="xs" />
-                            <span>Remove</span>
+                            <span>Remove from Schedule</span>
                           </>
                         ) : (
                           <>
