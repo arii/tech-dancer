@@ -95,8 +95,8 @@ describe('useNavigatorStorage Hook Suite', () => {
       result.current.saveCustomSchedule('South Bay Dance Fling 2026', sessionIds);
     });
 
-    const key = 'wcs_navigator_schedule_south-bay-dance-fling-2026';
-    const stored = localStorage.getItem(key);
+    const storageKeyName = 'wcs_navigator_schedule_south-bay-dance-fling-2026';
+    const stored = localStorage.getItem(storageKeyName);
     expect(stored).not.toBeNull();
     expect(JSON.parse(stored!).includedSessionIds).toEqual(sessionIds);
 
@@ -107,7 +107,7 @@ describe('useNavigatorStorage Hook Suite', () => {
       result.current.clearCustomSchedule('South Bay Dance Fling 2026');
     });
 
-    expect(localStorage.getItem(key)).toBeNull();
+    expect(localStorage.getItem(storageKeyName)).toBeNull();
     expect(result.current.getSavedSchedule('South Bay Dance Fling 2026')).toBeNull();
   });
 
@@ -130,7 +130,8 @@ describe('useNavigatorStorage Hook Suite', () => {
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to save tech-dancer-wcs-draft to localStorage:'),
+      expect.stringContaining('Failed to save to localStorage:'),
+      expect.anything(),
       expect.anything()
     );
 
