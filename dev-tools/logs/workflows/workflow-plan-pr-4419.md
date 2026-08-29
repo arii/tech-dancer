@@ -1,0 +1,1 @@
+I have audited PR #4419 (which supersedes #4418). Both target the same goal of updating the architecture deep dive docs. PR #4419 contains a more refined markdown update. Therefore, PR #4419 is the preferred implementation.

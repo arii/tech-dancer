@@ -1,0 +1,1 @@
+I have audited PR #4425 (which supersedes #4424). Both target the same goal of re-recording visual regression snapshots and cleaning up UI anti-patterns. PR #4425 is the more complete one, as it includes the necessary updates to `visual.spec.ts-snapshots` which #4424 misses, while both cover the other core requirements. Therefore, PR #4425 is the preferred implementation.
