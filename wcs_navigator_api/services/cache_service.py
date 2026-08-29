@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-CACHE_DIR = Path(".wcs_cache")
+import os
+
+CACHE_DIR = Path(os.getenv("WCS_CACHE_DIR", ".wcs_cache"))
 
 def get_cache_key(pdf_bytes: bytes, params: Optional[Dict[str, Any]] = None) -> str:
     """Computes a deterministic SHA256 hash for a request."""
@@ -28,10 +30,13 @@ def get_cached_response(cache_key: str) -> Optional[Dict[str, Any]]:
 
 def set_cached_response(cache_key: str, response_data: Dict[str, Any]) -> None:
     """Writes a response to the cache."""
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_path = CACHE_DIR / f"{cache_key}.json"
-    with open(cache_path, "w", encoding="utf-8") as f:
-        json.dump(response_data, f, ensure_ascii=False, indent=2)
+    try:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache_path = CACHE_DIR / f"{cache_key}.json"
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(response_data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 
 def pre_seed_fixtures() -> None:
     """Pre-seeds the cache with California 2026 event fixtures."""

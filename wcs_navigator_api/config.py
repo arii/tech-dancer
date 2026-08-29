@@ -1,11 +1,27 @@
+import re
 from google import genai
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+GEMINI_API_KEY_REGEX = re.compile(r"^AIzaSy[A-Za-z0-9_-]{33}$")
 
 
 class MissingGeminiAPIKeyError(Exception):
     """Raised when GEMINI_API_KEY environment variable is missing or empty."""
 
     pass
+
+
+class InvalidGeminiAPIKeyError(Exception):
+    """Raised when GEMINI_API_KEY format is invalid according to structure checks."""
+
+    pass
+
+
+def is_valid_gemini_api_key_format(key: str) -> bool:
+    """Validate structure of Google Gemini API key without making API calls."""
+    if not key:
+        return False
+    return bool(GEMINI_API_KEY_REGEX.match(key))
 
 
 class Settings(BaseSettings):
@@ -39,5 +55,9 @@ def get_genai_client() -> genai.Client:
     if not settings.GEMINI_API_KEY:
         raise MissingGeminiAPIKeyError(
             "GEMINI_API_KEY environment variable is missing or empty."
+        )
+    if not is_valid_gemini_api_key_format(settings.GEMINI_API_KEY):
+        raise InvalidGeminiAPIKeyError(
+            "GEMINI_API_KEY format is invalid (must start with 'AIzaSy' and be 39 characters)."
         )
     return genai.Client(api_key=settings.GEMINI_API_KEY)

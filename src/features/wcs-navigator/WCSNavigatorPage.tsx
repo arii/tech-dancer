@@ -36,6 +36,8 @@ export const WCSNavigatorPage: React.FC = () => {
 
   // Custom Upload & Live Gateway State
   const [uploadedPayload, setUploadedPayload] = useState<File | string | null>(null);
+  const [uploadType, setUploadType] = useState<'pdf' | 'url'>('pdf');
+  const [isDiscoveryLoading, setIsDiscoveryLoading] = useState<boolean>(false);
   const [customTrace, setCustomTrace] = useState<AgentDecisionTrace | null>(null);
   const [discoverySource, setDiscoverySource] = useState<'live_api' | 'client_heuristic'>('live_api');
   const [discoveryErrorReason, setDiscoveryErrorReason] = useState<string | undefined>();
@@ -83,22 +85,32 @@ export const WCSNavigatorPage: React.FC = () => {
 
   // Discovery handlers for custom uploads
   const handleStartCustomDiscovery = async (target: File | string, eventName?: string) => {
+    const isUrl = typeof target === 'string';
     const name = eventName || (target instanceof File ? target.name.replace(/\.pdf$/i, '') : target);
     setActiveEventName(name);
     setActiveEventId('');
     setUploadedPayload(target);
+    setUploadType(isUrl ? 'url' : 'pdf');
+    setIsDiscoveryLoading(true);
 
-    const result = await discoverSchedule(target, isMockMode);
-    setDiscoveryData(result.discovery);
-    setDecisionTrace(result.decisionTrace);
-    setCustomTrace(result.decisionTrace);
-    setDiscoverySource(result.source);
-    setDiscoveryErrorReason(result.errorReason);
-    if (result.telemetry) {
-      setActiveTelemetry(result.telemetry);
-    }
-
+    // Transition step to 'discovering' IMMEDIATELY so the user gets instant feedback
     setStep('discovering');
+
+    try {
+      const result = await discoverSchedule(target, isMockMode);
+      setDiscoveryData(result.discovery);
+      setDecisionTrace(result.decisionTrace);
+      setCustomTrace(result.decisionTrace);
+      setDiscoverySource(result.source);
+      setDiscoveryErrorReason(result.errorReason);
+      if (result.telemetry) {
+        setActiveTelemetry(result.telemetry);
+      }
+    } catch (err) {
+      console.error('[WCS Navigator] Custom discovery error:', err);
+    } finally {
+      setIsDiscoveryLoading(false);
+    }
   };
 
   const handleDiscoveryComplete = () => {
@@ -344,6 +356,10 @@ export const WCSNavigatorPage: React.FC = () => {
         {step === 'discovering' && (
           <AgentDiscoveryTransition
             eventName={activeEventName}
+            targetName={uploadedPayload instanceof File ? uploadedPayload.name : typeof uploadedPayload === 'string' ? uploadedPayload : activeEventName}
+            isCustomUpload={Boolean(uploadedPayload)}
+            uploadType={uploadType}
+            isAsyncLoading={isDiscoveryLoading}
             onComplete={handleDiscoveryComplete}
           />
         )}

@@ -8,6 +8,7 @@ import { PersonaChips } from '@/features/wcs-navigator/components/PersonaChips';
 import { DropzoneUpload } from '@/features/wcs-navigator/components/DropzoneUpload';
 import { EventSearchHero } from '@/features/wcs-navigator/components/EventSearchHero';
 import { WorkflowExplainer } from '@/features/wcs-navigator/components/WorkflowExplainer';
+import { AgentDiscoveryTransition } from '@/features/wcs-navigator/components/AgentDiscoveryTransition';
 import { WCSNavigatorPage } from '@/features/wcs-navigator/WCSNavigatorPage';
 
 afterEach(() => {
@@ -122,6 +123,28 @@ describe('WCS Navigator Components', () => {
     const hideBtn = screen.getByRole('button', { name: /Hide Details/i });
     fireEvent.click(hideBtn);
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders AgentDiscoveryTransition for custom uploads with stage progression labels', () => {
+    const onComplete = vi.fn();
+
+    render(
+      <AgentDiscoveryTransition
+        eventName="test-event"
+        targetName="test-schedule.pdf"
+        isCustomUpload={true}
+        uploadType="pdf"
+        isAsyncLoading={true}
+        onComplete={onComplete}
+      />
+    );
+
+    expect(screen.getByText('Uploading & Parsing Schedule')).toBeTruthy();
+    expect(screen.getByText(/test-schedule.pdf/i)).toBeTruthy();
+    expect(screen.getByText(/Uploading schedule document.../i)).toBeTruthy();
+    expect(screen.getByText(/Parsing schedule & extracting event details with AI.../i)).toBeTruthy();
+    expect(screen.getByText(/Analyzing workshop tracks & finding relevant details.../i)).toBeTruthy();
+    expect(screen.getByText(/Preparing personalized questionnaire.../i)).toBeTruthy();
   });
 
   it('renders WCSNavigatorPage end-to-end and navigates through wizard steps', async () => {
