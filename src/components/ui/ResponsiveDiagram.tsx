@@ -146,16 +146,16 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
         <Stack
           position="fixed"
           inset
-          zIndex="modal"
+          zIndex="search"
           direction="col"
           justify="between"
           padding={{ base: 4, sm: 6 }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
-          className="bg-bg/95 backdrop-blur-md text-text-main"
+          className="bg-bg/95 backdrop-blur-md text-text-main w-screen h-screen overflow-hidden"
         >
-          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3}>
+          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3} shrink={0}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
             <Stack direction="row" align="center" gap={2}>
               {/* Zoom Out */}
@@ -211,7 +211,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             justify="center"
             cursor="pointer"
             onClick={handleOverlayClick}
-            className="w-full h-full select-none"
+            className="w-full h-full select-none overflow-auto"
           >
             <Box
               padding={4}
@@ -220,7 +220,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               borderColor="line"
               surface="surface"
               shadow="2xl"
+              display="flex"
+              align="center"
+              justify="center"
               onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-full transition-transform duration-150 ease-out"
               style={{ // impeccable-ignore - Dynamic zoom scaling transform
                 transform: `scale(${zoomScale})`,
                 transformOrigin: 'center center',
@@ -230,9 +234,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                maxWidth="full"
-                height="auto"
-                className="max-w-full h-auto rounded-md"
+                className="max-w-full max-h-full w-auto h-auto object-contain rounded-md"
               />
             </Box>
           </Box>
