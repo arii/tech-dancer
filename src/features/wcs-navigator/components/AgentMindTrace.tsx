@@ -300,44 +300,46 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     return (
       <Box
         key={session.id}
-        padding={3.5}
+        padding={{ default: 4, sm: 5 }}
         radius="xl"
         border
-        className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3`}
+        className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
       >
         {/* Dedicated Left Time & Category Column */}
         <Stack
           direction={{ base: 'row', sm: 'col' }}
           align={{ base: 'center', sm: 'start' }}
           justify={{ base: 'between', sm: 'center' }}
-          gap={1.5}
-          paddingBottom={{ base: 2, sm: 0 }}
-          paddingRight={{ base: 0, sm: 4 }}
+          gap={2}
+          paddingBottom={{ base: 2.5, sm: 0 }}
+          paddingRight={{ base: 0, sm: 6 }}
           border={{ base: 'b', sm: 'r' }}
           borderColor="line"
-          className="sm:w-44 shrink-0"
+          className="sm:w-52 shrink-0"
         >
-          <Stack direction="row" align="center" gap={1.5}>
-            <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-            <Text variant="mono" size="xs" weight="font-bold" color="main" tracking="wide">
+          <Stack direction="row" align="center" gap={2}>
+            <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
+            <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="whitespace-nowrap">
               {session.time}
             </Text>
           </Stack>
-          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2} paddingY={0.5} radius="md" className="bg-white/10 w-fit">
+          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit">
             {badge}
           </Text>
         </Stack>
 
         {/* Center: Title & High-Contrast Details */}
-        <Stack gap={1} justify="center" flex={1} minWidth={0}>
-          <Text as="h4" weight="font-bold" size="sm" color="main" leading="snug">
+        <Stack gap={1.5} justify="center" flex={1} minWidth={0}>
+          <Text as="h4" weight="font-bold" size="base" color="main" leading="snug">
             {session.title}
           </Text>
-          <Stack direction="row" align="center" gap={2} className="text-xs text-text-dim">
-            <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
-            <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
+          <Stack direction="row" align="center" gap={3} flexWrap="wrap" className="text-xs text-text-dim">
+            <Stack direction="row" align="center" gap={1.5}>
+              <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+              <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
+            </Stack>
             {session.justification && (
-              <Text as="span" size="xs" color="dim" paddingLeft={2} border="l" borderColor="line" className="hidden md:inline truncate">
+              <Text as="span" size="xs" color="dim" paddingLeft={2} border="l" borderColor="line" className="leading-relaxed">
                 {session.justification}
               </Text>
             )}
@@ -350,18 +352,18 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             as="button"
             direction="row"
             align="center"
-            gap={1}
-            paddingX={2.5}
-            paddingY={1.5}
+            gap={1.5}
+            paddingX={3.5}
+            paddingY={2}
             radius="lg"
             type="button"
             onClick={() => handleToggleSession(session.id)}
             aria-label={`Remove ${session.title}`}
             title="Remove from my schedule"
-            className="min-h-11 text-xs text-text-dim hover:text-error hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-line/40"
+            className="min-h-11 text-xs font-mono text-text-dim hover:text-error hover:bg-error/10 bg-surface/50 border border-line/60 hover:border-error/40 transition-colors cursor-pointer font-medium"
           >
             <Icon icon={X} size="xs" />
-            <span className="sm:hidden md:inline">Remove</span>
+            <span>Remove</span>
           </Stack>
         </Stack>
       </Box>

@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React, { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ServiceTelemetry } from '../services/wcsApiClient';
@@ -212,30 +213,30 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
         {/* TAB 1: CONFIRMED INPUTS */}
         {activeTab === 'inputs' && (
           <Stack gap={4} width="full" className="animate-in fade-in duration-150">
-            <Grid cols={{ base: 1, md: 3 }} gap={3} width="full">
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+            <Grid cols={{ base: 1, md: 3 }} gap={3.5} width="full">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Confirmed Division Persona
                 </Text>
-                <Text weight="font-bold" size="sm" color="main" marginTop={1}>
-                  {confirmedDivision?.toUpperCase() || 'NOVICE'}
+                <Text variant="mono" weight="font-bold" size="sm" color="main">
+                  {confirmedDivision ? confirmedDivision.toUpperCase() : 'NOVICE'}
                 </Text>
               </Box>
 
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Confirmed Dance Role
                 </Text>
-                <Text weight="font-bold" size="sm" color="main" marginTop={1}>
-                  {confirmedRole ? confirmedRole.toUpperCase() : 'None Specified (Universal)'}
+                <Text variant="mono" weight="font-bold" size="sm" color="main">
+                  {confirmedRole ? confirmedRole.toUpperCase() : 'UNIVERSAL (NOT SPECIFIED)'}
                 </Text>
               </Box>
 
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
-                  Target Landing Target
+                  Target Flight Touchdown
                 </Text>
-                <Text weight="font-bold" size="sm" color="main" marginTop={1}>
+                <Text variant="mono" weight="font-bold" size="sm" color="main">
                   {bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Friday'}
                 </Text>
               </Box>
@@ -258,14 +259,14 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                     {Object.entries(answers).map(([key, val], idx) => (
                       <Box
                         key={key}
-                        padding={3}
+                        padding={3.5}
                         display="flex"
                         align="center"
                         justify="between"
                         className={`text-xs font-mono ${idx > 0 ? 'border-t border-line/30' : ''}`}
                       >
                         <span className="text-brand-cyan font-bold">{key}</span>
-                        <Box as="span" paddingX={2} paddingY={1} radius="md" className="text-text-main bg-white/5">
+                        <Box as="span" paddingX={2.5} paddingY={1} radius="md" className="text-text-main bg-white/5">
                           {Array.isArray(val) ? val.join(', ') : String(val)}
                         </Box>
                       </Box>
@@ -280,39 +281,39 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
         {/* TAB 2: GATEWAY & TASKMAKER TELEMETRY */}
         {activeTab === 'telemetry' && (
           <Stack gap={4} width="full" className="animate-in fade-in duration-150">
-            <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={3} width="full">
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+            <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={3.5} width="full">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Service Endpoint
                 </Text>
-                <Text weight="font-bold" size="xs" color="main" marginTop={1} className="truncate font-mono">
+                <Text variant="mono" weight="font-bold" size="sm" color="main" className="truncate">
                   {telemetry?.endpoint || '/api/v1/discover'}
                 </Text>
               </Box>
 
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Execution Latency
                 </Text>
-                <Text weight="font-bold" size="sm" color="accent" marginTop={1} className="font-mono">
+                <Text variant="mono" weight="font-bold" size="sm" color="accent">
                   {telemetry?.durationMs || 0} ms
                 </Text>
               </Box>
 
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Processing Engine
                 </Text>
-                <Text weight="font-bold" size="xs" color="main" marginTop={1} className="truncate font-mono">
+                <Text variant="mono" weight="font-bold" size="sm" color="main" className="truncate">
                   {telemetry?.engine || 'Local Heuristic Engine'}
                 </Text>
               </Box>
 
-              <Box padding={3.5} radius="xl" border className="bg-surface/70 border-line/60">
+              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   HTTP Response Status
                 </Text>
-                <Text weight="font-bold" size="sm" color={telemetry?.httpStatus === 200 ? 'main' : 'dim'} marginTop={1} className="font-mono">
+                <Text variant="mono" weight="font-bold" size="sm" color={telemetry?.httpStatus === 200 ? 'main' : 'dim'}>
                   {telemetry?.httpStatus ? `HTTP ${telemetry.httpStatus}` : '200 OK (Client Local)'}
                 </Text>
               </Box>

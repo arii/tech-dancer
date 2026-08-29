@@ -2,12 +2,12 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
-import { DevLabCallout } from '@/features/home/DevLabCallout';
+import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
 import { useProfile } from './useProfile';
 
 const PortfolioCta = () => (
   <Box marginTop={6}>
-    <DevLabCallout />
+    <RoboticsPortfolioCard />
   </Box>
 );
 

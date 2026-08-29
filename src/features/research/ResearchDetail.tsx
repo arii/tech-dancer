@@ -14,7 +14,8 @@ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
-import { DevLabCallout } from '@/features/home/DevLabCallout';
+import { ActionButton } from '@/components/ui/ActionButton';
+import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -114,7 +115,7 @@ export default function ResearchDetail() {
             <Stack gap={4}>
               {/* Primary Portfolio CTA Banner */}
               <Box marginBottom={2}>
-                <DevLabCallout />
+                <RoboticsPortfolioCard />
               </Box>
 
               <EditorialHeader

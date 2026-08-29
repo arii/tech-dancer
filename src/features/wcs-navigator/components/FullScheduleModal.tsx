@@ -199,28 +199,28 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                 return (
                   <Box
                     key={session.id}
-                    padding={3.5}
+                    padding={{ default: 4, sm: 5 }}
                     radius="xl"
                     border
                     className={`transition-all ${style} ${
                       isIncluded ? 'ring-1 ring-white/20' : 'opacity-75 hover:opacity-100'
-                    } flex flex-col sm:flex-row sm:items-center justify-between gap-3`}
+                    } flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
                   >
                     {/* Left: Time & Badge Column */}
                     <Stack
                       direction={{ base: 'row', sm: 'col' }}
                       align={{ base: 'center', sm: 'start' }}
                       justify={{ base: 'between', sm: 'center' }}
-                      gap={1.5}
-                      paddingBottom={{ base: 2, sm: 0 }}
-                      paddingRight={{ base: 0, sm: 4 }}
+                      gap={2}
+                      paddingBottom={{ base: 2.5, sm: 0 }}
+                      paddingRight={{ base: 0, sm: 6 }}
                       border={{ base: 'b', sm: 'r' }}
                       borderColor="line"
-                      className="sm:w-44 shrink-0"
+                      className="sm:w-52 shrink-0"
                     >
-                      <Stack direction="row" align="center" gap={1.5}>
-                        <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                        <Text variant="mono" size="xs" weight="font-bold" color="main" tracking="wide">
+                      <Stack direction="row" align="center" gap={2}>
+                        <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
+                        <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="whitespace-nowrap">
                           {session.time}
                         </Text>
                       </Stack>
@@ -245,12 +245,12 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                     </Stack>
 
                     {/* Center: Title & Location */}
-                    <Stack gap={1} justify="center" flex={1} minWidth={0}>
-                      <Text as="h4" weight="font-bold" size="sm" color="main" leading="snug">
+                    <Stack gap={1.5} justify="center" flex={1} minWidth={0}>
+                      <Text as="h4" weight="font-bold" size="base" color="main" leading="snug">
                         {session.title}
                       </Text>
                       <Stack direction="row" align="center" gap={2} className="text-xs text-text-dim">
-                        <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
                         <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
                       </Stack>
                     </Stack>
@@ -260,16 +260,16 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                       <button
                         type="button"
                         onClick={() => onToggleSession(session.id)}
-                        className={`min-h-11 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                        className={`min-h-11 flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-mono font-medium transition-colors cursor-pointer ${
                           isIncluded
                             ? 'bg-surface-alt/70 hover:bg-surface text-text-dim hover:text-error border border-line/60'
-                            : 'bg-brand-cyan/15 hover:bg-brand-cyan/25 text-brand-cyan border border-brand-cyan/30'
+                            : 'bg-brand-cyan/15 hover:bg-brand-cyan/25 text-brand-cyan border border-brand-cyan/30 font-bold'
                         }`}
                       >
                         {isIncluded ? (
                           <>
                             <Icon icon={X} size="xs" />
-                            <span>Remove from Schedule</span>
+                            <span>Remove</span>
                           </>
                         ) : (
                           <>
