@@ -345,18 +345,68 @@ export function adaptTraceToUserPreferences(
   const isSocialOnly = divisionKey.includes('social') || divisionKey === 'social_only';
   const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');
 
-  // Adapt Buffer Timeline
+  // Detect Arrival Mode & Intensive Registration
+  const arrivalVal = String(answers.arrival || answers.arrival_target || answers.arrival_time || '').toLowerCase();
+  const intensiveVal = String(answers.intensive || answers.intensives || answers.masterclass || '').toLowerCase();
+  const hasIntensive = intensiveVal.includes('yes') || intensiveVal === 'yes_masterclass' || intensiveVal === 'intensive_registered';
+  const isLocalCommute = arrivalVal.includes('local') || arrivalVal === 'drive' || arrivalVal === 'commute';
+  const isEveningArrival = arrivalVal.includes('evening') || arrivalVal.includes('after_work') || arrivalVal === 'friday_evening';
+
+  let calculatedArrivalDeadline = '2:15 PM Friday';
+  let calculatedStagingTime = '5:15 PM Friday';
+
+  if (isLocalCommute) {
+    calculatedArrivalDeadline = 'Local Commute (Drive-In)';
+    calculatedStagingTime = '5:15 PM Friday';
+  } else if (hasIntensive) {
+    calculatedArrivalDeadline = '12:00 PM Friday';
+    calculatedStagingTime = '1:45 PM Friday';
+  } else if (isEveningArrival) {
+    calculatedArrivalDeadline = '6:30 PM Friday';
+    calculatedStagingTime = '8:00 PM Friday';
+  }
+
+  // Adapt Buffer Timeline Steps
   const updatedSteps = (baseTrace.bufferTimeline?.steps || []).map((step) => {
+    if (step.type === 'transit' || step.label.toLowerCase().includes('flight') || step.label.toLowerCase().includes('touchdown')) {
+      if (isLocalCommute) {
+        return {
+          ...step,
+          time: '4:15 PM',
+          label: 'Local Hotel / Venue Arrival Buffer',
+          description: 'Drive in, park, and complete registration before staging check-in.'
+        };
+      }
+      if (hasIntensive) {
+        return {
+          ...step,
+          time: '12:00 PM',
+          label: 'Midday Flight Touchdown for Intensive',
+          description: 'Land early to settle into hotel before 2:00 PM Intensive workshops.'
+        };
+      }
+      if (isEveningArrival) {
+        return {
+          ...step,
+          time: '6:30 PM',
+          label: 'Evening Flight Touchdown & Transit',
+          description: 'Evening arrival buffer for social dancing and late-night mixer.'
+        };
+      }
+    }
+
     if (step.type === 'staging' || step.label.toLowerCase().includes('staging') || step.label.toLowerCase().includes('prelim')) {
       if (isSocialOnly) {
         return {
           ...step,
+          time: isEveningArrival ? '9:00 PM' : '8:00 PM',
           label: 'Friday Social Kickoff & Evening Mixer',
           description: 'Friday Welcome Dance & Social Kickoff'
         };
       }
       return {
         ...step,
+        time: calculatedStagingTime,
         label: `${divisionLabel} Strictly Swing Staging Call`,
         description: `${divisionLabel} division marshalling check-in`
       };
@@ -413,6 +463,8 @@ export function adaptTraceToUserPreferences(
     bufferTimeline: baseTrace.bufferTimeline
       ? {
           ...baseTrace.bufferTimeline,
+          latestFlightArrivalDeadline: calculatedArrivalDeadline,
+          earliestStagingTime: calculatedStagingTime,
           steps: updatedSteps
         }
       : baseTrace.bufferTimeline,

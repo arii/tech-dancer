@@ -6,7 +6,7 @@ import bbbFixture from '../../../../wcs_navigator_api/tests/fixtures/bbb_2026.js
 import halloweenFixture from '../../../../wcs_navigator_api/tests/fixtures/halloween_2026.json';
 import { DiscoveryResponse } from '../types/navigator';
 import { AgentDecisionTrace } from '../types';
-import { extractUserDivision, adaptTraceToUserPreferences } from '../utils/scheduleRuleEngine';
+import { extractUserDivision, extractUserRole, adaptTraceToUserPreferences } from '../utils/scheduleRuleEngine';
 
 describe('Frontend Integration & Compatibility Verification with California 2026 Fixtures', () => {
   afterEach(() => {
@@ -59,5 +59,28 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     const adapted = adaptTraceToUserPreferences(rawTrace, answers1, 'The Aloha Open 2026');
     const strictlySession = adapted.sessions.find((s) => s.title.includes('Strictly'));
     expect(strictlySession?.title).toContain('Intermediate');
+  });
+
+  it('correctly handles local commuter arrival target and does not assume dance role without user confirmation', () => {
+    const userAnswers = {
+      intensive: 'no_intensives',
+      division: 'novice',
+      arrival: 'local',
+      track: 'competitor_workshops',
+    };
+
+    // Role should not be assumed
+    expect(extractUserRole(userAnswers)).toBe('');
+
+    // Target landing should adapt to Local Commute
+    const rawTrace = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
+    const adapted = adaptTraceToUserPreferences(rawTrace, userAnswers, 'Boogie by the Bay 2026');
+    expect(adapted.bufferTimeline?.latestFlightArrivalDeadline).toBe('Local Commute (Drive-In)');
+    expect(adapted.bufferTimeline?.steps[0].label).toBe('Local Hotel / Venue Arrival Buffer');
+
+    // Intensive attendees get 12:00 PM landing target
+    const intensiveAnswers = { intensive: 'yes', arrival: 'early_afternoon' };
+    const adaptedIntensive = adaptTraceToUserPreferences(rawTrace, intensiveAnswers, 'Boogie by the Bay 2026');
+    expect(adaptedIntensive.bufferTimeline?.latestFlightArrivalDeadline).toBe('12:00 PM Friday');
   });
 });
