@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/jules/wcs-navigator-e2e-a11y-audit-17006745049560339877/sitemap.xml
