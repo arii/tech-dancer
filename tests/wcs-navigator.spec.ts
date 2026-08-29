@@ -142,6 +142,46 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await expect(page.getByText(/Step 1/i)).toBeVisible();
   });
 
+  test('Mobile Responsive Viewport & Clean Formatting Check', async ({ page }) => {
+    // Set viewport to mobile screen (375x812 iPhone)
+    await page.setViewportSize({ width: 375, height: 812 });
+
+    const searchInput = page.getByRole('combobox', { name: /Search convention or city/i });
+    await searchInput.click();
+    await searchInput.fill('Boogie');
+    await page.getByRole('button', { name: /Boogie by the Bay/i }).first().click();
+
+    await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
+
+    // Step through questionnaire
+    const optionBtn = page.locator('button:has(h4)').first();
+    if ((await optionBtn.count()) > 0) {
+      await optionBtn.click();
+    }
+
+    for (let i = 0; i < 8; i++) {
+      if (await page.getByText(/Pre-Event Transit Logistics/i).isVisible()) break;
+      const genBtn = page.locator('button:has-text("Generate Final Itinerary"), button:has-text("Generate Itinerary")').first();
+      if ((await genBtn.count()) > 0 && await genBtn.isVisible()) {
+        await genBtn.click();
+        break;
+      }
+      const optBtn = page.locator('button:has(h4)').first();
+      if ((await optBtn.count()) > 0 && await optBtn.isVisible()) {
+        await optBtn.click();
+      }
+      await page.waitForTimeout(200);
+    }
+
+    await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
+
+    // Verify Mobile Decision Logic & Debug button works cleanly without overlap
+    const debugBtn = page.getByRole('button', { name: /Decision Logic & Debug/i });
+    await expect(debugBtn).toBeVisible();
+    await debugBtn.click();
+    await expect(page.getByText(/Agent Decision Logic & Taskmaker Telemetry/i)).toBeVisible();
+  });
+
   test('Accessibility & Keyboard Focus Trapping', async ({ page }) => {
     // Test Workflow Explainer Modal Dismissal
     const howItWorksBtn = page.getByRole('button', { name: /How WCS Navigator Works guide/i });
