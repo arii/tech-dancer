@@ -144,4 +144,20 @@ describe('DecisionDebugInspector Suite', () => {
 
     expect(writeTextMock).toHaveBeenCalled();
   });
+
+  it('renders default role indicator when confirmedRole is empty (no assumption)', () => {
+    render(
+      <DecisionDebugInspector
+        eventName="The Aloha Open 2026"
+        confirmedDivision="novice"
+        confirmedRole=""
+        answers={{ division: 'novice' }}
+        telemetry={mockTelemetry}
+        decisionTrace={mockDecisionTrace}
+      />
+    );
+
+    expect(screen.getByText('NOVICE')).toBeDefined();
+    expect(screen.getByText('None Specified (Universal)')).toBeDefined();
+  });
 });

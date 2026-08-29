@@ -86,4 +86,37 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     const adaptedIntensive = adaptTraceToUserPreferences(rawTrace, intensiveAnswers, 'Boogie by the Bay 2026');
     expect(adaptedIntensive.bufferTimeline?.latestFlightArrivalDeadline).toBe('12:00 PM Friday');
   });
+
+  it('validates Scenario: Local Novice Competitor (No Intensives) schedule inputs and output rules', () => {
+    const noviceLocalInputs = {
+      division: 'novice',
+      role: '',
+      arrival: 'local',
+      intensive: 'no_intensives',
+      track: 'competitor_workshops',
+    };
+
+    // Confirmed Profile: NOVICE with zero unconfirmed LEAD assumption
+    expect(extractUserDivision(noviceLocalInputs)).toBe('novice');
+    expect(extractUserRole(noviceLocalInputs)).toBe('');
+
+    const rawTrace = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
+    const adapted = adaptTraceToUserPreferences(rawTrace, noviceLocalInputs, 'Boogie by the Bay 2026');
+
+    // Landing Target: Local Commute (Drive-In)
+    expect(adapted.bufferTimeline?.latestFlightArrivalDeadline).toBe('Local Commute (Drive-In)');
+
+    // Buffer step: Local Hotel / Venue Arrival Buffer
+    const bufferStep = adapted.bufferTimeline?.steps.find((s) => s.label.includes('Local Hotel'));
+    expect(bufferStep).toBeDefined();
+    expect(bufferStep?.label).toBe('Local Hotel / Venue Arrival Buffer');
+
+    // Sessions: Novice prelims included; higher division / intensive sessions filtered
+    const novicePrelim = adapted.sessions.find((s) => s.title.includes('Novice'));
+    expect(novicePrelim?.status).toBe('included');
+
+    const filteredSessions = adapted.sessions.filter((s) => s.status === 'filtered');
+    expect(filteredSessions.length).toBeGreaterThan(0);
+    expect(filteredSessions[0].justification).toBeDefined();
+  });
 });
