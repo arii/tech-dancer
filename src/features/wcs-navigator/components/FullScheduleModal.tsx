@@ -139,35 +139,45 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           paddingY={3}
           border="b"
           borderColor="line"
-          className="bg-surface/50 items-center"
+          className="bg-surface/50"
         >
           {/* Day Tabs */}
           <Stack direction="row" align="center" gap={1.5}>
             {(['all', 'friday', 'saturday', 'sunday'] as const).map((day) => (
-              <button
+              <Box
+                as="button"
                 key={day}
                 type="button"
                 onClick={() => setActiveDay(day)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors cursor-pointer ${
+                paddingX={3}
+                paddingY={1.5}
+                radius="lg"
+                className={`text-xs font-medium capitalize transition-colors cursor-pointer ${
                   activeDay === day
                     ? 'bg-brand-cyan text-black font-bold'
                     : 'bg-surface-alt/80 text-text-dim hover:text-white border border-line/60'
                 }`}
               >
                 {day === 'all' ? 'All Days' : day}
-              </button>
+              </Box>
             ))}
           </Stack>
 
           {/* Search Box */}
           <Box display="flex" align="center" gap={2} className="relative w-full sm:w-64">
             <Search className="w-4 h-4 text-text-dim absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
+            <Box
+              as="input"
               type="text"
               placeholder="Search sessions or instructors..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-surface-alt border border-line text-xs text-white placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              paddingLeft={8}
+              paddingRight={3}
+              paddingY={1.5}
+              radius="lg"
+              width="full"
+              className="bg-surface-alt border border-line text-xs text-text-main placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
             />
           </Box>
         </Box>
@@ -197,15 +207,27 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                     } flex flex-col sm:flex-row sm:items-center justify-between gap-3`}
                   >
                     {/* Left: Time & Badge Column */}
-                    <div className="sm:w-44 shrink-0 flex sm:flex-col items-center sm:items-start justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r border-white/10 pb-2 sm:pb-0 sm:pr-4">
-                      <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-1.5">
+                    <Stack
+                      direction={{ base: 'row', sm: 'col' }}
+                      align={{ base: 'center', sm: 'start' }}
+                      justify={{ base: 'between', sm: 'center' }}
+                      gap={1.5}
+                      paddingBottom={{ base: 2, sm: 0 }}
+                      paddingRight={{ base: 0, sm: 4 }}
+                      border={{ base: 'b', sm: 'r' }}
+                      borderColor="line"
+                      className="sm:w-44 shrink-0"
+                    >
+                      <Stack direction="row" align="center" gap={1.5}>
                         <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                        <span>{session.time}</span>
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/10">
+                        <Text variant="mono" size="xs" weight="font-bold" color="main" tracking="wide">
+                          {session.time}
+                        </Text>
+                      </Stack>
+                      <Stack direction="row" align="center" gap={1.5}>
+                        <Text variant="mono" size="xs" weight="font-semibold" paddingX={2} paddingY={0.5} radius="md" className="bg-white/10">
                           {badge}
-                        </span>
+                        </Text>
                         <Box
                           as="span"
                           paddingX={2}
@@ -219,28 +241,28 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                         >
                           {isIncluded ? '✓ In Itinerary' : 'Excluded'}
                         </Box>
-                      </div>
-                    </div>
+                      </Stack>
+                    </Stack>
 
                     {/* Center: Title & Location */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
-                      <h4 className="font-bold text-sm sm:text-base text-white leading-snug">
+                    <Stack gap={1} justify="center" flex={1} minWidth={0}>
+                      <Text as="h4" weight="font-bold" size="sm" color="main" leading="snug">
                         {session.title}
-                      </h4>
-                      <div className="flex items-center gap-2 text-xs text-slate-300">
+                      </Text>
+                      <Stack direction="row" align="center" gap={2} className="text-xs text-text-dim">
                         <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
-                        <span className="font-medium text-slate-200">{session.location}</span>
-                      </div>
-                    </div>
+                        <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
+                      </Stack>
+                    </Stack>
 
                     {/* Right: Quieter Modal Action Button */}
-                    <div className="shrink-0 flex items-center justify-end border-t sm:border-t-0 border-white/10 pt-2 sm:pt-0">
+                    <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: 'none' }} borderColor="line" className="shrink-0">
                       <button
                         type="button"
                         onClick={() => onToggleSession(session.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                        className={`min-h-11 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                           isIncluded
-                            ? 'bg-surface-alt/70 hover:bg-surface text-text-dim hover:text-red-400 border border-line/60'
+                            ? 'bg-surface-alt/70 hover:bg-surface text-text-dim hover:text-error border border-line/60'
                             : 'bg-brand-cyan/15 hover:bg-brand-cyan/25 text-brand-cyan border border-brand-cyan/30'
                         }`}
                       >
@@ -256,7 +278,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                           </>
                         )}
                       </button>
-                    </div>
+                    </Stack>
                   </Box>
                 );
               })}

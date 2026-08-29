@@ -81,14 +81,19 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
       <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5} className="min-w-0">
         <Box display="flex" align="center" gap={2} className="min-w-0 shrink-0">
           {currentStep > 0 && (
-            <button
+            <Stack
+              as="button"
+              direction="row"
+              align="center"
+              gap={1}
+              paddingX={2}
               type="button"
               onClick={handleBack}
-              className="min-h-11 h-11 px-2 flex items-center gap-1 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
+              className="min-h-11 h-11 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
-            </button>
+            </Stack>
           )}
           <Text variant="mono" size="xs" color="dim" uppercase tracking="wider" className="shrink-0">
             Step {currentStep + 1} of {totalSteps}
@@ -96,13 +101,17 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         </Box>
 
         <Stack direction="row" align="center" gap={3} className="shrink-0">
-          <button
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            paddingX={2}
             type="button"
             onClick={handleSkipQuestion}
-            className="min-h-11 h-11 px-2 flex items-center text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
+            className="min-h-11 h-11 text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
           >
             Skip question →
-          </button>
+          </Stack>
           <span className="text-text-dim/40">•</span>
           <Text variant="mono" size="xs" color="dim">
             {progressPercent}%
@@ -224,25 +233,47 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         display="flex"
         align="center"
         justify="between"
-        className="sticky bottom-0 z-20 bg-surface-alt/95 backdrop-blur-md border-t border-line/60 py-3 px-4 -mx-4 shadow-lg sm:static sm:bg-transparent sm:backdrop-blur-none sm:border-t sm:border-line/40 sm:p-0 sm:m-0 sm:shadow-none sm:mt-6 sm:pt-6 text-xs font-mono gap-2"
+        paddingX={{ base: 4, sm: 0 }}
+        paddingY={{ base: 3, sm: 0 }}
+        marginTop={{ base: 0, sm: 6 }}
+        paddingTop={{ base: 0, sm: 6 }}
+        border="t"
+        borderColor="line"
+        className="sticky bottom-0 z-20 bg-surface-alt/95 backdrop-blur-md shadow-lg sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none text-xs font-mono"
       >
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3}
+          paddingY={2}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipQuestion}
-          className="min-h-11 h-11 flex items-center gap-1.5 text-text-dim hover:text-text-main transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface border border-line/50 shrink-0"
+          className="min-h-11 h-11 text-text-dim hover:text-text-main transition-colors cursor-pointer hover:bg-surface border-line/50 shrink-0"
         >
           <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
           <span>Skip Step →</span>
-        </button>
+        </Stack>
 
-        <button
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3.5}
+          paddingY={2}
+          radius="lg"
+          border
           type="button"
           onClick={handleSkipToItinerary}
-          className="min-h-11 h-11 flex items-center gap-1.5 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/40 shrink-0"
+          className="min-h-11 h-11 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer bg-brand-cyan/15 hover:bg-brand-cyan/25 border-brand-cyan/40 shrink-0"
         >
           <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
           <span>Skip All &amp; Generate Itinerary</span>
-        </button>
+        </Stack>
       </Box>
     </Box>
   );
