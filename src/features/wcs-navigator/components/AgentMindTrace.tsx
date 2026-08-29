@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
 import { ServiceTelemetry } from '../services/wcsApiClient';
@@ -298,12 +298,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     const { badge, style } = getSessionCategory(session);
 
     return (
-      <Box
+      <Grid
         key={session.id}
+        cols={{ default: 1, sm: 12 }}
+        gap={{ default: 4, sm: 6 }}
         padding={{ default: 4, sm: 5 }}
         radius="xl"
         border
-        className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
+        minHeight={28}
+        className={`transition-all ${style} hover:border-white/30 items-center`}
       >
         {/* Dedicated Left Time & Category Column */}
         <Stack
@@ -315,7 +318,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           paddingRight={{ base: 0, sm: 6 }}
           border={{ base: 'b', sm: 'r' }}
           borderColor="line"
-          className="sm:w-52 shrink-0"
+          className="sm:col-span-3 h-full"
         >
           <Stack direction="row" align="center" gap={2}>
             <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
@@ -323,19 +326,21 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               {session.time}
             </Text>
           </Stack>
-          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit">
+          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1.5} radius="md" className="bg-white/10 w-fit leading-normal">
             {badge}
           </Text>
         </Stack>
 
         {/* Center: Title & High-Contrast Details */}
-        <Stack gap={1.5} justify="center" flex={1} minWidth={0}>
+        <Stack gap={1.5} justify="center" className="sm:col-span-7 min-w-0">
           <Text as="h4" weight="font-bold" size="base" color="main" leading="snug">
             {session.title}
           </Text>
           <Stack direction="row" align="center" gap={3} flexWrap="wrap" className="text-xs text-text-dim">
-            <Stack direction="row" align="center" gap={1.5}>
-              <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+            <Stack direction="row" align="start" gap={1.5}>
+              <Box marginTop={0.5}>
+                <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+              </Box>
               <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
             </Stack>
             {session.justification && (
@@ -347,7 +352,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Stack>
 
         {/* Right: Quick Remove Action Button */}
-        <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: 'none' }} borderColor="line" className="shrink-0">
+        <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: 'none' }} borderColor="line" className="sm:col-span-2">
           <Stack
             as="button"
             direction="row"
@@ -366,7 +371,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <span>Remove</span>
           </Stack>
         </Stack>
-      </Box>
+      </Grid>
     );
   };
 
@@ -381,7 +386,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         gap={2.5}
         padding={3.5}
         radius="xl"
-        marginY={1}
         width="full"
         className="bg-surface-alt/70 border border-white/10 text-xs"
       >
@@ -406,7 +410,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               paddingY={1}
               radius="full"
               border
-              className="bg-surface border-line/60 shadow-sm"
+              className="bg-surface border-line/60 shadow-sm whitespace-nowrap"
             >
               {toTitleCase(attire)}
             </Text>
@@ -590,7 +594,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
       <Stack gap={6} width="full">
         {/* FRIDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+          <Stack direction="row" align="center" justify="between" paddingBottom={4} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
@@ -609,7 +613,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               {sessionsByDay.friday.map(renderSessionCard)}
             </Stack>
           ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+            <Box display="flex" align="center" justify="center" minHeight={24} padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
             </Box>
           )}
@@ -620,7 +624,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
         {/* SATURDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+          <Stack direction="row" align="center" justify="between" paddingBottom={4} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
@@ -636,7 +640,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               {sessionsByDay.saturday.map(renderSessionCard)}
             </Stack>
           ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+            <Box display="flex" align="center" justify="center" minHeight={24} padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
             </Box>
           )}
@@ -647,7 +651,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
         {/* SUNDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+          <Stack direction="row" align="center" justify="between" paddingBottom={4} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
               <Calendar className="w-4 h-4 text-brand-cyan" />
               <h3 className="font-bold text-base text-text-main">
@@ -663,7 +667,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               {sessionsByDay.sunday.map(renderSessionCard)}
             </Stack>
           ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+            <Box display="flex" align="center" justify="center" minHeight={24} padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
               <Text size="xs" color="dim">No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
             </Box>
           )}

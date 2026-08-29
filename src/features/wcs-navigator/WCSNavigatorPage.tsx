@@ -419,7 +419,7 @@ export const WCSNavigatorPage: React.FC = () => {
         )}
 
         {/* Clean Footer Tag */}
-        <Box display="flex" align="center" justify="center" gap={2} paddingY={4} color="dim">
+        <Box display="flex" align="center" justify="start" gap={2} paddingY={4} color="dim">
           <Icon icon={Layers} size="xs" />
           <Text size="micro" variant="mono" color="dim">
             WCS Navigator • Personalized Itinerary &amp; Travel Planner

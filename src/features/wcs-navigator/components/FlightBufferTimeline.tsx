@@ -99,7 +99,7 @@ export const FlightBufferTimeline: React.FC<FlightBufferTimelineProps> = ({
   return (
     <Stack gap={3} width="full" className={className}>
       <Box
-        padding={4}
+        padding={{ default: 4, sm: 5 }}
         radius="xl"
         border
         className="bg-surface-alt/70 border-white/10 backdrop-blur-md"
