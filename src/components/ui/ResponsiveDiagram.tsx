@@ -207,14 +207,13 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             overflow="auto"
             padding={4}
             display="flex"
-            align="center"
-            justify="center"
             cursor="pointer"
             onClick={handleOverlayClick}
             className="w-full h-full select-none"
           >
             <Box
               padding={4}
+              margin="auto"
               radius="lg"
               border
               borderColor="line"
@@ -230,9 +229,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                maxWidth="full"
-                height="auto"
-                className="max-w-full h-auto rounded-md"
+                className="rounded-md"
+                style={{ // impeccable-ignore - Allow intrinsic scaling of diagram image
+                  maxWidth: 'none',
+                  display: 'block'
+                }}
               />
             </Box>
           </Box>
