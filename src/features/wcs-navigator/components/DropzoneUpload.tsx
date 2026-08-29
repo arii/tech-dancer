@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
+import { useState, useRef, DragEvent, ChangeEvent, FormEvent, FC } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -12,10 +11,10 @@ interface DropzoneUploadProps {
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
-export const DropzoneUpload = ({
+export const DropzoneUpload: FC<DropzoneUploadProps> = ({
   onIngestPdf,
   onIngestUrl
-}: DropzoneUploadProps) => {
+}) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [urlInput, setUrlInput] = useState('');
@@ -184,23 +183,34 @@ export const DropzoneUpload = ({
                 </Text>
               </Box>
               <Box position="relative" width="full">
-                <input
+                <Box
+                  as="input"
                   type="url"
                   placeholder="https://event.com/schedule.pdf"
                   value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setUrlInput(e.target.value)}
                   onBlur={() => setUrlInput((prev) => prev.trim())}
-                  className="w-full bg-slate-950/90 border border-white/20 rounded-lg px-3.5 py-2.5 text-sm font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                  width="full"
+                  paddingX={3.5}
+                  paddingY={2.5}
+                  radius="lg"
+                  border
+                  className="bg-surface-alt border-line/60 text-sm font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
                 />
                 {urlInput && (
-                  <button
+                  <Box
+                    as="button"
                     type="button"
                     onClick={() => setUrlInput('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim hover:text-white p-0.5"
+                    position="absolute"
+                    right={3}
+                    top="1/2"
+                    padding={0.5}
+                    className="-translate-y-1/2 text-text-dim hover:text-white"
                     title="Clear URL"
                   >
                     <Icon icon={X} size="xs" />
-                  </button>
+                  </Box>
                 )}
               </Box>
             </Stack>

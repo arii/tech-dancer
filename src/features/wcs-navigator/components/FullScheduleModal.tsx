@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, FC, ChangeEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { AuditSession } from '../types';
@@ -14,7 +13,7 @@ export interface FullScheduleModalProps {
   eventName?: string;
 }
 
-export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
+export const FullScheduleModal: FC<FullScheduleModalProps> = ({
   isOpen,
   onClose,
   sessions,
@@ -49,39 +48,53 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
     if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
       return {
         badge: '🏆 Competition',
-        style: 'bg-amber-950/25 border-amber-500/40 text-amber-300',
+        style: 'bg-surface/20 border-amber-500/40 text-amber-500',
       };
     }
     if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
       return {
         badge: '🌙 Social Dancing',
-        style: 'bg-purple-950/25 border-purple-500/40 text-purple-300',
+        style: 'bg-surface/20 border-accent/40 text-accent',
       };
     }
     if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
       return {
         badge: '🍽️ Meal / Rest Break',
-        style: 'bg-emerald-950/25 border-emerald-500/40 text-emerald-300',
+        style: 'bg-surface/20 border-emerald-500/40 text-emerald-500',
       };
     }
     return {
       badge: '🧠 Workshop',
-      style: 'bg-cyan-950/25 border-cyan-500/40 text-cyan-300',
+      style: 'bg-cyan-950/25 border-cyan-500/40 text-brand-cyan',
     };
   };
 
   return createPortal(
-    <Box
+    <Stack
+      position="fixed"
+      inset
+      zIndex={50}
+      align="center"
+      justify="center"
+      padding={{ base: 4, sm: 6, md: 8 }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="full-schedule-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-slate-950/90 backdrop-blur-xl animate-fade-in"
+      className="bg-surface-alt/90 backdrop-blur-xl animate-fade-in"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <Box
-        className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-surface border border-line rounded-2xl shadow-2xl overflow-hidden"
+      <Stack
+        direction="col"
+        width="full"
+        maxWidth="4xl"
+        maxHeight="full"
+        surface="surface"
+        border
+        radius="2xl"
+        shadow="2xl"
+        overflow="hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -146,14 +159,21 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           </Stack>
 
           {/* Search Box */}
-          <Box display="flex" align="center" gap={2} className="relative w-full sm:w-64">
+          <Box position="relative" width={{ default: "full", sm: "fit" }} className="w-full sm:w-64">
             <Search className="w-4 h-4 text-text-dim absolute left-2.5 top-2.5 pointer-events-none" />
-            <input
+            <Box
+              as="input"
               type="text"
               placeholder="Search sessions or instructors..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-surface-alt border border-line text-xs font-mono text-white placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              width="full"
+              paddingLeft={8}
+              paddingRight={3}
+              paddingY={1.5}
+              radius="lg"
+              border
+              className="bg-surface-alt border-line text-xs font-mono text-white placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
             />
           </Box>
         </Box>
@@ -178,24 +198,28 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                     padding={4}
                     radius="xl"
                     border
-                    className={`flex flex-col justify-between transition-all ${style} ${
+                    className={`transition-all ${style} ${
                       isIncluded ? 'ring-1 ring-white/20' : 'opacity-80 hover:opacity-100'
                     }`}
                   >
-                    <Stack gap={2}>
+                    <Stack gap={2} justify="between" height="full">
                       <Box display="flex" align="center" justify="between" gap={2}>
-                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
+                        <Box as="span" paddingX={2} paddingY={0.5} radius="md" border borderColor="line" className="text-xs font-mono font-bold bg-surface-alt/40">
                           {badge}
-                        </span>
-                        <span
-                          className={`text-[11px] font-mono px-2 py-0.5 rounded-full ${
+                        </Box>
+                        <Box
+                          as="span"
+                          paddingX={2}
+                          paddingY={0.5}
+                          radius="full"
+                          className={`text-xs font-mono ${
                             isIncluded
-                              ? 'bg-emerald-500/20 text-emerald-300 font-bold'
+                              ? 'bg-emerald-500/20 text-emerald-500 font-bold'
                               : 'bg-white/5 text-text-dim'
                           }`}
                         >
                           {isIncluded ? '✓ In Itinerary' : 'Excluded'}
-                        </span>
+                        </Box>
                       </Box>
 
                       <h4 className="font-bold text-sm text-white leading-snug">
@@ -265,8 +289,8 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
             </Stack>
           </Button>
         </Box>
-      </Box>
-    </Box>,
+      </Stack>
+    </Stack>,
     document.body
   );
 };

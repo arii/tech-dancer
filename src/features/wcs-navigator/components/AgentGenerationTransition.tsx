@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { Bot, CheckCircle2, Loader2, Sparkles, Plane, Clock, Calendar, ShieldCheck, Music } from 'lucide-react';
@@ -17,7 +16,7 @@ interface ReasoningStage {
   detail: string;
 }
 
-export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps> = ({
+export const AgentGenerationTransition: FC<AgentGenerationTransitionProps> = ({
   eventName,
   division = 'novice',
   role,
@@ -128,7 +127,7 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
             padding={5}
             radius="xl"
             border
-            className="border-line/50 bg-slate-950/70 text-left font-mono"
+            className="border-line/50 bg-surface/70 text-left font-mono"
           >
             {stages.map((stage, idx) => {
               const isDone = currentStageIndex > idx;
@@ -142,27 +141,27 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
                   gap={3}
                   className={`transition-all duration-300 ${
                     isDone
-                      ? 'text-emerald-400 opacity-90'
+                      ? 'text-emerald-500 opacity-90'
                       : isCurrent
                       ? 'text-brand-cyan opacity-100'
                       : 'text-text-dim/40 opacity-30'
                   }`}
                 >
-                  <Box className="shrink-0 pt-0.5">
+                  <Box shrink={0} paddingTop={0.5}>
                     {isDone ? (
-                      <Icon icon={CheckCircle2} size="xs" className="text-emerald-400" />
+                      <Icon icon={CheckCircle2} size="xs" className="text-emerald-500" />
                     ) : isCurrent ? (
                       <Icon icon={Loader2} size="xs" className="animate-spin text-brand-cyan" />
                     ) : (
-                      <div className="w-3.5 h-3.5 rounded-full border border-white/20" />
+                      <Box width={3.5} height={3.5} radius="full" border borderColor="line" />
                     )}
                   </Box>
 
                   <Stack gap={0.5} className="text-xs">
-                    <Text weight="font-bold" size="xs" className={isCurrent ? 'text-white' : isDone ? 'text-emerald-300' : 'text-text-dim'}>
+                    <Text weight="font-bold" size="xs" className={isCurrent ? 'text-white' : isDone ? 'text-emerald-500' : 'text-text-dim'}>
                       {stage.title}
                     </Text>
-                    <Text size="micro" className={isCurrent ? 'text-text-dim' : isDone ? 'text-emerald-400/70' : 'text-text-dim/40'}>
+                    <Text size="xs" color="dim" className={isCurrent ? 'text-text-dim' : isDone ? 'text-emerald-500/70' : 'text-text-dim/40'}>
                       {stage.detail}
                     </Text>
                   </Stack>
@@ -172,10 +171,12 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
           </Stack>
 
           {/* Progress Indicator */}
-          <Box width="full" className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
-            <div
-              className="bg-brand-cyan h-full transition-all duration-500 rounded-full shadow-glow"
-              style={{ width: `${Math.min(100, ((currentStageIndex + 1) / stages.length) * 100)}%` }}
+          <Box width="full" height={1.5} radius="full" overflow="hidden" className="bg-surface-alt">
+            <Box
+              height="full"
+              radius="full"
+              className="bg-brand-cyan transition-all duration-500 shadow-glow"
+              width={`${Math.min(100, ((currentStageIndex + 1) / stages.length) * 100)}%`}
             />
           </Box>
         </Stack>

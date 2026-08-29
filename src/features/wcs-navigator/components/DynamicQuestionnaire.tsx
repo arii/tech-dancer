@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, FC } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
 import { ArrowLeft, FastForward, SkipForward } from 'lucide-react';
@@ -11,7 +10,7 @@ export interface DynamicQuestionnaireProps {
   onSubmit?: (answers: Record<string, QuestionAnswerValue>) => void;
 }
 
-export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
+export const DynamicQuestionnaire: FC<DynamicQuestionnaireProps> = ({
   activeEventName = 'South Bay Dance Fling 2026',
   discoveryResponse,
   onSubmit,
@@ -238,23 +237,37 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         borderColor="line"
         className="border-line/40 text-xs font-mono"
       >
-        <button
+        <Box
+          as="button"
           type="button"
           onClick={handleSkipQuestion}
-          className="flex items-center gap-1.5 text-text-dim hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg hover:bg-surface-alt border border-transparent hover:border-line/50"
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
+          className="border-transparent hover:border-line/50 hover:bg-surface-alt text-text-dim hover:text-white transition-colors cursor-pointer"
         >
-          <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip this question (Next Step →)</span>
-        </button>
+          <Stack direction="row" align="center" gap={1.5}>
+            <SkipForward className="w-3.5 h-3.5 text-brand-cyan" />
+            <span>Skip this question (Next Step →)</span>
+          </Stack>
+        </Box>
 
-        <button
+        <Box
+          as="button"
           type="button"
           onClick={handleSkipToItinerary}
-          className="flex items-center gap-1.5 text-brand-cyan hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-lg bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30"
+          paddingX={3}
+          paddingY={1.5}
+          radius="lg"
+          border
+          className="border-brand-cyan/30 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-brand-cyan hover:text-white transition-colors cursor-pointer"
         >
-          <FastForward className="w-3.5 h-3.5" />
-          <span>⚡ Skip All &amp; Generate Itinerary</span>
-        </button>
+          <Stack direction="row" align="center" gap={1.5}>
+            <FastForward className="w-3.5 h-3.5" />
+            <span>⚡ Skip All &amp; Generate Itinerary</span>
+          </Stack>
+        </Box>
       </Box>
     </Box>
   );

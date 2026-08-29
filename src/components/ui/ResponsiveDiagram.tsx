@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, FC, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
@@ -10,7 +9,7 @@ interface ResponsiveDiagramProps {
   className?: string;
 }
 
-export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
+export const ResponsiveDiagram: FC<ResponsiveDiagramProps> = ({
   chart,
   title,
   className = '',
@@ -20,7 +19,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   // Generate the mermaid.ink URL with dark theme and 24px font size payload
-  const diagramUrl = React.useMemo(() => {
+  const diagramUrl = useMemo(() => {
     try {
       const config = {
         code: chart,
@@ -84,7 +83,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   };
 
   // Close overlay when clicking outer background area
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       setIsExpanded(false);
     }
@@ -161,12 +160,16 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
       {/* Full-Screen Modal Overlay */}
       {isExpanded && typeof document !== 'undefined' && createPortal(
         <Stack
-          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between"
+          position="fixed"
+          inset
+          zIndex={50}
           direction="col"
+          justify="between"
           padding={{ base: 4, sm: 8 }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
+          className="bg-surface-alt/95 backdrop-blur-xl"
         >
           <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={4}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
@@ -225,24 +228,29 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             className="select-none cursor-zoom-out"
             onClick={handleOverlayClick}
           >
-            <Box
-              className="transition-all duration-150 cursor-default max-w-full max-h-full"
-              margin="auto"
-              style={{
+            {(() => {
+              const zoomStyle = {
                 width: `${100 * zoomScale}%`,
                 maxWidth: `${1400 * zoomScale}px`,
-              }}
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
-            >
-              <Box
-                as="img"
-                src={diagramUrl}
-                alt={title ?? "Workflow Diagram"}
-                width="full"
-                height="auto"
-                className="mx-auto"
-              />
-            </Box>
+              };
+              return (
+                <Box
+                  className="transition-all duration-150 cursor-default max-w-full max-h-full"
+                  margin="auto"
+                  style={zoomStyle}
+                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
+                >
+                  <Box
+                    as="img"
+                    src={diagramUrl}
+                    alt={title ?? "Workflow Diagram"}
+                    width="full"
+                    height="auto"
+                    marginX="auto"
+                  />
+                </Box>
+              );
+            })()}
           </Box>
         </Stack>,
         document.body

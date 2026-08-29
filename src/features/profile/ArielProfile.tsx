@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
@@ -140,7 +139,10 @@ const ArielProfile = () => {
                           overflow="hidden"
                           radius="2xl"
                           border
-                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'aspect-square max-w-md mx-auto' : 'aspect-[4/3]'}`}
+                          aspect={isSquare ? 'square' : 'video'}
+                          maxWidth={isSquare ? 'md' : undefined}
+                          marginX={isSquare ? 'auto' : undefined}
+                          className="bg-surface border-line/40 shadow-lg group"
                         >
                           <img
                             src={img.src}
@@ -166,7 +168,9 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm aspect-[2/3]"
+                      aspect="auto"
+                      maxWidth={{ default: 'xs', md: 'sm' }}
+                      className="bg-surface border-line/40 shadow-lg group"
                     >
                       <img
                         src={wcsLove.gallery[0].src}
@@ -221,7 +225,9 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="video"
+                      maxWidth="xl"
+                      className="bg-surface border-line/40 shadow-lg group"
                     >
                       <img
                         src={whyBuilt.gallery[0].src}
@@ -245,7 +251,9 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="video"
+                      maxWidth="xl"
+                      className="bg-surface border-line/40 shadow-lg group"
                     >
                       <img
                         src={financialStrategies.gallery[0].src}

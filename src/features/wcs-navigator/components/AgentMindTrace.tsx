@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, FC } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
 import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
@@ -90,7 +89,7 @@ function buildDynamicIcs(
   ].join('\r\n');
 }
 
-export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
+export const AgentMindTrace: FC<AgentMindTraceProps> = ({
   trace,
   visualScheduleMarkdown,
   className,
@@ -271,24 +270,24 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
       return {
         badge: '🏆 Competition',
-        style: 'bg-amber-950/20 border-amber-500/35 text-amber-300',
+        style: 'bg-surface/20 border-amber-500/35 text-amber-500',
       };
     }
     if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
       return {
         badge: '🌙 Social Dancing',
-        style: 'bg-purple-950/20 border-purple-500/35 text-purple-300',
+        style: 'bg-surface/20 border-accent/35 text-accent',
       };
     }
     if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
       return {
         badge: '🍽️ Meal / Rest Break',
-        style: 'bg-emerald-950/20 border-emerald-500/35 text-emerald-300',
+        style: 'bg-surface/20 border-emerald-500/35 text-emerald-500',
       };
     }
     return {
       badge: '🧠 Workshop',
-      style: 'bg-cyan-950/20 border-cyan-500/35 text-cyan-300',
+      style: 'bg-cyan-950/20 border-cyan-500/35 text-brand-cyan',
     };
   };
 
@@ -301,38 +300,41 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         padding={4}
         radius="xl"
         border
-        display="flex"
-        flexWrap="wrap"
-        className={`transition-all flex flex-col justify-between ${style} hover:border-white/30`}
+        className={`transition-all ${style} hover:border-white/30`}
       >
-        <Stack gap={2}>
-          <Box display="flex" align="center" justify="between" gap={2}>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10">
-              {badge}
-            </span>
-            <button
-              type="button"
-              onClick={() => handleToggleSession(session.id)}
-              aria-label={`Remove ${session.title}`}
-              title="Remove from my schedule"
-              className="text-text-dim hover:text-red-400 p-1 rounded transition-colors cursor-pointer"
-            >
-              <Icon icon={X} size="xs" />
-            </button>
-          </Box>
+        <Stack gap={2} justify="between" height="full">
+          <Stack gap={2}>
+            <Box display="flex" align="center" justify="between" gap={2}>
+              <Box as="span" paddingX={2} paddingY={0.5} radius="md" border borderColor="line" className="text-xs font-mono font-bold bg-surface-alt/40">
+                {badge}
+              </Box>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => handleToggleSession(session.id)}
+                aria-label={`Remove ${session.title}`}
+                title="Remove from my schedule"
+                padding={1}
+                radius="sm"
+                className="text-text-dim hover:text-error transition-colors cursor-pointer"
+              >
+                <Icon icon={X} size="xs" />
+              </Box>
+            </Box>
 
-          <h4 className="font-bold text-sm text-white leading-snug">
-            {session.title}
-          </h4>
+            <Text as="h4" weight="font-bold" size="sm" color="main" leading="snug">
+              {session.title}
+            </Text>
 
-          <Stack direction="row" align="center" gap={4} paddingTop={0.5} className="text-xs font-mono text-text-dim">
-            <Stack direction="row" align="center" gap={1.5}>
-              <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-              <span>{session.time}</span>
-            </Stack>
-            <Stack direction="row" align="center" gap={1.5}>
-              <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
-              <span>{session.location}</span>
+            <Stack direction="row" align="center" gap={4} paddingTop={0.5} className="text-xs font-mono text-text-dim">
+              <Stack direction="row" align="center" gap={1.5}>
+                <Clock className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                <span>{session.time}</span>
+              </Stack>
+              <Stack direction="row" align="center" gap={1.5}>
+                <MapPin className="w-3.5 h-3.5 text-text-dim shrink-0" />
+                <span>{session.location}</span>
+              </Stack>
             </Stack>
           </Stack>
         </Stack>
@@ -462,7 +464,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
             className={`text-xs font-mono transition-all cursor-pointer ${
               isDebugInspectorOpen
-                ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
+              ? 'bg-brand-cyan text-black border-brand-cyan shadow-sm font-bold'
                 : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
             }`}
           >
