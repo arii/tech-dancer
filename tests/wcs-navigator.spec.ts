@@ -8,9 +8,12 @@ test.describe('WCS Navigator E2E Workflow & Accessibility Audit Matrix', () => {
     // 1. Initial Hero View & Header Heading
     await expect(page.getByRole('heading', { name: /WCS Navigator/i })).toBeVisible();
 
-    // Verify Custom PDF/URL Ingestion UI Elements
-    await expect(page.getByText(/Drag & drop event schedule PDF/i)).toBeVisible();
-    await expect(page.getByPlaceholderText(/https:\/\/example\.com\/schedule\.pdf/i)).toBeVisible();
+    // Toggle and Verify Custom PDF/URL Ingestion UI Elements
+    const toggleUploadBtn = page.getByText(/upload custom schedule/i);
+    await expect(toggleUploadBtn).toBeVisible();
+    await toggleUploadBtn.click();
+    await expect(page.getByText(/Drag and drop your event PDF schedule/i)).toBeVisible();
+    await expect(page.getByPlaceholder('https://example.com/schedule.pdf')).toBeVisible();
 
     // 2. Search Omnibox & California Presets
     const searchInput = page.locator('input[type="text"]').first();
@@ -100,7 +103,7 @@ test.describe('WCS Navigator E2E Workflow & Accessibility Audit Matrix', () => {
     const tab3Btn = page.getByRole('button', { name: /3\. Rule Engine Audit/i });
     await expect(tab3Btn).toBeVisible();
     await tab3Btn.click();
-    const searchAuditInput = page.getByPlaceholderText(/Search audit sessions/i);
+    const searchAuditInput = page.getByPlaceholder('Search audit sessions');
     await expect(searchAuditInput).toBeVisible();
     await searchAuditInput.fill('Novice');
     await page.waitForTimeout(300);
@@ -141,10 +144,10 @@ test.describe('WCS Navigator E2E Workflow & Accessibility Audit Matrix', () => {
     await page.goto('./research/wcs-navigator', { waitUntil: 'networkidle' });
 
     // Check "How It Works" guide modal & focus trapping
-    const howItWorksBtn = page.getByRole('button', { name: /How WCS Navigator Works guide|How It Works/i });
+    const howItWorksBtn = page.getByText(/How It Works/i).first();
     await expect(howItWorksBtn).toBeVisible();
     await howItWorksBtn.click();
-    await expect(page.getByText(/System Architecture & Execution Pipeline/i)).toBeVisible();
+    await expect(page.getByText(/Autonomous Two-Pass Architecture/i)).toBeVisible();
 
     // Select Boogie by the Bay
     const searchInput = page.locator('input[type="text"]').first();
@@ -176,4 +179,3 @@ test.describe('WCS Navigator E2E Workflow & Accessibility Audit Matrix', () => {
     await expect(dialog).not.toBeVisible();
   });
 });
-
