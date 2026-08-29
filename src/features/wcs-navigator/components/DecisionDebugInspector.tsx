@@ -228,7 +228,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                   Confirmed Dance Role
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main">
-                  {confirmedRole ? confirmedRole.toUpperCase() : 'UNIVERSAL (NOT SPECIFIED)'}
+                  {confirmedRole ? confirmedRole.toUpperCase() : 'None Specified (Universal)'}
                 </Text>
               </Box>
 
