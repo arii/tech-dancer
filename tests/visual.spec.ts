@@ -8,6 +8,7 @@ const routes = [
   { name: 'research', path: './research', waitSelector: 'h1:has-text("DevAI Experiments")' },
   { name: 'about', path: './about' },
   { name: 'ux-auditor', path: './ux-auditor', mainSelector: '[data-testid="ux-auditor-container"]' },
+  { name: 'wcs-navigator', path: './research/wcs-navigator', waitSelector: 'h1:has-text("WCS Navigator")' },
   { name: 'preview', path: './preview', waitText: 'Component Preview' },
   { name: 'merch', path: './merch', mainSelector: '[data-testid="merch-feed"]' },
   { name: 'halloween-costumes-mobile', path: './blog/2026-04-18-halloween-costumes', viewport: { width: 390, height: 844 } }
