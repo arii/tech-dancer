@@ -113,7 +113,8 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
       marginX="auto"
       paddingY={{ default: 12, md: 20 }}
       width="full"
-      className="relative min-h-[40vh] flex flex-col justify-center"
+      minHeight="40"
+      className="relative"
     >
       {/* Clean, Standalone Google-Style Search Omnibox */}
       <Box width="full" className="relative">
@@ -128,7 +129,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
           surface="card"
           border
           shadow="2xl"
-          className="border-line/80 hover:border-brand-cyan/70 focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all bg-slate-900/90 backdrop-blur-xl"
+          className="border-line/80 hover:border-brand-cyan/70 focus-within:border-brand-cyan focus-within:ring-2 focus-within:ring-brand-cyan/20 transition-all bg-surface-alt/90 backdrop-blur-xl"
         >
           <Search className="w-5 h-5 text-brand-cyan shrink-0" />
           <input
@@ -144,14 +145,16 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
           />
 
           {searchQuery && (
-            <button
+            <Box
+              as="button"
               type="button"
               aria-label="Clear search"
               onClick={handleClear}
-              className="text-text-dim hover:text-text-main p-1 transition-colors cursor-pointer"
+              padding={1}
+              className="text-text-dim hover:text-text-main transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
-            </button>
+            </Box>
           )}
         </Box>
 
@@ -163,31 +166,38 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             radius="xl"
             shadow="2xl"
             marginTop={2}
-            className="absolute top-full left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/98 border-line/80 overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-150"
+            className="absolute top-full left-0 right-0 z-50 backdrop-blur-xl bg-surface-alt/95 border-line/80 overflow-hidden text-left animate-in fade-in slide-in-from-top-2 duration-150"
           >
-            <Box className="divide-y divide-line/40 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900/40">
+            <Box className="divide-y divide-line/40 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-surface-alt scrollbar-track-surface/40">
               {filteredEvents.map((event) => (
-                <button
+                <Stack
+                  as="button"
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  width="full"
+                  paddingX={4}
+                  paddingY={3}
                   key={event.id}
                   type="button"
                   onMouseDown={() => handleSelectEvent(event)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-left group cursor-pointer"
+                  className="hover:bg-white/5 transition-colors text-left group cursor-pointer"
                 >
-                  <Stack gap={0.5} className="min-w-0 pr-2">
+                  <Stack gap={0.5} minWidth={0} paddingRight={2}>
                     <Box display="flex" align="center" gap={2}>
                       <span className="font-bold text-sm text-text-main group-hover:text-brand-cyan transition-colors">
                         {event.name}
                       </span>
-                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan">
+                      <Text as="span" variant="mono" size="xs" color="main" paddingX={2} paddingY={0.5} className="font-semibold rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan">
                         Configure Plan
-                      </span>
+                      </Text>
                     </Box>
                     <span className="text-xs text-text-dim">
                       📍 {event.location} • 📅 {event.dates}
                     </span>
                   </Stack>
                   <ChevronRight className="w-4 h-4 text-text-dim group-hover:text-brand-cyan transition-colors shrink-0" />
-                </button>
+                </Stack>
               ))}
             </Box>
           </Box>
@@ -195,15 +205,20 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
       </Box>
 
       {/* Progressive Disclosure: Custom PDF / URL Ingestion Drawer Toggle */}
-      <Box width="full" className="flex flex-col items-center">
-        <button
+      <Stack align="center" width="full">
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingY={1}
           type="button"
           onClick={() => setIsUploadDrawerOpen(!isUploadDrawerOpen)}
-          className="text-xs font-mono text-text-dim/80 hover:text-brand-cyan flex items-center gap-1.5 transition-colors cursor-pointer py-1"
+          className="text-xs font-mono text-text-dim/80 hover:text-brand-cyan transition-colors cursor-pointer"
         >
           <Upload className="w-3.5 h-3.5" />
           <span>{isUploadDrawerOpen ? 'Hide custom schedule upload ▲' : 'Or upload custom schedule PDF / URL ▼'}</span>
-        </button>
+        </Stack>
 
         {isUploadDrawerOpen && (
           <Box width="full" marginTop={4} className="animate-in fade-in slide-in-from-top-3 duration-200">
@@ -219,7 +234,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
             />
           </Box>
         )}
-      </Box>
+      </Stack>
     </Stack>
   );
 };

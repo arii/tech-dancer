@@ -9,37 +9,48 @@ const PortfolioCta = () => (
     display="flex"
     wrap="wrap"
     align="start"
+    align={{ sm: "center" }}
     justify="between"
     gap={4}
     marginTop={6}
-    padding={6}
+    padding={{ default: 6, md: 8 }}
     radius="2xl"
     border
-    className="border-brand-cyan/20 bg-gradient-to-r from-surface/90 via-brand-cyan/10 to-surface/90 backdrop-blur-md shadow-xl sm:items-center md:p-8"
+    className="border-brand-cyan/20 bg-gradient-to-r from-surface/90 via-brand-cyan/10 to-surface/90 backdrop-blur-md shadow-xl"
   >
     <Stack gap={2} className="max-w-2xl">
       <Box
         as="span"
+        display="inline-flex"
+        align="center"
         paddingX={2.5}
         paddingY={0.5}
         radius="full"
         border
-        className="inline-flex items-center text-xs font-mono font-medium tracking-wider uppercase bg-brand-cyan/10 text-brand-cyan border-brand-cyan/20 w-max"
+        className="text-xs font-mono font-medium tracking-wider uppercase bg-brand-cyan/10 text-brand-cyan border-brand-cyan/20 w-max"
       >
         Engineering &amp; Robotics Consulting
       </Box>
-      <Text size="sm" color="dim" className="md:text-base leading-relaxed text-slate-300">
+      <Text size="sm" color="dim" className="md:text-base leading-relaxed text-text-dim">
         Specializing in robotics software architecture, agentic engineering, front-end development, and technical leadership. Let's build together.
       </Text>
     </Stack>
-    <a
+    <Box
+      as="a"
       href="https://arii.github.io"
       target="_blank"
       rel="noopener noreferrer"
-      className="shrink-0 inline-flex items-center justify-center whitespace-nowrap px-5 py-3 rounded-xl bg-brand-cyan text-black font-semibold text-sm hover:opacity-90 transition-all shadow-lg hover:-translate-y-0.5"
+      shrink={0}
+      display="inline-flex"
+      align="center"
+      justify="center"
+      paddingX={5}
+      paddingY={3}
+      radius="xl"
+      className="whitespace-nowrap bg-brand-cyan text-black font-semibold text-sm hover:opacity-90 transition-all shadow-lg hover:-translate-y-0.5"
     >
       <span>Hire Me / View Portfolio →</span>
-    </a>
+    </Box>
   </Box>
 );
 
@@ -51,31 +62,31 @@ const LegalAndSocial = () => (
           Connect &amp; Social
         </Text>
         <Box display="flex" wrap gap={2.5}>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="px-4 py-2 rounded-lg border border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
+          <Box as="a" href="https://instagram.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
             INSTAGRAM
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="px-4 py-2 rounded-lg border border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
+          </Box>
+          <Box as="a" href="https://linkedin.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
             LINKEDIN
-          </a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="px-4 py-2 rounded-lg border border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
+          </Box>
+          <Box as="a" href="https://github.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
             GITHUB
-          </a>
+          </Box>
         </Box>
       </Stack>
 
-      <Grid cols={{ default: 1, sm: 2 }} gap={6} className="text-xs text-text-dim border-t md:border-t-0 md:border-l md:border-line/40 md:pl-8 pt-8 md:pt-0">
-        <div id="privacy" className="scroll-mt-24">
+      <Grid cols={{ default: 1, sm: 2 }} gap={6} paddingLeft={{ md: 8 }} paddingTop={{ default: 8, md: 0 }} className="text-xs text-text-dim border-t md:border-t-0 md:border-l md:border-line/40">
+        <Box id="privacy" scrollMarginTop={24}>
           <Text as="h5" variant="mono" className="text-text-main uppercase tracking-wider text-xs">Privacy Policy</Text>
           <p className="leading-relaxed text-text-dim">
             This site is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Form info is used solely for its intended purpose.
           </p>
-        </div>
-        <div id="terms" className="scroll-mt-24">
+        </Box>
+        <Box id="terms" scrollMarginTop={24}>
           <Text as="h5" variant="mono" className="text-text-main uppercase tracking-wider text-xs">Terms of Use</Text>
           <p className="leading-relaxed text-text-dim">
             Content is provided for informational and entertainment purposes. We are not responsible for issues arising from tools, products, or travel advice mentioned.
           </p>
-        </div>
+        </Box>
       </Grid>
     </Grid>
   </Box>
@@ -105,9 +116,9 @@ const ArielProfile = () => {
 
       <PortfolioCta />
 
-      <div className="space-y-16 mt-12">
+      <Stack gap={16} marginTop={12}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
-          <div className="space-y-16">
+          <Stack gap={16}>
             {danceBackground && (
               <Stack gap={6}>
                 <Stack gap={4} className="max-w-3xl">
@@ -119,7 +130,7 @@ const ArielProfile = () => {
                   </p>
                 </Stack>
                 {danceBackground.gallery && danceBackground.gallery.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl items-center">
+                  <Grid cols={{ default: 1, md: 2 }} gap={6} align="center" className="max-w-5xl">
                     {danceBackground.gallery.map((img, idx) => {
                       const isSquare = img.src.includes('first_comp') || idx === 1;
                       return (
@@ -129,7 +140,8 @@ const ArielProfile = () => {
                           overflow="hidden"
                           radius="2xl"
                           border
-                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'aspect-square max-w-md mx-auto' : 'aspect-[4/3]'}`}
+                          aspect={isSquare ? "square" : "4/3"}
+                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'max-w-md mx-auto' : ''}`}
                         >
                           <img
                             src={img.src}
@@ -140,22 +152,23 @@ const ArielProfile = () => {
                         </Box>
                       );
                     })}
-                  </div>
+                  </Grid>
                 )}
               </Stack>
             )}
 
             {/* 3. What I Love About WCS Section (Photo Left, 3 Feature Items Right) */}
             {wcsLove && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
                 {wcsLove.gallery && wcsLove.gallery[0] && (
-                  <div className="order-2 lg:order-1 flex justify-center w-full">
+                  <Box className="order-2 lg:order-1" display="flex" justify="center" width="full">
                     <Box
                       width="full"
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm aspect-[2/3]"
+                      aspect="2/3"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm"
                     >
                       <img
                         src={wcsLove.gallery[0].src}
@@ -164,7 +177,7 @@ const ArielProfile = () => {
                         loading="lazy"
                       />
                     </Box>
-                  </div>
+                  </Box>
                 )}
                 <Stack gap={4} className="order-1 lg:order-2">
                   <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
@@ -189,12 +202,12 @@ const ArielProfile = () => {
                     ))}
                   </Stack>
                 </Stack>
-              </div>
+              </Grid>
             )}
 
             {/* 4. Why I Built This Site Section (Text Left, Photo Right) */}
             {whyBuilt && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
                 <Stack gap={4}>
                   <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
                     {whyBuilt.title}
@@ -204,13 +217,14 @@ const ArielProfile = () => {
                   </p>
                 </Stack>
                 {whyBuilt.gallery && whyBuilt.gallery[0] && (
-                  <div className="flex justify-center w-full">
+                  <Box display="flex" justify="center" width="full">
                     <Box
                       width="full"
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="3/2"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
                     >
                       <img
                         src={whyBuilt.gallery[0].src}
@@ -219,22 +233,23 @@ const ArielProfile = () => {
                         loading="lazy"
                       />
                     </Box>
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Grid>
             )}
 
             {/* 5. Financial Strategies Section (Photo Left, Text Right) */}
             {financialStrategies && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
                 {financialStrategies.gallery && financialStrategies.gallery[0] && (
-                  <div className="order-2 lg:order-1 flex justify-center w-full">
+                  <Box className="order-2 lg:order-1" display="flex" justify="center" width="full">
                     <Box
                       width="full"
                       overflow="hidden"
                       radius="2xl"
                       border
-                      className="bg-surface border-line/40 shadow-lg group aspect-[3/2] max-w-xl"
+                      aspect="3/2"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
                     >
                       <img
                         src={financialStrategies.gallery[0].src}
@@ -243,7 +258,7 @@ const ArielProfile = () => {
                         loading="lazy"
                       />
                     </Box>
-                  </div>
+                  </Box>
                 )}
                 <Stack gap={4} className="order-1 lg:order-2">
                   <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
@@ -253,11 +268,11 @@ const ArielProfile = () => {
                     {financialStrategies.content}
                   </p>
                 </Stack>
-              </div>
+              </Grid>
             )}
-          </div>
+          </Stack>
         </Reveal>
-      </div>
+      </Stack>
 
       <LegalAndSocial />
     </Box>

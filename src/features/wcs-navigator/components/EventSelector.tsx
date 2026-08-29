@@ -28,22 +28,26 @@ export const EventSelector = ({
 
       {/* Select Dropdown with 44px touch target */}
       <Box width="full">
-        <select
+        <Box
+          as="select"
           id="event-dropdown-select"
           aria-label="Select California 2026 Event Preset"
           value={selectedEventId}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             const ev = CALIFORNIA_2026_EVENTS.find(item => item.id === e.target.value);
             if (ev) onSelectEvent(ev);
           }}
-          className="w-full border bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer min-h-11 px-3 py-2.5"
+          width="full"
+          padding={3}
+          minHeight={11}
+          className="bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
         >
           {CALIFORNIA_2026_EVENTS.map((event) => (
             <option key={event.id} value={event.id} className="bg-surface text-white">
               {event.name} — {event.location} ({event.dates})
             </option>
           ))}
-        </select>
+        </Box>
       </Box>
 
       {/* Event Preset Quick Cards */}
