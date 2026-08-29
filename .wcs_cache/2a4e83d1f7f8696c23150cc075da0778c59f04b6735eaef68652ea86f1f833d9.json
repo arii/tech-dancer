@@ -1,0 +1,57 @@
+{
+  "preset_id": "boogie-by-the-bay-2026",
+  "preset_name": "Boogie by the Bay 2026",
+  "event_name": "Boogie by the Bay 2026",
+  "tracks_detected": [
+    "West Coast Swing",
+    "Country Swing"
+  ],
+  "suggested_form_questions": [
+    {
+      "id": "dance_styles",
+      "title": "Which dance styles do you plan to participate in?",
+      "type": "multiselect",
+      "context": "Filters schedule items by your preferred dance styles (WCS, Country, Hustle).",
+      "required": true,
+      "options": [
+        {
+          "label": "West Coast Swing",
+          "value": "wcs",
+          "subtitle": "Primary convention workshops & social dancing",
+          "badge": "WCS"
+        },
+        {
+          "label": "Country Swing",
+          "value": "country",
+          "subtitle": "Cross-over workshops & late night social rooms",
+          "badge": "Country"
+        }
+      ],
+      "defaultValue": [
+        "wcs"
+      ]
+    },
+    {
+      "id": "wsdc_level",
+      "title": "What is your WSDC workshop level?",
+      "type": "select",
+      "context": "Restricts eligible workshop sessions to your verified WSDC skill level.",
+      "required": true,
+      "options": [
+        {
+          "label": "Novice Level",
+          "value": "novice",
+          "subtitle": "Foundational workshops & Novice prelim staging calls",
+          "badge": "Novice"
+        },
+        {
+          "label": "Intermediate Level",
+          "value": "intermediate",
+          "subtitle": "Intermediate workshops & Intermediate prelim calls",
+          "badge": "Intermediate"
+        }
+      ],
+      "defaultValue": "novice"
+    }
+  ]
+}

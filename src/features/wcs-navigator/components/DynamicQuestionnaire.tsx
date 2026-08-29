@@ -1,206 +1,198 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Button } from '@/layouts/Button';
-import { DiscoveryResponse, FormQuestion, QuestionAnswerValue } from '../types/navigator';
-import { SelectField } from './FormFields/SelectField';
-import { MultiSelectField } from './FormFields/MultiSelectField';
-import { BooleanField } from './FormFields/BooleanField';
-import { Sparkles, Bot, Loader2 } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
+import { useState, useMemo } from 'react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
+import { ArrowLeft } from 'lucide-react';
+import { analyzeEventFootprint } from '../utils/questionGenerator';
 
 export interface DynamicQuestionnaireProps {
-  discoveryResponse: DiscoveryResponse;
-  initialAnswers?: Record<string, QuestionAnswerValue>;
-  personaChips?: PersonaChip[];
-  onAnswersChange?: (answers: Record<string, QuestionAnswerValue>) => void;
+  activeEventName?: string;
+  discoveryResponse?: DiscoveryResponse;
   onSubmit?: (answers: Record<string, QuestionAnswerValue>) => void;
-  isSubmitting?: boolean;
 }
 
 export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
+  activeEventName = 'South Bay Dance Fling 2026',
   discoveryResponse,
-  initialAnswers = {},
-  onAnswersChange,
   onSubmit,
-  isSubmitting = false,
 }) => {
-  const questions = discoveryResponse.suggested_form_questions || [];
+  const steps = useMemo(() => {
+    return analyzeEventFootprint(activeEventName, discoveryResponse);
+  }, [activeEventName, discoveryResponse]);
 
-  const [isSimulatingAgent, setIsSimulatingAgent] = useState<boolean>(false);
-  const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<Record<string, QuestionAnswerValue>>({});
 
-  const [answersState, setAnswersState] = useState<Record<string, QuestionAnswerValue>>(() => {
-    const defaults: Record<string, QuestionAnswerValue> = {};
-    questions.forEach((q) => {
-      if (q.defaultValue !== undefined) {
-        defaults[q.id] = q.defaultValue;
-      }
-    });
-    return { ...defaults, ...initialAnswers };
-  });
+  const activeQuestion = steps[currentStep] || steps[0];
+  const totalSteps = steps.length;
+  const progressPercent = Math.round(((currentStep + 1) / totalSteps) * 100);
 
-  // Sync initialAnswers
-  const answers = useMemo(() => {
-    const defaults: Record<string, QuestionAnswerValue> = {};
-    questions.forEach((q) => {
-      if (q.defaultValue !== undefined) {
-        defaults[q.id] = q.defaultValue;
-      }
-    });
-    return { ...defaults, ...initialAnswers, ...answersState };
-  }, [questions, initialAnswers, answersState]);
+  const handleSelectOption = (optionId: string) => {
+    setSelectedOptionId(optionId);
+    const updatedAnswers = { ...answers, [activeQuestion.id]: optionId };
+    setAnswers(updatedAnswers);
 
-  const handleFieldChange = (questionId: string, value: QuestionAnswerValue, _index: number) => {
-    const updated = { ...answers, [questionId]: value };
-    setAnswersState(updated);
-    setActiveQuestionId(questionId);
-    if (onAnswersChange) {
-      onAnswersChange(updated);
-    }
-
-    // Progressive disclosure animation feedback (Item 3): trigger micro-loader simulation on tap
-    setIsSimulatingAgent(true);
+    // Smooth tactile delay before auto-advancing
     setTimeout(() => {
-      setIsSimulatingAgent(false);
-    }, 550);
+      setSelectedOptionId(null);
+      if (currentStep < totalSteps - 1) {
+        setCurrentStep((prev) => prev + 1);
+      } else if (onSubmit) {
+        onSubmit(updatedAnswers);
+      }
+    }, 180);
   };
 
-  // Validation: check if all required questions have valid non-empty answers
-  const isValid = useMemo(() => {
-    return questions.every((q: FormQuestion) => {
-      if (!q.required) return true;
-      const val = answers[q.id];
-      if (val === undefined || val === null) return false;
-      if (typeof val === 'string' && val.trim() === '') return false;
-      if (Array.isArray(val) && val.length === 0) return false;
-      return true;
-    });
-  }, [questions, answers]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isValid && onSubmit) {
-      onSubmit(answers);
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setSelectedOptionId(null);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full">
-      {/* Dynamic Question Inputs with Progressive Disclosure & Stagger Animation */}
-      <Stack gap={6}>
-        {questions.map((question, index) => {
-          const val = answers[question.id];
-          const isActive = activeQuestionId === question.id;
-
-          return (
+    <Box maxWidth="xl" marginX="auto" paddingX={4} paddingY={{ default: 8, md: 12 }} width="full">
+      {/* Sleek Progress Topline */}
+      <Box display="flex" align="center" justify="between" width="full" marginBottom={2.5}>
+        <Box display="flex" align="center" gap={2}>
+          {currentStep > 0 && (
             <Stack
-              key={question.id}
-              gap={3}
-              className="transition-all duration-300 animate-in fade-in slide-in-from-top-2"
+              as="button"
+              direction="row"
+              align="center"
+              gap={1}
+              type="button"
+              onClick={handleBack}
+              marginRight={2}
+              className="text-xs font-mono text-text-dim hover:text-white cursor-pointer transition-colors"
             >
-              {question.type === 'select' && (
-                <SelectField
-                  question={question}
-                  value={val}
-                  onChange={(v) => handleFieldChange(question.id, v, index)}
-                />
-              )}
-              {question.type === 'multiselect' && (
-                <MultiSelectField
-                  question={question}
-                  value={val}
-                  onChange={(v) => handleFieldChange(question.id, v, index)}
-                />
-              )}
-              {question.type === 'boolean' && (
-                <BooleanField
-                  question={question}
-                  value={val}
-                  onChange={(v) => handleFieldChange(question.id, v, index)}
-                />
-              )}
-
-              {/* Micro Typing Indicator / Simulated Agent Loader beneath active selection */}
-              {isSimulatingAgent && isActive && (
-                <Box
-                  surface="card"
-                  paddingX={3.5}
-                  paddingY={2.5}
-                  radius="lg"
-                  border
-                  display="flex"
-                  align="center"
-                  gap={2.5}
-                  marginTop={2}
-                  className="border-accent/40 bg-accent/5 animate-pulse"
-                >
-                  <Icon icon={Bot} size="xs" color="accent" />
-                  <Icon icon={Loader2} size="xs" color="accent" className="animate-spin" />
-                  <Text variant="mono" size="xs" color="accent">
-                    Gemini AI Agent scanning ballroom timetable for next prompt...
-                  </Text>
-                </Box>
-              )}
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
             </Stack>
-          );
-        })}
+          )}
+          <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
+            Step {currentStep + 1} of {totalSteps}
+          </Text>
+        </Box>
+        <Text variant="mono" size="xs" color="dim">
+          {progressPercent}% Complete
+        </Text>
+      </Box>
+
+      {/* Clean Progress Line */}
+      <Box width="full" height={1} radius="full" marginBottom={8} className="bg-surface-alt overflow-hidden">
+        <Box
+          height="full"
+          radius="full"
+          className="bg-brand-cyan transition-all duration-300 ease-out"
+          width={`${progressPercent}%`}
+        />
+      </Box>
+
+      {/* Direct, Uncluttered Question Header */}
+      <Stack gap={1.5} marginBottom={6}>
+        <Text
+          as="h3"
+          weight="font-bold"
+          size="2xl"
+          color="main"
+          tracking="tight"
+          className="leading-snug"
+        >
+          {activeQuestion.question}
+        </Text>
+        {activeQuestion.subtitle && (
+          <Text variant="mono" size="xs" color="dim" marginTop={1}>
+            {activeQuestion.subtitle}
+          </Text>
+        )}
       </Stack>
 
-      {/* Action Submit Button */}
-      <Box paddingTop={4} marginTop={6} border className="border-t border-line/60 transition-all duration-400 ease-out animate-in fade-in slide-in-from-bottom-2">
-        <Button
-          type="submit"
-          variant="primary"
-          fullWidth
-          disabled={!isValid || isSubmitting}
-          loading={isSubmitting}
-        >
-          <Box display="flex" align="center" justify="center" gap={2}>
-            <Sparkles className="w-4 h-4 text-black" />
-            <Text weight="font-bold" size="sm" color="main">Generate Calendar</Text>
-          </Box>
-        </Button>
-      </Box>
+      {/* Balanced, Highly Interactive Large Card Stack */}
+      {activeQuestion.options.length > 0 ? (
+        <Grid cols={1} gap={3.5} className="animate-in fade-in slide-in-from-right-3 duration-150">
+          {activeQuestion.options.map((opt) => {
+            const isSelected = selectedOptionId === opt.id || answers[activeQuestion.id] === opt.id;
 
-      {/* Mobile Sticky Action CTA Bar (<md) */}
-      <Box
-        display="flex"
-        align="center"
-        justify="between"
-        gap={3}
-        paddingX={4}
-        paddingY={3}
-        surface="surface"
-        border
-        shadow="2xl"
-        className="md:hidden fixed bottom-16 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-line/80"
-      >
-        <Stack gap={0.5}>
-          <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="wider">
-            {isValid ? 'Ready to Optimize' : 'Complete Preferences'}
-          </Text>
-          <Text size="xs" color="dim">
-            {isValid ? 'All required answered' : 'Personalize your weekend'}
-          </Text>
+            return (
+              <Stack
+                as="button"
+                direction="row"
+                align="center"
+                key={opt.id}
+                type="button"
+                onClick={() => handleSelectOption(opt.id)}
+                padding={4}
+                radius="xl"
+                border
+                width="full"
+                className={`group text-left transition-all duration-150 cursor-pointer ${
+                  isSelected
+                    ? 'bg-brand-cyan/15 border-brand-cyan ring-2 ring-brand-cyan/20'
+                    : 'bg-surface-alt border-line/60 hover:border-brand-cyan/60 hover:bg-surface'
+                }`}
+              >
+                <Box as="span" padding={2.5} radius="xl" border marginRight={4} className="text-2xl bg-surface border-line/40 group-hover:border-brand-cyan/40 transition-colors shrink-0">
+                  {opt.icon}
+                </Box>
+                <Box flex={1} minWidth={0} paddingRight={2}>
+                  <h4 className="font-bold text-sm sm:text-base text-text-main group-hover:text-white transition-colors">
+                    {opt.title}
+                  </h4>
+                  <Box as="p" marginTop={1} className="text-xs text-text-dim group-hover:text-text-main/80 transition-colors">
+                    {opt.desc}
+                  </Box>
+                </Box>
+                <span className="text-text-dim/60 group-hover:text-brand-cyan text-base transition-all transform translate-x-0 group-hover:translate-x-1 duration-150 shrink-0">
+                  →
+                </span>
+              </Stack>
+            );
+          })}
+        </Grid>
+      ) : (
+        /* Fallback: safety net for boolean/empty-options questions — never leaves user stranded */
+        <Stack direction={{ default: "col", sm: "row" }} gap={3} marginTop={2} className="animate-in fade-in duration-150">
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            justify="center"
+            gap={3}
+            padding={4}
+            radius="xl"
+            border
+            flex={1}
+            type="button"
+            onClick={() => handleSelectOption('yes')}
+            className="border-brand-cyan/60 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-text-main font-semibold transition-all duration-150 cursor-pointer"
+          >
+            <span className="text-xl">✅</span>
+            <span>Yes, include it</span>
+          </Stack>
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            justify="center"
+            gap={3}
+            padding={4}
+            radius="xl"
+            border
+            flex={1}
+            type="button"
+            onClick={() => handleSelectOption('no')}
+            className="border-line/60 bg-surface-alt hover:border-brand-cyan/40 hover:bg-surface text-text-dim hover:text-text-main font-medium transition-all duration-150 cursor-pointer"
+          >
+            <span className="text-xl">⏭️</span>
+            <span>No, skip it</span>
+          </Stack>
         </Stack>
-
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={!isValid || isSubmitting}
-          loading={isSubmitting}
-          size="md"
-          className="shrink-0 font-bold"
-        >
-          <Box display="flex" align="center" justify="center" gap={1.5}>
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Generate</span>
-          </Box>
-        </Button>
-      </Box>
+      )}
     </Box>
   );
 };
+
+export default DynamicQuestionnaire;
 
 

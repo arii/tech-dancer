@@ -1,0 +1,106 @@
+{
+  "decisionTrace": {
+    "subTasks": [
+      {
+        "id": "1",
+        "label": "Parsed event timetable",
+        "status": "completed",
+        "detail": "Extracted sessions from schedule PDF"
+      },
+      {
+        "id": "2",
+        "label": "Calculated travel buffer",
+        "status": "completed",
+        "detail": "Computed safe flight landing deadline"
+      },
+      {
+        "id": "3",
+        "label": "Filtered workshops & assembled calendar",
+        "status": "completed",
+        "detail": "Tailored schedule generated"
+      }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "2026-10-09T17:15:00-07:00",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 30,
+      "latestFlightArrivalDeadline": "2026-10-09T14:15:00-07:00",
+      "steps": [
+        {
+          "label": "Earliest Call / Staging",
+          "time": "5:15 PM",
+          "duration": null,
+          "type": "staging",
+          "description": "Mandatory event call time"
+        },
+        {
+          "label": "Warmup & Registration Buffer",
+          "time": "4:15 PM",
+          "duration": "60m",
+          "type": "warmup",
+          "description": "Warmup and bib pick-up buffer"
+        },
+        {
+          "label": "Hotel Check-In & Settle",
+          "time": "2:45 PM",
+          "duration": "90m",
+          "type": "hotel",
+          "description": "Hotel check-in and luggage drop"
+        },
+        {
+          "label": "Airport Transit",
+          "time": "2:15 PM",
+          "duration": "30m",
+          "type": "transit",
+          "description": "Drive/shuttle from airport to hotel"
+        },
+        {
+          "label": "Latest Flight Landing",
+          "time": "2:15 PM",
+          "duration": null,
+          "type": "flight",
+          "description": "Latest safe touchdown deadline"
+        }
+      ],
+      "formulaSummary": "17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:15 (Landing Deadline)"
+    },
+    "sessions": [
+      {
+        "id": "s-novice",
+        "title": "Novice Strictly Swing Prelims",
+        "time": "Friday 5:30 PM - 6:30 PM",
+        "location": "Grand Ballroom",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Matches user's Novice division selection."
+      },
+      {
+        "id": "s-advanced",
+        "title": "Advanced / Champion Workshop",
+        "time": "Saturday 11:00 AM - 12:00 PM",
+        "location": "Junior Ballroom",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Filtered out because user level is Novice and ineligible for Advanced+ classes."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "t1",
+        "day": "Friday Night",
+        "themeTitle": "Neon & Glow Party",
+        "category": "social_theme",
+        "description": "Midnight UV blacklight social.",
+        "recommendedAttire": [
+          "Neon clothing",
+          "White tops"
+        ],
+        "vibe": "High Energy"
+      }
+    ],
+    "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nBEGIN:VEVENT\r\nSUMMARY:✈️ Target Flight Landing Deadline\r\nDTSTART:20261009T1415000700\r\nDTEND:20261009T1415000700\r\nDESCRIPTION:Target flight touchdown deadline computed by WCS Navigator (17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:15 (Landing Deadline)).\r\nEND:VEVENT\r\nEND:VCALENDAR"
+  },
+  "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nBEGIN:VEVENT\r\nSUMMARY:✈️ Target Flight Landing Deadline\r\nDTSTART:20261009T1415000700\r\nDTEND:20261009T1415000700\r\nDESCRIPTION:Target flight touchdown deadline computed by WCS Navigator (17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:15 (Landing Deadline)).\r\nEND:VEVENT\r\nEND:VCALENDAR",
+  "visualScheduleMarkdown": ""
+}

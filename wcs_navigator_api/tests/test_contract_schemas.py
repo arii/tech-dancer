@@ -14,7 +14,6 @@ from wcs_navigator_api.models.logistics import (
     AuditSession,
     BufferCalculationResult,
     BufferStep,
-    PackingItem,
     SubTask,
     ThemeDressCode,
 )
@@ -152,22 +151,11 @@ def test_generate_response_frontend_contract_serialization():
         )
     ]
 
-    packing = [
-        PackingItem(
-            id="p1",
-            name="Adhesive Suede Shoe Sheets",
-            category="footwear",
-            rationale="For portable ballroom vinyl tiling",
-            quantity=2,
-        )
-    ]
-
     decision_trace = AgentDecisionTrace(
         subTasks=sub_tasks,
         bufferTimeline=buffer_timeline,
         sessions=sessions,
         themeDressCodes=themes,
-        packingManifest=packing,
         icsContent="BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR",
     )
 
@@ -205,10 +193,6 @@ def test_generate_response_frontend_contract_serialization():
     assert trace_dump["themeDressCodes"][0]["category"] == "social_theme"
     assert trace_dump["themeDressCodes"][0]["recommendedAttire"] == ["Neon tops", "Glow accessories"]
 
-    # Packing checks
-    assert len(trace_dump["packingManifest"]) == 1
-    assert trace_dump["packingManifest"][0]["name"] == "Adhesive Suede Shoe Sheets"
-    assert trace_dump["packingManifest"][0]["category"] == "footwear"
 
 
 def test_fixture_schema_deserialization_gate():

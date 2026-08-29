@@ -1,0 +1,33 @@
+{
+  "preset_id": "halloween-swingthing-2026",
+  "preset_name": "Halloween SwingThing 2026",
+  "event_name": "Halloween SwingThing 2026",
+  "tracks_detected": [
+    "West Coast Swing",
+    "Halloween Socials"
+  ],
+  "suggested_form_questions": [
+    {
+      "id": "wsdc_division",
+      "title": "What is your dancer persona & competition division?",
+      "type": "select",
+      "context": "Filters out contest staging calls for pure social dancers.",
+      "required": true,
+      "defaultValue": "Novice",
+      "options": [
+        {
+          "label": "Novice Competitor",
+          "value": "Novice",
+          "subtitle": "WSDC Novice prelims and workshops",
+          "badge": "Novice"
+        },
+        {
+          "label": "Social Dancer Only",
+          "value": "Social",
+          "subtitle": "All-levels social dances & Halloween costume contest spectator",
+          "badge": "Social"
+        }
+      ]
+    }
+  ]
+}

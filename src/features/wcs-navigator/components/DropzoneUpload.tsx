@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
@@ -100,7 +99,7 @@ export const DropzoneUpload = ({
     <Stack gap={4} width="full">
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-          3. Custom Ingestion (PDF / Schedule URL)
+          Custom Ingestion (PDF / Schedule URL)
         </Text>
         <Text size="sm" color="dim">
           Upload an official event schedule PDF or paste a schedule URL to parse custom weekend tracks.

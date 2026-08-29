@@ -170,7 +170,9 @@ def test_discover_gemini_failure_returns_500(mocker):
         return_value=mock_genai_instance,
     )
 
-    files = {"file": ("schedule.pdf", SAMPLE_PDF_BYTES, "application/pdf")}
+    # Use unique bytes so we don't hit the cache from previous tests
+    fail_bytes = b"%PDF-1.4\n%...\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF\nFailure"
+    files = {"file": ("schedule.pdf", fail_bytes, "application/pdf")}
     response = client.post("/generate-calendar/discover", files=files)
 
     assert response.status_code == 500

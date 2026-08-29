@@ -1,5 +1,3 @@
-// impeccable-ignore-file
-import React from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Calendar, MapPin, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -11,7 +9,7 @@ export interface EventSelectorProps {
   onSelectEvent: (event: WCSCaliforniaEvent) => void;
 }
 
-export const EventSelector: React.FC<EventSelectorProps> = ({
+export const EventSelector = ({
   selectedEventId,
   onSelectEvent
 }) => {
@@ -30,22 +28,26 @@ export const EventSelector: React.FC<EventSelectorProps> = ({
 
       {/* Select Dropdown with 44px touch target */}
       <Box width="full">
-        <select
+        <Box
+          as="select"
           id="event-dropdown-select"
           aria-label="Select California 2026 Event Preset"
           value={selectedEventId}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             const ev = CALIFORNIA_2026_EVENTS.find(item => item.id === e.target.value);
             if (ev) onSelectEvent(ev);
           }}
-          className="w-full min-h-[44px] px-3 py-2.5 bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
+          width="full"
+          padding={3}
+          minHeight={11}
+          className="bg-surface border border-line rounded-lg text-white focus:outline-none focus:border-brand-cyan text-sm cursor-pointer"
         >
           {CALIFORNIA_2026_EVENTS.map((event) => (
             <option key={event.id} value={event.id} className="bg-surface text-white">
               {event.name} — {event.location} ({event.dates})
             </option>
           ))}
-        </select>
+        </Box>
       </Box>
 
       {/* Event Preset Quick Cards */}
@@ -67,7 +69,7 @@ export const EventSelector: React.FC<EventSelectorProps> = ({
               justify="between"
               cursor="pointer"
               className={cn(
-                "min-h-[44px] border text-left transition-all duration-200 hover:border-brand-cyan/50 tap-target",
+                "min-h-11 border text-left transition-all duration-200 hover:border-brand-cyan/50 tap-target",
                 isSelected ? "border-brand-cyan ring-1 ring-brand-cyan/40 bg-brand-cyan/5" : "border-line hover:bg-surface"
               )}
             >
@@ -111,7 +113,7 @@ export const EventSelector: React.FC<EventSelectorProps> = ({
                 rel="noopener noreferrer"
                 size="xs"
                 color="accent"
-                className="hover:underline font-semibold min-h-[32px] inline-flex items-center"
+                className="hover:underline font-semibold min-h-8" display="inline-flex" align="center"
               >
                 Official Website →
               </Text>

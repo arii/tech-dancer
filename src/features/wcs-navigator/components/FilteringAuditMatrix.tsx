@@ -1,8 +1,7 @@
-// impeccable-ignore-file
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { AuditSession } from '../types';
-import { CheckCircle, XCircle, Clock, MapPin, Filter, Layers, AlertCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, MapPin, Layers } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 export interface FilteringAuditMatrixProps {
@@ -158,13 +157,13 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
         </Stack>
       </Box>
 
-      {/* Tabs Bar with 44px min touch target */}
+      {/* Minimal Sleek Tabs Bar */}
       <Box
         display="flex"
-        gap={2}
-        paddingBottom={2}
+        gap={4}
+        paddingBottom={0}
         wrap
-        className="border-b border-line"
+        className="border-b border-line/60"
         role="tablist"
         aria-label="Filter sessions by status"
       >
@@ -176,20 +175,17 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           onClick={() => setActiveTab('included')}
           display="flex"
           align="center"
-          gap={2}
-          paddingX={4}
-          paddingY={2.5}
-          minHeight={11}
-          radius="xl"
+          gap={1.5}
+          paddingY={2}
           cursor="pointer"
-          className={`font-semibold text-xs transition-colors border ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
             activeTab === 'included'
-              ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40 font-bold shadow-sm'
-              : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
+              ? 'border-text-main text-text-main font-bold'
+              : 'border-transparent text-text-dim hover:text-text-main'
           }`}
         >
-          <Icon icon={CheckCircle} size="sm" />
-          <span>Matched &amp; Scheduled ({includedSessions.length})</span>
+          <Icon icon={CheckCircle} size="xs" />
+          <span>Matched ({includedSessions.length})</span>
         </Box>
 
         <Box
@@ -200,19 +196,16 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           onClick={() => setActiveTab('filtered')}
           display="flex"
           align="center"
-          gap={2}
-          paddingX={4}
-          paddingY={2.5}
-          minHeight={11}
-          radius="xl"
+          gap={1.5}
+          paddingY={2}
           cursor="pointer"
-          className={`font-semibold text-xs transition-colors border ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
             activeTab === 'filtered'
-              ? 'bg-brand-terminal-red/15 text-brand-terminal-red border-brand-terminal-red/40 font-bold shadow-sm'
-              : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
+              ? 'border-text-dim text-text-dim font-bold'
+              : 'border-transparent text-text-dim/60 hover:text-text-main'
           }`}
         >
-          <Icon icon={XCircle} size="sm" />
+          <Icon icon={XCircle} size="xs" />
           <span>Filtered Out ({filteredSessions.length})</span>
         </Box>
 
@@ -224,20 +217,17 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
           onClick={() => setActiveTab('all')}
           display="flex"
           align="center"
-          gap={2}
-          paddingX={4}
-          paddingY={2.5}
-          minHeight={11}
-          radius="xl"
+          gap={1.5}
+          paddingY={2}
           cursor="pointer"
-          className={`font-semibold text-xs transition-colors border ${
+          className={`font-semibold text-xs transition-all border-b-2 -mb-px pb-2.5 ${
             activeTab === 'all'
-              ? 'bg-surface text-text-main border-line font-bold shadow-sm'
-              : 'text-text-dim border-transparent hover:text-text-main hover:bg-surface'
+              ? 'border-text-main text-text-main font-bold'
+              : 'border-transparent text-text-dim hover:text-text-main'
           }`}
         >
-          <Icon icon={Layers} size="sm" />
-          <span>All ({sessions.length})</span>
+          <Icon icon={Layers} size="xs" />
+          <span>Full Schedule ({sessions.length})</span>
         </Box>
       </Box>
 
@@ -252,76 +242,76 @@ export const FilteringAuditMatrix: React.FC<FilteringAuditMatrixProps> = ({
                 key={session.id}
                 padding={5}
                 radius="lg"
-                surface="card"
                 border
-                className={`transition-all ${
+                className={`transition-all bg-surface/30 flex flex-col justify-between ${
                   isIncluded
-                    ? 'border-brand-cyan/30 hover:border-brand-cyan/60 bg-gradient-to-br from-surface to-brand-cyan/5 shadow-sm'
-                    : 'border-line/80 opacity-90 hover:opacity-100 bg-surface/70'
+                    ? 'border-line/60 hover:border-line'
+                    : 'border-line/30 opacity-75'
+                } ${
+                  activeTab === 'all' && isIncluded
+                    ? 'ring-1 ring-brand-cyan/40 bg-brand-cyan/[0.03]'
+                    : ''
                 }`}
               >
-                <Stack gap={3}>
-                  <Box display="flex" align="start" justify="between" gap={2}>
-                    <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
-                      {session.title}
-                    </Box>
+                <Stack gap={3.5}>
+                  <Box display="flex" align="start" justify="between" gap={3}>
+                    <Stack gap={1}>
+                      {activeTab === 'all' && (
+                        <Text
+                          as="span"
+                          variant="mono"
+                          size="xs"
+                          weight="font-bold"
+                          uppercase
+                          tracking="widest"
+                          paddingX={1.5}
+                          paddingY={0.5}
+                          radius="sm"
+                          className={`w-fit ${
+                            isIncluded
+                              ? 'bg-brand-cyan/20 text-brand-cyan'
+                              : 'bg-white/[0.05] text-text-dim'
+                          }`}
+                        >
+                          {isIncluded ? '★ Selected for Your Plan' : 'Filtered Out'}
+                        </Text>
+                      )}
+                      <Box as="h4" className="text-sm font-bold text-text-main leading-snug">
+                        {session.title}
+                      </Box>
+                    </Stack>
 
-                    {/* Rationale Tag / Decision Badge */}
-                    <Box
-                      paddingX={2.5}
-                      paddingY={1}
-                      minHeight={7}
-                      radius="full"
-                      border
-                      display="flex"
-                      align="center"
-                      gap={1.5}
-                      className={`text-xs font-mono font-bold shrink-0 ${
-                        isIncluded
-                          ? 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40'
-                          : 'bg-brand-terminal-red/10 text-brand-terminal-red border-brand-terminal-red/30'
-                      }`}
+                    {/* Rationale Tag (Clean unbordered monospace) */}
+                    <Text
+                      variant="mono"
+                      size="micro"
+                      className="text-xs font-mono text-text-dim shrink-0 uppercase tracking-wider"
                     >
-                      <Icon
-                        icon={isIncluded ? CheckCircle : AlertCircle}
-                        size="xs"
-                      />
-                      <span>{session.decisionBadge}</span>
-                    </Box>
+                      {session.decisionBadge}
+                    </Text>
                   </Box>
 
                   <Stack gap={1} className="text-xs text-text-dim font-mono">
                     <Box display="flex" align="center" gap={2}>
-                      <Clock className="w-3.5 h-3.5 text-accent shrink-0" />
-                      <Box as="span">{session.time}</Box>
+                      <Clock className="w-3.5 h-3.5 text-text-dim" />
+                      <span>{session.time}</span>
                     </Box>
                     <Box display="flex" align="center" gap={2}>
-                      <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
-                      <Box as="span">{session.location}</Box>
+                      <MapPin className="w-3.5 h-3.5 text-text-dim" />
+                      <span>{session.location}</span>
                     </Box>
                   </Stack>
 
-                  {/* Justification Box with Rationale Explanation */}
+                  {/* Justification Text */}
                   <Box
                     padding={3}
                     radius="md"
-                    surface={isIncluded ? undefined : 'muted'}
-                    border
-                    className={`text-xs ${
-                      isIncluded
-                        ? 'bg-accent/5 text-text-main border-accent/15'
-                        : 'text-text-dim border-line/60'
-                    }`}
+                    className="text-xs text-text-dim bg-surface/40 border border-line/30 leading-relaxed"
                   >
-                    <Box display="flex" align="start" gap={2}>
-                      <Filter className="w-3.5 h-3.5 shrink-0 opacity-70" />
-                      <Box as="span">
-                        <strong className="font-semibold text-text-main">
-                          {isIncluded ? 'Why this fits your profile:' : 'Exclusion reason:'}
-                        </strong>{' '}
-                        {session.justification}
-                      </Box>
-                    </Box>
+                    <strong className="font-semibold text-text-main">
+                      {isIncluded ? 'Selection Reason:' : 'Filter Reason:'}
+                    </strong>{' '}
+                    {session.justification}
                   </Box>
                 </Stack>
               </Box>

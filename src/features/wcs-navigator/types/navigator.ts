@@ -22,6 +22,8 @@ export interface FormQuestion {
 export interface DiscoveryResponse {
   preset_id?: string;
   preset_name?: string;
+  event_name?: string;
+  tracks_detected?: string[];
   suggested_form_questions: FormQuestion[];
 }
 

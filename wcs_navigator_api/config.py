@@ -10,6 +10,7 @@ class MissingGeminiAPIKeyError(Exception):
 
 class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-3.5-flash"
     ALLOWED_ORIGINS: list[str] = [
         "http://localhost:5173",
         "https://boomtick.blog",

@@ -13,8 +13,8 @@ describe('AgentMindTrace Suite', () => {
 
   it('renders AgentMindTrace container and header correctly', () => {
     render(<AgentMindTrace />);
-    expect(screen.getByText(/Personalized Schedule & Travel Buffer/i)).toBeDefined();
-    expect(screen.getAllByText(/Download Calendar \(\.ics\)|Download \(\.ics\)/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Profile:/i)).toBeDefined();
+    expect(screen.getAllByText(/Add to Calendar \(\.ics\)/i).length).toBeGreaterThan(0);
   });
 
   it('renders ExecutionProgressBar sub-tasks', () => {
@@ -27,11 +27,9 @@ describe('AgentMindTrace Suite', () => {
   });
 
   it('renders FlightBufferTimeline buffer steps and time summary', () => {
-    render(<FlightBufferTimeline />);
-    expect(screen.getByText('Travel & Arrival Timeline')).toBeDefined();
-    expect(screen.getAllByText(/Earliest Event Call/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Landing Target|Target Landing Deadline/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('Competition Staging Call')).toBeDefined();
+    render(<FlightBufferTimeline activeEventName="Boogie by the Bay" />);
+    expect(screen.getByText(/Pre-Event Transit Logistics/i)).toBeDefined();
+    expect(screen.getAllByText(/SFO/i).length).toBeGreaterThan(0);
   });
 
   it('toggles tabs between all, included, and filtered sessions in FilteringAuditMatrix', () => {
@@ -44,13 +42,13 @@ describe('AgentMindTrace Suite', () => {
     expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();
     expect(screen.getByText(/User selected Novice/i)).toBeDefined();
 
-    const includedTabBtn = screen.getByRole('tab', { name: /Matched & Scheduled/i });
+    const includedTabBtn = screen.getByRole('tab', { name: /Matched/i });
     fireEvent.click(includedTabBtn);
 
     expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
     expect(screen.queryByText('Advanced & All-Star Jack & Jill')).toBeNull();
 
-    const allTabBtn = screen.getByRole('tab', { name: /All/i });
+    const allTabBtn = screen.getByRole('tab', { name: /Full Schedule/i });
     fireEvent.click(allTabBtn);
     expect(screen.getByText('Novice Jack & Jill Prelims')).toBeDefined();
     expect(screen.getByText('Advanced & All-Star Jack & Jill')).toBeDefined();
@@ -71,12 +69,11 @@ describe('AgentMindTrace Suite', () => {
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
     render(<AgentMindTrace />);
-    const downloadBtns = screen.getAllByRole('button', { name: /Download Calendar \(\.ics\)|Download \(\.ics\)/i });
+    const downloadBtns = screen.getAllByRole('button', { name: /Add to Calendar \(\.ics\)/i });
     fireEvent.click(downloadBtns[0]);
 
     expect(createObjectURLMock).toHaveBeenCalled();
     expect(screen.getByText('Calendar Downloaded (.ics)')).toBeDefined();
-    expect(screen.getByText(/wcs-navigator-schedule\.ics/i)).toBeDefined();
+    expect(screen.getByText(/wcs-schedule\.ics/i)).toBeDefined();
   });
 });
-

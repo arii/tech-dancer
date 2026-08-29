@@ -7,6 +7,75 @@ export interface EventMockData {
   icsContent: string;
 }
 
+function createIcsString(
+  eventName: string,
+  landingDeadline: string,
+  stagingTime: string,
+  sessions: { title: string; time: string; location: string }[]
+): string {
+  const events = [
+    [
+      'BEGIN:VEVENT',
+      `UID:flight-landing-${Date.now()}-1@wcs-navigator.boomtick.blog`,
+      'SUMMARY:✈️ Target Flight Landing Deadline',
+      `DESCRIPTION:Recommended latest flight touchdown to allow transit, hotel check-in, and warmup before ${stagingTime}.`,
+      'DTSTART:20261009T212500Z',
+      'DTEND:20261009T215500Z',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Reminder: Flight landing deadline for WCS convention',
+      'END:VALARM',
+      'END:VEVENT'
+    ].join('\r\n'),
+    ...sessions.map((s, i) =>
+      [
+        'BEGIN:VEVENT',
+        `UID:session-${i}-${Date.now()}@wcs-navigator.boomtick.blog`,
+        `SUMMARY:🏆 ${s.title}`,
+        `DESCRIPTION:Scheduled at ${s.time} in ${s.location}. Matched to your preferences by WCS Navigator.`,
+        `LOCATION:${s.location}`,
+        'DTSTART:20261010T170000Z',
+        'DTEND:20261010T181500Z',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:Reminder: ${s.title} starting in 15 minutes`,
+        'END:VALARM',
+        'END:VEVENT'
+      ].join('\r\n')
+    )
+  ];
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//WCS Navigator//Event Calendar Generator//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${eventName} Custom Schedule`,
+    ...events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+}
+
+const southBaySessions = [
+  { title: 'Novice Strictly Swing Prelims', time: 'Friday 5:30 PM - 6:30 PM', location: 'Grand Ballroom' },
+  { title: 'Saturday Flow & Connection Technique Workshop', time: 'Saturday 2:00 PM - 3:15 PM', location: 'Grand Ballroom' },
+  { title: 'Friday Neon Glow Late Night Social', time: 'Friday 10:30 PM - 5:00 AM', location: 'Grand Ballroom' }
+];
+
+const southBayIcs = createIcsString('South Bay Dance Fling 2026', '2:15 PM', '5:15 PM', southBaySessions);
+
+const boogieSessions = [
+  { title: 'Novice Strictly Swing Prelims', time: 'Friday 5:30 PM - 6:45 PM', location: 'Grand Peninsula Ballroom' },
+  { title: 'All-Levels Musicality & Connection Workshop', time: 'Saturday 11:30 AM - 12:45 PM', location: 'Regency Ballroom' },
+  { title: 'Bay Area Glow Social Party', time: 'Friday 10:30 PM - 5:00 AM', location: 'Grand Peninsula Ballroom' },
+  { title: 'Classic Champions Showcase & Cocktail Chic Gala', time: 'Saturday 8:30 PM - 11:00 PM', location: 'Grand Peninsula Ballroom' }
+];
+
+const boogieIcs = createIcsString('Boogie by the Bay 2026', '2:25 PM', '5:15 PM', boogieSessions);
+
 export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
   'south-bay-dance-fling-2026': {
     discovery: {
@@ -156,9 +225,9 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           vibe: 'Cozy & Laid Back'
         }
       ],
-      icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nMETHOD:PUBLISH\\nBEGIN:VEVENT\\nUID:wcs-flight-deadline-001@boomtick.blog\\nDTSTART:20260904T211500Z\\nDTEND:20260904T214500Z\\nSUMMARY:✈️ Target Flight Landing Deadline (SJC)\\nDESCRIPTION:Latest recommended landing time to allow 30m transit, 90m hotel check-in, and 60m warmup before Novice Staging.\\nLOCATION:San Jose Mineta International Airport (SJC)\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nBEGIN:VEVENT\\nUID:wcs-novice-strictly-002@boomtick.blog\\nDTSTART:20260905T003000Z\\nDTEND:20260905T013000Z\\nSUMMARY:🏆 Novice Strictly Swing Prelims\\nDESCRIPTION:Report to ballroom staging area by 5:15 PM for roll call.\\nLOCATION:Grand Ballroom, South Bay Dance Fling\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nEND:VCALENDAR'
+      icsContent: southBayIcs
     },
-    icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nMETHOD:PUBLISH\\nBEGIN:VEVENT\\nUID:wcs-flight-deadline-001@boomtick.blog\\nDTSTART:20260904T211500Z\\nDTEND:20260904T214500Z\\nSUMMARY:✈️ Target Flight Landing Deadline (SJC)\\nDESCRIPTION:Latest recommended landing time to allow 30m transit, 90m hotel check-in, and 60m warmup before Novice Staging.\\nLOCATION:San Jose Mineta International Airport (SJC)\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nBEGIN:VEVENT\\nUID:wcs-novice-strictly-002@boomtick.blog\\nDTSTART:20260905T003000Z\\nDTEND:20260905T013000Z\\nSUMMARY:🏆 Novice Strictly Swing Prelims\\nDESCRIPTION:Report to ballroom staging area by 5:15 PM for roll call.\\nLOCATION:Grand Ballroom, South Bay Dance Fling\\nSTATUS:CONFIRMED\\nEND:VEVENT\\nEND:VCALENDAR'
+    icsContent: southBayIcs
   },
   'boogie-by-the-bay-2026': {
     discovery: {
@@ -166,38 +235,58 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
       preset_name: 'Boogie by the Bay 2026',
       suggested_form_questions: [
         {
-          id: 'dance_styles',
-          type: 'multiselect',
-          title: 'Which dance genres do you want on your schedule?',
+          id: 'intensive',
+          type: 'select',
+          title: 'Are you attending any Friday pre-convention intensives at Boogie by the Bay?',
           options: [
-            { label: 'West Coast Swing', value: 'wcs' },
-            { label: 'Country Swing', value: 'country' },
-            { label: 'Hustle', value: 'hustle' }
+            { label: 'Jordan & Tatiana "Mastering the Blues" (Fri 10:00 AM - 1:00 PM)', subtitle: 'Regency Ballroom • Requires flight landing by 8:30 AM', value: 'blues_intensive', badge: 'Intensive' },
+            { label: 'Kelly Casanova Judging Intensive (Fri 1:00 PM - 4:00 PM)', subtitle: 'Harbour Room A • Requires arrival by 12:00 PM', value: 'judging_intensive', badge: 'Judging' },
+            { label: 'Competitor Leveled Afternoon Tracks (Fri 1:00 PM - 5:00 PM)', subtitle: 'Sandpebble ABC • Novice 1pm, Int 2pm, Adv 3pm, All-Star 4pm', value: 'competitor_workshops', badge: 'Leveled' },
+            { label: 'No Daytime Intensives (Standard Friday Evening Arrival)', subtitle: 'Arrive in time for 6:30 PM Strictly Prelims or 9:00 PM Social Kickoff', value: 'no_intensives', badge: 'Evening' }
           ],
-          context: 'Boogie is a multi-genre event; filter out non-WCS tracks if focusing purely on WCS.',
-          defaultValue: ['wcs']
+          context: 'Used to configure early morning travel buffer alerts and pre-convention calendar items.',
+          defaultValue: 'no_intensives',
+          required: true
         },
         {
-          id: 'wsdc_level',
+          id: 'division',
           type: 'select',
-          title: 'What is your dancer persona & competition division?',
+          title: 'Which competitive divisions are you entering this weekend?',
           options: [
-            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
-            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
-            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
-            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
+            { label: 'Novice Competitor Track', subtitle: 'Friday 6:30 PM Strictly Prelims + Saturday 12:30 PM J&J Prelims', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor Track', subtitle: 'Friday 6:30 PM Strictly Prelims + Saturday 2:15 PM J&J Prelims', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Advanced / All-Star Competitor', subtitle: 'Friday 8:00 PM Strictly + Saturday 4:00 PM J&J Prelims', value: 'advanced_allstar', badge: 'Adv/All-Star' },
+            { label: 'Social Dancer / Non-Competitor', subtitle: 'All-levels workshops, Champions Gala, and late-night socials (no staging calls)', value: 'social_only', badge: 'Social' }
           ],
-          context: 'Enforces workshop level gatekeeping and flags your division check-in time.',
+          context: 'Calculates your earliest competition marshalling call and filters leveled workshops.',
           defaultValue: 'novice',
           required: true
         },
         {
-          id: 'spectator_interest',
-          type: 'boolean',
-          title: 'Include Saturday night Champion Showcase in your schedule?',
-          options: [],
-          context: 'Prime-time spectator event (9:00 PM - 11:30 PM) which pauses general social dancing.',
-          defaultValue: true
+          id: 'arrival',
+          type: 'select',
+          title: 'When is your Friday arrival target at Hyatt Regency SFO?',
+          options: [
+            { label: 'Early Afternoon (Flight landing before 2:30 PM)', subtitle: 'Full 3.5h buffer for SFO transit, hotel check-in, unpack & warmup before 6:30 PM Strictly', value: 'early', badge: 'Recommended' },
+            { label: 'Friday Evening Arrival (6:00 PM – 8:00 PM)', subtitle: 'Check in for evening masterclasses and 9:00 PM kickoff social', value: 'evening', badge: 'Evening' },
+            { label: 'Local Bay Area Commute / Drive-In', subtitle: 'Driving in locally from SF/Bay Area; no airport buffer needed', value: 'local', badge: 'Drive-In' }
+          ],
+          context: 'Generates backward staging timeline and sets automatic flight touchdown alarms.',
+          defaultValue: 'early',
+          required: true
+        },
+        {
+          id: 'track',
+          type: 'select',
+          title: 'Boogie by the Bay runs 3 simultaneous daytime tracks. Which stream should we prioritize?',
+          options: [
+            { label: 'Competitor Leveled Workshops', subtitle: 'Sandpebble ABC • Division-targeted technique & strategy classes', value: 'competitor_workshops', badge: 'Technique' },
+            { label: 'Main Ballroom Masterclasses', subtitle: 'Grand Peninsula • Musicality, phrasing & partner connection classes', value: 'all_levels_ballroom', badge: 'Musicality' },
+            { label: 'Curated All-Around Mix', subtitle: 'Optimal balance across all rooms and touring instructors', value: 'balanced_mix', badge: 'Curated' }
+          ],
+          context: 'Resolves workshop timetable clashes across Grand Peninsula, Regency, and Sandpebble ballrooms.',
+          defaultValue: 'competitor_workshops',
+          required: true
         }
       ]
     },
@@ -241,6 +330,24 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           status: 'filtered',
           decisionBadge: 'Level Ineligible',
           justification: 'Filtered: Requires Level 4/5 audition band'
+        },
+        {
+          id: 'b3',
+          title: 'All-Levels Musicality & Connection Workshop',
+          time: 'Saturday 11:30 AM - 12:45 PM',
+          location: 'Regency Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Matched all-levels musicality focus.'
+        },
+        {
+          id: 'b4',
+          title: 'Bay Area Glow Social Party',
+          time: 'Friday 10:30 PM - 5:00 AM',
+          location: 'Grand Peninsula Ballroom',
+          status: 'included',
+          decisionBadge: 'Social Energy',
+          justification: 'Friday kickoff late night social.'
         }
       ],
       themeDressCodes: [
@@ -281,99 +388,288 @@ export const MOCK_EVENT_RESULTS: Record<string, EventMockData> = {
           vibe: 'Warm & Community-Driven'
         }
       ],
-      icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline (SFO)\\nDTSTART:20261009T212500Z\\nDTEND:20261009T215500Z\\nDESCRIPTION:Landing deadline for Boogie by the Bay 2026.\\nLOCATION:San Francisco International Airport (SFO)\\nEND:VEVENT\\nEND:VCALENDAR'
+      icsContent: boogieIcs
     },
-    icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nCALSCALE:GREGORIAN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline (SFO)\\nDTSTART:20261009T212500Z\\nDTEND:20261009T215500Z\\nDESCRIPTION:Landing deadline for Boogie by the Bay 2026.\\nLOCATION:San Francisco International Airport (SFO)\\nEND:VEVENT\\nEND:VCALENDAR'
+    icsContent: boogieIcs
+  },
+  'the-open-2026': {
+    discovery: {
+      preset_id: 'the-open-2026',
+      preset_name: 'The Open (US Open Swing Dance Championships)',
+      suggested_form_questions: [
+        {
+          id: 'wsdc_level',
+          type: 'select',
+          title: 'What is your dancer persona & competition division?',
+          options: [
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
+          ],
+          context: 'Used to filter out conflicting tracks, gate level-restricted workshops, and calculate travel staging deadlines.',
+          defaultValue: 'novice',
+          required: true
+        },
+        {
+          id: 'workshop_focus',
+          type: 'multiselect',
+          title: 'Which workshop tracks do you plan to prioritize?',
+          options: [
+            { label: 'Lead & Follow Connection', value: 'connection' },
+            { label: 'Musicality & Accents', value: 'musicality' },
+            { label: 'Speed & Footwork', value: 'footwork' }
+          ],
+          context: 'Schedule contains simultaneous workshop rooms; filters out conflicting tracks.',
+          defaultValue: ['connection', 'musicality']
+        },
+        {
+          id: 'spectator_interest',
+          type: 'boolean',
+          title: 'Include Saturday night US Open Classic Showcase Finals in your schedule?',
+          options: [],
+          context: 'The premier championship showcase division (8:00 PM - 11:30 PM).',
+          defaultValue: true
+        }
+      ]
+    },
+    decisionTrace: {
+      subTasks: [
+        { id: '1', label: 'Analyzed US Open timetable & ballrooms', status: 'completed', detail: 'Found Burbank Marriott Convention Hall, 52 workshops, and 8 divisions' },
+        { id: '2', label: 'Calculated BUR transit & warmup buffer', status: 'completed', detail: '15m transit + 90m hotel settle + 60m warmup' },
+        { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Selected workshops matching your division' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '4:15 PM (Friday)',
+        warmupMinutes: 60,
+        hotelSettleMinutes: 90,
+        transitMinutes: 15,
+        latestFlightArrivalDeadline: '1:30 PM (Friday)',
+        formulaSummary: '16:15 (Novice Strictly Staging) - (15m BUR Transit + 90m Settle + 60m Warmup) = 13:30 Target Arrival',
+        steps: [
+          { label: 'US Open Strictly Swing Staging Call', time: '4:15 PM', duration: 'Staging', type: 'staging', description: 'Grand Ballroom Check-in & Warmup' },
+          { label: 'Warmup & Floor Check', time: '3:15 PM', duration: '60 min', type: 'warmup', description: 'Test floor speed & stretch' },
+          { label: 'Burbank Marriott Check-in & Wardrobe', time: '1:45 PM', duration: '90 min', type: 'hotel', description: 'Unpack dance attire & freshen up' },
+          { label: 'BUR Airport to Marriott Transit', time: '1:30 PM', duration: '15 min', type: 'transit', description: 'Direct 5-minute shuttle / taxi buffer' },
+          { label: 'Recommended Venue Arrival', time: '1:30 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest arrival deadline' }
+        ]
+      },
+      sessions: [
+        {
+          id: 'uo1',
+          title: 'Friday Afternoon WCS Foundations & Flow Workshop',
+          time: 'Friday 1:30 PM - 2:45 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Fits foundational technique focus prior to evening competitions.'
+        },
+        {
+          id: 'uo2',
+          title: 'US Open Strictly Swing Prelims (Novice & Intermediate)',
+          time: 'Friday 4:15 PM - 6:45 PM',
+          location: 'Grand Ballroom',
+          status: 'included',
+          decisionBadge: 'Division Match',
+          justification: 'Division match for Novice. Check-in call at 4:15 PM.'
+        },
+        {
+          id: 'uo3',
+          title: 'US Open Classic Division Routines & Late Night Kickoff',
+          time: 'Friday 8:30 PM - 5:00 AM',
+          location: 'Convention Hall',
+          status: 'included',
+          decisionBadge: 'Social Energy',
+          justification: 'Marquee evening pro routines followed by open late-night social dancing.'
+        },
+        {
+          id: 'uo4',
+          title: 'Champions Musicality & Micro-Phrasing Workshop',
+          time: 'Saturday 11:30 AM - 12:45 PM',
+          location: 'Academy Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Matches your Musicality & Accents preference.'
+        },
+        {
+          id: 'uo5',
+          title: 'Level 4/5 Champion Masterclass with Benji Schwimmer',
+          time: 'Saturday 3:45 PM - 5:00 PM',
+          location: 'Academy Ballroom',
+          status: 'filtered',
+          decisionBadge: 'Level Ineligible',
+          justification: 'Requires Level 4/5 audition wristband or Advanced WSDC points.'
+        },
+        {
+          id: 'uo6',
+          title: 'US Open Showcase Division Finals & Gala Show',
+          time: 'Saturday 8:00 PM - 11:30 PM',
+          location: 'Convention Hall',
+          status: 'included',
+          decisionBadge: 'Showcase Event',
+          justification: 'The premier worldwide championship showcase division.'
+        }
+      ],
+      themeDressCodes: [
+        {
+          id: 'tuo1',
+          day: 'Friday Night',
+          themeTitle: 'Friday Kickoff & Classic Showcases',
+          category: 'social_theme',
+          description: 'High-energy kickoff evening featuring Classic pro routines and midnight social.',
+          recommendedAttire: ['Smart casual dancewear', 'Clean suede shoes', 'Breathable shirts'],
+          vibe: 'Exciting & Welcoming'
+        },
+        {
+          id: 'tuo2',
+          day: 'Saturday Evening',
+          themeTitle: 'US Open Showcase Gala & Formal Glam',
+          category: 'showcase_formal',
+          description: 'The pinnacle gala evening of the US Open Swing Dance Championships.',
+          recommendedAttire: ['Suits & fitted jackets', 'Cocktail gowns / dressy jumpsuits', 'Polished ballroom dance shoes'],
+          vibe: 'World-Class Championship Prestigious'
+        },
+        {
+          id: 'tuo3',
+          day: 'Sat / Sun Prelims',
+          themeTitle: 'WSDC Official Competition Dress Code',
+          category: 'competition_attire',
+          description: 'Official WSDC competition attire for Jack & Jill and Strictly Swing.',
+          recommendedAttire: ['Dark slacks / dance trousers', 'Neat fitted button-down shirts', 'Competition bibs'],
+          vibe: 'Athletic & Professional'
+        },
+        {
+          id: 'tuo4',
+          day: 'Sunday Night',
+          themeTitle: 'Thanksgiving Weekend Survivor Social',
+          category: 'casual_sunday',
+          description: 'Survivor dancing until dawn to close out the US Open weekend.',
+          recommendedAttire: ['US Open event tees', 'Comfortable joggers & dance sneakers'],
+          vibe: 'Warm & Festive'
+        }
+      ],
+      icsContent: southBayIcs
+    },
+    icsContent: southBayIcs
   }
 };
 
-export const createGenericMockResult = (eventName: string): EventMockData => ({
-  discovery: {
-    preset_id: 'custom-event',
-    preset_name: eventName || 'Custom Event Schedule',
-    suggested_form_questions: [
-      {
-        id: 'experience_level',
-        type: 'select',
-        title: 'What is your dancer persona & competition division?',
-        options: [
-          { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
-          { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
-          { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
-          { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
-        ],
-        context: 'Filters out ineligible advanced intensives and targets call times.',
-        defaultValue: 'novice',
-        required: true
-      },
-      {
-        id: 'workshop_selection',
-        type: 'multiselect',
-        title: 'Select your preferred workshop topics:',
-        options: [
-          { label: 'Lead & Follow Connection', value: 'connection' },
-          { label: 'Musicality & Accents', value: 'musicality' },
-          { label: 'Speed & Footwork', value: 'footwork' }
-        ],
-        context: 'Resolves simultaneous class schedule conflicts.',
-        defaultValue: ['connection', 'musicality']
-      }
-    ]
-  },
-  decisionTrace: {
-    subTasks: [
-      { id: '1', label: `Analyzed ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
-      { id: '2', label: 'Calculated arrival & travel buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
-      { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Tailored schedule generated' },
-      { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
-    ],
-    bufferTimeline: {
-      earliestStagingTime: '5:00 PM (Friday)',
-      warmupMinutes: 60,
-      hotelSettleMinutes: 90,
-      transitMinutes: 30,
-      latestFlightArrivalDeadline: '2:00 PM (Friday)',
-      formulaSummary: '17:00 Staging - (30m Transit + 90m Hotel + 60m Warmup) = 14:00 Landing',
-      steps: [
-        { label: 'Earliest Competition Staging', time: '5:00 PM', duration: 'Staging', type: 'staging', description: 'Event Staging Call' },
-        { label: 'Warmup Buffer', time: '4:00 PM', duration: '60 min', type: 'warmup', description: 'Check-in & Warmup' },
-        { label: 'Hotel Settle', time: '2:30 PM', duration: '90 min', type: 'hotel', description: 'Hotel Room Check-in' },
-        { label: 'Airport Transit', time: '2:00 PM', duration: '30 min', type: 'transit', description: 'Transit from Airport' },
-        { label: 'Target Flight Landing Deadline', time: '2:00 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest flight touchdown' }
+export const createGenericMockResult = (eventName: string): EventMockData => {
+  const genericSessions = [
+    { title: 'Friday Welcome Social & All-Levels Class', time: 'Friday 6:00 PM - 7:30 PM', location: 'Main Ballroom' },
+    { title: 'Saturday Connection & Flow Workshop', time: 'Saturday 1:00 PM - 2:15 PM', location: 'Main Ballroom' },
+    { title: 'Champions Showcase Gala', time: 'Saturday 9:00 PM - 11:30 PM', location: 'Main Ballroom' }
+  ];
+
+  const ics = createIcsString(eventName || 'Custom Event Schedule', '2:00 PM', '5:00 PM', genericSessions);
+
+  return {
+    discovery: {
+      preset_id: 'custom-event',
+      preset_name: eventName || 'Custom Event Schedule',
+      suggested_form_questions: [
+        {
+          id: 'experience_level',
+          type: 'select',
+          title: 'What is your dancer persona & competition division?',
+          options: [
+            { label: 'Novice Competitor', subtitle: 'WSDC Novice prelims, early staging call, foundational tracks', value: 'novice', badge: 'Novice' },
+            { label: 'Intermediate Competitor', subtitle: 'WSDC Intermediate prelims, intensive classes, late night socials', value: 'intermediate', badge: 'Intermediate' },
+            { label: 'Social Dancer Only', subtitle: 'All-levels workshops, peak party energy, no prelim staging calls', value: 'social_only', badge: 'Social' },
+            { label: 'Workshop Enthusiast', subtitle: 'Max daytime classes, masterclasses & technique intensives', value: 'workshop_enthusiast', badge: 'Workshops' }
+          ],
+          context: 'Filters out ineligible advanced intensives and targets call times.',
+          defaultValue: 'novice',
+          required: true
+        },
+        {
+          id: 'workshop_selection',
+          type: 'multiselect',
+          title: 'Select your preferred workshop topics:',
+          options: [
+            { label: 'Lead & Follow Connection', value: 'connection' },
+            { label: 'Musicality & Accents', value: 'musicality' },
+            { label: 'Speed & Footwork', value: 'footwork' }
+          ],
+          context: 'Resolves simultaneous class schedule conflicts.',
+          defaultValue: ['connection', 'musicality']
+        }
       ]
     },
-    sessions: [
-      {
-        id: 'g1',
-        title: 'Friday Welcome Social & All-Levels Class',
-        time: 'Friday 6:00 PM - 7:30 PM',
-        location: 'Main Ballroom',
-        status: 'included',
-        decisionBadge: 'All-Levels',
-        justification: 'Open all-levels class'
-      }
-    ],
-    themeDressCodes: [
-      {
-        id: 'g-theme-1',
-        day: 'Friday Night',
-        themeTitle: 'Welcome Social & Kickoff Party',
-        category: 'social_theme',
-        description: 'Casual and welcoming social dance atmosphere.',
-        recommendedAttire: ['Dance t-shirts', 'Suede dance shoes', 'Comfortable stretch jeans'],
-        vibe: 'Fun & Friendly'
+    decisionTrace: {
+      subTasks: [
+        { id: '1', label: `Analyzed ${eventName} timetable`, status: 'completed', detail: 'Extracted sessions and timeline' },
+        { id: '2', label: 'Calculated arrival & travel buffer', status: 'completed', detail: '30m transit + 90m hotel + 60m warmup' },
+        { id: '3', label: 'Filtered workshops & assembled calendar', status: 'completed', detail: 'Tailored schedule generated' },
+        { id: '4', label: 'Generated calendar file (.ics)', status: 'completed', detail: 'Ready for Apple & Google Calendar' }
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '5:00 PM (Friday)',
+        warmupMinutes: 60,
+        hotelSettleMinutes: 90,
+        transitMinutes: 30,
+        latestFlightArrivalDeadline: '2:00 PM (Friday)',
+        formulaSummary: '17:00 Staging - (30m Transit + 90m Hotel + 60m Warmup) = 14:00 Landing',
+        steps: [
+          { label: 'Earliest Competition Staging', time: '5:00 PM', duration: 'Staging', type: 'staging', description: 'Event Staging Call' },
+          { label: 'Warmup Buffer', time: '4:00 PM', duration: '60 min', type: 'warmup', description: 'Check-in & Warmup' },
+          { label: 'Hotel Settle', time: '2:30 PM', duration: '90 min', type: 'hotel', description: 'Hotel Room Check-in' },
+          { label: 'Airport Transit', time: '2:00 PM', duration: '30 min', type: 'transit', description: 'Transit from Airport' },
+          { label: 'Target Flight Landing Deadline', time: '2:00 PM', duration: 'Deadline', type: 'flight', description: 'Recommended latest flight touchdown' }
+        ]
       },
-      {
-        id: 'g-theme-2',
-        day: 'Saturday Evening',
-        themeTitle: 'Main Showcase & Champions Gala',
-        category: 'showcase_formal',
-        description: 'Evening spotlight showcases and finals.',
-        recommendedAttire: ['Dress shirts / cocktail attire', 'Polished dance shoes'],
-        vibe: 'Festive & Elegant'
-      }
-    ],
-    icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline\\nDTSTART:20261015T210000Z\\nDTEND:20261015T213000Z\\nDESCRIPTION:Landing deadline for event.\\nEND:VEVENT\\nEND:VCALENDAR'
-  },
-  icsContent: 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\nBEGIN:VEVENT\\nSUMMARY:✈️ Target Flight Landing Deadline\\nDTSTART:20261015T210000Z\\nDTEND:20261015T213000Z\\nDESCRIPTION:Landing deadline for event.\\nEND:VEVENT\\nEND:VCALENDAR'
-});
+      sessions: [
+        {
+          id: 'g1',
+          title: 'Friday Welcome Social & All-Levels Class',
+          time: 'Friday 6:00 PM - 7:30 PM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'All-Levels',
+          justification: 'Open all-levels class'
+        },
+        {
+          id: 'g2',
+          title: 'Saturday Connection & Flow Workshop',
+          time: 'Saturday 1:00 PM - 2:15 PM',
+          location: 'Main Ballroom',
+          status: 'included',
+          decisionBadge: 'Workshop Match',
+          justification: 'Selected connection & flow focus.'
+        },
+        {
+          id: 'g3',
+          title: 'Advanced Intensive Masterclass',
+          time: 'Saturday 3:00 PM - 4:30 PM',
+          location: 'Studio B',
+          status: 'filtered',
+          decisionBadge: 'Level Ineligible',
+          justification: 'Requires Advanced+ division registration.'
+        }
+      ],
+      themeDressCodes: [
+        {
+          id: 'g-theme-1',
+          day: 'Friday Night',
+          themeTitle: 'Welcome Social & Kickoff Party',
+          category: 'social_theme',
+          description: 'Casual and welcoming social dance atmosphere.',
+          recommendedAttire: ['Dance t-shirts', 'Suede dance shoes', 'Comfortable stretch jeans'],
+          vibe: 'Fun & Friendly'
+        },
+        {
+          id: 'g-theme-2',
+          day: 'Saturday Evening',
+          themeTitle: 'Main Showcase & Champions Gala',
+          category: 'showcase_formal',
+          description: 'Evening spotlight showcases and finals.',
+          recommendedAttire: ['Dress shirts / cocktail attire', 'Polished dance shoes'],
+          vibe: 'Festive & Elegant'
+        }
+      ],
+      icsContent: ics
+    },
+    icsContent: ics
+  };
+};

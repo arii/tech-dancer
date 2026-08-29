@@ -9,17 +9,20 @@ export interface ResearchTool {
   subtitle?: string;
   description: string;
   category: string;
-  taxonomyBucket?: 'flagship' | 'engineering' | 'data-content' | 'e-commerce';
+  taxonomyBucket?: 'live-experiments' | 'engineering' | 'data-content' | 'e-commerce' | 'migrated';
   status: string;
   tags: string[];
   canonicalPath?: string;
+  deepDivePath?: string;
   externalUrl?: string;
   externalLinkDisplayLabel?: string;
   sourceUrl?: string;
+  isFeatured?: boolean;
   isFlagship?: boolean;
   excludeFromEngineeringTools?: boolean;
   image?: string;
   imageAlt?: string;
+  migratedUrl?: string;
   inDevMessage?: {
     highlight: string;
     rest: string;
@@ -33,137 +36,93 @@ export interface ResearchTool {
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
-    id: 'hrm-flagship',
-    inDevMessage: {
-      highlight: 'Intended to run locally on your own server.',
-      rest: ' No live site available.'
-    },
-    taxonomyBucket: 'flagship',
-    title: 'HRM (Heart Rate Monitor)',
-    description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server, with Spotify API integration and a synchronized timer. Built end-to-end as a DevAI-assisted engineering project.',
-    category: 'Product Development',
-    status: 'Active',
-    tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
-    sourceUrl: 'https://github.com/arii/hrm',
-    isFlagship: true,
-    image: '/assets/research/hrm-flagship.png',
-    imageAlt: 'Screenshot of the HRM heart rate monitor training dashboard with real-time biometric telemetry and Spotify integration'
-  },
-  {
-    id: 'repo-auditor-ai',
-    inDevMessage: {
-      highlight: 'Available now for testing',
-      rest: ' with your own repository.'
-    },
-    taxonomyBucket: 'flagship',
-    title: 'RepoAuditor AI',
-    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
+    id: 'versiontruth',
+    taxonomyBucket: 'live-experiments',
+    title: 'VersionTruth',
+    subtitle: 'REAL-TIME GROUND-TRUTH INTELLIGENCE',
+    description: 'The antidote to version hallucinations: real-time ground-truth intelligence for npm, Node.js, and GitHub Actions to eliminate agent dependencies and hallucination errors.',
     category: 'DevAI Tooling',
-    status: 'Active',
-    tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
-    externalUrl: 'https://repo-auditor-ai.vercel.app/',
-    externalLinkDisplayLabel: 'Open RepoAuditor AI',
-    sourceUrl: 'https://github.com/arii/hrm-project-management',
-    isFlagship: true,
-    image: '/assets/research/repo-auditor-ai.png',
-    imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
-  },
-  {
-    id: 'boomtick-blog',
-    inDevMessage: {
-      highlight: 'RAG + LLM tooling in active development.',
-      rest: ' This site is the production environment where those pipelines are being built and validated.'
-    },
-    taxonomyBucket: 'flagship',
-    title: 'BoomTick.blog',
-    subtitle: 'LIVE DEVELOPMENT ENVIRONMENT',
-    description: 'West Coast Swing community platform and active testbed for RAG pipelines and LLM-assisted content workflows currently in development. Includes SEO-optimized publishing, analytics, and Printful API integration for automated merch listing generation.',
-    category: 'Product development',
-    status: 'Active dev',
-    tags: ['Next.js', 'LLM Workflows', 'SEO'],
-    externalUrl: 'https://boomtick.blog',
-    externalLinkDisplayLabel: 'Visit Site',
-    sourceUrl: 'https://github.com/arii/tech-dancer',
-    isFlagship: true,
-    customPreview: {
-      logo: { prefix: 'boom', accent: 'tick', suffix: '.blog' },
-      headline: [
-        { text: 'Pack smart.' },
-        { text: 'Dance more.', accent: 'Dance more.' }
-      ],
-      tagline: "The west coast swing dancer's guide to gear, travel, and better dance weekends."
-    }
-  },
-  {
-    id: 'gitops-pr-reviewer',
-    taxonomyBucket: 'engineering',
-    title: 'GitOps Code Review Agent',
-    subtitle: 'Automated PR Auditing',
-    description: 'LLM-powered PR auditing using GitHub Actions. Reviews code style and pattern consistency on every pull request. The foundation for the RAG-grounded review pipeline being built into RepoAuditor AI.',
-    category: 'DevAI System',
-    status: 'Active',
-    tags: ['GitHub Actions', 'LLM', 'PR Automation'],
-    canonicalPath: '/research/gitops-pr-reviewer',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
-  },
-  {
-    id: 'deployment-impact-analyzer',
-    taxonomyBucket: 'flagship',
-    title: 'Deployment Impact Analyzer',
-    subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
-    description: 'CI pipeline that determines which pages are visually affected by a pull request. Uses dependency-cruiser to trace changed files through the import graph, then captures Playwright screenshots of affected routes, runs pixelmatch pixel diffs, crops changed regions, and generates a deployment review report with severity scores. Agent integration in progress.',
-    category: 'DevAI System',
-    status: 'Active',
-    tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
-    canonicalPath: '/research/deployment-impact-analyzer',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools',
-    isFlagship: true
+    status: 'Live Tool',
+    tags: ['Ground Truth', 'npm', 'Node.js', 'GitHub Actions', 'Agents'],
+    canonicalPath: '/versiontruth',
+    deepDivePath: '/research/2026-07-10-latest-version-check-skill',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/api',
+    isFeatured: true,
+    image: '/assets/research/versiontruth-preview.png',
+    imageAlt: 'Screenshot of the VersionTruth dependency and version verification dashboard'
   },
   {
     id: 'ux-auditor',
-    taxonomyBucket: 'engineering',
+    taxonomyBucket: 'live-experiments',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'PLAYWRIGHT VISUAL REGRESSION',
-    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Deployment Impact Analyzer pipeline.',
+    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots, computes pixel-level diffs, crops bounding boxes of changed regions, and scores severity by percentage of changed pixels.',
     category: 'Perception Debugging',
-    status: 'Active',
+    status: 'Live Tool',
     tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
     canonicalPath: '/ux-auditor',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
+    deepDivePath: '/research/deployment-impact-analyzer',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools',
+    isFeatured: true,
+    image: '/assets/research/ux-auditor-preview.png',
+    imageAlt: 'Screenshot of the Visual Regression & UX Auditor interface comparing pixel deltas'
   },
   {
     id: 'wcs-navigator',
-    taxonomyBucket: 'flagship',
+    taxonomyBucket: 'live-experiments',
     title: 'WCS Navigator',
     subtitle: 'CALIFORNIA 2026 PRESETS & PERSONA SELECTOR',
-    description: 'Event schedule entry view pre-loaded with 5 California 2026 West Coast Swing events, 4 social dance personas, PDF/URL schedule ingestion, and mock vs backend execution mode toggle.',
-    category: 'Product Development',
-    status: 'Active',
+    description: 'Explore how WCS Navigator uses a stateless, zero-dependency Python FastAPI backend and Gemini 2.5 Flash to process raw convention schedules into personalized RFC 5545 calendar files entirely in-memory.',
+    category: 'Live Testbed',
+    status: 'Live Tool',
     tags: ['React', 'WCS Events', 'Persona Generator', 'Schedule Parsing'],
-    canonicalPath: '/research/wcs-navigator',
-    isFlagship: true
-  },
-  {
-    id: 'wcs-scraper',
-    taxonomyBucket: 'data-content',
-    title: 'High-Scale Telemetry Ingestion ETL',
-    subtitle: 'Scraper-to-Parquet Pipeline',
-    description: 'A data engineering showcase for Dev AI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
-    category: 'Data Engineering',
-    status: 'Active',
-    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
-    canonicalPath: '/research/wcs-scraper'
+    canonicalPath: '/wcs-navigator',
+    deepDivePath: '/research/wcs-navigator-architecture',
+    isFeatured: true,
+    image: '/assets/research/wcs-navigator-preview.png',
+    imageAlt: 'Screenshot of the WCS Navigator interactive schedule explorer and persona presets'
   },
   {
     id: 'blog-drafter',
-    taxonomyBucket: 'data-content',
+    taxonomyBucket: 'live-experiments',
     title: 'AI Blog Drafter',
-    subtitle: 'Human-in-the-Loop Content Engine',
+    subtitle: 'HUMAN-IN-THE-LOOP CONTENT ENGINE',
     description: 'A prompt engineering platform designed for brand-consistent content generation. It combines RAG over existing blog posts with a human-in-the-loop workflow to maintain editorial quality.',
     category: 'Content Tools',
-    status: 'Active',
-    tags: ['LLM', 'Content Generation', 'Productivity'],
-    canonicalPath: '/research/blog-drafter'
+    status: 'Live Tool',
+    tags: ['LLM', 'RAG', 'Content Generation', 'Productivity'],
+    canonicalPath: '/research/blog-drafter',
+    isFeatured: true,
+    image: '/assets/research/blog-drafter-preview.png',
+    imageAlt: 'Screenshot of the AI Blog Drafter prompt workspace and article generator'
+  },
+  {
+    id: 'wcs-scraper',
+    taxonomyBucket: 'live-experiments',
+    title: 'High-Scale Telemetry Ingestion ETL',
+    subtitle: 'SCRAPER-TO-PARQUET PIPELINE',
+    description: 'A data engineering showcase for DevAI systems, transforming raw competitive dance records into compressed Parquet formats for efficient RAG indexing and analytical queries.',
+    category: 'Data Engineering',
+    status: 'Live Tool',
+    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
+    canonicalPath: '/research/wcs-scraper',
+    deepDivePath: '/research/wcs-scraper-initial-sync',
+    isFeatured: true,
+    image: '/assets/research/wcs-scraper-preview.png',
+    imageAlt: 'Screenshot of the WCS-Scraper telemetry ETL pipeline dashboard and ingestion log viewer'
+  },
+  {
+    id: 'gitops-pr-reviewer',
+    taxonomyBucket: 'migrated',
+    title: 'GitOps Code Review Agent',
+    subtitle: 'Automated PR Auditing',
+    description: 'LLM-powered PR auditing using GitHub Actions. Reviews code style and pattern consistency on every pull request. Migrated to primary portfolio.',
+    category: 'DevAI System',
+    status: 'Migrated',
+    tags: ['GitHub Actions', 'LLM', 'PR Automation'],
+    canonicalPath: '/research/gitops-pr-reviewer',
+    migratedUrl: 'https://arii.github.io',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
     id: 'ecommerce-automation',
@@ -176,16 +135,50 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
     canonicalPath: '/research/ecommerce-automation'
   },
+  // Migrated Flagship Tools (Preserved for route resolution & graceful SEO fallbacks)
   {
-    id: 'versiontruth',
-    taxonomyBucket: 'engineering',
-    title: 'VersionTruth',
-    subtitle: 'The antidote to version hallucinations',
-    description: 'The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions.',
+    id: 'hrm-flagship',
+    taxonomyBucket: 'migrated',
+    title: 'HRM (Heart Rate Monitor)',
+    description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server. Migrated to primary portfolio.',
+    category: 'Product Development',
+    status: 'Migrated',
+    tags: ['React', 'Web Bluetooth', 'Spotify API'],
+    migratedUrl: 'https://arii.github.io',
+    sourceUrl: 'https://github.com/arii/hrm'
+  },
+  {
+    id: 'repo-auditor-ai',
+    taxonomyBucket: 'migrated',
+    title: 'RepoAuditor AI',
+    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. Migrated to primary portfolio.',
     category: 'DevAI Tooling',
+    status: 'Migrated',
+    tags: ['DevAI', 'GitHub API', 'Multi-Agent'],
+    migratedUrl: 'https://arii.github.io',
+    externalUrl: 'https://repo-auditor-ai.vercel.app/'
+  },
+  {
+    id: 'boomtick-blog',
+    taxonomyBucket: 'migrated',
+    title: 'BoomTick.blog',
+    description: 'West Coast Swing community platform and active testbed for RAG pipelines and LLM-assisted content workflows.',
+    category: 'Product Development',
     status: 'Active',
-    tags: ['versions', 'ci', 'dependencies', 'hallucination-mitigation', 'npm', 'node', 'github-actions', 'agents', 'nanda'],
-    canonicalPath: '/versiontruth',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/api'
+    tags: ['Next.js', 'LLM Workflows', 'SEO'],
+    migratedUrl: 'https://arii.github.io'
+  },
+  {
+    id: 'deployment-impact-analyzer',
+    taxonomyBucket: 'migrated',
+    title: 'Deployment Impact Analyzer',
+    subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
+    description: 'CI pipeline that determines which pages are visually affected by a pull request. Migrated to primary portfolio.',
+    category: 'DevAI System',
+    status: 'Migrated',
+    tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
+    canonicalPath: '/research/deployment-impact-analyzer',
+    migratedUrl: 'https://arii.github.io',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   }
 ];

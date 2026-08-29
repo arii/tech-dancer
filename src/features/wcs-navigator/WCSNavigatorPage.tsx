@@ -1,13 +1,12 @@
-// impeccable-ignore-file
 import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { Icon } from '@/components/ui/Icon';
-import { ToggleLeft, ToggleRight, ArrowLeft, RefreshCw, Layers } from 'lucide-react';
-import { CALIFORNIA_2026_EVENTS } from './data/californiaEvents';
+import { HelpCircle, ArrowLeft, Layers, RefreshCw } from 'lucide-react';
+import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from './data/californiaEvents';
 import { MOCK_EVENT_RESULTS, createGenericMockResult, EventMockData } from './data/mockResults';
-import { EventSearchHero } from './components/EventSearchHero';
+import { EventSearchHero, UserPreferences } from './components/EventSearchHero';
 import { AgentDiscoveryTransition } from './components/AgentDiscoveryTransition';
 import { DynamicQuestionnaire } from './components/DynamicQuestionnaire';
 import { AgentMindTrace } from './components/AgentMindTrace';
@@ -15,15 +14,20 @@ import { WorkflowExplainer } from './components/WorkflowExplainer';
 import { DiscoveryResponse, QuestionAnswerValue } from './types/navigator';
 import { AgentDecisionTrace } from './types';
 
+import { extractScheduleFromDocument } from './services/liveScheduleExtractor';
+
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'results';
 
 export const WCSNavigatorPage: React.FC = () => {
   const [step, setStep] = useState<WizardStep>('search');
   const [isMockMode, setIsMockMode] = useState<boolean>(true);
+  const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
 
   // Selected State
   const [activeEventName, setActiveEventName] = useState<string>(CALIFORNIA_2026_EVENTS[0].name);
   const [activeEventId, setActiveEventId] = useState<string>(CALIFORNIA_2026_EVENTS[0].id);
+  const [activeDivision, setActiveDivision] = useState<string>('novice');
+  const [activeRole, setActiveRole] = useState<string>('lead');
 
   // Data State
   const [discoveryData, setDiscoveryData] = useState<DiscoveryResponse>(
@@ -33,24 +37,79 @@ export const WCSNavigatorPage: React.FC = () => {
     MOCK_EVENT_RESULTS['south-bay-dance-fling-2026'].decisionTrace
   );
 
-  // Discovery handlers
-  const handleStartDiscovery = (eventName: string, eventId?: string) => {
+  // Progressive Discovery & Questionnaire on Event Select
+  const handleSelectEventPreset = (event: WCSCaliforniaEvent, prefs?: Partial<UserPreferences>) => {
+    setActiveEventName(event.name);
+    setActiveEventId(event.id);
+    if (prefs?.division) setActiveDivision(prefs.division);
+    if (prefs?.role) setActiveRole(prefs.role);
+
+    const mockData: EventMockData =
+      MOCK_EVENT_RESULTS[event.id] || createGenericMockResult(event.name);
+
+    setDiscoveryData(mockData.discovery);
+    setDecisionTrace(mockData.decisionTrace);
+
+    // Progressive Flow: Discovery scan -> Dynamic Questionnaire -> Results
+    setStep('discovering');
+  };
+
+  // Discovery handlers for custom uploads
+  const handleStartCustomDiscovery = async (eventName: string, eventId?: string) => {
     setActiveEventName(eventName);
     setActiveEventId(eventId || '');
+
+    if (!eventId || !MOCK_EVENT_RESULTS[eventId]) {
+      const extracted = await extractScheduleFromDocument(eventName);
+      setDiscoveryData(extracted.discovery);
+      setDecisionTrace(extracted.decisionTrace);
+    }
     setStep('discovering');
   };
 
   const handleDiscoveryComplete = () => {
-    const mockData: EventMockData =
-      MOCK_EVENT_RESULTS[activeEventId] || createGenericMockResult(activeEventName);
-
-    setDiscoveryData(mockData.discovery);
-    setDecisionTrace(mockData.decisionTrace);
+    if (activeEventId && MOCK_EVENT_RESULTS[activeEventId]) {
+      const mockData: EventMockData = MOCK_EVENT_RESULTS[activeEventId];
+      setDiscoveryData(mockData.discovery);
+      setDecisionTrace(mockData.decisionTrace);
+    }
     setStep('questionnaire');
   };
 
   // Questionnaire submission handler
-  const handleGenerateItinerary = (_answers: Record<string, QuestionAnswerValue>) => {
+  const handleGenerateItinerary = (answers: Record<string, QuestionAnswerValue>) => {
+    if (answers.division && typeof answers.division === 'string') {
+      setActiveDivision(answers.division);
+    }
+    if (answers.role && typeof answers.role === 'string') {
+      setActiveRole(answers.role);
+    }
+
+    const mockData = MOCK_EVENT_RESULTS[activeEventId] || createGenericMockResult(activeEventName);
+    setDecisionTrace(mockData.decisionTrace);
+
+    const eventTitle = discoveryData?.preset_name || activeEventName;
+    const buffer = mockData.decisionTrace.bufferTimeline;
+    const sessions = mockData.decisionTrace.sessions || [];
+    const themes = mockData.decisionTrace.themeDressCodes || [];
+
+    const markdownDoc = [
+      `# 🕺 ${eventTitle} — Personalized Weekend Itinerary`,
+      `*Generated by WCS Navigator on ${new Date().toLocaleDateString()}*`,
+      '',
+      '## ✈️ Travel & Arrival Buffer Target',
+      `- **Earliest Event Staging Call:** ${buffer?.earliestStagingTime || '5:15 PM Friday'}`,
+      `- **Recommended Flight Touchdown:** ${buffer?.latestFlightArrivalDeadline || '2:15 PM Friday'}`,
+      `- **Buffer Breakdown:** ${buffer?.transitMinutes || 30}m Transit + ${buffer?.hotelSettleMinutes || 90}m Hotel Settle + ${buffer?.warmupMinutes || 60}m Warmup`,
+      '',
+      '## 📅 Matched Workshops & Competition Schedule',
+      ...sessions.filter(s => s.status === 'included').map(s => `### ✅ ${s.title}\n- **Time:** ${s.time}\n- **Location:** ${s.location}\n- **Profile Match:** ${s.justification}\n`),
+      '',
+      '## 🎭 Party Themes & Dress Codes',
+      ...themes.map(t => `### 🌟 ${t.day}: ${t.themeTitle}\n- **Atmosphere:** ${t.vibe}\n- **Outfits:** ${t.recommendedAttire.join(', ')}\n`)
+    ].join('\n');
+
+    setDiscoveryData(prev => ({ ...prev, visualScheduleMarkdown: markdownDoc }));
     setStep('results');
   };
 
@@ -62,107 +121,119 @@ export const WCSNavigatorPage: React.FC = () => {
         keywords="West Coast Swing, WCS Navigator, AI dance optimizer, California 2026 WCS events, flight buffer engine, schedule parser"
       />
 
-      <Stack gap={8} width="full">
-        {/* Top Header & Mode Toggle Bar */}
-        <Box display="flex" justify="between" align="center" wrap="wrap" gap={4} border="b" paddingBottom={4}>
-          <PageHeader
-            title="WCS Navigator"
-            subtitle="Personalized weekend schedule and travel planner for California 2026 West Coast Swing conventions."
-            as="h1"
-            paddingBottom={0}
-            border="none"
-          />
-
-          {/* Mode Switch Toggle (Subtle & Clean) */}
-          <Box
-            as="button"
-            type="button"
-            onClick={() => setIsMockMode(!isMockMode)}
-            paddingX={3.5}
-            paddingY={2}
-            surface="muted"
-            radius="lg"
-            border
-            display="flex"
-            align="center"
-            gap={2.5}
-            minHeight={11}
-            cursor="pointer"
-            className="border-line hover:border-accent transition-colors"
-          >
-            <Icon icon={isMockMode ? ToggleLeft : ToggleRight} size="sm" color="accent" />
-            <Text variant="mono" size="xs" weight="font-bold" color="main">
-              {isMockMode ? 'Demo Data' : 'Live Data'}
-            </Text>
+      <Stack gap={6} width="full">
+        {/* Top Header & Minimal Utility Bar */}
+        <Box display="flex" justify="between" align="center" wrap="wrap" gap={3} paddingBottom={2} className="border-b border-line/40">
+          <Box display="flex" align="center" gap={3}>
+            <PageHeader
+              title="WCS Navigator"
+              as="h1"
+              paddingBottom={0}
+              border="none"
+            />
+            <Stack
+              as="button"
+              align="center"
+              direction="row"
+              gap={1}
+              type="button"
+              aria-label="How WCS Navigator Works guide"
+              onClick={() => setIsGuideOpen(!isGuideOpen)}
+              className="text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors"
+            >
+              <Icon icon={HelpCircle} size="xs" />
+              <span className="underline underline-offset-2">How It Works</span>
+            </Stack>
           </Box>
+
+          <Stack align="center" direction="row" gap={3}>
+            {/* Mode Switch: Text-only utility link */}
+            <Stack
+              as="button"
+              align="center"
+              direction="row"
+              gap={2}
+              paddingY={1}
+              type="button"
+              onClick={() => setIsMockMode(!isMockMode)}
+              className="text-xs font-mono text-text-dim hover:text-text-main transition-colors cursor-pointer"
+            >
+              <span className={`w-2 h-2 rounded-full ${isMockMode ? 'bg-text-dim' : 'bg-brand-emerald'}`} />
+              <span>{isMockMode ? 'Demo Presets' : 'Live Gateway'}</span>
+            </Stack>
+          </Stack>
         </Box>
 
-        {/* Step Progression Breadcrumb (Visible when not in search) */}
+        {/* Collapsible Inline Guide */}
+        {isGuideOpen && (
+          <WorkflowExplainer onClose={() => setIsGuideOpen(false)} />
+        )}
+
+        {/* Step Progression Breadcrumb (Clean Flow) */}
         {step !== 'search' && (
           <Box
-            surface="surface"
-            paddingX={5}
-            paddingY={3}
-            radius="xl"
-            border
             display="flex"
             align="center"
             justify="between"
             wrap="wrap"
             gap={3}
-            className="border-line/70"
+            paddingY={1}
+            className="text-xs font-mono text-text-dim"
           >
-            <Box display="flex" align="center" gap={3}>
-              <Box
+            <Box display="flex" align="center" gap={2}>
+              <Stack
                 as="button"
+                align="center"
+                direction="row"
+                gap={1}
                 type="button"
                 onClick={() => setStep('search')}
-                display="flex"
-                align="center"
-                gap={1.5}
-                paddingX={2}
-                minHeight={11}
-                cursor="pointer"
-                className="text-xs text-dim hover:text-white transition-colors"
+                className="text-text-dim hover:text-white transition-colors cursor-pointer"
               >
-                <Icon icon={ArrowLeft} size="xs" />
+                <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Change Event</span>
-              </Box>
-              <Text size="micro" color="dim">•</Text>
-              <Text size="xs" weight="font-bold" color="main">
-                {activeEventName}
-              </Text>
+              </Stack>
+              <span className="text-line">/</span>
+              <span className="text-brand-cyan font-bold">{activeEventName}</span>
             </Box>
 
-            <Box display="flex" align="center" gap={2}>
-              <Box
+            <Box display="flex" align="center" gap={3}>
+              {step === 'results' && (
+                <Stack
+                  as="button"
+                  align="center"
+                  direction="row"
+                  gap={1}
+                  type="button"
+                  onClick={() => setStep('questionnaire')}
+                  className="text-text-dim hover:text-white transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Edit Questionnaire</span>
+                </Stack>
+              )}
+              <Stack
                 as="button"
+                align="center"
+                direction="row"
+                gap={1}
                 type="button"
                 onClick={() => setStep('search')}
-                display="flex"
-                align="center"
-                gap={1.5}
-                paddingX={3.5}
-                paddingY={2}
-                radius="lg"
-                surface="muted"
-                minHeight={11}
-                cursor="pointer"
-                className="text-xs font-mono text-dim hover:text-white transition-colors"
+                className="text-text-dim hover:text-white transition-colors cursor-pointer"
               >
-                <Icon icon={RefreshCw} size="xs" />
-                <span>Start Over</span>
-              </Box>
+                <RefreshCw className="w-3 h-3" />
+                <span>Search Again</span>
+              </Stack>
             </Box>
           </Box>
         )}
 
-        {/* STEP 1: Search & Ingestion Hero */}
+        {/* STEP 1: Google-Style Search & Ingestion Hero */}
         {step === 'search' && (
           <EventSearchHero
-            onDiscoverPreset={(event) => handleStartDiscovery(event.name, event.id)}
-            onDiscoverPdf={(file) => handleStartDiscovery(file.name.replace(/\.pdf$/i, ''))}
-            onDiscoverUrl={(url) => handleStartDiscovery(url)}
+            onDiscoverPreset={handleSelectEventPreset}
+            onDiscoverPdf={(file) => handleStartCustomDiscovery(file.name.replace(/\.pdf$/i, ''))}
+            onDiscoverUrl={(url) => handleStartCustomDiscovery(url)}
           />
         )}
 
@@ -174,60 +245,27 @@ export const WCSNavigatorPage: React.FC = () => {
           />
         )}
 
-        {/* STEP 2: Discovered Dynamic Questionnaire & Persona Pre-Fill */}
+        {/* STEP 2: Optional Detailed Dynamic Questionnaire */}
         {step === 'questionnaire' && (
-          <Stack gap={6} width="full">
-            <Box surface="surface" padding={6} radius="xl" border className="border-line/70">
-              <Stack gap={2} marginBottom={4} border="b" paddingBottom={3}>
-                <Text variant="headline" size="lg" weight="font-bold" color="main">
-                  Personalize Your Weekend
-                </Text>
-                <Text size="xs" color="dim">
-                  We identified the workshop tiers and competition call times for <span className="text-white font-semibold">{activeEventName}</span>. Choose your preferences to build your custom schedule.
-                </Text>
-              </Stack>
-
-              <DynamicQuestionnaire
-                discoveryResponse={discoveryData}
-                onSubmit={handleGenerateItinerary}
-              />
-            </Box>
-          </Stack>
-        )}
-
-        {/* STEP 3: Agent Mind Decision Explainer & Calendar Export */}
-        {step === 'results' && (
-          <Stack gap={6} width="full">
-            <Box display="flex" justify="between" align="center" wrap="wrap" gap={3}>
-              <Box
-                as="button"
-                type="button"
-                onClick={() => setStep('questionnaire')}
-                display="flex"
-                align="center"
-                gap={2}
-                paddingX={4}
-                paddingY={2.5}
-                radius="lg"
-                surface="surface"
-                border
-                minHeight={11}
-                cursor="pointer"
-                className="border-line text-xs font-bold text-dim hover:text-white hover:border-accent transition-all"
-              >
-                <Icon icon={ArrowLeft} size="xs" />
-                <span>Adjust Preferences &amp; Re-generate</span>
-              </Box>
-            </Box>
-
-            <AgentMindTrace
-              trace={decisionTrace}
+          <Stack gap={6} width="full" maxWidth="3xl" marginX="auto">
+            <DynamicQuestionnaire
+              activeEventName={activeEventName}
+              discoveryResponse={discoveryData}
+              onSubmit={handleGenerateItinerary}
             />
           </Stack>
         )}
 
-        {/* Workflow Explainer Banner */}
-        <WorkflowExplainer />
+        {/* STEP 3: Unified Chronological Itinerary & Calendar Export */}
+        {step === 'results' && (
+          <AgentMindTrace
+            trace={decisionTrace}
+            activeEventName={activeEventName}
+            selectedDivision={activeDivision}
+            selectedRole={activeRole}
+            visualScheduleMarkdown={(discoveryData?.visualScheduleMarkdown) || (discoveryData?.preset_name ? `# Your WCS Visual Schedule for ${discoveryData.preset_name}\n\nGenerated by WCS Navigator.` : undefined)}
+          />
+        )}
 
         {/* Clean Footer Tag */}
         <Box display="flex" align="center" justify="center" gap={2} paddingY={4} color="dim">
@@ -240,3 +278,6 @@ export const WCSNavigatorPage: React.FC = () => {
     </Box>
   );
 };
+
+export default WCSNavigatorPage;
+

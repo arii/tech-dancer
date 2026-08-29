@@ -58,18 +58,10 @@ Return a valid JSON object matching the GenerateResponse schema:
         "vibe": "High Energy"
       }
     ],
-    "packingManifest": [
-      {
-        "id": "pack-1",
-        "name": "Adhesive Suede Shoe Sheets",
-        "category": "footwear",
-        "rationale": "Essential for ballroom floor traction",
-        "quantity": 2
-      }
-    ],
     "icsContent": "BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\n..."
   },
-  "icsContent": "BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\n..."
+  "icsContent": "BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//WCS Navigator//EN\\n...",
+  "visualScheduleMarkdown": "## My Weekend\\n\\n**Friday**\\n- 2:15 PM: ✈️ Flight Landing\\n- 5:15 PM: Novice J&J Prelims\\n- Midnight: Theme - Glow Night\\n\\n**Saturday**\\n..."
 }
 
 ### CRITICAL RULES:
@@ -83,11 +75,19 @@ Return a valid JSON object matching the GenerateResponse schema:
    - Include a VEVENT for the Target Flight Landing Deadline:
      SUMMARY:✈️ Target Flight Landing Deadline
    - Include VEVENT entries for all included sessions.
+   - For all VEVENTs, include a 15-minute reminder using:
+     BEGIN:VALARM
+     TRIGGER:-PT15M
+     ACTION:DISPLAY
+     DESCRIPTION:Reminder
+     END:VALARM
+   - Ensure LOCATION, DESCRIPTION, and dress code tags are present in the events.
 3. THEME DRESS CODES:
    - Extract theme_dress_codes for evening socials, showcase galas, competition attire, or casual Sunday.
    - Set category to one of: 'social_theme', 'showcase_formal', 'competition_attire', 'casual_sunday'.
-4. PACKING MANIFEST:
-   - Provide recommended items with category in: 'footwear', 'attire', 'toiletries', 'tech', 'essentials'.
+4. VISUAL SCHEDULE MARKDOWN:
+   - Generate a clean, phone-lock-screen-friendly Markdown summary in `visualScheduleMarkdown`.
+   - Include the target flight landing, all 'included' workshops/competitions, and nightly themes.
 """
 
 

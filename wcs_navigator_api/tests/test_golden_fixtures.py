@@ -66,11 +66,6 @@ def test_boogie_by_the_bay_2026_fixture_validation():
     assert "Friday Glow Party" in theme_titles
     assert "Saturday Showcase Gala" in theme_titles
 
-    # Packing List: contains adhesive suede shoe sheets and garment steamer
-    packing_items = [p.name for p in trace.packing_manifest]
-    assert "Adhesive Suede Shoe Sheets" in packing_items
-    assert "Garment Steamer" in packing_items
-
 
 def test_halloween_swingthing_2026_fixture_validation():
     """Validates Halloween SwingThing 2026 (Pure Social Dancer)."""
@@ -111,11 +106,6 @@ def test_halloween_swingthing_2026_fixture_validation():
     assert len(social_showcase_sessions) >= 2
     for session in social_showcase_sessions:
         assert session.status == "included"
-
-    # Packing List: contains dance-safe Halloween costumes and electrolyte hydration packets
-    packing_items = [p.name for p in trace.packing_manifest]
-    assert "Dance-Safe Halloween Costumes" in packing_items
-    assert "Electrolyte Hydration Packets" in packing_items
 
 
 def test_rfc_5545_calendar_compliance():

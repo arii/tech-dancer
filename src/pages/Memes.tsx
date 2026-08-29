@@ -94,6 +94,7 @@ const Memes = () => {
           display="flex"
           align="center"
           justify="center"
+          padding={{ base: 4, md: 12 }}
           className="bg-black/90 cursor-zoom-out"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
@@ -121,7 +122,7 @@ const Memes = () => {
           <img
             src={lightboxImage}
             alt="Expanded meme preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl cursor-default" // impeccable-ignore
+            className="w-full h-full object-contain rounded-lg border border-white/10 shadow-2xl cursor-default"
             onClick={(e) => e.stopPropagation()}
             data-testid="lightbox-image"
           />

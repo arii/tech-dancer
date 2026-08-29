@@ -10,7 +10,6 @@ from wcs_navigator_api.models.logistics import (
     AgentDecisionTrace,
     AuditSession,
     BufferCalculationResult,
-    PackingItem,
     SubTask,
     ThemeDressCode,
 )
@@ -20,6 +19,7 @@ from wcs_navigator_api.prompts.generation_prompt import (
     build_generation_prompt,
 )
 from wcs_navigator_api.services.buffer_engine import calculate_flight_buffer
+from wcs_navigator_api.services.cache_service import get_cache_key, get_cached_response, set_cached_response
 from wcs_navigator_api.services.pdf_service import (
     create_genai_pdf_part,
     extract_pdf_bytes_from_upload,
@@ -118,6 +118,11 @@ async def generate_calendar(
                 detail="Request must provide either a multipart PDF file or a JSON payload with a valid schedule URL.",
             ) from err
 
+    cache_key = get_cache_key(pdf_bytes, responses_dict)
+    cached_data = get_cached_response(cache_key)
+    if cached_data:
+        return GenerateResponse.model_validate(cached_data)
+
     # Calculate travel buffer
     earliest_call = responses_dict.get(
         "earliest_call_time_iso",
@@ -141,7 +146,7 @@ async def generate_calendar(
         buffer_timeline_json=buffer_result.model_dump_json(by_alias=True),
     )
 
-    model_name = getattr(settings, "GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = getattr(settings, "GEMINI_MODEL", "gemini-3.5-flash")
 
     try:
         response = client.models.generate_content(
@@ -166,9 +171,10 @@ async def generate_calendar(
         SubTask(**st)
         for st in raw_trace.get("subTasks", raw_trace.get("sub_tasks", []))
     ] if raw_trace.get("subTasks") or raw_trace.get("sub_tasks") else [
-        SubTask(id="1", label="Parsed schedule & matched preferences", status="completed", detail="Processed schedule against user profile"),
-        SubTask(id="2", label="Calculated travel buffer", status="completed", detail=buffer_result.formula_summary),
-        SubTask(id="3", label="Filtered workshops & assembled calendar", status="completed", detail="Tailored schedule generated"),
+        SubTask(id="1", label="[🟢 DISCOVERY]", status="completed", detail="Parsed schedule & matched preferences"),
+        SubTask(id="2", label="[🟢 FILTERING]", status="completed", detail="Processed schedule against user profile"),
+        SubTask(id="3", label="[🟢 CALCULATING BUFFER MATH]", status="completed", detail=buffer_result.formula_summary),
+        SubTask(id="4", label="[🟢 PACKAGING]", status="completed", detail="Tailored schedule generated"),
     ]
 
     sessions = [
@@ -181,24 +187,24 @@ async def generate_calendar(
         for t in raw_trace.get("themeDressCodes", raw_trace.get("theme_dress_codes", []))
     ] if raw_trace.get("themeDressCodes") or raw_trace.get("theme_dress_codes") else None
 
-    packing_manifest = [
-        PackingItem(**p)
-        for p in raw_trace.get("packingManifest", raw_trace.get("packing_manifest", []))
-    ] if raw_trace.get("packingManifest") or raw_trace.get("packing_manifest") else None
-
     raw_ics = raw_trace.get("icsContent", raw_trace.get("ics_content", response_data.get("icsContent", response_data.get("ics_content", ""))))
     ics_content = ensure_flight_deadline_in_ics(raw_ics, buffer_result)
+
+    visual_schedule_markdown = response_data.get("visualScheduleMarkdown", response_data.get("visual_schedule_markdown", ""))
 
     decision_trace = AgentDecisionTrace(
         subTasks=sub_tasks,
         bufferTimeline=buffer_result,
         sessions=sessions,
         themeDressCodes=theme_dress_codes,
-        packingManifest=packing_manifest,
         icsContent=ics_content,
     )
 
-    return GenerateResponse(
+    generate_res = GenerateResponse(
         decisionTrace=decision_trace,
         icsContent=ics_content,
+        visualScheduleMarkdown=visual_schedule_markdown,
     )
+
+    set_cached_response(cache_key, generate_res.model_dump(by_alias=True))
+    return generate_res

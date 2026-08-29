@@ -1,6 +1,3 @@
-// impeccable-ignore-file
-import React from 'react';
-import { Sparkles, Shirt, PartyPopper, Award, Tag, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { ThemeDressCode } from '../types';
 
@@ -48,91 +45,41 @@ const DEFAULT_THEMES: ThemeDressCode[] = [
   },
 ];
 
-const CATEGORY_CONFIG = {
-  social_theme: {
-    label: 'Social Theme',
-    badge: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/40',
-    icon: PartyPopper,
-    accentBorder: 'hover:border-brand-cyan/60',
-  },
-  showcase_formal: {
-    label: 'Gala & Showcase',
-    badge: 'bg-brand-amber/20 text-brand-amber border-brand-amber/40',
-    icon: Sparkles,
-    accentBorder: 'hover:border-brand-amber/60',
-  },
-  competition_attire: {
-    label: 'WSDC Official',
-    badge: 'bg-brand-emerald/20 text-brand-emerald border-brand-emerald/40',
-    icon: Award,
-    accentBorder: 'hover:border-brand-emerald/60',
-  },
-  casual_sunday: {
-    label: 'Survivor Social',
-    badge: 'bg-surface text-text-main border-line',
-    icon: Shirt,
-    accentBorder: 'hover:border-accent/60',
-  },
-};
-
 export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: ThemeDressCodeCardProps) => {
   return (
-    <Stack gap={4} className={className}>
-      {/* Header Banner */}
-      <Box display="flex" align="center" justify="between" wrap gap={2}>
-        <Stack gap={1}>
-          <Box display="flex" align="center" gap={2}>
-            <Sparkles className="w-5 h-5 text-accent" />
-            <Text weight="font-bold" size="lg" color="main">
-              Event Themes &amp; Dress Codes
-            </Text>
-          </Box>
+    <Stack gap={5} width="full" className={className}>
+      {/* Editorial Header */}
+      <Box display="flex" align="start" justify="between" wrap gap={2} paddingBottom={2} className="border-b border-line/40">
+        <Stack gap={0.5}>
+          <Text as="h3" variant="body-bold" size="lg" color="main" className="text-base sm:text-lg">
+            Event Themes &amp; Dress Codes
+          </Text>
           <Text size="xs" color="dim">
             Official party themes, gala dress codes, and competition attire expectations
           </Text>
         </Stack>
-        <Text variant="mono" size="xs" color="accent" weight="font-semibold" radius="md" paddingX={3} paddingY={1} surface="card" border>
-          {themes.length} Key Themes Identified
-        </Text>
       </Box>
 
-      {/* Grid of Theme & Dress Code Cards */}
-      <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+      {/* Grid of Theme & Dress Code Items in Elegant, Open-Air Cards */}
+      <Grid cols={{ default: 1, md: 2 }} gap={4}>
         {themes.map((item) => {
-          const config = CATEGORY_CONFIG[item.category] || CATEGORY_CONFIG.social_theme;
-          const CategoryIcon = config.icon;
-
           return (
-            <Box
+            <Stack
               key={item.id}
-              padding={5}
-              radius="xl"
-              surface="card"
-              border
-              shadow="md"
-              display="flex"
               direction="col"
               justify="between"
-              className={`border-line/80 transition-all ${config.accentBorder}`}
+              padding={5}
+              radius="lg"
+              border
+              className="bg-surface/30 border-line/50"
             >
               <Stack gap={3}>
-                {/* Top Row: Day & Category Tag */}
                 <Box display="flex" align="center" justify="between" gap={2}>
-                  <Box display="flex" align="center" gap={2}>
-                    <Box padding={2} radius="xl" border className={`${config.badge} shrink-0`}>
-                      <CategoryIcon className="w-4 h-4" />
-                    </Box>
-                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
-                      {item.day}
-                    </Text>
-                  </Box>
-
-                  <Text variant="mono" size="micro" weight="font-semibold" radius="md" paddingX={2.5} paddingY={0.5} border className={config.badge}>
-                    {config.label}
+                  <Text variant="mono" size="micro" color="dim" uppercase tracking="wider" weight="font-semibold">
+                    {item.day}
                   </Text>
                 </Box>
 
-                {/* Theme Title & Vibe */}
                 <Stack gap={1}>
                   <Text weight="font-bold" size="base" color="main" leading="snug">
                     {item.themeTitle}
@@ -142,48 +89,29 @@ export const ThemeDressCodeCard = ({ themes = DEFAULT_THEMES, className }: Theme
                   </Text>
                 </Stack>
 
-                {/* Recommended Attire Checklist Pills */}
-                <Box padding={3} radius="xl" surface="muted" border className="border-line/50">
-                  <Stack gap={2}>
-                    <Box display="flex" align="center" gap={1.5}>
-                      <Tag className="w-3.5 h-3.5 text-accent shrink-0" />
-                      <Text variant="mono" size="micro" weight="font-semibold" color="main">
-                        Recommended Outfits:
-                      </Text>
-                    </Box>
-                    <Box display="flex" wrap gap={1.5}>
-                      {item.recommendedAttire.map((attire, idx) => (
-                        <Box
-                          key={idx}
-                          display="inline-flex"
-                          align="center"
-                          gap={1}
-                          paddingX={2.5}
-                          paddingY={1}
-                          radius="lg"
-                          surface="card"
-                          border
-                          className="border-line/60"
-                        >
-                          <CheckCircle2 className="w-3 h-3 text-brand-emerald shrink-0" />
-                          <Text size="xs" color="dim">{attire}</Text>
-                        </Box>
-                      ))}
-                    </Box>
-                  </Stack>
-                </Box>
+                {/* Clean Outfits Bullet List */}
+                <Stack gap={1} paddingTop={2}>
+                  <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
+                    Recommended Outfits:
+                  </Text>
+                  <Box as="ul" paddingLeft={1} className="space-y-1">
+                    {item.recommendedAttire.map((attire, idx) => (
+                      <Stack direction="row" align="center" gap={1.5} as="li" key={idx}>
+                        <Text size="xs" color="dim" className="list-none text-text-dim text-xs">•</Text>
+                        <Text size="xs" color="dim" className="list-none">{attire}</Text>
+                      </Stack>
+                    ))}
+                  </Box>
+                </Stack>
               </Stack>
 
-              {/* Vibe Tag Footer */}
-              <Box paddingTop={2} marginTop={4} border className="border-t border-line/40">
-                <Box display="flex" align="center" justify="between">
-                  <Text variant="mono" size="micro" color="dim">Atmosphere:</Text>
-                  <Text variant="mono" size="xs" color="accent" weight="font-semibold">
-                    ✨ {item.vibe}
-                  </Text>
-                </Box>
+              {/* Atmosphere Monospace Footer */}
+              <Box paddingTop={3} marginTop={4} className="border-t border-line/30">
+                <Text variant="mono" size="micro" color="dim">
+                  Atmosphere: <span className="text-text-main font-medium">{item.vibe}</span>
+                </Text>
               </Box>
-            </Box>
+            </Stack>
           );
         })}
       </Grid>

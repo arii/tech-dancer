@@ -162,7 +162,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           className="fixed inset-0 z-50 backdrop-blur-md"
           direction="col"
           padding={{ base: 4, sm: 8 }}
-          /* impeccable-ignore */ style={{ backgroundColor: 'rgba(2, 6, 23, 0.95)' }}
+ style={ { backgroundColor: 'rgba(2, 6, 23, 0.95)' }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
@@ -227,7 +227,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             <Box
               className="transition-all duration-150 cursor-default"
               margin="auto"
-              /* impeccable-ignore */ style={{
+ style={ {
                 width: `${100 * zoomScale}%`,
                 minWidth: `${360 * zoomScale}px`,
                 maxWidth: `${1400 * zoomScale}px`,
