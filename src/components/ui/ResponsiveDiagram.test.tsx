@@ -1,8 +1,30 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { ResponsiveDiagram } from './ResponsiveDiagram';
 
 describe('ResponsiveDiagram component', () => {
+  afterEach(() => {
+    cleanup();
+  });
+  it('should render modal into document.body via portal and support escape key dismissal', () => {
+    const { container } = render(<ResponsiveDiagram chart="graph TD; A-->B;" title="Test Diagram" />);
+
+    // Click trigger to expand modal
+    const trigger = screen.getByTitle('Click/Tap to view full screen');
+    fireEvent.click(trigger);
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeDefined();
+
+    // Verify modal portal is direct child of document.body and not inside local container
+    expect(document.body.contains(dialog)).toBe(true);
+    expect(container.contains(dialog)).toBe(false);
+
+    // Test Escape key closes modal
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
   it('should render title and click/tap to expand', () => {
     render(<ResponsiveDiagram chart="graph TD; A-->B;" title="Test Diagram" />);
 
