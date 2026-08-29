@@ -28,7 +28,7 @@ jobs:
             context: .
             image: ghcr.io/${{ github.repository }}
           - name: wcs-navigator-api
-            dockerfile: Dockerfile
+            dockerfile: wcs_navigator_api/Dockerfile
             context: wcs_navigator_api
             image: ghcr.io/${{ github.repository }}/wcs-navigator-api
     steps:
