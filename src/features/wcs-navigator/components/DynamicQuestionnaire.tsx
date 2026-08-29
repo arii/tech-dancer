@@ -84,7 +84,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
             <button
               type="button"
               onClick={handleBack}
-              className="min-h-[44px] px-2 flex items-center gap-1 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
+              className="min-h-11 h-11 px-2 flex items-center gap-1 text-xs font-mono text-text-dim hover:text-text-main cursor-pointer transition-colors shrink-0"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -99,7 +99,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           <button
             type="button"
             onClick={handleSkipQuestion}
-            className="min-h-[44px] px-2 flex items-center text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
+            className="min-h-11 h-11 px-2 flex items-center text-xs font-mono text-text-dim hover:text-brand-cyan transition-colors cursor-pointer"
           >
             Skip question →
           </button>
@@ -229,7 +229,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         <button
           type="button"
           onClick={handleSkipQuestion}
-          className="min-h-[44px] flex items-center gap-1.5 text-text-dim hover:text-text-main transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface border border-line/50 shrink-0"
+          className="min-h-11 h-11 flex items-center gap-1.5 text-text-dim hover:text-text-main transition-colors cursor-pointer py-2 px-3 rounded-lg hover:bg-surface border border-line/50 shrink-0"
         >
           <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
           <span>Skip Step →</span>
@@ -238,7 +238,7 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         <button
           type="button"
           onClick={handleSkipToItinerary}
-          className="min-h-[44px] flex items-center gap-1.5 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/40 shrink-0"
+          className="min-h-11 h-11 flex items-center gap-1.5 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer py-2 px-3.5 rounded-lg bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/40 shrink-0"
         >
           <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
           <span>Skip All &amp; Generate Itinerary</span>

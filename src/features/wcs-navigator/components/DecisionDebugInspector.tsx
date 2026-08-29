@@ -138,7 +138,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
             radius="lg"
             type="button"
             onClick={() => setActiveTab('inputs')}
-            className={`min-h-[44px] text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 h-11 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'inputs'
                 ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -158,7 +158,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
             radius="lg"
             type="button"
             onClick={() => setActiveTab('telemetry')}
-            className={`min-h-[44px] text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 h-11 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'telemetry'
                 ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -178,7 +178,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
             radius="lg"
             type="button"
             onClick={() => setActiveTab('filtering')}
-            className={`min-h-[44px] text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 h-11 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'filtering'
                 ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -198,7 +198,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
             radius="lg"
             type="button"
             onClick={() => setActiveTab('json')}
-            className={`min-h-[44px] text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`min-h-11 h-11 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'json'
                 ? 'bg-brand-cyan text-black shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
