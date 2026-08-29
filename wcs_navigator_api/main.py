@@ -2,7 +2,11 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from wcs_navigator_api.config import MissingGeminiAPIKeyError, settings
+from wcs_navigator_api.config import (
+    InvalidGeminiAPIKeyError,
+    MissingGeminiAPIKeyError,
+    settings,
+)
 from wcs_navigator_api.routes.discover import router as discover_router
 from wcs_navigator_api.routes.generate import router as generate_router
 
@@ -34,6 +38,20 @@ async def missing_gemini_api_key_handler(
             "detail": str(exc),
             "error_code": "MISSING_GEMINI_API_KEY",
             "action": "Please set the GEMINI_API_KEY environment variable in your .env or shell context.",
+        },
+    )
+
+
+@app.exception_handler(InvalidGeminiAPIKeyError)
+async def invalid_gemini_api_key_handler(
+    request: Request, exc: InvalidGeminiAPIKeyError
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": str(exc),
+            "error_code": "INVALID_GEMINI_API_KEY_FORMAT",
+            "action": "Ensure GEMINI_API_KEY is 39 characters starting with 'AIzaSy'.",
         },
     )
 

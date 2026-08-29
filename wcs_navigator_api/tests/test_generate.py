@@ -85,9 +85,12 @@ MOCK_GEMINI_RESPONSE_JSON = json.dumps({
 def test_generate_calendar_multipart_success(mock_get_genai):
     """Test POST /generate-calendar/generate with multipart PDF upload."""
     mock_genai_client = MagicMock()
+    mock_chat = MagicMock()
     mock_response = MagicMock()
     mock_response.text = MOCK_GEMINI_RESPONSE_JSON
-    mock_genai_client.models.generate_content.return_value = mock_response
+    mock_response.parsed = None
+    mock_chat.send_message.return_value = mock_response
+    mock_genai_client.chats.create.return_value = mock_chat
     mock_get_genai.return_value = mock_genai_client
 
     files = {
@@ -130,9 +133,12 @@ def test_generate_calendar_json_url_success(mock_get_genai, mock_fetch_pdf):
     mock_fetch_pdf.return_value = VALID_PDF_BYTES
 
     mock_genai_client = MagicMock()
+    mock_chat = MagicMock()
     mock_response = MagicMock()
     mock_response.text = MOCK_GEMINI_RESPONSE_JSON
-    mock_genai_client.models.generate_content.return_value = mock_response
+    mock_response.parsed = None
+    mock_chat.send_message.return_value = mock_response
+    mock_genai_client.chats.create.return_value = mock_chat
     mock_get_genai.return_value = mock_genai_client
 
     payload = {
@@ -159,9 +165,12 @@ def test_generate_calendar_aliased_routes(mock_get_genai, mock_fetch_pdf):
     mock_fetch_pdf.return_value = VALID_PDF_BYTES
 
     mock_genai_client = MagicMock()
+    mock_chat = MagicMock()
     mock_response = MagicMock()
     mock_response.text = MOCK_GEMINI_RESPONSE_JSON
-    mock_genai_client.models.generate_content.return_value = mock_response
+    mock_response.parsed = None
+    mock_chat.send_message.return_value = mock_response
+    mock_genai_client.chats.create.return_value = mock_chat
     mock_get_genai.return_value = mock_genai_client
 
     payload = {
@@ -183,3 +192,37 @@ def test_generate_calendar_invalid_file_type():
 
     response = client.post("/generate-calendar/generate", files=files)
     assert response.status_code == 400
+
+
+def test_format_iso_to_utc_ics():
+    """Test ISO to strict RFC 5545 UTC timestamp formatting."""
+    from wcs_navigator_api.routes.generate import format_iso_to_utc_ics
+
+    # ISO string with timezone offset (-07:00) -> converts to UTC
+    formatted = format_iso_to_utc_ics("2026-10-09T14:15:00-07:00")
+    assert formatted == "20261009T211500Z"
+
+    # Naive ISO string -> adds Z
+    formatted_naive = format_iso_to_utc_ics("2026-10-09T14:15:00")
+    assert formatted_naive == "20261009T141500Z"
+
+
+def test_agent_tools():
+    """Test agent tools in wcs_navigator_api.tools."""
+    from wcs_navigator_api.tools import (
+        sync_google_tasks,
+        compile_packing_list,
+        route_event_details,
+        AGENT_TOOLS,
+    )
+
+    assert len(AGENT_TOOLS) == 3
+    res_tasks = sync_google_tasks("Boogie by the Bay", ["Bring suede dance shoes", "Pack extra shirts"])
+    assert "Successfully synced 2 tasks" in res_tasks
+
+    res_packing = compile_packing_list("Boogie by the Bay", ["footwear", "apparel"])
+    assert "Boogie by the Bay" in res_packing
+
+    res_route = route_event_details("Hyatt Regency SFO", "Grand Ballroom")
+    assert "Hyatt Regency SFO" in res_route
+

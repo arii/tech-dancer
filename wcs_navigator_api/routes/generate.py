@@ -1,6 +1,7 @@
 """Stage 2 Generation Pass router for WCS Navigator API."""
 
 import json
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from google.genai import types
@@ -25,20 +26,37 @@ from wcs_navigator_api.services.pdf_service import (
     extract_pdf_bytes_from_upload,
     fetch_pdf_bytes_from_url,
 )
+from wcs_navigator_api.tools import AGENT_TOOLS
 
 router = APIRouter(tags=["generate"])
+
+
+def format_iso_to_utc_ics(iso_str: str) -> str:
+    """Convert an ISO datetime string into a strict RFC 5545 UTC timestamp (YYYYMMDDTHHMMSSZ)."""
+    try:
+        dt = datetime.fromisoformat(iso_str)
+        if dt.tzinfo is not None:
+            dt_utc = dt.astimezone(timezone.utc)
+        else:
+            dt_utc = dt
+        return dt_utc.strftime("%Y%m%dT%H%M%SZ")
+    except Exception:
+        clean_str = iso_str.replace("-", "").replace(":", "")
+        if "+" in clean_str:
+            clean_str = clean_str.split("+")[0]
+        if not clean_str.endswith("Z"):
+            clean_str += "Z"
+        return clean_str
 
 
 def ensure_flight_deadline_in_ics(
     ics_content: str, buffer_result: BufferCalculationResult
 ) -> str:
-    """Ensure the flight landing deadline event exists in the RFC 5545 calendar text."""
+    """Ensure the flight landing deadline event exists in the RFC 5545 calendar text with strict UTC formatting."""
     if "Target Flight Landing Deadline" in ics_content or "✈️" in ics_content:
         return ics_content
 
-    dt_str = buffer_result.latest_flight_arrival_deadline.replace("-", "").replace(":", "")
-    if "+" in dt_str:
-        dt_str = dt_str.split("+")[0]
+    dt_str = format_iso_to_utc_ics(buffer_result.latest_flight_arrival_deadline)
 
     vevent = (
         "BEGIN:VEVENT\r\n"
@@ -149,62 +167,98 @@ async def generate_calendar(
     model_name = getattr(settings, "GEMINI_MODEL", "gemini-3.5-flash")
 
     try:
-        response = client.models.generate_content(
+        chat = client.chats.create(
             model=model_name,
-            contents=[pdf_part, prompt_text],
             config=types.GenerateContentConfig(
                 system_instruction=GENERATION_SYSTEM_PROMPT,
                 response_mime_type="application/json",
+                response_schema=GenerateResponse,
+                tools=AGENT_TOOLS,
+                temperature=0.2,
             ),
         )
-        response_data = json.loads(response.text)
+        response = chat.send_message([pdf_part, prompt_text])
+
+        generate_res: Optional[GenerateResponse] = None
+        response_data: Dict[str, Any] = {}
+
+        if hasattr(response, "parsed") and isinstance(response.parsed, GenerateResponse):
+            generate_res = response.parsed
+        elif hasattr(response, "parsed") and response.parsed is not None:
+            if isinstance(response.parsed, dict):
+                generate_res = GenerateResponse.model_validate(response.parsed)
+            else:
+                response_data = dict(response.parsed)
+        elif hasattr(response, "text") and response.text:
+            response_data = json.loads(response.text)
+            try:
+                generate_res = GenerateResponse.model_validate(response_data)
+            except Exception:
+                generate_res = None
+        else:
+            raise ValueError("Empty response received from Gemini agent chat session.")
     except Exception as err:
         raise HTTPException(
-            status_code=500, detail=f"Gemini generation pass failed: {str(err)}"
+            status_code=500, detail=f"Agent workflow orchestration failed: {str(err)}"
         ) from err
 
-    # Extract decision_trace data or top level fields
-    raw_trace = response_data.get("decisionTrace", response_data.get("decision_trace", response_data))
+    if generate_res is not None:
+        ics_content = ensure_flight_deadline_in_ics(generate_res.ics_content, buffer_result)
+        decision_trace = generate_res.decision_trace.model_copy(
+            update={
+                "ics_content": ics_content,
+                "buffer_timeline": buffer_result,
+            }
+        )
+        generate_res = generate_res.model_copy(
+            update={
+                "decision_trace": decision_trace,
+                "ics_content": ics_content,
+            }
+        )
+    else:
+        # Extract decision_trace data or top level fields
+        raw_trace = response_data.get("decisionTrace", response_data.get("decision_trace", response_data))
 
-    # Parse and validate decision trace components
-    sub_tasks = [
-        SubTask(**st)
-        for st in raw_trace.get("subTasks", raw_trace.get("sub_tasks", []))
-    ] if raw_trace.get("subTasks") or raw_trace.get("sub_tasks") else [
-        SubTask(id="1", label="[🟢 DISCOVERY]", status="completed", detail="Parsed schedule & matched preferences"),
-        SubTask(id="2", label="[🟢 FILTERING]", status="completed", detail="Processed schedule against user profile"),
-        SubTask(id="3", label="[🟢 CALCULATING BUFFER MATH]", status="completed", detail=buffer_result.formula_summary),
-        SubTask(id="4", label="[🟢 PACKAGING]", status="completed", detail="Tailored schedule generated"),
-    ]
+        # Parse and validate decision trace components
+        sub_tasks = [
+            SubTask(**st)
+            for st in raw_trace.get("subTasks", raw_trace.get("sub_tasks", []))
+        ] if raw_trace.get("subTasks") or raw_trace.get("sub_tasks") else [
+            SubTask(id="1", label="[🟢 DISCOVERY]", status="completed", detail="Parsed schedule & matched preferences"),
+            SubTask(id="2", label="[🟢 FILTERING]", status="completed", detail="Processed schedule against user profile"),
+            SubTask(id="3", label="[🟢 CALCULATING BUFFER MATH]", status="completed", detail=buffer_result.formula_summary),
+            SubTask(id="4", label="[🟢 PACKAGING]", status="completed", detail="Tailored schedule generated"),
+        ]
 
-    sessions = [
-        AuditSession(**s)
-        for s in raw_trace.get("sessions", [])
-    ]
+        sessions = [
+            AuditSession(**s)
+            for s in raw_trace.get("sessions", [])
+        ]
 
-    theme_dress_codes = [
-        ThemeDressCode(**t)
-        for t in raw_trace.get("themeDressCodes", raw_trace.get("theme_dress_codes", []))
-    ] if raw_trace.get("themeDressCodes") or raw_trace.get("theme_dress_codes") else None
+        theme_dress_codes = [
+            ThemeDressCode(**t)
+            for t in raw_trace.get("themeDressCodes", raw_trace.get("theme_dress_codes", []))
+        ] if raw_trace.get("themeDressCodes") or raw_trace.get("theme_dress_codes") else None
 
-    raw_ics = raw_trace.get("icsContent", raw_trace.get("ics_content", response_data.get("icsContent", response_data.get("ics_content", ""))))
-    ics_content = ensure_flight_deadline_in_ics(raw_ics, buffer_result)
+        raw_ics = raw_trace.get("icsContent", raw_trace.get("ics_content", response_data.get("icsContent", response_data.get("ics_content", ""))))
+        ics_content = ensure_flight_deadline_in_ics(raw_ics, buffer_result)
 
-    visual_schedule_markdown = response_data.get("visualScheduleMarkdown", response_data.get("visual_schedule_markdown", ""))
+        visual_schedule_markdown = response_data.get("visualScheduleMarkdown", response_data.get("visual_schedule_markdown", ""))
 
-    decision_trace = AgentDecisionTrace(
-        subTasks=sub_tasks,
-        bufferTimeline=buffer_result,
-        sessions=sessions,
-        themeDressCodes=theme_dress_codes,
-        icsContent=ics_content,
-    )
+        decision_trace = AgentDecisionTrace(
+            subTasks=sub_tasks,
+            bufferTimeline=buffer_result,
+            sessions=sessions,
+            themeDressCodes=theme_dress_codes,
+            icsContent=ics_content,
+        )
 
-    generate_res = GenerateResponse(
-        decisionTrace=decision_trace,
-        icsContent=ics_content,
-        visualScheduleMarkdown=visual_schedule_markdown,
-    )
+        generate_res = GenerateResponse(
+            decisionTrace=decision_trace,
+            icsContent=ics_content,
+            visualScheduleMarkdown=visual_schedule_markdown,
+        )
 
     set_cached_response(cache_key, generate_res.model_dump(by_alias=True))
     return generate_res

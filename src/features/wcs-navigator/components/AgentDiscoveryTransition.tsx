@@ -1,8 +1,3 @@
-import { useEffect, useState } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { Cpu, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
-
 import { useEffect, useState, useRef } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
@@ -27,7 +22,10 @@ export const AgentDiscoveryTransition: React.FC<AgentDiscoveryTransitionProps> =
 }) => {
   const [currentStage, setCurrentStage] = useState(0);
   const isLoadingRef = useRef(isAsyncLoading);
-  isLoadingRef.current = isAsyncLoading;
+
+  useEffect(() => {
+    isLoadingRef.current = isAsyncLoading;
+  }, [isAsyncLoading]);
 
   const presetStages = [
     { label: 'Reading workshop schedules & room tracks...', doneLabel: 'Schedules & room tracks loaded' },
