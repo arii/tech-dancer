@@ -73,6 +73,22 @@ describe('DecisionDebugInspector Suite', () => {
     expect(screen.getByText('workshop_level')).toBeDefined();
   });
 
+  it('handles unconfirmed role gracefully without defaulting to LEAD assumption', () => {
+    render(
+      <DecisionDebugInspector
+        eventName="Boogie by the Bay 2026"
+        confirmedDivision="novice"
+        confirmedRole=""
+        answers={{ division: 'novice', arrival: 'local' }}
+        telemetry={mockTelemetry}
+        decisionTrace={mockDecisionTrace}
+      />
+    );
+
+    expect(screen.getByText('NOVICE')).toBeDefined();
+    expect(screen.getByText('None Specified (Universal)')).toBeDefined();
+  });
+
   it('switches to Gateway & Engine Telemetry tab and inspects service trace', () => {
     render(
       <DecisionDebugInspector
