@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/fix/visual-snapshots-and-anti-patterns-3387864572677926244/sitemap.xml
