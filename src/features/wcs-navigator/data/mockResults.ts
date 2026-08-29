@@ -1157,8 +1157,8 @@ export const createGenericMockResult = (eventName: string): EventMockData => {
             { label: 'Switch / Both', subtitle: 'Lead in some divisions, Follow in others', value: 'switch', badge: 'Switch' }
           ],
           context: 'Customizes workshop focus and competition call notes.',
-          defaultValue: 'lead',
-          required: true
+          defaultValue: '',
+          required: false
         }
       ]
     },
