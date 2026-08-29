@@ -34,6 +34,20 @@ test.describe('WCS Navigator E2E Workflow', () => {
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
     await expect(page.getByText(/Add to Calendar \(\.ics\)/i)).toBeVisible();
     await expect(page.getByText(/View All Schedule/i)).toBeVisible();
+    await expect(page.getByText(/Decision Logic & Debug/i)).toBeVisible();
+
+    // 4.5 Inspect Decision Logic & Debug Panel
+    const debugBtn = page.getByRole('button', { name: /Decision Logic & Debug/i });
+    await debugBtn.click();
+    await expect(page.getByText(/Agent Decision Logic & Taskmaker Telemetry/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /1\. Confirmed Inputs/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /2\. Gateway & Engine/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /3\. Rule Engine Audit/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /4\. Raw JSON Schemas/i })).toBeVisible();
+
+    // Switch to Rule Engine Audit tab
+    await page.getByRole('button', { name: /3\. Rule Engine Audit/i }).click();
+    await expect(page.getByPlaceholderText(/Search audit sessions/i)).toBeVisible();
 
     // 5. Open Full Schedule Modal Customizer
     const fullScheduleBtn = page.getByRole('button', { name: /View All Schedule/i });

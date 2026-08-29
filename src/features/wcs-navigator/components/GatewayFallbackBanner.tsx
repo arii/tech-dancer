@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React from 'react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';

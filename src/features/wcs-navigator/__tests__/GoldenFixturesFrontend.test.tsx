@@ -6,6 +6,7 @@ import bbbFixture from '../../../../wcs_navigator_api/tests/fixtures/bbb_2026.js
 import halloweenFixture from '../../../../wcs_navigator_api/tests/fixtures/halloween_2026.json';
 import { DiscoveryResponse } from '../types/navigator';
 import { AgentDecisionTrace } from '../types';
+import { extractUserDivision, adaptTraceToUserPreferences } from '../utils/scheduleRuleEngine';
 
 describe('Frontend Integration & Compatibility Verification with California 2026 Fixtures', () => {
   afterEach(() => {
@@ -45,5 +46,18 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     expect(screen.getByText(/Profile:/i)).toBeDefined();
     expect(screen.getAllByText(/Friday Spooktacular Social Dance/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Saturday Night Costume Contest/i).length).toBeGreaterThan(0);
+  });
+
+  it('correctly extracts Intermediate division from dynamic backend questions (workshop_level / competition_divisions)', () => {
+    const answers1 = { workshop_level: 'intermediate', competition_divisions: ['intermediate'] };
+    expect(extractUserDivision(answers1)).toBe('intermediate');
+
+    const answers2 = { competition_division: 'intermediate_strictly' };
+    expect(extractUserDivision(answers2)).toBe('intermediate');
+
+    const rawTrace = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
+    const adapted = adaptTraceToUserPreferences(rawTrace, answers1, 'The Aloha Open 2026');
+    const strictlySession = adapted.sessions.find((s) => s.title.includes('Strictly'));
+    expect(strictlySession?.title).toContain('Intermediate');
   });
 });

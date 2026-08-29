@@ -79,7 +79,7 @@ describe('WCS Navigator Components', () => {
       />
     );
 
-    const input = screen.getByPlaceholderText('https://event.com/schedule');
+    const input = screen.getByPlaceholderText(/https:\/\/event\.com\/schedule/i);
     const submitBtn = screen.getByRole('button', { name: /Fetch & Ingest URL/i });
 
     fireEvent.change(input, { target: { value: 'https://southbaydancefling.com/schedule' } });
@@ -134,12 +134,12 @@ describe('WCS Navigator Components', () => {
     );
 
     expect(screen.getByText('WCS Navigator')).toBeTruthy();
-    expect(screen.getByText('Demo Presets')).toBeTruthy();
+    expect(screen.getByText('Live Gateway')).toBeTruthy();
 
     // Mode Toggle
-    const modeBtn = screen.getByRole('button', { name: /Demo Presets/i });
+    const modeBtn = screen.getByRole('button', { name: /Live Gateway/i });
     fireEvent.click(modeBtn);
-    expect(screen.getByText('Live Gateway')).toBeTruthy();
+    expect(screen.getByText('Demo Presets')).toBeTruthy();
 
     vi.useRealTimers();
   });

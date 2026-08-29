@@ -1,0 +1,273 @@
+{
+  "decisionTrace": {
+    "subTasks": [
+      {
+        "id": "1",
+        "label": "Filter workshops by user level",
+        "status": "completed",
+        "detail": "Filtered out Newcomer/Novice workshops and Advanced/All-Star workshops. Retained Intermediate workshops and All Levels sessions."
+      },
+      {
+        "id": "2",
+        "label": "Filter competitions by division",
+        "status": "completed",
+        "detail": "Included Intermediate Jack & Jill Prelims and Finals. Marked Novice, Masters, Advanced, All-Star, and Champions divisions as spectator/filtered events."
+      },
+      {
+        "id": "3",
+        "label": "Apply buffer timeline",
+        "status": "completed",
+        "detail": "Integrated flight arrival deadline of 2:15 PM on Friday, September 25th based on 5:15 PM earliest staging time."
+      }
+    ],
+    "bufferTimeline": {
+      "earliestStagingTime": "2026-10-09T17:15:00-07:00",
+      "warmupMinutes": 60,
+      "hotelSettleMinutes": 90,
+      "transitMinutes": 30,
+      "latestFlightArrivalDeadline": "2026-10-09T14:15:00-07:00",
+      "steps": [
+        {
+          "label": "Earliest Call / Staging",
+          "time": "5:15 PM",
+          "duration": null,
+          "type": "staging",
+          "description": "Mandatory event call time"
+        },
+        {
+          "label": "Warmup & Registration Buffer",
+          "time": "4:15 PM",
+          "duration": "60m",
+          "type": "warmup",
+          "description": "Warmup and bib pick-up buffer"
+        },
+        {
+          "label": "Hotel Check-In & Settle",
+          "time": "2:45 PM",
+          "duration": "90m",
+          "type": "hotel",
+          "description": "Hotel check-in and luggage drop"
+        },
+        {
+          "label": "Airport Transit",
+          "time": "2:15 PM",
+          "duration": "30m",
+          "type": "transit",
+          "description": "Drive/shuttle from airport to hotel"
+        },
+        {
+          "label": "Latest Flight Landing",
+          "time": "2:15 PM",
+          "duration": null,
+          "type": "flight",
+          "description": "Latest safe touchdown deadline"
+        }
+      ],
+      "formulaSummary": "17:15 (Call) - 30m (Transit) - 90m (Hotel Settle) - 60m (Warmup) = 14:15 (Landing Deadline)"
+    },
+    "sessions": [
+      {
+        "id": "aloha-fri-reg",
+        "title": "Registration Opens",
+        "time": "Friday 3:00 PM",
+        "location": "Lokalani Ballroom Foyer",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Required for event check-in and pass collection."
+      },
+      {
+        "id": "aloha-fri-blessing",
+        "title": "Hawaiian Blessing",
+        "time": "Friday 5:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Event cultural kick-off; highly recommended."
+      },
+      {
+        "id": "aloha-fri-opening",
+        "title": "Opening Ceremonies",
+        "time": "Friday 5:30 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Official welcome and weekend briefing."
+      },
+      {
+        "id": "aloha-fri-hula",
+        "title": "Wahine or Kane Hula Workshop",
+        "time": "Friday 6:00 PM",
+        "location": "Lokalani Ballroom 1 & 2",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Unique cultural workshops open to all dancers."
+      },
+      {
+        "id": "aloha-fri-aloha-jj",
+        "title": "All Aloha J&J Prelims and Finals",
+        "time": "Friday 8:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Fun crossover/all-levels welcome competition."
+      },
+      {
+        "id": "aloha-sat-breathwork",
+        "title": "Breathwork & Meditation Class",
+        "time": "Saturday 10:00 AM",
+        "location": "Lokalani Ballroom 2",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Excellent physical/mental preparation for competition."
+      },
+      {
+        "id": "aloha-sat-novice-w1",
+        "title": "Newcomer/Novice Workshop (Mike Carringer)",
+        "time": "Saturday 11:00 AM",
+        "location": "Lokalani Ballroom 1",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Below user's intermediate skill level choice."
+      },
+      {
+        "id": "aloha-sat-int-w1",
+        "title": "Intermediate Workshop (Jung Choe)",
+        "time": "Saturday 11:00 AM",
+        "location": "Lokalani Ballroom 2",
+        "status": "included",
+        "decisionBadge": "Level Match",
+        "justification": "Perfect match for your intermediate workshop preference."
+      },
+      {
+        "id": "aloha-sat-novice-w2",
+        "title": "Newcomer/Novice Workshop (Joseph Tong)",
+        "time": "Saturday 12:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Below user's intermediate skill level choice."
+      },
+      {
+        "id": "aloha-sat-adv-w1",
+        "title": "Advanced/All Stars Workshop (Emily Huang)",
+        "time": "Saturday 12:00 PM",
+        "location": "Lokalani Ballroom 2",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Above user's intermediate skill level."
+      },
+      {
+        "id": "aloha-sat-int-w2",
+        "title": "Intermediate Workshop (Alex Kim)",
+        "time": "Saturday 3:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "Level Match",
+        "justification": "Matches user's intermediate level workshop preferences."
+      },
+      {
+        "id": "aloha-sat-adv-w2",
+        "title": "Advanced/All Stars Workshop (Joel & Chantelle)",
+        "time": "Saturday 3:00 PM",
+        "location": "Lokalani Ballroom 2",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Above user's intermediate skill level."
+      },
+      {
+        "id": "aloha-sat-int-jj-prelims",
+        "title": "Intermediate Jack & Jill Prelims",
+        "time": "Saturday 4:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Target competitive division chosen by user."
+      },
+      {
+        "id": "aloha-sat-novice-jj-prelims",
+        "title": "Novice Jack & Jill Prelims",
+        "time": "Saturday 4:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "filtered",
+        "decisionBadge": "Level Ineligible",
+        "justification": "Different competitive division."
+      },
+      {
+        "id": "aloha-sat-dinner",
+        "title": "Ticketed Dinner & Live Music",
+        "time": "Saturday 6:00 PM",
+        "location": "Wailea Beach Resort",
+        "status": "included",
+        "decisionBadge": "Social Event",
+        "justification": "Excellent social/networking option."
+      },
+      {
+        "id": "aloha-sat-int-jj-finals",
+        "title": "Intermediate Jack & Jill Finals",
+        "time": "Saturday 8:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "Division Match",
+        "justification": "Your targeted competitive division final (either competing or supporting peers)."
+      },
+      {
+        "id": "aloha-sun-all-w1",
+        "title": "All Levels Workshop (Dave Kahn)",
+        "time": "Sunday 11:00 AM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Open to all levels; great recovery workshop."
+      },
+      {
+        "id": "aloha-sun-all-w2",
+        "title": "All Levels Workshop (Jesse & Aerial)",
+        "time": "Sunday 12:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Open to all levels."
+      },
+      {
+        "id": "aloha-sun-all-w3",
+        "title": "All Levels Workshop (Janelle & Skylar)",
+        "time": "Sunday 2:00 PM",
+        "location": "Lokalani Ballroom 1",
+        "status": "included",
+        "decisionBadge": "All Levels",
+        "justification": "Final technical session of the event."
+      }
+    ],
+    "themeDressCodes": [
+      {
+        "id": "theme-aloha",
+        "day": "Friday & Saturday Night",
+        "themeTitle": "Aloha / Hawaiian Flair",
+        "category": "social_theme",
+        "description": "Island patterns, floral prints, and light breezy resort wear.",
+        "recommendedAttire": [
+          "Hawaiian print shirts",
+          "Breezy sundresses",
+          "Linen pants or shorts"
+        ],
+        "vibe": "Tropical & Relaxed"
+      },
+      {
+        "id": "theme-dinner",
+        "day": "Saturday Dinner",
+        "themeTitle": "Island Chic Dinner",
+        "category": "showcase_formal",
+        "description": "Smart casual with a tropical elegance for the live music dinner.",
+        "recommendedAttire": [
+          "Aloha smart wear",
+          "Collared shirts",
+          "Summer formal dresses"
+        ],
+        "vibe": "Elegant & Festal"
+      }
+    ],
+    "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:aloha-flight-landing-deadline\nDTSTART;TZID=Pacific/Honolulu:20260925T141500\nDTEND;TZID=Pacific/Honolulu:20260925T143000\nSUMMARY:✈️ Target Flight Landing Deadline\nDESCRIPTION:Latest touchdown time to clear airport transit, check in at the hotel, and prep for opening ceremonies.\nLOCATION:OGG Airport\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-reg\nDTSTART;TZID=Pacific/Honolulu:20260925T150000\nDTEND;TZID=Pacific/Honolulu:20260925T170000\nSUMMARY:Registration Opens\nDESCRIPTION:Collect your pass and competition bib.\nLOCATION:Lokalani Ballroom Foyer\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-blessing\nDTSTART;TZID=Pacific/Honolulu:20260925T170000\nDTEND;TZID=Pacific/Honolulu:20260925T173000\nSUMMARY:Hawaiian Blessing\nDESCRIPTION:Cultural opening blessing.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-opening\nDTSTART;TZID=Pacific/Honolulu:20260925T173000\nDTEND;TZID=Pacific/Honolulu:20260925T180000\nSUMMARY:Opening Ceremonies\nDESCRIPTION:Welcome briefing for the Aloha Open.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-w1\nDTSTART;TZID=Pacific/Honolulu:20260926T110000\nDTEND;TZID=Pacific/Honolulu:20260926T120000\nSUMMARY:Intermediate Workshop - Jung Choe\nDESCRIPTION:WCS workshop targeted at intermediate level dancers.\nLOCATION:Lokalani Ballroom 2\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-w2\nDTSTART;TZID=Pacific/Honolulu:20260926T150000\nDTEND;TZID=Pacific/Honolulu:20260926T160000\nSUMMARY:Intermediate Workshop - Alex Kim\nDESCRIPTION:Intermediate level technique and patterns.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-jj-prelims\nDTSTART;TZID=Pacific/Honolulu:20260926T160000\nDTEND;TZID=Pacific/Honolulu:20260926T173000\nSUMMARY:Intermediate J&J Prelims\nDESCRIPTION:Competitive prelims for Intermediate Jack & Jill.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-jj-finals\nDTSTART;TZID=Pacific/Honolulu:20260926T200000\nDTEND;TZID=Pacific/Honolulu:20260926T213000\nSUMMARY:Intermediate J&J Finals\nDESCRIPTION:Intermediate Jack & Jill finals phase.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR"
+  },
+  "icsContent": "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//WCS Navigator//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nUID:aloha-flight-landing-deadline\nDTSTART;TZID=Pacific/Honolulu:20260925T141500\nDTEND;TZID=Pacific/Honolulu:20260925T143000\nSUMMARY:✈️ Target Flight Landing Deadline\nDESCRIPTION:Latest touchdown time to clear airport transit, check in at the hotel, and prep for opening ceremonies.\nLOCATION:OGG Airport\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-reg\nDTSTART;TZID=Pacific/Honolulu:20260925T150000\nDTEND;TZID=Pacific/Honolulu:20260925T170000\nSUMMARY:Registration Opens\nDESCRIPTION:Collect your pass and competition bib.\nLOCATION:Lokalani Ballroom Foyer\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-blessing\nDTSTART;TZID=Pacific/Honolulu:20260925T170000\nDTEND;TZID=Pacific/Honolulu:20260925T173000\nSUMMARY:Hawaiian Blessing\nDESCRIPTION:Cultural opening blessing.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-fri-opening\nDTSTART;TZID=Pacific/Honolulu:20260925T173000\nDTEND;TZID=Pacific/Honolulu:20260925T180000\nSUMMARY:Opening Ceremonies\nDESCRIPTION:Welcome briefing for the Aloha Open.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-w1\nDTSTART;TZID=Pacific/Honolulu:20260926T110000\nDTEND;TZID=Pacific/Honolulu:20260926T120000\nSUMMARY:Intermediate Workshop - Jung Choe\nDESCRIPTION:WCS workshop targeted at intermediate level dancers.\nLOCATION:Lokalani Ballroom 2\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-w2\nDTSTART;TZID=Pacific/Honolulu:20260926T150000\nDTEND;TZID=Pacific/Honolulu:20260926T160000\nSUMMARY:Intermediate Workshop - Alex Kim\nDESCRIPTION:Intermediate level technique and patterns.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-jj-prelims\nDTSTART;TZID=Pacific/Honolulu:20260926T160000\nDTEND;TZID=Pacific/Honolulu:20260926T173000\nSUMMARY:Intermediate J&J Prelims\nDESCRIPTION:Competitive prelims for Intermediate Jack & Jill.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nBEGIN:VEVENT\nUID:aloha-sat-int-jj-finals\nDTSTART;TZID=Pacific/Honolulu:20260926T200000\nDTEND;TZID=Pacific/Honolulu:20260926T213000\nSUMMARY:Intermediate J&J Finals\nDESCRIPTION:Intermediate Jack & Jill finals phase.\nLOCATION:Lokalani Ballroom 1\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR",
+  "visualScheduleMarkdown": "## 🌺 The Aloha Open 2026\n### My Personalized Schedule (Intermediate Level)\n\n---\n\n### ✈️ Travel & Friday Arrival (Sept 25)\n- **2:15 PM**: ✈️ Latest Safe Flight Landing Time\n- **2:45 PM**: Hotel Check-In & Settle (Wailea Beach Resort)\n- **3:00 PM**: Registration Opens (Lokalani Ballroom Foyer) \n- **4:15 PM**: Warmup & Prep\n- **5:00 PM**: Hawaiian Blessing\n- **5:30 PM**: Opening Ceremonies\n- **6:00 PM**: Wahine/Kane Hula Workshop\n- **8:00 PM**: All Aloha J&J Prelims & Finals\n- **9:30 PM**: Social Dancing (Dress Code: **Tropical / Aloha patterns**)\n\n---\n\n### 👟 Saturday Workshops & Competition (Sept 26)\n- **10:00 AM**: Breathwork & Meditation Class\n- **11:00 AM**: **Intermediate Workshop** (Jung Choe) - Lokalani 2\n- **12:00 PM**: *Break / Practice* (Novice & Advanced workshops filtered out)\n- **1:00 PM**: Lunch Break & Open Dancing\n- **3:00 PM**: **Intermediate Workshop** (Alex Kim) - Lokalani 1\n- **4:00 PM**: 🏆 **Intermediate Jack & Jill Prelims**\n- **6:00 PM**: 🍽️ Ticketed Dinner & Live Music\n- **8:00 PM**: 🏆 **Intermediate Jack & Jill Finals**\n- **11:00 PM**: Awards \n- **11:30 PM - 2:00 AM**: Late Night Social Dancing\n\n---\n\n### 🌊 Sunday Recovery (Sept 27)\n- **11:00 AM**: All Levels Workshop (Dave Kahn)\n- **12:00 PM**: All Levels Workshop (Jesse & Aerial)\n- **1:00 PM**: Lunch Break\n- **2:00 PM**: All Levels Workshop (Janelle & Skylar)\n- **3:00 PM**: Social Dancing & Goodbyes"
+}

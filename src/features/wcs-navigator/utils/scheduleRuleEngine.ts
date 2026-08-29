@@ -261,6 +261,67 @@ export function evaluateScheduleRules(
 }
 
 /**
+ * Robustly extracts the intended WCS division from any questionnaire answer key/values.
+ */
+export function extractUserDivision(answers: Record<string, import('../types/navigator').QuestionAnswerValue>): string {
+  const candidates = [
+    answers.division,
+    answers.competition_divisions,
+    answers.competition_division,
+    answers.workshop_level,
+    answers.experience_level,
+    answers.wsdc_level,
+    answers.level,
+    answers.skill_level,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const str = (Array.isArray(candidate) ? candidate.join(' ') : String(candidate)).toLowerCase();
+    if (str.includes('intermediate')) return 'intermediate';
+    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
+    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
+    if (str.includes('masters')) return 'masters';
+    if (str.includes('champion')) return 'champions';
+    if (str.includes('social')) return 'social_only';
+    if (str.includes('pro_am')) return 'pro_am';
+  }
+
+  for (const val of Object.values(answers)) {
+    if (!val) continue;
+    const str = (Array.isArray(val) ? val.join(' ') : String(val)).toLowerCase();
+    if (str.includes('intermediate')) return 'intermediate';
+    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
+    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
+    if (str.includes('social')) return 'social_only';
+  }
+
+  return 'novice';
+}
+
+/**
+ * Robustly extracts the dancer role (lead/follow/switch) if explicitly answered.
+ */
+export function extractUserRole(answers: Record<string, import('../types/navigator').QuestionAnswerValue>): string {
+  const candidates = [answers.role, answers.dance_role, answers.preferred_role];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const str = String(candidate).toLowerCase();
+    if (str.includes('lead')) return 'lead';
+    if (str.includes('follow')) return 'follow';
+    if (str.includes('switch')) return 'switch';
+  }
+  for (const val of Object.values(answers)) {
+    if (!val) continue;
+    const str = String(val).toLowerCase();
+    if (str === 'lead' || str.includes('leader')) return 'lead';
+    if (str === 'follow' || str.includes('follower')) return 'follow';
+    if (str === 'switch') return 'switch';
+  }
+  return '';
+}
+
+/**
  * Dynamically adjusts a Decision Trace (buffer timeline, session titles, and justifications)
  * to match the user's specific answers from the questionnaire.
  */
@@ -269,7 +330,7 @@ export function adaptTraceToUserPreferences(
   answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
   eventName: string = 'WCS Event'
 ): import('../types').AgentDecisionTrace {
-  const divisionKey = String(answers.division || answers.experience_level || answers.wsdc_level || 'novice').toLowerCase();
+  const divisionKey = extractUserDivision(answers).toLowerCase();
 
   // Format division label
   let divisionLabel = 'Novice';
@@ -278,6 +339,8 @@ export function adaptTraceToUserPreferences(
   else if (divisionKey.includes('social')) divisionLabel = 'Social Dancer';
   else if (divisionKey.includes('pro_am')) divisionLabel = 'Pro-Am Spotlight';
   else if (divisionKey.includes('workshop')) divisionLabel = 'Workshop Enthusiast';
+  else if (divisionKey.includes('masters')) divisionLabel = 'Masters';
+  else if (divisionKey.includes('champion')) divisionLabel = 'Champions';
 
   const isSocialOnly = divisionKey.includes('social') || divisionKey === 'social_only';
   const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');

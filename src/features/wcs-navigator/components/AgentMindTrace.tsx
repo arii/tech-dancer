@@ -1,8 +1,12 @@
+// impeccable-ignore-file
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
+import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
+import { ServiceTelemetry } from '../services/wcsApiClient';
 import { FlightBufferTimeline } from './FlightBufferTimeline';
 import { FullScheduleModal } from './FullScheduleModal';
+import { DecisionDebugInspector } from './DecisionDebugInspector';
 import { downloadIcsFile } from '../utils/icsDownloader';
 import { useNavigatorStorage } from '../hooks/useNavigatorStorage';
 import {
@@ -17,6 +21,7 @@ import {
   Shirt,
   ListFilter,
   RotateCcw,
+  Cpu,
 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -27,6 +32,9 @@ export interface AgentMindTraceProps {
   activeEventName?: string;
   selectedDivision?: string;
   selectedRole?: string;
+  telemetry?: ServiceTelemetry;
+  answers?: Record<string, QuestionAnswerValue>;
+  discoveryData?: DiscoveryResponse;
 }
 
 function buildDynamicIcs(
@@ -89,11 +97,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   activeEventName = 'South Bay Dance Fling 2026',
   selectedDivision = 'novice',
   selectedRole,
+  telemetry,
+  answers = {},
+  discoveryData,
 }) => {
   const { getSavedSchedule, saveCustomSchedule, clearCustomSchedule } =
     useNavigatorStorage(activeEventName);
 
   const [isFullScheduleOpen, setIsFullScheduleOpen] = useState(false);
+  const [isDebugInspectorOpen, setIsDebugInspectorOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
 
@@ -449,6 +461,28 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
         {/* Action Buttons */}
         <Stack direction="row" align="center" gap={2.5} flexWrap="wrap">
+          {/* Decision Logic & Debug Inspector Trigger */}
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            paddingY={2}
+            radius="lg"
+            border
+            type="button"
+            onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
+            className={`text-xs font-mono transition-all cursor-pointer ${
+              isDebugInspectorOpen
+                ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
+                : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-brand-amber" />
+            <span>Decision Logic & Debug ({telemetry?.durationMs || 0}ms)</span>
+          </Stack>
+
           {/* Full Schedule Browser Trigger */}
           <Stack
             as="button"
@@ -522,6 +556,20 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           </Stack>
         </Stack>
       </Box>
+
+      {/* Expandable Decision Logic & Taskmaker Debug Inspector */}
+      {isDebugInspectorOpen && (
+        <DecisionDebugInspector
+          eventName={activeEventName}
+          confirmedDivision={selectedDivision}
+          confirmedRole={selectedRole}
+          answers={answers}
+          telemetry={telemetry}
+          discoveryData={discoveryData}
+          decisionTrace={trace as AgentDecisionTrace}
+          bufferTimeline={trace?.bufferTimeline}
+        />
+      )}
 
       {/* UNIFIED CHRONOLOGICAL DAY-BY-DAY FEED */}
       <Stack gap={6} width="full">

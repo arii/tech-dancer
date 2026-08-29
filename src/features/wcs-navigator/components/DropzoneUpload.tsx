@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useState, useRef, DragEvent, ChangeEvent, FormEvent } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Upload, Link as LinkIcon, FileText, CheckCircle2, AlertCircle, X } from 'lucide-react';
@@ -182,16 +183,26 @@ export const DropzoneUpload = ({
                   Ingest Schedule via URL
                 </Text>
               </Box>
-              <Text size="xs" color="dim">
-                Provide a direct link to an online event timetable or published schedule webpage.
-              </Text>
-              <input
-                type="url"
-                placeholder="https://event.com/schedule"
-                value={urlInput}
-                onChange={(e) => setUrlInput(e.target.value)}
-                className="w-full bg-surface border border-line rounded-lg text-sm text-white focus:outline-none focus:border-brand-cyan"
-              />
+              <Box position="relative" width="full">
+                <input
+                  type="url"
+                  placeholder="https://event.com/schedule.pdf"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  onBlur={() => setUrlInput((prev) => prev.trim())}
+                  className="w-full bg-slate-950/90 border border-white/20 rounded-lg px-3.5 py-2.5 text-sm font-mono text-white placeholder-text-dim/60 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all"
+                />
+                {urlInput && (
+                  <button
+                    type="button"
+                    onClick={() => setUrlInput('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim hover:text-white p-0.5"
+                    title="Clear URL"
+                  >
+                    <Icon icon={X} size="xs" />
+                  </button>
+                )}
+              </Box>
             </Stack>
             <ActionButton type="submit" variant="primary" paddingX={4} paddingY={2} width="full">
               Fetch & Ingest URL

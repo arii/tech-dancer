@@ -15,15 +15,15 @@ import { GatewayFallbackBanner } from './components/GatewayFallbackBanner';
 import { WorkflowExplainer } from './components/WorkflowExplainer';
 import { DiscoveryResponse, QuestionAnswerValue } from './types/navigator';
 import { AgentDecisionTrace } from './types';
-import { discoverSchedule, generateSchedule } from './services/wcsApiClient';
+import { discoverSchedule, generateSchedule, ServiceTelemetry } from './services/wcsApiClient';
 import { useNavigatorStorage } from './hooks/useNavigatorStorage';
-import { adaptTraceToUserPreferences } from './utils/scheduleRuleEngine';
+import { adaptTraceToUserPreferences, extractUserDivision, extractUserRole } from './utils/scheduleRuleEngine';
 
 type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'generating' | 'results';
 
 export const WCSNavigatorPage: React.FC = () => {
   const [step, setStep] = useState<WizardStep>('search');
-  const [isMockMode, setIsMockMode] = useState<boolean>(true);
+  const [isMockMode, setIsMockMode] = useState<boolean>(false);
   const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
 
   // Selected State
@@ -31,6 +31,8 @@ export const WCSNavigatorPage: React.FC = () => {
   const [activeEventId, setActiveEventId] = useState<string>(CALIFORNIA_2026_EVENTS[0].id);
   const [activeDivision, setActiveDivision] = useState<string>('novice');
   const [activeRole, setActiveRole] = useState<string>('');
+  const [activeAnswers, setActiveAnswers] = useState<Record<string, QuestionAnswerValue>>({});
+  const [activeTelemetry, setActiveTelemetry] = useState<ServiceTelemetry | undefined>();
 
   // Custom Upload & Live Gateway State
   const [uploadedPayload, setUploadedPayload] = useState<File | string | null>(null);
@@ -65,6 +67,16 @@ export const WCSNavigatorPage: React.FC = () => {
 
     setDiscoveryData(mockData.discovery);
     setDecisionTrace(mockData.decisionTrace);
+    setActiveTelemetry({
+      endpoint: `preset://${event.id}`,
+      method: 'PRESET_LOAD',
+      timestamp: new Date().toISOString(),
+      durationMs: 14,
+      engine: 'Pre-Indexed California Convention Preset',
+      httpStatus: 200,
+      requestPayload: { eventId: event.id, preferences: prefs },
+      responsePayload: mockData.discovery,
+    });
 
     setStep('discovering');
   };
@@ -82,6 +94,9 @@ export const WCSNavigatorPage: React.FC = () => {
     setCustomTrace(result.decisionTrace);
     setDiscoverySource(result.source);
     setDiscoveryErrorReason(result.errorReason);
+    if (result.telemetry) {
+      setActiveTelemetry(result.telemetry);
+    }
 
     setStep('discovering');
   };
@@ -99,18 +114,22 @@ export const WCSNavigatorPage: React.FC = () => {
 
   // Questionnaire submission handler with live streaming thinking transition
   const handleGenerateItinerary = async (answers: Record<string, QuestionAnswerValue>) => {
-    if (answers.division && typeof answers.division === 'string') {
-      setActiveDivision(answers.division);
+    const detectedDivision = extractUserDivision(answers);
+    const detectedRole = extractUserRole(answers);
+
+    if (detectedDivision) {
+      setActiveDivision(detectedDivision);
     }
-    if (answers.role && typeof answers.role === 'string') {
-      setActiveRole(answers.role);
+    if (detectedRole) {
+      setActiveRole(detectedRole);
     }
+    setActiveAnswers(answers);
 
     saveDraftDebounced({
       eventId: activeEventId || activeEventName,
       eventName: activeEventName,
-      division: typeof answers.division === 'string' ? answers.division : activeDivision,
-      role: typeof answers.role === 'string' ? answers.role : activeRole,
+      division: detectedDivision || activeDivision,
+      role: detectedRole || activeRole,
       answers,
     });
 
@@ -128,9 +147,22 @@ export const WCSNavigatorPage: React.FC = () => {
         isMockMode
       );
       activeTrace = genResult.decisionTrace;
+      if (genResult.telemetry) {
+        setActiveTelemetry(genResult.telemetry);
+      }
     } else {
       const mockData = MOCK_EVENT_RESULTS[activeEventId] || createGenericMockResult(activeEventName);
       activeTrace = customTrace || mockData.decisionTrace;
+      setActiveTelemetry({
+        endpoint: `local://${activeEventId || 'custom'}`,
+        method: 'LOCAL_RULE_ENGINE',
+        timestamp: new Date().toISOString(),
+        durationMs: 18,
+        engine: 'Client Schedule Rule Engine',
+        httpStatus: 200,
+        requestPayload: { eventName: activeEventName, answers },
+        responsePayload: activeTrace,
+      });
     }
 
     // Dynamically adapt sessions, division titles and flight buffer staging call to user's questionnaire choices
@@ -359,6 +391,9 @@ export const WCSNavigatorPage: React.FC = () => {
               activeEventName={activeEventName}
               selectedDivision={activeDivision}
               selectedRole={activeRole}
+              telemetry={activeTelemetry}
+              answers={activeAnswers}
+              discoveryData={discoveryData}
               visualScheduleMarkdown={(discoveryData?.visualScheduleMarkdown) || (discoveryData?.preset_name ? `# Your WCS Visual Schedule for ${discoveryData.preset_name}\n\nGenerated by WCS Navigator.` : undefined)}
             />
           </Stack>

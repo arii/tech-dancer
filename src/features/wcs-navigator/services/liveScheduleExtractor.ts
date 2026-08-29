@@ -25,10 +25,24 @@ export async function extractScheduleFromDocument(
   rawContent?: string
 ): Promise<ExtractedSchedulePayload> {
   const content = rawContent || fileNameOrText;
-  const cleanName = fileNameOrText
-    .replace(/\.pdf$/i, '')
-    .replace(/[-_]+/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  let cleanName = fileNameOrText;
+  if (fileNameOrText.startsWith('http://') || fileNameOrText.startsWith('https://')) {
+    try {
+      const urlObj = new URL(fileNameOrText);
+      const hostPart = urlObj.hostname.replace(/^www\./i, '').replace(/\.(com|org|net|dance|blog|io)$/i, '');
+      cleanName = hostPart
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      if (!cleanName.toLowerCase().includes('2026')) cleanName += ' 2026';
+    } catch {
+      cleanName = 'Custom Online Event 2026';
+    }
+  } else {
+    cleanName = fileNameOrText
+      .replace(/\.pdf$/i, '')
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
 
   // Extract instructors mentions
   const knownInstructors = [

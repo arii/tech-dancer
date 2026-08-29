@@ -1,0 +1,115 @@
+{
+  "preset_id": "the-aloha-open-2026",
+  "preset_name": "The Aloha Open 2026",
+  "event_name": "The Aloha Open",
+  "tracks_detected": [
+    "West Coast Swing",
+    "Hula"
+  ],
+  "suggested_form_questions": [
+    {
+      "id": "track_selection",
+      "title": "Which dance styles or tracks are you planning to focus on?",
+      "type": "multiselect",
+      "context": "Filters schedule items to display only workshops and events corresponding to your chosen tracks, such as West Coast Swing or Hula.",
+      "required": true,
+      "options": [
+        {
+          "label": "West Coast Swing",
+          "value": "wcs",
+          "subtitle": "Workshops, social dancing, and Jack & Jill competitions",
+          "badge": "Main Track"
+        },
+        {
+          "label": "Hula",
+          "value": "hula",
+          "subtitle": "Wahine & Kane workshops, Hula Dance Off",
+          "badge": "Specialty Track"
+        }
+      ],
+      "defaultValue": [
+        "wcs"
+      ]
+    },
+    {
+      "id": "workshop_level",
+      "title": "What is your West Coast Swing workshop level?",
+      "type": "select",
+      "context": "Hides workshops that are outside your target level to keep your schedule clean, while still showing All Levels sessions.",
+      "required": false,
+      "options": [
+        {
+          "label": "Newcomer / Novice",
+          "value": "newcomer_novice",
+          "subtitle": "Designed for beginners or dancers new to competition",
+          "badge": "Lokalani 1"
+        },
+        {
+          "label": "Intermediate",
+          "value": "intermediate",
+          "subtitle": "Requires comfortable mastery of basics or WSDC Intermediate points",
+          "badge": "Lokalani 1 / 2"
+        },
+        {
+          "label": "Advanced / All Stars",
+          "value": "advanced_all_stars",
+          "subtitle": "For experienced dancers looking for high-level concepts",
+          "badge": "Lokalani 2"
+        }
+      ],
+      "defaultValue": "newcomer_novice"
+    },
+    {
+      "id": "competition_divisions",
+      "title": "Which competition divisions are you entering?",
+      "type": "multiselect",
+      "context": "Ensures your personalized agenda includes specific call times, prelims, spotlight finals, and awards ceremonies for your entered divisions.",
+      "required": false,
+      "options": [
+        {
+          "label": "All Aloha J&J",
+          "value": "all_aloha",
+          "subtitle": "Friday 8:00 PM",
+          "badge": "Friday"
+        },
+        {
+          "label": "Novice J&J",
+          "value": "novice",
+          "subtitle": "Prelims Sat 4:00 PM | Finals Sat 8:00 PM",
+          "badge": "Saturday"
+        },
+        {
+          "label": "Intermediate J&J",
+          "value": "intermediate",
+          "subtitle": "Prelims Sat 4:00 PM | Finals Sat 8:00 PM",
+          "badge": "Saturday"
+        },
+        {
+          "label": "Masters J&J",
+          "value": "masters",
+          "subtitle": "Prelims Sat 4:00 PM | Finals Sat 8:00 PM",
+          "badge": "Saturday"
+        },
+        {
+          "label": "Advanced J&J",
+          "value": "advanced",
+          "subtitle": "Prelims Sat 4:00 PM | Spotlight Finals Sat 8:00 PM",
+          "badge": "Saturday"
+        },
+        {
+          "label": "All Star J&J",
+          "value": "all_star",
+          "subtitle": "Finals Sat 9:30 PM",
+          "badge": "Saturday"
+        },
+        {
+          "label": "Champions J&J",
+          "value": "champions",
+          "subtitle": "Finals Sat 9:30 PM",
+          "badge": "Saturday"
+        }
+      ],
+      "defaultValue": []
+    }
+  ]
+}
