@@ -105,21 +105,30 @@ export const DropzoneUpload = ({
             <Text size="xs" color="dim">
               {(pdfFile.size / 1024).toFixed(1)} KB
             </Text>
-            <button
-              type="button"
+            <Stack
+              direction="row"
+              align="center"
+              gap={1}
+              paddingX={3}
+              paddingY={1}
+              radius="lg"
+              surface="surface"
+              border
+              borderColor="line"
+              cursor="pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 clearFile();
               }}
-              className="flex items-center gap-1 px-3 py-1 text-xs text-text-dim hover:text-white rounded-lg bg-surface border border-line/60 hover:bg-surface-alt transition-colors cursor-pointer"
+              className="text-xs text-text-dim hover:text-white hover:bg-surface-alt transition-colors"
             >
               <X className="w-3.5 h-3.5" />
-              <span>Remove PDF</span>
-            </button>
+              <Text size="xs" color="dim">Remove PDF</Text>
+            </Stack>
           </Stack>
         ) : (
           <Stack gap={2} align="center">
-            <Box width={10} height={10} radius="full" className="bg-brand-cyan/10 flex items-center justify-center text-brand-cyan">
+            <Box width={10} height={10} radius="full" display="flex" align="center" justify="center" className="bg-brand-cyan/10 text-brand-cyan">
               <Upload className="w-5 h-5" />
             </Box>
             <Stack gap={0.5} align="center">
@@ -136,17 +145,17 @@ export const DropzoneUpload = ({
 
       {/* Validation Feedback Banners */}
       {errorMsg && (
-        <Box padding={3} radius="md" border className="border-error/40 bg-error/10 flex items-center gap-2">
+        <Stack direction="row" align="center" gap={2} padding={3} radius="md" border className="border-error/40 bg-error/10">
           <AlertCircle className="w-4 h-4 text-error shrink-0" />
           <Text size="xs" color="dim" weight="font-semibold">{errorMsg}</Text>
-        </Box>
+        </Stack>
       )}
 
       {successMsg && (
-        <Box padding={3} radius="md" border className="border-brand-green/40 bg-brand-green/10 flex items-center gap-2">
+        <Stack direction="row" align="center" gap={2} padding={3} radius="md" border className="border-brand-green/40 bg-brand-green/10">
           <CheckCircle2 className="w-4 h-4 text-brand-green shrink-0" />
           <Text size="xs" color="dim" weight="font-semibold">{successMsg}</Text>
-        </Box>
+        </Stack>
       )}
     </Stack>
   );

@@ -2,54 +2,12 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { DevLabCallout } from '@/features/home/DevLabCallout';
 import { useProfile } from './useProfile';
 
 const PortfolioCta = () => (
-  <Box
-    display="flex"
-    wrap="wrap"
-    align={{ base: "start", sm: "center" }}
-    justify="between"
-    gap={4}
-    marginTop={6}
-    padding={{ default: 6, md: 8 }}
-    radius="2xl"
-    border
-    className="border-brand-cyan/20 bg-gradient-to-r from-surface/90 via-brand-cyan/10 to-surface/90 backdrop-blur-md shadow-xl"
-  >
-    <Stack gap={2} className="max-w-2xl">
-      <Box
-        as="span"
-        display="inline-flex"
-        align="center"
-        paddingX={2.5}
-        paddingY={0.5}
-        radius="full"
-        border
-        className="text-xs font-mono font-medium tracking-wider uppercase bg-brand-cyan/10 text-brand-cyan border-brand-cyan/20 w-max"
-      >
-        Engineering &amp; Robotics Consulting
-      </Box>
-      <Text size="sm" color="dim" className="md:text-base leading-relaxed text-text-dim">
-        Specializing in robotics software architecture, agentic engineering, front-end development, and technical leadership. Let's build together.
-      </Text>
-    </Stack>
-    <Box
-      as="a"
-      href="https://arii.github.io"
-      target="_blank"
-      rel="noopener noreferrer"
-      shrink={0}
-      display="inline-flex"
-      align="center"
-      justify="center"
-      paddingX={5}
-      paddingY={3}
-      radius="xl"
-      className="whitespace-nowrap bg-brand-cyan text-black font-semibold text-sm hover:opacity-90 transition-all shadow-lg hover:-translate-y-0.5"
-    >
-      <span>Hire Me / View Portfolio →</span>
-    </Box>
+  <Box marginTop={6}>
+    <DevLabCallout />
   </Box>
 );
 

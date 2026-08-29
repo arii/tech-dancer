@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
@@ -19,7 +19,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   // Generate the mermaid.ink URL with dark theme and 24px font size payload
-  const diagramUrl = React.useMemo(() => {
+  const diagramUrl = useMemo(() => {
     try {
       const config = {
         code: chart,
@@ -76,7 +76,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     setIsExpanded((prev) => {
       const next = !prev;
       if (next) {
-        setZoomScale(isMobile ? 1.5 : 1.25);
+        setZoomScale(isMobile ? 1.4 : 1.2);
       }
       return next;
     });
@@ -129,6 +129,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           cursor="pointer"
           className="transition-opacity hover:opacity-90 w-full text-center"
           title="Click/Tap to view full screen"
+          aria-label="Click/Tap diagram to expand & zoom"
         >
           <Box
             as="img"
@@ -136,25 +137,8 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             alt={title ?? "Workflow Diagram"}
             maxWidth="full"
             height="auto"
-            marginX="auto"
           />
         </Box>
-      </Box>
-
-      {/* Helper Tip */}
-      <Box marginTop={2} display="flex" justify="center">
-        <Button
-          onClick={handleToggleExpand}
-          variant="ghost"
-          size="sm"
-        >
-          <Stack direction="row" align="center" gap={1}>
-            <Maximize2 className="h-3 w-3 text-text-dim" />
-            <Text size="xs" color="dim" weight="font-medium" hoverColor="main">
-              Click/Tap diagram to expand & zoom
-            </Text>
-          </Stack>
-        </Button>
       </Box>
 
       {/* Full-Screen Modal Overlay */}
@@ -162,17 +146,16 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
         <Stack
           position="fixed"
           inset
-          zIndex={50}
-          surface="surface"
+          zIndex={100}
           direction="col"
           justify="between"
-          padding={{ base: 4, sm: 8 }}
+          padding={{ base: 4, sm: 6 }}
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
-          className="bg-surface/95 backdrop-blur-xl"
+          className="bg-bg/95 backdrop-blur-md text-text-main"
         >
-          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={4}>
+          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
             <Stack direction="row" align="center" gap={2}>
               {/* Zoom Out */}
@@ -183,29 +166,29 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 variant="secondary"
                 size="sm"
               >
-                <ZoomOut className="h-5 w-5" />
+                <ZoomOut className="h-4 w-4" />
               </Button>
               {/* Reset Zoom */}
               <Button
-                onClick={() => setZoomScale(isMobile ? 1.5 : 1.25)}
+                onClick={() => setZoomScale(isMobile ? 1.4 : 1.2)}
                 aria-label="Reset zoom"
                 title="Reset Zoom"
                 variant="secondary"
                 size="sm"
               >
-                <RotateCcw className="h-5 w-5" />
+                <RotateCcw className="h-4 w-4" />
               </Button>
               {/* Zoom In */}
               <Button
-                onClick={() => setZoomScale((prev) => Math.min(4.0, prev + 0.25))}
+                onClick={() => setZoomScale((prev) => Math.min(3.0, prev + 0.25))}
                 aria-label="Zoom in"
                 title="Zoom In"
                 variant="secondary"
                 size="sm"
               >
-                <ZoomIn className="h-5 w-5" />
+                <ZoomIn className="h-4 w-4" />
               </Button>
-              <Box height={6} width={1} className="bg-line" marginX={1} />
+              <Box height={5} width={1} className="bg-line" marginX={1} />
               {/* Close Overlay */}
               <Button
                 onClick={handleToggleExpand}
@@ -213,39 +196,43 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 variant="secondary"
                 size="sm"
               >
-                <Minimize2 className="h-5 w-5" />
+                <Minimize2 className="h-4 w-4" />
               </Button>
             </Stack>
           </Stack>
 
-          {/* Scrollable Zoomed Container */}
+          {/* Scrollable Diagram Viewer */}
           <Box
             flex={1}
             overflow="auto"
-            padding={{ base: 4, sm: 8 }}
+            padding={4}
             display="flex"
             align="center"
             justify="center"
-            className="select-none cursor-zoom-out w-full h-full"
+            cursor="pointer"
             onClick={handleOverlayClick}
+            className="w-full h-full select-none"
           >
             <Box
-              className="transition-transform duration-150 cursor-default p-4 my-auto shrink-0"
-              marginX="auto"
-              style={{ // impeccable-ignore - Dynamic zoom scaling
+              padding={4}
+              radius="lg"
+              border
+              borderColor="line"
+              surface="surface"
+              shadow="2xl"
+              onClick={(e) => e.stopPropagation()}
+              style={{ // impeccable-ignore - Dynamic zoom scaling transform
                 transform: `scale(${zoomScale})`,
                 transformOrigin: 'center center',
               }}
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking actual diagram content
             >
               <Box
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                className="max-w-none h-auto mx-auto shadow-2xl rounded-lg bg-surface/80 p-2"
-                style={{
-                  width: `${isMobile ? 340 : 850}px`,
-                }}
+                maxWidth="full"
+                height="auto"
+                className="max-w-full h-auto rounded-md"
               />
             </Box>
           </Box>

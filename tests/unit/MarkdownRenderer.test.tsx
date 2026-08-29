@@ -16,7 +16,7 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
 
     // Verify it renders the ResponsiveDiagram container structure
     expect(screen.getByText('Workflow Diagram')).toBeDefined();
-    expect(screen.getByText('Click/Tap diagram to expand & zoom')).toBeDefined();
+    expect(screen.getByTitle('Click/Tap to view full screen')).toBeDefined();
 
     const imgElement = screen.getByAltText('Workflow Diagram') as HTMLImageElement;
     expect(imgElement).toBeDefined();

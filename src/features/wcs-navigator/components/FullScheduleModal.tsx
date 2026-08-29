@@ -125,16 +125,16 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           paddingY={3}
           border="b"
           borderColor="line"
-          className="bg-surface/50"
+          className="bg-surface/50 items-center"
         >
           {/* Day Tabs */}
-          <Stack direction="row" gap={1.5}>
+          <Stack direction="row" align="center" gap={1.5}>
             {(['all', 'friday', 'saturday', 'sunday'] as const).map((day) => (
               <button
                 key={day}
                 type="button"
                 onClick={() => setActiveDay(day)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium capitalize transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors cursor-pointer ${
                   activeDay === day
                     ? 'bg-brand-cyan text-black font-bold'
                     : 'bg-surface-alt/80 text-text-dim hover:text-white border border-line/60'
@@ -147,13 +147,13 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
 
           {/* Search Box */}
           <Box display="flex" align="center" gap={2} className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-text-dim absolute left-2.5 top-2.5 pointer-events-none" />
+            <Search className="w-4 h-4 text-text-dim absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search sessions or instructors..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-surface-alt border border-line text-xs font-mono text-white placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-surface-alt border border-line text-xs text-white placeholder:text-text-dim/60 focus:outline-none focus:border-brand-cyan/60"
             />
           </Box>
         </Box>

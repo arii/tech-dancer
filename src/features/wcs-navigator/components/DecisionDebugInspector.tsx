@@ -124,7 +124,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('inputs')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'inputs'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -137,7 +137,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('telemetry')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'telemetry'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -150,7 +150,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('filtering')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'filtering'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'
@@ -163,7 +163,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('json')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === 'json'
                 ? 'bg-brand-cyan text-slate-950 shadow-sm'
                 : 'text-text-dim hover:text-text-main hover:bg-white/5'

@@ -28,9 +28,9 @@ describe('ResponsiveDiagram component', () => {
   it('should render title and click/tap to expand', () => {
     render(<ResponsiveDiagram chart="graph TD; A-->B;" title="Test Diagram" />);
 
-    // Check title and expand hint
+    // Check title and expand trigger
     expect(screen.getByText('Test Diagram')).toBeDefined();
-    expect(screen.getByText('Click/Tap diagram to expand & zoom')).toBeDefined();
+    expect(screen.getByTitle('Click/Tap to view full screen')).toBeDefined();
 
     // The modal should not be visible initially
     expect(screen.queryByRole('dialog')).toBeNull();
