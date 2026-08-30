@@ -24,8 +24,8 @@
   }
 ,
   "fix-wcs-navigator-layout-13045715650358428125": {
-    "commitTimestamp": 1788048221,
-    "deployTimestamp": 1788048221,
+    "commitTimestamp": 1788070781,
+    "deployTimestamp": 1788070781,
     "sha": "unknown"
   }
 ,
@@ -66,8 +66,8 @@
   }
 ,
   "update-wcs-navigator-api-readme-4086698329599483307": {
-    "commitTimestamp": 1788048478,
-    "deployTimestamp": 1788048478,
+    "commitTimestamp": 1788070781,
+    "deployTimestamp": 1788070781,
     "sha": "unknown"
   }
 }
