@@ -19,9 +19,12 @@ if [ -z "${GEMINI_API_KEY:-}" ]; then
   exit 1
 fi
 
-echo "Deploying wcs-navigator-api to Google Cloud Run..."
+REGION="${REGION:-us-west1}"
+GEMINI_MODEL="${GEMINI_MODEL:-gemini-3.5-flash}"
+
+echo "Deploying wcs-navigator-api to Google Cloud Run in ${REGION} with ${GEMINI_MODEL}..."
 gcloud run deploy wcs-navigator-api \
   --source . \
-  --region us-central1 \
+  --region "${REGION}" \
   --allow-unauthenticated \
-  --set-env-vars GEMINI_API_KEY="${GEMINI_API_KEY}"
+  --set-env-vars GEMINI_API_KEY="${GEMINI_API_KEY}",GEMINI_MODEL="${GEMINI_MODEL}"
