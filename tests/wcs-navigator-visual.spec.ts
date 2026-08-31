@@ -6,7 +6,7 @@ test.describe('WCS Navigator Visual Regression Tests', () => {
     await page.goto('./research/wcs-navigator', { waitUntil: 'networkidle' });
   });
 
-  const runVisualJourney = async (page: any, isMobile: boolean) => {
+  const runVisualJourney = async (page: import("@playwright/test").Page, isMobile: boolean) => {
     const prefix = isMobile ? 'mobile-' : '';
 
     // Step 1: Initial load
