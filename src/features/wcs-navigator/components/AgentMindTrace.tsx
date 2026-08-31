@@ -312,34 +312,34 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           justify={{ base: 'between', sm: 'center' }}
           gap={2}
           paddingBottom={{ base: 2.5, sm: 0 }}
-          paddingRight={{ base: 0, sm: 6 }}
+          paddingRight={{ base: 0, sm: 4 }}
           border={{ base: 'b', sm: 'r' }}
           borderColor="line"
-          className="sm:w-52 shrink-0"
+          className="sm:w-60 md:w-64 shrink-0 min-w-0"
         >
-          <Stack direction="row" align="center" gap={2}>
+          <Stack direction="row" align="center" gap={2} className="min-w-0">
             <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
-            <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="whitespace-nowrap">
+            <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="break-words">
               {session.time}
             </Text>
           </Stack>
-          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit">
+          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit shrink-0">
             {badge}
           </Text>
         </Stack>
 
         {/* Center: Title & High-Contrast Details */}
-        <Stack gap={1.5} justify="center" flex={1} minWidth={0}>
-          <Text as="h4" weight="font-bold" size="base" color="main" leading="snug">
+        <Stack gap={1.5} justify="center" flex={1} minWidth={0} className="min-w-0">
+          <Text as="h4" weight="font-bold" size="base" color="main" leading="snug" className="break-words">
             {session.title}
           </Text>
-          <Stack direction="row" align="center" gap={3} flexWrap="wrap" className="text-xs text-text-dim">
+          <Stack direction="col" gap={1} className="text-xs text-text-dim">
             <Stack direction="row" align="center" gap={1.5}>
               <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-              <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
+              <Text as="span" size="xs" color="main" weight="font-medium" className="break-words">{session.location}</Text>
             </Stack>
             {session.justification && (
-              <Text as="span" size="xs" color="dim" paddingLeft={2} border="l" borderColor="line" className="leading-relaxed">
+              <Text as="span" size="xs" color="dim" className="leading-relaxed break-words text-text-dim/80">
                 {session.justification}
               </Text>
             )}

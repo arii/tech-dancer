@@ -222,6 +222,7 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
                   key={event.id}
                   type="button"
                   onMouseDown={() => handleSelectEvent(event)}
+                  onClick={() => handleSelectEvent(event)}
                   className="hover:bg-white/5 transition-colors text-left group cursor-pointer"
                 >
                   <Stack gap={0.5} minWidth={0} paddingRight={2}>
