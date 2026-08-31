@@ -1,55 +1,36 @@
+"""Render the WCS Navigator architecture deep dive study markdown to a styled PDF."""
+
+import os
 import re
 import subprocess
-import os
 
-with open("content/studies/wcs-navigator-architecture.md", "r") as f:
-    raw_md = f.read()
 
-# Parse frontmatter
-frontmatter_match = re.match(r"^---\n(.*?)\n---\n(.*)$", raw_md, re.DOTALL)
-if frontmatter_match:
-    fm_text = frontmatter_match.group(1)
-    body_md = frontmatter_match.group(2)
-else:
-    body_md = raw_md
-    fm_text = ""
-
-title = "WCS Navigator Architecture Deep Dive"
-author = "Ariel Anders, PhD"
-date = "2026-08-28"
-tags = "DevAI, FastAPI, Gemini, React, WCS, Automation"
-excerpt = "Explore how WCS Navigator uses a search-first UI, pre-flight footprint analysis, auto-advancing card questionnaires, dynamic rule engines, taskmaker debug telemetry, and stateless in-memory calendar streaming to deliver personalized convention itineraries."
-
-for line in fm_text.splitlines():
-    if line.startswith("title:"):
-        title = line.split(":", 1)[1].strip().strip('"')
-    elif line.startswith("author:"):
-        author = line.split(":", 1)[1].strip().strip('"')
-    elif line.startswith("date:"):
-        date = line.split(":", 1)[1].strip().strip('"')
-    elif line.startswith("excerpt:"):
-        excerpt = line.split(":", 1)[1].strip().strip('"')
-
-# Replace image paths to absolute file URIs for local chrome rendering
-workspace_root = os.path.abspath(os.getcwd())
-def replace_img(match):
+def replace_img_path(match: re.Match[str], workspace_root: str) -> str:
+    """Map relative public asset URLs to absolute file paths for local rendering."""
     path = match.group(1)
     if path.startswith("/"):
         full_path = os.path.join(workspace_root, "public", path.lstrip("/"))
         return f"({full_path})"
     return f"({path})"
 
-body_md = re.sub(r'\((/assets/[^)]+)\)', replace_img, body_md)
 
-# Save temporary markdown
-with open("temp_article.md", "w") as f:
-    f.write(body_md)
+def parse_frontmatter(raw_md: str) -> tuple[str, dict[str, str]]:
+    """Parse YAML frontmatter metadata and extract the markdown body."""
+    match = re.match(r"^---\n(.*?)\n---\n(.*)$", raw_md, re.DOTALL)
+    if not match:
+        return raw_md, {}
 
-# Convert to html body with pandoc
-body_html = subprocess.check_output(["pandoc", "temp_article.md", "-f", "markdown", "-t", "html"]).decode("utf-8")
-os.remove("temp_article.md")
+    metadata: dict[str, str] = {}
+    for line in match.group(1).splitlines():
+        if ":" in line:
+            key, val = line.split(":", 1)
+            metadata[key.strip()] = val.strip().strip('"')
+    return match.group(2), metadata
 
-styled_html = f"""<!DOCTYPE html>
+
+def build_styled_html(title: str, author: str, date: str, excerpt: str, body_html: str) -> str:
+    """Construct standalone HTML document with typography and print styles."""
+    return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -183,16 +164,52 @@ styled_html = f"""<!DOCTYPE html>
 </html>
 """
 
-with open("docs/wcs-navigator-deep-dive.html", "w") as f:
-    f.write(styled_html)
 
-chrome_cmd = [
-    "google-chrome",
-    "--headless",
-    "--disable-gpu",
-    "--no-sandbox",
-    "--print-to-pdf=pdf_docs/wcs_navigator_deep_dive_article.pdf",
-    "docs/wcs-navigator-deep-dive.html"
-]
-subprocess.run(chrome_cmd, check=True)
-print("Successfully generated pdf_docs/wcs_navigator_deep_dive_article.pdf")
+def main() -> None:
+    """Extract frontmatter, convert markdown, apply typography, and print to PDF."""
+    with open("content/studies/wcs-navigator-architecture.md", "r", encoding="utf-8") as f_in:
+        raw_md = f_in.read()
+
+    body_md, meta = parse_frontmatter(raw_md)
+    title = meta.get("title", "WCS Navigator Architecture Deep Dive")
+    author = meta.get("author", "Ariel Anders, PhD")
+    date = meta.get("date", "2026-08-28")
+    excerpt = meta.get(
+        "excerpt",
+        "Explore how WCS Navigator delivers personalized convention itineraries.",
+    )
+
+    workspace_root = os.path.abspath(os.getcwd())
+    body_md = re.sub(
+        r"\((/assets/[^)]+)\)",
+        lambda m: replace_img_path(m, workspace_root),
+        body_md,
+    )
+
+    with open("temp_article.md", "w", encoding="utf-8") as temp_f:
+        temp_f.write(body_md)
+
+    body_html_bytes = subprocess.check_output(
+        ["pandoc", "temp_article.md", "-f", "markdown", "-t", "html"]
+    )
+    body_html = body_html_bytes.decode("utf-8")
+    os.remove("temp_article.md")
+
+    styled_html = build_styled_html(title, author, date, excerpt, body_html)
+    with open("docs/wcs-navigator-deep-dive.html", "w", encoding="utf-8") as out_f:
+        out_f.write(styled_html)
+
+    chrome_cmd = [
+        "google-chrome",
+        "--headless",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--print-to-pdf=pdf_docs/wcs_navigator_deep_dive_article.pdf",
+        "docs/wcs-navigator-deep-dive.html",
+    ]
+    subprocess.run(chrome_cmd, check=True)
+    print("Successfully generated pdf_docs/wcs_navigator_deep_dive_article.pdf")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,8 @@
-import subprocess
-import os
+"""Render the WCS Navigator API documentation markdown to a styled PDF."""
 
-html_template = """<!DOCTYPE html>
+import subprocess
+
+HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -105,22 +106,27 @@ html_template = """<!DOCTYPE html>
 <body>
 """
 
-# Convert markdown body to html using pandoc
-cmd = ["pandoc", "docs/wcs-navigator-api-docs.md", "-f", "markdown", "-t", "html"]
-body_html = subprocess.check_output(cmd).decode("utf-8")
 
-full_html = html_template + body_html + "</body></html>"
-with open("docs/wcs-navigator-api-docs-styled.html", "w") as f:
-    f.write(full_html)
+def main() -> None:
+    """Compile markdown API docs to HTML and export as PDF via headless Chrome."""
+    cmd = ["pandoc", "docs/wcs-navigator-api-docs.md", "-f", "markdown", "-t", "html"]
+    body_html = subprocess.check_output(cmd).decode("utf-8")
 
-# Render to PDF using headless Chrome
-chrome_cmd = [
-    "google-chrome",
-    "--headless",
-    "--disable-gpu",
-    "--no-sandbox",
-    "--print-to-pdf=pdf_docs/wcs_navigator_api_documentation.pdf",
-    "docs/wcs-navigator-api-docs-styled.html"
-]
-subprocess.run(chrome_cmd, check=True)
-print("Successfully generated pdf_docs/wcs_navigator_api_documentation.pdf")
+    full_html = HTML_TEMPLATE + body_html + "</body></html>"
+    with open("docs/wcs-navigator-api-docs-styled.html", "w", encoding="utf-8") as file_out:
+        file_out.write(full_html)
+
+    chrome_cmd = [
+        "google-chrome",
+        "--headless",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--print-to-pdf=pdf_docs/wcs_navigator_api_documentation.pdf",
+        "docs/wcs-navigator-api-docs-styled.html",
+    ]
+    subprocess.run(chrome_cmd, check=True)
+    print("Successfully generated pdf_docs/wcs_navigator_api_documentation.pdf")
+
+
+if __name__ == "__main__":
+    main()
