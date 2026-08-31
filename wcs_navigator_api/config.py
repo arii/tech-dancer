@@ -18,11 +18,10 @@ class InvalidGeminiAPIKeyError(Exception):
 
 
 def is_valid_gemini_api_key_format(key: str) -> bool:
-    """Validate structure of Google Gemini API key without making API calls."""
+    """Check if API key string is non-empty."""
     if not key:
         return False
-    clean_key = key.strip().strip('"').strip("'")
-    return bool(GEMINI_API_KEY_REGEX.match(clean_key))
+    return bool(key.strip().strip('"').strip("'"))
 
 
 class Settings(BaseSettings):
@@ -52,14 +51,9 @@ settings = Settings()
 
 
 def get_genai_client() -> genai.Client:
-    """Initialize and return a Google GenAI Client using GEMINI_API_KEY settings."""
+    """Initialize and return a Google GenAI Client using GEMINI_API_KEY settings or default environment."""
     raw_key = settings.GEMINI_API_KEY.strip().strip('"').strip("'") if settings.GEMINI_API_KEY else ""
-    if not raw_key:
-        raise MissingGeminiAPIKeyError(
-            "GEMINI_API_KEY environment variable is missing or empty."
-        )
-    if not is_valid_gemini_api_key_format(raw_key):
-        raise InvalidGeminiAPIKeyError(
-            "GEMINI_API_KEY format is invalid (must start with 'AIza' and be a valid API key)."
-        )
-    return genai.Client(api_key=raw_key)
+    if raw_key:
+        return genai.Client(api_key=raw_key)
+    # Allows Google Cloud Run ADC (Application Default Credentials) or ambient GOOGLE_API_KEY
+    return genai.Client()

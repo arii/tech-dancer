@@ -36,4 +36,7 @@ python3 scripts/render_api_docs_pdf.py
 echo "==> Generating WCS Navigator Architecture Deep Dive Article PDF..."
 python3 scripts/render_article_pdf.py
 
+echo "==> Generating WCS Navigator Mermaid Architecture Diagrams PDF..."
+python3 scripts/render_architecture_diagram_pdf.py
+
 echo "==> All PDFs generated successfully under pdf_docs/!"
