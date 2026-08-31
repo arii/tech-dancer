@@ -3,7 +3,7 @@ import { getVisualTestMasks, scrollToSettle } from './utils/playwright-helpers';
 
 const HOMEPAGE_URL = './';
 
-test('visual comparison for homepage', async ({ page }) => {
+test('verify homepage visual consistency', async ({ page }) => {
   await page.goto(HOMEPAGE_URL);
   await page.waitForLoadState('networkidle');
 

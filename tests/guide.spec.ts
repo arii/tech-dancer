@@ -3,7 +3,7 @@ import { getVisualTestMasks, scrollToSettle } from './utils/playwright-helpers';
 
 const GUIDE_URL = './blog/2026-04-19-practical-tools-essentials';
 
-test('visual comparison for guide', async ({ page }) => {
+test('verify guide visual consistency', async ({ page }) => {
   await page.goto(GUIDE_URL);
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(new RegExp(`.*${GUIDE_URL.replace('./', '')}`));
