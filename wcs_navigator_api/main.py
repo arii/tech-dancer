@@ -51,12 +51,15 @@ async def invalid_gemini_api_key_handler(
         content={
             "detail": str(exc),
             "error_code": "INVALID_GEMINI_API_KEY_FORMAT",
-            "action": "Ensure GEMINI_API_KEY is 39 characters starting with 'AIzaSy'.",
+            "action": "Ensure GEMINI_API_KEY starts with 'AIza' and is a valid Google GenAI API key.",
         },
     )
 
 
+@app.get("/")
 @app.get("/health")
+@app.get("/ready")
+@app.get("/api/v1/health")
 async def health_check() -> dict[str, str]:
     return {
         "status": "ok",

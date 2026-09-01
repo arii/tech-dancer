@@ -160,4 +160,83 @@ describe('DecisionDebugInspector Suite', () => {
 
     expect(writeTextMock).toHaveBeenCalled();
   });
+
+  it('renders Local Novice Competitor (No Intensives) inputs and Tab 3 Rule Engine Audit justifications', () => {
+    const localNoviceAnswers = {
+      division: 'novice',
+      role: '',
+      arrival: 'local',
+      intensive: 'no_intensives',
+      track: 'competitor_workshops',
+    };
+
+    const localNoviceTrace: AgentDecisionTrace = {
+      eventName: 'Boogie by the Bay 2026',
+      sessions: [
+        {
+          id: 'nov1',
+          title: 'Novice Strictly Swing Preliminaries',
+          time: 'Friday 6:30 PM - 7:45 PM',
+          location: 'Grand Ballroom',
+          category: 'competition',
+          status: 'included',
+          decisionBadge: 'Competition Call',
+          justification: 'Division match for Novice. Marshalling call on time.',
+        },
+        {
+          id: 'int_int1',
+          title: 'Advanced / All-Star Masterclass Intensive',
+          time: 'Friday 2:00 PM - 5:00 PM',
+          location: 'Pavilion A',
+          category: 'intensive',
+          status: 'filtered',
+          decisionBadge: 'Filtered Out',
+          justification: 'Filtered out because user selected No Intensives and Novice division.',
+        },
+      ],
+      bufferTimeline: {
+        earliestStagingTime: '5:15 PM Friday',
+        latestFlightArrivalDeadline: 'Local Commute (Drive-In)',
+        transitMinutes: 45,
+        hotelSettleMinutes: 90,
+        warmupMinutes: 45,
+        steps: [
+          {
+            time: '4:15 PM',
+            type: 'local_arrival',
+            label: 'Local Hotel / Venue Arrival Buffer',
+            description: 'Drive in, park, and complete registration before staging check-in.',
+            bufferMinutes: 45,
+            iconName: 'Car',
+          },
+        ],
+      },
+      themeDressCodes: [],
+      icsContent: '',
+    };
+
+    render(
+      <DecisionDebugInspector
+        eventName="Boogie by the Bay 2026"
+        confirmedDivision="novice"
+        confirmedRole=""
+        answers={localNoviceAnswers}
+        telemetry={mockTelemetry}
+        decisionTrace={localNoviceTrace}
+      />
+    );
+
+    // Tab 1 Confirmed Inputs checks
+    expect(screen.getByText('NOVICE')).toBeDefined();
+    expect(screen.getByText('None Specified (Universal)')).toBeDefined();
+    expect(screen.getByText('no_intensives')).toBeDefined();
+
+    // Switch to Tab 3 Rule Engine Audit
+    const filterTabBtn = screen.getByRole('button', { name: /3\. Rule Engine Audit/i });
+    fireEvent.click(filterTabBtn);
+
+    expect(screen.getByText('Novice Strictly Swing Preliminaries')).toBeDefined();
+    expect(screen.getByText(/Division match for Novice/i)).toBeDefined();
+    expect(screen.getByText(/Filtered out because user selected No Intensives and Novice division/i)).toBeDefined();
+  });
 });
