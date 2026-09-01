@@ -166,6 +166,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     const optionBtn = page.locator('button:has(h4)').first();
     if ((await optionBtn.count()) > 0) {
       await optionBtn.click();
+      await page.waitForTimeout(300);
     }
 
     for (let i = 0; i < 8; i++) {
@@ -178,6 +179,7 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
       const optBtn = page.locator('button:has(h4)').first();
       if ((await optBtn.count()) > 0 && await optBtn.isVisible()) {
         await optBtn.click();
+        await page.waitForTimeout(300);
       }
     }
 
@@ -216,8 +218,9 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
         break;
       }
       const optionBtn = page.locator('button:has(h4)').first();
-      if ((await optionBtn.count()) > 0) {
+      if ((await optionBtn.count()) > 0 && await optionBtn.isVisible()) {
         await optionBtn.click();
+        await page.waitForTimeout(300);
       }
     }
 
