@@ -9,6 +9,10 @@ test('verify guide visual comparison consistency', async ({ page }) => {
   await expect(page).toHaveURL(new RegExp(`.*${GUIDE_URL.replace('./', '')}`));
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
+  // Scroll to bottom and wait for all lazy assets to finish loading
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForLoadState('networkidle');
+
   await scrollToSettle(page);
 
   await expect(page).toHaveScreenshot('detail-page-v2.png', {

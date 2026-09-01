@@ -91,12 +91,13 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
         direction="col"
         width="full"
         maxWidth="4xl"
+        maxHeight="full"
         surface="surface"
         border
         radius="2xl"
         shadow="2xl"
         overflow="hidden"
-        className="max-h-[90vh] my-auto"
+        marginY="auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -258,10 +259,17 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
 
                     {/* Right: Quieter Modal Action Button */}
                     <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: 'none' }} borderColor="line" className="shrink-0">
-                      <button
+                      <Stack
+                        as="button"
+                        direction="row"
+                        align="center"
+                        gap={1.5}
+                        paddingX={3.5}
+                        paddingY={2}
+                        radius="lg"
                         type="button"
                         onClick={() => onToggleSession(session.id)}
-                        className={`min-h-11 flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-mono font-medium transition-colors cursor-pointer ${
+                        className={`min-h-11 text-xs font-mono font-medium transition-colors cursor-pointer ${
                           isIncluded
                             ? 'bg-surface-alt/70 hover:bg-surface text-text-dim hover:text-error border border-line/60'
                             : 'bg-brand-cyan/15 hover:bg-brand-cyan/25 text-brand-cyan border border-brand-cyan/30 font-bold'
@@ -270,15 +278,15 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                         {isIncluded ? (
                           <>
                             <Icon icon={X} size="xs" />
-                            <span>Remove from Schedule</span>
+                            <Text size="xs">Remove from Schedule</Text>
                           </>
                         ) : (
                           <>
                             <Plus className="w-3.5 h-3.5" />
-                            <span>Add to Schedule</span>
+                            <Text size="xs">Add to Schedule</Text>
                           </>
                         )}
-                      </button>
+                      </Stack>
                     </Stack>
                   </Box>
                 );

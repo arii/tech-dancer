@@ -67,14 +67,12 @@ export async function scrollToSettle(page: Page) {
           lastHeight = currentHeight;
         }
 
-        // Minimal task yield to allow for layout/lazy-loading triggers
-        await new Promise(requestAnimationFrame);
+        await new Promise((r) => setTimeout(r, 100));
       }
     };
 
     await waitForScrollHeightToSettle();
     scrollable.scrollTo(0, 0);
-    // Ensure paint settlement
-    await new Promise(requestAnimationFrame);
   });
+  await page.waitForTimeout(300);
 }

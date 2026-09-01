@@ -53,7 +53,7 @@ export const GatewayFallbackBanner = ({
           >
             <Stack direction="row" align="center" gap={1.5}>
               <RefreshCw className="w-3 h-3" />
-              <span>Retry Upload</span>
+              <Text size="xs">Retry Upload</Text>
             </Stack>
           </Button>
         </Box>
@@ -72,7 +72,7 @@ export const GatewayFallbackBanner = ({
         >
           <Stack direction="row" align="center" gap={1.5} className="text-xs font-mono text-brand-amber font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-brand-amber shrink-0" />
-            <span>Or try a verified 2026 schedule:</span>
+            <Text size="xs" weight="font-semibold" className="text-brand-amber">Or try a verified 2026 schedule:</Text>
           </Stack>
 
           <Box display="flex" wrap gap={1.5} align="center">
@@ -92,7 +92,7 @@ export const GatewayFallbackBanner = ({
                 className="bg-brand-amber/20 hover:bg-brand-amber/30 border-brand-amber/30 text-white text-xs font-mono transition-colors cursor-pointer"
               >
                 <Calendar className="w-3 h-3 text-brand-amber shrink-0" />
-                <span>{evt.name}</span>
+                <Text size="xs">{evt.name}</Text>
               </Stack>
             ))}
           </Box>
