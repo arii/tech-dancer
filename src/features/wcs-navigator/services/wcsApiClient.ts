@@ -2,7 +2,7 @@ import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
 import { AgentDecisionTrace, GenerateResponse } from '../types';
 import { extractScheduleFromDocument } from './liveScheduleExtractor';
 
-const DEFAULT_API_BASE = 'http://localhost:8000';
+const DEFAULT_API_BASE = 'https://wcs-navigator-api-237690545533.us-west1.run.app';
 
 function getApiBaseUrl(): string {
   if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_WCS_API_URL) {

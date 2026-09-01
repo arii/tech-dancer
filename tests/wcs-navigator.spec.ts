@@ -40,47 +40,56 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
   });
 
-  test('Step 2 - Step 6: Full multi-step user journey, debug inspector tabs, modal customization, and edit recovery', async ({ page }) => {
-    // Step 1: Preset Selection (South Bay Dance Fling)
+  test('Step 2 - Step 6: Local Novice Competitor end-to-end journey with debug inspector tabs, modal customization, and edit recovery', async ({ page }) => {
+    // Step 1: Preset Selection (Boogie by the Bay)
     const searchInput = page.getByRole('combobox', { name: /Search convention/i });
     await searchInput.click();
-    await searchInput.fill('South Bay');
-    await page.getByRole('button', { name: /South Bay Dance Fling/i }).first().click();
+    await searchInput.fill('Boogie by the Bay');
+    await page.getByRole('button', { name: /Boogie by the Bay/i }).first().click();
 
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
 
-    // Step 2: Dynamic Questionnaire — Select Novice Competitor (Persona)
-    const noviceCard = page.locator('button:has(h4:has-text("Novice Competitor"))').first();
-    await expect(noviceCard).toBeVisible();
+    // Step 2: Dynamic Questionnaire — Answering Local Novice Competitor (No Intensives)
+    // Question 1: Intensives
+    const noIntensiveOption = page.locator('button:has(h4:has-text("No — Not attending"))').first();
+    await expect(noIntensiveOption).toBeVisible();
+    await noIntensiveOption.click();
+
+    // Question 2: Division / Persona
+    const noviceCard = page.locator('button:has(h4:has-text("Novice Competitor Track"))').first();
+    await expect(noviceCard).toBeVisible({ timeout: 5000 });
     await noviceCard.click();
 
-    // Answer subsequent questionnaire steps (or skip/generate options)
-    for (let i = 0; i < 8; i++) {
-      if (await page.getByText(/Pre-Event Transit Logistics/i).isVisible()) break;
-      if (await page.getByText(/Generating Itinerary/i).isVisible()) break;
+    // Question 3: Arrival Target (Local Commute)
+    const localDriveOption = page.locator('button:has(h4:has-text("Local Bay Area Commute"))').first();
+    await expect(localDriveOption).toBeVisible({ timeout: 5000 });
+    await localDriveOption.click();
 
-      const genBtn = page.locator('button:has-text("Generate Final Itinerary"), button:has-text("Generate Itinerary")').first();
-      if ((await genBtn.count()) > 0 && await genBtn.isVisible()) {
-        await genBtn.click();
-        break;
-      }
+    // Question 4: Multi-Room Track
+    const competitorTrackOption = page.locator('button:has(h4:has-text("Competitor Leveled Workshops"))').first();
+    await expect(competitorTrackOption).toBeVisible({ timeout: 5000 });
+    await competitorTrackOption.click();
 
-      const optionBtn = page.locator('button:has(h4)').first();
-      if ((await optionBtn.count()) > 0) {
-        await optionBtn.click();
-      } else {
-        const nextOrSkipBtn = page.locator('button:has-text("Next"), button:has-text("Skip")').first();
-        if ((await nextOrSkipBtn.count()) > 0 && await nextOrSkipBtn.isVisible()) {
-          await nextOrSkipBtn.click();
-        }
-      }
-      await expect(page.locator('body')).toBeVisible();
+    // Finish remaining steps or click Generate Itinerary if prompt is visible
+    const generateBtn = page.locator('button:has-text("Skip All & Generate Itinerary"), button:has-text("Generate Final Itinerary")').first();
+    if (await generateBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await generateBtn.click();
     }
 
-    // Step 2.5 & Step 3: Generation & Personalized Itinerary Timeline
+    // Step 2.5 & Step 3: Generation & Personalized Itinerary Timeline Verification
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
     await expect(page.getByText(/Add to Calendar \(\.ics\)/i)).toBeVisible();
     await expect(page.getByText(/View All Schedule/i)).toBeVisible();
+
+    // Verify Local Commute landing target and transit logistics
+    await expect(page.getByText(/Local Commute \(Drive-In\)/i)).toBeVisible();
+    await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible();
+
+    // Verify Day-by-Day Chronological Sections, Sessions, & Themes
+    await expect(page.getByText(/Friday — Arrival, Warmup & Prelims/i)).toBeVisible();
+    await expect(page.getByText(/Saturday — Daytime Workshops & Champions Gala/i)).toBeVisible();
+    await expect(page.getByText(/Sunday — Intensive Masterclasses & Survivor Social/i)).toBeVisible();
+    await expect(page.getByText(/Novice Strictly Swing/i).first()).toBeVisible();
 
     // Step 4: Decision Logic & Taskmaker Debug Inspector Verification
     const debugBtn = page.getByRole('button', { name: /Decision Logic & Debug/i });
@@ -89,13 +98,16 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
 
     await expect(page.getByText(/Agent Decision Logic & Taskmaker Telemetry/i)).toBeVisible();
 
-    // Tab 1: Confirmed Inputs
+    // Tab 1: Confirmed Inputs (Assert division NOVICE and unconfirmed role handled gracefully)
     await page.getByRole('button', { name: /1\. Confirmed Inputs/i }).click();
     await expect(page.getByText('Confirmed Division Persona')).toBeVisible();
+    await expect(page.getByText('NOVICE', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('None Specified (Universal)')).toBeVisible();
 
     // Tab 2: Gateway & Engine
     await page.getByRole('button', { name: /2\. Gateway & Engine/i }).click();
     await expect(page.getByText(/Execution Latency/i)).toBeVisible();
+    await expect(page.getByText('HTTP 200', { exact: true }).first()).toBeVisible();
 
     // Tab 3: Rule Engine Audit
     await page.getByRole('button', { name: /3\. Rule Engine Audit/i }).click();

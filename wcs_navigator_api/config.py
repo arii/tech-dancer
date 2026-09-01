@@ -2,7 +2,7 @@ import re
 from google import genai
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-GEMINI_API_KEY_REGEX = re.compile(r"^AIzaSy[A-Za-z0-9_-]{33}$")
+GEMINI_API_KEY_REGEX = re.compile(r"^AIza[A-Za-z0-9_-]{30,}$")
 
 
 class MissingGeminiAPIKeyError(Exception):
@@ -18,10 +18,10 @@ class InvalidGeminiAPIKeyError(Exception):
 
 
 def is_valid_gemini_api_key_format(key: str) -> bool:
-    """Validate structure of Google Gemini API key without making API calls."""
+    """Check if API key string is non-empty."""
     if not key:
         return False
-    return bool(GEMINI_API_KEY_REGEX.match(key))
+    return bool(key.strip().strip('"').strip("'"))
 
 
 class Settings(BaseSettings):
@@ -51,13 +51,9 @@ settings = Settings()
 
 
 def get_genai_client() -> genai.Client:
-    """Initialize and return a Google GenAI Client using GEMINI_API_KEY settings."""
-    if not settings.GEMINI_API_KEY:
-        raise MissingGeminiAPIKeyError(
-            "GEMINI_API_KEY environment variable is missing or empty."
-        )
-    if not is_valid_gemini_api_key_format(settings.GEMINI_API_KEY):
-        raise InvalidGeminiAPIKeyError(
-            "GEMINI_API_KEY format is invalid (must start with 'AIzaSy' and be 39 characters)."
-        )
-    return genai.Client(api_key=settings.GEMINI_API_KEY)
+    """Initialize and return a Google GenAI Client using GEMINI_API_KEY settings or default environment."""
+    raw_key = settings.GEMINI_API_KEY.strip().strip('"').strip("'") if settings.GEMINI_API_KEY else ""
+    if raw_key:
+        return genai.Client(api_key=raw_key)
+    # Allows Google Cloud Run ADC (Application Default Credentials) or ambient GOOGLE_API_KEY
+    return genai.Client()
