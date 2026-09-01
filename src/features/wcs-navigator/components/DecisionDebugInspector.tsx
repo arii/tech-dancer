@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ServiceTelemetry } from '../services/wcsApiClient';
@@ -214,32 +213,32 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
         {activeTab === 'inputs' && (
           <Stack gap={4} width="full" className="animate-in fade-in duration-150">
             <Grid cols={{ base: 1, md: 3 }} gap={3.5} width="full">
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Confirmed Division Persona
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main">
                   {confirmedDivision ? confirmedDivision.toUpperCase() : 'NOVICE'}
                 </Text>
-              </Box>
+              </Stack>
 
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Confirmed Dance Role
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main">
                   {confirmedRole ? confirmedRole.toUpperCase() : 'None Specified (Universal)'}
                 </Text>
-              </Box>
+              </Stack>
 
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Target Flight Touchdown
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main">
                   {bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Friday'}
                 </Text>
-              </Box>
+              </Stack>
             </Grid>
 
             {/* Answer Map Breakdown */}
@@ -265,7 +264,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                         justify="between"
                         className={`text-xs font-mono ${idx > 0 ? 'border-t border-line/30' : ''}`}
                       >
-                        <span className="text-brand-cyan font-bold">{key}</span>
+                        <Text as="span" className="text-brand-cyan font-bold">{key}</Text>
                         <Box as="span" paddingX={2.5} paddingY={1} radius="md" className="text-text-main bg-white/5">
                           {Array.isArray(val) ? val.join(', ') : String(val)}
                         </Box>
@@ -282,41 +281,41 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
         {activeTab === 'telemetry' && (
           <Stack gap={4} width="full" className="animate-in fade-in duration-150">
             <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={3.5} width="full">
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Service Endpoint
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main" className="truncate">
                   {telemetry?.endpoint || '/api/v1/discover'}
                 </Text>
-              </Box>
+              </Stack>
 
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Execution Latency
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="accent">
                   {telemetry?.durationMs || 0} ms
                 </Text>
-              </Box>
+              </Stack>
 
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   Processing Engine
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color="main" className="truncate">
                   {telemetry?.engine || 'Local Heuristic Engine'}
                 </Text>
-              </Box>
+              </Stack>
 
-              <Box padding={4} radius="xl" border className="bg-surface/70 border-line/60 flex flex-col justify-between gap-2.5 min-h-[88px]">
+              <Stack padding={4} radius="xl" border minHeight={22} gap={2.5} justify="between" className="bg-surface/70 border-line/60">
                 <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                   HTTP Response Status
                 </Text>
                 <Text variant="mono" weight="font-bold" size="sm" color={telemetry?.httpStatus === 200 ? 'main' : 'dim'}>
                   {telemetry?.httpStatus ? `HTTP ${telemetry.httpStatus}` : '200 OK (Client Local)'}
                 </Text>
-              </Box>
+              </Stack>
             </Grid>
 
             {/* Collapsible Request Payload */}
@@ -334,7 +333,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
               >
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={showRequestPayload ? ChevronDown : ChevronRight} size="xs" />
-                  <span className="font-bold text-text-main">Sent Request Payload</span>
+                  <Text as="span" weight="font-bold" color="main">Sent Request Payload</Text>
                 </Box>
                 <Text size="xs" color="dim">Click to toggle</Text>
               </Box>
@@ -362,7 +361,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
               >
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={showResponsePayload ? ChevronDown : ChevronRight} size="xs" />
-                  <span className="font-bold text-text-main">Received Response Payload</span>
+                  <Text as="span" weight="font-bold" color="main">Received Response Payload</Text>
                 </Box>
                 <Text size="xs" color="dim">Click to toggle</Text>
               </Box>
@@ -414,12 +413,12 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                       key={session.id}
                       padding={3}
                       className={`text-xs font-mono ${idx > 0 ? 'border-t border-line/30' : ''} ${
-                        session.status === 'included' ? 'bg-brand-cyan/[0.03]' : 'bg-red-500/[0.02]'
+                        session.status === 'included' ? 'bg-brand-cyan/10' : 'bg-red-500/10'
                       }`}
                     >
                       <Box display="flex" align="start" justify="between" gap={2}>
                         <Stack gap={0.5} minWidth={0}>
-                          <span className="font-bold text-text-main">{session.title}</span>
+                          <Text as="span" weight="font-bold" color="main">{session.title}</Text>
                           <Text size="xs" color="dim">
                             🕒 {session.time} • 📍 {session.location}
                           </Text>
@@ -441,7 +440,7 @@ export const DecisionDebugInspector: React.FC<DecisionDebugInspectorProps> = ({
                         </Box>
                       </Box>
                       <Box marginTop={1} padding={1.5} radius="md" className="text-xs text-text-dim/90 bg-white/5">
-                        <strong className="text-white/80">Rule Reason:</strong> {session.justification}
+                        <Text as="strong" className="text-white/80">Rule Reason:</Text> {session.justification}
                       </Box>
                     </Box>
                   ))}

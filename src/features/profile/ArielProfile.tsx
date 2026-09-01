@@ -97,7 +97,7 @@ const ArielProfile = () => {
                           overflow="hidden"
                           radius="2xl"
                           border
-                          aspect={isSquare ? "square" : "4/3"}
+                          aspect={isSquare ? "square" : "video"}
                           className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'max-w-md mx-auto' : ''}`}
                         >
                           <img
@@ -124,7 +124,7 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="2/3"
+                      aspect="square"
                       className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm"
                     >
                       <img
@@ -180,8 +180,8 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="3/2"
-                      className="bg-surface border-line/40 shadow-lg group aspect-video max-w-xl"
+                      aspect="video"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
                     >
                       <img
                         src={whyBuilt.gallery[0].src}
@@ -205,8 +205,8 @@ const ArielProfile = () => {
                       overflow="hidden"
                       radius="2xl"
                       border
-                      aspect="3/2"
-                      className="bg-surface border-line/40 shadow-lg group aspect-video max-w-xl"
+                      aspect="video"
+                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
                     >
                       <img
                         src={financialStrategies.gallery[0].src}

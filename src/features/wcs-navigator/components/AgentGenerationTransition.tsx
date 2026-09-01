@@ -76,6 +76,10 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
     };
   }, [onComplete]);
 
+  const progressWidthStyle = {
+    width: `${Math.min(100, ((currentStageIndex + 1) / stages.length) * 100)}%`,
+  };
+
   return (
     <Box
       display="flex"
@@ -176,7 +180,7 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
               height="full"
               radius="full"
               className="bg-brand-cyan transition-all duration-500 shadow-glow"
-              style={{ width: `${Math.min(100, ((currentStageIndex + 1) / stages.length) * 100)}%` }} // impeccable-ignore - Dynamic width calculation
+              style={progressWidthStyle}
             />
           </Box>
         </Stack>

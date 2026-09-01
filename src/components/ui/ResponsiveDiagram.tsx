@@ -93,6 +93,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     return null;
   }
 
+  const zoomTransformStyle = {
+    transform: `scale(${zoomScale})`,
+    transformOrigin: 'center center',
+  };
+
   return (
     <Box marginY={6} radius="xl" border borderColor="line" surface="surface" padding={4} shadow="lg" className={className}>
       {/* Header Bar */}
@@ -221,10 +226,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               surface="surface"
               shadow="2xl"
               onClick={(e) => e.stopPropagation()}
-              style={{ // impeccable-ignore - Dynamic zoom scaling transform
-                transform: `scale(${zoomScale})`,
-                transformOrigin: 'center center',
-              }}
+              style={zoomTransformStyle}
             >
               <Box
                 as="img"
