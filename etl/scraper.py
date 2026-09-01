@@ -25,6 +25,14 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 BASE_URL = "https://scoring.dance"
 USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
 
+EVENT_RESULTS_REGEX = re.compile(r"/events/\d+/results/")
+CALENDAR_ICON_REGEX = re.compile(r"fa-calendar")
+LOCATION_ICON_REGEX = re.compile(r"fa-map-marker")
+RESULT_LINK_REGEX = re.compile(r"/results/\d+\.html")
+DANCER_ID_REGEX = re.compile(r"/(?:dancer|registry)/(\d+)")
+EVENT_DATE_REGEX = re.compile(r"at (\d{2}/\d{2}/\d{4})")
+RESULT_ID_REGEX = re.compile(r"/results/(\d+)\.html")
+
 
 async def ethical_throttle(base_delay=1.0, jitter_range=(0.0, 2.0)):
     """Handles ethical rate limiting with jitter."""
@@ -71,7 +79,7 @@ class ScoringDanceCrawler:
             try:
                 html_content = self._fetch_page_text(url)
                 soup = BeautifulSoup(html_content, "html.parser")
-                links = soup.find_all("a", href=re.compile(r"/events/\d+/results/"))
+                links = soup.find_all("a", href=EVENT_RESULTS_REGEX)
 
                 if not links:
                     break
@@ -122,7 +130,7 @@ class ScoringDanceCrawler:
         if not parent:
             return None
         for _ in range(4):
-            date_icon = parent.find("i", class_=re.compile(r"fa-calendar"))
+            date_icon = parent.find("i", class_=CALENDAR_ICON_REGEX)
             if date_icon:
                 sibling = date_icon.find_next_sibling(string=True)
                 if sibling:
@@ -137,7 +145,7 @@ class ScoringDanceCrawler:
         if not parent:
             return "Unknown"
         for _ in range(4):
-            location_icon = parent.find("i", class_=re.compile(r"fa-map-marker"))
+            location_icon = parent.find("i", class_=LOCATION_ICON_REGEX)
             if location_icon:
                 sibling = location_icon.find_next_sibling(string=True)
                 if sibling:
@@ -150,7 +158,7 @@ class ScoringDanceCrawler:
     def extract_results_links(self, html_content, event_url):
         """Extracts individual competition result links from an event page."""
         soup = BeautifulSoup(html_content, "html.parser")
-        links = soup.find_all("a", href=re.compile(r"/results/\d+\.html"))
+        links = soup.find_all("a", href=RESULT_LINK_REGEX)
         return [urljoin(event_url, link["href"]) for link in links]
 
 
@@ -167,7 +175,7 @@ class ScoringDanceParser:
         if not d_id and link.get("href"):
             href = link.get("href")
             # Extract number from /dancer/123 or /wsdc/registry/123.html
-            match = re.search(r"/(?:dancer|registry)/(\d+)", href)
+            match = DANCER_ID_REGEX.search(href)
             if match:
                 d_id = match.group(1)
             else:
@@ -215,7 +223,7 @@ class ScoringDanceParser:
             return promoted_text in ["yes", "y"]
         return False
 
-    def parse_results(self, html_content, url, event_url=None, location="Unknown"):
+    def parse_results(self, html_content, url, event_url=None, location="Unknown", result_id=None):
         """Parse the results from the HTML content."""
         soup = BeautifulSoup(html_content, "html.parser")
         results = []
@@ -227,14 +235,15 @@ class ScoringDanceParser:
         title_tag = soup.find("h1")
         title = title_tag.get_text(strip=True) if title_tag else "Unknown Result"
 
-        date_match = re.search(r"at (\d{2}/\d{2}/\d{4})", soup.get_text())
+        date_match = EVENT_DATE_REGEX.search(soup.get_text())
         date_str = date_match.group(1) if date_match else None
 
         if not date_str:
             logging.warning("No event date found while parsing results page: %s", title)
 
-        result_id_match = re.search(r"/results/(\d+)\.html", url)
-        result_id = result_id_match.group(1) if result_id_match else "unknown"
+        if not result_id:
+            result_id_match = RESULT_ID_REGEX.search(url)
+            result_id = result_id_match.group(1) if result_id_match else "unknown"
 
         tables = soup.find_all("table", class_=lambda c: c and "results-table" in c)
         if not tables:
@@ -410,23 +419,28 @@ class ETLPipeline:
             content = await self._fetch_page(context, url)
             await browser.close()
 
-            raw_df = self.parser.parse_results(content, url, event_url=url)
+            res_id_match = RESULT_ID_REGEX.search(url)
+            res_id = res_id_match.group(1) if res_id_match else None
+
+            raw_df = self.parser.parse_results(content, url, event_url=url, result_id=res_id)
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
+            if res_id:
+                self.processed_result_ids.add(res_id)
 
     async def run_historical(self, years=5, limit=None):
-        logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
+        logging.info("Starting historical scrape for past %s years (Limit: %s)", years, limit)
 
         semaphore = asyncio.Semaphore(5)
 
-        async def fetch_result(res_url, context):
+        async def fetch_result(res_url, res_id, context):
             async with semaphore:
                 try:
                     content = await self._fetch_page(context, res_url)
                     await ethical_throttle()
-                    return (res_url, content)
+                    return (res_url, content, res_id)
                 except Exception as e:
-                    logging.error(f"Failed to fetch {res_url}: {e}")
+                    logging.error("Failed to fetch %s: %s", res_url, e)
                     return None
 
         # Discovery Phase (Always check for NEW events, but prepend to queue)
@@ -504,29 +518,41 @@ class ETLPipeline:
 
                     fetch_tasks = []
                     for url in results_links:
-                        res_id_match = re.search(r"/results/(\d+)\.html", url)
+                        res_id_match = RESULT_ID_REGEX.search(url)
                         res_id = res_id_match.group(1) if res_id_match else None
                         if res_id and res_id in self.processed_result_ids:
                             continue
-                        fetch_tasks.append(fetch_result(url, context))
+                        fetch_tasks.append(fetch_result(url, res_id, context))
 
-                    fetched_results = await asyncio.gather(*fetch_tasks, return_exceptions=True)
+                    if fetch_tasks:
+                        fetched_results = await asyncio.gather(*fetch_tasks, return_exceptions=True)
 
-                    for result in fetched_results:
-                        if isinstance(result, Exception):
-                            logging.error(f"Unhandled exception during fetch: {result}")
-                            continue
-                        if result is not None:
-                            res_url, content = result
-                            try:
-                                raw_df = self.parser.parse_results(
-                                    content, res_url, event_url=event_url, location=location
-                                )
-                                ledger_df = process_for_ledger(raw_df)
-                                self.output_manager.update_ledger(ledger_df)
-                                event_has_new_data = True
-                            except Exception as e:
-                                logging.error(f"Failed to process {res_url}: {e}")
+                        event_ledger_dfs = []
+                        new_res_ids = set()
+
+                        for result in fetched_results:
+                            if isinstance(result, Exception):
+                                logging.error("Unhandled exception during fetch: %s", result)
+                                continue
+                            if result is not None:
+                                res_url, content, res_id = result
+                                try:
+                                    raw_df = self.parser.parse_results(
+                                        content, res_url, event_url=event_url, location=location, result_id=res_id
+                                    )
+                                    ledger_df = process_for_ledger(raw_df)
+                                    if not ledger_df.empty:
+                                        event_ledger_dfs.append(ledger_df)
+                                    if res_id:
+                                        new_res_ids.add(res_id)
+                                except Exception as e:
+                                    logging.error("Failed to process %s: %s", res_url, e)
+
+                        if event_ledger_dfs:
+                            combined_df = pd.concat(event_ledger_dfs, ignore_index=True)
+                            self.output_manager.update_ledger(combined_df)
+                            self.processed_result_ids.update(new_res_ids)
+                            event_has_new_data = True
 
                     if event_has_new_data:
                         processed_count += 1

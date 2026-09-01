@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error
+# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error,too-many-locals
 """Tests for the ETL pipeline."""
 import os
 from datetime import datetime, timedelta
@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 import requests
 
+import pytest
 from etl.processor import process_for_ledger
-from etl.scraper import BASE_URL, OutputManager, ScoringDanceCrawler, ScoringDanceParser
+from etl.scraper import BASE_URL, ETLPipeline, OutputManager, ScoringDanceCrawler, ScoringDanceParser
 
 
 def test_wsdc_id_extraction():
@@ -140,3 +141,89 @@ def test_get_recent_events(mocker):
     # get_recent_events yields tuples of (url, location)
     urls = [url for url, _ in links]
     assert f"{BASE_URL}/enUS/events/338/results/" in urls
+
+
+@pytest.mark.asyncio
+async def test_etl_pipeline_run_historical_batch(tmp_path, mocker):
+    ledger_file = tmp_path / "test_ledger.parquet"
+    queue_file = tmp_path / "event_queue.json"
+    manager = OutputManager(ledger_path=str(ledger_file), studies_dir=str(tmp_path / "studies"))
+    crawler = ScoringDanceCrawler()
+    parser = ScoringDanceParser()
+
+    pipeline = ETLPipeline(crawler, parser, manager, queue_path=str(queue_file))
+
+    # Mock async_playwright so no real browser launch is attempted
+    mock_browser = mocker.AsyncMock()
+    mock_context = mocker.AsyncMock()
+    mock_browser.new_context.return_value = mock_context
+    mock_playwright = mocker.AsyncMock()
+    mock_playwright.chromium.launch.return_value = mock_browser
+
+    mock_pw_cm = mocker.MagicMock()
+    mock_pw_cm.__aenter__.return_value = mock_playwright
+    mock_pw_cm.__aexit__.return_value = None
+    mocker.patch("etl.scraper.async_playwright", return_value=mock_pw_cm)
+
+    # Mock crawler discovery to return one event
+    event_url = "https://scoring.dance/enUS/events/100/results/"
+    mocker.patch.object(crawler, "get_recent_events", return_value=[(event_url, "Mock City")])
+
+    # Discovery page html with 2 result links
+    discovery_html = """
+    <div>
+        <a href="/enUS/events/100/results/1001.html">Result 1</a>
+        <a href="/enUS/events/100/results/1002.html">Result 2</a>
+    </div>
+    """
+
+    res1_html = """
+    <h1>Mock Comp 1 at 01/01/2025</h1>
+    <table>
+        <tr>
+            <td>101</td>
+            <td class="competitor-name"><a href="/dancer/123">John Doe</a></td>
+            <td title="Judge 1">Yes</td>
+        </tr>
+    </table>
+    """
+
+    res2_html = """
+    <h1>Mock Comp 2 at 01/01/2025</h1>
+    <table>
+        <tr>
+            <td>102</td>
+            <td class="competitor-name"><a href="/dancer/456">Jane Smith</a></td>
+            <td title="Judge 1">Yes</td>
+        </tr>
+    </table>
+    """
+
+    async def mock_fetch_page(_context, url):
+        if url == event_url:
+            return discovery_html
+        if "1001.html" in url:
+            return res1_html
+        if "1002.html" in url:
+            return res2_html
+        return ""
+
+    mocker.patch.object(pipeline, "_fetch_page", side_effect=mock_fetch_page)
+
+    # Spy on update_ledger
+    update_spy = mocker.spy(manager, "update_ledger")
+
+    processed = await pipeline.run_historical(years=1)
+
+    assert processed == 1
+    # Check that update_ledger was called ONCE for the event batch
+    assert update_spy.call_count == 1
+
+    # Verify processed_result_ids in-memory caching
+    assert "1001" in pipeline.processed_result_ids
+    assert "1002" in pipeline.processed_result_ids
+
+    # Verify Parquet content
+    df = pd.read_parquet(ledger_file)
+    assert len(df) == 2
+    assert set(df["result_id"].unique()) == {"1001", "1002"}
