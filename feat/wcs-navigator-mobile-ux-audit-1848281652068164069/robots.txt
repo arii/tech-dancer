@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/feat/wcs-navigator-mobile-ux-audit-1848281652068164069/sitemap.xml
