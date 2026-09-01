@@ -356,12 +356,6 @@ function renderCard(deployment, isIdxEven) {
     return card;
 }
 
-let renderTimer = null;
-function debouncedRender() {
-    if (renderTimer) clearTimeout(renderTimer);
-    renderTimer = setTimeout(renderGrid, 50);
-}
-
 function renderGrid() {
     const grid = document.getElementById('grid');
     const emptyState = document.getElementById('empty-state');
@@ -486,14 +480,14 @@ async function init() {
         Object.entries(statsMap).forEach(([id, val]) => { const element = document.getElementById(id); if (element) element.textContent = val; });
 
         if (state.rateLimitRemaining > 5) {
-            prs.forEach(async (pr) => {
-                state.prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
-                debouncedRender();
-            });
-            state.mergedPRs.forEach(async (pr) => {
-                await checkDeploymentExists(pr.head.ref);
-                debouncedRender();
-            });
+            await Promise.all([
+                Promise.all(prs.map(async (pr) => {
+                    state.prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
+                })),
+                Promise.all(state.mergedPRs.map(async (pr) => {
+                    await checkDeploymentExists(pr.head.ref);
+                }))
+            ]);
         }
 
         renderGrid();
