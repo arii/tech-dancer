@@ -140,3 +140,139 @@ def test_get_recent_events(mocker):
     # get_recent_events yields tuples of (url, location)
     urls = [url for url, _ in links]
     assert f"{BASE_URL}/enUS/events/338/results/" in urls
+
+
+import pytest
+from etl.scraper import ETLPipeline
+
+
+@pytest.mark.asyncio
+async def test_run_historical_batching_and_cache(tmp_path, mocker):
+    ledger_file = tmp_path / "test_ledger.parquet"
+    queue_file = tmp_path / "queue.json"
+    manager = OutputManager(ledger_path=str(ledger_file), studies_dir=str(tmp_path / "studies"))
+
+    mock_event_html = """
+    <html>
+        <body>
+            <a href="/enUS/events/100/results/1001.html">Result 1</a>
+            <a href="/enUS/events/100/results/1002.html">Result 2</a>
+        </body>
+    </html>
+    """
+
+    mock_result_1_html = """
+    <h1>Jack & Jill Prelims</h1>
+    <table>
+        <tr>
+            <td>101</td>
+            <td class="competitor-name"><a href="/dancer/1001" data-wsdc="1001">Dancer One</a></td>
+            <td class="promoted">Yes</td>
+            <td title="Judge 1">Yes</td>
+        </tr>
+    </table>
+    at 01/01/2025
+    """
+
+    mock_result_2_html = """
+    <h1>Jack & Jill Finals</h1>
+    <table>
+        <tr>
+            <td>102</td>
+            <td class="competitor-name"><a href="/dancer/1002" data-wsdc="1002">Dancer Two</a></td>
+            <td class="promoted">No</td>
+            <td title="Judge 1">Alt1</td>
+        </tr>
+    </table>
+    at 01/01/2025
+    """
+
+    crawler = ScoringDanceCrawler()
+    parser = ScoringDanceParser()
+    pipeline = ETLPipeline(crawler, parser, manager, queue_path=str(queue_file))
+    pipeline.event_queue = [["https://scoring.dance/enUS/events/100/results/", "City X"]]
+
+    mocker.patch.object(crawler, "get_recent_events", return_value=[])
+    mocker.patch("etl.scraper.ethical_throttle", mocker.AsyncMock())
+
+    async def mock_fetch_page(context, url):
+        if "1001.html" in url:
+            return mock_result_1_html
+        elif "1002.html" in url:
+            return mock_result_2_html
+        return mock_event_html
+
+    mocker.patch.object(pipeline, "_fetch_page", new=mocker.AsyncMock(side_effect=mock_fetch_page))
+
+    mock_playwright_ctx = mocker.MagicMock()
+    mock_browser = mocker.AsyncMock()
+    mock_context = mocker.AsyncMock()
+    mock_browser.new_context = mocker.AsyncMock(return_value=mock_context)
+    mock_playwright_ctx.chromium.launch = mocker.AsyncMock(return_value=mock_browser)
+
+    mocker.patch(
+        "etl.scraper.async_playwright",
+        return_value=mocker.MagicMock(
+            __aenter__=mocker.AsyncMock(return_value=mock_playwright_ctx),
+            __aexit__=mocker.AsyncMock(return_value=False),
+        ),
+    )
+
+    spy_update_ledger = mocker.spy(manager, "update_ledger")
+
+    processed = await pipeline.run_historical(years=1)
+
+    assert processed == 1
+    # Check that update_ledger was called exactly ONCE for the event batch containing both results
+    assert spy_update_ledger.call_count == 1
+    call_df = spy_update_ledger.call_args[0][0]
+    assert set(call_df["result_id"]) == {"1001", "1002"}
+
+    # Verify that processed_result_ids in memory cache was updated with both result IDs
+    assert "1001" in pipeline.processed_result_ids
+    assert "1002" in pipeline.processed_result_ids
+
+
+@pytest.mark.asyncio
+async def test_run_single_updates_cache(tmp_path, mocker):
+    ledger_file = tmp_path / "test_ledger.parquet"
+    manager = OutputManager(ledger_path=str(ledger_file), studies_dir=str(tmp_path / "studies"))
+
+    mock_result_html = """
+    <h1>Jack & Jill Prelims</h1>
+    <table>
+        <tr>
+            <td>101</td>
+            <td class="competitor-name"><a href="/dancer/1001" data-wsdc="1001">Dancer One</a></td>
+            <td class="promoted">Yes</td>
+            <td title="Judge 1">Yes</td>
+        </tr>
+    </table>
+    at 01/01/2025
+    """
+
+    crawler = ScoringDanceCrawler()
+    parser = ScoringDanceParser()
+    pipeline = ETLPipeline(crawler, parser, manager)
+
+    mocker.patch.object(pipeline, "_fetch_page", new=mocker.AsyncMock(return_value=mock_result_html))
+
+    mock_playwright_ctx = mocker.MagicMock()
+    mock_browser = mocker.AsyncMock()
+    mock_context = mocker.AsyncMock()
+    mock_browser.new_context = mocker.AsyncMock(return_value=mock_context)
+    mock_playwright_ctx.chromium.launch = mocker.AsyncMock(return_value=mock_browser)
+
+    mocker.patch(
+        "etl.scraper.async_playwright",
+        return_value=mocker.MagicMock(
+            __aenter__=mocker.AsyncMock(return_value=mock_playwright_ctx),
+            __aexit__=mocker.AsyncMock(return_value=False),
+        ),
+    )
+
+    url = "https://scoring.dance/enUS/events/100/results/2005.html"
+    await pipeline.run_single(url)
+
+    assert "2005" in pipeline.processed_result_ids
+    assert os.path.exists(ledger_file)
