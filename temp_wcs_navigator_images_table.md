@@ -1,0 +1,9 @@
+# WCS Navigator Image Catalogue & Descriptions
+
+| # | Image Asset | Image Name | Description (<140 chars) |
+| :---: | :--- | :--- | :--- |
+| **1** | [`public/assets/research/wcs-navigator-preview.png`](file:///home/ari/tech-dancer/public/assets/research/wcs-navigator-preview.png) | **Research Study Preview Banner** | Overview study banner showcasing the AI scheduling workflow, used for research catalogue previews and social cards. |
+| **2** | [`public/assets/research/wcs-navigator/screenshot-wcs-navigator-hero.png`](file:///home/ari/tech-dancer/public/assets/research/wcs-navigator/screenshot-wcs-navigator-hero.png) | **Search Omnibox & Ingestion Dropzone** | Search-first landing page with CA 2026 event autocomplete and a dropzone for custom schedule PDF/URL uploads. |
+| **3** | [`public/assets/research/wcs-navigator/screenshot-wcs-navigator-questionnaire.png`](file:///home/ari/tech-dancer/public/assets/research/wcs-navigator/screenshot-wcs-navigator-questionnaire.png) | **Tactile Dynamic Questionnaire** | Pre-flight dynamic card survey querying division, workshop track priority, and arrival targets with 180ms auto-advance. |
+| **4** | [`public/assets/research/wcs-navigator/screenshot-wcs-navigator-debug-inspector.png`](file:///home/ari/tech-dancer/public/assets/research/wcs-navigator/screenshot-wcs-navigator-debug-inspector.png) | **Taskmaker Debug Inspector** | 4-tab explainability inspector auditing confirmed inputs, live service telemetry, rule matrices, and JSON schemas. |
+| **5** | [`public/assets/research/wcs-navigator/screenshot-wcs-navigator-itinerary.png`](file:///home/ari/tech-dancer/public/assets/research/wcs-navigator/screenshot-wcs-navigator-itinerary.png) | **Chronological Schedule & Transit Dashboard** | Personalized chronological schedule with ballroom locations, venue transit tips, and one-click .ics/.md export. |

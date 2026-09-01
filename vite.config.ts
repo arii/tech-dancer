@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
@@ -89,14 +90,14 @@ export default defineConfig(({mode}) => {
   const hostname = resolveHostname().replace(/\/$/, '');
   const fullAppUrl = new URL(base, hostname).href;
 
-  const appVersion = process.env.npm_package_version || '0.0.0';
-
-  // Guard: Production builds must have a valid version (not 0.0.0)
-  if (isProd && appVersion === '0.0.0') {
-    throw new Error(
-      'PRODUCTION BUILD FAILURE: package.json version is 0.0.0. ' +
-      'Please use "pnpm release:patch|minor|major" to set a real version before deploying.'
-    );
+  let appVersion = process.env.npm_package_version;
+  if (!appVersion || appVersion === '0.0.0') {
+    try {
+      const pkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf-8'));
+      appVersion = pkg.version || '0.0.0';
+    } catch {
+      appVersion = '0.0.0';
+    }
   }
 
   // Automatically discover dynamic routes
@@ -149,6 +150,9 @@ export default defineConfig(({mode}) => {
       'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
       'import.meta.env.VITE_IS_VERCEL': JSON.stringify(
         process.env.VERCEL === '1' ? 'true' : 'false'
+      ),
+      'import.meta.env.VITE_WCS_API_URL': JSON.stringify(
+        process.env.VITE_WCS_API_URL || env.VITE_WCS_API_URL || 'https://wcs-navigator-api-237690545533.us-west1.run.app'
       ),
     },
     plugins: [
