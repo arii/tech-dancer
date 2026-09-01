@@ -77,7 +77,7 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     const adapted = adaptTraceToUserPreferences(rawTrace, userAnswers, 'Boogie by the Bay 2026');
     expect(adapted.bufferTimeline?.latestFlightArrivalDeadline).toBe('Local Commute (Drive-In)');
     const localStep = adapted.bufferTimeline?.steps.find(
-      (s) => s.type === 'transit' || s.type === 'flight' || s.label.includes('Local')
+      (s) => s.type === 'transit' || s.type === 'flight' || s.label.includes('Local') || s.type === 'local_arrival'
     );
     expect(localStep?.label).toBe('Local Hotel / Venue Arrival Buffer');
 
@@ -85,5 +85,38 @@ describe('Frontend Integration & Compatibility Verification with California 2026
     const intensiveAnswers = { intensive: 'yes', arrival: 'early_afternoon' };
     const adaptedIntensive = adaptTraceToUserPreferences(rawTrace, intensiveAnswers, 'Boogie by the Bay 2026');
     expect(adaptedIntensive.bufferTimeline?.latestFlightArrivalDeadline).toBe('12:00 PM Friday');
+  });
+
+  it('validates Scenario: Local Novice Competitor (No Intensives) inputs and confirmed outputs', () => {
+    const inputs = {
+      division: 'novice',
+      role: '',
+      arrival: 'local',
+      intensive: 'no_intensives',
+      track: 'competitor_workshops',
+    };
+
+    // Rule engine extraction assertions
+    expect(extractUserDivision(inputs)).toBe('novice');
+    expect(extractUserRole(inputs)).toBe('');
+
+    const rawTrace = bbbFixture.generate.decisionTrace as unknown as AgentDecisionTrace;
+    const adaptedTrace = adaptTraceToUserPreferences(rawTrace, inputs, 'Boogie by the Bay 2026');
+
+    // Profile and landing target assertions
+    expect(adaptedTrace.bufferTimeline?.latestFlightArrivalDeadline).toBe('Local Commute (Drive-In)');
+
+    // Local Hotel/Venue Arrival Buffer at 4:15 PM instead of flight landing
+    const arrivalBufferStep = adaptedTrace.bufferTimeline?.steps.find(
+      (step) => step.label === 'Local Hotel / Venue Arrival Buffer'
+    );
+    expect(arrivalBufferStep).toBeDefined();
+    expect(arrivalBufferStep?.time).toBe('4:15 PM');
+
+    // Strictly prelim session is adapted for Novice
+    const noviceStrictly = adaptedTrace.sessions.find((s) => s.title.includes('Novice Strictly Swing'));
+    expect(noviceStrictly).toBeDefined();
+    expect(noviceStrictly?.status).toBe('included');
+    expect(noviceStrictly?.justification).toContain('Division match for Novice');
   });
 });
