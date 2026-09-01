@@ -209,10 +209,10 @@ async function main() {
   console.log(`Verifying ${uniqueLinks.length} unique Amazon links with concurrency ${CONCURRENCY}...`);
 
   // 3. Verify links with concurrency
-  const queue = [...uniqueLinks];
+  let currentIndex = 0;
   const workers = Array.from({ length: CONCURRENCY }).map(async () => {
-    while (queue.length > 0) {
-      const item = queue.shift();
+    while (currentIndex < uniqueLinks.length) {
+      const item = uniqueLinks[currentIndex++];
       if (item) {
         await verifyLink(item, issues);
       }
