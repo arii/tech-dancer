@@ -233,18 +233,20 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
         display="flex"
         align="center"
         justify="between"
-        paddingX={{ base: 4, sm: 0 }}
-        paddingY={{ base: 3, sm: 0 }}
-        marginTop={{ base: 0, sm: 6 }}
-        paddingTop={{ base: 0, sm: 6 }}
+        gap={2}
+        paddingX={{ default: 3, sm: 0 }}
+        paddingY={{ default: 3, sm: 0 }}
+        marginTop={{ default: 4, sm: 6 }}
+        paddingTop={{ default: 0, sm: 6 }}
         border="t"
         borderColor="line"
-        className="sticky bottom-0 z-20 bg-surface-alt/95 backdrop-blur-md shadow-lg sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none text-xs font-mono"
+        className="sticky bottom-0 z-20 bg-surface-alt/95 backdrop-blur-md shadow-lg sm:static sm:bg-transparent sm:backdrop-blur-none sm:shadow-none text-xs font-mono min-w-0"
       >
         <Stack
           as="button"
           direction="row"
           align="center"
+          justify="center"
           gap={1.5}
           paddingX={3}
           paddingY={2}
@@ -252,27 +254,29 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
           border
           type="button"
           onClick={handleSkipQuestion}
-          className="min-h-11 h-11 text-text-dim hover:text-text-main transition-colors cursor-pointer hover:bg-surface border-line/50 shrink-0"
+          className="min-h-11 h-11 text-text-dim hover:text-text-main transition-colors cursor-pointer hover:bg-surface border-line/50 shrink-0 text-center"
         >
-          <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip Step →</span>
+          <FastForward className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+          <span className="truncate">Skip Step →</span>
         </Stack>
 
         <Stack
           as="button"
           direction="row"
           align="center"
+          justify="center"
           gap={1.5}
-          paddingX={3.5}
+          paddingX={3}
           paddingY={2}
           radius="lg"
           border
+          flex={{ default: 1, sm: "none" }}
           type="button"
           onClick={handleSkipToItinerary}
-          className="min-h-11 h-11 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer bg-brand-cyan/15 hover:bg-brand-cyan/25 border-brand-cyan/40 shrink-0"
+          className="min-h-11 h-11 text-brand-cyan hover:text-white font-semibold transition-colors cursor-pointer bg-brand-cyan/15 hover:bg-brand-cyan/25 border-brand-cyan/40 min-w-0 text-center"
         >
-          <FastForward className="w-3.5 h-3.5 text-brand-cyan" />
-          <span>Skip All &amp; Generate Itinerary</span>
+          <FastForward className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+          <span className="truncate">Skip All &amp; Generate</span>
         </Stack>
       </Box>
     </Box>
