@@ -32,7 +32,7 @@ describe('telemetry utils', () => {
       reportError(payload);
 
       expect(navigator.sendBeacon).toHaveBeenCalledTimes(1);
-      const [endpoint, blob] = (navigator.sendBeacon as any).mock.calls[0];
+      const [endpoint, blob] = vi.mocked(navigator.sendBeacon).mock.calls[0] as [string, Blob];
       expect(endpoint).toBe('/api/telemetry');
       expect(blob).toBeInstanceOf(Blob);
     });
@@ -41,11 +41,11 @@ describe('telemetry utils', () => {
       reportError({});
 
       expect(navigator.sendBeacon).toHaveBeenCalledTimes(1);
-      const [, blob] = (navigator.sendBeacon as any).mock.calls[0];
+      const [, blob] = vi.mocked(navigator.sendBeacon).mock.calls[0] as [string, Blob];
 
       // We can read text from Blob using FileReader or standard Blob methods in jsdom/vitest
       return blob.text().then((text: string) => {
-        const data = JSON.parse(text);
+        const data = JSON.parse(text) as Record<string, unknown>;
         expect(data.message).toBe('Unknown error');
         expect(data.type).toBe('error');
         expect(data.url).toBe('https://boomtick.blog/test-page');
@@ -126,8 +126,8 @@ describe('telemetry utils', () => {
 
   describe('initTelemetry', () => {
     it('registers window event listeners for error and unhandledrejection', () => {
-      const listeners: Record<string, Function> = {};
-      const mockAddEventListener = vi.fn((event, handler) => {
+      const listeners: Record<string, (event: unknown) => void> = {};
+      const mockAddEventListener = vi.fn((event: string, handler: (event: unknown) => void) => {
         listeners[event] = handler;
       });
 
