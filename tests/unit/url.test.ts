@@ -13,9 +13,9 @@ describe('url utils', () => {
       expect(isValidUrl(null)).toBe(false);
       expect(isValidUrl(undefined)).toBe(false);
       expect(isValidUrl('')).toBe(false);
-      // @ts-expect-request invalid type testing
+      // @ts-expect-error invalid type testing
       expect(isValidUrl(123 as unknown as string)).toBe(false);
-      // @ts-expect-request invalid type testing
+      // @ts-expect-error invalid type testing
       expect(isValidUrl({} as unknown as string)).toBe(false);
     });
 
