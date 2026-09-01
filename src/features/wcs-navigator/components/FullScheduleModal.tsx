@@ -214,19 +214,19 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                       justify={{ base: 'between', sm: 'center' }}
                       gap={2}
                       paddingBottom={{ base: 2.5, sm: 0 }}
-                      paddingRight={{ base: 0, sm: 6 }}
+                      paddingRight={{ base: 0, sm: 4 }}
                       border={{ base: 'b', sm: 'r' }}
                       borderColor="line"
-                      className="sm:w-52 shrink-0"
+                      className="sm:w-60 md:w-64 shrink-0 min-w-0"
                     >
-                      <Stack direction="row" align="center" gap={2}>
+                      <Stack direction="row" align="center" gap={2} className="min-w-0">
                         <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
-                        <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="whitespace-nowrap">
+                        <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="break-words">
                           {session.time}
                         </Text>
                       </Stack>
-                      <Stack direction="row" align="center" gap={1.5}>
-                        <Text variant="mono" size="xs" weight="font-semibold" paddingX={2} paddingY={0.5} radius="md" className="bg-white/10">
+                      <Stack direction="row" align="center" gap={1.5} flexWrap="wrap" className="shrink-0">
+                        <Text variant="mono" size="xs" weight="font-semibold" paddingX={2} paddingY={0.5} radius="md" className="bg-white/10 shrink-0">
                           {badge}
                         </Text>
                         <Box
@@ -234,7 +234,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                           paddingX={2}
                           paddingY={0.5}
                           radius="full"
-                          className={`text-xs font-mono ${
+                          className={`text-xs font-mono shrink-0 ${
                             isIncluded
                               ? 'bg-emerald-500/20 text-emerald-300 font-bold'
                               : 'bg-white/5 text-text-dim'
@@ -246,13 +246,13 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                     </Stack>
 
                     {/* Center: Title & Location */}
-                    <Stack gap={1.5} justify="center" flex={1} minWidth={0}>
-                      <Text as="h4" weight="font-bold" size="base" color="main" leading="snug">
+                    <Stack gap={1.5} justify="center" flex={1} minWidth={0} className="min-w-0">
+                      <Text as="h4" weight="font-bold" size="base" color="main" leading="snug" className="break-words">
                         {session.title}
                       </Text>
-                      <Stack direction="row" align="center" gap={2} className="text-xs text-text-dim">
+                      <Stack direction="row" align="center" gap={2} className="text-xs text-text-dim flex-wrap">
                         <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-                        <Text as="span" size="xs" color="main" weight="font-medium">{session.location}</Text>
+                        <Text as="span" size="xs" color="main" weight="font-medium" className="break-words">{session.location}</Text>
                       </Stack>
                     </Stack>
 
