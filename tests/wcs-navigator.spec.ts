@@ -162,25 +162,10 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
 
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
 
-    // Step through questionnaire
-    const optionBtn = page.locator('button:has(h4)').first();
-    if ((await optionBtn.count()) > 0) {
-      await optionBtn.click();
-      await page.waitForTimeout(300);
-    }
-
-    for (let i = 0; i < 8; i++) {
-      if (await page.getByText(/Pre-Event Transit Logistics/i).isVisible()) break;
-      const genBtn = page.locator('button:has-text("Generate Final Itinerary"), button:has-text("Generate Itinerary")').first();
-      if ((await genBtn.count()) > 0 && await genBtn.isVisible()) {
-        await genBtn.click();
-        break;
-      }
-      const optBtn = page.locator('button:has(h4)').first();
-      if ((await optBtn.count()) > 0 && await optBtn.isVisible()) {
-        await optBtn.click();
-        await page.waitForTimeout(300);
-      }
+    // Click Skip All & Generate to directly advance to Results
+    const skipAllBtn = page.getByRole('button', { name: /Skip All & Generate/i });
+    if (await skipAllBtn.isVisible()) {
+      await skipAllBtn.click();
     }
 
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
@@ -209,19 +194,10 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
 
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
 
-    // Fast-forward through questionnaire
-    for (let i = 0; i < 8; i++) {
-      if (await page.getByText(/Pre-Event Transit Logistics/i).isVisible()) break;
-      const genBtn = page.locator('button:has-text("Generate Final Itinerary"), button:has-text("Generate Itinerary")').first();
-      if ((await genBtn.count()) > 0 && await genBtn.isVisible()) {
-        await genBtn.click();
-        break;
-      }
-      const optionBtn = page.locator('button:has(h4)').first();
-      if ((await optionBtn.count()) > 0 && await optionBtn.isVisible()) {
-        await optionBtn.click();
-        await page.waitForTimeout(300);
-      }
+    // Click Skip All & Generate to directly advance to Results
+    const skipAllBtn = page.getByRole('button', { name: /Skip All & Generate/i });
+    if (await skipAllBtn.isVisible()) {
+      await skipAllBtn.click();
     }
 
     await expect(page.getByText(/Pre-Event Transit Logistics/i)).toBeVisible({ timeout: 15000 });
