@@ -20,7 +20,7 @@ import {
 
 // --- Configuration & Constants ---
 const env = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string>;
-const apiKey = env.VITE_OPENAI_API_KEY || env.VITE_GEMINI_API_KEY || (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('ux-auditor-api-key') : "") || "";
+const apiKey = env.VITE_OPENAI_API_KEY || env.VITE_GEMINI_API_KEY || "";
 declare const __app_id: string | undefined;
 declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
@@ -62,7 +62,7 @@ export function useUXAuditor() {
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
-  const [customApiKey, setCustomApiKey] = useState(sessionStorage.getItem('ux-auditor-api-key') || "");
+  const [customApiKey, setCustomApiKey] = useState("");
   const { snapshotService, setSnapshotService, getSnapshotUrl, fetchSnapshot } = useSnapshotManager();
   const [selectedViewports, setSelectedViewports] = useState<string[]>(['Mobile', 'Tablet', 'Desktop']);
   const [selectedFoci, setSelectedFoci] = useState<AnalysisFocus[]>(['Core Layout & Spacing', 'Accessibility (WCAG)']);
@@ -374,11 +374,6 @@ Limit response to the top 3-5 highest-severity, actionable issues. Respond stric
     }
   };
 
-  const updateApiKey = (key: string) => {
-    setCustomApiKey(key);
-    sessionStorage.setItem('ux-auditor-api-key', key);
-  };
-
   return {
     user,
     reports,
@@ -388,7 +383,7 @@ Limit response to the top 3-5 highest-severity, actionable issues. Respond stric
     url,
     setUrl,
     customApiKey,
-    setCustomApiKey: updateApiKey,
+    setCustomApiKey,
     snapshotService,
     setSnapshotService,
     selectedViewports,

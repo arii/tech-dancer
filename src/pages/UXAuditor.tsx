@@ -503,7 +503,7 @@ export default function UXAuditor() {
             isPassword
             placeholder="OpenAI or Gemini API Key (optional override)"
             onClear={() => setCustomApiKey("")}
-            helpText="⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices."
+            helpText="API keys are kept strictly in active memory for this session and are never persisted to local or session storage."
           />
 
           <AuditInput

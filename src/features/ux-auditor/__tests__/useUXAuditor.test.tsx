@@ -29,6 +29,22 @@ describe('useUXAuditor', () => {
     expect(result.current.selectedViewports).toEqual(['Mobile', 'Tablet', 'Desktop']);
     expect(result.current.selectedFoci).toEqual(['Core Layout & Spacing', 'Accessibility (WCAG)']);
     expect(result.current.selectedPreset).toBe('Flat / Minimal');
+    expect(result.current.customApiKey).toBe('');
+  });
+
+  it('maintains custom API key strictly in React memory state and does not persist to sessionStorage', () => {
+    sessionStorage.setItem('ux-auditor-api-key', 'stale-key-that-should-be-ignored');
+
+    const { result } = renderHook(() => useUXAuditor(), { wrapper: createWrapper() });
+
+    expect(result.current.customApiKey).toBe('');
+
+    act(() => {
+      result.current.setCustomApiKey('new-in-memory-api-key');
+    });
+
+    expect(result.current.customApiKey).toBe('new-in-memory-api-key');
+    expect(sessionStorage.getItem('ux-auditor-api-key')).not.toBe('new-in-memory-api-key');
   });
 
   it('allows updating viewport, focus, and preset configuration', () => {
