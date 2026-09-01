@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error
+# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error,too-many-locals
 """Tests for the ETL pipeline."""
 import os
 from datetime import datetime, timedelta
@@ -199,12 +199,12 @@ async def test_etl_pipeline_run_historical_batch(tmp_path, mocker):
     </table>
     """
 
-    async def mock_fetch_page(context, url):
+    async def mock_fetch_page(_context, url):
         if url == event_url:
             return discovery_html
-        elif "1001.html" in url:
+        if "1001.html" in url:
             return res1_html
-        elif "1002.html" in url:
+        if "1002.html" in url:
             return res2_html
         return ""
 
