@@ -1,13 +1,14 @@
-# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error
+# pylint: disable=missing-docstring,no-name-in-module,singleton-comparison,syntax-error,too-many-locals,unused-argument
 """Tests for the ETL pipeline."""
 import os
 from datetime import datetime, timedelta
 
 import pandas as pd
+import pytest
 import requests
 
 from etl.processor import process_for_ledger
-from etl.scraper import BASE_URL, OutputManager, ScoringDanceCrawler, ScoringDanceParser
+from etl.scraper import BASE_URL, ETLPipeline, OutputManager, ScoringDanceCrawler, ScoringDanceParser
 
 
 def test_wsdc_id_extraction():
@@ -142,10 +143,6 @@ def test_get_recent_events(mocker):
     assert f"{BASE_URL}/enUS/events/338/results/" in urls
 
 
-import pytest
-from etl.scraper import ETLPipeline
-
-
 @pytest.mark.asyncio
 async def test_run_historical_batching_and_cache(tmp_path, mocker):
     ledger_file = tmp_path / "test_ledger.parquet"
@@ -195,10 +192,10 @@ async def test_run_historical_batching_and_cache(tmp_path, mocker):
     mocker.patch.object(crawler, "get_recent_events", return_value=[])
     mocker.patch("etl.scraper.ethical_throttle", mocker.AsyncMock())
 
-    async def mock_fetch_page(context, url):
+    async def mock_fetch_page(_context, url):
         if "1001.html" in url:
             return mock_result_1_html
-        elif "1002.html" in url:
+        if "1002.html" in url:
             return mock_result_2_html
         return mock_event_html
 
