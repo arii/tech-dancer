@@ -153,7 +153,10 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
-          className="bg-bg/95 backdrop-blur-md text-text-main w-screen h-screen overflow-hidden"
+          width="screen"
+          height="screen"
+          overflow="hidden"
+          className="bg-bg/95 backdrop-blur-md text-text-main"
         >
           <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3} shrink={0}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
