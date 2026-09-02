@@ -146,7 +146,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
         <Stack
           position="fixed"
           inset
-          zIndex="search"
+          zIndex="modal"
           direction="col"
           justify="between"
           padding={{ base: 4, sm: 6 }}
@@ -226,10 +226,12 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               shadow="2xl"
               onClick={(e) => e.stopPropagation()}
               className="transition-transform duration-150 ease-out"
-              style={{ // impeccable-ignore - Dynamic zoom scaling transform
-                transform: `scale(${zoomScale})`,
-                transformOrigin: 'center center',
-              }}
+              style={
+                {
+                  transform: `scale(${zoomScale})`,
+                  transformOrigin: 'center center',
+                } as React.CSSProperties
+              }
             >
               <Box
                 as="img"
