@@ -93,11 +93,6 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
     return null;
   }
 
-  const zoomTransformStyle = {
-    transform: `scale(${zoomScale})`,
-    transformOrigin: 'center center',
-  };
-
   return (
     <Box marginY={6} radius="xl" border borderColor="line" surface="surface" padding={4} shadow="lg" className={className}>
       {/* Header Bar */}
@@ -158,9 +153,12 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           onClick={handleOverlayClick}
           role="dialog"
           aria-modal="true"
+          width="screen"
+          height="screen"
+          overflow="hidden"
           className="bg-bg/95 backdrop-blur-md text-text-main"
         >
-          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3}>
+          <Stack direction="row" align="center" justify="between" border="b" borderColor="line" paddingBottom={3} shrink={0}>
             <Text size="base" weight="font-semibold" color="main">{title ?? 'Diagram View'}</Text>
             <Stack direction="row" align="center" gap={2}>
               {/* Zoom Out */}
@@ -209,6 +207,10 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
           {/* Scrollable Diagram Viewer */}
           <Box
             flex={1}
+            width="full"
+            height="full"
+            minHeight={0}
+            minWidth={0}
             overflow="auto"
             padding={4}
             display="flex"
@@ -216,7 +218,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             justify="center"
             cursor="pointer"
             onClick={handleOverlayClick}
-            className="w-full h-full select-none"
+            className="select-none"
           >
             <Box
               padding={4}
@@ -226,15 +228,20 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               surface="surface"
               shadow="2xl"
               onClick={(e) => e.stopPropagation()}
-              style={zoomTransformStyle}
+              className="transition-transform duration-150 ease-out"
+              style={
+                {
+                  transform: `scale(${zoomScale})`,
+                  transformOrigin: 'center center',
+                } as React.CSSProperties
+              }
             >
               <Box
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                maxWidth="full"
-                height="auto"
-                className="max-w-full h-auto rounded-md"
+                width="full"
+                className="max-w-full rounded-md block"
               />
             </Box>
           </Box>
