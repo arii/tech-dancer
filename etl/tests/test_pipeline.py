@@ -220,12 +220,10 @@ async def test_run_historical_batching_and_cache(tmp_path, mocker):
     processed = await pipeline.run_historical(years=1)
 
     assert processed == 1
-    # Check that update_ledger was called exactly ONCE for the event batch containing both results
     assert spy_update_ledger.call_count == 1
     call_df = spy_update_ledger.call_args[0][0]
     assert set(call_df["result_id"]) == {"1001", "1002"}
 
-    # Verify that processed_result_ids in memory cache was updated with both result IDs
     assert "1001" in pipeline.processed_result_ids
     assert "1002" in pipeline.processed_result_ids
 

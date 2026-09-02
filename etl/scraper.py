@@ -25,7 +25,6 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 BASE_URL = "https://scoring.dance"
 USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
 
-# Compiled regexes for optimal scraping performance
 EVENT_RESULTS_LINK_RE = re.compile(r"/events/\d+/results/")
 RESULT_LINK_RE = re.compile(r"/results/\d+\.html")
 RESULT_ID_RE = re.compile(r"/results/(\d+)\.html")
