@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/perf/etl-scraper-batching-4127714608405154960-12125004427370526057/sitemap.xml
