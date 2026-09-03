@@ -135,8 +135,13 @@ export default defineConfig(({mode}) => {
               return 'vendor';
             }
           },
-        }
-      }
+        },
+      },
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext',
+      },
     },
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
@@ -350,6 +355,9 @@ export default defineConfig(({mode}) => {
       },
     },
     server: {
+      watch: {
+        ignored: ['**/.venv/**', '**/boomtick-pkg/**', '**/node_modules/**'],
+      },
       hmr: process.env.DISABLE_HMR ? false : {
         protocol: 'ws',
         host: 'localhost',
