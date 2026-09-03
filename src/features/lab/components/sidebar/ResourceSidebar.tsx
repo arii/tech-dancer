@@ -43,24 +43,48 @@ export function ResourceBodyExtras({ heading }: { heading?: string }) {
 interface ResourceSidebarProps {
   affiliateIds?: string[];
   affiliateLink?: string; // For manual entry in BlogDrafter
+  shopUrl?: string;
+  provider?: string;
   specs?: Record<string, string>;
 }
 
-export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: ResourceSidebarProps) {
+export function ResourceSidebar({ affiliateIds, affiliateLink, shopUrl, provider, specs }: ResourceSidebarProps) {
   const affiliateLinks = (affiliateIds || [])
     .map(id => affiliateManager.getLink(id))
     .filter((link): link is NonNullable<typeof link> => !!link);
+
+  const hasWhereToBuy = affiliateLinks.length > 0 || !!affiliateLink || !!shopUrl;
 
   return (
     <Stack gap={8}>
       {specs && Object.keys(specs).length > 0 && <SpecsTable specs={specs} />}
 
-      {(affiliateLinks.length > 0 || affiliateLink) && (
+      {hasWhereToBuy && (
         <Stack gap={4}>
           <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
             Where to Buy
           </Text>
           <Grid cols={1} gap={3}>
+            {shopUrl && (
+              <Box
+                as="a"
+                href={shopUrl}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                display="flex"
+                align="center"
+                justify="between"
+                padding={4}
+                surface="default"
+                border
+                className="hover:border-accent group transition-all bg-accent/5"
+              >
+                <Text variant="mono" size="xs" weight="font-bold">
+                  {provider === 'printful' || shopUrl.includes('printful') ? 'Buy on Printful' : 'Buy Now'}
+                </Text>
+                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
+              </Box>
+            )}
             {affiliateLinks.map(link => (
               <Box
                 key={link.id}

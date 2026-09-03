@@ -53,4 +53,13 @@ test.describe('Merch Page', () => {
       await expect(link).toHaveAttribute('target', '_blank');
     }
   });
+
+  test('should render Buy on Printful button on gear landing pages', async ({ page }) => {
+    await page.goto('/gear/2024-06-01-norcal-gate-crop-hoodie');
+    await expect(page.getByRole('heading', { name: /Golden Gate Crop Hoodie/i })).toBeVisible();
+    const buyButton = page.getByRole('link', { name: /Buy on Printful/i });
+    await expect(buyButton).toBeVisible();
+    await expect(buyButton).toHaveAttribute('href', 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie');
+    await expect(buyButton).toHaveAttribute('target', '_blank');
+  });
 });

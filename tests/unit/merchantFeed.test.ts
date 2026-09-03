@@ -12,12 +12,15 @@ describe('Google Merchant Center XML Feed Generator', () => {
     expect(xml).toContain('</rss>');
   });
 
-  it('includes all merch products in the feed', () => {
+  it('includes all merch products in the feed with verified domain links, colors, and sizes', () => {
     const xml = generateGoogleMerchantXml();
     for (const product of MERCH_PRODUCTS) {
       expect(xml).toContain(`<g:id>${product.id}</g:id>`);
       expect(xml).toContain(`<g:price>${product.price} USD</g:price>`);
-      expect(xml).toContain(`<link>${product.printfulUrl}</link>`);
+      expect(xml).toContain(`<link>https://boomtick.blog/gear/${product.gearSlug}</link>`);
+      expect(xml).toContain(`<g:color>${product.color}</g:color>`);
+      const escapedSize = product.size.replace(/"/g, '&quot;');
+      expect(xml).toContain(`<g:size>${escapedSize}</g:size>`);
     }
   });
 
