@@ -42,7 +42,7 @@ export function EditorialLayout({
       maxWidth="5xl"
       marginX="auto"
       paddingX={{ base: 5, md: 10, lg: 12 }}
-      paddingY={{ base: 8, md: 16 }}
+      paddingY={{ base: 4, md: 16 }}
     >
       <Stack gap="section-spacing">
         {/* Navigation */}
@@ -53,6 +53,7 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
+            minHeight={11}
             className={journalVariants.navLink()}
           >
             <Icon
@@ -133,6 +134,8 @@ export function EditorialLayout({
           align="center"
           justify="center"
           padding={3}
+          minHeight={11}
+          minWidth={11}
           radius="full"
           surface="surface"
           border

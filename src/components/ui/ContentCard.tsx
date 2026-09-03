@@ -60,7 +60,11 @@ export function ContentCard(props: ContentCardProps) {
       {...motionProps}
     >
       {image && (
-        <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
+        <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden" style={
+          {
+            maxHeight: '40vh'
+          } as React.CSSProperties
+        }>
           <img
             src={image}
             alt={imageAlt || title}

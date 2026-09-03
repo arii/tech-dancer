@@ -65,7 +65,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const hero = post.image ? (
     <Stack gap={4}>
       {post.imageBack ? (
-        <Grid cols={{ base: 1, md: 2 }} gap={4}>
+        <Grid cols={{ base: 2, md: 2 }} gap={4}>
           <Stack gap={2}>
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
             <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />

@@ -32,7 +32,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
         <Box height="full">
           {previous && (
             <Stack gap={2} height="full">
-              <Stack direction="row" align="center" gap={2}>
+              <Stack direction="row" align="center" gap={2} minHeight={11}>
                 <Icon
                   icon={ArrowLeft}
                   size="sm"
@@ -61,7 +61,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
         <Box height="full">
           {next && (
             <Stack gap={2} align="end" height="full">
-              <Stack direction="row" align="center" gap={2}>
+              <Stack direction="row" align="center" gap={2} minHeight={11}>
                 <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
                   Next Article
                 </Text>

@@ -71,7 +71,7 @@ export default function BlogPost() {
       <BlogPostDetail
         post={post}
         onBack={() => navigate('/blog')}
-        backLabel="Back to Folio"
+        backLabel="Back to Blog Posts"
       />
     </>
   );
