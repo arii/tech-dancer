@@ -34,11 +34,20 @@ export function EditorialHeader({
   return (
     <Stack gap={8}>
       <Stack gap={4}>
-        <Text variant="mono" size={{ base: "xs", md: "sm" }} color="dim" weight="font-black" uppercase tracking="widest">
-          <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {readTime}
-        </Text>
-
-        <Text as="h1" variant="h1" weight="font-black" leading="none" tracking="tighter" className="text-fluid-h1 text-balance break-words">
+        <Text
+          as="h1"
+          variant="h1"
+          weight="font-black"
+          leading="none"
+          tracking="tighter"
+          className="break-words"
+          style={
+            {
+              fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
+              textWrap: "balance"
+            } as React.CSSProperties
+          }
+        >
           {title}
         </Text>
 
@@ -49,17 +58,14 @@ export function EditorialHeader({
         )}
       </Stack>
 
-      {hero && (
-        <Box width="full">
-          {hero}
-        </Box>
-      )}
-
       <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
+             <Text variant="mono" size="micro" color="dim" weight="font-bold">
+               <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {readTime}
+             </Text>
              {onShare && (
                <Stack as="button" direction="row" align="center" gap={1.5} minHeight={11} onClick={onShare} className={journalVariants.shareAction()}>
                  <Share2 className="w-3.5 h-3.5" />
@@ -102,6 +108,12 @@ export function EditorialHeader({
           </Stack>
         )}
       </Stack>
+
+      {hero && (
+        <Box width="full">
+          {hero}
+        </Box>
+      )}
     </Stack>
   );
 }

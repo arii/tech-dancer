@@ -39,7 +39,7 @@ export function EditorialLayout({
   return (
     <Box
       width="full"
-      maxWidth="5xl"
+      maxWidth="3xl"
       marginX="auto"
       paddingX={{ base: 5, md: 10, lg: 12 }}
       paddingY={{ base: 4, md: 16 }}

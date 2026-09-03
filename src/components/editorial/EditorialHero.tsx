@@ -25,11 +25,11 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       <ProductImageFrame
         src={src}
         alt={alt}
-        objectFit={objectFit}
+        objectFit="contain"
         border={false}
         radius="none"
         aspect="auto"
-        className="w-full h-full object-cover"
+        className="w-full h-auto object-contain"
       />
     </Box>
   );
