@@ -161,8 +161,8 @@ export default function Merch() {
         )}
 
         {/* Return Policy & Printful Fulfillment Info */}
-        <Box id="return-policy" padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full" className="scroll-mt-24">
-          <div id="returnpolicy" className="scroll-mt-24" />
+        <Box id="return-policy" padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full">
+          <div id="returnpolicy" />
           <Stack gap={4}>
             <Stack direction="row" align="center" gap={3}>
               <Box padding={2} radius="md" className="bg-accent/10 text-accent">
