@@ -558,6 +558,11 @@
   scroll-margin-top: 6rem;
 }
 
+@utility font-fluid-h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  text-wrap: balance;
+}
+
 @utility h-hero-mobile {
   max-height: 40vh;
 }

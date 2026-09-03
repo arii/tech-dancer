@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -65,16 +65,16 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const hero = post.image ? (
     <Stack gap={4}>
       {post.imageBack ? (
-        <Grid cols={{ base: 1, md: 2 }} gap={4}>
-          <Stack gap={2}>
+        <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
+          <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
             <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
-          <Stack gap={2}>
+          <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
             <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
-        </Grid>
+        </Stack>
       ) : (
         <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
       )}

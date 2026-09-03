@@ -5,7 +5,7 @@ import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
 import { VerdictCallout } from '@/components/layout/DetailElements';
-import { Stack, Grid, Text, Box } from '@/layouts/Primitives';
+import { Stack, Text, Box } from '@/layouts/Primitives';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -34,16 +34,16 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
             post.image ? (
               <Stack gap={4}>
                 {post.imageBack ? (
-                  <Grid cols={{ base: 1, md: 2 }} gap={4}>
-                    <Stack gap={2}>
+                  <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
+                    <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
                       <EditorialHero src={post.image} alt={`${post.title} - front`} />
                     </Stack>
-                    <Stack gap={2}>
+                    <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
                       <EditorialHero src={post.imageBack} alt={`${post.title} - back`} />
                     </Stack>
-                  </Grid>
+                  </Stack>
                 ) : (
                   <EditorialHero src={post.image} alt={post.title} />
                 )}

@@ -32,7 +32,7 @@ export function EditorialHeader({
   hero,
 }: EditorialHeaderProps) {
   return (
-    <Stack gap={8}>
+    <Stack gap={6}>
       <Stack gap={4}>
         <Text
           as="h1"
@@ -40,13 +40,7 @@ export function EditorialHeader({
           weight="font-black"
           leading="none"
           tracking="tighter"
-          className="break-words"
-          style={
-            {
-              fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
-              textWrap: "balance"
-            } as React.CSSProperties
-          }
+          className="break-words font-fluid-h1"
         >
           {title}
         </Text>
@@ -58,7 +52,7 @@ export function EditorialHeader({
         )}
       </Stack>
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
+      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={4} className="border-opacity-medium">
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>

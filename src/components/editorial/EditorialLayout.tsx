@@ -42,9 +42,9 @@ export function EditorialLayout({
       maxWidth="3xl"
       marginX="auto"
       paddingX={{ base: 5, md: 10, lg: 12 }}
-      paddingY={{ base: 4, md: 16 }}
+      paddingY={{ base: 4, md: 8 }}
     >
-      <Stack gap="section-spacing">
+      <Stack gap={{ base: 8, md: 12 }}>
         {/* Navigation */}
         <Box>
           <Stack
@@ -107,7 +107,7 @@ export function EditorialLayout({
             )}
           </Grid>
         ) : (
-          <Stack gap="section-spacing" width="full" marginX="auto" maxWidth="3xl">
+          <Stack gap={{ base: 8, md: 12 }} width="full" marginX="auto" maxWidth="3xl">
             <Box className="article-content-wrapper" width="full">
               {children}
             </Box>
