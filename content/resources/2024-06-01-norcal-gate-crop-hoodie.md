@@ -9,7 +9,7 @@ image: "/assets/gear/norcal-gate-crop-hoodie.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Cozy & Regional"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/norcal-bestcal-golden-gate-crop-hoodie
+shopUrl: https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie
 internalSku: norcal-bestcal-golden-gate-hoodie
 fulfillmentType: "print-on-demand"
 provider: "printful"

@@ -58,7 +58,13 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
         />
       }
       sidebar={
-        <ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />
+        <ResourceSidebar
+          slug={post.slug}
+          affiliateIds={post.affiliateIds}
+          shopUrl={post.shopUrl}
+          provider={post.provider}
+          specs={post.specs}
+        />
       }
     >
       <Box className="prose-editorial">

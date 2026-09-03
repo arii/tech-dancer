@@ -56,17 +56,21 @@ export function generateGoogleMerchantXml(): string {
       .map((img) => `      <g:additional_image_link>${escapeXml(img)}</g:additional_image_link>`)
       .join('\n');
 
+    const gearUrl = `${BASE_URL}/gear/${product.gearSlug || product.id}`;
+
     return `    <item>
       <g:id>${escapeXml(product.id)}</g:id>
       <title>${escapeXml(product.title)}</title>
       <description>${escapeXml(product.description)}</description>
-      <link>${escapeXml(product.printfulUrl)}</link>
+      <link>${escapeXml(gearUrl)}</link>
       <g:image_link>${escapeXml(mainImage)}</g:image_link>
 ${additionalImageTags ? `${additionalImageTags}\n` : ''}      <g:condition>new</g:condition>
       <g:availability>in_stock</g:availability>
       <g:price>${product.price} USD</g:price>
       <g:brand>BoomTick</g:brand>
-      <g:identifier_exists>no</g:identifier_exists>
+      <g:color>${escapeXml(product.color || 'Black')}</g:color>
+      <g:size>${escapeXml(product.size || 'S/M/L/XL')}</g:size>
+${product.material ? `      <g:material>${escapeXml(product.material)}</g:material>\n` : ''}      <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>${googleCategory}</g:google_product_category>
       <g:product_type>${escapeXml(productType)}</g:product_type>
       <g:age_group>adult</g:age_group>
