@@ -2,7 +2,7 @@
 type: resource
 title: "Halloween Adhesive Felt Stickers"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Fashion"
 excerpt: "Adhesive felt pumpkin stickers for easy costume assembly."
 image: "/images/gear/sketches/pumpkin-stickers.webp"

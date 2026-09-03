@@ -9,7 +9,7 @@ test('verify homepage featured guide link', async ({ page }) => {
    await expect(guideLink).toBeVisible();
 
    // Click the link or Read the guide CTA
-   const cta = page.getByRole('link', { name: /Read guide/i }).first();
+   const cta = page.getByRole('link', { name: /Read the guide/i }).first();
    await cta.click();
 
   // Verify it lands on the correct page

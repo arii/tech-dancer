@@ -1,6 +1,6 @@
 
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
@@ -36,40 +36,76 @@ export function GearShelf() {
         Small things that make a dance weekend easier.
       </Text>
 
-      {/* Horizontal thumbnail strip list (Desktop & Mobile) */}
+      {/* Desktop: square image tile grid — visual shelf, not list cards */}
+      <Grid
+        display={{ base: "none", lg: "grid" }}
+        cols={{ lg: 3 }}
+        gap={{ lg: 4 }}
+      >
+        {PICKS.map(({ label, image, imageText, href }) => (
+          <Box key={label} as={NavLink} to={href} className="group">
+            <Box
+              radius="lg"
+              overflow="hidden"
+              border
+              display="flex"
+              align="center"
+              justify="center"
+              className="aspect-square max-h-48 w-full bg-surface-alt transition-all group-hover:border-accent/40"
+            >
+              {image ? (
+                <img
+                  src={`${ASSET_PREFIX}${image}`}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : imageText ? (
+                <Text variant="body" size="sm" weight="font-bold">
+                  [{imageText}]
+                </Text>
+              ) : (
+                <CategoryPlaceholder category="gear" size="md" />
+              )}
+            </Box>
+            <Text
+              variant="body"
+              size="sm"
+              weight="font-bold"
+              marginTop={2}
+              hoverColor="accent"
+            >
+              {label}
+            </Text>
+          </Box>
+        ))}
+      </Grid>
+
+      {/* Mobile: horizontal scroll of compact tiles */}
       <Box
+        display={{ base: "block", lg: "none" }}
         width="full"
         maxWidth="full"
         overflowX="auto"
         overscroll="x-contain"
-        paddingBottom={2}
-        className="scrollbar-hide"
+        paddingBottom={3}
+        noScrollbar
       >
-        <Box display="flex" gap={6} width="fit" paddingRight={4}>
+        <Box display="flex" gap={3} width="fit" paddingRight={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
-              key={label}
+              key={`mobile-${label}`}
               as={NavLink}
               to={href}
-              display="flex"
-              align="center"
-              gap={3}
-              className="group min-w-0"
+              className="group w-28 min-w-0"
             >
-              <Box
-                radius="sm"
-                overflow="hidden"
-                display="flex"
-                align="center"
-                justify="center"
-                className="h-12 w-12 shrink-0 bg-surface transition-all group-hover:opacity-80"
-              >
+              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
                   <img
                     src={`${ASSET_PREFIX}${image}`}
                     alt=""
                     aria-hidden="true"
-                    className="block h-full w-full object-cover"
+                    className="block h-full w-full max-w-full object-cover"
                   />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">
@@ -81,10 +117,10 @@ export function GearShelf() {
               </Box>
               <Text
                 variant="body"
-                size="sm"
+                size="xs"
                 weight="font-bold"
-                hoverColor="accent"
-                className="whitespace-nowrap"
+                marginTop={1.5}
+                textAlign="center"
               >
                 {label}
               </Text>

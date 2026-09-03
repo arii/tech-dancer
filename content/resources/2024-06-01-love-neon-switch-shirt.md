@@ -2,7 +2,7 @@
 type: resource
 title: "Lead follow or switch LOVE shirt in Neon"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "Show your versatility on the dance floor with this neon 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"

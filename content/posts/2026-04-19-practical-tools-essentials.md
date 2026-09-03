@@ -9,7 +9,7 @@ tags: ["guide", "travel", "gear"]
 image: "/assets/home/wcs-travel-pack.webp"
 imageAlt: "A flat-lay of WCS travel essentials including dance shoes, earplugs, and a travel steamer."
 imageFit: contain
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 affiliateIds:
   - "loop-experience"
   - "portable-steamer"

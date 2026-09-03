@@ -2,7 +2,7 @@
 type: resource
 title: "NorCal BestCal Golden Gate Rainbow Pride Shirt"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "Classic Golden Gate bridge design with a vibrant rainbow twist for NorCal dancers."
 image: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp"

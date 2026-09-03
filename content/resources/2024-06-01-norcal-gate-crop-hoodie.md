@@ -2,7 +2,7 @@
 type: resource
 title: "NorCal BestCal Golden Gate Crop Hoodie"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "Cozy crop hoodie with the Golden Gate bridge design."
 image: "/assets/gear/norcal-gate-crop-hoodie.webp"

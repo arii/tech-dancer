@@ -2,7 +2,7 @@
 type: resource
 title: "Reflective Crop Tops"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Fashion"
 excerpt: "Reflective casual crop tops for visibility and style on and off the dance floor."
 image: "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.webp"

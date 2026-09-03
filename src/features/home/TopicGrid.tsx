@@ -48,31 +48,41 @@ const TOPICS = [
 export function TopicGrid() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
-      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} tracking="wider">
+      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} uppercase tracking="wider">
         Explore by topic
       </Text>
-      <Box marginLeft={-4} paddingLeft={4}>
-        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4} className="divide-y sm:divide-y-0 sm:divide-x divide-line/30">
-          {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconAnimClass }) => (
-            <Stack
-              key={label}
-              as={NavLink}
-              to={href}
-              direction="row"
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
+        {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconBgClass, iconHoverBgClass, iconAnimClass }) => (
+          <Stack
+            key={label}
+            as={NavLink}
+            to={href}
+            direction="row"
+            align="center"
+            gap={4}
+            padding={4}
+            radius="md"
+            border
+            className={`group cursor-pointer bg-surface/30 border-line/30 topic-card-${id}`}
+          >
+            <Box
+              width={10}
+              height={10}
+              display="flex"
               align="center"
-              gap={3}
-              paddingY={3}
-              paddingX={{ base: 0, sm: 4 }}
-              className={`group cursor-pointer topic-card-${id}`}
+              justify="center"
+              radius="md"
+              shrink={0}
+              className={`${iconBgClass} ${iconHoverBgClass} transition-colors duration-300`}
             >
-              <Icon className={`h-4 w-4 ${iconColorClass} opacity-70 ${iconAnimClass} transition-transform duration-300`} />
-              <Text variant="body" size="sm" weight="font-medium" hoverColor="accent" className="transition-colors duration-300">
-                {label}
-              </Text>
-            </Stack>
-          ))}
-        </Grid>
-      </Box>
+              <Icon className={`h-5 w-5 ${iconColorClass} ${iconAnimClass} transition-transform duration-300`} />
+            </Box>
+            <Text variant="body" size="base" weight="font-bold" hoverColor="accent" className="transition-colors duration-300">
+              {label}
+            </Text>
+          </Stack>
+        ))}
+      </Grid>
     </Box>
   );
 }

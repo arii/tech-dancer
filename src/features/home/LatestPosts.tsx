@@ -23,7 +23,7 @@ export function LatestPosts() {
           weight="font-bold"
           paddingY={{ base: 4, sm: 0 }}
           paddingX={{ base: 4, sm: 0 }}
-          className="shrink-0 transition-colors hover:text-accent"
+          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
         >
           View all →
         </Text>
@@ -62,8 +62,8 @@ export function LatestPosts() {
             {/* Text content */}
             <Stack gap={1} className="min-w-0 flex-1">
               <Box display="flex" align="center" gap={3}>
-                <Text variant="mono" size="xs" color="accent" weight="font-medium" opacityVariant="subtle">
-                  {post.category.toLowerCase()}
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
+                  {post.category}
                 </Text>
                 <Text variant="mono" size="xs" color="dim">
                   {post.date}

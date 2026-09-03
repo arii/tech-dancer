@@ -2,7 +2,7 @@
 type: post
 title: "Power & Charging Essentials"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "On-the-go backup power sources for phones, speakers, and event accessories."
 image: "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.webp"

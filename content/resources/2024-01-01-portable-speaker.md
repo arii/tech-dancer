@@ -2,7 +2,7 @@
 type: resource
 title: "Portable Bluetooth Speaker (UE Wonderboom 4)"
 date: "2024-01-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Dance Gear"
 excerpt: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings."
 image: "/images/gear/sketches/ue-wonderboom.webp"

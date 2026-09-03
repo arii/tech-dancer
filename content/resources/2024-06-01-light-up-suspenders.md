@@ -2,7 +2,7 @@
 type: resource
 title: "Light Up Suspenders"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Dance Gear"
 excerpt: "Battery-operated LED light up suspenders to glow on the social dance floor."
 image: "/images/gear/sketches/glow_suspenders.webp"

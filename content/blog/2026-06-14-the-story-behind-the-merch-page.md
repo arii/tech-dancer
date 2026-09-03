@@ -4,7 +4,7 @@ title: "The Story Behind the Merch: From Jack & Jill Orama to NorCal Pride"
 date: "2026-06-14"
 author: "Ariel Anders"
 category: "Community"
-excerpt: "How a last-minute scramble to get shirts printed for Jack & Jill Orama turned into a fun side project making dance tees."
+excerpt: "How a single T-shirt for a local event evolved into a full collection of West Coast Swing apparel celebrating NorCal roots and role-fluid energy."
 image: "/assets/events/jjo-hero.svg"
 imageAlt: "Dancers at Jack & Jill Orama wearing event t-shirts."
 tags: ["merch", "community", "NorCal", "WCS"]
@@ -13,26 +13,27 @@ affiliateIds:
   - "norcal-pride-gate-shirt"
   - "love-neon-switch-shirt"
 ---
+Every great project has a "Day Zero"—a moment where a specific problem needs a creative solution. For the BoomTick Merch page, that moment was **Jack & Jill Orama**.
 
-The idea for these shirts started while getting ready for Jack & Jill Orama.
+## The Origin Story: Jack & Jill Orama
 
-## 01 / The Origin Story: Jack & Jill Orama
-
-Jack & Jill Orama (JJO) features the Orama Cup, where different regions go head-to-head in a friendly team competition. We wanted matching shirts for our NorCal group, but we completely missed the deadline to get them printed in time.
+It started with a simple goal: we needed shirts for a specific event. Jack & Jill Orama (JJO) is a beloved local West Coast Swing event, and we wanted to create something that captured the fun, competitive, yet community-focused spirit of the weekend.
 
 ![Jack & Jill Orama Hero](/assets/events/jjo-hero.svg)
 
-Rather than showing up without anything, I looked into print-on-demand as a fast alternative so we’d actually have shirts in hand for the weekend. Here's the original T-shirt design—a colorful NorCal Best Cal and the bear.
+The initial designs were highly focused. We weren't thinking about a "store" or a "brand" yet. We just wanted the dancers at JJO to have a piece of the event they could take home. But the response was overwhelming. Dancers didn't just want event shirts; they wanted shirts that spoke to their identity as West Coast Swing dancers year-round.
+
+Here's the original T-shirt that's the one with a colorful NorCal Best Cal and the bear only. We forgot to get them printed on time!
 
 ![Original Shirt](/assets/posts/original_shirt.jpg)
 
-## 02 / NorCal vs. SoCal: The "Best Cal" Backstory
+## NorCal vs. SoCal: The "Best Cal" Backstory
 
-In the California swing scene, the friendly rivalry between Northern and Southern California is a huge part of the fun—especially during the Orama Cup.
+If you've spent any time in the California swing scene, you know there’s a friendly (and sometimes fierce) rivalry between Northern and Southern California.
 
-Living in the Bay Area, we wanted our shirts to represent our side of the state and celebrate SF Pride with rainbow colors. The "Nor Cal Best Cal" design brought that together, pairing the California bear and the Golden Gate Bridge with vibrant rainbow stripes.
+Living in the Bay Area, we felt it was time to represent. The "Nor Cal Best Cal" designs were born out of that local pride. We wanted to celebrate the iconic Golden Gate Bridge, the California bear, and the unique energy of the NorCal WCS community.
 
-The print-on-demand options meant we could still get our gear in time for the event. Here are the two items I ended up wearing for the weekend.
+So I created the print-on-demand options, which are the two items I'm wearing, plus a few other options we had for the event.
 
 ![Me wearing new NorCal shirt (black)](/assets/posts/mewearing_new_norcal_shirt.jpg)
 
@@ -40,20 +41,28 @@ The print-on-demand options meant we could still get our gear in time for the ev
 
 <notice type="affiliate" id="norcal-bestcal-tshirt" />
 
-The shirts arrived right on time. Setting up the print-on-demand store was a blast, and since it was already up and running, I ended up designing a few more dance ideas—like the switch shirts—and adding them in too.
+What started as a single "NorCal BestCal" tee quickly expanded. We added rainbow pride versions, cropped hoodies for those foggy San Francisco nights, and tanks for the summer workshop season.
 
 <notice type="affiliate" id="norcal-pride-gate-shirt" />
 
-## Expanding the Side Project
+## Evolution of Designs: Celebrating Every Dancer
 
-Once the store was set up, it was easy to experiment. We added rainbow pride versions, cropped hoodies for chilly San Francisco nights, and lightweight tanks. The neon "LOVE" series was added as a fun way to celebrate the roles we dance—Lead, Follow, Switch.
+As the community grew, so did our vision. We realized that WCS is more than just a location; it's a culture of inclusion and versatility. This led to the expansion of our "Lead, Follow, Switch" collection.
+
+We wanted to move away from traditional gendered roles and celebrate the fact that many of us do it all on the floor. The neon "LOVE" series was designed to be bold, high-visibility, and role-positive.
 
 <notice type="affiliate" id="love-neon-switch-shirt" />
 
-I even went on to create more BoomTick style merchandise like the slot era mug as a fun side project.
+From the intricate "War Eagle" back prints to the minimalist role checklists, every design is a conversation starter. We aim to create apparel that you don't just wear to the ballroom, but that you're proud to wear to the airport or the coffee shop.
+
+## Check Out the Collection
+
+And then I went on to create more BoomTick style merchandise like the slot era mug.
 
 ![Boomtick Merch](/assets/posts/booomtick_merch.jpg)
 
-It was a fun accident turning a missed print deadline into a living side project. Whether you're a NorCal local, a dedicated switch dancer, or just someone who loves a good graphic tee, it’s been a blast seeing these on the dance floor.
+The store is a living project. We’re constantly adding new designs based on community feedback and the latest events. Whether you're a NorCal local, a dedicated switch dancer, or just someone who loves a good graphic tee, there’s something for you.
 
 **[Browse the full collection on our Merch page](/merch)**
+
+Support the community, represent your role, and we'll see you on the dance floor!
