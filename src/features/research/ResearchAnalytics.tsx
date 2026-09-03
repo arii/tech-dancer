@@ -31,23 +31,19 @@ const ResearchAnalytics = () => {
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full">
       <SEO
-        title="DevAI Experiments"
-        description="DevAI experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines."
+        title="Experiments"
+        description="Experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines."
         keywords="DevAI, live testbeds, visual regression, VersionTruth, Playwright, pixelmatch, RAG pipelines, data engineering"
       />
       <Stack gap={16} width="full">
         {/* Full-width Hero Section */}
         <Stack gap={4} width="full">
           <PageHeader
-            label="EXPERIMENTS"
-            title="DevAI Experiments"
+            label="LABORATORY"
+            title="Experiments"
+            description="An active sandbox and live testing environment for AI-assisted engineering tools, RAG pipelines, and automated developer workflows. Explore live testbeds, visual regression engines, and high-scale data telemetry systems."
             as="h1"
-            paddingBottom={0}
-            border="none"
           />
-          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" leading="relaxed" className="whitespace-normal break-normal max-w-4xl">
-            An active sandbox and live testing environment for AI-assisted engineering tools, RAG pipelines, and automated developer workflows. Explore live testbeds, visual regression engines, and high-scale data telemetry systems.
-          </Text>
 
           {/* Main Portfolio & Projects Banner */}
           <RoboticsPortfolioCard />

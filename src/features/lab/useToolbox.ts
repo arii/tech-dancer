@@ -33,13 +33,57 @@ export function useToolbox() {
 
     if (selectedPill && selectedPill !== 'all') {
       filteredResources = filteredResources.filter(resource => {
+        const cat = (resource.category || '').toLowerCase();
+        const tags = (resource.tags || []).map(t => t.toLowerCase());
+        const title = (resource.title || '').toLowerCase();
+        const excerpt = (resource.excerpt || '').toLowerCase();
+        const bestFor = ((resource as { bestFor?: string[] }).bestFor || []).map(b => b.toLowerCase());
+
         switch (selectedPill) {
-          case 'Best for travel':
-            return safeSearch(resource.category, 'travel') || resource.tags?.includes('travel');
-          case 'Highly recommended':
-            return resource.tags?.includes('highly recommended');
-          case 'Competition ready':
-            return resource.tags?.includes('competition ready');
+          case 'Footwear & Care':
+            return (
+              cat.includes('dance') ||
+              tags.includes('shoes') ||
+              tags.includes('footwear') ||
+              tags.includes('diy') ||
+              tags.includes('maintenance') ||
+              title.includes('shoe') ||
+              title.includes('suede')
+            );
+          case 'Ballroom & Social':
+            return (
+              cat.includes('dance') ||
+              tags.includes('practice') ||
+              tags.includes('visibility') ||
+              tags.includes('accessory') ||
+              title.includes('fan') ||
+              title.includes('tripod')
+            );
+          case 'Travel & Packing':
+            return (
+              cat.includes('travel') ||
+              cat.includes('self care') ||
+              tags.includes('travel') ||
+              tags.includes('packing') ||
+              tags.includes('storage') ||
+              bestFor.includes('carry-on') ||
+              title.includes('bag') ||
+              title.includes('bottle') ||
+              title.includes('fanny')
+            );
+          case 'Theme & Costumes':
+            return (
+              cat.includes('fashion') ||
+              tags.includes('fashion') ||
+              tags.includes('halloween') ||
+              tags.includes('diy') ||
+              tags.includes('outdoor') ||
+              tags.includes('summer') ||
+              bestFor.includes('theming') ||
+              title.includes('sticker') ||
+              title.includes('visor') ||
+              title.includes('crop')
+            );
           default:
             return true;
         }
