@@ -5,7 +5,7 @@ const routes = [
   { name: 'home', path: './' },
   { name: 'blog', path: './blog' },
   { name: 'gear', path: './gear' },
-  { name: 'research', path: './research', waitSelector: 'h1:has-text("DevAI Experiments")' },
+  { name: 'research', path: './research', waitSelector: 'h1:has-text("Experiments")' },
   { name: 'about', path: './about' },
   { name: 'ux-auditor', path: './ux-auditor', mainSelector: '[data-testid="ux-auditor-container"]' },
   { name: 'preview', path: './preview', waitText: 'Component Preview' },
