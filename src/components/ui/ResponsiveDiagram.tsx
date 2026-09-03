@@ -146,7 +146,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
         <Stack
           position="fixed"
           inset
-          zIndex="modal"
+          zIndex="search"
           direction="col"
           justify="between"
           padding={{ base: 4, sm: 6 }}
