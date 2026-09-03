@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Memes from '@/pages/Memes';
-import { MEMES_DATA } from '@/data/memes';
+import { MEMES_DATA, MEME_PORTING_BACKLOG } from '@/data/memes';
 
 describe('Memes Page Component', () => {
   const renderMemesPage = () => {
@@ -16,7 +16,7 @@ describe('Memes Page Component', () => {
     );
   };
 
-  test('renders page elements correctly', () => {
+  test('renders page elements, under construction banner, and backlog roadmap correctly', () => {
     renderMemesPage();
 
     // Check SEO & Page Headers
@@ -24,18 +24,32 @@ describe('Memes Page Component', () => {
     expect(screen.getByText('West Coast Swing Memes')).toBeDefined();
     expect(screen.getByText('COMMUNITY & HUMOR')).toBeDefined();
 
-    // Check that all memes from data are rendered
-    MEMES_DATA.forEach((meme) => {
-      // Title
-      expect(screen.getByText(meme.title)).toBeDefined();
+    // Check Under Construction banner notice and exact required text
+    expect(screen.getByTestId('under-construction-banner')).toBeDefined();
+    expect(
+      screen.getByText(
+        'Still porting some of my favorite original dance memes here! In the meantime, enjoy this initial curated collection of favorites.'
+      )
+    ).toBeDefined();
 
-      // Card container
+    // Check that all featured memes from data are rendered
+    MEMES_DATA.forEach((meme) => {
+      expect(screen.getByText(meme.title)).toBeDefined();
       expect(screen.getByTestId(`meme-card-${meme.id}`)).toBeDefined();
 
-      // Image alt text
       const img = screen.getByAltText(meme.altText) as HTMLImageElement;
       expect(img).toBeDefined();
       expect(img.src).toContain(meme.imageSrc);
+    });
+
+    // Check Porting Roadmap section and backlog items
+    expect(screen.getByTestId('porting-roadmap-section')).toBeDefined();
+    expect(screen.getByText('Porting Roadmap & Backlog')).toBeDefined();
+
+    MEME_PORTING_BACKLOG.forEach((item) => {
+      expect(screen.getByTestId(`roadmap-item-${item.id}`)).toBeDefined();
+      expect(screen.getByText(item.title)).toBeDefined();
+      expect(screen.getByText(item.description)).toBeDefined();
     });
   });
 

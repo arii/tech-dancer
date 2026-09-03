@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Clock, Sparkles } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { MEMES_DATA } from '@/data/memes';
+import { StatusBadge } from '@/components/ui/StatusBadge';
+import { MEMES_DATA, MEME_PORTING_BACKLOG } from '@/data/memes';
 
 const Memes = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -29,60 +30,153 @@ const Memes = () => {
         description="Enjoy the best, highly relatable West Coast Swing (WCS) memes about the slot, connection, social dancing, and hotel rooms. Perfect to share with your partner dance community."
       />
 
-      <Stack gap={12} width="full" maxWidth="screen-xl">
+      <Stack gap={10} width="full" maxWidth="screen-xl">
         <PageHeader
           label="COMMUNITY & HUMOR"
           title="West Coast Swing Memes"
           description="A centralized collection of relatable West Coast Swing memes. From slotted dance debates to the drama of trying a new pattern on the social floor, we have you covered."
         />
 
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8} width="full" minWidth="0" align="stretch">
-          {MEMES_DATA.map((meme) => (
-            <BaseCard
-              key={meme.id}
-              gap={4}
-              padding={{ base: 4, md: 5 }}
-              radius="md"
-              border
-              maxWidth="full"
-              className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
-              data-testid={`meme-card-${meme.id}`}
-            >
-              {/* Meme Image Container */}
-              <Box
-                width="full"
-                display="flex"
-                align="center"
-                justify="center"
-                radius="md"
-                overflow="hidden"
-                className="bg-bg/50 border border-line/20 cursor-zoom-in"
-                maxHeight={{ base: 96, md: 108 }}
-                onClick={() => setLightboxImage(meme.imageSrc)}
+        {/* Under Construction Notice Banner */}
+        <Box
+          surface="accent"
+          border
+          padding={{ base: 5, md: 6 }}
+          radius="md"
+          position="relative"
+          className="overflow-hidden shadow-sm"
+          data-testid="under-construction-banner"
+        >
+          <Stack gap={2}>
+            <Box display="flex" align="center" gap={2}>
+              <Icon icon={Sparkles} size="sm" className="text-accent shrink-0" />
+              <Text
+                variant="mono"
+                size="tiny"
+                weight="font-bold"
+                intent="success"
+                tracking="widest"
+                uppercase
               >
-                <img
-                  src={meme.imageSrc}
-                  alt={meme.altText}
-                  className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
-                  loading="lazy"
-                />
-              </Box>
+                Under Construction / Work In Progress
+              </Text>
+            </Box>
+            <Text variant="body" size="base" color="main" className="text-pretty">
+              Still porting some of my favorite original dance memes here! In the meantime, enjoy this initial curated collection of favorites.
+            </Text>
+          </Stack>
+        </Box>
 
-              {/* Meme Info (Stretches uniformly to make cards the same height) */}
-              <Box paddingY={2} flex={true}>
-                <Text
-                  variant="body"
-                  size="lg"
-                  weight="font-bold"
-                  color="main"
-                  leading="tight"
+        {/* Initial Curated Memes Section */}
+        <Stack gap={6} width="full">
+          <Box display="flex" align="center" justify="between">
+            <Text variant="subheading" size="xl" weight="font-bold" color="main">
+              Featured Memes
+            </Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase tracking="wider">
+              {MEMES_DATA.length} Available
+            </Text>
+          </Box>
+
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8} width="full" minWidth="0" align="stretch">
+            {MEMES_DATA.map((meme) => (
+              <BaseCard
+                key={meme.id}
+                gap={4}
+                padding={{ base: 4, md: 5 }}
+                radius="md"
+                border
+                maxWidth="full"
+                className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
+                data-testid={`meme-card-${meme.id}`}
+              >
+                {/* Meme Image Container */}
+                <Box
+                  width="full"
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  radius="md"
+                  overflow="hidden"
+                  className="bg-bg/50 border border-line/20 cursor-zoom-in"
+                  maxHeight={{ base: 96, md: 108 }}
+                  onClick={() => setLightboxImage(meme.imageSrc)}
                 >
-                  {meme.title}
+                  <img
+                    src={meme.imageSrc}
+                    alt={meme.altText}
+                    className="w-full h-auto object-contain transition-transform duration-300 hover:scale-105"
+                    loading="lazy"
+                  />
+                </Box>
+
+                {/* Meme Info */}
+                <Box paddingY={2} flex={true}>
+                  <Text
+                    variant="body"
+                    size="lg"
+                    weight="font-bold"
+                    color="main"
+                    leading="tight"
+                  >
+                    {meme.title}
+                  </Text>
+                </Box>
+              </BaseCard>
+            ))}
+          </Grid>
+        </Stack>
+
+        {/* Porting Roadmap / Backlog Section */}
+        <Stack gap={6} width="full" data-testid="porting-roadmap-section">
+          <Box display="flex" align={{ sm: 'center' }} justify="between" gap={2}>
+            <Stack gap={1}>
+              <Text variant="subheading" size="xl" weight="font-bold" color="main">
+                Porting Roadmap & Backlog
+              </Text>
+              <Text variant="body" size="sm" color="dim">
+                Original dance memes currently being formatted, polished, and added to the gallery.
+              </Text>
+            </Stack>
+            <Box display="flex" align="center" gap={2} className="shrink-0">
+              <Icon icon={Clock} size="xs" className="text-text-dim" />
+              <Text variant="mono" size="tiny" color="dim" uppercase tracking="wider">
+                {MEME_PORTING_BACKLOG.length} In Queue
+              </Text>
+            </Box>
+          </Box>
+
+          <Grid cols={{ base: 1, md: 2 }} gap={4} width="full">
+            {MEME_PORTING_BACKLOG.map((item) => (
+              <BaseCard
+                key={item.id}
+                gap={3}
+                padding={5}
+                radius="md"
+                border
+                maxWidth="full"
+                data-testid={`roadmap-item-${item.id}`}
+              >
+                <Box display="flex" align="center" justify="between" gap={3}>
+                  <Text variant="body" size="base" weight="font-bold" color="main">
+                    {item.title}
+                  </Text>
+                  <StatusBadge label={item.status} className="shrink-0" />
+                </Box>
+                <Text variant="body" size="sm" color="dim" className="text-pretty">
+                  {item.description}
                 </Text>
-              </Box>
-            </BaseCard>
-          ))}
-        </Grid>
+                {item.targetCategory && (
+                  <Box display="flex" align="center" gap={2} marginTop={1}>
+                    <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
+                      Category: {item.targetCategory}
+                    </Text>
+                  </Box>
+                )}
+              </BaseCard>
+            ))}
+          </Grid>
+        </Stack>
       </Stack>
 
       {/* Lightbox Modal */}
