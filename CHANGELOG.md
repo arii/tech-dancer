@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.7.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.6.0...tech-dancer-v0.7.0) (2026-09-03)
+
+
+### Features
+
+* **about:** standardize page format, intersperse core pillars, and eliminate duplicate images ([#4470](https://github.com/arii/tech-dancer/issues/4470)) ([c62e11d](https://github.com/arii/tech-dancer/commit/c62e11d5cb40e25561988b1a4f1a9bd6346fa8df))
+* **epic:** consolidate WCS Navigator, Research Tools (Scraper & UX Auditor), and DevAI live experiments platform ([#4383](https://github.com/arii/tech-dancer/issues/4383)) ([8a62042](https://github.com/arii/tech-dancer/commit/8a6204283cd23b9d9fde067433ad592edde7d690))
+* install agent ops workflows from boomtick ([#4248](https://github.com/arii/tech-dancer/issues/4248)) ([de56536](https://github.com/arii/tech-dancer/commit/de56536d5724a24ad01a54a947d8db3504611a5f))
+* replace DevLabCallout with GearCallout on Home page ([#4272](https://github.com/arii/tech-dancer/issues/4272)) ([436fc91](https://github.com/arii/tech-dancer/commit/436fc91fd095e26b1482c2869df5f6b1cf4223bc))
+* Restore the /gear page and full gear catalog experience ([#4266](https://github.com/arii/tech-dancer/issues/4266)) ([318f5d0](https://github.com/arii/tech-dancer/commit/318f5d085611e8ae09b9aaa9bbf856b413a7fe6b))
+* **wcs-navigator:** consolidate discovery, generation pass endpoints, golden test fixtures, and UI enhancements ([#4368](https://github.com/arii/tech-dancer/issues/4368)) ([182e5f5](https://github.com/arii/tech-dancer/commit/182e5f5918dd7282f9e0096c4c2d9f0e5791bb01))
+* **wcs-navigator:** consolidate WCS Navigator full-stack architecture (Epic [#4332](https://github.com/arii/tech-dancer/issues/4332)) ([#4351](https://github.com/arii/tech-dancer/issues/4351)) ([a32f0a8](https://github.com/arii/tech-dancer/commit/a32f0a8508bac7039f696a3fe3230d27a05a7356))
+* **wcs-navigator:** implement two-pass agent discovery flow and arch… ([#4353](https://github.com/arii/tech-dancer/issues/4353)) ([dfcd779](https://github.com/arii/tech-dancer/commit/dfcd779e9d59bae927ee0ac3df740a975abcab09))
+* **wcs-navigator:** mobile UX audit, touch target ergonomics & responsive testing ([#4449](https://github.com/arii/tech-dancer/issues/4449)) ([0a64bac](https://github.com/arii/tech-dancer/commit/0a64bac834c7e88437b5c77f41883ece9dc89a8c))
+* **wcs-navigator:** release Docker container & consolidate navigator improvements ([#4430](https://github.com/arii/tech-dancer/issues/4430)) ([b1ae4ea](https://github.com/arii/tech-dancer/commit/b1ae4ea685a2610087b6d7d8a76514eca532b90d))
+
+
+### Bug Fixes
+
+* **ci:** resolve deployment impact analysis submodule action failure ([#4286](https://github.com/arii/tech-dancer/issues/4286)) ([38157f6](https://github.com/arii/tech-dancer/commit/38157f6a6891b4f6d00d25b8faefee334a7328fa))
+* **ui:** use semantic z-index for ResponsiveDiagram modal portal ([#4432](https://github.com/arii/tech-dancer/issues/4432)) ([163b2d6](https://github.com/arii/tech-dancer/commit/163b2d6dbb1b4652e22fddf44743ac5103e95ba7))
+
+
+### Performance Improvements
+
+* **core:** fix async loop blocking and optimize iteration efficiency ([#4445](https://github.com/arii/tech-dancer/issues/4445)) ([08d756d](https://github.com/arii/tech-dancer/commit/08d756d2618a1154cb76f3bc88e5c5a470b19d04))
+* **etl:** optimize results link fetching and batch updates in scraper ([#4443](https://github.com/arii/tech-dancer/issues/4443)) ([0cb8b56](https://github.com/arii/tech-dancer/commit/0cb8b56f664daedba837c23f002f346688abad87))
+* **etl:** optimize results link fetching and batch updates in scraper ([#4444](https://github.com/arii/tech-dancer/issues/4444)) ([f34f84f](https://github.com/arii/tech-dancer/commit/f34f84f5bab60451cac661d9952f3a8e21fa9166))
+
 ## [0.6.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.5.0...tech-dancer-v0.6.0) (2026-08-10)
 
 
