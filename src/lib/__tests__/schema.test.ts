@@ -6,7 +6,7 @@ import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
 describe('Schema generation', () => {
   describe('generateMerchSchema', () => {
-    it('should only include stable fields and no risky fields', () => {
+    it('should generate complete Product schema with valid price and policy details, strictly omitting reviews', () => {
       const mockProducts: ProductCatalogItem[] = [
         {
           id: 'test-id',
@@ -27,13 +27,17 @@ describe('Schema generation', () => {
 
       expect(product.name).toBe('Test Product');
       expect(product.sku).toBe('test-id');
+      expect(product.mpn).toBe('test-id');
+      expect(product.brand.name).toBe('BoomTick');
 
-      // Risky fields should be undefined (and should not even be in the type)
+      expect(product.offers.price).toBe('25.00');
+      expect(product.offers.priceCurrency).toBe('USD');
+      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.offers.itemCondition).toBe('https://schema.org/NewCondition');
+      expect(product.offers.shippingDetails).toBeDefined();
+      expect(product.offers.hasMerchantReturnPolicy).toBeDefined();
+
       const json = JSON.stringify(product);
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('availability');
-      expect(json).not.toContain('shippingDetails');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
       expect(json).not.toContain('aggregateRating');
       expect(json).not.toContain('review');
 
@@ -42,7 +46,7 @@ describe('Schema generation', () => {
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('should not include ratings, reviews, or risky offer claims for gear', () => {
+    it('should generate complete Product schema for gear without ratings or fake review claims', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -65,12 +69,18 @@ describe('Schema generation', () => {
       const json = JSON.stringify(product);
 
       expect(product.name).toBe('Test Gear');
+      expect(product.brand.name).toBe('BoomTick');
+      expect(product.sku).toBe('test-gear');
+      expect(product.mpn).toBe('test-gear');
+
+      expect(product.offers.price).toBe('25.00');
+      expect(product.offers.priceCurrency).toBe('USD');
+      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.offers.shippingDetails).toBeDefined();
+      expect(product.offers.hasMerchantReturnPolicy).toBeDefined();
+
       expect(json).not.toContain('aggregateRating');
       expect(json).not.toContain('review');
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('availability');
-      expect(json).not.toContain('shippingDetails');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
 
       expect(product.offers.url).toBe('https://example.com/test');
     });
