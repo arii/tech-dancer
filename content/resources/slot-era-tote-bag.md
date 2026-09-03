@@ -3,7 +3,7 @@ id: "slot-era-tote-bag"
 title: "Slot Era WCS Tote Bag"
 category: "Accessories"
 badge: "Merch"
-price: "$24.00"
+price: "$27.00"
 image: "/assets/slot_era_tote.webp"
 url: "https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag"
 featured: true

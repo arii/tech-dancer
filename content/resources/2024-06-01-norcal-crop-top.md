@@ -10,7 +10,7 @@ imageBack: "/assets/gear/norcal-crop-top-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Trendy & Airy"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/norcal-crop-top
+shopUrl: https://boomtick.printful.me/product/norcal-best-cal-cropped-top
 internalSku: norcal-bestcal-cropped-top
 fulfillmentType: "print-on-demand"
 provider: "printful"

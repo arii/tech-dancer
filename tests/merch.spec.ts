@@ -28,7 +28,7 @@ test.describe('Merch Page', () => {
     // Assert existence of the new Slot Era product elements specifically
     await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"]').first()).toBeVisible();
     await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-tote-bag"]').first()).toBeVisible();
-    await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug"]').first()).toBeVisible();
+    await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-mug"]').first()).toBeVisible();
   });
 
   test('should filter products by collection', async ({ page }) => {

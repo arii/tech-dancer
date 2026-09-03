@@ -10,7 +10,7 @@ imageBack: "/assets/gear/unisex-t-shirt-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Classic & Inclusive"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/love-unisex-shirt
+shopUrl: https://boomtick.printful.me/product/unisex-t-shirt
 displayMode: "pair"
 featuredSide: "back"
 internalSku: love-lead-follow-switch-unisex

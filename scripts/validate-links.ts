@@ -29,6 +29,7 @@ async function main() {
   validRoutes.add('/research');
   validRoutes.add('/blog');
   validRoutes.add('/gear');
+  validRoutes.add('/merch');
 
   console.log(`Discovered ${validRoutes.size} valid internal routes.`);
 

@@ -10,7 +10,7 @@ imageBack: "/assets/gear/norcal-best-cal-pride-california-bear-apparel-back.webp
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "California Classic"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/norcal-pride-bear-shirt
+shopUrl: https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel
 internalSku: norcal-bestcal-pride-bear
 fulfillmentType: "print-on-demand"
 provider: "printful"

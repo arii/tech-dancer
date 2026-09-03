@@ -10,7 +10,7 @@ imageBack: "/assets/gear/norcal-bear-tank-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Cool & Casual"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/mens-bear-tank-nor-cal-best-cal
+shopUrl: https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal
 internalSku: mens-bear-tank-norcal
 fulfillmentType: "print-on-demand"
 provider: "printful"
