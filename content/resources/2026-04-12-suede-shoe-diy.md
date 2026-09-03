@@ -9,9 +9,10 @@ image: /images/gear/amazon/suede-stick-on-sheets.jpg
 affiliateIds:
 - suede-sheets
 tags:
-- diy
 - footwear
-- budget
+- shoes
+- diy
+- dance
 updatedDate: Mar 2024
 affiliateProvider: amazon
 ---
