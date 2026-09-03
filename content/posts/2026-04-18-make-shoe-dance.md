@@ -2,7 +2,7 @@
 type: post
 title: "Make Any Shoe a Dance Shoe"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "Turn your favorite sneakers or flats into dance shoes with adhesive suede. A DIY modification that improves spins, reduces joint strain, and survives long social dance weekends."
 image: "/images/gear/diy/hero.webp"

@@ -2,7 +2,7 @@
 type: resource
 title: "Adhesive Suede Sheets for DIY Dance Shoes"
 date: '2026-04-12'
-author: Ariel Anders, PhD
+author: Ariel Anders
 category: Dance Gear
 excerpt: "Recommended materials for converting your favorite sneakers into high-performance dance shoes."
 image: /images/gear/amazon/suede-stick-on-sheets.jpg

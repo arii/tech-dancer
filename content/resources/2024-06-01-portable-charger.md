@@ -3,7 +3,7 @@ type: resource
 draft: true
 title: "Anker Portable Power Bank"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Travel"
 excerpt: "High-capacity charger to keep your phone alive during long event days."
 image: "/images/gear/amazon/anker-20000mah-power-bank.jpg"

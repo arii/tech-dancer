@@ -28,6 +28,7 @@ export type ProductUseCase =
 
 export interface ProductCatalogItem {
   id: string;
+  gearSlug?: string;
   source: ProductSource;
   title: string;
   description: string;
@@ -36,6 +37,9 @@ export interface ProductCatalogItem {
   imageDisplayMode?: MerchImageDisplayMode;
   href: string;
   price?: string;
+  color?: string;
+  size?: string;
+  material?: string;
   collections: string[];
   tags: string[];
   roles?: ('lead' | 'follow' | 'switch')[];

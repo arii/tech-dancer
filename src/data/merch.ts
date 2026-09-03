@@ -2,9 +2,13 @@ import type { MerchImageDisplayMode, MerchProductImage } from '@/data/products/c
 
 export interface MerchProduct {
   id: string;
+  gearSlug: string;
   title: string;
   description: string;
   price: string;
+  color: string;
+  size: string;
+  material?: string;
   imageUrl: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
@@ -27,9 +31,13 @@ const gearImage = (fileName: string) => `/assets/gear/${fileName}`;
 export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'love-neon-follow',
+    gearSlug: '2024-06-01-love-neon-follow-shirt',
     title: 'Ask Me to Follow - LOVE Neon Performance Tee',
     description: 'Both roles. No rules. The floor is yours from every angle.',
     price: '24.50',
+    color: 'Black/Neon',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('love-neon-tshirt-ask-me-to-follow-back.webp'),
     images: [
       { src: gearImage('love-neon-tshirt-ask-me-to-follow-front.webp'), side: 'front', alt: 'Front view of LOVE Neon Ask Me to Follow t-shirt' },
@@ -43,9 +51,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'love-neon-lead',
+    gearSlug: '2024-06-01-love-neon-lead-shirt',
     title: 'Ask Me to Lead - LOVE Neon Performance Tee',
     description: 'Any body leads. Any role is a choice. Wear it, own it, drive the floor.',
     price: '24.00',
+    color: 'Black/Neon',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('love-neon-tshirt-ask-me-to-lead-back.webp'),
     images: [
       { src: gearImage('love-neon-tshirt-ask-me-to-lead-front.webp'), side: 'front', alt: 'Front view of LOVE Neon Ask Me to Lead t-shirt' },
@@ -59,9 +71,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'lead-follow-switch-love-neon',
+    gearSlug: '2024-06-01-love-neon-switch-shirt',
     title: 'Lead . Follow . Switch - Partner Dance Role Tee',
     description: 'Check all three. The dancer who does it all - this is your shirt.',
     price: '24.00',
+    color: 'Black/Neon',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('lead-follow-or-switch-love-shirt-in-neon-back.webp'),
     images: [
       { src: gearImage('lead-follow-or-switch-love-shirt-in-neon-front.webp'), side: 'front', alt: 'Front view of Lead Follow or Switch LOVE Shirt in Neon' },
@@ -75,9 +91,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'war-eagle-oversized',
+    gearSlug: '2024-06-01-war-eagle-shirt',
     title: 'Rainbow War Eagle - Pride Back Print Organic Oversized Tee',
     description: 'Turn around and make a statement with this premium organic oversized tee. Featuring a soaring rainbow war eagle back print, this piece combines sustainable streetwear style with a bold message of pride and freedom. Perfect for the social floor or making an impression wherever you go.',
     price: '22.00',
+    color: 'Natural/Rainbow',
+    size: 'XS/S/M/L/XL/2XL',
+    material: '100% organic ring-spun cotton',
     imageUrl: gearImage('war-eagle-oversized-high-neck-t-shirt-front.webp'),
     images: [
       { src: gearImage('war-eagle-oversized-high-neck-t-shirt-front.webp'), side: 'front', alt: 'Front view of War Eagle oversized high neck t-shirt' },
@@ -90,9 +110,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'norcal-bestcal-golden-gate-pride',
+    gearSlug: '2024-06-01-norcal-pride-gate-shirt',
     title: 'NorCal Best Cal - Golden Gate Rainbow Pride T-Shirt',
     description: 'Bold Bay Area energy captured in a single design. Featuring the iconic Golden Gate Bridge set against a vibrant rainbow sky, this tee is definitive proof that NorCal is Best Cal. High-quality print on a soft, comfortable fabric that\'s ready for festival season or everyday wear.',
     price: '23.00',
+    color: 'Black/Rainbow',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% ring-spun cotton',
     imageUrl: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp'),
     images: [
       { src: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp'), side: 'front', alt: 'Front view of NorCal BestCal Golden Gate Rainbow Pride Shirt' },
@@ -105,9 +129,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'norcal-bestcal-pride-bear',
+    gearSlug: '2024-06-01-norcal-pride-bear-shirt',
     title: 'NorCal BestCal Pride Bear Shirt',
     description: 'The iconic California bear gets a rainbow pride makeover for NorCal dancers. Show your local spirit and LGBTQ+ support on the partner dance floor.',
     price: '15.50',
+    color: 'Black/Rainbow',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('norcal-best-cal-pride-california-bear-apparel-front.webp'),
     images: [
       { src: gearImage('norcal-best-cal-pride-california-bear-apparel-front.webp'), side: 'front', alt: 'Front view of NorCal BestCal Pride California Bear apparel' },
@@ -120,9 +148,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'love-lead-follow-switch-unisex',
+    gearSlug: '2024-06-01-love-unisex-shirt',
     title: 'LOVE Lead Follow or Switch Unisex Shirt',
     description: 'A classic role-neutral shirt for social dancers who love the Lead/Follow/Switch message. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '18.64',
+    color: 'Black',
+    size: 'XS/S/M/L/XL/2XL/3XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('unisex-t-shirt-back.webp'),
     images: [
       { src: gearImage('unisex-t-shirt-front.webp'), side: 'front', alt: 'Front view of LOVE Lead Follow or Switch Unisex Shirt' },
@@ -136,9 +168,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'mens-bear-tank-norcal',
+    gearSlug: '2024-06-01-norcal-bear-tank',
     title: 'NorCal BestCal Rainbow Bear Dance Tank Top',
     description: 'The Bay on your chest. A NorCal pride classic for warm-weather weekends, festivals, and every day that calls for something bold.',
     price: '18.50',
+    color: 'Black',
+    size: 'XS/S/M/L/XL/2XL',
+    material: '100% airlume combed and ring-spun cotton',
     imageUrl: gearImage('norcal-bear-tank-front.webp'),
     images: [
       { src: gearImage('norcal-bear-tank-front.webp'), side: 'front', alt: "Front view of Men's Bear Tank NorCal BestCal" },
@@ -150,9 +186,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'norcal-bestcal-cropped-top',
+    gearSlug: '2024-06-01-norcal-crop-top',
     title: 'NorCal Best Cal - Golden Gate Crop Top',
     description: 'NorCal pride, cropped and colorful. Festival-ready, dance-floor-ready, Bay Area-ready.',
     price: '20.50',
+    color: 'Black',
+    size: 'XS/S/M/L/XL',
+    material: '65% polyester, 35% viscose',
     imageUrl: gearImage('norcal-crop-top-front.webp'),
     images: [
       { src: gearImage('norcal-crop-top-front.webp'), side: 'front', alt: 'Front view of NorCal BestCal Cropped Top' },
@@ -164,9 +204,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'norcal-bestcal-golden-gate-hoodie',
+    gearSlug: '2024-06-01-norcal-gate-crop-hoodie',
     title: 'NorCal Best Cal - Golden Gate Crop Hoodie',
     description: 'Fog-season approved. A NorCal pride crop hoodie for Bay Area evenings, festival nights, and every golden California moment.',
     price: '34.00',
+    color: 'Black/Military Green/Storm',
+    size: 'S/M/L/XL/2XL',
+    material: '52% combed ring-spun cotton, 48% poly fleece',
     imageUrl: gearImage('norcal-gate-crop-hoodie.webp'),
     images: [
       { src: gearImage('norcal-gate-crop-hoodie.webp'), side: 'front', alt: 'Front view of NorCal BestCal Golden Gate crop hoodie' },
@@ -178,9 +222,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'norcal-bestcal-classic',
+    gearSlug: '2024-06-01-norcal-bestcal-tshirt',
     title: 'NorCal Best Cal - Golden Gate Classic Unisex Tee',
     description: 'The NorCal classic, in soft black heather. XS to 5XL - because NorCal pride belongs to every body.',
     price: '12.00',
+    color: 'Black Heather/Black',
+    size: 'XS/S/M/L/XL/2XL/3XL/4XL/5XL',
+    material: '100% combed and ring-spun cotton',
     imageUrl: gearImage('norcal-bestcal-front.webp'),
     images: [
       { src: gearImage('norcal-bestcal-front.webp'), side: 'front', alt: 'Front view of NorCal BestCal Classic Tee' },
@@ -192,9 +240,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'slot-era-tank-top',
+    gearSlug: 'slot-era-tank-top',
     title: "Slot Era WCS Women's Racerback Tank Top",
     description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
     price: '16.50',
+    color: 'Black/Rainbow',
+    size: 'XS/S/M/L/XL/2XL',
+    material: '60% combed ring-spun cotton, 40% polyester',
     imageUrl: '/assets/slot_era_racerback.webp',
     images: [
       { src: '/assets/slot_era_racerback.webp', side: 'front', alt: "Front view of Slot Era WCS Women's Racerback Tank Top" },
@@ -206,9 +258,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'slot-era-tote-bag',
+    gearSlug: 'slot-era-tote-bag',
     title: 'Slot Era WCS Tote Bag',
     description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
     price: '27.00',
+    color: 'Black',
+    size: '15" x 15"',
+    material: '100% spun polyester canvas',
     imageUrl: '/assets/slot_era_tote.webp',
     images: [
       { src: '/assets/slot_era_tote.webp', side: 'front', alt: 'Front view of Slot Era WCS Tote Bag' },
@@ -220,9 +276,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'slot-era-mug',
+    gearSlug: 'slot-era-mug',
     title: 'Slot Era Black Ceramic Mug',
     description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
     price: '16.50',
+    color: 'Black',
+    size: '11 oz',
+    material: 'Ceramic (dishwasher & microwave safe)',
     imageUrl: '/assets/slot_era_mug.webp',
     images: [
       { src: '/assets/slot_era_mug.webp', side: 'front', alt: 'Front view of Slot Era Black Ceramic Mug' },

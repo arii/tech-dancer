@@ -2,7 +2,7 @@
 type: resource
 title: "Slim Fanny Pack"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Travel"
 excerpt: "Ultra-light bounce-free waist perfect for outdoor dancing at Lindy in the Park."
 image: "/images/gear/sketches/fanny-pack.webp"

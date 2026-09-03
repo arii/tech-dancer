@@ -2,7 +2,7 @@
 type: resource
 title: "Alien Latex Mask"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Dance Gear"
 excerpt: "Commit to the Galactic theme with a high-quality alien mask."
 image: "/images/gear/sketches/alien-mask.webp"

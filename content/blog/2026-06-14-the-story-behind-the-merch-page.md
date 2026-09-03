@@ -2,7 +2,7 @@
 type: blog
 title: "The Story Behind the Merch: From Jack & Jill Orama to NorCal Pride"
 date: "2026-06-14"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Community"
 excerpt: "How a single T-shirt for a local event evolved into a full collection of West Coast Swing apparel celebrating NorCal roots and role-fluid energy."
 image: "/assets/events/jjo-hero.svg"

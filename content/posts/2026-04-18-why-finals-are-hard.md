@@ -4,7 +4,7 @@ draft: false
 status: published
 title: "Why Most Above-Average Dancers Don't Make Finals"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "WCS"
 excerpt: "A data-driven look at the WSDC points system, the 'Tier 3 Sweet Spot', and why survival math is the hardest part of West Coast Swing."
 image: "/assets/posts/competition-data-thumb.svg"
