@@ -34,13 +34,13 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
             post.image ? (
               <Stack gap={4}>
                 {post.imageBack ? (
-                  <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
-                    <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
-                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
+                  <Stack direction={{ base: 'col', md: 'row' }} gap={{ base: 4, md: 3 }} width="full">
+                    <Stack gap={2} flex={1} width="full">
+                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front View</Text>
                       <EditorialHero src={post.image} alt={`${post.title} - front`} />
                     </Stack>
-                    <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
-                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
+                    <Stack gap={2} flex={1} width="full">
+                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back View</Text>
                       <EditorialHero src={post.imageBack} alt={`${post.title} - back`} />
                     </Stack>
                   </Stack>

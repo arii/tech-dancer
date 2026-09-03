@@ -8,7 +8,7 @@ export const DISCLOSURE_TEXT = 'As an Amazon Associate, I earn from qualifying p
 
 const COMPACT_TEXT = 'As an Amazon Associate, I earn from qualifying purchases.';
 
-export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProps) {
+export const AffiliateDisclosure = ({ compact = false }: AffiliateDisclosureProps) => {
   const text = compact ? COMPACT_TEXT : DISCLOSURE_TEXT;
 
   return (
@@ -18,7 +18,8 @@ export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProp
       surface="muted"
       radius="md"
       border
-      className="border-line/40 inline-block bg-surface-alt/30"
+      width="full"
+      className="border-line/40 bg-surface-alt/30"
     >
       <Text
         variant="body"
@@ -31,4 +32,4 @@ export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProp
       </Text>
     </Box>
   );
-}
+};

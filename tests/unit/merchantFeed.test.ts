@@ -12,15 +12,27 @@ describe('Google Merchant Center XML Feed Generator', () => {
     expect(xml).toContain('</rss>');
   });
 
-  it('includes all merch products in the feed with verified domain links, colors, and sizes', () => {
+  it('splits apparel size options into separate variant items and keeps single dimensions intact', () => {
     const xml = generateGoogleMerchantXml();
     for (const product of MERCH_PRODUCTS) {
-      expect(xml).toContain(`<g:id>${product.id}</g:id>`);
       expect(xml).toContain(`<g:price>${product.price} USD</g:price>`);
       expect(xml).toContain(`<link>https://boomtick.blog/gear/${product.gearSlug}</link>`);
       expect(xml).toContain(`<g:color>${product.color}</g:color>`);
-      const escapedSize = product.size.replace(/"/g, '&quot;');
-      expect(xml).toContain(`<g:size>${escapedSize}</g:size>`);
+
+      const isApparelList = /^(XS|S|M|L|XL|[0-9]XL)(\/(XS|S|M|L|XL|[0-9]XL))+$/i.test(product.size.trim());
+      if (isApparelList) {
+        expect(xml).toContain(`<g:item_group_id>${product.id}</g:item_group_id>`);
+        const sizes = product.size.split('/');
+        for (const size of sizes) {
+          const slug = size.toLowerCase().replace(/[^a-z0-9]/g, '');
+          expect(xml).toContain(`<g:id>${product.id}-${slug}</g:id>`);
+          expect(xml).toContain(`<g:size>${size}</g:size>`);
+        }
+      } else {
+        expect(xml).toContain(`<g:id>${product.id}</g:id>`);
+        const escapedSize = product.size.replace(/"/g, '&quot;');
+        expect(xml).toContain(`<g:size>${escapedSize}</g:size>`);
+      }
     }
   });
 

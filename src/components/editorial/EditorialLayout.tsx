@@ -39,9 +39,9 @@ export function EditorialLayout({
   return (
     <Box
       width="full"
-      maxWidth="3xl"
+      maxWidth={sidebar ? "screen-xl" : "3xl"}
       marginX="auto"
-      paddingX={{ base: 5, md: 10, lg: 12 }}
+      paddingX={{ base: 5, md: 8, lg: 12 }}
       paddingY={{ base: 4, md: 8 }}
     >
       <Stack gap={{ base: 8, md: 12 }}>
@@ -74,12 +74,12 @@ export function EditorialLayout({
 
         {/* Content & Sidebar Layout */}
         {sidebar ? (
-          <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }} align="start">
+          <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 10, lg: 12 }} align="start">
             {/* Main Article Column */}
             <Box
               span={{ base: 1, lg: 8 }}
               width="full"
-              className="order-2 lg:order-1"
+              className="order-1"
             >
               <Box className="article-content-wrapper" width="full">
                 {children}
@@ -87,8 +87,8 @@ export function EditorialLayout({
             </Box>
 
             {/* Sidebar */}
-            <Box span={{ base: 1, lg: 4 }} width="full" className="order-1 lg:order-2">
-              <Stack gap={8} position={{ lg: "sticky" }} top={32}>
+            <Box span={{ base: 1, lg: 4 }} width="full" className="order-2">
+              <Stack gap={8} position={{ lg: "sticky" }} top={24}>
                 {sidebar}
               </Stack>
             </Box>
@@ -100,7 +100,7 @@ export function EditorialLayout({
                 width="full"
                 className="order-3"
               >
-                <Box marginTop={{ base: 12, lg: 0 }}>
+                <Box marginTop={{ base: 8, lg: 0 }}>
                   {footer}
                 </Box>
               </Box>

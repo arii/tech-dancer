@@ -87,14 +87,16 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   ) : undefined;
 
   const sidebar = affiliateLinks.length > 0 ? (
-    <Stack gap={8}>
+    <Stack gap={6} width="full">
       <AffiliateDisclosure compact={true} />
       <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
         Shop selected items
       </Text>
-      <Stack gap={6}>
+      <Stack gap={3} width="full">
         {affiliateLinks.map(link => (
-          <AffiliateCard key={link.id} link={link} />
+          <Box key={link.id} width="full">
+            <AffiliateCard link={link} />
+          </Box>
         ))}
       </Stack>
     </Stack>
@@ -117,33 +119,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       footer={footer}
       onShare={share}
       isShared={isCopied}
-    >
-      {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
-            <Stack direction="row" wrap gap={3}>
-              {post.tags.map(tag => (
-                <Box
-                  key={tag}
-                  paddingX={{ base: 5, sm: 5 }}
-                  paddingY={{ base: 3, sm: 2 }}
-                  minWidth={{ base: 11, sm: "auto" }}
-                  minHeight={{ base: 11, sm: "auto" }}
-                  display="flex"
-                  align="center"
-                  justify="center"
-                  surface="muted"
-                  border
-                  className="hover:border-accent transition-colors"
-                >
-                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
-                </Box>
-              ))}
-            </Stack>
-          </Stack>
-        </Box>
-      )}
-    </EditorialPostView>
+    />
   );
 }
