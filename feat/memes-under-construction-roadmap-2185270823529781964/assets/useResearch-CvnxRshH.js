@@ -1,0 +1,1 @@
+import{br as u}from"./vendor-BLdctGUO.js";import{d as s}from"./content-2PZtNKUd.js";import{R as r}from"./research-tools-DUIQ_n4W.js";function g(){const{data:o=[]}=u({queryKey:["studies"],queryFn:s,initialData:s});return{studies:o,tools:r,getTool:t=>r.find(e=>e.id===t),getStudy:t=>o.find(e=>e.slug===t)}}export{g as u};
