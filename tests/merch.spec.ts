@@ -25,10 +25,10 @@ test.describe('Merch Page', () => {
     await expect(productCards.first()).toBeVisible();
     expect(await productCards.count()).toBeGreaterThanOrEqual(14);
 
-    // Assert existence of the new Slot Era product elements specifically
-    await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"]').first()).toBeVisible();
-    await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-tote-bag"]').first()).toBeVisible();
-    await expect(page.locator('a[href*="boomtick-slot-era-west-coast-swing-dancer-mug"]').first()).toBeVisible();
+    // Assert existence of the new Slot Era products specifically
+    await expect(page.getByRole('link', { name: /Slot Era WCS Women's Racerback Tank Top/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /Slot Era WCS Tote Bag/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /Slot Era Black Ceramic Mug/i }).first()).toBeVisible();
   });
 
   test('should filter products by collection', async ({ page }) => {
@@ -54,10 +54,10 @@ test.describe('Merch Page', () => {
     }
   });
 
-  test('should render Buy on Printful button on gear landing pages', async ({ page }) => {
+  test('should render Order on Printful Store button on gear landing pages', async ({ page }) => {
     await page.goto('/gear/2024-06-01-norcal-gate-crop-hoodie');
     await expect(page.getByRole('heading', { name: /Golden Gate Crop Hoodie/i })).toBeVisible();
-    const buyButton = page.getByRole('link', { name: /Buy on Printful/i });
+    const buyButton = page.getByRole('link', { name: /Order on Printful Store/i });
     await expect(buyButton).toBeVisible();
     await expect(buyButton).toHaveAttribute('href', 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie');
     await expect(buyButton).toHaveAttribute('target', '_blank');
