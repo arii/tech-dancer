@@ -19,13 +19,8 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       radius="md"
       overflow="hidden"
       border
-      className={journalVariants.card({ variant: 'hero' })}
+      className={`h-hero-mobile md:h-auto ${journalVariants.card({ variant: 'hero' })}`}
       aspect={aspectRatio}
-      style={
-        {
-          maxHeight: '40vh'
-        } as React.CSSProperties
-      }
     >
       <ProductImageFrame
         src={src}

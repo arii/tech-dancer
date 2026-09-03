@@ -38,12 +38,7 @@ export function EditorialHeader({
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={3.5} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
-        <Text as="h1" variant="h1" weight="font-black" leading="none" tracking="tighter" className="break-words" style={
-          {
-            fontSize: "clamp(1.75rem, 5vw, 2.5rem)",
-            textWrap: "balance"
-          } as React.CSSProperties
-        }>
+        <Text as="h1" variant="h1" weight="font-black" leading="none" tracking="tighter" className="text-fluid-h1 text-balance break-words">
           {title}
         </Text>
 
