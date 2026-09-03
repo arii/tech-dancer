@@ -238,7 +238,7 @@ async def test_run_historical_gather_and_parse_exceptions(mocker, caplog, tmp_pa
                 t.close()
         return [
             Exception("Unhandled exception from gather"),
-            ("http://example.com/results/101.html", "<html></html>"),
+            ("http://example.com/results/101.html", "<html></html>", "101"),
         ]
 
     mocker.patch("asyncio.gather", side_effect=fake_gather)
