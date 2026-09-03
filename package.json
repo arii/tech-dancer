@@ -1,7 +1,7 @@
 {
   "name": "tech-dancer",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.0",
   "dependencyComments": {
     "openai": "Required exclusively by boomtick-pkg scripts (e.g. impact-ai-code-review.ts) running in the parent repository context during CI. It is not loaded by any application components or included in the frontend bundle."
   },
