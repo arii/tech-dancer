@@ -51,26 +51,28 @@ export function TopicGrid() {
       <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} tracking="wider">
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4} className="divide-y sm:divide-y-0 sm:divide-x divide-line/30 -ml-4 pl-4">
-        {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconAnimClass }) => (
-          <Stack
-            key={label}
-            as={NavLink}
-            to={href}
-            direction="row"
-            align="center"
-            gap={3}
-            paddingY={3}
-            paddingX={{ base: 0, sm: 4 }}
-            className={`group cursor-pointer topic-card-${id}`}
-          >
-            <Icon className={`h-4 w-4 ${iconColorClass} opacity-70 ${iconAnimClass} transition-transform duration-300`} />
-            <Text variant="body" size="sm" weight="font-medium" hoverColor="accent" className="transition-colors duration-300">
-              {label}
-            </Text>
-          </Stack>
-        ))}
-      </Grid>
+      <Box marginLeft={-4} paddingLeft={4}>
+        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4} className="divide-y sm:divide-y-0 sm:divide-x divide-line/30">
+          {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconAnimClass }) => (
+            <Stack
+              key={label}
+              as={NavLink}
+              to={href}
+              direction="row"
+              align="center"
+              gap={3}
+              paddingY={3}
+              paddingX={{ base: 0, sm: 4 }}
+              className={`group cursor-pointer topic-card-${id}`}
+            >
+              <Icon className={`h-4 w-4 ${iconColorClass} opacity-70 ${iconAnimClass} transition-transform duration-300`} />
+              <Text variant="body" size="sm" weight="font-medium" hoverColor="accent" className="transition-colors duration-300">
+                {label}
+              </Text>
+            </Stack>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 }

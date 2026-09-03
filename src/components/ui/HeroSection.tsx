@@ -2,7 +2,6 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness

@@ -1,6 +1,6 @@
 
 import { NavLink } from 'react-router-dom';
-import { Box, Text, Grid } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
