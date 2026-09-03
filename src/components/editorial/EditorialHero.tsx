@@ -12,7 +12,7 @@ interface EditorialHeroProps {
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover' }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'contain' }: EditorialHeroProps) {
   return (
     <Box
       width="full"
@@ -25,11 +25,11 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       <ProductImageFrame
         src={src}
         alt={alt}
-        objectFit="contain"
+        objectFit={objectFit}
         border={false}
         radius="none"
         aspect="auto"
-        className="w-full h-auto object-contain"
+        className={`w-full h-auto object-${objectFit}`}
       />
     </Box>
   );
