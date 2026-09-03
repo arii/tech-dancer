@@ -36,7 +36,6 @@ export function useToolbox() {
         const cat = (resource.category || '').toLowerCase();
         const tags = (resource.tags || []).map(t => t.toLowerCase());
         const title = (resource.title || '').toLowerCase();
-        const excerpt = (resource.excerpt || '').toLowerCase();
         const bestFor = ((resource as { bestFor?: string[] }).bestFor || []).map(b => b.toLowerCase());
 
         switch (selectedPill) {
