@@ -155,8 +155,10 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 justify="center"
                 paddingY={3}
                 paddingX={4}
+                gap={2}
+                marginTop={2}
                 radius="md"
-                className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold gap-2 text-center group mt-2 shadow-sm"
+                className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold text-center group shadow-sm"
               >
                 <ShoppingBag className="w-4 h-4 text-bg transition-transform group-hover:scale-110" />
                 <Text variant="mono" size="xs" weight="font-black" color="inherit">
