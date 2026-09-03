@@ -1,237 +1,120 @@
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
+import { Box, Stack } from '@/layouts/Primitives';
 import { useProfile } from './useProfile';
-
-const PortfolioCta = () => (
-  <Box marginTop={6}>
-    <RoboticsPortfolioCard />
-  </Box>
-);
-
-const LegalAndSocial = () => (
-  <Box as="section" maxWidth="6xl" marginX="auto" paddingX={4} marginTop={20} paddingTop={12} border="t" className="border-line/80">
-    <Grid cols={{ default: 1, md: 2 }} gap={12}>
-      <Stack gap={4}>
-        <Text as="h4" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" className="text-brand-cyan">
-          Connect &amp; Social
-        </Text>
-        <Box display="flex" wrap gap={2.5}>
-          <Box as="a" href="https://instagram.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
-            INSTAGRAM
-          </Box>
-          <Box as="a" href="https://linkedin.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
-            LINKEDIN
-          </Box>
-          <Box as="a" href="https://github.com" target="_blank" rel="noreferrer" paddingX={4} paddingY={2} radius="lg" border className="border-line bg-surface/60 hover:border-brand-cyan/40 hover:text-text-main text-text-dim transition-colors text-xs font-mono">
-            GITHUB
-          </Box>
-        </Box>
-      </Stack>
-
-      <Grid cols={{ default: 1, sm: 2 }} gap={6} paddingLeft={{ md: 8 }} paddingTop={{ default: 8, md: 0 }} className="text-xs text-text-dim border-t md:border-t-0 md:border-l md:border-line/40">
-        <Box id="privacy" scrollMarginTop={24}>
-          <Text as="h5" variant="mono" className="text-text-main uppercase tracking-wider text-xs">Privacy Policy</Text>
-          <p className="leading-relaxed text-text-dim">
-            This site is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Form info is used solely for its intended purpose.
-          </p>
-        </Box>
-        <Box id="terms" scrollMarginTop={24}>
-          <Text as="h5" variant="mono" className="text-text-main uppercase tracking-wider text-xs">Terms of Use</Text>
-          <p className="leading-relaxed text-text-dim">
-            Content is provided for informational and entertainment purposes. We are not responsible for issues arising from tools, products, or travel advice mentioned.
-          </p>
-        </Box>
-      </Grid>
-    </Grid>
-  </Box>
-);
+import ProfileStoryRow from './components/ProfileStoryRow';
+import ProfileLegalAndSocial from './components/ProfileLegalAndSocial';
 
 const ArielProfile = () => {
   const { bio } = useProfile();
   const hasHash = Boolean(window.location.hash);
 
   const danceBackground = bio.sections.find(s => s.id === 'dance-background');
-  const wcsLove = bio.sections.find(s => s.id === 'wcs-love');
+  const stylePillar = bio.sections.find(s => s.id === 'style-expression');
+  const timingPillar = bio.sections.find(s => s.id === 'timing-musicality');
   const whyBuilt = bio.sections.find(s => s.id === 'why-built');
-  const financialStrategies = bio.sections.find(s => s.id === 'financial-strategies');
+  const travelPillar = bio.sections.find(s => s.id === 'financial-strategies');
 
   return (
-    <Box as="section" height="full" paddingBottom={{ base: 24, lg: 32 }}>
+    <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
       <SEO
         title="About"
-        description="Ariel Anders, PhD: West Coast Swing dancer, community builder, and creator of boomtick.blog. Personal site focused on dance lifestyle, travel strategies, and live web experiments."
+        description="Ariel Anders, PhD: West Coast Swing dancer, roboticist, and creator of boomtick.blog. Personal site focused on dance lifestyle, travel strategies, and live web experiments."
       />
 
+      {/* 1. Standardized Page Header (Consistent with Blog, Gear, Merch, Research) */}
       <PageHeader
         label="BIOGRAPHY"
         title={bio.name}
         description={bio.role}
       />
 
-      <PortfolioCta />
+      {/* 2. Robotics & Autonomous Systems Portfolio CTA Card */}
+      <Box marginTop={{ base: 8, lg: 12 }} marginBottom={{ base: 8, lg: 12 }}>
+        <RoboticsPortfolioCard />
+      </Box>
 
-      <Stack gap={16} marginTop={12}>
+      {/* 3. Interspersed Alternating Zigzag Story Sections with Unique Photography */}
+      <Stack gap={{ base: 20, lg: 28 }} marginTop={{ base: 12, lg: 16 }}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
-          <Stack gap={16}>
+          <Stack gap={{ base: 24, lg: 32 }}>
+            {/* Section 1: Dance Background (Text Left, Image Right) */}
             {danceBackground && (
-              <Stack gap={6}>
-                <Stack gap={4} className="max-w-3xl">
-                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
-                    {danceBackground.title}
-                  </h2>
-                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
-                    {danceBackground.content}
-                  </p>
-                </Stack>
-                {danceBackground.gallery && danceBackground.gallery.length > 0 && (
-                  <Grid cols={{ default: 1, md: 2 }} gap={6} align="center" className="max-w-5xl">
-                    {danceBackground.gallery.map((img, idx) => {
-                      const isSquare = img.src.includes('first_comp') || idx === 1;
-                      return (
-                        <Box
-                          key={img.src || idx}
-                          width="full"
-                          overflow="hidden"
-                          radius="2xl"
-                          border
-                          aspect={isSquare ? "square" : "video"}
-                          className={`bg-surface border-line/40 shadow-lg group ${isSquare ? 'max-w-md mx-auto' : ''}`}
-                        >
-                          <img
-                            src={img.src}
-                            alt={img.alt}
-                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                        </Box>
-                      );
-                    })}
-                  </Grid>
-                )}
-              </Stack>
+              <ProfileStoryRow
+                id={danceBackground.id}
+                eyebrow={danceBackground.eyebrow}
+                title={danceBackground.title || 'My Dance Background'}
+                content={danceBackground.content}
+                imageSrc={danceBackground.gallery?.[0]?.src}
+                imageAlt={danceBackground.gallery?.[0]?.alt}
+                caption={danceBackground.gallery?.[0]?.caption}
+                reverse={false}
+              />
             )}
 
-            {/* 3. What I Love About WCS Section (Photo Left, 3 Feature Items Right) */}
-            {wcsLove && (
-              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
-                {wcsLove.gallery && wcsLove.gallery[0] && (
-                  <Box className="order-2 lg:order-1" display="flex" justify="center" width="full">
-                    <Box
-                      width="full"
-                      overflow="hidden"
-                      radius="2xl"
-                      border
-                      aspect="square"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xs md:max-w-sm"
-                    >
-                      <img
-                        src={wcsLove.gallery[0].src}
-                        alt={wcsLove.gallery[0].alt}
-                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </Box>
-                  </Box>
-                )}
-                <Stack gap={4} className="order-1 lg:order-2">
-                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
-                    {wcsLove.title}
-                  </h2>
-                  <Stack gap={3}>
-                    {wcsLove.items?.map((item, index) => (
-                      <Box
-                        key={item.title || index}
-                        padding={4}
-                        radius="xl"
-                        border
-                        className="border-line/60 bg-surface/40 hover:border-brand-cyan/30 transition-colors space-y-1"
-                      >
-                        <span className="text-xs font-mono font-semibold uppercase tracking-wider text-text-dim">
-                          {item.title}
-                        </span>
-                        <p className="text-sm text-text-dim leading-relaxed">
-                          {item.description}
-                        </p>
-                      </Box>
-                    ))}
-                  </Stack>
-                </Stack>
-              </Grid>
+            {/* Section 2: Core Pillar - Style & Expression (Image Left, Text Right) */}
+            {stylePillar && (
+              <ProfileStoryRow
+                id={stylePillar.id}
+                eyebrow={stylePillar.eyebrow}
+                title={stylePillar.title || 'Style & Visual Expression'}
+                content={stylePillar.content}
+                imageSrc={stylePillar.gallery?.[0]?.src}
+                imageAlt={stylePillar.gallery?.[0]?.alt}
+                caption={stylePillar.gallery?.[0]?.caption}
+                reverse={true}
+              />
             )}
 
-            {/* 4. Why I Built This Site Section (Text Left, Photo Right) */}
+            {/* Section 3: Core Pillar - Timing & Musicality (Text Left, Image Right) */}
+            {timingPillar && (
+              <ProfileStoryRow
+                id={timingPillar.id}
+                eyebrow={timingPillar.eyebrow}
+                title={timingPillar.title || 'Timing & Musicality'}
+                content={timingPillar.content}
+                imageSrc={timingPillar.gallery?.[0]?.src}
+                imageAlt={timingPillar.gallery?.[0]?.alt}
+                caption={timingPillar.gallery?.[0]?.caption}
+                reverse={false}
+              />
+            )}
+
+            {/* Section 4: Why I Built This Site (Image Left, Text Right) */}
             {whyBuilt && (
-              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
-                <Stack gap={4}>
-                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
-                    {whyBuilt.title}
-                  </h2>
-                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
-                    {whyBuilt.content}
-                  </p>
-                </Stack>
-                {whyBuilt.gallery && whyBuilt.gallery[0] && (
-                  <Box display="flex" justify="center" width="full">
-                    <Box
-                      width="full"
-                      overflow="hidden"
-                      radius="2xl"
-                      border
-                      aspect="video"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
-                    >
-                      <img
-                        src={whyBuilt.gallery[0].src}
-                        alt={whyBuilt.gallery[0].alt}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </Box>
-                  </Box>
-                )}
-              </Grid>
+              <ProfileStoryRow
+                id={whyBuilt.id}
+                eyebrow={whyBuilt.eyebrow}
+                title={whyBuilt.title || 'Why I Built This Site'}
+                content={whyBuilt.content}
+                imageSrc={whyBuilt.gallery?.[0]?.src}
+                imageAlt={whyBuilt.gallery?.[0]?.alt}
+                caption={whyBuilt.gallery?.[0]?.caption}
+                reverse={true}
+              />
             )}
 
-            {/* 5. Financial Strategies Section (Photo Left, Text Right) */}
-            {financialStrategies && (
-              <Grid cols={{ default: 1, lg: 2 }} gap={10} align="center">
-                {financialStrategies.gallery && financialStrategies.gallery[0] && (
-                  <Box className="order-2 lg:order-1" display="flex" justify="center" width="full">
-                    <Box
-                      width="full"
-                      overflow="hidden"
-                      radius="2xl"
-                      border
-                      aspect="video"
-                      className="bg-surface border-line/40 shadow-lg group max-w-xl"
-                    >
-                      <img
-                        src={financialStrategies.gallery[0].src}
-                        alt={financialStrategies.gallery[0].alt}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </Box>
-                  </Box>
-                )}
-                <Stack gap={4} className="order-1 lg:order-2">
-                  <h2 className="text-2xl font-bold uppercase tracking-tight text-text-main">
-                    {financialStrategies.title}
-                  </h2>
-                  <p className="text-base sm:text-lg text-text-dim leading-relaxed">
-                    {financialStrategies.content}
-                  </p>
-                </Stack>
-              </Grid>
+            {/* Section 5: Core Pillar - Travel & Logistics (Text Left, Image Right) */}
+            {travelPillar && (
+              <ProfileStoryRow
+                id={travelPillar.id}
+                eyebrow={travelPillar.eyebrow}
+                title={travelPillar.title || 'Travel & Sustainable Logistics'}
+                content={travelPillar.content}
+                imageSrc={travelPillar.gallery?.[0]?.src}
+                imageAlt={travelPillar.gallery?.[0]?.alt}
+                caption={travelPillar.gallery?.[0]?.caption}
+                reverse={false}
+              />
             )}
           </Stack>
         </Reveal>
       </Stack>
 
-      <LegalAndSocial />
+      {/* 4. Legal, Terms & Social Links */}
+      <ProfileLegalAndSocial />
     </Box>
   );
 };

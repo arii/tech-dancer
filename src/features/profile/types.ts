@@ -20,11 +20,15 @@ export interface ProfileItem {
   icon?: string;
   title: string;
   description: string;
+  image?: ProfileGalleryImage;
 }
 
 export interface ProfileGalleryImage {
   src: string;
   alt: string;
+  caption?: string;
+  event?: string;
+  year?: string;
 }
 
 export interface ProfileDetail {
@@ -41,6 +45,8 @@ export interface ProfileLink {
 export interface ProfileData {
   name: string;
   role: string;
+  bioSummary?: string;
+  heroImage?: ProfileGalleryImage;
   sections: ProfileSection[];
   details: ProfileDetail[];
 }
