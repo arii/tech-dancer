@@ -2,7 +2,7 @@
 type: post
 title: "Practice & Social Dance Apparel"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "Basic functional dance wear and layering accessories for your next practice or social."
 image: "/images/gear/sketches/mesh-fishnet-top.webp"

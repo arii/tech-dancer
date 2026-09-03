@@ -2,7 +2,7 @@
 type: post
 title: "Practice & Review Tech"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "Electronics and tools for listening to music, rehearsing, or recording practice runs."
 image: "/images/gear/sketches/ue-wonderboom.webp"

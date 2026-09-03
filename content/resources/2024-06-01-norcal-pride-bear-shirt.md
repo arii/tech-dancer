@@ -2,7 +2,7 @@
 type: resource
 title: "NorCal Best Cal Pride California Bear Apparel"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "The iconic California bear, redesigned with Pride colors for the West Coast Swing community."
 image: "/assets/gear/norcal-best-cal-pride-california-bear-apparel-front.webp"

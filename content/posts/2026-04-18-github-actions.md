@@ -3,7 +3,7 @@ type: post
 draft: true
 title: "How I used GitHub Actions to power this site"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Tech"
 excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog."
 image: ""

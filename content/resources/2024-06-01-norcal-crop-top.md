@@ -2,7 +2,7 @@
 type: resource
 title: "NorCal Best Cal Cropped top"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "Stylish cropped top for NorCal dancers."
 image: "/assets/gear/norcal-crop-top-front.webp"

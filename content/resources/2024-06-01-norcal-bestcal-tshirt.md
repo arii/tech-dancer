@@ -2,7 +2,7 @@
 type: resource
 title: "NorCal BestCal"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "The original NorCal BestCal t-shirt."
 image: "/assets/gear/norcal-bestcal-front.webp"

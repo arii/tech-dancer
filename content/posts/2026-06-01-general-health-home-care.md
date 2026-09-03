@@ -2,7 +2,7 @@
 type: post
 title: "General Health & Home Care for Dancers"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Health"
 excerpt: "Master your post-event recovery with targeted foam-rolling techniques, muscle maintenance, and professional self-care strategies designed for the active West Coast Swing dancer."
 image: "/images/gear/sketches/foam-roller.webp"
