@@ -1,7 +1,73 @@
 {
-  "dependabot/npm_and_yarn/npm_and_yarn-41f14ddda9": {
-    "commitTimestamp": 1788411053,
-    "deployTimestamp": 1788411053,
+  "jules/typography-and-content-expansion-13010930442902283272/about": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/gear": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/memes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/versiontruth": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "jules/typography-and-content-expansion-13010930442902283272/wcs-navigator": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 }
