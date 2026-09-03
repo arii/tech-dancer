@@ -1,1 +1,0 @@
-import{j as u}from"./vendor-BLdctGUO.js";import{J as m,B as c,c as d}from"./index-BS2l93Fc.js";const x=({label:s,onClick:r,isActive:t,className:a,type:o="button",variant:n="default",...e})=>{const i=m({variant:n,isActive:t});return u.jsx(c,{as:"button",type:o,onClick:r,"aria-pressed":t||void 0,radius:"md",cursor:"pointer",className:d(i,a),...e,children:s})};export{x as F};
