@@ -72,10 +72,10 @@ export function PromoStrip({
         >
           <Text
             variant="mono"
-            size={{ base: 'micro', sm: 'tiny' }}
+            size={{ base: 'xs', sm: 'sm' }}
             weight="font-bold"
             color="accent"
-            className="group-hover:underline underline-offset-4 uppercase transition-all"
+            className="group-hover:underline underline-offset-4 transition-all"
           >
             {ctaLabel}
           </Text>

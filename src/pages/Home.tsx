@@ -39,7 +39,7 @@ export default function Home() {
           imageSrc="/assets/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"
           subtitle="Tees, hoodies, and tanks for the dance floor"
-          ctaLabel="Shop now"
+          ctaLabel="Shop the collection"
           href="/merch"
         />
       </Box>

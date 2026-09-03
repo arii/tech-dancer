@@ -53,14 +53,6 @@ export function HeroSection() {
         marginX={{ base: 0, xl: "auto" }}
       >
 
-
-        <Wordmark
-          variant="hero"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-logo-anim"
-        />
-
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
@@ -85,10 +77,12 @@ export function HeroSection() {
           <Text
             as="span"
             variant="hero"
+            color="white"
+            opacityVariant="muted"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
             display="block"
           >
-            <span className="hero-accent-color">Dance more.</span>
+            <span>Dance more.</span>
           </Text>
         </Stack>
 
