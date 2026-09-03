@@ -220,7 +220,11 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
             onClick={handleOverlayClick}
             className="select-none"
           >
-            <Box
+            <Stack
+              align="center"
+              justify="center"
+              width="full"
+              maxWidth="5xl"
               padding={4}
               radius="lg"
               border
@@ -228,7 +232,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               surface="surface"
               shadow="2xl"
               onClick={(e) => e.stopPropagation()}
-              className="max-w-5xl w-full flex items-center justify-center transition-transform duration-150 ease-out"
+              className="transition-transform duration-150 ease-out"
               style={
                 {
                   transform: `scale(${zoomScale})`,
@@ -240,9 +244,12 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                className="w-full max-h-[75vh] object-contain rounded-md block"
+                width="full"
+                maxHeight="screen"
+                radius="sm"
+                className="object-contain block"
               />
-            </Box>
+            </Stack>
           </Box>
         </Stack>,
         document.body
