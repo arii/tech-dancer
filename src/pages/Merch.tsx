@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { RotateCcw } from 'lucide-react';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -158,6 +159,29 @@ export default function Merch() {
             ))}
           </Grid>
         )}
+
+        {/* Return Policy & Printful Fulfillment Info */}
+        <Box id="return-policy" padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full" className="scroll-mt-24">
+          <div id="returnpolicy" className="scroll-mt-24" />
+          <Stack gap={4}>
+            <Stack direction="row" align="center" gap={3}>
+              <Box padding={2} radius="md" className="bg-accent/10 text-accent">
+                <RotateCcw className="w-5 h-5" />
+              </Box>
+              <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
+                Return & Fulfillment Policy
+              </Text>
+            </Stack>
+
+            <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
+              Each BoomTick merchandise item is custom made to order and fulfilled directly through Printful. Because items are produced specifically when ordered, we cannot accept returns or exchanges for size, color, or change of mind.
+            </Text>
+
+            <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
+              If your item arrives misprinted, damaged, defective, or incorrect, please contact us promptly with photos of the issue so we can work with Printful to resolve it and get a replacement sent to you right away.
+            </Text>
+          </Stack>
+        </Box>
 
         {/* Footer Callouts */}
         <Box padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full">
