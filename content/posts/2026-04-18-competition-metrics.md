@@ -4,7 +4,7 @@ draft: true
 status: draft
 title: "Coming Soon: WCS Competition Data Scraper"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Tech"
 excerpt: "Announcing a new tool for a clearer way to look at West Coast Swing competition results."
 image: "/assets/posts/competition-data-thumb.svg"

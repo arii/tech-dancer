@@ -2,7 +2,7 @@
 type: resource
 title: "Halloween Pumpkin Headbands"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Fashion"
 excerpt: "Cute pumpkin headbands for themed social dancing without sacrificing movement."
 image: "/images/gear/sketches/pumpkin-headbands.webp"

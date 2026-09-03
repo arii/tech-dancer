@@ -14,9 +14,10 @@ export const EVENT_TYPES = [
 ] as const;
 
 export const GEAR_PILLS = [
-  { label: "Travel picks", value: "Best for travel" },
-  { label: "Recommended", value: "Highly recommended" },
-  { label: "Competition ready", value: "Competition ready" }
+  { label: "Footwear & Care", value: "footwear" },
+  { label: "Ballroom & Social", value: "social" },
+  { label: "Travel & Packing", value: "travel" },
+  { label: "Theme & Costumes", value: "theme" },
 ] as const;
 
-export const ALL_GEAR_FILTER = { label: "All gear", value: "all" } as const;
+export const ALL_GEAR_FILTER = { label: "All Gear", value: "all" } as const;

@@ -2,7 +2,7 @@
 type: resource
 title: "Sunscreen & Lip Balm SPF 50"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Self Care"
 excerpt: "Stay protected during outdoor social events and pool parties."
 image: ""

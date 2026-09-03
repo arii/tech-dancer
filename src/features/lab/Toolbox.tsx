@@ -24,17 +24,18 @@ export default function Toolbox() {
   [filteredCategories]);
 
   return (
-    <Box as="section" paddingY={4}>
+    <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="toolbox-feed">
       <SEO
-        title="Toolbox"
+        title="Gear Reviews"
         description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
-      <Box as="header" marginBottom={8}>
+
+      <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="THE TOOLBOX"
+          label="GEAR & REVIEWS"
           title="Gear Reviews"
-          description="Rigorous testing and honest takes on the gear that keeps you moving."
+          description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
         />
 
         <Stack gap={6}>
@@ -51,7 +52,7 @@ export default function Toolbox() {
           </Box>
         </Stack>
 
-        <Box display="flex" justify="center" marginTop={8} marginBottom={8} className="overflow-x-auto">
+        <Box display="flex" justify="center" marginBottom={4} className="overflow-x-auto">
           <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">
             <FilterButton
               label={ALL_GEAR_FILTER.label}
@@ -70,34 +71,34 @@ export default function Toolbox() {
             ))}
           </Box>
         </Box>
-      </Box>
 
-      {/* Grid: Mobile-first stacking */}
-      {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 3, md: 4 }}>
-          {allFilteredItems.map((item) => (
-            <GearCard
-              key={item.slug}
-              {...item}
-              basePath="/gear"
-            />
-          ))}
-        </Grid>
-      ) : (
-        <Stack gap={0} border="t" className="border-line">
-          {allFilteredItems.map((item) => (
-            <ListRow key={item.slug} {...item} basePath="/gear" />
-          ))}
-        </Stack>
-      )}
+        {/* Grid: Mobile-first stacking */}
+        {view === 'card' ? (
+          <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 3, md: 4 }}>
+            {allFilteredItems.map((item) => (
+              <GearCard
+                key={item.slug}
+                {...item}
+                basePath="/gear"
+              />
+            ))}
+          </Grid>
+        ) : (
+          <Stack gap={0} border="t" className="border-line">
+            {allFilteredItems.map((item) => (
+              <ListRow key={item.slug} {...item} basePath="/gear" />
+            ))}
+          </Stack>
+        )}
 
-      {allFilteredItems.length === 0 && (
-        <EmptyState
-          icon={<Search className="w-12 h-12" />}
-          title="No gear found"
-          description={`No gear found matching current filters.`}
-        />
-      )}
+        {allFilteredItems.length === 0 && (
+          <EmptyState
+            icon={<Search className="w-12 h-12" />}
+            title="No gear found"
+            description="No gear found matching current filters."
+          />
+        )}
+      </Stack>
     </Box>
   );
 }

@@ -76,7 +76,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'DevAI Experiments',
+    label: 'Experiments',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true,
