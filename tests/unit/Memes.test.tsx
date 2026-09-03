@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Memes from '@/pages/Memes';
-import { MEMES_DATA, MEME_PORTING_BACKLOG } from '@/data/memes';
+import { MEMES_DATA } from '@/data/memes';
 
 describe('Memes Page Component', () => {
   const renderMemesPage = () => {
@@ -16,7 +16,7 @@ describe('Memes Page Component', () => {
     );
   };
 
-  test('renders page elements, under construction banner, and backlog roadmap correctly', () => {
+  test('renders page elements and under construction banner correctly', () => {
     renderMemesPage();
 
     // Check SEO & Page Headers
@@ -40,16 +40,6 @@ describe('Memes Page Component', () => {
       const img = screen.getByAltText(meme.altText) as HTMLImageElement;
       expect(img).toBeDefined();
       expect(img.src).toContain(meme.imageSrc);
-    });
-
-    // Check Porting Roadmap section and backlog items
-    expect(screen.getByTestId('porting-roadmap-section')).toBeDefined();
-    expect(screen.getByText('Porting Roadmap & Backlog')).toBeDefined();
-
-    MEME_PORTING_BACKLOG.forEach((item) => {
-      expect(screen.getByTestId(`roadmap-item-${item.id}`)).toBeDefined();
-      expect(screen.getByText(item.title)).toBeDefined();
-      expect(screen.getByText(item.description)).toBeDefined();
     });
   });
 

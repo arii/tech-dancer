@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { X, Clock, Sparkles } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import { MEMES_DATA, MEME_PORTING_BACKLOG } from '@/data/memes';
+import { MEMES_DATA } from '@/data/memes';
 
 const Memes = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -122,57 +121,6 @@ const Memes = () => {
                     {meme.title}
                   </Text>
                 </Box>
-              </BaseCard>
-            ))}
-          </Grid>
-        </Stack>
-
-        {/* Porting Roadmap / Backlog Section */}
-        <Stack gap={6} width="full" data-testid="porting-roadmap-section">
-          <Box display="flex" align={{ sm: 'center' }} justify="between" gap={2}>
-            <Stack gap={1}>
-              <Text variant="subheading" size="xl" weight="font-bold" color="main">
-                Porting Roadmap & Backlog
-              </Text>
-              <Text variant="body" size="sm" color="dim">
-                Original dance memes currently being formatted, polished, and added to the gallery.
-              </Text>
-            </Stack>
-            <Box display="flex" align="center" gap={2} className="shrink-0">
-              <Icon icon={Clock} size="xs" className="text-text-dim" />
-              <Text variant="mono" size="tiny" color="dim" uppercase tracking="wider">
-                {MEME_PORTING_BACKLOG.length} In Queue
-              </Text>
-            </Box>
-          </Box>
-
-          <Grid cols={{ base: 1, md: 2 }} gap={4} width="full">
-            {MEME_PORTING_BACKLOG.map((item) => (
-              <BaseCard
-                key={item.id}
-                gap={3}
-                padding={5}
-                radius="md"
-                border
-                maxWidth="full"
-                data-testid={`roadmap-item-${item.id}`}
-              >
-                <Box display="flex" align="center" justify="between" gap={3}>
-                  <Text variant="body" size="base" weight="font-bold" color="main">
-                    {item.title}
-                  </Text>
-                  <StatusBadge label={item.status} className="shrink-0" />
-                </Box>
-                <Text variant="body" size="sm" color="dim" className="text-pretty">
-                  {item.description}
-                </Text>
-                {item.targetCategory && (
-                  <Box display="flex" align="center" gap={2} marginTop={1}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="wider">
-                      Category: {item.targetCategory}
-                    </Text>
-                  </Box>
-                )}
               </BaseCard>
             ))}
           </Grid>
