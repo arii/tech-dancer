@@ -2,7 +2,7 @@
 type: resource
 title: "High-Density Foam Roller"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Dance Gear"
 excerpt: "A high-density solid foam roller that is excellent for post-dance muscle recovery at home or local socials."
 image: "/images/gear/sketches/foam-roller.webp"

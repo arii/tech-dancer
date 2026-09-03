@@ -2,7 +2,7 @@
 type: post
 title: "The Most Effective Way to Combat Smelly Dance Shoes"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "Stop masking odors and start eliminating them. Why an electric shoe dryer has proven to be the most effective tool in my gear bag."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"

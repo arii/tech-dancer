@@ -2,7 +2,7 @@
 type: resource
 title: "Compression Packing Cubes"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Travel Gear"
 excerpt: "Maximize luggage space and keep your dance outfits organized and wrinkle-free."
 image: "/images/gear/sketches/compression-cubes.webp"

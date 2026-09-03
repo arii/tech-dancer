@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Box, Stack, Text, Button, type TextProps, type BoxProps } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
@@ -26,10 +27,7 @@ export function ProductCard({
   clampTitle?: TextProps['clamp'];
   clampDescription?: TextProps['clamp'];
 } & Omit<BoxProps, 'children'>) {
-  // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
-  const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
-    ? 'SEE OPTIONS'
-    : 'VIEW ON PRINTFUL';
+  const internalRoute = item.gearSlug ? `/gear/${item.gearSlug}` : undefined;
 
   const productItem = useMemo(() => {
     const parsedPrice = item.price ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : undefined;
@@ -62,31 +60,61 @@ export function ProductCard({
       {...props}
     >
       <ProductJsonLd item={productItem} />
-      <MerchImageDisplay
-        title={item.title}
-        href={item.href}
-        imageUrl={item.imageUrl}
-        images={item.images}
-        imageDisplayMode={item.imageDisplayMode}
-        isFeatured={isFeatured}
-      />
+      {internalRoute ? (
+        <Link to={internalRoute} state={{ from: 'merch' }} className="block w-full">
+          <MerchImageDisplay
+            title={item.title}
+            href={internalRoute}
+            imageUrl={item.imageUrl}
+            images={item.images}
+            imageDisplayMode={item.imageDisplayMode}
+            isFeatured={isFeatured}
+          />
+        </Link>
+      ) : (
+        <MerchImageDisplay
+          title={item.title}
+          href={item.href}
+          imageUrl={item.imageUrl}
+          images={item.images}
+          imageDisplayMode={item.imageDisplayMode}
+          isFeatured={isFeatured}
+        />
+      )}
 
       <Stack gap={isFeatured ? 4 : 3}>
-        <Text
-          as="a"
-          href={item.href}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          variant="body"
-          size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
-          weight="font-bold"
-          color="main"
-          leading="tight"
-          clamp={clampTitle}
-          className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {item.title}
-        </Text>
+        {internalRoute ? (
+          <Text
+            as={Link}
+            to={internalRoute}
+            state={{ from: 'merch' }}
+            variant="body"
+            size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
+            weight="font-bold"
+            color="main"
+            leading="tight"
+            clamp={clampTitle}
+            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            {item.title}
+          </Text>
+        ) : (
+          <Text
+            as="a"
+            href={item.href}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            variant="body"
+            size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
+            weight="font-bold"
+            color="main"
+            leading="tight"
+            clamp={clampTitle}
+            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            {item.title}
+          </Text>
+        )}
 
         <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription}>
           {item.description}
@@ -125,19 +153,35 @@ export function ProductCard({
             </Box>
           ))}
         </Stack>
-        <Button
-          as="a"
-          href={item.href}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          variant="primary"
-          fullWidth
-          gap={1.5}
-          aria-label={`View ${item.title} on Printful`}
-        >
-          {ctaText}
-          <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
-        </Button>
+
+        {internalRoute ? (
+          <Button
+            as={Link}
+            to={internalRoute}
+            state={{ from: 'merch' }}
+            variant="primary"
+            fullWidth
+            gap={1.5}
+            aria-label={`View details and options for ${item.title}`}
+          >
+            VIEW OPTIONS
+            <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
+          </Button>
+        ) : (
+          <Button
+            as="a"
+            href={item.href}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            variant="primary"
+            fullWidth
+            gap={1.5}
+            aria-label={`View ${item.title} on Printful`}
+          >
+            {item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1) ? 'SEE OPTIONS' : 'VIEW ON PRINTFUL'}
+            <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
+          </Button>
+        )}
       </Stack>
     </BaseCard>
   );

@@ -2,7 +2,7 @@
 type: post
 title: "Outdoor Dancing Gear"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "Gear specifically suited for outdoor events, festivals, or warm-weather dancing."
 image: "/images/gear/sketches/fanny-pack.webp"

@@ -2,7 +2,7 @@
 type: resource
 title: "LOVE Lead Follow or Switch Unisex shirt"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "fashion"
 excerpt: "Unisex 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/unisex-t-shirt-front.webp"

@@ -2,7 +2,7 @@
 type: resource
 title: "Green Full-Body Spandex Suit"
 date: "2024-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Dance Gear"
 excerpt: "The ultimate 'Dress to Impress' base for Galactic-themed events."
 image: "/images/gear/sketches/green-bodysuit.webp"

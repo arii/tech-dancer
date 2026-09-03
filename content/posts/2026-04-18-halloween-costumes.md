@@ -2,7 +2,7 @@
 type: post
 title: "Halloween costumes you can dance in"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Costumes"
 excerpt: "Easiest DIY pumpkin costume: orange outfit + pumpkin headband + stick-on jack-o’-lantern face. No sewing, no felt cutting, still cute enough for Halloween dancing."
 image: "/images/gear/sketches/assembly-guide.webp"

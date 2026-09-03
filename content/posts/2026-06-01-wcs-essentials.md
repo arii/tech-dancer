@@ -2,7 +2,7 @@
 type: post
 title: "WCS Essentials (Local & Travel)"
 date: "2026-06-01"
-author: "Ariel Anders, PhD"
+author: "Ariel Anders"
 category: "Gear"
 excerpt: "High-priority essentials to bring to any West Coast Swing event, whether local or out-of-town."
 image: "/images/gear/sketches/loop-earplugs.webp"

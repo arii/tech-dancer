@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
@@ -18,6 +18,7 @@ import {
 export default function GearPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: resource } = useQuery({
     queryKey: ['resources', slug],
     queryFn: () => slug ? getResourceBySlug(slug) : undefined,
@@ -61,13 +62,30 @@ export default function GearPost() {
     return schema;
   }, [resource]);
 
+  const isMerch = useMemo(() => {
+    if (!resource) return false;
+    const fromState = (location.state as { from?: string } | null)?.from;
+    if (fromState === 'merch' || fromState === '/merch') return true;
+    return (
+      resource.provider === 'printful' ||
+      !!resource.shopUrl ||
+      resource.tags?.includes('merch') ||
+      resource.category?.toLowerCase() === 'fashion' ||
+      resource.category?.toLowerCase() === 'apparel' ||
+      resource.category?.toLowerCase() === 'accessories'
+    );
+  }, [resource, location.state]);
+
+  const backTarget = isMerch ? '/merch' : '/gear';
+  const backLabel = isMerch ? 'Back to Merch' : 'Back to Toolbox';
+
   if (!resource) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Toolbox</Text>
+          <Box as="button" onClick={() => navigate(backTarget)} className="hover:text-accent transition-colors">
+            <Text variant="mono" size="xs">{backLabel}</Text>
           </Box>
         </Stack>
       </Box>
@@ -85,8 +103,8 @@ export default function GearPost() {
       />
       <GearPostDetail
         post={resource}
-        onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
+        onBack={() => navigate(backTarget)}
+        backLabel={backLabel}
       />
     </>
   );
