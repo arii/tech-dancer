@@ -103,9 +103,9 @@ function transform<T extends { date?: string; draft?: boolean }>(
         type,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
-        excerpt: String(data.excerpt || ""),
+        excerpt: String(data.excerpt || data.description || ""),
         date: String(data.date || ""),
-        author: String(data.author || "Ariel Anders, PhD"),
+        author: String(data.author || "Ariel Anders").replace(/,?\s*PhD/i, "").trim(),
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
 

@@ -178,7 +178,7 @@ export function ProductCard({
             gap={1.5}
             aria-label={`View ${item.title} on Printful`}
           >
-            VIEW ON PRINTFUL
+            {item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1) ? 'SEE OPTIONS' : 'VIEW ON PRINTFUL'}
             <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
           </Button>
         )}
