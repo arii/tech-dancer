@@ -228,7 +228,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
               surface="surface"
               shadow="2xl"
               onClick={(e) => e.stopPropagation()}
-              className="transition-transform duration-150 ease-out"
+              className="max-w-5xl w-full flex items-center justify-center transition-transform duration-150 ease-out"
               style={
                 {
                   transform: `scale(${zoomScale})`,
@@ -240,8 +240,7 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
                 as="img"
                 src={diagramUrl}
                 alt={title ?? "Workflow Diagram"}
-                width="full"
-                className="max-w-full rounded-md block"
+                className="w-full max-h-[75vh] object-contain rounded-md block"
               />
             </Box>
           </Box>
