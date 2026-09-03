@@ -202,7 +202,7 @@ export default defineConfig(({mode}) => {
         gzipSize: true,
       }),
       inspect && !isProd && Inspect(),
-      // Fix Vite preview SPA routing for sub-path deployments (e.g. /tech-dancer/).
+      // Fallback middleware to handle Vite preview SPA routing for sub-path deployments (e.g. /tech-dancer/).
       // When the browser reloads a URL like /tech-dancer?modal=true&q=swing (no
       // trailing slash) Vite rejects the request with a confusing "did you mean"
       // error instead of serving index.html, breaking the Playwright reload test.
