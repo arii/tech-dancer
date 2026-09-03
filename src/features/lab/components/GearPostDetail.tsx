@@ -59,6 +59,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       }
       sidebar={
         <ResourceSidebar
+          slug={post.slug}
           affiliateIds={post.affiliateIds}
           shopUrl={post.shopUrl}
           provider={post.provider}
