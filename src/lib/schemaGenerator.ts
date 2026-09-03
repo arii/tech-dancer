@@ -1,4 +1,12 @@
 // src/lib/schemaGenerator.ts
+import {
+  DEFAULT_BRAND,
+  DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+  DEFAULT_PRINTFUL_RETURN_POLICY,
+  type SchemaBrand,
+  type SchemaShippingDetails,
+  type SchemaMerchantReturnPolicy,
+} from '@/utils/schema';
 
 export interface ProductItem {
   id: string;
@@ -18,7 +26,10 @@ export interface SchemaOffer {
   price: string;
   priceCurrency: string;
   availability: string;
+  itemCondition: string;
   url: string;
+  shippingDetails?: SchemaShippingDetails;
+  hasMerchantReturnPolicy?: SchemaMerchantReturnPolicy;
 }
 
 export interface SchemaAggregateRating {
@@ -33,6 +44,9 @@ export interface ProductJsonLdData {
   name: string;
   description: string;
   image: string[];
+  brand: SchemaBrand;
+  sku: string;
+  mpn: string;
   offers?: SchemaOffer;
   aggregateRating?: SchemaAggregateRating;
 }
@@ -48,6 +62,9 @@ export const buildProductJsonLd = (item: ProductItem): ProductJsonLdData => {
     name: item.name,
     description: item.description,
     image: [item.imageUrl],
+    brand: DEFAULT_BRAND,
+    sku: item.id,
+    mpn: item.id,
   };
 
   // Attach Offer node only when a valid numeric price is provided
@@ -63,7 +80,10 @@ export const buildProductJsonLd = (item: ProductItem): ProductJsonLdData => {
       price: formattedPrice,
       priceCurrency: currency,
       availability,
+      itemCondition: 'https://schema.org/NewCondition',
       url: item.url,
+      shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+      hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
     };
   }
 

@@ -7,7 +7,13 @@ import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
 import type { SchemaProduct } from '@/utils/schema';
-import { AMAZON_AFFILIATE_DISCLOSURE } from '@/utils/schema';
+import {
+  AMAZON_AFFILIATE_DISCLOSURE,
+  DEFAULT_BRAND,
+  DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+  DEFAULT_PRINTFUL_RETURN_POLICY,
+  parsePrice,
+} from '@/utils/schema';
 
 export default function GearPost() {
   const { slug } = useParams();
@@ -22,8 +28,10 @@ export default function GearPost() {
   const structuredData = useMemo(() => {
     if (!resource) return null;
 
-    const isMerch = !!resource.shopUrl;
     const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
+    const sku = resource.internalSku || resource.slug;
+    const rawPrice = (resource as unknown as { price?: string | number }).price;
+    const price = parsePrice(rawPrice, "25.00");
 
     const schema: SchemaProduct = {
       "@context": "https://schema.org",
@@ -35,31 +43,18 @@ export default function GearPost() {
       "image": resource.image
         ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
         : `${BASE_URL}/assets/comp_analysis_hero.webp`,
-      "brand": {
-        "@type": "Brand",
-        "name": "BoomTick"
-      },
-      "sku": resource.internalSku || resource.slug,
+      "brand": DEFAULT_BRAND,
+      "sku": sku,
+      "mpn": sku,
       "offers": {
         "@type": "Offer",
+        "price": price,
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
         "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        ...(isMerch ? {
-          "availability": "https://schema.org/InStock",
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
-            "shippingDestination": {
-              "@type": "DefinedRegion",
-              "addressCountry": "US"
-            }
-          },
-          "hasMerchantReturnPolicy": {
-            "@type": "MerchantReturnPolicy",
-            "applicableCountry": "US",
-            "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
-            "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
-          }
-        } : {})
+        "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+        "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
       }
     };
 

@@ -4,6 +4,9 @@ import {
   generateMerchSchema,
   generateGearCatalogSchema,
   AMAZON_AFFILIATE_DISCLOSURE,
+  DEFAULT_BRAND,
+  DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+  DEFAULT_PRINTFUL_RETURN_POLICY,
 } from '@/utils/schema';
 import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
@@ -41,7 +44,7 @@ describe('schema utils', () => {
   });
 
   describe('generateMerchSchema', () => {
-    it('generates a valid SchemaItemList from merch products', () => {
+    it('generates a valid SchemaItemList from merch products with enriched offer data', () => {
       const mockProducts: ProductCatalogItem[] = [
         {
           id: 'shirt-1',
@@ -50,7 +53,7 @@ describe('schema utils', () => {
           imageUrl: '/assets/shirt.jpg',
           href: '/merch/shirt-1',
           category: 'Apparel',
-          price: 25,
+          price: '25.00',
           currency: 'USD',
           inStock: true,
         },
@@ -61,7 +64,7 @@ describe('schema utils', () => {
           imageUrl: 'https://cdn.example.com/hat.jpg',
           href: '/merch/hat-1',
           category: 'Accessories',
-          price: 15,
+          price: '15.00',
           currency: 'USD',
           inStock: true,
         },
@@ -81,14 +84,18 @@ describe('schema utils', () => {
               name: 'Awesome T-Shirt',
               description: 'A very cool shirt for WCS',
               image: `${BASE_URL}${ASSET_PREFIX}/assets/shirt.jpg`,
-              brand: {
-                '@type': 'Brand',
-                name: 'BoomTick',
-              },
+              brand: DEFAULT_BRAND,
               sku: 'shirt-1',
+              mpn: 'shirt-1',
               offers: {
                 '@type': 'Offer',
+                price: '25.00',
+                priceCurrency: 'USD',
+                availability: 'https://schema.org/InStock',
+                itemCondition: 'https://schema.org/NewCondition',
                 url: '/merch/shirt-1',
+                shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+                hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
               },
             },
           },
@@ -100,14 +107,18 @@ describe('schema utils', () => {
               name: 'WCS Cap',
               description: 'Stylish cap for events',
               image: 'https://cdn.example.com/hat.jpg',
-              brand: {
-                '@type': 'Brand',
-                name: 'BoomTick',
-              },
+              brand: DEFAULT_BRAND,
               sku: 'hat-1',
+              mpn: 'hat-1',
               offers: {
                 '@type': 'Offer',
+                price: '15.00',
+                priceCurrency: 'USD',
+                availability: 'https://schema.org/InStock',
+                itemCondition: 'https://schema.org/NewCondition',
                 url: '/merch/hat-1',
+                shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+                hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
               },
             },
           },
@@ -124,7 +135,7 @@ describe('schema utils', () => {
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('generates a SchemaItemList for non-Amazon gear resources', () => {
+    it('generates a SchemaItemList for non-Amazon gear resources with complete offer metadata', () => {
       const mockResources: Resource[] = [
         {
           slug: 'dance-shoes-1',
@@ -147,14 +158,18 @@ describe('schema utils', () => {
           name: 'Fuego Dance Sneakers',
           description: 'Great dance shoes for all floor types.',
           image: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
-          brand: {
-            '@type': 'Brand',
-            name: 'BoomTick',
-          },
+          brand: DEFAULT_BRAND,
           sku: 'dance-shoes-1',
+          mpn: 'dance-shoes-1',
           offers: {
             '@type': 'Offer',
+            price: '25.00',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+            itemCondition: 'https://schema.org/NewCondition',
             url: 'https://fuegodance.com/shoes',
+            shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+            hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
           },
         },
       });
@@ -180,10 +195,14 @@ describe('schema utils', () => {
         `Powerful portable speaker for dance practice. ${AMAZON_AFFILIATE_DISCLOSURE}`
       );
       expect(product.sku).toBe('AMZ-JBL-5');
+      expect(product.mpn).toBe('AMZ-JBL-5');
       expect(product.image).toBe(
         `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`
       );
       expect(product.offers.url).toBe(`${BASE_URL}/gear/portable-speaker`);
+      expect(product.offers.price).toBe('25.00');
+      expect(product.offers.priceCurrency).toBe('USD');
+      expect(product.offers.availability).toBe('https://schema.org/InStock');
     });
   });
 });

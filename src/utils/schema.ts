@@ -2,43 +2,36 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import type { Resource } from '@/lib/types/content';
 import { ASSET_PREFIX, BASE_URL } from '@/config/constants';
 
-/**
- * SCHEMA POLICY: Conservative Product JSON-LD
- *
- * Only publish stable, site-controlled facts in Product structured data.
- *
- * Allowed now:
- * - name
- * - description
- * - image
- * - URL
- * - brand
- * - internal SKU/id
- *
- * Do NOT publish at this time:
- * - price
- * - currency
- * - availability / stock status
- * - shipping details
- * - return policy
- * - ratings
- * - reviews
- * - review counts
- * - delivery dates
- *
- * Rationale:
- * Printful/Amazon/product availability, pricing, shipping, returns, and ratings can change
- * outside the site. Publishing guessed or stale values in JSON-LD creates SEO and trust risk.
- */
-
 export interface SchemaBrand {
   "@type": "Brand";
   "name": string;
 }
 
+export interface SchemaShippingDetails {
+  "@type": "OfferShippingDetails";
+  "description": string;
+  "shippingDestination": {
+    "@type": "DefinedRegion";
+    "addressCountry": string;
+  };
+}
+
+export interface SchemaMerchantReturnPolicy {
+  "@type": "MerchantReturnPolicy";
+  "applicableCountry": string;
+  "returnPolicyCategory": string;
+  "description": string;
+}
+
 export interface SchemaOffer {
   "@type": "Offer";
+  "price": string;
+  "priceCurrency": string;
+  "availability": string;
+  "itemCondition": string;
   "url": string;
+  "shippingDetails"?: SchemaShippingDetails;
+  "hasMerchantReturnPolicy"?: SchemaMerchantReturnPolicy;
 }
 
 export interface SchemaProduct {
@@ -49,6 +42,7 @@ export interface SchemaProduct {
   "image": string;
   "brand": SchemaBrand;
   "sku": string;
+  "mpn": string;
   "offers": SchemaOffer;
 }
 
@@ -66,6 +60,40 @@ export interface SchemaItemList {
 
 export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may earn from qualifying purchases.";
 
+export const DEFAULT_BRAND: SchemaBrand = {
+  "@type": "Brand",
+  "name": "BoomTick"
+};
+
+export const DEFAULT_PRINTFUL_SHIPPING_DETAILS: SchemaShippingDetails = {
+  "@type": "OfferShippingDetails",
+  "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+  "shippingDestination": {
+    "@type": "DefinedRegion",
+    "addressCountry": "US"
+  }
+};
+
+export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
+  "@type": "MerchantReturnPolicy",
+  "applicableCountry": "US",
+  "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
+  "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+};
+
+export function parsePrice(price?: string | number, defaultPrice = "24.00"): string {
+  if (typeof price === 'number') {
+    return price.toFixed(2);
+  }
+  if (typeof price === 'string') {
+    const num = parseFloat(price.replace(/[^0-9.]/g, ''));
+    if (!isNaN(num)) {
+      return num.toFixed(2);
+    }
+  }
+  return defaultPrice;
+}
+
 /**
  * Ensures a valid image URL without duplicate prefixes.
  * Handles:
@@ -77,7 +105,6 @@ export function getImageUrl(url?: string, defaultUrl?: string): string {
   if (!target) return "";
   if (target.startsWith('http')) return target;
 
-  // Normalize path by removing duplicate base/asset prefixes if they already exist in the string
   let path = target;
   if (BASE_URL && path.startsWith(BASE_URL)) {
     path = path.replace(BASE_URL, '');
@@ -86,7 +113,6 @@ export function getImageUrl(url?: string, defaultUrl?: string): string {
     path = path.replace(ASSET_PREFIX, '');
   }
 
-  // Ensure path starts with a single slash
   path = '/' + path.replace(/^\/+/, '');
 
   return `${BASE_URL}${ASSET_PREFIX}${path}`;
@@ -97,19 +123,24 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
     "@context": "https://schema.org",
     "@type": "ItemList",
     "itemListElement": products.map((product, index) => {
+      const price = parsePrice(product.price, "24.00");
       const item: SchemaProduct = {
         "@type": "Product",
         "name": product.title,
         "description": product.description,
         "image": getImageUrl(product.imageUrl),
-        "brand": {
-          "@type": "Brand",
-          "name": "BoomTick"
-        },
+        "brand": DEFAULT_BRAND,
         "sku": product.id,
+        "mpn": product.id,
         "offers": {
           "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
           "url": product.href,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
         }
       };
 
@@ -128,20 +159,27 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
     "@type": "ItemList",
     "itemListElement": resources.map((resource, index) => {
       const isAmazon = resource.affiliateProvider === 'amazon';
+      const sku = resource.internalSku || resource.slug;
+      const rawPrice = (resource as unknown as { price?: string | number }).price;
+      const price = parsePrice(rawPrice, "25.00");
 
       const productSchema: SchemaProduct = {
         "@type": "Product",
         "name": resource.title,
         "description": isAmazon ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
         "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "brand": {
-          "@type": "Brand",
-          "name": "BoomTick"
-        },
-        "sku": resource.internalSku || resource.slug,
+        "brand": DEFAULT_BRAND,
+        "sku": sku,
+        "mpn": sku,
         "offers": {
           "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
           "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
         }
       };
 

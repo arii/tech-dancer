@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { buildProductJsonLd, ProductItem } from '@/lib/schemaGenerator';
 
 describe('buildProductJsonLd', () => {
-  it('generates valid Product schema with accurately formatted price offer', () => {
+  it('generates valid Product schema with accurately formatted price offer and brand/policy metadata', () => {
     const mockItem: ProductItem = {
       id: 'norcal-bestcal-tee',
       name: 'NorCal BestCal Golden Gate Unisex Tee',
@@ -20,10 +20,18 @@ describe('buildProductJsonLd', () => {
     expect(schema['@context']).toBe('https://schema.org');
     expect(schema['@type']).toBe('Product');
     expect(schema.name).toBe('NorCal BestCal Golden Gate Unisex Tee');
+    expect(schema.brand).toEqual({ '@type': 'Brand', name: 'BoomTick' });
+    expect(schema.sku).toBe('norcal-bestcal-tee');
+    expect(schema.mpn).toBe('norcal-bestcal-tee');
+
     expect(schema.offers).toBeDefined();
     expect(schema.offers?.price).toBe('28.00');
     expect(schema.offers?.priceCurrency).toBe('USD');
     expect(schema.offers?.availability).toBe('https://schema.org/InStock');
+    expect(schema.offers?.itemCondition).toBe('https://schema.org/NewCondition');
+    expect(schema.offers?.shippingDetails).toBeDefined();
+    expect(schema.offers?.hasMerchantReturnPolicy).toBeDefined();
+
     expect(schema.aggregateRating).toBeUndefined();
   });
 
@@ -56,5 +64,8 @@ describe('buildProductJsonLd', () => {
     const schema = buildProductJsonLd(mockItem);
 
     expect(schema.offers).toBeUndefined();
+    expect(schema.brand).toEqual({ '@type': 'Brand', name: 'BoomTick' });
+    expect(schema.sku).toBe('event-guide');
+    expect(schema.mpn).toBe('event-guide');
   });
 });
