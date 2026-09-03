@@ -16,7 +16,7 @@ describe('Memes Page Component', () => {
     );
   };
 
-  test('renders page elements correctly', () => {
+  test('renders page elements and under construction banner correctly', () => {
     renderMemesPage();
 
     // Check SEO & Page Headers
@@ -24,15 +24,19 @@ describe('Memes Page Component', () => {
     expect(screen.getByText('West Coast Swing Memes')).toBeDefined();
     expect(screen.getByText('COMMUNITY & HUMOR')).toBeDefined();
 
-    // Check that all memes from data are rendered
-    MEMES_DATA.forEach((meme) => {
-      // Title
-      expect(screen.getByText(meme.title)).toBeDefined();
+    // Check Under Construction banner notice and exact required text
+    expect(screen.getByTestId('under-construction-banner')).toBeDefined();
+    expect(
+      screen.getByText(
+        'Still porting some of my favorite original dance memes here! In the meantime, enjoy this initial curated collection of favorites.'
+      )
+    ).toBeDefined();
 
-      // Card container
+    // Check that all featured memes from data are rendered
+    MEMES_DATA.forEach((meme) => {
+      expect(screen.getByText(meme.title)).toBeDefined();
       expect(screen.getByTestId(`meme-card-${meme.id}`)).toBeDefined();
 
-      // Image alt text
       const img = screen.getByAltText(meme.altText) as HTMLImageElement;
       expect(img).toBeDefined();
       expect(img.src).toContain(meme.imageSrc);
