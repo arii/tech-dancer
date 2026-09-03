@@ -7,8 +7,6 @@ badge: "Merch"
 price: "$16.50"
 image: "/assets/slot_era_racerback.webp"
 shopUrl: "https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"
-url: "https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"
-shopUrl: "https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"
 author: "Ariel Anders"
 date: "2024-06-01"
 tags: ["merch", "slot-era", "apparel", "dance"]
