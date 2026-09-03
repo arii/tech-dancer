@@ -105,7 +105,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         category: String(data.category || "General"),
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
-        author: String(data.author || ""),
+        author: String(data.author || "Ariel Anders, PhD"),
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
 

@@ -1,4 +1,4 @@
-import { ExternalLink, ShoppingBag, Palette, Ruler, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, ShoppingBag, Palette, Ruler, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
@@ -69,7 +69,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
     ...(matchedMerch?.size ? { Sizes: matchedMerch.size.replace(/\//g, ', ') } : {}),
     ...(matchedMerch?.material ? { Material: matchedMerch.material } : {}),
     ...(matchedMerch ? { Fulfillment: 'Print-on-Demand (Printful)' } : {}),
-    ...(specs || {}),
+    ...specs,
   };
 
   return (
@@ -156,13 +156,13 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 paddingY={3}
                 paddingX={4}
                 radius="md"
-                className="bg-accent text-background hover:bg-accent/90 transition-all font-bold gap-2 text-center group mt-2"
+                className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold gap-2 text-center group mt-2 shadow-sm"
               >
-                <ShoppingBag className="w-4 h-4 transition-transform group-hover:scale-110" />
-                <Text variant="mono" size="xs" weight="font-bold" color="inherit">
+                <ShoppingBag className="w-4 h-4 text-bg transition-transform group-hover:scale-110" />
+                <Text variant="mono" size="xs" weight="font-black" color="inherit">
                   Order on Printful Store
                 </Text>
-                <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                <ExternalLink className="w-3.5 h-3.5 text-bg opacity-80" />
               </Box>
             )}
 
