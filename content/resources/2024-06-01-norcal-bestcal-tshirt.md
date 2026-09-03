@@ -10,7 +10,7 @@ imageBack: "/assets/gear/norcal-bestcal-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Essential Merch"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/norcal-bestcal-tshirt
+shopUrl: https://boomtick.printful.me/product/norcal-bestcal
 internalSku: norcal-bestcal-classic
 fulfillmentType: "print-on-demand"
 provider: "printful"

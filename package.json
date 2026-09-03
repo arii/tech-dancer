@@ -15,7 +15,7 @@
     "prebuild": "tsx scripts/generate-assets.ts",
     "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
     "build:review": "DISABLE_MINIFY=true pnpm run build",
-    "postbuild": "tsx scripts/generate-robots.ts && tsx scripts/generate-spa-stubs.mjs && node scripts/clean-sitemap.mjs",
+    "postbuild": "tsx scripts/generate-robots.ts && tsx scripts/generate-spa-stubs.mjs && node scripts/clean-sitemap.mjs && tsx scripts/generate-merchant-feed.ts",
     "build:analyze": "ANALYZE=true vite build",
     "build:profile": "vite build --profile",
     "prepreview": "node scripts/cleanup-ports.mjs",

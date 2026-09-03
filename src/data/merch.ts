@@ -106,7 +106,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-pride-bear',
     title: 'NorCal BestCal Pride Bear Shirt',
-    description: 'The iconic California bear gets a rainbow pride makeover for NorCal dancers. Show your local spirit and LGTBQ+ support on the partner dance floor.',
+    description: 'The iconic California bear gets a rainbow pride makeover for NorCal dancers. Show your local spirit and LGBTQ+ support on the partner dance floor.',
     price: '15.50',
     imageUrl: gearImage('norcal-best-cal-pride-california-bear-apparel-front.webp'),
     images: [
@@ -136,7 +136,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   },
   {
     id: 'mens-bear-tank-norcal',
-    title: 'NorCal Best Cal - Golden Gate Classic Tank Top',
+    title: 'NorCal BestCal Rainbow Bear Dance Tank Top',
     description: 'The Bay on your chest. A NorCal pride classic for warm-weather weekends, festivals, and every day that calls for something bold.',
     price: '18.50',
     imageUrl: gearImage('norcal-bear-tank-front.webp'),
@@ -194,7 +194,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'slot-era-tank-top',
     title: "Slot Era WCS Women's Racerback Tank Top",
     description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
-    price: '28.00',
+    price: '16.50',
     imageUrl: '/assets/slot_era_racerback.webp',
     images: [
       { src: '/assets/slot_era_racerback.webp', side: 'front', alt: "Front view of Slot Era WCS Women's Racerback Tank Top" },
@@ -208,7 +208,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'slot-era-tote-bag',
     title: 'Slot Era WCS Tote Bag',
     description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
-    price: '24.00',
+    price: '27.00',
     imageUrl: '/assets/slot_era_tote.webp',
     images: [
       { src: '/assets/slot_era_tote.webp', side: 'front', alt: 'Front view of Slot Era WCS Tote Bag' },
@@ -222,13 +222,13 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'slot-era-mug',
     title: 'Slot Era Black Ceramic Mug',
     description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
-    price: '18.00',
+    price: '16.50',
     imageUrl: '/assets/slot_era_mug.webp',
     images: [
       { src: '/assets/slot_era_mug.webp', side: 'front', alt: 'Front view of Slot Era Black Ceramic Mug' },
     ],
     imageDisplayMode: 'front-only',
-    printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-black-glossy-mug',
+    printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-mug',
     collections: ['slot-era'],
     tags: ['Accessories', 'Merch', 'Mug'],
   },

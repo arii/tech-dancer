@@ -10,7 +10,7 @@ imageBack: "/assets/gear/war-eagle-oversized-high-neck-t-shirt-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Oversized & Comfortable"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/war-eagle-shirt
+shopUrl: https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt
 displayMode: "pair"
 featuredSide: "back"
 internalSku: war-eagle-oversized

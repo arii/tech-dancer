@@ -10,7 +10,7 @@ imageBack: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-back.web
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Regional Pride"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/norcal-pride-golden-gate-shirt
+shopUrl: https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt
 internalSku: norcal-bestcal-golden-gate-pride
 fulfillmentType: "print-on-demand"
 provider: "printful"

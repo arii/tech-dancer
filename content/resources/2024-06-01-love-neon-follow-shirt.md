@@ -10,7 +10,7 @@ imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Stylish & Social"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/follow-love-shirt-neon
+shopUrl: https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow
 displayMode: "pair"
 featuredSide: "back"
 internalSku: love-neon-follow

@@ -10,7 +10,7 @@ imageBack: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Versatile & Vibrant"
 updatedDate: "June 2024"
-shopUrl: https://boomtick.printful.me/lead-follow-switch-love-shirt-neon
+shopUrl: https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon
 displayMode: "pair"
 featuredSide: "back"
 internalSku: lead-follow-switch-love-neon

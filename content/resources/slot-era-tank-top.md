@@ -3,7 +3,7 @@ id: "slot-era-tank-top"
 title: "Slot Era WCS Women's Racerback Tank Top"
 category: "Apparel"
 badge: "Merch"
-price: "$28.00"
+price: "$16.50"
 image: "/assets/slot_era_racerback.webp"
 url: "https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-womens-fitted-racerback-tank-top"
 featured: true
