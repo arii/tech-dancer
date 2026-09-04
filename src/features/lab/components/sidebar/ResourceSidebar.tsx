@@ -109,12 +109,12 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                     key={c}
                     paddingX={2}
                     paddingY={0.5}
-                    surface="muted"
+                    surface="alt"
                     border
                     radius="full"
-                    className="border-line/60"
+                    className="border-line/20"
                   >
-                    <Text variant="mono" size="micro" weight="font-medium">{c.trim()}</Text>
+                    <Text variant="mono" size="micro" weight="font-medium" color="dim">{c.trim()}</Text>
                   </Box>
                 ))}
               </Stack>
@@ -132,12 +132,12 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                     key={s}
                     paddingX={2}
                     paddingY={0.5}
-                    surface="muted"
+                    surface="alt"
                     border
                     radius="sm"
-                    className="border-line/60"
+                    className="border-line/20"
                   >
-                    <Text variant="mono" size="micro" weight="font-bold">{s.trim()}</Text>
+                    <Text variant="mono" size="micro" weight="font-bold" color="dim">{s.trim()}</Text>
                   </Box>
                 ))}
               </Stack>

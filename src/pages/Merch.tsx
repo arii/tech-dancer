@@ -122,25 +122,25 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={6} width="full" align="stretch">
+                  <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={6} width="full" align="stretch">
                     <ProductCard
                       item={section.products[0]}
                       isFeatured
-                      span={{ base: 1, sm: 2, md: 2 }}
-                      className="md:row-span-1"
+                      span={{ base: 1, sm: 2, lg: 2 }}
+                      className="lg:row-span-1"
                     />
                     {section.products.slice(1, 3).map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
                         item={product}
-                        span={{ base: 1, sm: 1, md: 1 }}
+                        span={{ base: 1, sm: 1, lg: 1 }}
                         clampTitle={EDITORIAL_CLAMP}
                         clampDescription={EDITORIAL_CLAMP}
                       />
                     ))}
                   </Grid>
                 ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={6} width="full" minWidth="0" align="stretch">
+                  <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full" minWidth="0" align="stretch">
                     {section.products.map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
@@ -153,7 +153,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={6} width="full" minWidth="0" align="stretch">
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full" minWidth="0" align="stretch">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}

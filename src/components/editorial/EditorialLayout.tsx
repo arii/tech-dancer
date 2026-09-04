@@ -39,12 +39,12 @@ export function EditorialLayout({
   return (
     <Box
       width="full"
-      maxWidth="5xl"
+      maxWidth={sidebar ? "screen-xl" : "3xl"}
       marginX="auto"
-      paddingX={{ base: 5, md: 10, lg: 12 }}
-      paddingY={{ base: 8, md: 16 }}
+      paddingX={{ base: 5, md: 8, lg: 12 }}
+      paddingY={{ base: 4, md: 8 }}
     >
-      <Stack gap="section-spacing">
+      <Stack gap={{ base: 8, md: 12 }}>
         {/* Navigation */}
         <Box>
           <Stack
@@ -53,6 +53,7 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
+            minHeight={11}
             className={journalVariants.navLink()}
           >
             <Icon
@@ -73,9 +74,23 @@ export function EditorialLayout({
 
         {/* Content & Sidebar Layout */}
         {sidebar ? (
-          <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }} align="start">
+          <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 10, lg: 12 }} align="start">
+            {/* Sidebar / Shop items: On mobile/tablet (<lg), display before article body so products and disclosure maintain context with intro */}
+            <Box
+              as="aside"
+              span={{ base: 1, lg: 4 }}
+              width="full"
+              className="order-1 lg:order-2"
+              aria-label="Article resources and shop items"
+            >
+              <Stack gap={8} position={{ lg: "sticky" }} top={24}>
+                {sidebar}
+              </Stack>
+            </Box>
+
             {/* Main Article Column */}
             <Box
+              as="article"
               span={{ base: 1, lg: 8 }}
               width="full"
               className="order-2 lg:order-1"
@@ -85,13 +100,6 @@ export function EditorialLayout({
               </Box>
             </Box>
 
-            {/* Sidebar */}
-            <Box span={{ base: 1, lg: 4 }} width="full" className="order-1 lg:order-2">
-              <Stack gap={8} position={{ lg: "sticky" }} top={32}>
-                {sidebar}
-              </Stack>
-            </Box>
-
             {/* Footer */}
             {footer && (
               <Box
@@ -99,15 +107,15 @@ export function EditorialLayout({
                 width="full"
                 className="order-3"
               >
-                <Box marginTop={{ base: 12, lg: 0 }}>
+                <Box marginTop={{ base: 10, lg: 4 }}>
                   {footer}
                 </Box>
               </Box>
             )}
           </Grid>
         ) : (
-          <Stack gap="section-spacing" width="full" marginX="auto" maxWidth="3xl">
-            <Box className="article-content-wrapper" width="full">
+          <Stack gap={{ base: 8, md: 12 }} width="full" marginX="auto" maxWidth="3xl">
+            <Box as="article" className="article-content-wrapper" width="full">
               {children}
             </Box>
             {footer && (
@@ -133,6 +141,8 @@ export function EditorialLayout({
           align="center"
           justify="center"
           padding={3}
+          minHeight={11}
+          minWidth={11}
           radius="full"
           surface="surface"
           border

@@ -65,10 +65,10 @@
   },
   "listerine-tabs": {
     "id": "listerine-tabs",
-    "name": "Listerine Ready! Tabs",
-    "url": "https://www.amazon.com/dp/B088VCG8JH?tag=onasafari04-20",
+    "name": "Listerine PocketPaks Breath Strips",
+    "url": "https://amzn.to/4cuVGnv",
     "category": "travel",
-    "description": "Revolutionary 4-hour fresh breath in a chewable tablet.",
+    "description": "Instant fresh breath strips in a pocket-sized pack for dance events.",
     "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg",
     "imageMode": "contain"
   },
@@ -223,7 +223,7 @@
   "hand-sanitizer": {
     "id": "hand-sanitizer",
     "name": "Purell Advanced Hand Sanitizer",
-    "url": "https://www.amazon.com/dp/B00EAQX2LE?tag=onasafari04-20",
+    "url": "https://amzn.to/4zUnb3P",
     "category": "travel",
     "description": "Stay healthy while dancing with hundreds of people.",
     "image": "/images/gear/amazon/purell-advanced-hand-sanitizer.jpg",
@@ -383,7 +383,7 @@
   "portable-steamer": {
     "id": "portable-steamer",
     "name": "Portable Garment Steamer",
-    "url": "https://www.amazon.com/dp/B08J45WG5B?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B089DD62DW?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
     "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
@@ -574,10 +574,9 @@
   "tripod": {
     "id": "tripod",
     "name": "Compact Travel Tripod",
-    "url": "https://www.amazon.com/dp/B08BZDKDBP?tag=onasafari04-20",
+    "url": "https://amzn.to/46pO1DL",
     "category": "gear",
     "description": "Perfect for filming your competition heats and practice sessions.",
-    "draft": true,
     "image": ""
   },
   "alien-mask": {
@@ -592,7 +591,7 @@
   "green-bodysuit": {
     "id": "green-bodysuit",
     "name": "Green Alien Bodysuit",
-    "url": "https://www.amazon.com/dp/B00TGBQ0YY?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B07FY8QZP6?tag=onasafari04-20",
     "category": "gear",
     "description": "The perfect base for a Galactic theme outfit.",
     "image": "/images/gear/sketches/green-bodysuit.webp"

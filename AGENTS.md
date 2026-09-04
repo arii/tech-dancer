@@ -182,6 +182,18 @@ Agents invoking `orchestrateCodeReview` must respect the optimization pipeline:
   STYLE/PERFORMANCE after 2+ failures
 - Cache hits (`prevState.cache` hash match) skip the LLM call entirely
 
+### Targeted Visual Impact Analysis & Multi-Viewport Review
+
+When validating visual changes on specific routes across multiple viewports (`Desktop`, `Laptop`, `Tablet`, `Mobile`, `Ultrawide`):
+
+```bash
+# Capture screenshots and visual diffs for a specific route
+pnpm exec tsx boomtick-pkg/scripts/impact-visual-diff.ts --route /blog/2026-06-01-event-travel-packing --force
+
+# Or run the multimodal Gemini visual review orchestrator
+pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts --route /blog/2026-06-01-event-travel-packing --force
+```
+
 ### Issue Lifecycle
 
 Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always

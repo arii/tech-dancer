@@ -26,13 +26,15 @@ interface ArticleNavigationProps {
 export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
   if (!previous && !next) return null;
 
+  const hasBoth = Boolean(previous && next);
+
   return (
     <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
-      <Grid cols={{ base: 1, md: 2 }} gap={4}>
+      <Grid cols={{ base: 1, md: hasBoth ? 2 : 1 }} gap={6}>
         <Box height="full">
           {previous && (
             <Stack gap={2} height="full">
-              <Stack direction="row" align="center" gap={2}>
+              <Stack direction="row" align="center" gap={2} minHeight={11}>
                 <Icon
                   icon={ArrowLeft}
                   size="sm"
@@ -61,7 +63,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
         <Box height="full">
           {next && (
             <Stack gap={2} align="end" height="full">
-              <Stack direction="row" align="center" gap={2}>
+              <Stack direction="row" align="center" gap={2} minHeight={11}>
                 <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
                   Next Article
                 </Text>

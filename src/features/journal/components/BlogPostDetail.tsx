@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -65,16 +65,16 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const hero = post.image ? (
     <Stack gap={4}>
       {post.imageBack ? (
-        <Grid cols={{ base: 1, md: 2 }} gap={4}>
-          <Stack gap={2}>
+        <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
+          <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
             <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
-          <Stack gap={2}>
+          <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
             <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
-        </Grid>
+        </Stack>
       ) : (
         <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
       )}
@@ -87,17 +87,21 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   ) : undefined;
 
   const sidebar = affiliateLinks.length > 0 ? (
-    <Stack gap={8}>
-      <AffiliateDisclosure compact={true} />
-      <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-        Shop selected items
-      </Text>
-      <Stack gap={6}>
-        {affiliateLinks.map(link => (
-          <AffiliateCard key={link.id} link={link} />
-        ))}
+    <Box width="full">
+      <Stack gap={6} width="full">
+        <AffiliateDisclosure compact={true} />
+        <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+          Shop selected items
+        </Text>
+        <Stack gap={3} width="full">
+          {affiliateLinks.map(link => (
+            <Box key={link.id} width="full">
+              <AffiliateCard link={link} />
+            </Box>
+          ))}
+        </Stack>
       </Stack>
-    </Stack>
+    </Box>
   ) : undefined;
 
   const footer = (
@@ -117,33 +121,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       footer={footer}
       onShare={share}
       isShared={isCopied}
-    >
-      {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
-            <Stack direction="row" wrap gap={3}>
-              {post.tags.map(tag => (
-                <Box
-                  key={tag}
-                  paddingX={{ base: 5, sm: 5 }}
-                  paddingY={{ base: 3, sm: 2 }}
-                  minWidth={{ base: 11, sm: "auto" }}
-                  minHeight={{ base: 11, sm: "auto" }}
-                  display="flex"
-                  align="center"
-                  justify="center"
-                  surface="muted"
-                  border
-                  className="hover:border-accent transition-colors"
-                >
-                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
-                </Box>
-              ))}
-            </Stack>
-          </Stack>
-        </Box>
-      )}
-    </EditorialPostView>
+    />
   );
 }

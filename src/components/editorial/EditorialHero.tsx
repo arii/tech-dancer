@@ -12,16 +12,15 @@ interface EditorialHeroProps {
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover' }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'contain' }: EditorialHeroProps) {
   return (
     <Box
       width="full"
       radius="md"
       overflow="hidden"
       border
-      className={journalVariants.card({ variant: 'hero' })}
+      className={`h-hero-mobile md:h-auto ${journalVariants.card({ variant: 'hero' })}`}
       aspect={aspectRatio}
-      maxHeight={{ base: 64, md: 80, lg: 96 }}
     >
       <ProductImageFrame
         src={src}
@@ -30,7 +29,7 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
         border={false}
         radius="none"
         aspect="auto"
-        className="w-full h-full max-h-64 md:max-h-80 lg:max-h-96"
+        className={`w-full h-auto object-${objectFit}`}
       />
     </Box>
   );

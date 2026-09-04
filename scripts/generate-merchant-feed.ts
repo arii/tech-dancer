@@ -20,8 +20,39 @@ function resolveImageUrl(url: string): string {
   return `${BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
+interface ParsedVariant {
+  id: string;
+  size: string;
+  itemGroupId?: string;
+}
+
+function parseVariants(productId: string, rawSize: string): ParsedVariant[] {
+  // Check if size represents an apparel size list (e.g., XS/S/M/L/XL/2XL/3XL)
+  const isSizeList = /^(XS|S|M|L|XL|[0-9]XL)(\/(XS|S|M|L|XL|[0-9]XL))+$/i.test(rawSize.trim());
+
+  if (isSizeList) {
+    const sizes = rawSize.split('/').map((s) => s.trim()).filter(Boolean);
+    return sizes.map((size) => {
+      const sizeSlug = size.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return {
+        id: `${productId}-${sizeSlug}`,
+        size,
+        itemGroupId: productId,
+      };
+    });
+  }
+
+  // Single-size products (e.g., 15" x 15", 11 oz)
+  return [
+    {
+      id: productId,
+      size: rawSize,
+    },
+  ];
+}
+
 export function generateGoogleMerchantXml(): string {
-  const items = MERCH_PRODUCTS.map((product) => {
+  const items = MERCH_PRODUCTS.flatMap((product) => {
     const mainImage = resolveImageUrl(product.imageUrl);
     const additionalImages = (product.images || [])
       .map((img) => resolveImageUrl(img.src))
@@ -57,10 +88,16 @@ export function generateGoogleMerchantXml(): string {
       .join('\n');
 
     const gearUrl = `${BASE_URL}/gear/${product.gearSlug || product.id}`;
+    const variants = parseVariants(product.id, product.size || 'One Size');
 
-    return `    <item>
-      <g:id>${escapeXml(product.id)}</g:id>
-      <title>${escapeXml(product.title)}</title>
+    return variants.map((variant) => {
+      const groupTag = variant.itemGroupId
+        ? `      <g:item_group_id>${escapeXml(variant.itemGroupId)}</g:item_group_id>\n`
+        : '';
+
+      return `    <item>
+      <g:id>${escapeXml(variant.id)}</g:id>
+${groupTag}      <title>${escapeXml(product.title)}</title>
       <description>${escapeXml(product.description)}</description>
       <link>${escapeXml(gearUrl)}</link>
       <g:image_link>${escapeXml(mainImage)}</g:image_link>
@@ -69,7 +106,7 @@ ${additionalImageTags ? `${additionalImageTags}\n` : ''}      <g:condition>new</
       <g:price>${product.price} USD</g:price>
       <g:brand>BoomTick</g:brand>
       <g:color>${escapeXml(product.color || 'Black')}</g:color>
-      <g:size>${escapeXml(product.size || 'S/M/L/XL')}</g:size>
+      <g:size>${escapeXml(variant.size)}</g:size>
 ${product.material ? `      <g:material>${escapeXml(product.material)}</g:material>\n` : ''}      <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>${googleCategory}</g:google_product_category>
       <g:product_type>${escapeXml(productType)}</g:product_type>
@@ -81,6 +118,7 @@ ${product.material ? `      <g:material>${escapeXml(product.material)}</g:materi
         <g:price>4.99 USD</g:price>
       </g:shipping>
     </item>`;
+    });
   }).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
