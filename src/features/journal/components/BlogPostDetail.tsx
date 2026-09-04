@@ -87,19 +87,21 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   ) : undefined;
 
   const sidebar = affiliateLinks.length > 0 ? (
-    <Stack gap={6} width="full">
-      <AffiliateDisclosure compact={true} />
-      <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-        Shop selected items
-      </Text>
-      <Stack gap={3} width="full">
-        {affiliateLinks.map(link => (
-          <Box key={link.id} width="full">
-            <AffiliateCard link={link} />
-          </Box>
-        ))}
+    <Box width="full">
+      <Stack gap={6} width="full">
+        <AffiliateDisclosure compact={true} />
+        <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+          Shop selected items
+        </Text>
+        <Stack gap={3} width="full">
+          {affiliateLinks.map(link => (
+            <Box key={link.id} width="full">
+              <AffiliateCard link={link} />
+            </Box>
+          ))}
+        </Stack>
       </Stack>
-    </Stack>
+    </Box>
   ) : undefined;
 
   const footer = (
