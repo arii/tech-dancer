@@ -212,7 +212,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 as="a"
                 href={link.url}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="sponsored noopener noreferrer"
                 display="flex"
                 align="center"
                 justify="between"
@@ -230,7 +230,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 as="a"
                 href={affiliateLink}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="sponsored noopener noreferrer"
                 display="flex"
                 align="center"
                 justify="between"

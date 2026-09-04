@@ -8,7 +8,6 @@ import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
 import type { SchemaProduct } from '@/utils/schema';
 import {
-  AMAZON_AFFILIATE_DISCLOSURE,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
@@ -43,38 +42,12 @@ export default function GearPost() {
   const structuredData = useMemo(() => {
     if (!resource) return null;
 
-    const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
     const sku = resource.internalSku || resource.slug;
     const rawPrice = (resource as unknown as { price?: string | number }).price;
     const price = parsePrice(rawPrice, "25.00");
     const productImageUrl = resource.image
       ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
       : `${BASE_URL}/assets/comp_analysis_hero.webp`;
-
-    const productSchema: SchemaProduct = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": resource.title,
-      "description": isAmazon
-        ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
-        : resource.excerpt,
-      "image": productImageUrl,
-      "sku": sku,
-      "mpn": sku,
-      ...(isMerch && {
-        brand: DEFAULT_BRAND,
-        offers: {
-          "@type": "Offer",
-          "price": price,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "itemCondition": "https://schema.org/NewCondition",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
-        }
-      })
-    };
 
     const breadcrumbSchema = {
       "@context": "https://schema.org",
@@ -89,8 +62,8 @@ export default function GearPost() {
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Gear & Reviews",
-          "item": `${BASE_URL}/gear`
+          "name": isMerch ? "Merch" : "Gear & Reviews",
+          "item": `${BASE_URL}${isMerch ? '/merch' : '/gear'}`
         },
         {
           "@type": "ListItem",
@@ -101,7 +74,55 @@ export default function GearPost() {
       ]
     };
 
-    return [productSchema, breadcrumbSchema];
+    if (isMerch) {
+      const productSchema: SchemaProduct = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": resource.title,
+        "description": resource.excerpt,
+        "image": productImageUrl,
+        "sku": sku,
+        "mpn": sku,
+        "brand": DEFAULT_BRAND,
+        "offers": {
+          "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
+        }
+      };
+      return [productSchema, breadcrumbSchema];
+    }
+
+    // For third-party affiliate items, emit standard Article & Breadcrumbs (no Product schema to prevent merchant listing misclassification)
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": resource.title,
+      "description": resource.excerpt,
+      "image": productImageUrl,
+      "datePublished": resource.date,
+      "dateModified": resource.date,
+      "author": {
+        "@type": "Person",
+        "name": resource.author || "Ariel Anders"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "BoomTick",
+        "url": BASE_URL
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `${BASE_URL}/gear/${resource.slug}`
+      }
+    };
+
+    return [articleSchema, breadcrumbSchema];
   }, [resource, isMerch]);
 
   const backTarget = isMerch ? '/merch' : '/gear';

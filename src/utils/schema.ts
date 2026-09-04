@@ -268,40 +268,51 @@ export function generateImageObjectSchema(params: {
   };
 }
 
-export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList {
+export function generateGearCatalogSchema(resources: Resource[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "name": "West Coast Swing Dance Gear & Reviews",
+    "description": "Curated dance gear, recovery tools, and competition essentials for West Coast Swing dancers.",
     "itemListElement": resources.map((resource, index) => {
-      const isAffiliate = resource.affiliateProvider === 'amazon' || !resource.shopUrl;
-      const sku = resource.internalSku || resource.slug;
+      const isMerch = resource.provider === 'printful' || !!resource.shopUrl || resource.tags?.includes('merch');
+      const itemUrl = `${BASE_URL}/gear/${resource.slug}`;
 
-      const productSchema: SchemaProduct = {
-        "@type": "Product",
-        "name": resource.title,
-        "description": resource.affiliateProvider === 'amazon' ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
-        "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "sku": sku,
-        "mpn": sku,
-        ...(!isAffiliate && {
-          brand: DEFAULT_BRAND,
-          offers: {
+      if (isMerch) {
+        const sku = resource.internalSku || resource.slug;
+        const productSchema: SchemaProduct = {
+          "@type": "Product",
+          "name": resource.title,
+          "description": resource.excerpt,
+          "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
+          "sku": sku,
+          "mpn": sku,
+          "brand": DEFAULT_BRAND,
+          "offers": {
             "@type": "Offer",
             "price": parsePrice((resource as unknown as { price?: string | number }).price, "25.00"),
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
-            "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+            "url": resource.shopUrl || itemUrl,
             "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
             "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
           }
-        })
-      };
+        };
 
+        return {
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": productSchema
+        };
+      }
+
+      // Non-merch third-party affiliate items are represented as informational Article/WebPage entities, NOT Product schema
       return {
         "@type": "ListItem",
         "position": index + 1,
-        "item": productSchema
+        "name": resource.title,
+        "url": itemUrl
       };
     })
   };
