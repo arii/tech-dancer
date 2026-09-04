@@ -138,6 +138,44 @@ blocked and further LLM calls add no value.
 
 ---
 
+## 🎨 Targeted Visual Impact Analysis & Multi-Viewport Review
+
+Agents can run targeted visual diffs and Gemini AI visual reviews for specific routes across multiple viewports (`Desktop`, `Laptop`, `Tablet`, `Mobile`, `Ultrawide`).
+
+### 1. Generating Targeted Visual Diffs & Screenshots
+
+Use the `--route` and `--force` flags (or environment variables) to capture visual snapshots and diffs against `main`:
+
+```bash
+# Target a specific route directly
+pnpm exec tsx boomtick-pkg/scripts/impact-visual-diff.ts --route /blog/2026-06-01-event-travel-packing --force
+
+# Or pass via environment variable
+TARGET_ROUTE=/blog/2026-06-01-event-travel-packing pnpm exec tsx boomtick-pkg/scripts/impact-visual-diff.ts --force
+```
+
+Generated visual artifacts are stored in `artifacts/visual-review/<route-slug>/` with before/after comparisons and composite diff sheets.
+
+### 2. Running AI Visual Impact Reviews
+
+To run the Gemini multimodal visual review orchestrator on targeted routes:
+
+```bash
+# Run visual review orchestrator for a single route
+pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts --route /blog/2026-06-01-event-travel-packing --force
+
+# Or via environment variable
+TARGET_ROUTE=/blog/2026-06-01-event-travel-packing pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts
+```
+
+This analyzes:
+- Multi-viewport layout shifts and breakpoint alignment
+- Visual hierarchy and editorial typography compliance
+- Responsive images and hero asset rendering
+- Accessibility contrast and interactive element spacing
+
+---
+
 ## 🛠️ MCP Tool Usage Guidelines
 
 ### Asynchronous Operations
