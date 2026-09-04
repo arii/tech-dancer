@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.7.0...tech-dancer-v0.8.0) (2026-09-04)
+
+
+### Features
+
+* **gear:** add rich card description and metadata for Relavel Travel Toiletry Bag ([#4488](https://github.com/arii/tech-dancer/issues/4488)) ([27d058d](https://github.com/arii/tech-dancer/commit/27d058d32debcbe384fa20225f3782926438025f))
+
+
+### Bug Fixes
+
+* **feed:** point Google Merchant feed to verified gear pages with colors and sizes ([#4486](https://github.com/arii/tech-dancer/issues/4486)) ([4c08a04](https://github.com/arii/tech-dancer/commit/4c08a040a3bb9e36f98d1ad738898ce3ef80c41b))
+* **merch:** sync catalog with live Printful store and add Google Merchant XML feed ([#4478](https://github.com/arii/tech-dancer/issues/4478)) ([e73c859](https://github.com/arii/tech-dancer/commit/e73c859fba4aba36fe8af2c7164a90e41e77ebef))
+* **merch:** sync catalog with Printful, add Google Merchant feed and return policy ([#4485](https://github.com/arii/tech-dancer/issues/4485)) ([4a02b20](https://github.com/arii/tech-dancer/commit/4a02b205c85ebc66b095ca881f9ed15a2930aba5))
+
 ## [0.7.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.6.0...tech-dancer-v0.7.0) (2026-09-03)
 
 
