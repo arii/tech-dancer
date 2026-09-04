@@ -237,6 +237,7 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
     "@type": "ItemList",
     "itemListElement": products.map((product, index) => {
       const price = parsePrice(product.price, "24.00");
+      const itemUrl = product.gearSlug ? `${BASE_URL}/gear/${product.gearSlug}` : `${BASE_URL}/gear/${product.id}`;
       const item: SchemaProduct = {
         "@type": "Product",
         "name": product.title,
@@ -251,7 +252,7 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
-          "url": product.href,
+          "url": itemUrl,
           "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
           "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
         }
