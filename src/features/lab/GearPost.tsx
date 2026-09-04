@@ -26,6 +26,20 @@ export default function GearPost() {
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
 
+  const isMerch = useMemo(() => {
+    if (!resource) return false;
+    const fromState = (location.state as { from?: string } | null)?.from;
+    if (fromState === 'merch' || fromState === '/merch') return true;
+    return (
+      resource.provider === 'printful' ||
+      !!resource.shopUrl ||
+      resource.tags?.includes('merch') ||
+      resource.category?.toLowerCase() === 'fashion' ||
+      resource.category?.toLowerCase() === 'apparel' ||
+      resource.category?.toLowerCase() === 'accessories'
+    );
+  }, [resource, location.state]);
+
   const structuredData = useMemo(() => {
     if (!resource) return null;
 
@@ -45,19 +59,21 @@ export default function GearPost() {
         ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
         : resource.excerpt,
       "image": productImageUrl,
-      "brand": DEFAULT_BRAND,
       "sku": sku,
       "mpn": sku,
-      "offers": {
-        "@type": "Offer",
-        "price": price,
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
-        "itemCondition": "https://schema.org/NewCondition",
-        "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-        "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
-      }
+      ...(isMerch && {
+        brand: DEFAULT_BRAND,
+        offers: {
+          "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
+        }
+      })
     };
 
     const breadcrumbSchema = {
@@ -86,21 +102,7 @@ export default function GearPost() {
     };
 
     return [productSchema, breadcrumbSchema];
-  }, [resource]);
-
-  const isMerch = useMemo(() => {
-    if (!resource) return false;
-    const fromState = (location.state as { from?: string } | null)?.from;
-    if (fromState === 'merch' || fromState === '/merch') return true;
-    return (
-      resource.provider === 'printful' ||
-      !!resource.shopUrl ||
-      resource.tags?.includes('merch') ||
-      resource.category?.toLowerCase() === 'fashion' ||
-      resource.category?.toLowerCase() === 'apparel' ||
-      resource.category?.toLowerCase() === 'accessories'
-    );
-  }, [resource, location.state]);
+  }, [resource, isMerch]);
 
   const backTarget = isMerch ? '/merch' : '/gear';
   const backLabel = isMerch ? 'Back to Merch' : 'Back to Toolbox';

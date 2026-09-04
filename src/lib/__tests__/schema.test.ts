@@ -46,7 +46,7 @@ describe('Schema generation', () => {
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('should generate complete Product schema for gear without ratings or fake review claims', () => {
+    it('should generate Product schema for first-party merch gear with complete offer metadata and omit fake reviews', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -69,20 +69,43 @@ describe('Schema generation', () => {
       const json = JSON.stringify(product);
 
       expect(product.name).toBe('Test Gear');
-      expect(product.brand.name).toBe('BoomTick');
+      expect(product.brand?.name).toBe('BoomTick');
       expect(product.sku).toBe('test-gear');
       expect(product.mpn).toBe('test-gear');
 
-      expect(product.offers.price).toBe('25.00');
-      expect(product.offers.priceCurrency).toBe('USD');
-      expect(product.offers.availability).toBe('https://schema.org/InStock');
-      expect(product.offers.shippingDetails).toBeDefined();
-      expect(product.offers.hasMerchantReturnPolicy).toBeDefined();
+      expect(product.offers?.price).toBe('25.00');
+      expect(product.offers?.priceCurrency).toBe('USD');
+      expect(product.offers?.availability).toBe('https://schema.org/InStock');
+      expect(product.offers?.shippingDetails).toBeDefined();
+      expect(product.offers?.hasMerchantReturnPolicy).toBeDefined();
 
       expect(json).not.toContain('aggregateRating');
       expect(json).not.toContain('review');
 
-      expect(product.offers.url).toBe('https://example.com/test');
+      expect(product.offers?.url).toBe('https://example.com/test');
+    });
+
+    it('should omit offers and brand for affiliate products without shopUrl', () => {
+      const mockResources: Resource[] = [
+        {
+          type: 'resource',
+          slug: 'affiliate-gear',
+          title: 'Affiliate Gear',
+          date: '2023-01-01',
+          author: 'Test Author',
+          category: 'Gear',
+          excerpt: 'Test Excerpt',
+          content: 'Test Content',
+          affiliateProvider: 'amazon',
+        }
+      ];
+
+      const schema = generateGearCatalogSchema(mockResources);
+      const product = schema.itemListElement[0].item;
+
+      expect(product.name).toBe('Affiliate Gear');
+      expect(product.offers).toBeUndefined();
+      expect(product.brand).toBeUndefined();
     });
   });
 

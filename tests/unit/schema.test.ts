@@ -177,7 +177,7 @@ describe('schema utils', () => {
       });
     });
 
-    it('appends AMAZON_AFFILIATE_DISCLOSURE for Amazon affiliate products', () => {
+    it('omits offers, price, and brand for Amazon affiliate products while adding disclosure', () => {
       const mockResources: Resource[] = [
         {
           slug: 'portable-speaker',
@@ -201,10 +201,11 @@ describe('schema utils', () => {
       expect(product.image).toBe(
         `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`
       );
-      expect(product.offers.url).toBe(`${BASE_URL}/gear/portable-speaker`);
-      expect(product.offers.price).toBe('25.00');
-      expect(product.offers.priceCurrency).toBe('USD');
-      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.offers).toBeUndefined();
+      expect(product.brand).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).price).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).aggregateRating).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).review).toBeUndefined();
     });
   });
 

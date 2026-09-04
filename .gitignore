@@ -11,6 +11,9 @@ build/
 *-analysis.html
 .eslintcache
 .prettiercache
+public/sitemap.xml
+public/products.xml
+public/robots.txt
 
 # Testing
 playwright-report/

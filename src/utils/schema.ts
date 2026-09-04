@@ -40,10 +40,10 @@ export interface SchemaProduct {
   "name": string;
   "description": string;
   "image": string;
-  "brand": SchemaBrand;
+  "brand"?: SchemaBrand;
   "sku": string;
   "mpn": string;
-  "offers": SchemaOffer;
+  "offers"?: SchemaOffer;
 }
 
 export interface SchemaBreadcrumbListItem {
@@ -227,29 +227,29 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
     "@context": "https://schema.org",
     "@type": "ItemList",
     "itemListElement": resources.map((resource, index) => {
-      const isAmazon = resource.affiliateProvider === 'amazon';
+      const isAffiliate = resource.affiliateProvider === 'amazon' || !resource.shopUrl;
       const sku = resource.internalSku || resource.slug;
-      const rawPrice = (resource as unknown as { price?: string | number }).price;
-      const price = parsePrice(rawPrice, "25.00");
 
       const productSchema: SchemaProduct = {
         "@type": "Product",
         "name": resource.title,
-        "description": isAmazon ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
+        "description": resource.affiliateProvider === 'amazon' ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
         "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "brand": DEFAULT_BRAND,
         "sku": sku,
         "mpn": sku,
-        "offers": {
-          "@type": "Offer",
-          "price": price,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "itemCondition": "https://schema.org/NewCondition",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
-        }
+        ...(!isAffiliate && {
+          brand: DEFAULT_BRAND,
+          offers: {
+            "@type": "Offer",
+            "price": parsePrice((resource as unknown as { price?: string | number }).price, "25.00"),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+            "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+            "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
+          }
+        })
       };
 
       return {
