@@ -266,13 +266,30 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             if (isInternal) {
               return <Link to={href} {...props} />;
             }
-            const isAffiliateOrCommercial = href ? (
-              href.includes('amazon.com') ||
-              href.includes('amzn.to') ||
-              href.includes('printful.com') ||
-              href.includes('tag=') ||
-              href.includes('affiliate')
-            ) : false;
+            let isAffiliateOrCommercial = false;
+            if (href) {
+              try {
+                const parsedUrl = new URL(href, 'https://localhost');
+                const host = parsedUrl.hostname.toLowerCase();
+                const isAffiliateDomain =
+                  host === 'amazon.com' ||
+                  host.endsWith('.amazon.com') ||
+                  host === 'amzn.to' ||
+                  host.endsWith('.amzn.to') ||
+                  host === 'printful.com' ||
+                  host.endsWith('.printful.com') ||
+                  host === 'printful.me' ||
+                  host.endsWith('.printful.me');
+
+                const hasAffiliateParams =
+                  parsedUrl.searchParams.has('tag') ||
+                  parsedUrl.searchParams.has('affiliate');
+
+                isAffiliateOrCommercial = isAffiliateDomain || hasAffiliateParams;
+              } catch {
+                isAffiliateOrCommercial = false;
+              }
+            }
 
             const rel = isAffiliateOrCommercial
               ? 'sponsored noopener noreferrer'

@@ -88,7 +88,7 @@ describe('Schema generation', () => {
       expect(json).not.toContain('aggregateRating');
       expect(json).not.toContain('review');
 
-      expect(product.offers?.url).toBe('https://example.com/test');
+      expect(product.offers?.url).toBe(`${BASE_URL}/gear/test-gear`);
     });
 
     it('should emit clean informational ListItem without Product schema for affiliate products', () => {

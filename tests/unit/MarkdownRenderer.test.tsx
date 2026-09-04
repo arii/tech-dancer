@@ -51,4 +51,39 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
     expect(codeBlock).toBeDefined();
     expect(screen.getByText('const')).toBeDefined();
   });
+
+  it('should assign sponsored rel attribute for affiliate links and standard rel for other links', () => {
+    const markdownContent = `
+[Amazon](https://www.amazon.com/dp/12345)
+[Amzn](https://amzn.to/abcde)
+[Printful](https://printful.com/product/123)
+[Tag Link](https://example.com/item?tag=my-tag)
+[Not Amazon](https://not-amazon.com/test)
+[Standard Link](https://example.org/docs)
+    `;
+
+    render(
+      <MemoryRouter>
+        <MarkdownRenderer content={markdownContent} />
+      </MemoryRouter>
+    );
+
+    const amazonLink = screen.getByText('Amazon');
+    expect(amazonLink.getAttribute('rel')).toBe('sponsored noopener noreferrer');
+
+    const amznLink = screen.getByText('Amzn');
+    expect(amznLink.getAttribute('rel')).toBe('sponsored noopener noreferrer');
+
+    const printfulLink = screen.getByText('Printful');
+    expect(printfulLink.getAttribute('rel')).toBe('sponsored noopener noreferrer');
+
+    const tagLink = screen.getByText('Tag Link');
+    expect(tagLink.getAttribute('rel')).toBe('sponsored noopener noreferrer');
+
+    const notAmazonLink = screen.getByText('Not Amazon');
+    expect(notAmazonLink.getAttribute('rel')).toBe('noopener noreferrer');
+
+    const standardLink = screen.getByText('Standard Link');
+    expect(standardLink.getAttribute('rel')).toBe('noopener noreferrer');
+  });
 });

@@ -338,7 +338,7 @@ export function generateGearCatalogSchema(resources: Resource[]) {
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
-            "url": resource.shopUrl || itemUrl,
+            "url": itemUrl,
             "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
             "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
           }
