@@ -256,6 +256,7 @@ describe('schema utils', () => {
 
       expect(imageSchema).toEqual({
         '@type': 'ImageObject',
+        name: 'Dance shoes',
         url: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
         contentUrl: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
         caption: 'Dance shoes',
@@ -298,6 +299,7 @@ describe('schema utils', () => {
           url: BASE_URL,
           logo: {
             '@type': 'ImageObject',
+            name: 'BoomTick.blog Logo',
             url: `${BASE_URL}/favicon.ico`
           }
         }

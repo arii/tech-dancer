@@ -35,6 +35,7 @@ export default function BlogPost() {
     const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
+      "name": post.title,
       "headline": post.title,
       "description": post.excerpt,
       "author": authorSchema,
@@ -44,6 +45,7 @@ export default function BlogPost() {
         postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
         {
           "@type": "ImageObject",
+          "name": post.imageAlt || post.title,
           "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
           "caption": post.imageAlt || post.title,
           "creditText": post.author || "Ariel Anders",
@@ -56,13 +58,16 @@ export default function BlogPost() {
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME,
+        "url": BASE_URL,
         "logo": {
           "@type": "ImageObject",
+          "name": `${SITE_NAME} Logo`,
           "url": `${BASE_URL}/favicon.ico`
         }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
+        "name": post.title,
         "@id": `${BASE_URL}/blog/${post.slug}`
       }
     };

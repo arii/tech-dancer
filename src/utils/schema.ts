@@ -131,6 +131,7 @@ export const PUBLISHER_BOOMTICK = {
   "url": BASE_URL,
   "logo": {
     "@type": "ImageObject" as const,
+    "name": "BoomTick.blog Logo",
     "url": `${BASE_URL}/favicon.ico`
   }
 };
@@ -252,6 +253,7 @@ export function generateImageObjectSchema(params: {
   const imageUrl = getImageUrl(params.url);
   return {
     "@type": "ImageObject",
+    "name": params.caption || params.description || "Image",
     "url": imageUrl,
     "contentUrl": imageUrl,
     ...(params.caption ? { "caption": params.caption } : {}),

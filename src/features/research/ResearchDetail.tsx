@@ -69,6 +69,7 @@ export default function ResearchDetail() {
       const techArticleSchema = {
         "@context": "https://schema.org",
         "@type": "TechArticle",
+        "name": study.title,
         "headline": study.title,
         "description": study.excerpt,
         "proficiencyLevel": "Expert",
@@ -80,6 +81,7 @@ export default function ResearchDetail() {
           studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
           {
             "@type": "ImageObject",
+            "name": study.title,
             "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
             "caption": study.title,
             "creditText": study.author || "Ariel Anders",
@@ -92,13 +94,16 @@ export default function ResearchDetail() {
         "publisher": {
           "@type": "Organization",
           "name": SITE_NAME,
+          "url": BASE_URL,
           "logo": {
             "@type": "ImageObject",
+            "name": `${SITE_NAME} Logo`,
             "url": `${BASE_URL}/favicon.ico`
           }
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
+          "name": study.title,
           "@id": `${BASE_URL}/research/${study.slug}`
         }
       };
