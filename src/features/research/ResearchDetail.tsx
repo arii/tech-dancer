@@ -8,7 +8,7 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS } from '@/utils/schema';
+import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -58,6 +58,7 @@ export default function ResearchDetail() {
       const studyImageUrl = study.authorImage || `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
       const isAriel = !study.author || study.author === 'Ariel Anders' || study.author.includes('Ariel');
+      const authorName = study.author || "Ariel Anders";
       const authorSchema = isAriel
         ? AUTHOR_ARIEL_ANDERS
         : {
@@ -69,36 +70,48 @@ export default function ResearchDetail() {
       const techArticleSchema = {
         "@context": "https://schema.org",
         "@type": "TechArticle",
+        "name": study.title,
         "headline": study.title,
         "description": study.excerpt,
         "proficiencyLevel": "Expert",
         "articleSection": "Technical Deep Dive",
         "author": authorSchema,
-        "datePublished": study.date,
-        "dateModified": study.date,
+        "datePublished": formatIsoDate(study.date),
+        "dateModified": formatIsoDate(study.date),
         "image": [
           studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
           {
             "@type": "ImageObject",
+            "name": study.title,
             "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
             "caption": study.title,
-            "creditText": study.author || "Ariel Anders",
+            "creditText": authorName,
             "creator": {
               "@type": "Person",
-              "name": study.author || "Ariel Anders"
-            }
+              "name": authorName
+            },
+            "copyrightHolder": {
+              "@type": "Person",
+              "name": authorName
+            },
+            "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+            "license": `${BASE_URL}/about#terms`,
+            "acquireLicensePage": `${BASE_URL}/about`
           }
         ],
         "publisher": {
           "@type": "Organization",
           "name": SITE_NAME,
+          "url": BASE_URL,
           "logo": {
             "@type": "ImageObject",
+            "name": `${SITE_NAME} Logo`,
             "url": `${BASE_URL}/favicon.ico`
           }
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
+          "name": study.title,
           "@id": `${BASE_URL}/research/${study.slug}`
         }
       };

@@ -5,7 +5,7 @@ import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS } from '@/utils/schema';
+import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -22,6 +22,7 @@ export default function BlogPost() {
     if (!post) return null;
 
     const postImageUrl = post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`;
+    const authorName = post.author || "Ariel Anders";
 
     const isAriel = !post.author || post.author === 'Ariel Anders' || post.author.includes('Ariel');
     const authorSchema = isAriel
@@ -35,34 +36,46 @@ export default function BlogPost() {
     const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
+      "name": post.title,
       "headline": post.title,
       "description": post.excerpt,
       "author": authorSchema,
-      "datePublished": post.date,
-      "dateModified": post.updated || post.date,
+      "datePublished": formatIsoDate(post.date),
+      "dateModified": formatIsoDate(post.updated || post.date),
       "image": [
         postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
         {
           "@type": "ImageObject",
+          "name": post.imageAlt || post.title,
           "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
           "caption": post.imageAlt || post.title,
-          "creditText": post.author || "Ariel Anders",
+          "creditText": authorName,
           "creator": {
             "@type": "Person",
-            "name": post.author || "Ariel Anders"
-          }
+            "name": authorName
+          },
+          "copyrightHolder": {
+            "@type": "Person",
+            "name": authorName
+          },
+          "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+          "license": `${BASE_URL}/about#terms`,
+          "acquireLicensePage": `${BASE_URL}/about`
         }
       ],
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME,
+        "url": BASE_URL,
         "logo": {
           "@type": "ImageObject",
+          "name": `${SITE_NAME} Logo`,
           "url": `${BASE_URL}/favicon.ico`
         }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
+        "name": post.title,
         "@id": `${BASE_URL}/blog/${post.slug}`
       }
     };

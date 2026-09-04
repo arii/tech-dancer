@@ -65,7 +65,13 @@ describe('Schema generation', () => {
       ];
 
       const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
+      const product = schema.itemListElement[0].item as unknown as {
+        name: string;
+        brand?: { name: string };
+        sku?: string;
+        mpn?: string;
+        offers?: { price?: string; priceCurrency?: string; availability?: string; shippingDetails?: unknown; hasMerchantReturnPolicy?: unknown; url?: string };
+      };
       const json = JSON.stringify(product);
 
       expect(product.name).toBe('Test Gear');
@@ -85,7 +91,7 @@ describe('Schema generation', () => {
       expect(product.offers?.url).toBe('https://example.com/test');
     });
 
-    it('should omit offers and brand for affiliate products without shopUrl', () => {
+    it('should emit clean informational ListItem without Product schema for affiliate products', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -101,11 +107,19 @@ describe('Schema generation', () => {
       ];
 
       const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
+      const item = schema.itemListElement[0];
 
-      expect(product.name).toBe('Affiliate Gear');
-      expect(product.offers).toBeUndefined();
-      expect(product.brand).toBeUndefined();
+      expect(item).toEqual({
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Affiliate Gear',
+        url: `${BASE_URL}/gear/affiliate-gear`,
+      });
+
+      const json = JSON.stringify(item);
+      expect(json).not.toContain('"@type":"Product"');
+      expect(json).not.toContain('offers');
+      expect(json).not.toContain('price');
     });
   });
 

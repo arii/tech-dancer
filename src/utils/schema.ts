@@ -62,6 +62,7 @@ export interface SchemaBreadcrumbList {
 export interface SchemaImageObject {
   "@context"?: "https://schema.org";
   "@type": "ImageObject";
+  "name"?: string;
   "url": string;
   "contentUrl"?: string;
   "caption"?: string;
@@ -75,6 +76,40 @@ export interface SchemaImageObject {
     "@type": "Person" | "Organization";
     "name": string;
   };
+  "copyrightNotice"?: string;
+  "license"?: string;
+  "acquireLicensePage"?: string;
+}
+
+/**
+ * Ensures a date string is formatted in valid ISO 8601 with a timezone (e.g. YYYY-MM-DDTHH:mm:ssZ).
+ * If input is already in ISO format with timezone or offset, returns as-is or normalizes.
+ */
+export function formatIsoDate(dateStr?: string, defaultTime = "T08:00:00Z"): string {
+  if (!dateStr) {
+    return new Date().toISOString();
+  }
+  const trimmed = dateStr.trim();
+  // If it's a simple YYYY-MM-DD date
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return `${trimmed}${defaultTime}`;
+  }
+  // If it has timezone offset or Z already
+  if (/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) {
+    if (trimmed.endsWith('Z') || /[+-]\d{2}:\d{2}$/.test(trimmed)) {
+      return trimmed;
+    }
+    return `${trimmed}Z`;
+  }
+  try {
+    const parsed = new Date(trimmed);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString();
+    }
+  } catch {
+    // fallback
+  }
+  return `${trimmed}${defaultTime}`;
 }
 
 export interface SchemaListItem {
@@ -131,6 +166,7 @@ export const PUBLISHER_BOOMTICK = {
   "url": BASE_URL,
   "logo": {
     "@type": "ImageObject" as const,
+    "name": "BoomTick.blog Logo",
     "url": `${BASE_URL}/favicon.ico`
   }
 };
@@ -248,60 +284,79 @@ export function generateImageObjectSchema(params: {
   caption?: string;
   description?: string;
   author?: string;
+  copyrightNotice?: string;
+  license?: string;
+  acquireLicensePage?: string;
 }): SchemaImageObject {
   const imageUrl = getImageUrl(params.url);
+  const authorName = params.author || "Ariel Anders";
   return {
     "@type": "ImageObject",
+    "name": params.caption || params.description || "Image",
     "url": imageUrl,
     "contentUrl": imageUrl,
     ...(params.caption ? { "caption": params.caption } : {}),
     ...(params.description ? { "description": params.description } : {}),
-    "creditText": params.author || "Ariel Anders",
+    "creditText": authorName,
     "creator": {
       "@type": "Person",
-      "name": params.author || "Ariel Anders"
+      "name": authorName
     },
     "copyrightHolder": {
       "@type": "Person",
-      "name": params.author || "Ariel Anders"
-    }
+      "name": authorName
+    },
+    "copyrightNotice": params.copyrightNotice || `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+    "license": params.license || `${BASE_URL}/about#terms`,
+    "acquireLicensePage": params.acquireLicensePage || `${BASE_URL}/about`
   };
 }
 
-export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList {
+export function generateGearCatalogSchema(resources: Resource[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "name": "West Coast Swing Dance Gear & Reviews",
+    "description": "Curated dance gear, recovery tools, and competition essentials for West Coast Swing dancers.",
     "itemListElement": resources.map((resource, index) => {
-      const isAffiliate = resource.affiliateProvider === 'amazon' || !resource.shopUrl;
-      const sku = resource.internalSku || resource.slug;
+      const isMerch = resource.provider === 'printful' || !!resource.shopUrl || resource.tags?.includes('merch');
+      const itemUrl = `${BASE_URL}/gear/${resource.slug}`;
 
-      const productSchema: SchemaProduct = {
-        "@type": "Product",
-        "name": resource.title,
-        "description": resource.affiliateProvider === 'amazon' ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
-        "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "sku": sku,
-        "mpn": sku,
-        ...(!isAffiliate && {
-          brand: DEFAULT_BRAND,
-          offers: {
+      if (isMerch) {
+        const sku = resource.internalSku || resource.slug;
+        const productSchema: SchemaProduct = {
+          "@type": "Product",
+          "name": resource.title,
+          "description": resource.excerpt,
+          "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
+          "sku": sku,
+          "mpn": sku,
+          "brand": DEFAULT_BRAND,
+          "offers": {
             "@type": "Offer",
             "price": parsePrice((resource as unknown as { price?: string | number }).price, "25.00"),
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
-            "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+            "url": resource.shopUrl || itemUrl,
             "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
             "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
           }
-        })
-      };
+        };
 
+        return {
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": productSchema
+        };
+      }
+
+      // Non-merch third-party affiliate items are represented as informational Article/WebPage entities, NOT Product schema
       return {
         "@type": "ListItem",
         "position": index + 1,
-        "item": productSchema
+        "name": resource.title,
+        "url": itemUrl
       };
     })
   };

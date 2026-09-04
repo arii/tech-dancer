@@ -266,7 +266,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             if (isInternal) {
               return <Link to={href} {...props} />;
             }
-            return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
+            const isAffiliateOrCommercial = href ? (
+              href.includes('amazon.com') ||
+              href.includes('amzn.to') ||
+              href.includes('printful.com') ||
+              href.includes('tag=') ||
+              href.includes('affiliate')
+            ) : false;
+
+            const rel = isAffiliateOrCommercial
+              ? 'sponsored noopener noreferrer'
+              : 'noopener noreferrer';
+
+            return <a href={href} {...props} rel={rel} target="_blank" />;
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (

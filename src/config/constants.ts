@@ -41,7 +41,11 @@ export const STATIC_SCHEMAS = {
       "@type": "Organization",
       "name": SITE_NAME,
       "url": BASE_URL,
-      "logo": `${BASE_URL}/favicon.ico`,
+      "logo": {
+        "@type": "ImageObject",
+        "name": `${SITE_NAME} Logo`,
+        "url": `${BASE_URL}/favicon.ico`
+      },
       "founder": {
         "@type": "Person",
         "name": "Ariel Anders",
@@ -65,19 +69,29 @@ export const STATIC_SCHEMAS = {
     {
       "@context": "https://schema.org",
       "@type": "ProfilePage",
+      "name": `About ${bioName} | Roboticist & WCS Dancer`,
+      "description": bioRole,
       "mainEntity": {
         "@type": "Person",
         "name": bioName,
         "description": bioRole,
         "image": {
           "@type": "ImageObject",
+          "name": `${bioName} Profile Photo`,
           "url": `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
           "caption": "Ariel Anders, PhD - Roboticist & WCS Dancer",
           "creditText": "Ariel Anders",
           "creator": {
             "@type": "Person",
             "name": "Ariel Anders"
-          }
+          },
+          "copyrightHolder": {
+            "@type": "Person",
+            "name": "Ariel Anders"
+          },
+          "copyrightNotice": `© ${new Date().getFullYear()} Ariel Anders. All rights reserved.`,
+          "license": `${BASE_URL}/about#terms`,
+          "acquireLicensePage": `${BASE_URL}/about`
         },
         "jobTitle": "Roboticist & AI Engineer",
         "url": `${BASE_URL}/about`,

@@ -6,7 +6,7 @@ import {
   generateBreadcrumbSchema,
   generateImageObjectSchema,
   generateCollectionPageSchema,
-  AMAZON_AFFILIATE_DISCLOSURE,
+  formatIsoDate,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
@@ -138,7 +138,7 @@ describe('schema utils', () => {
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('generates a SchemaItemList for non-Amazon gear resources with complete offer metadata', () => {
+    it('generates a SchemaItemList with Product schema for first-party merch gear resources', () => {
       const mockResources: Resource[] = [
         {
           slug: 'dance-shoes-1',
@@ -148,6 +148,7 @@ describe('schema utils', () => {
           category: 'footwear',
           image: '/assets/shoes.webp',
           shopUrl: 'https://fuegodance.com/shoes',
+          provider: 'printful',
         },
       ];
 
@@ -178,7 +179,7 @@ describe('schema utils', () => {
       });
     });
 
-    it('omits offers, price, and brand for Amazon affiliate products while adding disclosure', () => {
+    it('strips Product schema entirely for third-party affiliate items to avoid merchant listing penalties', () => {
       const mockResources: Resource[] = [
         {
           slug: 'portable-speaker',
@@ -193,20 +194,18 @@ describe('schema utils', () => {
 
       const schema = generateGearCatalogSchema(mockResources);
 
-      const product = schema.itemListElement[0].item;
-      expect(product.description).toBe(
-        `Powerful portable speaker for dance practice. ${AMAZON_AFFILIATE_DISCLOSURE}`
-      );
-      expect(product.sku).toBe('AMZ-JBL-5');
-      expect(product.mpn).toBe('AMZ-JBL-5');
-      expect(product.image).toBe(
-        `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`
-      );
-      expect(product.offers).toBeUndefined();
-      expect(product.brand).toBeUndefined();
-      expect((product as unknown as Record<string, unknown>).price).toBeUndefined();
-      expect((product as unknown as Record<string, unknown>).aggregateRating).toBeUndefined();
-      expect((product as unknown as Record<string, unknown>).review).toBeUndefined();
+      expect(schema.itemListElement[0]).toEqual({
+        '@type': 'ListItem',
+        position: 1,
+        name: 'JBL Charge 5',
+        url: `${BASE_URL}/gear/portable-speaker`,
+      });
+
+      const json = JSON.stringify(schema.itemListElement[0]);
+      expect(json).not.toContain('"@type":"Product"');
+      expect(json).not.toContain('offers');
+      expect(json).not.toContain('price');
+      expect(json).not.toContain('hasMerchantReturnPolicy');
     });
   });
 
@@ -247,6 +246,22 @@ describe('schema utils', () => {
     });
   });
 
+  describe('formatIsoDate', () => {
+    it('appends default UTC time if date is YYYY-MM-DD', () => {
+      expect(formatIsoDate('2026-06-01')).toBe('2026-06-01T08:00:00Z');
+      expect(formatIsoDate('2026-08-28')).toBe('2026-08-28T08:00:00Z');
+    });
+
+    it('retains existing ISO date with timezone', () => {
+      expect(formatIsoDate('2026-06-01T12:00:00Z')).toBe('2026-06-01T12:00:00Z');
+      expect(formatIsoDate('2026-06-01T12:00:00-07:00')).toBe('2026-06-01T12:00:00-07:00');
+    });
+
+    it('handles empty or undefined date gracefully', () => {
+      expect(formatIsoDate(undefined)).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    });
+  });
+
   describe('generateImageObjectSchema', () => {
     it('generates a valid SchemaImageObject with credit and licensing metadata', () => {
       const imageSchema = generateImageObjectSchema({
@@ -258,6 +273,7 @@ describe('schema utils', () => {
 
       expect(imageSchema).toEqual({
         '@type': 'ImageObject',
+        name: 'Dance shoes',
         url: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
         contentUrl: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
         caption: 'Dance shoes',
@@ -270,7 +286,10 @@ describe('schema utils', () => {
         copyrightHolder: {
           '@type': 'Person',
           name: 'Ariel Anders, PhD'
-        }
+        },
+        copyrightNotice: `© ${new Date().getFullYear()} Ariel Anders, PhD. All rights reserved.`,
+        license: `${BASE_URL}/about#terms`,
+        acquireLicensePage: `${BASE_URL}/about`
       });
     });
   });
@@ -300,6 +319,7 @@ describe('schema utils', () => {
           url: BASE_URL,
           logo: {
             '@type': 'ImageObject',
+            name: 'BoomTick.blog Logo',
             url: `${BASE_URL}/favicon.ico`
           }
         }
