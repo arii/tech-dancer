@@ -84,7 +84,14 @@ export const STATIC_SCHEMAS = {
           "creator": {
             "@type": "Person",
             "name": "Ariel Anders"
-          }
+          },
+          "copyrightHolder": {
+            "@type": "Person",
+            "name": "Ariel Anders"
+          },
+          "copyrightNotice": `© ${new Date().getFullYear()} Ariel Anders. All rights reserved.`,
+          "license": `${BASE_URL}/about#terms`,
+          "acquireLicensePage": `${BASE_URL}/about`
         },
         "jobTitle": "Roboticist & AI Engineer",
         "url": `${BASE_URL}/about`,

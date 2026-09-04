@@ -6,6 +6,7 @@ import {
   generateBreadcrumbSchema,
   generateImageObjectSchema,
   generateCollectionPageSchema,
+  formatIsoDate,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
@@ -245,6 +246,22 @@ describe('schema utils', () => {
     });
   });
 
+  describe('formatIsoDate', () => {
+    it('appends default UTC time if date is YYYY-MM-DD', () => {
+      expect(formatIsoDate('2026-06-01')).toBe('2026-06-01T08:00:00Z');
+      expect(formatIsoDate('2026-08-28')).toBe('2026-08-28T08:00:00Z');
+    });
+
+    it('retains existing ISO date with timezone', () => {
+      expect(formatIsoDate('2026-06-01T12:00:00Z')).toBe('2026-06-01T12:00:00Z');
+      expect(formatIsoDate('2026-06-01T12:00:00-07:00')).toBe('2026-06-01T12:00:00-07:00');
+    });
+
+    it('handles empty or undefined date gracefully', () => {
+      expect(formatIsoDate(undefined)).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    });
+  });
+
   describe('generateImageObjectSchema', () => {
     it('generates a valid SchemaImageObject with credit and licensing metadata', () => {
       const imageSchema = generateImageObjectSchema({
@@ -269,7 +286,10 @@ describe('schema utils', () => {
         copyrightHolder: {
           '@type': 'Person',
           name: 'Ariel Anders, PhD'
-        }
+        },
+        copyrightNotice: `© ${new Date().getFullYear()} Ariel Anders, PhD. All rights reserved.`,
+        license: `${BASE_URL}/about#terms`,
+        acquireLicensePage: `${BASE_URL}/about`
       });
     });
   });

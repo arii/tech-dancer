@@ -11,6 +11,8 @@ import {
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
+  AUTHOR_ARIEL_ANDERS,
+  formatIsoDate,
   parsePrice,
 } from '@/utils/schema';
 
@@ -99,25 +101,59 @@ export default function GearPost() {
     }
 
     // For third-party affiliate items, emit standard Article & Breadcrumbs (no Product schema to prevent merchant listing misclassification)
+    const authorName = resource.author || "Ariel Anders";
+    const isAriel = !resource.author || resource.author === 'Ariel Anders' || resource.author.includes('Ariel');
+    const authorSchema = isAriel
+      ? AUTHOR_ARIEL_ANDERS
+      : {
+          "@type": "Person" as const,
+          "name": resource.author,
+          "url": `${BASE_URL}/about`
+        };
+
     const articleSchema = {
       "@context": "https://schema.org",
       "@type": "Article",
+      "name": resource.title,
       "headline": resource.title,
       "description": resource.excerpt,
-      "image": productImageUrl,
-      "datePublished": resource.date,
-      "dateModified": resource.date,
-      "author": {
-        "@type": "Person",
-        "name": resource.author || "Ariel Anders"
-      },
+      "image": [
+        productImageUrl,
+        {
+          "@type": "ImageObject",
+          "name": resource.title,
+          "url": productImageUrl,
+          "caption": resource.title,
+          "creditText": authorName,
+          "creator": {
+            "@type": "Person",
+            "name": authorName
+          },
+          "copyrightHolder": {
+            "@type": "Person",
+            "name": authorName
+          },
+          "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+          "license": `${BASE_URL}/about#terms`,
+          "acquireLicensePage": `${BASE_URL}/about`
+        }
+      ],
+      "datePublished": formatIsoDate(resource.date),
+      "dateModified": formatIsoDate(resource.date),
+      "author": authorSchema,
       "publisher": {
         "@type": "Organization",
-        "name": "BoomTick",
-        "url": BASE_URL
+        "name": "BoomTick.blog",
+        "url": BASE_URL,
+        "logo": {
+          "@type": "ImageObject",
+          "name": "BoomTick.blog Logo",
+          "url": `${BASE_URL}/favicon.ico`
+        }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
+        "name": resource.title,
         "@id": `${BASE_URL}/gear/${resource.slug}`
       }
     };

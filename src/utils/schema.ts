@@ -62,6 +62,7 @@ export interface SchemaBreadcrumbList {
 export interface SchemaImageObject {
   "@context"?: "https://schema.org";
   "@type": "ImageObject";
+  "name"?: string;
   "url": string;
   "contentUrl"?: string;
   "caption"?: string;
@@ -75,6 +76,40 @@ export interface SchemaImageObject {
     "@type": "Person" | "Organization";
     "name": string;
   };
+  "copyrightNotice"?: string;
+  "license"?: string;
+  "acquireLicensePage"?: string;
+}
+
+/**
+ * Ensures a date string is formatted in valid ISO 8601 with a timezone (e.g. YYYY-MM-DDTHH:mm:ssZ).
+ * If input is already in ISO format with timezone or offset, returns as-is or normalizes.
+ */
+export function formatIsoDate(dateStr?: string, defaultTime = "T08:00:00Z"): string {
+  if (!dateStr) {
+    return new Date().toISOString();
+  }
+  const trimmed = dateStr.trim();
+  // If it's a simple YYYY-MM-DD date
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return `${trimmed}${defaultTime}`;
+  }
+  // If it has timezone offset or Z already
+  if (/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) {
+    if (trimmed.endsWith('Z') || /[+-]\d{2}:\d{2}$/.test(trimmed)) {
+      return trimmed;
+    }
+    return `${trimmed}Z`;
+  }
+  try {
+    const parsed = new Date(trimmed);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString();
+    }
+  } catch {
+    // fallback
+  }
+  return `${trimmed}${defaultTime}`;
 }
 
 export interface SchemaListItem {
@@ -249,8 +284,12 @@ export function generateImageObjectSchema(params: {
   caption?: string;
   description?: string;
   author?: string;
+  copyrightNotice?: string;
+  license?: string;
+  acquireLicensePage?: string;
 }): SchemaImageObject {
   const imageUrl = getImageUrl(params.url);
+  const authorName = params.author || "Ariel Anders";
   return {
     "@type": "ImageObject",
     "name": params.caption || params.description || "Image",
@@ -258,15 +297,18 @@ export function generateImageObjectSchema(params: {
     "contentUrl": imageUrl,
     ...(params.caption ? { "caption": params.caption } : {}),
     ...(params.description ? { "description": params.description } : {}),
-    "creditText": params.author || "Ariel Anders",
+    "creditText": authorName,
     "creator": {
       "@type": "Person",
-      "name": params.author || "Ariel Anders"
+      "name": authorName
     },
     "copyrightHolder": {
       "@type": "Person",
-      "name": params.author || "Ariel Anders"
-    }
+      "name": authorName
+    },
+    "copyrightNotice": params.copyrightNotice || `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+    "license": params.license || `${BASE_URL}/about#terms`,
+    "acquireLicensePage": params.acquireLicensePage || `${BASE_URL}/about`
   };
 }
 
