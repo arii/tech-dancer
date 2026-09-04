@@ -14,7 +14,7 @@ import { Search } from 'lucide-react';
 
 import { GEAR_PILLS, ALL_GEAR_FILTER } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
-import { generateGearCatalogSchema } from '@/utils/schema';
+import { generateGearCatalogSchema, generateBreadcrumbSchema } from '@/utils/schema';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -23,11 +23,17 @@ export default function Toolbox() {
     filteredCategories.flatMap(cat => cat.items),
   [filteredCategories]);
 
+  const breadcrumbs = useMemo(() => generateBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Gear & Reviews", path: "/gear" }
+  ]), []);
+
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="toolbox-feed">
       <SEO
-        title="Gear Reviews"
-        description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
+        title="West Coast Swing Dance Gear & Reviews"
+        description="Discover top-rated dance shoes, travel steamers, recovery gear, and competition essentials curated for West Coast Swing dancers by Ariel Anders."
+        schema={breadcrumbs}
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
 

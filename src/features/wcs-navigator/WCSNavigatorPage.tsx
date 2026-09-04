@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
+import { BASE_URL } from '@/config/constants';
+import { AUTHOR_ARIEL_ANDERS, PUBLISHER_BOOMTICK } from '@/utils/schema';
 import { Icon } from '@/components/ui/Icon';
 import { HelpCircle, ArrowLeft, Layers, RefreshCw } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from './data/californiaEvents';
@@ -218,7 +220,6 @@ export const WCSNavigatorPage: React.FC = () => {
             `### ✅ ${s.title}\n- **Time:** ${s.time}\n- **Location:** ${s.location}\n- **Profile Match:** ${s.justification}\n`
         ),
       '',
-      '## 🎭 Party Themes & Dress Codes',
       ...themes.map(
         (t) =>
           `### 🌟 ${t.day}: ${t.themeTitle}\n- **Atmosphere:** ${t.vibe}\n- **Outfits:** ${t.recommendedAttire.join(', ')}\n`
@@ -228,12 +229,45 @@ export const WCSNavigatorPage: React.FC = () => {
     setDiscoveryData((prev) => ({ ...prev, visualScheduleMarkdown: markdownDoc }));
   };
 
+  const navigatorSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "WCS Navigator",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "description": "Google Search-style AI agent for West Coast Swing conventions. Pre-scans multi-room schedules, computes backward flight buffer math, and streams calendar files.",
+      "url": `${BASE_URL}/wcs-navigator`,
+      "author": AUTHOR_ARIEL_ANDERS,
+      "publisher": PUBLISHER_BOOMTICK
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${BASE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "WCS Navigator",
+          "item": `${BASE_URL}/wcs-navigator`
+        }
+      ]
+    }
+  ];
+
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full" paddingX={{ base: 4, sm: 6 }}>
       <SEO
         title="WCS Navigator — AI Dance Convention Itinerary & Calendar Optimizer"
         description="Google Search-style AI agent for West Coast Swing conventions. Pre-scans multi-room schedules, computes backward flight buffer math, and streams calendar files."
         keywords="West Coast Swing, WCS Navigator, AI dance optimizer, California 2026 WCS events, flight buffer engine, schedule parser"
+        schema={navigatorSchema}
       />
 
       <Stack gap={6} width="full">

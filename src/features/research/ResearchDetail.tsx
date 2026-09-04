@@ -8,6 +8,7 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { AUTHOR_ARIEL_ANDERS } from '@/utils/schema';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -54,31 +55,116 @@ export default function ResearchDetail() {
 
   const structuredData = useMemo(() => {
     if (study) {
-      return {
+      const studyImageUrl = study.authorImage || `${BASE_URL}/assets/comp_analysis_hero.webp`;
+
+      const isAriel = !study.author || study.author === 'Ariel Anders' || study.author.includes('Ariel');
+      const authorSchema = isAriel
+        ? AUTHOR_ARIEL_ANDERS
+        : {
+            "@type": "Person" as const,
+            "name": study.author,
+            "url": `${BASE_URL}/about`
+          };
+
+      const techArticleSchema = {
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "TechArticle",
         "headline": study.title,
         "description": study.excerpt,
-        "author": {
-          "@type": "Person",
-          "name": study.author || "Ariel Anders",
-          "url": `${BASE_URL}/about`
-        },
+        "proficiencyLevel": "Expert",
+        "articleSection": "Technical Deep Dive",
+        "author": authorSchema,
         "datePublished": study.date,
+        "dateModified": study.date,
+        "image": [
+          studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
+          {
+            "@type": "ImageObject",
+            "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
+            "caption": study.title,
+            "creditText": study.author || "Ariel Anders",
+            "creator": {
+              "@type": "Person",
+              "name": study.author || "Ariel Anders"
+            }
+          }
+        ],
         "publisher": {
           "@type": "Organization",
-          "name": SITE_NAME
+          "name": SITE_NAME,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${BASE_URL}/favicon.ico`
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `${BASE_URL}/research/${study.slug}`
         }
       };
+
+      const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${BASE_URL}`
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Experiments",
+            "item": `${BASE_URL}/research`
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": study.title,
+            "item": `${BASE_URL}/research/${study.slug}`
+          }
+        ]
+      };
+
+      return [techArticleSchema, breadcrumbSchema];
     }
     if (tool) {
-      return {
+      const toolSchema = {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": tool.title,
         "description": tool.description,
         "applicationCategory": "EducationalApplication"
       };
+
+      const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${BASE_URL}`
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Experiments",
+            "item": `${BASE_URL}/research`
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": tool.title,
+            "item": `${BASE_URL}${tool.canonicalPath || `/research/${tool.id}`}`
+          }
+        ]
+      };
+
+      return [toolSchema, breadcrumbSchema];
     }
     return null;
   }, [tool, study]);

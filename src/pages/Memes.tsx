@@ -6,9 +6,20 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MEMES_DATA } from '@/data/memes';
+import { generateCollectionPageSchema } from '@/utils/schema';
 
 const Memes = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  const memesSchema = generateCollectionPageSchema({
+    name: "West Coast Swing Memes",
+    description: "Enjoy the best, highly relatable West Coast Swing (WCS) memes about the slot, connection, social dancing, and hotel rooms. Perfect to share with your partner dance community.",
+    url: "/memes",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Memes", path: "/memes" }
+    ]
+  });
 
   // Close lightbox on Escape key press
   useEffect(() => {
@@ -27,6 +38,7 @@ const Memes = () => {
       <SEO
         title="West Coast Swing Memes"
         description="Enjoy the best, highly relatable West Coast Swing (WCS) memes about the slot, connection, social dancing, and hotel rooms. Perfect to share with your partner dance community."
+        schema={memesSchema}
       />
 
       <Stack gap={10} width="full" maxWidth="screen-xl">

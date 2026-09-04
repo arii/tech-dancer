@@ -26,42 +26,6 @@ export default function GearPost() {
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
 
-  const structuredData = useMemo(() => {
-    if (!resource) return null;
-
-    const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
-    const sku = resource.internalSku || resource.slug;
-    const rawPrice = (resource as unknown as { price?: string | number }).price;
-    const price = parsePrice(rawPrice, "25.00");
-
-    const schema: SchemaProduct = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": resource.title,
-      "description": isAmazon
-        ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
-        : resource.excerpt,
-      "image": resource.image
-        ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
-        : `${BASE_URL}/assets/comp_analysis_hero.webp`,
-      "brand": DEFAULT_BRAND,
-      "sku": sku,
-      "mpn": sku,
-      "offers": {
-        "@type": "Offer",
-        "price": price,
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
-        "itemCondition": "https://schema.org/NewCondition",
-        "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-        "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
-      }
-    };
-
-    return schema;
-  }, [resource]);
-
   const isMerch = useMemo(() => {
     if (!resource) return false;
     const fromState = (location.state as { from?: string } | null)?.from;
@@ -75,6 +39,70 @@ export default function GearPost() {
       resource.category?.toLowerCase() === 'accessories'
     );
   }, [resource, location.state]);
+
+  const structuredData = useMemo(() => {
+    if (!resource) return null;
+
+    const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
+    const sku = resource.internalSku || resource.slug;
+    const rawPrice = (resource as unknown as { price?: string | number }).price;
+    const price = parsePrice(rawPrice, "25.00");
+    const productImageUrl = resource.image
+      ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
+      : `${BASE_URL}/assets/comp_analysis_hero.webp`;
+
+    const productSchema: SchemaProduct = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": resource.title,
+      "description": isAmazon
+        ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
+        : resource.excerpt,
+      "image": productImageUrl,
+      "sku": sku,
+      "mpn": sku,
+      ...(isMerch && {
+        brand: DEFAULT_BRAND,
+        offers: {
+          "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
+        }
+      })
+    };
+
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${BASE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gear & Reviews",
+          "item": `${BASE_URL}/gear`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": resource.title,
+          "item": `${BASE_URL}/gear/${resource.slug}`
+        }
+      ]
+    };
+
+    return [productSchema, breadcrumbSchema];
+  }, [resource, isMerch]);
 
   const backTarget = isMerch ? '/merch' : '/gear';
   const backLabel = isMerch ? 'Back to Merch' : 'Back to Toolbox';

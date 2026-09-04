@@ -19,6 +19,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
+import { generateCollectionPageSchema } from '@/utils/schema';
 
 const ResearchAnalytics = () => {
   const { tools } = useResearch();
@@ -28,12 +29,23 @@ const ResearchAnalytics = () => {
   const liveTools = tools.filter(t => ['versiontruth', 'ux-auditor', 'wcs-navigator'].includes(t.id));
   const experimentTools = tools.filter(t => ['blog-drafter', 'wcs-scraper', 'ecommerce-automation'].includes(t.id));
 
+  const researchSchema = generateCollectionPageSchema({
+    name: "Laboratory & Experiments",
+    description: "Experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines.",
+    url: "/research",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Experiments", path: "/research" }
+    ]
+  });
+
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full">
       <SEO
         title="Experiments"
         description="Experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines."
         keywords="DevAI, live testbeds, visual regression, VersionTruth, Playwright, pixelmatch, RAG pipelines, data engineering"
+        schema={researchSchema}
       />
       <Stack gap={16} width="full">
         {/* Full-width Hero Section */}

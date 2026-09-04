@@ -40,10 +40,41 @@ export interface SchemaProduct {
   "name": string;
   "description": string;
   "image": string;
-  "brand": SchemaBrand;
+  "brand"?: SchemaBrand;
   "sku": string;
   "mpn": string;
-  "offers": SchemaOffer;
+  "offers"?: SchemaOffer;
+}
+
+export interface SchemaBreadcrumbListItem {
+  "@type": "ListItem";
+  "position": number;
+  "name": string;
+  "item": string;
+}
+
+export interface SchemaBreadcrumbList {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  "itemListElement": SchemaBreadcrumbListItem[];
+}
+
+export interface SchemaImageObject {
+  "@context"?: "https://schema.org";
+  "@type": "ImageObject";
+  "url": string;
+  "contentUrl"?: string;
+  "caption"?: string;
+  "description"?: string;
+  "creditText"?: string;
+  "creator"?: {
+    "@type": "Person";
+    "name": string;
+  };
+  "copyrightHolder"?: {
+    "@type": "Person" | "Organization";
+    "name": string;
+  };
 }
 
 export interface SchemaListItem {
@@ -80,6 +111,52 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
   "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
   "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
 };
+
+export const AUTHOR_ARIEL_ANDERS = {
+  "@type": "Person" as const,
+  "name": "Ariel Anders",
+  "jobTitle": "Roboticist & AI Engineer",
+  "url": `${BASE_URL}/about`,
+  "sameAs": [
+    "https://arii.github.io",
+    "https://github.com/arii",
+    "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
+    "https://www.instagram.com/onasafari/"
+  ]
+};
+
+export const PUBLISHER_BOOMTICK = {
+  "@type": "Organization" as const,
+  "name": "BoomTick.blog",
+  "url": BASE_URL,
+  "logo": {
+    "@type": "ImageObject" as const,
+    "url": `${BASE_URL}/favicon.ico`
+  }
+};
+
+export function generateCollectionPageSchema(params: {
+  name: string;
+  description: string;
+  url: string;
+  breadcrumbs?: { name: string; path: string }[];
+}): Array<Record<string, unknown>> {
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": params.name,
+    "description": params.description,
+    "url": params.url.startsWith('http') ? params.url : `${BASE_URL}${params.url.startsWith('/') ? '' : '/'}${params.url}`,
+    "publisher": PUBLISHER_BOOMTICK,
+  };
+
+  if (params.breadcrumbs && params.breadcrumbs.length > 0) {
+    const breadcrumbSchema = generateBreadcrumbSchema(params.breadcrumbs);
+    return [collectionSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+  }
+
+  return [collectionSchema];
+}
 
 export function parsePrice(price?: string | number, defaultPrice = "24.00"): string {
   if (typeof price === 'number') {
@@ -153,34 +230,72 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
   };
 }
 
+export function generateBreadcrumbSchema(items: { name: string; path: string }[]): SchemaBreadcrumbList {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": item.name,
+      "item": item.path.startsWith('http') ? item.path : `${BASE_URL}${item.path.startsWith('/') ? '' : '/'}${item.path}`
+    }))
+  };
+}
+
+export function generateImageObjectSchema(params: {
+  url: string;
+  caption?: string;
+  description?: string;
+  author?: string;
+}): SchemaImageObject {
+  const imageUrl = getImageUrl(params.url);
+  return {
+    "@type": "ImageObject",
+    "url": imageUrl,
+    "contentUrl": imageUrl,
+    ...(params.caption ? { "caption": params.caption } : {}),
+    ...(params.description ? { "description": params.description } : {}),
+    "creditText": params.author || "Ariel Anders",
+    "creator": {
+      "@type": "Person",
+      "name": params.author || "Ariel Anders"
+    },
+    "copyrightHolder": {
+      "@type": "Person",
+      "name": params.author || "Ariel Anders"
+    }
+  };
+}
+
 export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "itemListElement": resources.map((resource, index) => {
-      const isAmazon = resource.affiliateProvider === 'amazon';
+      const isAffiliate = resource.affiliateProvider === 'amazon' || !resource.shopUrl;
       const sku = resource.internalSku || resource.slug;
-      const rawPrice = (resource as unknown as { price?: string | number }).price;
-      const price = parsePrice(rawPrice, "25.00");
 
       const productSchema: SchemaProduct = {
         "@type": "Product",
         "name": resource.title,
-        "description": isAmazon ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
+        "description": resource.affiliateProvider === 'amazon' ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
         "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "brand": DEFAULT_BRAND,
         "sku": sku,
         "mpn": sku,
-        "offers": {
-          "@type": "Offer",
-          "price": price,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "itemCondition": "https://schema.org/NewCondition",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
-        }
+        ...(!isAffiliate && {
+          brand: DEFAULT_BRAND,
+          offers: {
+            "@type": "Offer",
+            "price": parsePrice((resource as unknown as { price?: string | number }).price, "25.00"),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+            "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+            "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY
+          }
+        })
       };
 
       return {

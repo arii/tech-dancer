@@ -3,6 +3,9 @@ import {
   getImageUrl,
   generateMerchSchema,
   generateGearCatalogSchema,
+  generateBreadcrumbSchema,
+  generateImageObjectSchema,
+  generateCollectionPageSchema,
   AMAZON_AFFILIATE_DISCLOSURE,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
@@ -175,7 +178,7 @@ describe('schema utils', () => {
       });
     });
 
-    it('appends AMAZON_AFFILIATE_DISCLOSURE for Amazon affiliate products', () => {
+    it('omits offers, price, and brand for Amazon affiliate products while adding disclosure', () => {
       const mockResources: Resource[] = [
         {
           slug: 'portable-speaker',
@@ -199,10 +202,113 @@ describe('schema utils', () => {
       expect(product.image).toBe(
         `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`
       );
-      expect(product.offers.url).toBe(`${BASE_URL}/gear/portable-speaker`);
-      expect(product.offers.price).toBe('25.00');
-      expect(product.offers.priceCurrency).toBe('USD');
-      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.offers).toBeUndefined();
+      expect(product.brand).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).price).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).aggregateRating).toBeUndefined();
+      expect((product as unknown as Record<string, unknown>).review).toBeUndefined();
+    });
+  });
+
+  describe('generateBreadcrumbSchema', () => {
+    it('generates a valid SchemaBreadcrumbList with 1-based indexing and full canonical paths', () => {
+      const items = [
+        { name: 'Home', path: '/' },
+        { name: 'Journal', path: '/blog' },
+        { name: 'Packing Guide', path: '/blog/packing-guide' }
+      ];
+
+      const schema = generateBreadcrumbSchema(items);
+
+      expect(schema).toEqual({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: `${BASE_URL}/`
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Journal',
+            item: `${BASE_URL}/blog`
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: 'Packing Guide',
+            item: `${BASE_URL}/blog/packing-guide`
+          }
+        ]
+      });
+    });
+  });
+
+  describe('generateImageObjectSchema', () => {
+    it('generates a valid SchemaImageObject with credit and licensing metadata', () => {
+      const imageSchema = generateImageObjectSchema({
+        url: '/assets/shoes.webp',
+        caption: 'Dance shoes',
+        description: 'Suede dance shoes for social dance floor',
+        author: 'Ariel Anders, PhD'
+      });
+
+      expect(imageSchema).toEqual({
+        '@type': 'ImageObject',
+        url: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
+        contentUrl: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
+        caption: 'Dance shoes',
+        description: 'Suede dance shoes for social dance floor',
+        creditText: 'Ariel Anders, PhD',
+        creator: {
+          '@type': 'Person',
+          name: 'Ariel Anders, PhD'
+        },
+        copyrightHolder: {
+          '@type': 'Person',
+          name: 'Ariel Anders, PhD'
+        }
+      });
+    });
+  });
+
+  describe('generateCollectionPageSchema', () => {
+    it('generates CollectionPage schema with breadcrumbs and publisher info', () => {
+      const schemas = generateCollectionPageSchema({
+        name: 'West Coast Swing Articles',
+        description: 'Guide collection',
+        url: '/blog',
+        breadcrumbs: [
+          { name: 'Home', path: '/' },
+          { name: 'Journal', path: '/blog' }
+        ]
+      });
+
+      expect(schemas).toHaveLength(2);
+      expect(schemas[0]).toEqual({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'West Coast Swing Articles',
+        description: 'Guide collection',
+        url: `${BASE_URL}/blog`,
+        publisher: {
+          '@type': 'Organization',
+          name: 'BoomTick.blog',
+          url: BASE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${BASE_URL}/favicon.ico`
+          }
+        }
+      });
+      expect(schemas[1]).toMatchObject({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: expect.any(Array)
+      });
     });
   });
 });
