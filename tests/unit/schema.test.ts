@@ -171,7 +171,7 @@ describe('schema utils', () => {
             priceCurrency: 'USD',
             availability: 'https://schema.org/InStock',
             itemCondition: 'https://schema.org/NewCondition',
-            url: 'https://fuegodance.com/shoes',
+            url: `${BASE_URL}/gear/dance-shoes-1`,
             shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
             hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
           },

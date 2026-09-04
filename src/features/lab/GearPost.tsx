@@ -7,6 +7,7 @@ import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
 import type { SchemaProduct } from '@/utils/schema';
+import { MERCH_PRODUCTS } from '@/data/merch';
 import {
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
@@ -45,7 +46,10 @@ export default function GearPost() {
     if (!resource) return null;
 
     const sku = resource.internalSku || resource.slug;
-    const rawPrice = (resource as unknown as { price?: string | number }).price;
+    const matchedMerch = MERCH_PRODUCTS.find(
+      (p) => (resource.slug && (p.gearSlug === resource.slug || p.id === resource.slug)) || (resource.shopUrl && p.printfulUrl === resource.shopUrl)
+    );
+    const rawPrice = matchedMerch?.price || (resource as unknown as { price?: string | number }).price;
     const price = parsePrice(rawPrice, "25.00");
     const productImageUrl = resource.image
       ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
@@ -92,7 +96,7 @@ export default function GearPost() {
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
           "itemCondition": "https://schema.org/NewCondition",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          "url": `${BASE_URL}/gear/${resource.slug}`,
           "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
           "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
         }
