@@ -75,22 +75,29 @@ export function EditorialLayout({
         {/* Content & Sidebar Layout */}
         {sidebar ? (
           <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 10, lg: 12 }} align="start">
+            {/* Sidebar / Shop items: On mobile/tablet (<lg), display before article body so products and disclosure maintain context with intro */}
+            <Box
+              as="aside"
+              span={{ base: 1, lg: 4 }}
+              width="full"
+              className="order-1 lg:order-2"
+              aria-label="Article resources and shop items"
+            >
+              <Stack gap={8} position={{ lg: "sticky" }} top={24}>
+                {sidebar}
+              </Stack>
+            </Box>
+
             {/* Main Article Column */}
             <Box
+              as="article"
               span={{ base: 1, lg: 8 }}
               width="full"
-              className="order-1"
+              className="order-2 lg:order-1"
             >
               <Box className="article-content-wrapper" width="full">
                 {children}
               </Box>
-            </Box>
-
-            {/* Sidebar */}
-            <Box span={{ base: 1, lg: 4 }} width="full" className="order-2">
-              <Stack gap={8} position={{ lg: "sticky" }} top={24}>
-                {sidebar}
-              </Stack>
             </Box>
 
             {/* Footer */}
@@ -100,7 +107,7 @@ export function EditorialLayout({
                 width="full"
                 className="order-3"
               >
-                <Box marginTop={{ base: 8, lg: 0 }}>
+                <Box marginTop={{ base: 10, lg: 4 }}>
                   {footer}
                 </Box>
               </Box>
@@ -108,7 +115,7 @@ export function EditorialLayout({
           </Grid>
         ) : (
           <Stack gap={{ base: 8, md: 12 }} width="full" marginX="auto" maxWidth="3xl">
-            <Box className="article-content-wrapper" width="full">
+            <Box as="article" className="article-content-wrapper" width="full">
               {children}
             </Box>
             {footer && (
