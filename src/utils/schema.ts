@@ -112,6 +112,52 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
   "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
 };
 
+export const AUTHOR_ARIEL_ANDERS = {
+  "@type": "Person" as const,
+  "name": "Ariel Anders",
+  "jobTitle": "Roboticist & AI Engineer",
+  "url": `${BASE_URL}/about`,
+  "sameAs": [
+    "https://arii.github.io",
+    "https://github.com/arii",
+    "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
+    "https://www.instagram.com/onasafari/"
+  ]
+};
+
+export const PUBLISHER_BOOMTICK = {
+  "@type": "Organization" as const,
+  "name": "BoomTick.blog",
+  "url": BASE_URL,
+  "logo": {
+    "@type": "ImageObject" as const,
+    "url": `${BASE_URL}/favicon.ico`
+  }
+};
+
+export function generateCollectionPageSchema(params: {
+  name: string;
+  description: string;
+  url: string;
+  breadcrumbs?: { name: string; path: string }[];
+}): Array<Record<string, unknown>> {
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": params.name,
+    "description": params.description,
+    "url": params.url.startsWith('http') ? params.url : `${BASE_URL}${params.url.startsWith('/') ? '' : '/'}${params.url}`,
+    "publisher": PUBLISHER_BOOMTICK,
+  };
+
+  if (params.breadcrumbs && params.breadcrumbs.length > 0) {
+    const breadcrumbSchema = generateBreadcrumbSchema(params.breadcrumbs);
+    return [collectionSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+  }
+
+  return [collectionSchema];
+}
+
 export function parsePrice(price?: string | number, defaultPrice = "24.00"): string {
   if (typeof price === 'number') {
     return price.toFixed(2);

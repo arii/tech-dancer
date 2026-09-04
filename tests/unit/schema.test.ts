@@ -5,6 +5,7 @@ import {
   generateGearCatalogSchema,
   generateBreadcrumbSchema,
   generateImageObjectSchema,
+  generateCollectionPageSchema,
   AMAZON_AFFILIATE_DISCLOSURE,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
@@ -270,6 +271,43 @@ describe('schema utils', () => {
           '@type': 'Person',
           name: 'Ariel Anders, PhD'
         }
+      });
+    });
+  });
+
+  describe('generateCollectionPageSchema', () => {
+    it('generates CollectionPage schema with breadcrumbs and publisher info', () => {
+      const schemas = generateCollectionPageSchema({
+        name: 'West Coast Swing Articles',
+        description: 'Guide collection',
+        url: '/blog',
+        breadcrumbs: [
+          { name: 'Home', path: '/' },
+          { name: 'Journal', path: '/blog' }
+        ]
+      });
+
+      expect(schemas).toHaveLength(2);
+      expect(schemas[0]).toEqual({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'West Coast Swing Articles',
+        description: 'Guide collection',
+        url: `${BASE_URL}/blog`,
+        publisher: {
+          '@type': 'Organization',
+          name: 'BoomTick.blog',
+          url: BASE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${BASE_URL}/favicon.ico`
+          }
+        }
+      });
+      expect(schemas[1]).toMatchObject({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: expect.any(Array)
       });
     });
   });

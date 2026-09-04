@@ -8,6 +8,7 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { AUTHOR_ARIEL_ANDERS } from '@/utils/schema';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -56,6 +57,15 @@ export default function ResearchDetail() {
     if (study) {
       const studyImageUrl = study.authorImage || `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
+      const isAriel = !study.author || study.author === 'Ariel Anders' || study.author.includes('Ariel');
+      const authorSchema = isAriel
+        ? AUTHOR_ARIEL_ANDERS
+        : {
+            "@type": "Person" as const,
+            "name": study.author,
+            "url": `${BASE_URL}/about`
+          };
+
       const techArticleSchema = {
         "@context": "https://schema.org",
         "@type": "TechArticle",
@@ -63,22 +73,22 @@ export default function ResearchDetail() {
         "description": study.excerpt,
         "proficiencyLevel": "Expert",
         "articleSection": "Technical Deep Dive",
-        "author": {
-          "@type": "Person",
-          "name": study.author || "Ariel Anders",
-          "url": `${BASE_URL}/about`
-        },
+        "author": authorSchema,
         "datePublished": study.date,
-        "image": {
-          "@type": "ImageObject",
-          "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
-          "caption": study.title,
-          "creditText": study.author || "Ariel Anders",
-          "creator": {
-            "@type": "Person",
-            "name": study.author || "Ariel Anders"
+        "dateModified": study.date,
+        "image": [
+          studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
+          {
+            "@type": "ImageObject",
+            "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
+            "caption": study.title,
+            "creditText": study.author || "Ariel Anders",
+            "creator": {
+              "@type": "Person",
+              "name": study.author || "Ariel Anders"
+            }
           }
-        },
+        ],
         "publisher": {
           "@type": "Organization",
           "name": SITE_NAME,

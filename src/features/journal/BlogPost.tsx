@@ -5,6 +5,7 @@ import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { AUTHOR_ARIEL_ANDERS } from '@/utils/schema';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -22,27 +23,36 @@ export default function BlogPost() {
 
     const postImageUrl = post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
+    const isAriel = !post.author || post.author === 'Ariel Anders' || post.author.includes('Ariel');
+    const authorSchema = isAriel
+      ? AUTHOR_ARIEL_ANDERS
+      : {
+          "@type": "Person" as const,
+          "name": post.author,
+          "url": `${BASE_URL}/about`
+        };
+
     const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "headline": post.title,
       "description": post.excerpt,
-      "author": {
-        "@type": "Person",
-        "name": post.author || "Ariel Anders",
-        "url": `${BASE_URL}/about`
-      },
+      "author": authorSchema,
       "datePublished": post.date,
-      "image": {
-        "@type": "ImageObject",
-        "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
-        "caption": post.title,
-        "creditText": post.author || "Ariel Anders",
-        "creator": {
-          "@type": "Person",
-          "name": post.author || "Ariel Anders"
+      "dateModified": post.updated || post.date,
+      "image": [
+        postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
+        {
+          "@type": "ImageObject",
+          "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
+          "caption": post.imageAlt || post.title,
+          "creditText": post.author || "Ariel Anders",
+          "creator": {
+            "@type": "Person",
+            "name": post.author || "Ariel Anders"
+          }
         }
-      },
+      ],
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME,
