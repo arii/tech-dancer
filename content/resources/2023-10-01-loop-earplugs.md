@@ -1,4 +1,5 @@
 ---
+type: resource
 title: "Loop Experience 2 Earplugs"
 label: "Earplugs"
 category: "Gear"
@@ -6,7 +7,8 @@ author: "Ariel Anders"
 date: "2023-10-01"
 price: "$35.00"
 image: "/images/gear/sketches/loop-earplugs.jpg"
-url: "https://www.amazon.com/dp/B07MBQZ1P6?tag=onasafari04-20"
+affiliateIds: ["loop-experience"]
+affiliateProvider: "amazon"
 featured: true
 description: "Loop Experience 2 earplugs reduce noise by 18 decibels while keeping music and speech clear. Perfect for social dancing where the music volume is high but you still need to hear your partner."
 ---
