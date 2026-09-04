@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
 import { Box, Stack } from '@/layouts/Primitives';
+import { STATIC_SCHEMAS } from '@/config/constants';
 import { useProfile } from './useProfile';
 import ProfileStoryRow from './components/ProfileStoryRow';
 import ProfileLegalAndSocial from './components/ProfileLegalAndSocial';
@@ -20,8 +21,10 @@ const ArielProfile = () => {
   return (
     <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
       <SEO
-        title="About"
-        description="Ariel Anders, PhD: West Coast Swing dancer, roboticist, and creator of boomtick.blog. Personal site focused on dance lifestyle, travel strategies, and live web experiments."
+        title="About Ariel Anders | Roboticist & WCS Dancer"
+        description="Learn about Ariel Anders, PhD: West Coast Swing dancer, roboticist, and creator of BoomTick. Discover dance lifestyle insights and robotics projects."
+        type="profile"
+        schema={STATIC_SCHEMAS.ABOUT(bio.name, bio.role)}
       />
 
       {/* 1. Standardized Page Header (Consistent with Blog, Gear, Merch, Research) */}

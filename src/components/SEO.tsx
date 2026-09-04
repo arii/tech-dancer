@@ -43,10 +43,22 @@ export function SEO({
 
   const combinedSchema = useMemo(() => {
     if (!schema && !jsonLd) return null;
-    const schemas = [];
+    const schemas: unknown[] = [];
 
-    if (schema) schemas.push(schema);
-    if (jsonLd) schemas.push(jsonLd);
+    if (schema) {
+      if (Array.isArray(schema)) {
+        schemas.push(...schema);
+      } else {
+        schemas.push(schema);
+      }
+    }
+    if (jsonLd) {
+      if (Array.isArray(jsonLd)) {
+        schemas.push(...jsonLd);
+      } else {
+        schemas.push(jsonLd);
+      }
+    }
 
     return JSON.stringify(schemas.length === 1 ? schemas[0] : schemas);
   }, [schema, jsonLd]);
@@ -62,6 +74,7 @@ export function SEO({
       <link rel="canonical" href={url} />
 
       {/* Open Graph / Facebook */}
+      <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={displayTitle} />

@@ -10,8 +10,8 @@ export default function BlogFeed() {
   return (
     <>
       <SEO
-        title="Blog"
-        description="A searchable, categorized folio of posts covering travel, lifestyle, practical tools, technical portfolio pieces, and everything about West Coast Swing."
+        title="West Coast Swing Dance Articles & Tips"
+        description="Explore practical West Coast Swing tips, competition travel advice, dance shoe DIY guides, and community insights written by Ariel Anders, PhD."
       />
       <FolioGrid
         items={posts}

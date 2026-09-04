@@ -23,31 +23,98 @@ export const PRINTFUL_REFERRAL = {
 const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.";
 
 export const STATIC_SCHEMAS = {
-  HOME: {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": SITE_NAME,
-    "url": BASE_URL,
-    "description": DEFAULT_DESCRIPTION,
-    "publisher": {
-      "@type": "Person",
-      "name": "Ariel Anders"
-    }
-  },
-  ABOUT: (bioName: string, bioRole: string) => ({
-    "@context": "https://schema.org",
-    "@type": ["AboutPage", "ProfilePage"],
-    "mainEntity": {
-      "@type": "Person",
-      "name": bioName,
-      "description": bioRole,
-      "image": `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
-      "jobTitle": bioRole,
-      "url": `${BASE_URL}/about`,
+  HOME: [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": SITE_NAME,
+      "url": BASE_URL,
+      "description": DEFAULT_DESCRIPTION,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${BASE_URL}/blog?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": SITE_NAME,
+      "url": BASE_URL,
+      "logo": `${BASE_URL}/favicon.ico`,
+      "founder": {
+        "@type": "Person",
+        "name": "Ariel Anders",
+        "jobTitle": "Roboticist & AI Engineer",
+        "url": `${BASE_URL}/about`,
+        "sameAs": [
+          SOCIAL_LINKS.PORTFOLIO,
+          SOCIAL_LINKS.GITHUB,
+          SOCIAL_LINKS.LINKEDIN
+        ]
+      },
       "sameAs": [
+        SOCIAL_LINKS.PORTFOLIO,
         SOCIAL_LINKS.GITHUB,
-        SOCIAL_LINKS.LINKEDIN
+        SOCIAL_LINKS.LINKEDIN,
+        SOCIAL_LINKS.INSTAGRAM
       ]
     }
-  })
+  ],
+  ABOUT: (bioName: string, bioRole: string) => [
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "mainEntity": {
+        "@type": "Person",
+        "name": bioName,
+        "description": bioRole,
+        "image": {
+          "@type": "ImageObject",
+          "url": `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
+          "caption": "Ariel Anders, PhD - Roboticist & WCS Dancer",
+          "creditText": "Ariel Anders",
+          "creator": {
+            "@type": "Person",
+            "name": "Ariel Anders"
+          }
+        },
+        "jobTitle": "Roboticist & AI Engineer",
+        "url": `${BASE_URL}/about`,
+        "alumniOf": "Massachusetts Institute of Technology (MIT)",
+        "knowsAbout": [
+          "Artificial Intelligence",
+          "Robotics Software Engineering",
+          "Autonomous Systems",
+          "Agentic Workflows",
+          "Motion Planning",
+          "West Coast Swing"
+        ],
+        "sameAs": [
+          SOCIAL_LINKS.PORTFOLIO,
+          SOCIAL_LINKS.GITHUB,
+          SOCIAL_LINKS.LINKEDIN,
+          SOCIAL_LINKS.INSTAGRAM
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${BASE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": `${BASE_URL}/about`
+        }
+      ]
+    }
+  ]
 } as const;

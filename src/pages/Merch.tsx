@@ -65,8 +65,8 @@ export default function Merch() {
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="merch-feed">
       <SEO
-        title="West Coast Swing Dance Merch"
-        description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
+        title="West Coast Swing Dance Merch & Shirts"
+        description="Shop official BoomTick apparel for West Coast Swing dancers. Explore premium tees, crop hoodies, tanks, and accessories for leads, follows, and switch dancers."
         jsonLd={generateMerchSchema(allProducts)}
       />
 

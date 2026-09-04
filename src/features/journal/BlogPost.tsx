@@ -19,7 +19,10 @@ export default function BlogPost() {
 
   const structuredData = useMemo(() => {
     if (!post) return null;
-    return {
+
+    const postImageUrl = post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`;
+
+    const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "headline": post.title,
@@ -30,7 +33,16 @@ export default function BlogPost() {
         "url": `${BASE_URL}/about`
       },
       "datePublished": post.date,
-      "image": post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`,
+      "image": {
+        "@type": "ImageObject",
+        "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
+        "caption": post.title,
+        "creditText": post.author || "Ariel Anders",
+        "creator": {
+          "@type": "Person",
+          "name": post.author || "Ariel Anders"
+        }
+      },
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME,
@@ -44,6 +56,33 @@ export default function BlogPost() {
         "@id": `${BASE_URL}/blog/${post.slug}`
       }
     };
+
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${BASE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Journal",
+          "item": `${BASE_URL}/blog`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": post.title,
+          "item": `${BASE_URL}/blog/${post.slug}`
+        }
+      ]
+    };
+
+    return [blogPostingSchema, breadcrumbSchema];
   }, [post]);
 
   if (!post) {

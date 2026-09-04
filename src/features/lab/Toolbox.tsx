@@ -26,8 +26,8 @@ export default function Toolbox() {
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center" data-testid="toolbox-feed">
       <SEO
-        title="Gear Reviews"
-        description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
+        title="West Coast Swing Dance Gear & Reviews"
+        description="Discover top-rated dance shoes, travel steamers, recovery gear, and competition essentials curated for West Coast Swing dancers by Ariel Anders."
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
 

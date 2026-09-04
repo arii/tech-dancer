@@ -33,17 +33,18 @@ export default function GearPost() {
     const sku = resource.internalSku || resource.slug;
     const rawPrice = (resource as unknown as { price?: string | number }).price;
     const price = parsePrice(rawPrice, "25.00");
+    const productImageUrl = resource.image
+      ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
+      : `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
-    const schema: SchemaProduct = {
+    const productSchema: SchemaProduct = {
       "@context": "https://schema.org",
       "@type": "Product",
       "name": resource.title,
       "description": isAmazon
         ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
         : resource.excerpt,
-      "image": resource.image
-        ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
-        : `${BASE_URL}/assets/comp_analysis_hero.webp`,
+      "image": productImageUrl,
       "brand": DEFAULT_BRAND,
       "sku": sku,
       "mpn": sku,
@@ -59,7 +60,32 @@ export default function GearPost() {
       }
     };
 
-    return schema;
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${BASE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gear & Reviews",
+          "item": `${BASE_URL}/gear`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": resource.title,
+          "item": `${BASE_URL}/gear/${resource.slug}`
+        }
+      ]
+    };
+
+    return [productSchema, breadcrumbSchema];
   }, [resource]);
 
   const isMerch = useMemo(() => {

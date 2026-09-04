@@ -46,6 +46,37 @@ export interface SchemaProduct {
   "offers": SchemaOffer;
 }
 
+export interface SchemaBreadcrumbListItem {
+  "@type": "ListItem";
+  "position": number;
+  "name": string;
+  "item": string;
+}
+
+export interface SchemaBreadcrumbList {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  "itemListElement": SchemaBreadcrumbListItem[];
+}
+
+export interface SchemaImageObject {
+  "@context"?: "https://schema.org";
+  "@type": "ImageObject";
+  "url": string;
+  "contentUrl"?: string;
+  "caption"?: string;
+  "description"?: string;
+  "creditText"?: string;
+  "creator"?: {
+    "@type": "Person";
+    "name": string;
+  };
+  "copyrightHolder"?: {
+    "@type": "Person" | "Organization";
+    "name": string;
+  };
+}
+
 export interface SchemaListItem {
   "@type": "ListItem";
   "position": number;
@@ -150,6 +181,44 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
         "item": item
       };
     })
+  };
+}
+
+export function generateBreadcrumbSchema(items: { name: string; path: string }[]): SchemaBreadcrumbList {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": item.name,
+      "item": item.path.startsWith('http') ? item.path : `${BASE_URL}${item.path.startsWith('/') ? '' : '/'}${item.path}`
+    }))
+  };
+}
+
+export function generateImageObjectSchema(params: {
+  url: string;
+  caption?: string;
+  description?: string;
+  author?: string;
+}): SchemaImageObject {
+  const imageUrl = getImageUrl(params.url);
+  return {
+    "@type": "ImageObject",
+    "url": imageUrl,
+    "contentUrl": imageUrl,
+    ...(params.caption ? { "caption": params.caption } : {}),
+    ...(params.description ? { "description": params.description } : {}),
+    "creditText": params.author || "Ariel Anders",
+    "creator": {
+      "@type": "Person",
+      "name": params.author || "Ariel Anders"
+    },
+    "copyrightHolder": {
+      "@type": "Person",
+      "name": params.author || "Ariel Anders"
+    }
   };
 }
 

@@ -3,6 +3,8 @@ import {
   getImageUrl,
   generateMerchSchema,
   generateGearCatalogSchema,
+  generateBreadcrumbSchema,
+  generateImageObjectSchema,
   AMAZON_AFFILIATE_DISCLOSURE,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
@@ -203,6 +205,71 @@ describe('schema utils', () => {
       expect(product.offers.price).toBe('25.00');
       expect(product.offers.priceCurrency).toBe('USD');
       expect(product.offers.availability).toBe('https://schema.org/InStock');
+    });
+  });
+
+  describe('generateBreadcrumbSchema', () => {
+    it('generates a valid SchemaBreadcrumbList with 1-based indexing and full canonical paths', () => {
+      const items = [
+        { name: 'Home', path: '/' },
+        { name: 'Journal', path: '/blog' },
+        { name: 'Packing Guide', path: '/blog/packing-guide' }
+      ];
+
+      const schema = generateBreadcrumbSchema(items);
+
+      expect(schema).toEqual({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: `${BASE_URL}/`
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Journal',
+            item: `${BASE_URL}/blog`
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: 'Packing Guide',
+            item: `${BASE_URL}/blog/packing-guide`
+          }
+        ]
+      });
+    });
+  });
+
+  describe('generateImageObjectSchema', () => {
+    it('generates a valid SchemaImageObject with credit and licensing metadata', () => {
+      const imageSchema = generateImageObjectSchema({
+        url: '/assets/shoes.webp',
+        caption: 'Dance shoes',
+        description: 'Suede dance shoes for social dance floor',
+        author: 'Ariel Anders, PhD'
+      });
+
+      expect(imageSchema).toEqual({
+        '@type': 'ImageObject',
+        url: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
+        contentUrl: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
+        caption: 'Dance shoes',
+        description: 'Suede dance shoes for social dance floor',
+        creditText: 'Ariel Anders, PhD',
+        creator: {
+          '@type': 'Person',
+          name: 'Ariel Anders, PhD'
+        },
+        copyrightHolder: {
+          '@type': 'Person',
+          name: 'Ariel Anders, PhD'
+        }
+      });
     });
   });
 });
