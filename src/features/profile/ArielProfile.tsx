@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
+import { generateProfileGallerySchema } from '@/utils/schema';
 import { useProfile } from './useProfile';
 import ProfileStoryRow from './components/ProfileStoryRow';
 import ProfileLegalAndSocial from './components/ProfileLegalAndSocial';
@@ -18,13 +20,36 @@ const ArielProfile = () => {
   const whyBuilt = bio.sections.find(s => s.id === 'why-built');
   const travelPillar = bio.sections.find(s => s.id === 'financial-strategies');
 
+  const profileSchema = useMemo(() => {
+    const baseSchemas = STATIC_SCHEMAS.ABOUT(bio.name, bio.role);
+    const galleryImageObjects = generateProfileGallerySchema(bio.sections);
+
+    // Deep copy and attach gallery ImageObjects to the main Person entity's image property array
+    return baseSchemas.map(s => {
+      if (s["@type"] === "ProfilePage" && s.mainEntity) {
+        const existingImages = Array.isArray(s.mainEntity.image)
+          ? s.mainEntity.image
+          : [s.mainEntity.image];
+
+        return {
+          ...s,
+          mainEntity: {
+            ...s.mainEntity,
+            image: [...existingImages, ...galleryImageObjects]
+          }
+        };
+      }
+      return s;
+    });
+  }, [bio.name, bio.role, bio.sections]);
+
   return (
     <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
       <SEO
         title="About Ariel Anders | Roboticist & WCS Dancer"
         description="Learn about Ariel Anders, PhD: West Coast Swing dancer, roboticist, and creator of BoomTick. Discover dance lifestyle insights and robotics projects."
         type="profile"
-        schema={STATIC_SCHEMAS.ABOUT(bio.name, bio.role)}
+        schema={profileSchema}
       />
 
       {/* 1. Standardized Page Header (Consistent with Blog, Gear, Merch, Research) */}

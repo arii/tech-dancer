@@ -29,7 +29,7 @@ const ResearchAnalytics = () => {
   const liveTools = tools.filter(t => ['versiontruth', 'ux-auditor', 'wcs-navigator'].includes(t.id));
   const experimentTools = tools.filter(t => ['blog-drafter', 'wcs-scraper', 'ecommerce-automation'].includes(t.id));
 
-  const researchSchema = generateCollectionPageSchema({
+  const collectionSchemas = generateCollectionPageSchema({
     name: "Laboratory & Experiments",
     description: "Experiments and live testing ground by Ariel Anders, PhD. Active sandbox featuring VersionTruth ground-truth intelligence, Playwright visual regression auditor, WCS Navigator, and RAG data pipelines.",
     url: "/research",
@@ -38,6 +38,23 @@ const ResearchAnalytics = () => {
       { name: "Experiments", path: "/research" }
     ]
   });
+
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Live Experiments & AI Tools",
+    "itemListElement": tools.map((t, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": t.title,
+      "url": t.canonicalPath ? `https://boomtick.blog${t.canonicalPath}` : `https://boomtick.blog/research/${t.id}`
+    }))
+  };
+
+  const researchSchema = [
+    ...collectionSchemas,
+    itemListSchema as unknown as Record<string, unknown>
+  ];
 
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full">
