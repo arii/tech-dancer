@@ -16,7 +16,7 @@ tags:
   - "wcs"
 ---
 
-Whether you're heading to a local social or traveling across the country for a convention, these items are high-priority essentials for any West Coast Swing dancer.
+Whether you're heading to a local social or traveling across the country for a convention, these items are high-priority essentials for any West Coast Swing dancer. For event planning, try our [interactive WCS Navigator event planner](/wcs-navigator) and browse our [essential West Coast Swing gear collection](/gear).
 
 ![A hand-drawn sketch of a large holographic rave fan with black bamboo ribs, shown both folded and fully open with a vibrant rainbow pattern, alongside its blue carrying pouch.](/images/gear/sketches/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.webp)
 
@@ -36,3 +36,5 @@ Ballroom sound systems are often cranked up to high volumes. To enjoy the music 
 * Mints or gum
 * Deodorant
 * Refillable water bottle
+
+For a full breakdown of out-of-town preparation, read our [WCS competition travel checklist](/blog/2026-06-01-event-travel-packing) and our [DIY suede dance shoe modification guide](/blog/2026-04-18-make-shoe-dance).

@@ -19,7 +19,7 @@ tags:
   - "practice"
 ---
 
-Functional dance wear should be comfortable, breathable, and stylish. These non-merch basics are perfect for layering and creating your own unique look on the dance floor.
+Functional dance wear should be comfortable, breathable, and stylish. These non-merch basics are perfect for layering and creating your own unique look on the dance floor. Explore our full [curated social dance apparel and gear](/gear) catalog or check out our [lead and follow switch dynamics](/gear/2024-06-01-love-neon-switch-shirt) collection.
 
 ![Crop Top](/images/gear/amazon/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.jpg)
 

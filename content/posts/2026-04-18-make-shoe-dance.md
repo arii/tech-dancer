@@ -18,7 +18,7 @@ tags:
 
 ## Why I Modify My Own Dance Shoes
 
-Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. My preferred solution is to "upgrade" high-comfort sneakers or flats using industrial-strength adhesive suede.
+Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. My preferred solution is to "upgrade" high-comfort sneakers or flats using industrial-strength adhesive suede. Learn more about [author Ariel Anders' dance and engineering background](/about) or explore our full [curated West Coast Swing footwear gear directory](/gear).
 
 ![Finished shoe](/images/gear/diy/step5-finished.svg)
 
@@ -119,7 +119,7 @@ This DIY modification has been tested extensively in high-demand environments. I
 ## Maintenance and Repairs
 
 ### Restoring Traction
-Over time, dust and floor wax can compress the suede fibers. Use a suede brush to raise the nap and refresh the glide characteristics after long weekends or heavy use.
+Over time, dust and floor wax can compress the suede fibers. Use a [dance shoe suede sole brush](/gear/2026-04-12-suede-shoe-diy) to raise the nap and refresh the glide characteristics after long weekends or heavy use. To keep your dance shoes fresh across multi-day events, see our guide on how to [combat dance shoe odor with electric dryers](/blog/2026-06-01-shoe-care-modification).
 
 ### Repairing Minor Peeling
 Instead of replacing the entire sheet, apply a drop of Shoe Goo or superglue to any lifted edges and clamp until cured.

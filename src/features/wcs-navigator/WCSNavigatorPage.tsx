@@ -3,7 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, PUBLISHER_BOOMTICK } from '@/utils/schema';
+import { AUTHOR_ARIEL_ANDERS, PUBLISHER_BOOMTICK, generateBreadcrumbSchema } from '@/utils/schema';
 import { Icon } from '@/components/ui/Icon';
 import { HelpCircle, ArrowLeft, Layers, RefreshCw } from 'lucide-react';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from './data/californiaEvents';
@@ -241,24 +241,10 @@ export const WCSNavigatorPage: React.FC = () => {
       "author": AUTHOR_ARIEL_ANDERS,
       "publisher": PUBLISHER_BOOMTICK
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": `${BASE_URL}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "WCS Navigator",
-          "item": `${BASE_URL}/wcs-navigator`
-        }
-      ]
-    }
+    generateBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "WCS Navigator", path: "/wcs-navigator" }
+    ]) as unknown as Record<string, unknown>
   ];
 
   return (
