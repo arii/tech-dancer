@@ -244,7 +244,7 @@ export const WCSNavigatorPage: React.FC = () => {
     generateBreadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "WCS Navigator", path: "/wcs-navigator" }
-    ]) as unknown as Record<string, unknown>
+    ])
   ];
 
   return (
