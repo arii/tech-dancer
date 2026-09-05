@@ -435,6 +435,50 @@ export function generateHowToSchema(params: {
   };
 }
 
+export interface ParsedMarkdownStep {
+  name: string;
+  text: string;
+  image?: string;
+  url?: string;
+}
+
+/**
+ * Utility to parse step headings and step text blocks from Markdown content.
+ * Isolates step header matching and formatting cleanup into a clean, testable function.
+ */
+export function parseMarkdownSteps(content: string, slug: string): ParsedMarkdownStep[] {
+  if (!content) return [];
+
+  const stepRegex = /###\s+(?:(\d+)[.:]\s*)?([^\n]+)\n+([\s\S]*?)(?=\n###|\n##|$)/g;
+  const steps: ParsedMarkdownStep[] = [];
+
+  let match;
+  while ((match = stepRegex.exec(content)) !== null) {
+    const rawNum = match[1];
+    const headerTitle = match[2].trim();
+    const bodyContent = match[3].trim();
+
+    const isStepHeader = Boolean(rawNum) || /step|clean|trace|cut|apply|cure|prepare|install|glue/i.test(headerTitle);
+    if (!isStepHeader) continue;
+
+    const textWithoutNotices = bodyContent.replace(/<Notice[\s\S]*?<\/Notice>/gi, '').trim();
+    const textClean = textWithoutNotices.replace(/!\[.*?\]\((.*?)\)/g, '').replace(/[*_#`]/g, '').trim();
+
+    const imgMatch = bodyContent.match(/!\[.*?\]\((.*?)\)/);
+    const stepImage = imgMatch ? imgMatch[1] : undefined;
+
+    const stepName = rawNum ? `Step ${rawNum}: ${headerTitle}` : headerTitle;
+    steps.push({
+      name: stepName,
+      text: textClean.split('\n')[0] || headerTitle,
+      image: stepImage,
+      url: `${BASE_URL}/blog/${slug}#${headerTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+    });
+  }
+
+  return steps;
+}
+
 export function extractHowToFromMarkdown(post: {
   title: string;
   excerpt: string;
@@ -444,37 +488,7 @@ export function extractHowToFromMarkdown(post: {
 }): SchemaHowTo | null {
   if (!post.content) return null;
 
-  // Search for step headings e.g. ### 1. Clean the Sole or ### Step 1: ...
-  const stepRegex = /###\s+(?:(\d+)[.:]\s*)?([^\n]+)\n+([\s\S]*?)(?=\n###|\n##|$)/g;
-  const steps: Array<{ name: string; text: string; image?: string; url?: string }> = [];
-
-  let match;
-  while ((match = stepRegex.exec(post.content)) !== null) {
-    const rawNum = match[1];
-    const headerTitle = match[2].trim();
-    const bodyContent = match[3].trim();
-
-    // Only include as step if header title has a step number or contains "Step" / "Clean" / "Trace" / "Cut" / "Apply" / "Cure"
-    const isStepHeader = rawNum || /step|clean|trace|cut|apply|cure|prepare|install|glue/i.test(headerTitle);
-    if (!isStepHeader) continue;
-
-    // Clean markdown formatting from body (notice boxes, markdown bold, images)
-    const textWithoutNotices = bodyContent.replace(/<Notice[\s\S]*?<\/Notice>/gi, '').trim();
-    const textClean = textWithoutNotices.replace(/!\[.*?\]\((.*?)\)/g, '').replace(/[*_#`]/g, '').trim();
-
-    // Extract first image in step if present
-    const imgMatch = bodyContent.match(/!\[.*?\]\((.*?)\)/);
-    const stepImage = imgMatch ? imgMatch[1] : undefined;
-
-    const stepName = rawNum ? `Step ${rawNum}: ${headerTitle}` : headerTitle;
-    steps.push({
-      name: stepName,
-      text: textClean.split('\n')[0] || headerTitle,
-      image: stepImage,
-      url: `${BASE_URL}/blog/${post.slug}#${headerTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
-    });
-  }
-
+  const steps = parseMarkdownSteps(post.content, post.slug);
   if (steps.length === 0) return null;
 
   // Extract tools/supplies from table or list if present

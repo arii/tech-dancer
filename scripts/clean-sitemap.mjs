@@ -56,17 +56,15 @@ if (fs.existsSync(targetPath)) {
     }
   }
 
-  // Home Route Imagery
-  addRouteImage('/', '/assets/dancer_hero.webp', 'West Coast Swing Social Dancer', 'Hero illustration of West Coast Swing dancers on the floor.');
-  addRouteImage('/', '/assets/roboticist_hero.webp', 'Ariel Anders PhD Roboticist', 'Hero illustration of Ariel Anders in robotics engineering laboratory.');
-
-  // About / Profile Page Imagery
-  addRouteImage('/about', '/assets/comp_analysis_hero.webp', 'Ariel Anders Profile Photo', 'Ariel Anders, PhD - Roboticist & WCS Dancer');
-  addRouteImage('/about', '/assets/first_comp.jpg', 'First WCS Competition', 'Ariel Anders performing a West Coast Swing extension during a competition');
-  addRouteImage('/about', '/assets/glow_bunny.jpg', 'Late Night Social LED Bunny', 'Ariel Anders wearing a creative LED light-up bunny costume');
-  addRouteImage('/about', '/assets/mad_jam_ari.jpg', 'MADjam Precision & Groove', 'Ariel Anders social dancing at the MADjam West Coast Swing convention');
-  addRouteImage('/about', '/assets/monterey.jpg', 'Monterey Swingfest', 'Ariel Anders on stage at a West Coast Swing event in Monterey');
-  addRouteImage('/about', '/assets/www_ari.jpg', 'Weekend Social Dance', 'Ariel Anders demonstrating athletic connection in a high-energy social dance session');
+  // Load Static Route Imagery from config
+  const sitemapConfigPath = path.resolve(process.cwd(), 'src/config/sitemap-images.ts');
+  if (fs.existsSync(sitemapConfigPath)) {
+    const sitemapConfigContent = fs.readFileSync(sitemapConfigPath, 'utf-8');
+    const staticMatches = [...sitemapConfigContent.matchAll(/routePath:\s*['"](.*?)['"][\s\S]*?imgLoc:\s*['"](.*?)['"][\s\S]*?title:\s*['"](.*?)['"][\s\S]*?caption:\s*['"](.*?)['"]/g)];
+    staticMatches.forEach(m => {
+      addRouteImage(m[1], m[2], m[3], m[4]);
+    });
+  }
 
   // Memes Page Imagery
   const memesPath = path.resolve(process.cwd(), 'src/data/memes.ts');
