@@ -127,11 +127,27 @@ export default defineConfig(({mode}) => {
           compact: !skipMinify,
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              const module = id.split('node_modules/').pop().split('/')[0];
-              if (['lucide-react', 'recharts', 'motion', 'framer-motion', 'firebase'].includes(module)) {
-                return module;
+              if (id.includes('jspdf') || id.includes('canvg') || id.includes('html2canvas')) {
+                return 'pdf-export';
               }
-              if (id.includes('react-syntax-highlighter') || id.includes('jspdf')) return module;
+              if (id.includes('recharts') || id.includes('/d3-')) {
+                return 'recharts';
+              }
+              if (id.includes('react-syntax-highlighter') || id.includes('refractor') || id.includes('lowlight') || id.includes('highlight.js')) {
+                return 'syntax-highlighter';
+              }
+              if (id.includes('firebase') || id.includes('@firebase')) {
+                return 'firebase';
+              }
+              if (id.includes('motion') || id.includes('framer-motion')) {
+                return 'motion';
+              }
+              if (id.includes('hyparquet') || id.includes('fast-png') || id.includes('pako') || id.includes('iobuffer') || id.includes('fflate')) {
+                return 'parquet';
+              }
+              if (id.includes('lucide-react')) {
+                return 'lucide';
+              }
               return 'vendor';
             }
           },

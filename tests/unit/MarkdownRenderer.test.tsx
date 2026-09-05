@@ -37,7 +37,7 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
     expect(decodedObj.mermaid.themeVariables.fontSize).toBe('24px');
   });
 
-  it('should render standard code blocks normally', () => {
+  it('should render standard code blocks normally', async () => {
     const markdownContent = '```typescript\nconst x = 42;\n```';
 
     render(
@@ -47,9 +47,9 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
     );
 
     // Verify standard code block renders without crashing
-    const codeBlock = screen.getByText('typescript');
+    const codeBlock = await screen.findByText('typescript');
     expect(codeBlock).toBeDefined();
-    expect(screen.getByText('const')).toBeDefined();
+    expect(await screen.findByText(/const/)).toBeDefined();
   });
 
   it('should assign sponsored rel attribute for affiliate links and standard rel for other links', () => {
