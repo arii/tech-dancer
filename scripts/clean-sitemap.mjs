@@ -72,7 +72,7 @@ if (fs.existsSync(targetPath)) {
   const memesPath = path.resolve(process.cwd(), 'src/data/memes.ts');
   if (fs.existsSync(memesPath)) {
     const memesContent = fs.readFileSync(memesPath, 'utf-8');
-    const memeMatches = [...memesContent.matchAll(/imageSrc:\s*['"](.*?)['"][\s\S]*?altText:\s*['"](.*?)['"]/g)];
+    const memeMatches = [...memesContent.matchAll(/imageSrc:\s*['"]([^'"]+)['"][^}]+?altText:\s*['"]([^'"]+)['"]/g)];
     memeMatches.forEach(m => {
       addRouteImage('/memes', m[1], 'West Coast Swing Meme', m[2]);
     });
