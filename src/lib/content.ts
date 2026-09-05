@@ -10,15 +10,24 @@ import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/
 
 export type { Post, Resource, Study, ContentItem, ContentStatus };
 
+function getLineBreakLength(str: string): number {
+  if (str.startsWith('\r\n')) return 2;
+  if (str.startsWith('\n')) return 1;
+  return 0;
+}
+
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
  */
 export function parseFrontmatter(content: string) {
-  if (!content || typeof content !== 'string') return { data: {}, content: '' };
+  if (!content || typeof content !== 'string' || !content.startsWith('---')) {
+    return { data: {}, content: content || '' };
+  }
 
-  if (!content.startsWith('---')) return { data: {}, content };
+  const lineBreakLen = getLineBreakLength(content.slice(3));
+  if (lineBreakLen === 0) return { data: {}, content };
 
-  const startOffset = content.startsWith('---\r\n') ? 5 : content.startsWith('---\n') ? 4 : 3;
+  const startOffset = 3 + lineBreakLen;
   const match = content.slice(startOffset).match(/(?:^|\r?\n)---(?:\r?\n|$)/);
   if (!match || match.index === undefined) return { data: {}, content };
 

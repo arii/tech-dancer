@@ -133,29 +133,24 @@ export default defineConfig(({mode}) => {
                 ? pkgPath.split('/').slice(0, 2).join('/')
                 : pkgPath.split('/')[0];
 
-              if (moduleName === 'lucide-react') {
-                return 'lucide-react';
-              }
-              if (['recharts', 'd3-shape', 'd3-path', 'd3-array', 'd3-scale', 'd3-color', 'd3-interpolate', 'd3-format', 'd3-time', 'd3-time-format', 'victory-vendor', 'react-smooth'].includes(moduleName)) {
-                return 'recharts';
-              }
-              if (['motion', 'framer-motion', 'motion-dom', 'motion-utils'].includes(moduleName)) {
-                return 'framer-motion';
-              }
-              if (moduleName.startsWith('firebase') || moduleName.startsWith('@firebase')) {
-                return 'firebase';
-              }
-              if (moduleName.startsWith('@tanstack')) {
-                return 'tanstack-react-query';
-              }
-              if (['react-syntax-highlighter', 'highlight.js', 'refractor', 'lowlight', 'prismjs'].includes(moduleName)) {
-                return 'react-syntax-highlighter';
-              }
-              if (['jspdf', 'jspdf-autotable', 'canvg', 'html2canvas', 'dompurify', 'stackblur-canvas', 'svg-pathdata'].includes(moduleName)) {
-                return 'jspdf';
-              }
-              if (['yaml', 'fuse.js', 'hyparquet', 'papaparse'].includes(moduleName)) {
-                return moduleName;
+              const MANUAL_CHUNK_GROUPS: [string, string[]][] = [
+                ['lucide-react', ['lucide-react']],
+                ['recharts', ['recharts', 'd3-shape', 'd3-path', 'd3-array', 'd3-scale', 'd3-color', 'd3-interpolate', 'd3-format', 'd3-time', 'd3-time-format', 'victory-vendor', 'react-smooth']],
+                ['framer-motion', ['motion', 'framer-motion', 'motion-dom', 'motion-utils']],
+                ['firebase', ['firebase', '@firebase']],
+                ['tanstack-react-query', ['@tanstack']],
+                ['react-syntax-highlighter', ['react-syntax-highlighter', 'highlight.js', 'refractor', 'lowlight', 'prismjs']],
+                ['jspdf', ['jspdf', 'jspdf-autotable', 'canvg', 'html2canvas', 'dompurify', 'stackblur-canvas', 'svg-pathdata']],
+                ['yaml', ['yaml']],
+                ['fuse.js', ['fuse.js']],
+                ['hyparquet', ['hyparquet']],
+                ['papaparse', ['papaparse']],
+              ];
+
+              for (const [chunkName, patterns] of MANUAL_CHUNK_GROUPS) {
+                if (patterns.some(p => moduleName === p || moduleName.startsWith(p))) {
+                  return chunkName;
+                }
               }
               return 'vendor';
             }
