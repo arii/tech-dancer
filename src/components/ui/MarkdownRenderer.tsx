@@ -6,11 +6,13 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import { lazy, Suspense } from 'react';
 
-const SyntaxHighlighterLazy = lazy(() =>
-  Promise.all([
+async function loadSyntaxHighlighter() {
+  const [highlighterModule, styleModule] = await Promise.all([
     import('react-syntax-highlighter/dist/esm/prism-async'),
     import('react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus')
-  ]).then(([highlighterModule, styleModule]) => ({
+  ]);
+
+  return {
     default: ({ language, children, ...props }: { language: string; children: string; [key: string]: unknown }) => {
       const Highlighter = highlighterModule.default;
       return (
@@ -31,8 +33,10 @@ const SyntaxHighlighterLazy = lazy(() =>
         </Highlighter>
       );
     }
-  }))
-);
+  };
+}
+
+const SyntaxHighlighterLazy = lazy(loadSyntaxHighlighter);
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
