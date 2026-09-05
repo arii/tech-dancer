@@ -127,11 +127,36 @@ export default defineConfig(({mode}) => {
           compact: !skipMinify,
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              const module = id.split('node_modules/').pop().split('/')[0];
-              if (['lucide-react', 'recharts', 'motion', 'framer-motion', 'firebase'].includes(module)) {
-                return module;
+              const parts = id.split('node_modules/');
+              const pkgPath = parts[parts.length - 1];
+              const moduleName = pkgPath.startsWith('@')
+                ? pkgPath.split('/').slice(0, 2).join('/')
+                : pkgPath.split('/')[0];
+
+              if (moduleName === 'lucide-react') {
+                return 'lucide-react';
               }
-              if (id.includes('react-syntax-highlighter') || id.includes('jspdf')) return module;
+              if (['recharts', 'd3-shape', 'd3-path', 'd3-array', 'd3-scale', 'd3-color', 'd3-interpolate', 'd3-format', 'd3-time', 'd3-time-format', 'victory-vendor', 'react-smooth'].includes(moduleName)) {
+                return 'recharts';
+              }
+              if (['motion', 'framer-motion', 'motion-dom', 'motion-utils'].includes(moduleName)) {
+                return 'framer-motion';
+              }
+              if (moduleName.startsWith('firebase') || moduleName.startsWith('@firebase')) {
+                return 'firebase';
+              }
+              if (moduleName.startsWith('@tanstack')) {
+                return 'tanstack-react-query';
+              }
+              if (['react-syntax-highlighter', 'highlight.js', 'refractor', 'lowlight', 'prismjs'].includes(moduleName)) {
+                return 'react-syntax-highlighter';
+              }
+              if (['jspdf', 'jspdf-autotable', 'canvg', 'html2canvas', 'dompurify', 'stackblur-canvas', 'svg-pathdata'].includes(moduleName)) {
+                return 'jspdf';
+              }
+              if (['yaml', 'fuse.js', 'hyparquet', 'papaparse'].includes(moduleName)) {
+                return moduleName;
+              }
               return 'vendor';
             }
           },
