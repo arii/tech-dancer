@@ -36,40 +36,85 @@ export function RootLayout() {
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
-    // Inject Google Analytics script
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
+    let initialized = false;
+    let scriptElement: HTMLScriptElement | null = null;
 
-    // Initialize dataLayer and gtag
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function() {
-      // eslint-disable-next-line prefer-rest-params
-      window.dataLayer?.push(arguments);
+    const initGA = () => {
+      if (initialized) return;
+      initialized = true;
+
+      window.removeEventListener('pointerdown', initGA);
+      window.removeEventListener('scroll', initGA);
+      window.removeEventListener('keydown', initGA);
+      window.removeEventListener('touchstart', initGA);
+
+      // Inject Google Analytics script
+      scriptElement = document.createElement('script');
+      scriptElement.async = true;
+      scriptElement.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      document.head.appendChild(scriptElement);
+
+      // Initialize dataLayer and gtag
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {
+        // eslint-disable-next-line prefer-rest-params
+        window.dataLayer?.push(arguments);
+      };
+      window.gtag?.('js', new Date());
+
+      // Configure GA4 with automatic page_view tracking disabled
+      window.gtag?.('config', GA_MEASUREMENT_ID, {
+        send_page_view: false
+      });
+
+      window.gtag?.('event', 'page_view', {
+        page_path: window.location.pathname + window.location.search,
+        page_location: window.location.href,
+        page_title: document.title
+      });
     };
-    window.gtag?.('js', new Date());
 
-    // Configure GA4 with automatic page_view tracking disabled
-    // We'll track page views manually on location change to handle SPA routing correctly
-    window.gtag?.('config', GA_MEASUREMENT_ID, {
-      send_page_view: false
-    });
+    window.addEventListener('pointerdown', initGA, { passive: true, once: true });
+    window.addEventListener('scroll', initGA, { passive: true, once: true });
+    window.addEventListener('keydown', initGA, { passive: true, once: true });
+    window.addEventListener('touchstart', initGA, { passive: true, once: true });
+
+    let idleId: number | undefined;
+    let timerId: ReturnType<typeof setTimeout> | undefined;
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(() => initGA(), { timeout: 3500 });
+    } else {
+      timerId = setTimeout(initGA, 3000);
+    }
 
     return () => {
-      document.head.removeChild(script);
+      window.removeEventListener('pointerdown', initGA);
+      window.removeEventListener('scroll', initGA);
+      window.removeEventListener('keydown', initGA);
+      window.removeEventListener('touchstart', initGA);
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timerId !== undefined) {
+        clearTimeout(timerId);
+      }
+      if (scriptElement && document.head.contains(scriptElement)) {
+        document.head.removeChild(scriptElement);
+      }
     };
   }, []);
 
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
-    // Track page view on route change
-    window.gtag?.('event', 'page_view', {
-      page_path: location.pathname + location.search,
-      page_location: window.location.href,
-      page_title: document.title
-    });
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: location.pathname + location.search,
+        page_location: window.location.href,
+        page_title: document.title
+      });
+    }
   }, [location]);
 
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
@@ -77,7 +122,7 @@ export function RootLayout() {
   return (
     <Box height="full">
       <MainLayout>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <Box
             as={motion.div}
             key={location.pathname}

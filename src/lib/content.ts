@@ -10,15 +10,30 @@ import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/
 
 export type { Post, Resource, Study, ContentItem, ContentStatus };
 
+function getLineBreakLength(str: string): number {
+  if (str.startsWith('\r\n')) return 2;
+  if (str.startsWith('\n')) return 1;
+  return 0;
+}
+
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
  */
 export function parseFrontmatter(content: string) {
-  const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: {}, content };
+  if (!content || typeof content !== 'string' || !content.startsWith('---')) {
+    return { data: {}, content: content || '' };
+  }
 
-  const yamlStr = match[1];
-  const body = match[2];
+  const lineBreakLen = getLineBreakLength(content.slice(3));
+  if (lineBreakLen === 0) return { data: {}, content };
+
+  const startOffset = 3 + lineBreakLen;
+  const match = content.slice(startOffset).match(/(?:^|\r?\n)---(?:\r?\n|$)/);
+  if (!match || match.index === undefined) return { data: {}, content };
+
+  const yamlEndIndex = startOffset + match.index;
+  const yamlStr = content.slice(startOffset, yamlEndIndex).trim();
+  const body = content.slice(yamlEndIndex + match[0].length);
 
   try {
     const data = parse(yamlStr);
@@ -143,26 +158,40 @@ function transform<T extends { date?: string; draft?: boolean }>(
     });
 }
 
-const items = {
-  posts: transform<Post>({ ...contentModules.posts, ...contentModules.blogs } as Record<string, string | ContentModule>, 'post'),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
-};
+let _itemsCache: { posts: Post[]; studies: Study[]; resources: Resource[] } | null = null;
+let _mapsCache: { posts: Map<string, Post>; studies: Map<string, Study>; resources: Map<string, Resource> } | null = null;
 
-const maps = {
-  posts: new Map(items.posts.map(i => [i.slug, i])),
-  studies: new Map(items.studies.map(i => [i.slug, i])),
-  resources: new Map(items.resources.map(i => [i.slug, i])),
-};
+function getItemsCache() {
+  if (!_itemsCache) {
+    _itemsCache = {
+      posts: transform<Post>({ ...contentModules.posts, ...contentModules.blogs } as Record<string, string | ContentModule>, 'post'),
+      studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
+      resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
+    };
+  }
+  return _itemsCache;
+}
 
-export const getPosts = () => items.posts;
-export const getStudies = () => items.studies;
+function getMapsCache() {
+  if (!_mapsCache) {
+    const items = getItemsCache();
+    _mapsCache = {
+      posts: new Map(items.posts.map(i => [i.slug, i])),
+      studies: new Map(items.studies.map(i => [i.slug, i])),
+      resources: new Map(items.resources.map(i => [i.slug, i])),
+    };
+  }
+  return _mapsCache;
+}
 
-export const getPostBySlug = (slug: string) => maps.posts.get(slug);
+export const getPosts = () => getItemsCache().posts;
+export const getStudies = () => getItemsCache().studies;
 
-export const getResources = () => items.resources;
+export const getPostBySlug = (slug: string) => getMapsCache().posts.get(slug);
 
-export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+export const getResources = () => getItemsCache().resources;
+
+export const getResourceBySlug = (slug: string) => getMapsCache().resources.get(slug);
 
 /**
  * Calculates estimated reading time in minutes.
