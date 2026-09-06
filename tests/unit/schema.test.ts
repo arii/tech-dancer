@@ -216,7 +216,7 @@ describe('schema utils', () => {
     it('generates a valid SchemaBreadcrumbList with 1-based indexing and full canonical paths', () => {
       const items = [
         { name: 'Home', path: '/' },
-        { name: 'Journal', path: '/blog' },
+        { name: 'Blog', path: '/blog' },
         { name: 'Packing Guide', path: '/blog/packing-guide' }
       ];
 
@@ -235,7 +235,7 @@ describe('schema utils', () => {
           {
             '@type': 'ListItem',
             position: 2,
-            name: 'Journal',
+            name: 'Blog',
             item: `${BASE_URL}/blog`
           },
           {
@@ -245,6 +245,111 @@ describe('schema utils', () => {
             item: `${BASE_URL}/blog/packing-guide`
           }
         ]
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for blog post routes (/blog/:slug)', () => {
+      const blogBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Event Travel & Packing', path: '/blog/2026-06-01-event-travel-packing' }
+      ];
+
+      const schema = generateBreadcrumbSchema(blogBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${BASE_URL}/blog`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Event Travel & Packing',
+        item: `${BASE_URL}/blog/2026-06-01-event-travel-packing`
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for gear item routes (/gear/:slug)', () => {
+      const gearBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Gear & Tools', path: '/gear' },
+        { name: 'Adhesive Suede Sheets for DIY Dance Shoes', path: '/gear/2026-04-12-suede-shoe-diy' }
+      ];
+
+      const schema = generateBreadcrumbSchema(gearBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Gear & Tools',
+        item: `${BASE_URL}/gear`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Adhesive Suede Sheets for DIY Dance Shoes',
+        item: `${BASE_URL}/gear/2026-04-12-suede-shoe-diy`
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for research/tool routes (/research/:toolId)', () => {
+      const researchBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Research', path: '/research' },
+        { name: 'Deployment Impact Analyzer', path: '/research/deployment-impact-analyzer' }
+      ];
+
+      const schema = generateBreadcrumbSchema(researchBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Research',
+        item: `${BASE_URL}/research`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Deployment Impact Analyzer',
+        item: `${BASE_URL}/research/deployment-impact-analyzer`
       });
     });
   });

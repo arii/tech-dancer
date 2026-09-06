@@ -18,17 +18,17 @@ tags:
   - "organization"
 ---
 
-Travel conventions can be stressful, but being organized makes a world of difference. These packing essentials help you fit more in your bag and keep your dance clothes looking their best.
+Travel conventions can be stressful, but being organized makes a world of difference. These packing essentials help you fit more in your bag and keep your dance clothes looking their best. Before heading out, generate your [WCS competition travel checklist](/wcs-navigator) and browse our [curated West Coast Swing gear essentials catalog](/gear) for dance travel.
 
 ## Smart Packing Strategies
 
 ### Space-Saving Organization
-Standard folding often leaves gaps in your luggage. Instead, try the "bundle" method or use high-quality compression cubes. These cubes allow you to group outfits by day or performance type, making it easy to find exactly what you need without unpacking your entire bag.
+Standard folding often leaves gaps in your luggage. Instead, try the "bundle" method or use high-quality compression cubes. These cubes allow you to group outfits by day or performance type, making it easy to find exactly what you need without unpacking your entire bag. If you are preparing footwear for event ballrooms, see our [DIY suede dance shoe modification guide](/blog/2026-04-18-make-shoe-dance).
 
 <notice type="affiliate" id="compression-cubes"></notice>
 
 ### Travel-Sized Essentials
-Don't let bulky toiletries weigh you down. Opt for leak-proof silicone containers that meet TSA regulations. Labeling each bottle ensures you won't mix up your hair gel with your face wash during a quick costume change.
+Don't let bulky toiletries weigh you down. Opt for leak-proof silicone containers that meet TSA regulations. Labeling each bottle ensures you won't mix up your hair gel with your face wash during a quick costume change. Learn how to [combat dance shoe odor with electric dryers](/blog/2026-06-01-shoe-care-modification) during multi-day weekend events.
 
 ![Four multi-colored, leak-proof silicone travel bottles with labeled flip-top caps, designed for TSA-compliant storage of liquids.](/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.webp)
 

@@ -1,6 +1,6 @@
 // tests/unit/schemaGenerator.test.ts
 import { describe, it, expect } from 'vitest';
-import { buildProductJsonLd, ProductItem } from '@/lib/schemaGenerator';
+import { buildProductJsonLd, generateBreadcrumbSchema, ProductItem } from '@/lib/schemaGenerator';
 
 describe('buildProductJsonLd', () => {
   it('generates valid Product schema with accurately formatted price offer and brand/policy metadata', () => {
@@ -67,5 +67,22 @@ describe('buildProductJsonLd', () => {
     expect(schema.brand).toEqual({ '@type': 'Brand', name: 'BoomTick' });
     expect(schema.sku).toBe('event-guide');
     expect(schema.mpn).toBe('event-guide');
+  });
+});
+
+describe('generateBreadcrumbSchema from schemaGenerator', () => {
+  it('generates schema.org compliant BreadcrumbList structure when exported via schemaGenerator', () => {
+    const schema = generateBreadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Blog', path: '/blog' },
+      { name: 'WCS Essentials', path: '/blog/wcs-essentials' },
+    ]);
+
+    expect(schema['@context']).toBe('https://schema.org');
+    expect(schema['@type']).toBe('BreadcrumbList');
+    expect(schema.itemListElement).toHaveLength(3);
+    expect(schema.itemListElement[0].position).toBe(1);
+    expect(schema.itemListElement[1].position).toBe(2);
+    expect(schema.itemListElement[2].position).toBe(3);
   });
 });

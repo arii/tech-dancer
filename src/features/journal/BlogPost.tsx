@@ -5,7 +5,7 @@ import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
+import { AUTHOR_ARIEL_ANDERS, formatIsoDate, generateBreadcrumbSchema } from '@/utils/schema';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -80,30 +80,11 @@ export default function BlogPost() {
       }
     };
 
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": `${BASE_URL}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Journal",
-          "item": `${BASE_URL}/blog`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": post.title,
-          "item": `${BASE_URL}/blog/${post.slug}`
-        }
-      ]
-    };
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blog" },
+      { name: post.title, path: `/blog/${post.slug}` }
+    ]);
 
     return [blogPostingSchema, breadcrumbSchema];
   }, [post]);

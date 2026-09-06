@@ -43,7 +43,9 @@ This guide covers:
 ### Maintenance Supplies
 
 To keep your suede soles in top condition, I also recommend:
-- **Suede Brush:** Essential for restoring the nap after the suede becomes compressed.
+- **[Dance shoe suede sole brush](/gear/2026-04-12-suede-shoe-diy):** Essential for restoring the nap after the suede becomes compressed.
 - **Shoe Goo:** Useful for repairing minor edge peeling over time.
+
+Explore our full [curated West Coast Swing gear catalog](/gear) for additional footwear care and dance travel items.
 
 _Affiliate disclosure: Links in this guide may earn a commission at no cost to you._
