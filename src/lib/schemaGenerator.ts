@@ -44,6 +44,7 @@ export interface ProductJsonLdData {
   name: string;
   description: string;
   image: string[];
+  category?: string;
   brand: SchemaBrand;
   sku: string;
   mpn: string;
@@ -62,6 +63,7 @@ export const buildProductJsonLd = (item: ProductItem): ProductJsonLdData => {
     name: item.name,
     description: item.description,
     image: [item.imageUrl],
+    category: 'Apparel & Accessories > Clothing',
     brand: DEFAULT_BRAND,
     sku: item.id,
     mpn: item.id,

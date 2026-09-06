@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { getResourceBySlug } from '@/lib/content';
+import { getResourceBySlug, readingTime } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
@@ -15,6 +15,8 @@ import {
   AUTHOR_ARIEL_ANDERS,
   formatIsoDate,
   parsePrice,
+  extractHowToFromMarkdown,
+  extractFaqFromMarkdown,
 } from '@/utils/schema';
 
 export default function GearPost() {
@@ -87,6 +89,7 @@ export default function GearPost() {
         "name": resource.title,
         "description": resource.excerpt,
         "image": productImageUrl,
+        "category": "Apparel & Accessories > Clothing",
         "sku": sku,
         "mpn": sku,
         "brand": DEFAULT_BRAND,
@@ -115,12 +118,19 @@ export default function GearPost() {
           "url": `${BASE_URL}/about`
         };
 
+    const words = resource.content ? resource.content.trim().split(/\s+/).length : 0;
+    const estMinutes = readingTime(resource.content || '');
+
     const articleSchema = {
       "@context": "https://schema.org",
       "@type": "Article",
       "name": resource.title,
       "headline": resource.title,
       "description": resource.excerpt,
+      "inLanguage": "en-US",
+      "wordCount": words,
+      "timeRequired": `PT${estMinutes}M`,
+      ...(resource.tags && resource.tags.length > 0 ? { "keywords": resource.tags.join(', ') } : {}),
       "image": [
         productImageUrl,
         {
@@ -162,7 +172,19 @@ export default function GearPost() {
       }
     };
 
-    return [articleSchema, breadcrumbSchema];
+    const schemas: Array<Record<string, unknown>> = [articleSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+
+    const howToSchema = extractHowToFromMarkdown(resource);
+    if (howToSchema) {
+      schemas.push(howToSchema as unknown as Record<string, unknown>);
+    }
+
+    const faqSchema = extractFaqFromMarkdown(resource.content);
+    if (faqSchema) {
+      schemas.push(faqSchema as unknown as Record<string, unknown>);
+    }
+
+    return schemas;
   }, [resource, isMerch]);
 
   const backTarget = isMerch ? '/merch' : '/gear';

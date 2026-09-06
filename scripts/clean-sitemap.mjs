@@ -10,8 +10,16 @@ const sitemapPublicPath = path.resolve(process.cwd(), 'public/sitemap.xml');
 const targetPath = fs.existsSync(sitemapDistPath) ? sitemapDistPath : sitemapPublicPath;
 
 if (fs.existsSync(targetPath)) {
-  console.log('Cleaning up and standardizing sitemap.xml...');
+  console.log('Cleaning up and standardizing sitemap.xml with Google Image Extension...');
   let content = fs.readFileSync(targetPath, 'utf-8');
+
+  // Ensure xmlns:image is present in <urlset>
+  if (!content.includes('xmlns:image=')) {
+    content = content.replace(
+      /<urlset([^>]*)>/,
+      '<urlset$1 xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'
+    );
+  }
 
   // Remove <changefreq>...</changefreq>
   content = content.replace(/<changefreq>.*?<\/changefreq>/g, '');
@@ -19,14 +27,123 @@ if (fs.existsSync(targetPath)) {
   content = content.replace(/<priority>.*?<\/priority>/g, '');
   // Normalize localhost/preview domains to canonical production domain
   content = content.replace(/https?:\/\/localhost(:\d+)?/g, canonicalDomain);
-  // Remove empty lines that might have been left behind
-  content = content.split('\n').filter(line => line.trim() !== '').join('\n');
+
+  // Build image map for routes
+  const routeImagesMap = new Map();
+
+  function addRouteImage(routePath, imgLoc, title, caption) {
+    if (!imgLoc) return;
+    const fullImgUrl = imgLoc.startsWith('http')
+      ? imgLoc
+      : `${canonicalDomain}/${imgLoc.replace(/^\/+/, '')}`;
+
+    const routeKey = routePath.startsWith('http')
+      ? routePath
+      : `${canonicalDomain}${routePath.startsWith('/') ? '' : '/'}${routePath}`;
+
+    if (!routeImagesMap.has(routeKey)) {
+      routeImagesMap.set(routeKey, []);
+    }
+
+    const list = routeImagesMap.get(routeKey);
+    if (!list.some(item => item.loc === fullImgUrl)) {
+      list.push({
+        loc: fullImgUrl,
+        title: title || 'BoomTick Image',
+        caption: caption || title || 'BoomTick West Coast Swing & AI Content',
+        license: `${canonicalDomain}/about#terms`
+      });
+    }
+  }
+
+  // Load Static Route Imagery from config
+  const sitemapConfigPath = path.resolve(process.cwd(), 'src/config/sitemap-images.ts');
+  if (fs.existsSync(sitemapConfigPath)) {
+    const sitemapConfigContent = fs.readFileSync(sitemapConfigPath, 'utf-8');
+    const staticMatches = [...sitemapConfigContent.matchAll(/routePath:\s*['"](.*?)['"][\s\S]*?imgLoc:\s*['"](.*?)['"][\s\S]*?title:\s*['"](.*?)['"][\s\S]*?caption:\s*['"](.*?)['"]/g)];
+    staticMatches.forEach(m => {
+      addRouteImage(m[1], m[2], m[3], m[4]);
+    });
+  }
+
+  // Memes Page Imagery
+  const memesPath = path.resolve(process.cwd(), 'src/data/memes.ts');
+  if (fs.existsSync(memesPath)) {
+    const memesContent = fs.readFileSync(memesPath, 'utf-8');
+    const memeMatches = [...memesContent.matchAll(/imageSrc:\s*['"]([^'"]+)['"][^}]+?altText:\s*['"]([^'"]+)['"]/g)];
+    memeMatches.forEach(m => {
+      addRouteImage('/memes', m[1], 'West Coast Swing Meme', m[2]);
+    });
+  }
+
+  // Helper to parse frontmatter and markdown images from content files
+  function processContentDirectory(dirPath, routePrefix) {
+    if (!fs.existsSync(dirPath)) return;
+    const files = fs.readdirSync(dirPath);
+    files.forEach(file => {
+      if (!file.endsWith('.md')) return;
+      const filePath = path.join(dirPath, file);
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+
+      const rawSlug = file.replace(/\.md$/, '');
+      const strippedSlug = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+
+      const routePaths = Array.from(new Set([
+        `${routePrefix}/${rawSlug}`,
+        `${routePrefix}/${strippedSlug}`
+      ]));
+
+      // Title
+      const titleMatch = fileContent.match(/^title:\s*["']?(.*?)["']?$/m);
+      const title = titleMatch ? titleMatch[1] : strippedSlug;
+
+      // Excerpt
+      const excerptMatch = fileContent.match(/^excerpt:\s*["']?(.*?)["']?$/m);
+      const excerpt = excerptMatch ? excerptMatch[1] : title;
+
+      // Hero Image
+      const heroImageMatch = fileContent.match(/^image:\s*["']?(.*?)["']?$/m);
+      if (heroImageMatch && heroImageMatch[1]) {
+        routePaths.forEach(rp => addRouteImage(rp, heroImageMatch[1], title, excerpt));
+      }
+
+      // Inline Images / SVG Diagrams
+      const inlineImages = [...fileContent.matchAll(/!\[(.*?)\]\((.*?)\)/g)];
+      inlineImages.forEach(img => {
+        routePaths.forEach(rp => addRouteImage(rp, img[2], img[1] || title, excerpt));
+      });
+    });
+  }
+
+  processContentDirectory(path.resolve(process.cwd(), 'content/posts'), '/blog');
+  processContentDirectory(path.resolve(process.cwd(), 'content/resources'), '/gear');
+  processContentDirectory(path.resolve(process.cwd(), 'content/studies'), '/research');
+
+  // Inject <image:image> blocks into each <url>...</url> node
+  content = content.replace(/<url>([\s\S]*?)<\/url>/g, (match, urlInner) => {
+    const locMatch = urlInner.match(/<loc>(.*?)<\/loc>/);
+    const currentLoc = locMatch ? locMatch[1] : null;
+
+    let imageBlocks = '';
+    if (currentLoc && routeImagesMap.has(currentLoc)) {
+      const images = routeImagesMap.get(currentLoc);
+      images.forEach(img => {
+        const titleTag = img.title ? `\n      <image:title>${img.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</image:title>` : '';
+        const captionTag = img.caption ? `\n      <image:caption>${img.caption.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</image:caption>` : '';
+        const licenseTag = img.license ? `\n      <image:license>${img.license}</image:license>` : '';
+
+        imageBlocks += `\n    <image:image>\n      <image:loc>${img.loc}</image:loc>${titleTag}${captionTag}${licenseTag}\n    </image:image>`;
+      });
+    }
+
+    return `\n  <url>${urlInner}${imageBlocks}\n  </url>`;
+  });
 
   if (fs.existsSync(path.dirname(sitemapDistPath))) {
     fs.writeFileSync(sitemapDistPath, content);
   }
   fs.writeFileSync(sitemapPublicPath, content);
-  console.log('Sitemap cleanup complete: standardized to', canonicalDomain);
+  console.log('Sitemap cleanup complete: Google Image Extension generated for canonical domain', canonicalDomain);
 } else {
   console.warn('sitemap.xml not found');
 }

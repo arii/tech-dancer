@@ -6,12 +6,12 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MEMES_DATA } from '@/data/memes';
-import { generateCollectionPageSchema } from '@/utils/schema';
+import { generateCollectionPageSchema, generateMemeGallerySchema } from '@/utils/schema';
 
 const Memes = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
-  const memesSchema = generateCollectionPageSchema({
+  const collectionSchemas = generateCollectionPageSchema({
     name: "West Coast Swing Memes",
     description: "Enjoy the best, highly relatable West Coast Swing (WCS) memes about the slot, connection, social dancing, and hotel rooms. Perfect to share with your partner dance community.",
     url: "/memes",
@@ -20,6 +20,11 @@ const Memes = () => {
       { name: "Memes", path: "/memes" }
     ]
   });
+
+  const memesSchema = [
+    ...collectionSchemas,
+    generateMemeGallerySchema(MEMES_DATA) as unknown as Record<string, unknown>
+  ];
 
   // Close lightbox on Escape key press
   useEffect(() => {

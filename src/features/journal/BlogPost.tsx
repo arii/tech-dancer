@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getPostBySlug } from '@/lib/content';
+import { getPostBySlug, readingTime } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
+import {
+  AUTHOR_ARIEL_ANDERS,
+  formatIsoDate,
+  extractHowToFromMarkdown,
+  extractFaqFromMarkdown,
+} from '@/utils/schema';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -33,12 +38,19 @@ export default function BlogPost() {
           "url": `${BASE_URL}/about`
         };
 
+    const words = post.content ? post.content.trim().split(/\s+/).length : 0;
+    const estMinutes = readingTime(post.content || '');
+
     const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "name": post.title,
       "headline": post.title,
       "description": post.excerpt,
+      "inLanguage": "en-US",
+      "wordCount": words,
+      "timeRequired": `PT${estMinutes}M`,
+      ...(post.tags && post.tags.length > 0 ? { "keywords": post.tags.join(', ') } : {}),
       "author": authorSchema,
       "datePublished": formatIsoDate(post.date),
       "dateModified": formatIsoDate(post.updated || post.date),
@@ -105,7 +117,19 @@ export default function BlogPost() {
       ]
     };
 
-    return [blogPostingSchema, breadcrumbSchema];
+    const schemas: Array<Record<string, unknown>> = [blogPostingSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+
+    const howToSchema = extractHowToFromMarkdown(post);
+    if (howToSchema) {
+      schemas.push(howToSchema as unknown as Record<string, unknown>);
+    }
+
+    const faqSchema = extractFaqFromMarkdown(post.content);
+    if (faqSchema) {
+      schemas.push(faqSchema as unknown as Record<string, unknown>);
+    }
+
+    return schemas;
   }, [post]);
 
   if (!post) {
