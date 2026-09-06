@@ -15,6 +15,7 @@ import {
   AUTHOR_ARIEL_ANDERS,
   formatIsoDate,
   parsePrice,
+  generateBreadcrumbSchema,
 } from '@/utils/schema';
 
 export default function GearPost() {
@@ -55,30 +56,11 @@ export default function GearPost() {
       ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
       : `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": `${BASE_URL}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": isMerch ? "Merch" : "Gear & Reviews",
-          "item": `${BASE_URL}${isMerch ? '/merch' : '/gear'}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": resource.title,
-          "item": `${BASE_URL}/gear/${resource.slug}`
-        }
-      ]
-    };
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: isMerch ? "Merch" : "Gear & Tools", path: isMerch ? "/merch" : "/gear" },
+      { name: resource.title, path: `/gear/${resource.slug}` }
+    ]);
 
     if (isMerch) {
       const productSchema: SchemaProduct = {

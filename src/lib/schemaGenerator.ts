@@ -3,10 +3,13 @@ import {
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
+  generateBreadcrumbSchema,
   type SchemaBrand,
   type SchemaShippingDetails,
   type SchemaMerchantReturnPolicy,
 } from '@/utils/schema';
+
+export { generateBreadcrumbSchema };
 
 export interface ProductItem {
   id: string;

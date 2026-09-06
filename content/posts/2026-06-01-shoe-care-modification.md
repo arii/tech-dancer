@@ -40,6 +40,8 @@ In my experience, using a dryer for just 30-60 minutes after a dance session mak
 - **Freshness for Multi-Day Events:** There is nothing worse than putting on damp, smelly shoes for a morning workshop. A dryer ensures every day starts with a fresh pair.
 
 
-If you are looking for a reliable way to maintain your gear and your hygiene during long dance weekends, these have been the best investments I've made for my gear bag.
+If you are looking for a reliable way to maintain your gear and your hygiene during long dance weekends, these have been the best investments I've made for my gear bag. Check out our [curated West Coast Swing gear directory](/gear) for more recommendations.
+
+For additional footwear maintenance, use a [dance shoe suede sole brush](/gear/2026-04-12-suede-shoe-diy) to restore traction on compressed nap, or review our [custom adhesive suede shoe modification](/blog/2026-04-18-make-shoe-dance) tutorial. For complete event preparation, see our [WCS competition travel checklist](/blog/2026-06-01-event-travel-packing).
 
 <notice type="affiliate" id="shoe-dryer"></notice>

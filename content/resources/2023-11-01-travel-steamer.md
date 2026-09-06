@@ -15,4 +15,4 @@ affiliateProvider: "amazon"
 
 ## Competition Ready, Anywhere
 
-Wrinkles ruin your comp outfit. This travel steamer heats up in 30 seconds and is powerful enough for cotton shirts and delicate dance fabrics.
+Wrinkles ruin your comp outfit. This travel steamer heats up in 30 seconds and is powerful enough for cotton shirts and delicate dance fabrics. For complete out-of-town event preparation, read our [WCS competition travel checklist](/blog/2026-06-01-event-travel-packing) and browse our [full dance gear and travel essentials directory](/gear).
