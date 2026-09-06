@@ -41,7 +41,7 @@ describe('Schema generation', () => {
       expect(json).not.toContain('aggregateRating');
       expect(json).not.toContain('review');
 
-      expect(product.offers.url).toBe(`${BASE_URL}/gear/test-id`);
+      expect(product.offers.url).toBe(`${BASE_URL}/test-product`);
     });
   });
 

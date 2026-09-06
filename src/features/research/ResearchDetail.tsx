@@ -73,8 +73,11 @@ export default function ResearchDetail() {
         "name": study.title,
         "headline": study.title,
         "description": study.excerpt,
+        "inLanguage": "en-US",
         "proficiencyLevel": "Expert",
         "articleSection": "Technical Deep Dive",
+        "dependencies": study.tags || ["React", "TypeScript", "Playwright", "FastAPI"],
+        "keywords": study.tags?.join(', ') || "DevAI, Playwright, RAG, Software Engineering",
         "author": authorSchema,
         "datePublished": formatIsoDate(study.date),
         "dateModified": formatIsoDate(study.date),
@@ -130,7 +133,18 @@ export default function ResearchDetail() {
         "@type": "WebApplication",
         "name": tool.title,
         "description": tool.description,
-        "applicationCategory": "EducationalApplication"
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "inLanguage": "en-US",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "browserRequirements": "Requires JavaScript and HTML5 canvas/WebGL support. Works in Chrome, Firefox, Safari, Edge.",
+        "featureList": tool.tags,
+        "codeRepository": tool.sourceUrl || "https://github.com/arii/tech-dancer"
       };
 
       const breadcrumbSchema = generateBreadcrumbSchema([
