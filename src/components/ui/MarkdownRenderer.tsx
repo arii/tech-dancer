@@ -4,8 +4,39 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { lazy, Suspense } from 'react';
+
+async function loadSyntaxHighlighter() {
+  const [highlighterModule, styleModule] = await Promise.all([
+    import('react-syntax-highlighter/dist/esm/prism-async'),
+    import('react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus')
+  ]);
+
+  return {
+    default: ({ language, children, ...props }: { language: string; children: string; [key: string]: unknown }) => {
+      const Highlighter = highlighterModule.default;
+      return (
+        <Highlighter
+          style={styleModule.default}
+          language={language || 'text'}
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: 0,
+            background: 'var(--color-surface)',
+            fontSize: '0.8rem',
+            lineHeight: '1.6',
+          }}
+          {...props}
+        >
+          {children}
+        </Highlighter>
+      );
+    }
+  };
+}
+
+const SyntaxHighlighterLazy = lazy(loadSyntaxHighlighter);
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
@@ -178,21 +209,20 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             </Text>
           </Stack>
         )}
-        <SyntaxHighlighter
-          style={vscDarkPlus}
-          language={language || 'text'}
-          PreTag="div"
-          customStyle={{
-            margin: 0,
-            borderRadius: 0,
-            background: 'var(--color-surface)',
-            fontSize: '0.8rem',
-            lineHeight: '1.6',
-          }}
-          {...(props as object)}
+        <Suspense
+          fallback={
+            <Box padding={4}>
+              <Text variant="mono" size="xs" color="dim">Loading code snippet...</Text>
+            </Box>
+          }
         >
-          {codeString}
-        </SyntaxHighlighter>
+          <SyntaxHighlighterLazy
+            language={language || 'text'}
+            {...(props as object)}
+          >
+            {codeString}
+          </SyntaxHighlighterLazy>
+        </Suspense>
       </Box>
     );
   }
