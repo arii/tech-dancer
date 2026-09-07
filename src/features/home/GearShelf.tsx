@@ -83,50 +83,50 @@ export function GearShelf() {
 
       {/* Mobile: horizontal scroll of compact tiles */}
       <Box
-        display={{ base: "block", lg: "none" }}
+        display={{ base: "flex", lg: "none" }}
+        gap={3}
         width="full"
         maxWidth="full"
         overflowX="auto"
         overscroll="x-contain"
         paddingBottom={3}
+        paddingRight={4}
         noScrollbar
       >
-        <Box display="flex" gap={3} width="fit" paddingRight={4}>
-          {PICKS.map(({ label, image, imageText, href }) => (
-            <Box
-              key={`mobile-${label}`}
-              as={NavLink}
-              to={href}
-              className="group w-28 min-w-0"
-            >
-              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
-                {image ? (
-                  <img
-                    src={`${ASSET_PREFIX}${image}`}
-                    alt=""
-                    aria-hidden="true"
-                    className="block h-full w-full max-w-full object-cover"
-                  />
-                ) : imageText ? (
-                  <Text variant="body" size="xs" weight="font-bold" className="text-center">
-                    [{imageText}]
-                  </Text>
-                ) : (
-                  <CategoryPlaceholder category="gear" size="sm" />
-                )}
-              </Box>
-              <Text
-                variant="body"
-                size="xs"
-                weight="font-bold"
-                marginTop={1.5}
-                textAlign="center"
-              >
-                {label}
-              </Text>
+        {PICKS.map(({ label, image, imageText, href }) => (
+          <Box
+            key={`mobile-${label}`}
+            as={NavLink}
+            to={href}
+            className="group w-28 shrink-0 min-w-0"
+          >
+            <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
+              {image ? (
+                <img
+                  src={`${ASSET_PREFIX}${image}`}
+                  alt=""
+                  aria-hidden="true"
+                  className="block h-full w-full max-w-full object-cover"
+                />
+              ) : imageText ? (
+                <Text variant="body" size="xs" weight="font-bold" className="text-center">
+                  [{imageText}]
+                </Text>
+              ) : (
+                <CategoryPlaceholder category="gear" size="sm" />
+              )}
             </Box>
-          ))}
-        </Box>
+            <Text
+              variant="body"
+              size="xs"
+              weight="font-bold"
+              marginTop={1.5}
+              textAlign="center"
+            >
+              {label}
+            </Text>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

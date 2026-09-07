@@ -51,9 +51,7 @@ export default function Home() {
         maxWidth="full"
         minWidth={0}
       >
-        <Box className="w-full max-w-full min-w-0">
-          <GearShelf />
-        </Box>
+        <GearShelf />
 
         <Grid
           cols={{ base: 1 }}

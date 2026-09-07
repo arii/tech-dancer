@@ -39,6 +39,7 @@ export function BaseCard({
     transitions.default,
     border === true && "card-border",
     isLink && interaction.cardHover,
+    "cv-auto-card",
     className
   );
 

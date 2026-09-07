@@ -50,32 +50,36 @@ export function useScrollManagement(
       const SETTLE_TIME = 2000;
 
       const performScroll = () => {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          const targetY = rect.top + scrollTop - 128; // scroll-mt-32
+        requestAnimationFrame(() => {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetY = rect.top + scrollTop - 128; // scroll-mt-32
 
-          window.scrollTo({
-            top: targetY,
-            behavior: 'smooth'
-          });
-          return true;
-        }
-        return false;
+            window.scrollTo({
+              top: targetY,
+              behavior: 'smooth'
+            });
+          }
+        });
+        return Boolean(document.getElementById(id));
       };
 
       const observer = new ResizeObserver(() => {
-        const currentHeight = container.scrollHeight;
-        if (currentHeight !== lastHeight) {
-          lastHeight = currentHeight;
-          performScroll();
-          attempts++;
+        requestAnimationFrame(() => {
+          if (!container) return;
+          const currentHeight = container.scrollHeight;
+          if (currentHeight !== lastHeight) {
+            lastHeight = currentHeight;
+            performScroll();
+            attempts++;
 
-          if (attempts >= MAX_ATTEMPTS) {
-            observer.disconnect();
+            if (attempts >= MAX_ATTEMPTS) {
+              observer.disconnect();
+            }
           }
-        }
+        });
       });
 
       // Also observe document body as images might be outside the container but affect layout
