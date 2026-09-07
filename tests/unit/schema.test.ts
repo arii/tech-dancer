@@ -12,6 +12,7 @@ import {
   generateMemeGallerySchema,
   generateProfileGallerySchema,
   AUTHOR_ARIEL_ANDERS,
+  PUBLISHER_BOOMTICK,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
@@ -472,6 +473,45 @@ describe('schema utils', () => {
     });
   });
 
+  describe('PUBLISHER_BOOMTICK Organization & Founder topical authority schema', () => {
+    it('contains description, knowsAbout, keywords, address, and founder in PUBLISHER_BOOMTICK', () => {
+      expect(PUBLISHER_BOOMTICK['@type']).toBe('Organization');
+      expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick (BoomTick.blog)');
+      expect(PUBLISHER_BOOMTICK.email).toBe('ari@boomtick.blog');
+      expect(PUBLISHER_BOOMTICK.description).toBe('West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.');
+      expect(PUBLISHER_BOOMTICK.knowsAbout).toEqual([
+        'West Coast Swing',
+        'Social Dancing',
+        'Dance Mechanics and Timing',
+        'WCS Event Travel and Logistics'
+      ]);
+      expect(PUBLISHER_BOOMTICK.keywords).toBe('West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions');
+      expect(PUBLISHER_BOOMTICK.address).toEqual({
+        '@type': 'PostalAddress',
+        addressLocality: 'San Francisco',
+        addressRegion: 'CA',
+        addressCountry: 'US'
+      });
+      expect(PUBLISHER_BOOMTICK.founder).toEqual({
+        '@type': 'Person',
+        name: 'Ariel Anders',
+        jobTitle: 'Roboticist & AI Engineer',
+        url: `${BASE_URL}/about`,
+        knowsAbout: [
+          'West Coast Swing',
+          'Robotics',
+          'Artificial Intelligence'
+        ],
+        sameAs: [
+          'https://arii.github.io/',
+          'https://github.com/arii',
+          'https://www.linkedin.com/in/ariel-anders/',
+          'https://www.instagram.com/onasafari/'
+        ]
+      });
+    });
+  });
+
   describe('generateCollectionPageSchema', () => {
     it('generates CollectionPage schema with breadcrumbs and publisher info', () => {
       const schemas = generateCollectionPageSchema({
@@ -491,16 +531,7 @@ describe('schema utils', () => {
         name: 'West Coast Swing Articles',
         description: 'Guide collection',
         url: `${BASE_URL}/blog`,
-        publisher: {
-          '@type': 'Organization',
-          name: 'BoomTick.blog',
-          url: BASE_URL,
-          logo: {
-            '@type': 'ImageObject',
-            name: 'BoomTick.blog Logo',
-            url: `${BASE_URL}/favicon.ico`
-          }
-        }
+        publisher: PUBLISHER_BOOMTICK
       });
       expect(schemas[1]).toMatchObject({
         '@context': 'https://schema.org',

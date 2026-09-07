@@ -214,12 +214,44 @@ export const AUTHOR_ARIEL_ANDERS = {
 
 export const PUBLISHER_BOOMTICK = {
   "@type": "Organization" as const,
-  "name": "BoomTick.blog",
+  "name": "BoomTick (BoomTick.blog)",
   "url": BASE_URL,
+  "email": "ari@boomtick.blog",
+  "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+  "knowsAbout": [
+    "West Coast Swing",
+    "Social Dancing",
+    "Dance Mechanics and Timing",
+    "WCS Event Travel and Logistics"
+  ],
+  "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
   "logo": {
     "@type": "ImageObject" as const,
     "name": "BoomTick.blog Logo",
     "url": `${BASE_URL}/favicon.ico`
+  },
+  "address": {
+    "@type": "PostalAddress" as const,
+    "addressLocality": "San Francisco",
+    "addressRegion": "CA",
+    "addressCountry": "US"
+  },
+  "founder": {
+    "@type": "Person" as const,
+    "name": "Ariel Anders",
+    "jobTitle": "Roboticist & AI Engineer",
+    "url": `${BASE_URL}/about`,
+    "knowsAbout": [
+      "West Coast Swing",
+      "Robotics",
+      "Artificial Intelligence"
+    ],
+    "sameAs": [
+      "https://arii.github.io/",
+      "https://github.com/arii",
+      "https://www.linkedin.com/in/ariel-anders/",
+      "https://www.instagram.com/onasafari/"
+    ]
   }
 };
 
