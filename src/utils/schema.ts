@@ -193,7 +193,7 @@ export const AUTHOR_ARIEL_ANDERS = {
   "url": `${BASE_URL}/about`,
   "knowsAbout": [
     "West Coast Swing",
-    "Dance Biomechanics & Footwear",
+    "Dance Footwear",
     "Artificial Intelligence",
     "Robotics Engineering",
     "Computer Vision"

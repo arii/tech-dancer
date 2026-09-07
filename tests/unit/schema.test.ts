@@ -55,7 +55,7 @@ describe('schema utils', () => {
     it('contains E-E-A-T enriched knowsAbout and alumniOf in AUTHOR_ARIEL_ANDERS', () => {
       expect(AUTHOR_ARIEL_ANDERS.knowsAbout).toEqual([
         "West Coast Swing",
-        "Dance Biomechanics & Footwear",
+        "Dance Footwear",
         "Artificial Intelligence",
         "Robotics Engineering",
         "Computer Vision"
@@ -78,7 +78,7 @@ describe('schema utils', () => {
       };
       expect(profilePage.mainEntity.knowsAbout).toEqual([
         "West Coast Swing",
-        "Dance Biomechanics & Footwear",
+        "Dance Footwear",
         "Artificial Intelligence",
         "Robotics Engineering",
         "Computer Vision"

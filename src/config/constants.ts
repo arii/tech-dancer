@@ -110,7 +110,7 @@ export const STATIC_SCHEMAS = {
         ],
         "knowsAbout": [
           "West Coast Swing",
-          "Dance Biomechanics & Footwear",
+          "Dance Footwear",
           "Artificial Intelligence",
           "Robotics Engineering",
           "Computer Vision"
