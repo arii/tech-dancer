@@ -133,7 +133,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Business Automation',
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
-    canonicalPath: '/research/ecommerce-automation'
+    canonicalPath: '/research/ecommerce-automation',
+    image: '/assets/research/ecommerce-automation-preview.webp',
+    imageAlt: 'Screenshot of the Ecommerce Automation pipeline and metadata QA interface'
   },
   // Migrated Flagship Tools (Preserved for route resolution & graceful SEO fallbacks)
   {
