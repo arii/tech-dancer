@@ -191,6 +191,19 @@ export const AUTHOR_ARIEL_ANDERS = {
   "name": "Ariel Anders",
   "jobTitle": "Roboticist & AI Engineer",
   "url": `${BASE_URL}/about`,
+  "knowsAbout": [
+    "West Coast Swing",
+    "Dance Footwear",
+    "Artificial Intelligence",
+    "Robotics Engineering",
+    "Computer Vision"
+  ],
+  "alumniOf": [
+    {
+      "@type": "CollegeOrUniversity" as const,
+      "name": "Massachusetts Institute of Technology"
+    }
+  ],
   "sameAs": [
     "https://arii.github.io",
     "https://github.com/arii",

@@ -45,7 +45,7 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
         const stats = fs.statSync(filePath);
         let lastmod = stats.mtime.toISOString();
 
-        // Attempt to get date from frontmatter for more stable lastmod
+        // Attempt to get updated date or date from frontmatter for stable lastmod
         try {
           const content = fs.readFileSync(filePath, 'utf-8');
 
@@ -55,11 +55,14 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
             return null;
           }
 
+          const updatedMatch = content.match(/^updated:\s*["']?([^"'\n]+)["']?/m);
           const dateMatch = content.match(/^date:\s*["']?([^"'\n]+)["']?/m);
-          if (dateMatch?.[1]) {
-            const date = new Date(dateMatch[1]);
-            if (!isNaN(date.getTime())) {
-              lastmod = date.toISOString();
+
+          const targetDateStr = updatedMatch?.[1] || dateMatch?.[1];
+          if (targetDateStr) {
+            const parsedDate = new Date(targetDateStr);
+            if (!isNaN(parsedDate.getTime())) {
+              lastmod = parsedDate.toISOString();
             }
           }
         } catch {

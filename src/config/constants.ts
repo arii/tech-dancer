@@ -102,14 +102,18 @@ export const STATIC_SCHEMAS = {
         },
         "jobTitle": "Roboticist & AI Engineer",
         "url": `${BASE_URL}/about`,
-        "alumniOf": "Massachusetts Institute of Technology (MIT)",
+        "alumniOf": [
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Massachusetts Institute of Technology"
+          }
+        ],
         "knowsAbout": [
+          "West Coast Swing",
+          "Dance Footwear",
           "Artificial Intelligence",
-          "Robotics Software Engineering",
-          "Autonomous Systems",
-          "Agentic Workflows",
-          "Motion Planning",
-          "West Coast Swing"
+          "Robotics Engineering",
+          "Computer Vision"
         ],
         "sameAs": [
           SOCIAL_LINKS.PORTFOLIO,
