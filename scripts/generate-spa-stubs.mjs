@@ -147,8 +147,10 @@ function generateMetadataTags(route, meta) {
 
   let schemaJson = '';
   if (meta.rawTitle) {
-    const jsonLd = {
+    const isGearRoute = route.startsWith('/gear/');
+    const articleLd = {
       "@context": "https://schema.org",
+      "@id": `${canonicalUrl}#article`,
       "@type": "Article",
       "headline": meta.rawTitle,
       "description": meta.rawExcerpt || meta.description,
@@ -170,10 +172,37 @@ function generateMetadataTags(route, meta) {
       }
     };
     if (meta.date) {
-      jsonLd.datePublished = meta.date;
-      jsonLd.dateModified = meta.date;
+      articleLd.datePublished = meta.date;
+      articleLd.dateModified = meta.date;
     }
-    schemaJson = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+
+    if (isGearRoute) {
+      const productLd = {
+        "@context": "https://schema.org",
+        "@id": `${canonicalUrl}#product`,
+        "@type": "Product",
+        "name": meta.rawTitle,
+        "url": canonicalUrl,
+        "description": meta.rawExcerpt || meta.description,
+        "image": image,
+        "category": "Dance Footwear & Accessories",
+        "review": {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": meta.author || "Ariel Anders"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          }
+        }
+      };
+      schemaJson = `<script type="application/ld+json">${JSON.stringify([productLd, articleLd])}</script>`;
+    } else {
+      schemaJson = `<script type="application/ld+json">${JSON.stringify(articleLd)}</script>`;
+    }
   } else {
     const jsonLd = {
       "@context": "https://schema.org",

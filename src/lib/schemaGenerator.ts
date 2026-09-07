@@ -43,10 +43,12 @@ export interface SchemaAggregateRating {
 
 export interface ProductJsonLdData {
   '@context': 'https://schema.org';
+  '@id'?: string;
   '@type': 'Product';
   name: string;
   description: string;
   image: string[];
+  url?: string;
   category?: string;
   brand: SchemaBrand;
   sku: string;
@@ -62,10 +64,12 @@ export interface ProductJsonLdData {
 export const buildProductJsonLd = (item: ProductItem): ProductJsonLdData => {
   const schema: ProductJsonLdData = {
     '@context': 'https://schema.org',
+    '@id': `${item.url}#product`,
     '@type': 'Product',
     name: item.name,
     description: item.description,
     image: [item.imageUrl],
+    url: item.url,
     category: 'Apparel & Accessories > Clothing',
     brand: DEFAULT_BRAND,
     sku: item.id,

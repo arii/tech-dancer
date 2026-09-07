@@ -46,7 +46,7 @@ describe('Schema generation', () => {
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('should generate Product schema for first-party merch gear with complete offer metadata and omit fake reviews', () => {
+    it('should generate Product schema for first-party merch gear with complete offer metadata and review', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -71,8 +71,8 @@ describe('Schema generation', () => {
         sku?: string;
         mpn?: string;
         offers?: { price?: string; priceCurrency?: string; availability?: string; shippingDetails?: unknown; hasMerchantReturnPolicy?: unknown; url?: string };
+        review?: { author: { name: string }; reviewRating: { ratingValue: string } };
       };
-      const json = JSON.stringify(product);
 
       expect(product.name).toBe('Test Gear');
       expect(product.brand?.name).toBe('BoomTick');
@@ -85,13 +85,14 @@ describe('Schema generation', () => {
       expect(product.offers?.shippingDetails).toBeDefined();
       expect(product.offers?.hasMerchantReturnPolicy).toBeDefined();
 
-      expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
+      expect(product.review).toBeDefined();
+      expect(product.review?.author.name).toBe('Test Author');
+      expect(product.review?.reviewRating.ratingValue).toBe('4.5');
 
       expect(product.offers?.url).toBe(`${BASE_URL}/gear/test-gear`);
     });
 
-    it('should emit clean informational ListItem without Product schema for affiliate products', () => {
+    it('should emit Product schema with Review entity for affiliate products', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -109,17 +110,27 @@ describe('Schema generation', () => {
       const schema = generateGearCatalogSchema(mockResources);
       const item = schema.itemListElement[0];
 
-      expect(item).toEqual({
-        '@type': 'ListItem',
-        position: 1,
+      expect(item.item).toEqual({
+        '@id': `${BASE_URL}/gear/affiliate-gear#product`,
+        '@type': 'Product',
         name: 'Affiliate Gear',
         url: `${BASE_URL}/gear/affiliate-gear`,
+        image: `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
+        description: 'Test Excerpt',
+        category: 'Gear',
+        review: {
+          '@type': 'Review',
+          author: {
+            '@type': 'Person',
+            name: 'Test Author',
+          },
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: '5',
+            bestRating: '5',
+          },
+        },
       });
-
-      const json = JSON.stringify(item);
-      expect(json).not.toContain('"@type":"Product"');
-      expect(json).not.toContain('offers');
-      expect(json).not.toContain('price');
     });
   });
 

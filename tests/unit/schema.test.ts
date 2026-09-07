@@ -114,7 +114,7 @@ describe('schema utils', () => {
   });
 
   describe('generateMerchSchema', () => {
-    it('generates a valid SchemaItemList from merch products with enriched offer data', () => {
+    it('generates a valid SchemaItemList from merch products with enriched offer data and @id anchors', () => {
       const mockProducts: ProductCatalogItem[] = [
         {
           id: 'shirt-1',
@@ -147,17 +147,20 @@ describe('schema utils', () => {
 
       expect(schema).toEqual({
         '@context': 'https://schema.org',
+        '@id': `${BASE_URL}/merch#itemlist`,
         '@type': 'ItemList',
         itemListElement: [
           {
             '@type': 'ListItem',
             position: 1,
             item: {
+              '@id': `${BASE_URL}/gear/2024-06-01-shirt-1#product`,
               '@type': 'Product',
               name: 'Awesome T-Shirt',
+              url: `${BASE_URL}/gear/2024-06-01-shirt-1`,
               description: 'A very cool shirt for WCS',
               image: `${BASE_URL}${ASSET_PREFIX}/assets/shirt.jpg`,
-                category: 'Apparel & Accessories > Clothing',
+              category: 'Apparel & Accessories > Clothing',
               brand: DEFAULT_BRAND,
               sku: 'shirt-1',
               mpn: 'shirt-1',
@@ -177,11 +180,13 @@ describe('schema utils', () => {
             '@type': 'ListItem',
             position: 2,
             item: {
+              '@id': 'https://boomtick.printful.me/product/hat-1#product',
               '@type': 'Product',
               name: 'WCS Cap',
+              url: 'https://boomtick.printful.me/product/hat-1',
               description: 'Stylish cap for events',
               image: 'https://cdn.example.com/hat.jpg',
-                category: 'Apparel & Accessories > Clothing',
+              category: 'Apparel & Accessories > Clothing',
               brand: DEFAULT_BRAND,
               sku: 'hat-1',
               mpn: 'hat-1',
@@ -191,7 +196,7 @@ describe('schema utils', () => {
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
                 itemCondition: 'https://schema.org/NewCondition',
-                  url: 'https://boomtick.printful.me/product/hat-1',
+                url: 'https://boomtick.printful.me/product/hat-1',
                 shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
                 hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
               },
@@ -204,13 +209,14 @@ describe('schema utils', () => {
     it('returns empty itemListElement when products array is empty', () => {
       const schema = generateMerchSchema([]);
       expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@id']).toBe(`${BASE_URL}/merch#itemlist`);
       expect(schema['@type']).toBe('ItemList');
       expect(schema.itemListElement).toEqual([]);
     });
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('generates a SchemaItemList with Product schema for first-party merch gear resources', () => {
+    it('generates a SchemaItemList with nested Product and Review schema for first-party merch gear resources', () => {
       const mockResources: Resource[] = [
         {
           slug: 'dance-shoes-1',
@@ -230,14 +236,28 @@ describe('schema utils', () => {
         '@type': 'ListItem',
         position: 1,
         item: {
+          '@id': `${BASE_URL}/gear/dance-shoes-1#product`,
           '@type': 'Product',
           name: 'Fuego Dance Sneakers',
+          url: `${BASE_URL}/gear/dance-shoes-1`,
           description: 'Great dance shoes for all floor types.',
           image: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
-            category: 'Apparel & Accessories > Clothing',
+          category: 'Apparel & Accessories > Clothing',
           brand: DEFAULT_BRAND,
           sku: 'dance-shoes-1',
           mpn: 'dance-shoes-1',
+          review: {
+            '@type': 'Review',
+            author: {
+              '@type': 'Person',
+              name: 'Ariel Anders',
+            },
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: '5',
+              bestRating: '5',
+            },
+          },
           offers: {
             '@type': 'Offer',
             price: '25.00',
@@ -252,7 +272,7 @@ describe('schema utils', () => {
       });
     });
 
-    it('strips Product schema entirely for third-party affiliate items to avoid merchant listing penalties', () => {
+    it('generates nested Product and Review entities for third-party affiliate items', () => {
       const mockResources: Resource[] = [
         {
           slug: 'portable-speaker',
@@ -270,20 +290,33 @@ describe('schema utils', () => {
       expect(schema.itemListElement[0]).toEqual({
         '@type': 'ListItem',
         position: 1,
-        name: 'JBL Charge 5',
-        url: `${BASE_URL}/gear/portable-speaker`,
+        item: {
+          '@id': `${BASE_URL}/gear/portable-speaker#product`,
+          '@type': 'Product',
+          name: 'JBL Charge 5',
+          url: `${BASE_URL}/gear/portable-speaker`,
+          image: `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
+          description: 'Powerful portable speaker for dance practice.',
+          category: 'Audio',
+          review: {
+            '@type': 'Review',
+            author: {
+              '@type': 'Person',
+              name: 'Ariel Anders',
+            },
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: '5',
+              bestRating: '5',
+            },
+          },
+        },
       });
-
-      const json = JSON.stringify(schema.itemListElement[0]);
-      expect(json).not.toContain('"@type":"Product"');
-      expect(json).not.toContain('offers');
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
     });
   });
 
   describe('generateBreadcrumbSchema', () => {
-    it('generates a valid SchemaBreadcrumbList with 1-based indexing and full canonical paths', () => {
+    it('generates a valid SchemaBreadcrumbList with 1-based indexing, full canonical paths, and @id anchor', () => {
       const items = [
         { name: 'Home', path: '/' },
         { name: 'Blog', path: '/blog' },
@@ -294,6 +327,7 @@ describe('schema utils', () => {
 
       expect(schema).toEqual({
         '@context': 'https://schema.org',
+        '@id': `${BASE_URL}/blog/packing-guide#breadcrumbs`,
         '@type': 'BreadcrumbList',
         itemListElement: [
           {

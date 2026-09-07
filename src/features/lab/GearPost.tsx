@@ -64,32 +64,7 @@ export default function GearPost() {
       { name: resource.title, path: `/gear/${resource.slug}` }
     ]);
 
-    if (isMerch) {
-      const productSchema: SchemaProduct = {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": resource.title,
-        "description": resource.excerpt,
-        "image": productImageUrl,
-        "category": "Apparel & Accessories > Clothing",
-        "sku": sku,
-        "mpn": sku,
-        "brand": DEFAULT_BRAND,
-        "offers": {
-          "@type": "Offer",
-          "price": price,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "itemCondition": "https://schema.org/NewCondition",
-          "url": `${BASE_URL}/gear/${resource.slug}`,
-          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
-          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
-        }
-      };
-      return [productSchema, breadcrumbSchema];
-    }
-
-    // For third-party affiliate items, emit standard Article & Breadcrumbs (no Product schema to prevent merchant listing misclassification)
+    const itemUrl = `${BASE_URL}/gear/${resource.slug}`;
     const authorName = resource.author || "Ariel Anders";
     const isAriel = !resource.author || resource.author === 'Ariel Anders' || resource.author.includes('Ariel');
     const authorSchema = isAriel
@@ -100,11 +75,59 @@ export default function GearPost() {
           "url": `${BASE_URL}/about`
         };
 
+    const category = resource.category
+      ? (resource.category.charAt(0).toUpperCase() + resource.category.slice(1))
+      : "Dance Footwear & Accessories";
+
+    const productSchema: SchemaProduct = {
+      "@context": "https://schema.org",
+      "@id": `${itemUrl}#product`,
+      "@type": "Product",
+      "name": resource.title,
+      "url": itemUrl,
+      "description": resource.excerpt,
+      "image": productImageUrl,
+      "category": isMerch ? "Apparel & Accessories > Clothing" : category,
+      "sku": sku,
+      "mpn": sku,
+      "brand": DEFAULT_BRAND,
+      "review": {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": authorName
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": String(resource.rating || 5),
+          "bestRating": "5"
+        },
+        ...(resource.verdict ? { "reviewBody": resource.verdict } : {})
+      },
+      ...(isMerch ? {
+        "offers": {
+          "@type": "Offer",
+          "price": price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "url": itemUrl,
+          "shippingDetails": DEFAULT_PRINTFUL_SHIPPING_DETAILS,
+          "hasMerchantReturnPolicy": DEFAULT_PRINTFUL_RETURN_POLICY,
+        }
+      } : {})
+    };
+
+    if (isMerch) {
+      return [productSchema, breadcrumbSchema];
+    }
+
     const words = resource.content ? resource.content.trim().split(/\s+/).length : 0;
     const estMinutes = readingTime(resource.content || '');
 
     const articleSchema = {
       "@context": "https://schema.org",
+      "@id": `${itemUrl}#article`,
       "@type": "Article",
       "name": resource.title,
       "headline": resource.title,
@@ -150,11 +173,15 @@ export default function GearPost() {
       "mainEntityOfPage": {
         "@type": "WebPage",
         "name": resource.title,
-        "@id": `${BASE_URL}/gear/${resource.slug}`
+        "@id": itemUrl
       }
     };
 
-    const schemas: Array<Record<string, unknown>> = [articleSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+    const schemas: Array<Record<string, unknown>> = [
+      productSchema as unknown as Record<string, unknown>,
+      articleSchema,
+      breadcrumbSchema as unknown as Record<string, unknown>
+    ];
 
     const howToSchema = extractHowToFromMarkdown(resource);
     if (howToSchema) {

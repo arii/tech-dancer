@@ -53,17 +53,35 @@ export interface SchemaOffer {
   "hasMerchantReturnPolicy"?: SchemaMerchantReturnPolicy;
 }
 
+export interface SchemaReview {
+  "@type": "Review";
+  "author": {
+    "@type": "Person";
+    "name": string;
+  };
+  "reviewRating"?: {
+    "@type": "Rating";
+    "ratingValue": string;
+    "bestRating"?: string;
+    "worstRating"?: string;
+  };
+  "reviewBody"?: string;
+}
+
 export interface SchemaProduct {
   "@context"?: "https://schema.org";
+  "@id"?: string;
   "@type": "Product";
   "name": string;
   "description": string;
   "image": string;
+  "url"?: string;
   "category"?: string;
   "brand"?: SchemaBrand;
-  "sku": string;
-  "mpn": string;
+  "sku"?: string;
+  "mpn"?: string;
   "offers"?: SchemaOffer;
+  "review"?: SchemaReview;
 }
 
 export interface SchemaBreadcrumbListItem {
@@ -75,6 +93,7 @@ export interface SchemaBreadcrumbListItem {
 
 export interface SchemaBreadcrumbList {
   "@context": "https://schema.org";
+  "@id"?: string;
   "@type": "BreadcrumbList";
   "itemListElement": SchemaBreadcrumbListItem[];
 }
@@ -135,12 +154,17 @@ export function formatIsoDate(dateStr?: string, defaultTime = "T08:00:00Z"): str
 export interface SchemaListItem {
   "@type": "ListItem";
   "position": number;
-  "item": SchemaProduct;
+  "name"?: string;
+  "url"?: string;
+  "item": SchemaProduct | Record<string, unknown>;
 }
 
 export interface SchemaItemList {
   "@context": "https://schema.org";
+  "@id"?: string;
   "@type": "ItemList";
+  "name"?: string;
+  "description"?: string;
   "itemListElement": SchemaListItem[];
 }
 
@@ -286,6 +310,7 @@ export function getImageUrl(url?: string, defaultUrl?: string): string {
 export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemList {
   return {
     "@context": "https://schema.org",
+    "@id": `${BASE_URL}/merch#itemlist`,
     "@type": "ItemList",
     "itemListElement": products.map((product, index) => {
       const price = parsePrice(product.price, "24.00");
@@ -294,8 +319,10 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
         : (product.href ? (product.href.startsWith('http') ? product.href : `${BASE_URL}${product.href.startsWith('/') ? '' : '/'}${product.href}`) : `${BASE_URL}/gear/${product.id}`);
 
       const item: SchemaProduct = {
+        "@id": `${itemUrl}#product`,
         "@type": "Product",
         "name": product.title,
+        "url": itemUrl,
         "description": product.description,
         "image": getImageUrl(product.imageUrl),
         "category": "Apparel & Accessories > Clothing",
@@ -324,8 +351,14 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
 }
 
 export function generateBreadcrumbSchema(items: { name: string; path: string }[]): SchemaBreadcrumbList {
+  const lastPath = items.length > 0 ? items[items.length - 1].path : '';
+  const canonicalUrl = lastPath.startsWith('http')
+    ? lastPath
+    : `${BASE_URL}${lastPath.startsWith('/') ? '' : '/'}${lastPath}`;
+
   return {
     "@context": "https://schema.org",
+    "@id": `${canonicalUrl}#breadcrumbs`,
     "@type": "BreadcrumbList",
     "itemListElement": items.map((item, idx) => ({
       "@type": "ListItem",
@@ -369,27 +402,49 @@ export function generateImageObjectSchema(params: {
   };
 }
 
-export function generateGearCatalogSchema(resources: Resource[]) {
+export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList {
   return {
     "@context": "https://schema.org",
+    "@id": `${BASE_URL}/gear#itemlist`,
     "@type": "ItemList",
     "name": "West Coast Swing Dance Gear & Reviews",
     "description": "Curated dance gear, recovery tools, and competition essentials for West Coast Swing dancers.",
     "itemListElement": resources.map((resource, index) => {
       const isMerch = resource.provider === 'printful' || !!resource.shopUrl || resource.tags?.includes('merch');
       const itemUrl = `${BASE_URL}/gear/${resource.slug}`;
+      const imageUrl = getImageUrl(resource.image, '/assets/comp_analysis_hero.webp');
+      const category = resource.category
+        ? (resource.category.charAt(0).toUpperCase() + resource.category.slice(1))
+        : "Dance Footwear & Accessories";
+
+      const review: SchemaReview = {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": resource.author || "Ariel Anders"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": String(resource.rating || 5),
+          "bestRating": "5"
+        },
+        ...(resource.verdict ? { "reviewBody": resource.verdict } : {})
+      };
 
       if (isMerch) {
         const sku = resource.internalSku || resource.slug;
         const productSchema: SchemaProduct = {
+          "@id": `${itemUrl}#product`,
           "@type": "Product",
           "name": resource.title,
+          "url": itemUrl,
           "description": resource.excerpt,
-          "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
+          "image": imageUrl,
           "category": "Apparel & Accessories > Clothing",
           "sku": sku,
           "mpn": sku,
           "brand": DEFAULT_BRAND,
+          "review": review,
           "offers": {
             "@type": "Offer",
             "price": parsePrice((resource as unknown as { price?: string | number }).price, "25.00"),
@@ -409,12 +464,21 @@ export function generateGearCatalogSchema(resources: Resource[]) {
         };
       }
 
-      // Non-merch third-party affiliate items are represented as informational Article/WebPage entities, NOT Product schema
+      const productSchema: SchemaProduct = {
+        "@id": `${itemUrl}#product`,
+        "@type": "Product",
+        "name": resource.title,
+        "url": itemUrl,
+        "image": imageUrl,
+        "description": resource.excerpt,
+        "category": category,
+        "review": review
+      };
+
       return {
         "@type": "ListItem",
         "position": index + 1,
-        "name": resource.title,
-        "url": itemUrl
+        "item": productSchema
       };
     })
   };
