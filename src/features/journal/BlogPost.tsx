@@ -1,11 +1,17 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getPostBySlug } from '@/lib/content';
+import { getPostBySlug, readingTime } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
+import {
+  AUTHOR_ARIEL_ANDERS,
+  formatIsoDate,
+  generateBreadcrumbSchema,
+  extractHowToFromMarkdown,
+  extractFaqFromMarkdown,
+} from '@/utils/schema';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -33,12 +39,19 @@ export default function BlogPost() {
           "url": `${BASE_URL}/about`
         };
 
+    const words = post.content ? post.content.trim().split(/\s+/).length : 0;
+    const estMinutes = readingTime(post.content || '');
+
     const blogPostingSchema = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "name": post.title,
       "headline": post.title,
       "description": post.excerpt,
+      "inLanguage": "en-US",
+      "wordCount": words,
+      "timeRequired": `PT${estMinutes}M`,
+      ...(post.tags && post.tags.length > 0 ? { "keywords": post.tags.join(', ') } : {}),
       "author": authorSchema,
       "datePublished": formatIsoDate(post.date),
       "dateModified": formatIsoDate(post.updated || post.date),
@@ -80,32 +93,25 @@ export default function BlogPost() {
       }
     };
 
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": `${BASE_URL}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Journal",
-          "item": `${BASE_URL}/blog`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": post.title,
-          "item": `${BASE_URL}/blog/${post.slug}`
-        }
-      ]
-    };
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blog" },
+      { name: post.title, path: `/blog/${post.slug}` }
+    ]);
 
-    return [blogPostingSchema, breadcrumbSchema];
+    const schemas: Array<Record<string, unknown>> = [blogPostingSchema, breadcrumbSchema as unknown as Record<string, unknown>];
+
+    const howToSchema = extractHowToFromMarkdown(post);
+    if (howToSchema) {
+      schemas.push(howToSchema as unknown as Record<string, unknown>);
+    }
+
+    const faqSchema = extractFaqFromMarkdown(post.content);
+    if (faqSchema) {
+      schemas.push(faqSchema as unknown as Record<string, unknown>);
+    }
+
+    return schemas;
   }, [post]);
 
   if (!post) {

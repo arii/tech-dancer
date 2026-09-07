@@ -92,13 +92,26 @@ export function HeroParticleCanvas({
       }
     };
     
-    // Delay start of animation loop to give main-thread breathing room during bootup
-    const timeoutId = setTimeout(() => {
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const startAnimation = () => {
       rafId = requestAnimationFrame(draw);
-    }, 150);
+    };
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(() => startAnimation(), { timeout: 1000 });
+    } else {
+      timeoutId = setTimeout(startAnimation, 300);
+    }
 
     return () => {
-      clearTimeout(timeoutId);
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues, seeds]);

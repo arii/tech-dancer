@@ -8,7 +8,7 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, formatIsoDate } from '@/utils/schema';
+import { AUTHOR_ARIEL_ANDERS, formatIsoDate, generateBreadcrumbSchema } from '@/utils/schema';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -73,8 +73,11 @@ export default function ResearchDetail() {
         "name": study.title,
         "headline": study.title,
         "description": study.excerpt,
+        "inLanguage": "en-US",
         "proficiencyLevel": "Expert",
         "articleSection": "Technical Deep Dive",
+        "dependencies": study.tags || ["React", "TypeScript", "Playwright", "FastAPI"],
+        "keywords": study.tags?.join(', ') || "DevAI, Playwright, RAG, Software Engineering",
         "author": authorSchema,
         "datePublished": formatIsoDate(study.date),
         "dateModified": formatIsoDate(study.date),
@@ -116,30 +119,11 @@ export default function ResearchDetail() {
         }
       };
 
-      const breadcrumbSchema = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": `${BASE_URL}`
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Experiments",
-            "item": `${BASE_URL}/research`
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": study.title,
-            "item": `${BASE_URL}/research/${study.slug}`
-          }
-        ]
-      };
+      const breadcrumbSchema = generateBreadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Research", path: "/research" },
+        { name: study.title, path: `/research/${study.slug}` }
+      ]);
 
       return [techArticleSchema, breadcrumbSchema];
     }
@@ -149,33 +133,25 @@ export default function ResearchDetail() {
         "@type": "WebApplication",
         "name": tool.title,
         "description": tool.description,
-        "applicationCategory": "EducationalApplication"
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "inLanguage": "en-US",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "browserRequirements": "Requires JavaScript and HTML5 canvas/WebGL support. Works in Chrome, Firefox, Safari, Edge.",
+        "featureList": tool.tags,
+        "codeRepository": tool.sourceUrl || "https://github.com/arii/tech-dancer"
       };
 
-      const breadcrumbSchema = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": `${BASE_URL}`
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Experiments",
-            "item": `${BASE_URL}/research`
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": tool.title,
-            "item": `${BASE_URL}${tool.canonicalPath || `/research/${tool.id}`}`
-          }
-        ]
-      };
+      const breadcrumbSchema = generateBreadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Research", path: "/research" },
+        { name: tool.title, path: tool.canonicalPath || `/research/${tool.id}` }
+      ]);
 
       return [toolSchema, breadcrumbSchema];
     }

@@ -7,6 +7,10 @@ import {
   generateImageObjectSchema,
   generateCollectionPageSchema,
   formatIsoDate,
+  extractHowToFromMarkdown,
+  extractFaqFromMarkdown,
+  generateMemeGallerySchema,
+  generateProfileGallerySchema,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
@@ -90,6 +94,7 @@ describe('schema utils', () => {
               name: 'Awesome T-Shirt',
               description: 'A very cool shirt for WCS',
               image: `${BASE_URL}${ASSET_PREFIX}/assets/shirt.jpg`,
+                category: 'Apparel & Accessories > Clothing',
               brand: DEFAULT_BRAND,
               sku: 'shirt-1',
               mpn: 'shirt-1',
@@ -113,6 +118,7 @@ describe('schema utils', () => {
               name: 'WCS Cap',
               description: 'Stylish cap for events',
               image: 'https://cdn.example.com/hat.jpg',
+                category: 'Apparel & Accessories > Clothing',
               brand: DEFAULT_BRAND,
               sku: 'hat-1',
               mpn: 'hat-1',
@@ -122,7 +128,7 @@ describe('schema utils', () => {
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
                 itemCondition: 'https://schema.org/NewCondition',
-                url: `${BASE_URL}/gear/hat-1`,
+                  url: 'https://boomtick.printful.me/product/hat-1',
                 shippingDetails: DEFAULT_PRINTFUL_SHIPPING_DETAILS,
                 hasMerchantReturnPolicy: DEFAULT_PRINTFUL_RETURN_POLICY,
               },
@@ -165,6 +171,7 @@ describe('schema utils', () => {
           name: 'Fuego Dance Sneakers',
           description: 'Great dance shoes for all floor types.',
           image: `${BASE_URL}${ASSET_PREFIX}/assets/shoes.webp`,
+            category: 'Apparel & Accessories > Clothing',
           brand: DEFAULT_BRAND,
           sku: 'dance-shoes-1',
           mpn: 'dance-shoes-1',
@@ -216,7 +223,7 @@ describe('schema utils', () => {
     it('generates a valid SchemaBreadcrumbList with 1-based indexing and full canonical paths', () => {
       const items = [
         { name: 'Home', path: '/' },
-        { name: 'Journal', path: '/blog' },
+        { name: 'Blog', path: '/blog' },
         { name: 'Packing Guide', path: '/blog/packing-guide' }
       ];
 
@@ -235,7 +242,7 @@ describe('schema utils', () => {
           {
             '@type': 'ListItem',
             position: 2,
-            name: 'Journal',
+            name: 'Blog',
             item: `${BASE_URL}/blog`
           },
           {
@@ -245,6 +252,111 @@ describe('schema utils', () => {
             item: `${BASE_URL}/blog/packing-guide`
           }
         ]
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for blog post routes (/blog/:slug)', () => {
+      const blogBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Event Travel & Packing', path: '/blog/2026-06-01-event-travel-packing' }
+      ];
+
+      const schema = generateBreadcrumbSchema(blogBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${BASE_URL}/blog`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Event Travel & Packing',
+        item: `${BASE_URL}/blog/2026-06-01-event-travel-packing`
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for gear item routes (/gear/:slug)', () => {
+      const gearBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Gear & Tools', path: '/gear' },
+        { name: 'Adhesive Suede Sheets for DIY Dance Shoes', path: '/gear/2026-04-12-suede-shoe-diy' }
+      ];
+
+      const schema = generateBreadcrumbSchema(gearBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Gear & Tools',
+        item: `${BASE_URL}/gear`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Adhesive Suede Sheets for DIY Dance Shoes',
+        item: `${BASE_URL}/gear/2026-04-12-suede-shoe-diy`
+      });
+    });
+
+    it('generates schema.org compliant BreadcrumbList for research/tool routes (/research/:toolId)', () => {
+      const researchBreadcrumbs = [
+        { name: 'Home', path: '/' },
+        { name: 'Research', path: '/research' },
+        { name: 'Deployment Impact Analyzer', path: '/research/deployment-impact-analyzer' }
+      ];
+
+      const schema = generateBreadcrumbSchema(researchBreadcrumbs);
+
+      expect(schema['@context']).toBe('https://schema.org');
+      expect(schema['@type']).toBe('BreadcrumbList');
+      expect(schema.itemListElement).toHaveLength(3);
+
+      schema.itemListElement.forEach((item, idx) => {
+        expect(item['@type']).toBe('ListItem');
+        expect(item.position).toBe(idx + 1);
+        expect(typeof item.name).toBe('string');
+        expect(item.name.length).toBeGreaterThan(0);
+        expect(item.item).toMatch(/^https?:\/\//);
+      });
+
+      expect(schema.itemListElement[1]).toEqual({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Research',
+        item: `${BASE_URL}/research`
+      });
+      expect(schema.itemListElement[2]).toEqual({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Deployment Impact Analyzer',
+        item: `${BASE_URL}/research/deployment-impact-analyzer`
       });
     });
   });
@@ -332,6 +444,124 @@ describe('schema utils', () => {
         '@type': 'BreadcrumbList',
         itemListElement: expect.any(Array)
       });
+    });
+  });
+
+  describe('extractHowToFromMarkdown & generateHowToSchema', () => {
+    it('extracts step-by-step tutorial steps and tools from markdown', () => {
+      const mockPost = {
+        title: 'Make Any Shoe a Dance Shoe',
+        excerpt: 'DIY modification guide',
+        image: '/images/gear/diy/hero.webp',
+        slug: 'make-shoe-dance',
+        content: `
+## Required Gear
+| Item | Purpose |
+| :--- | :--- |
+| **Adhesive suede sheets** | Creates dance sole |
+| **Isopropyl alcohol** | Surface prep |
+
+## Step-by-Step Tutorial
+
+### 1. Clean the Sole
+Remove dirt and oils from the rubber sole.
+![Clean sole](/images/gear/diy/step1-clean.svg)
+
+### 2. Trace the Shoe
+Place the shoe sole-down on backing paper.
+`
+      };
+
+      const howTo = extractHowToFromMarkdown(mockPost);
+      expect(howTo).not.toBeNull();
+      expect(howTo?.['@type']).toBe('HowTo');
+      expect(howTo?.name).toBe('Make Any Shoe a Dance Shoe');
+      expect(howTo?.step).toHaveLength(2);
+      expect(howTo?.step[0].name).toBe('Step 1: Clean the Sole');
+      expect(howTo?.step[0].image).toBe(`${BASE_URL}${ASSET_PREFIX}/images/gear/diy/step1-clean.svg`);
+    });
+
+    it('returns null when no step headers exist in markdown', () => {
+      const mockPost = {
+        title: 'General Article',
+        excerpt: 'No steps here',
+        slug: 'general-article',
+        content: 'Just general text without any step headings.'
+      };
+
+      expect(extractHowToFromMarkdown(mockPost)).toBeNull();
+    });
+  });
+
+  describe('extractFaqFromMarkdown & generateFAQPageSchema', () => {
+    it('extracts FAQ section questions and answers from markdown', () => {
+      const content = `
+# Guide Title
+Some text here.
+
+## FAQs
+
+**How durable are adhesive suede sheets?**
+Suede sheets typically last for several months of regular dancing.
+
+**How do I remove them?**
+If you need to replace the sheets, peel them off slowly.
+`;
+
+      const faqPage = extractFaqFromMarkdown(content);
+      expect(faqPage).not.toBeNull();
+      expect(faqPage?.['@type']).toBe('FAQPage');
+      expect(faqPage?.mainEntity).toHaveLength(2);
+      expect(faqPage?.mainEntity[0].name).toBe('How durable are adhesive suede sheets?');
+      expect(faqPage?.mainEntity[0].acceptedAnswer.text).toBe('Suede sheets typically last for several months of regular dancing.');
+    });
+
+    it('returns null when no FAQs section is present', () => {
+      expect(extractFaqFromMarkdown('# Title\nNo FAQ here')).toBeNull();
+    });
+  });
+
+  describe('generateMemeGallerySchema & generateProfileGallerySchema', () => {
+    it('generates ImageGallery JSON-LD for memes with Google Image License attributes', () => {
+      const mockMemes = [
+        {
+          id: 'meme-1',
+          title: 'The Slotted Dance Debate',
+          imageSrc: '/assets/memes/9c2lc9.jpg',
+          altText: 'WCS slot debate meme'
+        }
+      ];
+
+      const gallery = generateMemeGallerySchema(mockMemes);
+      expect(gallery['@type']).toBe('ImageGallery');
+      expect(gallery.itemListElement).toHaveLength(1);
+
+      const item = gallery.itemListElement[0].item;
+      expect(item.name).toBe('The Slotted Dance Debate');
+      expect(item.creditText).toBe('Ariel Anders');
+      expect(item.license).toBe(`${BASE_URL}/about#terms`);
+      expect(item.acquireLicensePage).toBe(`${BASE_URL}/about`);
+    });
+
+    it('generates ImageObject array for profile story sections', () => {
+      const mockSections = [
+        {
+          id: 'dance-background',
+          gallery: [
+            {
+              src: '/assets/first_comp.jpg',
+              alt: 'First competition photo',
+              caption: 'First WCS Competition'
+            }
+          ]
+        }
+      ];
+
+      const images = generateProfileGallerySchema(mockSections);
+      expect(images).toHaveLength(1);
+      expect(images[0]['@type']).toBe('ImageObject');
+      expect(images[0].caption).toBe('First WCS Competition');
+      expect(images[0].creditText).toBe('Ariel Anders');
     });
   });
 });

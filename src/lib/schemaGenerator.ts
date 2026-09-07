@@ -3,10 +3,13 @@ import {
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
+  generateBreadcrumbSchema,
   type SchemaBrand,
   type SchemaShippingDetails,
   type SchemaMerchantReturnPolicy,
 } from '@/utils/schema';
+
+export { generateBreadcrumbSchema };
 
 export interface ProductItem {
   id: string;
@@ -44,6 +47,7 @@ export interface ProductJsonLdData {
   name: string;
   description: string;
   image: string[];
+  category?: string;
   brand: SchemaBrand;
   sku: string;
   mpn: string;
@@ -62,6 +66,7 @@ export const buildProductJsonLd = (item: ProductItem): ProductJsonLdData => {
     name: item.name,
     description: item.description,
     image: [item.imageUrl],
+    category: 'Apparel & Accessories > Clothing',
     brand: DEFAULT_BRAND,
     sku: item.id,
     mpn: item.id,

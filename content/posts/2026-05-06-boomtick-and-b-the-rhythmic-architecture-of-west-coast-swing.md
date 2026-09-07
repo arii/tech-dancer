@@ -62,7 +62,7 @@ UUS:  | • | • | •   • | • | • | •   • |
 
 These simple dots (•) and slashes (/)—if we were to substitute a touch for a step—give dancers a clear, visual map of weight transfer without needing to read complex musical sheet notation.
 
-This intersection of technical structure and creative expression is why I dance, and it is the foundation of BoomTick.blog.
+This intersection of technical structure and creative expression is why I dance, and it is the foundation of BoomTick.blog. Learn more about [author Ariel Anders' dance and engineering background](/about), explore our [personalized WCS Navigator schedule planner](/wcs-navigator), or browse our [West Coast Swing apparel and gear collection](/gear).
 
 ## Visual Identity: The Accessible Victorian
 
