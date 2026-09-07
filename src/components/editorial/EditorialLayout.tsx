@@ -61,7 +61,7 @@ export function EditorialLayout({
               size="sm"
               className="transition-transform group-hover:-translate-x-1"
             />
-            <Text variant="mono" size="xs" weight="font-bold" uppercase>
+            <Text variant="mono" size="xs" weight="font-bold">
               {backLabel}
             </Text>
           </Stack>

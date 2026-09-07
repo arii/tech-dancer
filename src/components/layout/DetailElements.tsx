@@ -1,4 +1,3 @@
-
 import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
@@ -22,7 +21,7 @@ export function ScoreItem({ label, value, icon: IconComponent, color, intent }: 
       paddingY={2}
       minWidth={{ base: 24, sm: 32 }}
     >
-      <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
+      <Text variant="mono" size="tiny" color="dim">{label}</Text>
       <Stack direction="row" align="center" gap={1} className={color || ''}>
         {IconComponent && <Icon icon={IconComponent} size="sm" color={intent === "brand" || intent === "accent" ? "accent" : "default"} />}
         <Text variant="display" size="xl" weight="font-bold" intent={intent}>{value}</Text>
@@ -61,11 +60,9 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
     <Stack gap={4}>
       <Text
         variant="mono"
-        size="tiny"
+        size="xs"
         weight="font-bold"
-        color="dim"
-        uppercase
-        tracking="widest"
+        color="main"
         border="b"
         paddingBottom={2}
       >
@@ -74,7 +71,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" uppercase opacityVariant="muted">{key}</Text>
+            <Text variant="mono" size="xs" color="dim">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}
@@ -90,7 +87,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Stack direction="row" align="center" gap={3}>
              <Icon icon={Shield} size="lg" color="accent" />
-             <Text variant="display" size="2xl" weight="font-black" color="accent" uppercase>THE VERDICT</Text>
+             <Text variant="display" size="2xl" weight="font-black" color="accent">The Verdict</Text>
           </Stack>
           <Text variant="body" size="lg" italic leading="relaxed" weight="font-medium" color="main">
             "{verdict}"

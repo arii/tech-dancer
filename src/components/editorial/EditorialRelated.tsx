@@ -19,7 +19,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
   return (
     <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
       <Stack gap={6}>
-        <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
+        <Text variant="mono" size="xs" color="dim" weight="font-bold">
           {title}
         </Text>
         <Stack gap={4}>
@@ -28,8 +28,8 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
               <Box padding={4} border radius="md" className={journalVariants.card({ interactive: true })}>
                 <Stack gap={1}>
                   {item.category && (
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold">
-                      {item.category.toUpperCase()}
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" className="capitalize">
+                      {item.category}
                     </Text>
                   )}
                   <Text variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
