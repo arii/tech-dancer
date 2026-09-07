@@ -5,7 +5,6 @@ import { resolveMerchImages } from '@/lib/merch/imageDisplay';
 
 interface MerchImageDisplayProps {
   title: string;
-  href: string;
   imageUrl: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
@@ -82,24 +81,17 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   );
 }
 
-export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
+export function MerchImageDisplay({ title, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
   if (!primary) return null;
 
   return (
     <Box
-      as="a"
-      href={href}
-      target="_blank"
-      rel="sponsored noopener noreferrer"
-      aria-label={`View ${title} on Printful`}
-      display="block"
       width="full"
       height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
       radius="md"
       overflow="hidden"
-      className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <Box width="full" height="full" minHeight="0">
         {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
