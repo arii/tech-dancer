@@ -40,7 +40,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                   size="sm"
                   className="transition-transform group-hover:-translate-x-1"
                 />
-                <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
+                <Text variant="mono" size="xs" color="dim" weight="font-bold">
                   Previous Article
                 </Text>
               </Stack>
@@ -64,7 +64,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
           {next && (
             <Stack gap={2} align="end" height="full">
               <Stack direction="row" align="center" gap={2} minHeight={11}>
-                <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
+                <Text variant="mono" size="xs" color="dim" weight="font-bold">
                   Next Article
                 </Text>
                 <Icon
