@@ -15,10 +15,10 @@ export function Footer() {
   }, []);
 
   const policyLinks = [
-    { label: 'Shipping', to: '/shipping' },
+    { label: 'Shipping', to: '/shipping-policy' },
     { label: 'Returns', to: '/return-policy' },
-    { label: 'Privacy', to: '/about#privacy' },
-    { label: 'Terms', to: '/about#terms' },
+    { label: 'Privacy', to: '/privacy-policy' },
+    { label: 'Terms', to: '/terms-of-service' },
     { label: 'Contact', to: '/about#contact' },
   ];
 
@@ -58,7 +58,6 @@ export function Footer() {
                   variant="ghost"
                   paddingX={{ base: 3, md: 3 }}
                   paddingY={{ base: 4, md: 2 }}
-                  whileTap={{ scale: 0.95 }}
                 >
                   <Text
                     variant="mono"
