@@ -61,10 +61,14 @@ export function ProductCard({
     >
       <ProductJsonLd item={productItem} />
       {internalRoute ? (
-        <Link to={internalRoute} state={{ from: 'merch' }} className="block w-full">
+        <Link
+          to={internalRoute}
+          state={{ from: 'merch' }}
+          className="block w-full group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md"
+          aria-label={`View product details for ${item.title}`}
+        >
           <MerchImageDisplay
             title={item.title}
-            href={internalRoute}
             imageUrl={item.imageUrl}
             images={item.images}
             imageDisplayMode={item.imageDisplayMode}
@@ -72,14 +76,24 @@ export function ProductCard({
           />
         </Link>
       ) : (
-        <MerchImageDisplay
-          title={item.title}
+        <Box
+          as="a"
           href={item.href}
-          imageUrl={item.imageUrl}
-          images={item.images}
-          imageDisplayMode={item.imageDisplayMode}
-          isFeatured={isFeatured}
-        />
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          aria-label={`Order ${item.title} on Printful`}
+          display="block"
+          width="full"
+          className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md"
+        >
+          <MerchImageDisplay
+            title={item.title}
+            imageUrl={item.imageUrl}
+            images={item.images}
+            imageDisplayMode={item.imageDisplayMode}
+            isFeatured={isFeatured}
+          />
+        </Box>
       )}
 
       <Stack gap={isFeatured ? 4 : 3}>
@@ -94,7 +108,8 @@ export function ProductCard({
             color="main"
             leading="tight"
             clamp={clampTitle}
-            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label={`View product details for ${item.title}`}
+            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
           >
             {item.title}
           </Text>
@@ -110,7 +125,8 @@ export function ProductCard({
             color="main"
             leading="tight"
             clamp={clampTitle}
-            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label={`Order ${item.title} on Printful`}
+            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
           >
             {item.title}
           </Text>
@@ -164,7 +180,7 @@ export function ProductCard({
             gap={1.5}
             aria-label={`View details and options for ${item.title}`}
           >
-            VIEW OPTIONS
+            VIEW DETAILS
             <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
           </Button>
         ) : (
@@ -176,9 +192,9 @@ export function ProductCard({
             variant="primary"
             fullWidth
             gap={1.5}
-            aria-label={`View ${item.title} on Printful`}
+            aria-label={`Order ${item.title} on Printful`}
           >
-            {item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1) ? 'SEE OPTIONS' : 'VIEW ON PRINTFUL'}
+            ORDER ON PRINTFUL
             <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
           </Button>
         )}
