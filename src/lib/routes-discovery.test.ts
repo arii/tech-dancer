@@ -40,6 +40,14 @@ describe('getAllRoutes', () => {
     expect(new Date(detailed[0].lastmod).getTime()).not.toBeNaN();
   });
 
+  it('should prioritize updated date over date in frontmatter for content routes lastmod', () => {
+    const { detailed } = getAllRoutes();
+    // 2026-04-19-practical-tools-essentials.md has updated: "2026-06-24" and date: "2026-04-19"
+    const target = detailed.find(r => r.path === '/blog/2026-04-19-practical-tools-essentials');
+    expect(target).toBeDefined();
+    expect(target?.lastmod).toContain('2026-06-24');
+  });
+
   it('should exclude /events routes', () => {
     const { all, sitemap, content } = getAllRoutes();
 

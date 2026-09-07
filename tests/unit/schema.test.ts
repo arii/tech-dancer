@@ -11,11 +11,12 @@ import {
   extractFaqFromMarkdown,
   generateMemeGallerySchema,
   generateProfileGallerySchema,
+  AUTHOR_ARIEL_ANDERS,
   DEFAULT_BRAND,
   DEFAULT_PRINTFUL_SHIPPING_DETAILS,
   DEFAULT_PRINTFUL_RETURN_POLICY,
 } from '@/utils/schema';
-import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
+import { BASE_URL, ASSET_PREFIX, STATIC_SCHEMAS } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import type { Resource } from '@/lib/types/content';
 
@@ -47,6 +48,47 @@ describe('schema utils', () => {
       expect(getImageUrl('///assets/photo.webp')).toBe(
         `${BASE_URL}${ASSET_PREFIX}/assets/photo.webp`
       );
+    });
+  });
+
+  describe('AUTHOR_ARIEL_ANDERS and STATIC_SCHEMAS.ABOUT', () => {
+    it('contains E-E-A-T enriched knowsAbout and alumniOf in AUTHOR_ARIEL_ANDERS', () => {
+      expect(AUTHOR_ARIEL_ANDERS.knowsAbout).toEqual([
+        "West Coast Swing",
+        "Dance Biomechanics & Footwear",
+        "Artificial Intelligence",
+        "Robotics Engineering",
+        "Computer Vision"
+      ]);
+      expect(AUTHOR_ARIEL_ANDERS.alumniOf).toEqual([
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Massachusetts Institute of Technology"
+        }
+      ]);
+    });
+
+    it('contains E-E-A-T enriched knowsAbout and alumniOf in STATIC_SCHEMAS.ABOUT', () => {
+      const aboutSchemas = STATIC_SCHEMAS.ABOUT("Ariel Anders", "Roboticist & AI Engineer");
+      const profilePage = aboutSchemas[0] as unknown as {
+        mainEntity: {
+          knowsAbout: string[];
+          alumniOf: Array<{ "@type": string; name: string }>;
+        };
+      };
+      expect(profilePage.mainEntity.knowsAbout).toEqual([
+        "West Coast Swing",
+        "Dance Biomechanics & Footwear",
+        "Artificial Intelligence",
+        "Robotics Engineering",
+        "Computer Vision"
+      ]);
+      expect(profilePage.mainEntity.alumniOf).toEqual([
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Massachusetts Institute of Technology"
+        }
+      ]);
     });
   });
 
