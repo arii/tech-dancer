@@ -9,13 +9,11 @@ export interface MerchGalleryImage {
   alt: string;
 }
 
-interface MerchImageGalleryProps {
+export interface MerchImageGalleryProps {
   title: string;
   images?: MerchGalleryImage[];
   fallbackImage?: string;
   fallbackImageBack?: string;
-  badges?: string[];
-  roles?: ('lead' | 'follow' | 'switch')[];
 }
 
 function resolveImageSrc(src: string) {
@@ -30,8 +28,6 @@ export function MerchImageGallery({
   images = [],
   fallbackImage,
   fallbackImageBack,
-  badges = [],
-  roles = [],
 }: MerchImageGalleryProps) {
   const normalizedImages: MerchGalleryImage[] = (() => {
     if (images && images.length > 0) return images;
@@ -100,47 +96,7 @@ export function MerchImageGallery({
           onClick={() => setIsZoomed((prev) => !prev)}
         />
 
-        {/* Badge Overlays */}
-        <Box position="absolute" className="top-3 left-3 z-10 pointer-events-none">
-          <Stack direction="row" wrap gap={1.5}>
-            <Box
-              paddingX={2.5}
-              paddingY={1}
-              radius="full"
-              className="bg-bg/80 backdrop-blur-md border border-line/30 shadow-xs"
-            >
-              <Text variant="mono" size="micro" weight="font-bold" color="main">
-                {getSideLabel(activeImage.side)}
-              </Text>
-            </Box>
-            {roles.map((r) => (
-              <Box
-                key={r}
-                paddingX={2.5}
-                paddingY={1}
-                radius="full"
-                className="bg-accent/15 backdrop-blur-md border border-accent/40 shadow-xs"
-              >
-                <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase>
-                  {r}
-                </Text>
-              </Box>
-            ))}
-            {badges.map((b) => (
-              <Box
-                key={b}
-                paddingX={2.5}
-                paddingY={1}
-                radius="full"
-                className="bg-surface/80 backdrop-blur-md border border-line/20 shadow-xs"
-              >
-                <Text variant="mono" size="micro" weight="font-bold" color="dim">
-                  {b}
-                </Text>
-              </Box>
-            ))}
-          </Stack>
-        </Box>
+
 
         {/* Quick Zoom Indicator */}
         <Box

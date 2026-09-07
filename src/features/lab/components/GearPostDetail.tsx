@@ -10,7 +10,6 @@ import { VerdictCallout } from '@/components/layout/DetailElements';
 import { Stack, Text, Box, Grid } from '@/layouts/Primitives';
 import { MERCH_PRODUCTS, COLLECTIONS } from '@/data/merch';
 import { MerchImageGallery, type MerchGalleryImage } from '@/components/products/MerchImageGallery';
-import { MerchProductAccordions } from '@/components/products/MerchProductAccordions';
 import { MerchCollectionCrossLinks } from '@/components/products/MerchCollectionCrossLinks';
 
 interface GearPostDetailProps {
@@ -98,24 +97,14 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
 
           {/* Main 2-Column Product Detail Layout */}
           <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 8, lg: 10 }} align="start">
-            {/* Left Column: Interactive Visual Viewer & Product Accordions */}
+            {/* Left Column: Interactive Visual Viewer */}
             <Box span={{ base: 1, lg: 7 }}>
-              <Stack gap={8}>
-                <MerchImageGallery
-                  title={post.title}
-                  images={galleryImages}
-                  fallbackImage={post.image}
-                  fallbackImageBack={post.imageBack}
-                  badges={collectionMeta ? [collectionMeta.label] : post.tags?.slice(0, 2)}
-                  roles={matchedMerch?.roles}
-                />
-
-                {/* Sizing, Care & Shipping Accordions */}
-                <MerchProductAccordions
-                  material={matchedMerch?.material}
-                  sizeString={matchedMerch?.size}
-                />
-              </Stack>
+              <MerchImageGallery
+                title={post.title}
+                images={galleryImages}
+                fallbackImage={post.image}
+                fallbackImageBack={post.imageBack}
+              />
             </Box>
 
             {/* Right Column: Title, Metadata, CTA, Order Guarantees & Overview */}
@@ -133,6 +122,21 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                       >
                         {collectionMeta.label}
                       </Box>
+                    )}
+                    {matchedMerch?.roles && matchedMerch.roles.length > 0 && (
+                      <Stack direction="row" gap={1.5}>
+                        {matchedMerch.roles.map((r) => (
+                          <Box
+                            key={r}
+                            paddingX={2.5}
+                            paddingY={1}
+                            radius="full"
+                            className="bg-accent/15 border border-accent/40 text-accent font-mono text-xs font-bold uppercase"
+                          >
+                            {r}
+                          </Box>
+                        ))}
+                      </Stack>
                     )}
                     <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
                       {post.category || 'Official Merch'}
@@ -264,27 +268,15 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                   </Stack>
                 )}
 
-                {/* Markdown Content Overview & Styling Advice */}
+                {/* Markdown Content Overview */}
                 <Stack gap={4} paddingTop={6} className="border-t border-line/20">
                   <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
-                    Design & Dance Floor Styling
+                    Design & Overview
                   </Text>
 
                   <Box className="prose-editorial">
                     {post.verdict && <VerdictCallout verdict={post.verdict} />}
                     <MarkdownRenderer content={post.content} />
-                  </Box>
-
-                  {/* Dance Floor Context & Styling Guidelines */}
-                  <Box padding={4} radius="md" className="bg-surface-alt/30 border border-line/20">
-                    <Stack gap={2}>
-                      <Text variant="mono" size="xs" weight="font-bold" color="main">
-                        💡 Dance Floor Fit & Performance Note
-                      </Text>
-                      <Text variant="body" size="xs" color="dim" leading="relaxed">
-                        Designed specifically for long West Coast Swing social nights and weekend conventions. The lightweight ring-spun cotton offers high movement range and moisture-wicking comfort under spotlight lamps. Pair with flexible dance denim or high-waisted social slacks for an effortless look from late-night workshops to sunrise socials.
-                      </Text>
-                    </Stack>
                   </Box>
                 </Stack>
               </Stack>

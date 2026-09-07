@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { MerchImageGallery } from './MerchImageGallery';
-import { MerchProductAccordions } from './MerchProductAccordions';
 import { MerchCollectionCrossLinks } from './MerchCollectionCrossLinks';
 
 describe('Merch UI Detail Components', () => {
@@ -25,10 +24,8 @@ describe('Merch UI Detail Components', () => {
       // Active front image
       expect(screen.getAllByAltText('Test Shirt Front').length).toBeGreaterThan(0);
 
-      // Side label pill & badges
+      // Side label pill
       expect(screen.getAllByText('Front View').length).toBeGreaterThan(0);
-      expect(screen.getByText('lead')).toBeTruthy();
-      expect(screen.getByText('follow')).toBeTruthy();
 
       // Find button to show back view
       const backButtons = screen.getAllByRole('button');
@@ -65,45 +62,6 @@ describe('Merch UI Detail Components', () => {
         fireEvent.click(backPill);
       }
       expect(screen.getAllByAltText('Fallback Tee - Back View').length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('MerchProductAccordions', () => {
-    it('renders Sizing, Fabric Care, and Shipping accordions and toggles state', () => {
-      render(
-        <MemoryRouter>
-          <MerchProductAccordions
-            material="100% ring-spun cotton"
-            sizeString="XS/S/M/L/XL/2XL/3XL"
-          />
-        </MemoryRouter>
-      );
-
-      // Sizing is open by default
-      expect(screen.getByText('Size & Fit Guide')).toBeTruthy();
-      expect(screen.getByText(/Unisex classic fit with standard US standard sizing/i)).toBeTruthy();
-
-      // Care accordion is closed initially
-      expect(screen.queryByText(/Material composition: 100% ring-spun cotton/i)).toBeNull();
-
-      // Click Care Accordion
-      const buttons = screen.getAllByRole('button');
-      const careHeader = buttons.find((b) => b.textContent?.includes('Fabric Care & Print Preservation'));
-      expect(careHeader).toBeTruthy();
-
-      if (careHeader) {
-        fireEvent.click(careHeader);
-      }
-      expect(screen.getByText(/Material composition: 100% ring-spun cotton/i)).toBeTruthy();
-
-      // Click Shipping Accordion
-      const shippingHeader = buttons.find((b) => b.textContent?.includes('Fulfillment & Shipping Guarantees'));
-      expect(shippingHeader).toBeTruthy();
-
-      if (shippingHeader) {
-        fireEvent.click(shippingHeader);
-      }
-      expect(screen.getByText(/Production Time: 2–7 business days/i)).toBeTruthy();
     });
   });
 
