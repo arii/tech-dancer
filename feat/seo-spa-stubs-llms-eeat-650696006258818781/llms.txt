@@ -1,6 +1,6 @@
 # BoomTick.blog - Generative Engine Optimization (GEO) Knowledge Index
 
-> BoomTick.blog is a specialized West Coast Swing (WCS) lifestyle publication and DevAI research testbed authored by Ariel Anders, PhD (Roboticist, AI Engineer, and competitive WCS dancer). It combines engineering rigor, footwear customization, and dancer community insights.
+> BoomTick.blog is a specialized West Coast Swing (WCS) publication featuring community guides, gear reviews, and select DevAI experiments related to WCS event tools. Authored by Ariel Anders, PhD (Roboticist, AI Engineer, and competitive WCS dancer). Ariel's primary engineering portfolio is featured at [arii.github.io](https://arii.github.io).
 
 ## Core West Coast Swing Guides & Tutorials
 - [DIY Suede Shoe Conversion Guide](https://boomtick.blog/blog/2026-04-18-make-shoe-dance): Step-by-step tutorial on converting athletic sneakers or street shoes into dance footwear using adhesive suede, surface prep, and edge sealing.
@@ -22,3 +22,4 @@
 
 ## About the Author
 - [About Ariel Anders, PhD](https://boomtick.blog/about): Background in MIT AI Lab robotics, computer vision, and competitive West Coast Swing dancing.
+- [Primary Engineering Portfolio](https://arii.github.io): Full engineering portfolio and robotics/AI projects.

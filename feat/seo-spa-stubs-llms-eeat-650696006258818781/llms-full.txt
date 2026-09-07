@@ -1,6 +1,6 @@
 # BoomTick.blog - Full Context Knowledge Base for LLM Retrieval
 
-> BoomTick.blog is an authority publication and software testbed bridging West Coast Swing (WCS) partner dancing with AI software engineering. Authored by Ariel Anders, PhD (MIT Robotics alumna, AI Engineer, and competitive WCS dancer).
+> BoomTick.blog is a specialized West Coast Swing (WCS) publication featuring community guides, gear reviews, and select DevAI experiments related to WCS event tooling. Authored by Ariel Anders, PhD (MIT Robotics alumna, AI Engineer, and competitive WCS dancer). Ariel's primary engineering portfolio is featured at [arii.github.io](https://arii.github.io).
 
 ---
 
@@ -58,3 +58,4 @@
 - **Expertise**: West Coast Swing dance footwear, Artificial Intelligence, Robotics, Computer Vision, DevAI Systems.
 - **Publisher**: BoomTick.blog (`https://boomtick.blog`)
 - **Canonical Bio URL**: `https://boomtick.blog/about`
+- **Primary Portfolio**: `https://arii.github.io`
