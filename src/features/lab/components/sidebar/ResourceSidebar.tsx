@@ -208,7 +208,14 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
               </Box>
             )}
             {affiliateLinks.map(link => {
-              const isAmazon = link.url.includes('amazon.com') || link.url.includes('amzn.to');
+              const isAmazon = (() => {
+                try {
+                  const host = new URL(link.url).hostname.toLowerCase();
+                  return host === 'amazon.com' || host.endsWith('.amazon.com') || host === 'amzn.to' || host.endsWith('.amzn.to');
+                } catch {
+                  return false;
+                }
+              })();
               const buttonText = isAmazon ? 'Check Price on Amazon' : link.name || 'View on Store';
               return (
                 <Box
