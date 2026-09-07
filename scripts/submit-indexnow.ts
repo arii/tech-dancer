@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 
-export const INDEXNOW_KEY = '820c893087310094431014cec746eac5';
+export const INDEXNOW_KEY = '820c893087310094431014cec746eac5'; // gitleaks:allow
 export const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
 
 const __filename = fileURLToPath(import.meta.url);
