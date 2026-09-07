@@ -71,14 +71,32 @@ const ProfileLegalAndSocial = () => {
           </Box>
         </Stack>
 
-        {/* Privacy & Terms */}
+        {/* Privacy, Terms & Official Contact */}
         <Grid
-          cols={{ default: 1, sm: 2 }}
+          cols={{ default: 1, sm: 3 }}
           gap={6}
           paddingLeft={{ md: 8 }}
           paddingTop={{ default: 8, md: 0 }}
           className="text-xs text-text-dim border-t md:border-t-0 md:border-l md:border-line/40"
         >
+          <Box id="contact" scrollMarginTop={24}>
+            <Stack gap={1.5}>
+              <Text
+                as="h5"
+                variant="mono"
+                size="xs"
+                weight="font-semibold"
+                uppercase
+                tracking="wider"
+                className="text-text-main"
+              >
+                Contact Signal
+              </Text>
+              <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
+                Official Merchant Support: <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>
+              </Text>
+            </Stack>
+          </Box>
           <Box id="privacy" scrollMarginTop={24}>
             <Stack gap={1.5}>
               <Text

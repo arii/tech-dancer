@@ -180,10 +180,10 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
   "applicableCountry": "US",
   "returnPolicyCategory": "https://schema.org/MerchantReturnFinite",
   "merchantReturnDays": 30,
-  "merchantReturnLink": `${BASE_URL}/merch#return-policy`,
+  "merchantReturnLink": `${BASE_URL}/return-policy`,
   "returnFees": "https://schema.org/FreeReturn",
   "customerSupportEmail": "ari@boomtick.blog",
-  "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly at ari@boomtick.blog so we can help resolve it."
+  "description": "Each item is custom made to order. We offer a 30-day replacement or refund for damaged, defective, or misprinted items. Contact ari@boomtick.blog for support."
 };
 
 export const AUTHOR_ARIEL_ANDERS = {
