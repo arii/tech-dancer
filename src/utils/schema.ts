@@ -136,7 +136,7 @@ export const DEFAULT_BRAND: SchemaBrand = {
 
 export const DEFAULT_PRINTFUL_SHIPPING_DETAILS: SchemaShippingDetails = {
   "@type": "OfferShippingDetails",
-  "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+  "description": "Made to order via Printful. Fulfillment/processing: 2–7 business days; domestic US ground transit: 4–8 business days; total delivery window: 6–15 business days. Rates calculated dynamically at checkout based on category and destination.",
   "shippingDestination": {
     "@type": "DefinedRegion",
     "addressCountry": "US"
@@ -147,9 +147,9 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
   "@type": "MerchantReturnPolicy",
   "applicableCountry": "US",
   "returnPolicyCategory": "https://schema.org/MerchantReturnFinite",
-  "merchantReturnLink": `${BASE_URL}/merch#return-policy`,
+  "merchantReturnLink": `${BASE_URL}/return-policy`,
   "returnFees": "https://schema.org/FreeReturn",
-  "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+  "description": "Made-to-order custom print items: free replacement or refund for damaged, defective, or misprinted products within 30 days of delivery. Contact ari@boomtick.blog with order details and photos."
 };
 
 export const AUTHOR_ARIEL_ANDERS = {

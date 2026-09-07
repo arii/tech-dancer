@@ -14,9 +14,12 @@ export function Footer() {
     setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
   }, []);
 
-  const legalLinks = [
+  const policyLinks = [
+    { label: 'Shipping', to: '/shipping' },
+    { label: 'Returns', to: '/return-policy' },
     { label: 'Privacy', to: '/about#privacy' },
     { label: 'Terms', to: '/about#terms' },
+    { label: 'Contact', to: '/about#contact' },
   ];
 
   const appVersion = import.meta.env.VITE_APP_VERSION || '0.0.0';
@@ -26,69 +29,90 @@ export function Footer() {
   return (
     <Box as="footer" marginTop="auto" width="full">
       <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
-
-      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Stack direction="row" align="center" gap={3} wrap>
-          <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
-            © 2026 BOOMTICK.BLOG
-          </Text>
-          <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
-          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>
-            <Text variant="mono" tracking="wider" uppercase>
-              {isDev ? 'dev' : `v${appVersion}`} (
-              <Box
-                as="a"
-                href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="inline-block"
-                paddingY={{ base: 4, sm: 0 }}
-                className="hover:text-accent transition-colors underline decoration-line/40"
-              >
-                {commitSha.substring(0, 7)}
-              </Box>
-              )
-            </Text>
-            {lastUpdated && ` · Last updated ${lastUpdated}`}
-          </Text>
-        </Stack>
-
-        <Box
-          paddingX={4}
-          paddingY={2}
-          radius="md"
-          border
-          className="border-line/20 bg-surface-alt/10"
-        >
-          <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
-            {DISCLOSURE_TEXT}
-          </Text>
-        </Box>
-
-        <Stack direction="row" gap={2} align="center">
-          {legalLinks.map((link) => (
-            <ActionButton
-              key={link.label}
-              as={NavLink}
-              to={link.to}
-              variant="ghost"
-              paddingX={{ base: 4, md: 3 }}
-              paddingY={{ base: 5, md: 2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Text
-                variant="mono"
-                size="xs"
-                uppercase
-                weight="font-bold"
-                tracking="widest"
-              >
-                {link.label}
+        <Stack gap={6}>
+          {/* Contact & Business Info */}
+          <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="contact" scrollMarginTop={24}>
+            <Stack gap={1}>
+              <Text variant="mono" size="xs" color="main" weight="font-bold" tracking="wider">
+                BoomTick (BoomTick.blog)
               </Text>
-            </ActionButton>
-          ))}
+              <Text variant="body" size="xs" color="dim">
+                San Francisco, CA, USA · Official Support:{' '}
+                <Box
+                  as="a"
+                  href="mailto:ari@boomtick.blog"
+                  className="text-brand-cyan hover:underline font-semibold"
+                >
+                  ari@boomtick.blog
+                </Box>
+              </Text>
+            </Stack>
+
+            {/* Mandated Standalone Footer Policy Pages */}
+            <Stack direction="row" gap={2} align="center" wrap>
+              {policyLinks.map((link) => (
+                <ActionButton
+                  key={link.label}
+                  as={NavLink}
+                  to={link.to}
+                  variant="ghost"
+                  paddingX={{ base: 3, md: 3 }}
+                  paddingY={{ base: 4, md: 2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Text
+                    variant="mono"
+                    size="xs"
+                    uppercase
+                    weight="font-bold"
+                    tracking="widest"
+                  >
+                    {link.label}
+                  </Text>
+                </ActionButton>
+              ))}
+            </Stack>
+          </Stack>
+
+          <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
+            <Stack direction="row" align="center" gap={3} wrap>
+              <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
+                © 2026 BOOMTICK.BLOG
+              </Text>
+              <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
+              <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>
+                <Text variant="mono" tracking="wider" uppercase>
+                  {isDev ? 'dev' : `v${appVersion}`} (
+                  <Box
+                    as="a"
+                    href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    display="inline-block"
+                    paddingY={{ base: 4, sm: 0 }}
+                    className="hover:text-accent transition-colors underline decoration-line/40"
+                  >
+                    {commitSha.substring(0, 7)}
+                  </Box>
+                  )
+                </Text>
+                {lastUpdated && ` · Last updated ${lastUpdated}`}
+              </Text>
+            </Stack>
+
+            <Box
+              paddingX={4}
+              paddingY={2}
+              radius="md"
+              border
+              className="border-line/20 bg-surface-alt/10"
+            >
+              <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
+                {DISCLOSURE_TEXT}
+              </Text>
+            </Box>
+          </Stack>
         </Stack>
-      </Stack>
       </Box>
     </Box>
   );
