@@ -29,6 +29,7 @@ describe('llms.txt and llms-full.txt GEO integrity', () => {
     expect(content).toContain('https://boomtick.blog/versiontruth');
     expect(content).toContain('https://boomtick.blog/wcs-navigator');
     expect(content).toContain('https://boomtick.blog/about');
+    expect(content).toContain('https://arii.github.io');
   });
 
   it('should verify public/llms-full.txt exists with extended context and content overviews', () => {
@@ -50,5 +51,6 @@ describe('llms.txt and llms-full.txt GEO integrity', () => {
     expect(content).toContain('VersionTruth');
     expect(content).toContain('WCS Navigator');
     expect(content).toContain('Ariel Anders, PhD');
+    expect(content).toContain('https://arii.github.io');
   });
 });
