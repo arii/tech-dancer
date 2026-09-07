@@ -3,7 +3,9 @@
   <channel>
     <title>BoomTick Merch Store</title>
     <link>https://boomtick.blog/merch</link>
-    <description>Official BoomTick dance merchandise, role shirts, and apparel for West Coast Swing dancers.</description>
+    <description>Official BoomTick dance merchandise, role shirts, and apparel for West Coast Swing dancers. For support, contact ari@boomtick.blog.</description>
+    <managingEditor>ari@boomtick.blog (Ariel Anders)</managingEditor>
+    <webMaster>ari@boomtick.blog (Ariel Anders)</webMaster>
     <item>
       <g:id>love-neon-follow-xs</g:id>
       <g:item_group_id>love-neon-follow</g:item_group_id>
@@ -27,8 +29,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-s</g:id>
@@ -53,8 +58,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-m</g:id>
@@ -79,8 +87,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-l</g:id>
@@ -105,8 +116,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-xl</g:id>
@@ -131,8 +145,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-2xl</g:id>
@@ -157,8 +174,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-follow-3xl</g:id>
@@ -183,8 +203,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-xs</g:id>
@@ -209,8 +232,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-s</g:id>
@@ -235,8 +261,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-m</g:id>
@@ -261,8 +290,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-l</g:id>
@@ -287,8 +319,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-xl</g:id>
@@ -313,8 +348,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-2xl</g:id>
@@ -339,8 +377,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-neon-lead-3xl</g:id>
@@ -365,8 +406,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-xs</g:id>
@@ -391,8 +435,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-s</g:id>
@@ -417,8 +464,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-m</g:id>
@@ -443,8 +493,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-l</g:id>
@@ -469,8 +522,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-xl</g:id>
@@ -495,8 +551,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-2xl</g:id>
@@ -521,8 +580,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>lead-follow-switch-love-neon-3xl</g:id>
@@ -547,8 +609,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-xs</g:id>
@@ -573,8 +638,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-s</g:id>
@@ -599,8 +667,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-m</g:id>
@@ -625,8 +696,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-l</g:id>
@@ -651,8 +725,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-xl</g:id>
@@ -677,8 +754,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>war-eagle-oversized-2xl</g:id>
@@ -703,8 +783,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-xs</g:id>
@@ -729,8 +812,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-s</g:id>
@@ -755,8 +841,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-m</g:id>
@@ -781,8 +870,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-l</g:id>
@@ -807,8 +899,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-xl</g:id>
@@ -833,8 +928,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-2xl</g:id>
@@ -859,8 +957,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-pride-3xl</g:id>
@@ -885,8 +986,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-xs</g:id>
@@ -911,8 +1015,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-s</g:id>
@@ -937,8 +1044,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-m</g:id>
@@ -963,8 +1073,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-l</g:id>
@@ -989,8 +1102,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-xl</g:id>
@@ -1015,8 +1131,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-2xl</g:id>
@@ -1041,8 +1160,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-pride-bear-3xl</g:id>
@@ -1067,8 +1189,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-xs</g:id>
@@ -1093,8 +1218,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-s</g:id>
@@ -1119,8 +1247,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-m</g:id>
@@ -1145,8 +1276,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-l</g:id>
@@ -1171,8 +1305,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-xl</g:id>
@@ -1197,8 +1334,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-2xl</g:id>
@@ -1223,8 +1363,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>love-lead-follow-switch-unisex-3xl</g:id>
@@ -1249,8 +1392,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-xs</g:id>
@@ -1274,8 +1420,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-s</g:id>
@@ -1299,8 +1448,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-m</g:id>
@@ -1324,8 +1476,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-l</g:id>
@@ -1349,8 +1504,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-xl</g:id>
@@ -1374,8 +1532,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>mens-bear-tank-norcal-2xl</g:id>
@@ -1399,8 +1560,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-cropped-top-xs</g:id>
@@ -1424,8 +1588,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-cropped-top-s</g:id>
@@ -1449,8 +1616,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-cropped-top-m</g:id>
@@ -1474,8 +1644,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-cropped-top-l</g:id>
@@ -1499,8 +1672,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-cropped-top-xl</g:id>
@@ -1524,8 +1700,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-hoodie-s</g:id>
@@ -1549,8 +1728,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-hoodie-m</g:id>
@@ -1574,8 +1756,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-hoodie-l</g:id>
@@ -1599,8 +1784,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-hoodie-xl</g:id>
@@ -1624,8 +1812,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-golden-gate-hoodie-2xl</g:id>
@@ -1649,8 +1840,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-xs</g:id>
@@ -1674,8 +1868,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-s</g:id>
@@ -1699,8 +1896,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-m</g:id>
@@ -1724,8 +1924,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-l</g:id>
@@ -1749,8 +1952,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-xl</g:id>
@@ -1774,8 +1980,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-2xl</g:id>
@@ -1799,8 +2008,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-3xl</g:id>
@@ -1824,8 +2036,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-4xl</g:id>
@@ -1849,8 +2064,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>norcal-bestcal-classic-5xl</g:id>
@@ -1874,8 +2092,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-xs</g:id>
@@ -1899,8 +2120,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-s</g:id>
@@ -1924,8 +2148,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-m</g:id>
@@ -1949,8 +2176,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-l</g:id>
@@ -1974,8 +2204,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-xl</g:id>
@@ -1999,8 +2232,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tank-top-2xl</g:id>
@@ -2024,8 +2260,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-tote-bag</g:id>
@@ -2048,8 +2287,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
     <item>
       <g:id>slot-era-mug</g:id>
@@ -2072,8 +2314,11 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>
   </channel>
 </rss>

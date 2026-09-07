@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-09-07T02:16:30.538Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-09-07T06:50:48.898Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/assets/dancer_hero.webp</image:loc>
       <image:title>West Coast Swing Social Dancer</image:title>
@@ -17,9 +17,9 @@
   </url>
   <url><loc>https://arii.github.io/tech-dancer/gear</loc><lastmod>2026-04-12T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-09-07T02:13:20.440Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-09-07T06:47:37.199Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-09-07T02:13:20.440Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-09-07T06:47:37.199Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/assets/comp_analysis_hero.webp</image:loc>
       <image:title>Ariel Anders Profile Photo</image:title>
@@ -57,7 +57,11 @@
       <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
     </image:image>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/memes</loc><lastmod>2026-09-07T02:13:20.440Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/shipping</loc><lastmod>2026-09-07T06:50:48.899Z</lastmod>
+  </url>
+  <url><loc>https://arii.github.io/tech-dancer/return-policy</loc><lastmod>2026-09-07T06:47:37.199Z</lastmod>
+  </url>
+  <url><loc>https://arii.github.io/tech-dancer/memes</loc><lastmod>2026-09-07T06:47:37.199Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/assets/memes/9c2lc9.jpg</image:loc>
       <image:title>West Coast Swing Meme</image:title>
@@ -91,27 +95,27 @@
   </url>
   <url><loc>https://arii.github.io/tech-dancer/research</loc><lastmod>2026-08-28T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-07T02:16:30.538Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-07T06:50:48.899Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/versiontruth</loc><lastmod>2026-09-07T02:16:30.538Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/versiontruth</loc><lastmod>2026-09-07T06:50:48.899Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/ux-auditor</loc><lastmod>2026-09-07T02:13:20.440Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/ux-auditor</loc><lastmod>2026-09-07T06:47:37.199Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/blog-drafter</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/blog-drafter</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-07T02:13:20.431Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-07T06:47:37.194Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/before.png</image:loc>
       <image:title>Baseline</image:title>
