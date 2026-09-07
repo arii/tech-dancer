@@ -31,7 +31,7 @@ export function Footer() {
       <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
         <Stack gap={6}>
           {/* Contact & Business Info */}
-          <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="contact" scrollMarginTop={24}>
+          <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
             <Stack gap={1}>
               <Text variant="mono" size="xs" color="main" weight="font-bold" tracking="wider">
                 BoomTick (BoomTick.blog)
