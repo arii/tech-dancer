@@ -193,6 +193,7 @@ jobs:
               # Ensure SEO assets are at the root
               cp ../dist-assets/sitemap.xml ./sitemap.xml 2>/dev/null || true
               cp ../dist-assets/robots.txt ./robots.txt 2>/dev/null || true
+              cp ../dist-assets/820c893087310094431014cec746eac5.txt ./820c893087310094431014cec746eac5.txt 2>/dev/null || true
             fi
 
             # 4. Update root 404.html for redirects (only for previews)
@@ -235,6 +236,13 @@ jobs:
 
           echo "Failed to deploy after $MAX_RETRIES attempts."
           exit 1
+
+      - name: Ping IndexNow Endpoint
+        if: ${{ github.ref_name == 'main' }}
+        env:
+          VITE_APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          pnpm exec tsx scripts/submit-indexnow.ts || true
 
       - name: Update Deployment Feedback
         uses: actions/github-script@v9 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
