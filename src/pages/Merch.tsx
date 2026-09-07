@@ -175,16 +175,20 @@ export default function Merch() {
                 <RotateCcw className="w-5 h-5" />
               </Box>
               <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
-                Return & Fulfillment Policy
+                Fulfillment, Shipping & Return Disclosures
               </Text>
             </Stack>
 
             <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
-              Each BoomTick merchandise item is custom made to order and fulfilled directly through Printful. Because items are produced specifically when ordered, we cannot accept returns or exchanges for size, color, or change of mind.
+              Each BoomTick merchandise item is custom made to order and fulfilled directly through Printful. Production/fulfillment takes 2–7 business days, with domestic US ground transit taking 4–8 business days (total estimated delivery window of 6–15 business days). Shipping fees are variable and calculated dynamically at checkout by Printful based on item type, package weight, and destination.
             </Text>
 
             <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
-              If your item arrives misprinted, damaged, defective, or incorrect, please contact us promptly with photos of the issue so we can work with Printful to resolve it and get a replacement sent to you right away.
+              If your item arrives misprinted, damaged, defective, or incorrect, please contact{' '}
+              <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">
+                ari@boomtick.blog
+              </Box>{' '}
+              within 30 days of delivery with photos of the issue so we can send a free replacement or refund right away.
             </Text>
           </Stack>
         </Box>

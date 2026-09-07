@@ -38,7 +38,7 @@ interface GearCardProps extends BaseProps {
 const CARD_STYLES = {
   image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
-  verdict: "uppercase tracking-widest opacity-solid"
+  verdict: "tracking-normal opacity-solid"
 };
 
 export function GearCard(props: GearCardProps) {
@@ -128,7 +128,7 @@ export function GearCard(props: GearCardProps) {
             opacityVariant="heavy"
             className="bg-accent text-bg backdrop-blur-md shadow-sm"
           >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+            <Text variant="mono" size="micro" weight="font-bold">
               {category}
             </Text>
           </Box>
@@ -166,7 +166,7 @@ export function GearCard(props: GearCardProps) {
             opacityVariant="heavy"
             className="bg-accent text-bg backdrop-blur-md shadow-sm"
           >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+            <Text variant="mono" size="micro" weight="font-bold">
               {category}
             </Text>
           </Box>
@@ -238,7 +238,7 @@ export function GearCard(props: GearCardProps) {
             gap={1.5}
             className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+            <Text variant="mono" size="sm" weight="font-bold" color="accent">
               View deal
             </Text>
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
@@ -252,7 +252,7 @@ export function GearCard(props: GearCardProps) {
             gap={1.5}
             className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+            <Text variant="mono" size="sm" weight="font-bold" color="accent">
               Read review
             </Text>
             <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />

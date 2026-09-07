@@ -115,8 +115,11 @@ ${product.material ? `      <g:material>${escapeXml(product.material)}</g:materi
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
-        <g:price>4.99 USD</g:price>
       </g:shipping>
+      <g:min_handling_time>2</g:min_handling_time>
+      <g:max_handling_time>7</g:max_handling_time>
+      <g:min_transit_time>4</g:min_transit_time>
+      <g:max_transit_time>8</g:max_transit_time>
     </item>`;
     });
   }).join('\n');
@@ -126,7 +129,9 @@ ${product.material ? `      <g:material>${escapeXml(product.material)}</g:materi
   <channel>
     <title>BoomTick Merch Store</title>
     <link>${BASE_URL}/merch</link>
-    <description>Official BoomTick dance merchandise, role shirts, and apparel for West Coast Swing dancers.</description>
+    <description>Official BoomTick dance merchandise, role shirts, and apparel for West Coast Swing dancers. For support, contact ari@boomtick.blog.</description>
+    <managingEditor>ari@boomtick.blog (Ariel Anders)</managingEditor>
+    <webMaster>ari@boomtick.blog (Ariel Anders)</webMaster>
 ${items}
   </channel>
 </rss>

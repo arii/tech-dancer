@@ -63,7 +63,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
 
         <Stack gap={1} flex={1} minWidth={0} width="full">
           <Box display="flex" align="center" justify="between" gap={1.5} width="full" className="relative z-20 pointer-events-none">
-            <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest" className="truncate">
+            <Text variant="mono" size="micro" weight="font-bold" color="accent" className="truncate capitalize">
               {link.category}
             </Text>
             <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />

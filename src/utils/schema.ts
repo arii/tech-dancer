@@ -10,6 +10,21 @@ export interface SchemaBrand {
 export interface SchemaShippingDetails {
   "@type": "OfferShippingDetails";
   "description": string;
+  "deliveryTime"?: {
+    "@type": "ShippingDeliveryTime";
+    "handlingTime": {
+      "@type": "QuantitativeValue";
+      "minValue": number;
+      "maxValue": number;
+      "unitCode": string;
+    };
+    "transitTime": {
+      "@type": "QuantitativeValue";
+      "minValue": number;
+      "maxValue": number;
+      "unitCode": string;
+    };
+  };
   "shippingDestination": {
     "@type": "DefinedRegion";
     "addressCountry": string;
@@ -20,8 +35,10 @@ export interface SchemaMerchantReturnPolicy {
   "@type": "MerchantReturnPolicy";
   "applicableCountry": string;
   "returnPolicyCategory": string;
+  "merchantReturnDays"?: number;
   "merchantReturnLink"?: string;
   "returnFees"?: string;
+  "customerSupportEmail"?: string;
   "description": string;
 }
 
@@ -136,7 +153,22 @@ export const DEFAULT_BRAND: SchemaBrand = {
 
 export const DEFAULT_PRINTFUL_SHIPPING_DETAILS: SchemaShippingDetails = {
   "@type": "OfferShippingDetails",
-  "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+  "description": "Custom made to order via Printful. Production takes 2–7 business days; shipping transit takes 4–8 business days. Shipping rates vary by product category and destination and are calculated at checkout.",
+  "deliveryTime": {
+    "@type": "ShippingDeliveryTime",
+    "handlingTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 2,
+      "maxValue": 7,
+      "unitCode": "d"
+    },
+    "transitTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 4,
+      "maxValue": 8,
+      "unitCode": "d"
+    }
+  },
   "shippingDestination": {
     "@type": "DefinedRegion",
     "addressCountry": "US"
@@ -147,9 +179,11 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
   "@type": "MerchantReturnPolicy",
   "applicableCountry": "US",
   "returnPolicyCategory": "https://schema.org/MerchantReturnFinite",
-  "merchantReturnLink": `${BASE_URL}/merch#return-policy`,
+  "merchantReturnDays": 30,
+  "merchantReturnLink": `${BASE_URL}/return-policy`,
   "returnFees": "https://schema.org/FreeReturn",
-  "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+  "customerSupportEmail": "ari@boomtick.blog",
+  "description": "Each item is custom made to order. We offer a 30-day replacement or refund for damaged, defective, or misprinted items. Contact ari@boomtick.blog for support."
 };
 
 export const AUTHOR_ARIEL_ANDERS = {

@@ -85,7 +85,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
         >
           <Stack gap={4}>
             <Stack direction="row" justify="between" align="baseline">
-              <Text variant="mono" size="tiny" weight="font-bold" color="accent" uppercase tracking="widest">
+              <Text variant="mono" size="xs" weight="font-bold" color="accent">
                 Official Merch
               </Text>
               <Text variant="display" size="2xl" weight="font-black" color="main">
@@ -101,7 +101,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
             <Stack gap={1.5}>
               <Stack direction="row" align="center" gap={1.5}>
                 <Palette className="w-3.5 h-3.5 text-accent" />
-                <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold">Available Colors</Text>
+                <Text variant="mono" size="xs" color="dim" weight="font-bold">Available Colors</Text>
               </Stack>
               <Stack direction="row" wrap gap={1.5}>
                 {matchedMerch.color.split('/').map((c) => (
@@ -124,7 +124,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
             <Stack gap={1.5}>
               <Stack direction="row" align="center" gap={1.5}>
                 <Ruler className="w-3.5 h-3.5 text-accent" />
-                <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold">Available Sizes</Text>
+                <Text variant="mono" size="xs" color="dim" weight="font-bold">Available Sizes</Text>
               </Stack>
               <Stack direction="row" wrap gap={1.5}>
                 {matchedMerch.size.split('/').map((s) => (
@@ -182,7 +182,7 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
       {/* Standard Where to Buy fallback for non-merch gear or Amazon links */}
       {hasWhereToBuy && !matchedMerch && (
         <Stack gap={4}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="border-b border-line" paddingBottom={2}>
             Where to Buy
           </Text>
           <Grid cols={1} gap={3}>
@@ -194,37 +194,52 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 rel="sponsored noopener noreferrer"
                 display="flex"
                 align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all bg-accent/5"
+                justify="center"
+                paddingY={3}
+                paddingX={4}
+                gap={2}
+                radius="md"
+                className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold text-center group shadow-sm"
               >
-                <Text variant="mono" size="xs" weight="font-bold">
-                  {provider === 'printful' || effectiveShopUrl.includes('printful') ? 'Buy on Printful' : 'Buy Now'}
+                <Text variant="mono" size="xs" weight="font-black" color="inherit">
+                  {provider === 'printful' || effectiveShopUrl.includes('printful') ? 'View on Store' : 'Buy Now'}
                 </Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
+                <ExternalLink className="w-3.5 h-3.5 text-bg opacity-80" />
               </Box>
             )}
-            {affiliateLinks.map(link => (
-              <Box
-                key={link.id}
-                as="a"
-                href={link.url}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                display="flex"
-                align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
-              >
-                <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
-              </Box>
-            ))}
+            {affiliateLinks.map(link => {
+              const isAmazon = (() => {
+                try {
+                  const host = new URL(link.url).hostname.toLowerCase();
+                  return host === 'amazon.com' || host.endsWith('.amazon.com') || host === 'amzn.to' || host.endsWith('.amzn.to');
+                } catch {
+                  return false;
+                }
+              })();
+              const buttonText = isAmazon ? 'Check Price on Amazon' : link.name || 'View on Store';
+              return (
+                <Box
+                  key={link.id}
+                  as="a"
+                  href={link.url}
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  paddingY={3}
+                  paddingX={4}
+                  gap={2}
+                  radius="md"
+                  className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold text-center group shadow-sm"
+                >
+                  <Text variant="mono" size="xs" weight="font-black" color="inherit">
+                    {buttonText}
+                  </Text>
+                  <ExternalLink className="w-3.5 h-3.5 text-bg opacity-80" />
+                </Box>
+              );
+            })}
             {affiliateLink && (
               <Box
                 as="a"
@@ -233,14 +248,17 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                 rel="sponsored noopener noreferrer"
                 display="flex"
                 align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
+                justify="center"
+                paddingY={3}
+                paddingX={4}
+                gap={2}
+                radius="md"
+                className="bg-accent text-bg hover:bg-accent-sky transition-all font-bold text-center group shadow-sm"
               >
-                <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
+                <Text variant="mono" size="xs" weight="font-black" color="inherit">
+                  Check Price on Amazon
+                </Text>
+                <ExternalLink className="w-3.5 h-3.5 text-bg opacity-80" />
               </Box>
             )}
           </Grid>

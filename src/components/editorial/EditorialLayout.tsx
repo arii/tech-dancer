@@ -24,11 +24,18 @@ export function EditorialLayout({
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 1000);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setShowBackToTop(window.scrollY > 1000);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -46,26 +53,24 @@ export function EditorialLayout({
     >
       <Stack gap={{ base: 8, md: 12 }}>
         {/* Navigation */}
-        <Box>
-          <Stack
-            as="button"
-            direction="row"
-            onClick={onBack}
-            align="center"
-            gap={2}
-            minHeight={11}
-            className={journalVariants.navLink()}
-          >
-            <Icon
-              icon={ArrowLeft}
-              size="sm"
-              className="transition-transform group-hover:-translate-x-1"
-            />
-            <Text variant="mono" size="xs" weight="font-bold" uppercase>
-              {backLabel}
-            </Text>
-          </Stack>
-        </Box>
+        <Stack
+          as="button"
+          direction="row"
+          onClick={onBack}
+          align="center"
+          gap={2}
+          minHeight={11}
+          className={journalVariants.navLink()}
+        >
+          <Icon
+            icon={ArrowLeft}
+            size="sm"
+            className="transition-transform group-hover:-translate-x-1"
+          />
+          <Text variant="mono" size="xs" weight="font-bold">
+            {backLabel}
+          </Text>
+        </Stack>
 
         {/* Header */}
         <Box width="full" marginX={!sidebar ? "auto" : undefined} maxWidth={!sidebar ? "3xl" : "full"}>
@@ -93,11 +98,9 @@ export function EditorialLayout({
               as="article"
               span={{ base: 1, lg: 8 }}
               width="full"
-              className="order-2 lg:order-1"
+              className="article-content-wrapper order-2 lg:order-1"
             >
-              <Box className="article-content-wrapper" width="full">
-                {children}
-              </Box>
+              {children}
             </Box>
 
             {/* Footer */}
@@ -105,11 +108,10 @@ export function EditorialLayout({
               <Box
                 span={{ base: 1, lg: 8 }}
                 width="full"
+                marginTop={{ base: 10, lg: 4 }}
                 className="order-3"
               >
-                <Box marginTop={{ base: 10, lg: 4 }}>
-                  {footer}
-                </Box>
+                {footer}
               </Box>
             )}
           </Grid>

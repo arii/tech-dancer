@@ -43,4 +43,14 @@ describe('Google Merchant Center XML Feed Generator', () => {
     // Shirts
     expect(xml).toContain('<g:google_product_category>1604</g:google_product_category>');
   });
+
+  it('includes handling/transit times and support email without hardcoded shipping fees', () => {
+    const xml = generateGoogleMerchantXml();
+    expect(xml).toContain('<g:min_handling_time>2</g:min_handling_time>');
+    expect(xml).toContain('<g:max_handling_time>7</g:max_handling_time>');
+    expect(xml).toContain('<g:min_transit_time>4</g:min_transit_time>');
+    expect(xml).toContain('<g:max_transit_time>8</g:max_transit_time>');
+    expect(xml).toContain('ari@boomtick.blog');
+    expect(xml).not.toContain('<g:price>4.99 USD</g:price>');
+  });
 });

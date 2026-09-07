@@ -39,12 +39,19 @@ export const STATIC_SCHEMAS = {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": SITE_NAME,
+      "name": "BoomTick (BoomTick.blog)",
       "url": BASE_URL,
+      "email": "ari@boomtick.blog",
       "logo": {
         "@type": "ImageObject",
         "name": `${SITE_NAME} Logo`,
         "url": `${BASE_URL}/favicon.ico`
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "San Francisco",
+        "addressRegion": "CA",
+        "addressCountry": "US"
       },
       "founder": {
         "@type": "Person",

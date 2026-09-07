@@ -50,11 +50,18 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   }, [chart]);
 
   useEffect(() => {
+    let ticking = false;
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsMobile(window.innerWidth < 768);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', checkMobile, { passive: true });
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 

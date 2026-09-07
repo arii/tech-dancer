@@ -1,5 +1,5 @@
 // Auto-generated safelist to ensure dynamic tailwind classes used in Box.tsx are preserved.
-export const tailwindSafelist = [
+export const tailwindSafelist = Array.from(new Set([
   'bottom-0',
   'bottom-8',
   'gap-0',
@@ -162,7 +162,6 @@ export const tailwindSafelist = [
   'z-nav',
   'z-mobile-menu',
   'z-search',
-  'z-search',
   'isolate',
   'scroll-mt-40',
   'lg:scroll-mt-16',
@@ -177,4 +176,4 @@ export const tailwindSafelist = [
   'col-span-4',
   'lg:col-span-8',
   'lg:col-span-4',
-];
+]));

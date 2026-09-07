@@ -50,6 +50,27 @@ describe('schema utils', () => {
     });
   });
 
+  describe('DEFAULT_PRINTFUL constants', () => {
+    it('contains accurate handling, transit, and contact email in DEFAULT_PRINTFUL_SHIPPING_DETAILS and DEFAULT_PRINTFUL_RETURN_POLICY', () => {
+      expect(DEFAULT_PRINTFUL_SHIPPING_DETAILS.deliveryTime?.handlingTime).toEqual({
+        '@type': 'QuantitativeValue',
+        minValue: 2,
+        maxValue: 7,
+        unitCode: 'd',
+      });
+      expect(DEFAULT_PRINTFUL_SHIPPING_DETAILS.deliveryTime?.transitTime).toEqual({
+        '@type': 'QuantitativeValue',
+        minValue: 4,
+        maxValue: 8,
+        unitCode: 'd',
+      });
+      expect(DEFAULT_PRINTFUL_SHIPPING_DETAILS.description).toContain('calculated at checkout');
+      expect(DEFAULT_PRINTFUL_RETURN_POLICY.merchantReturnDays).toBe(30);
+      expect(DEFAULT_PRINTFUL_RETURN_POLICY.customerSupportEmail).toBe('ari@boomtick.blog');
+      expect(DEFAULT_PRINTFUL_RETURN_POLICY.returnFees).toBe('https://schema.org/FreeReturn');
+    });
+  });
+
   describe('generateMerchSchema', () => {
     it('generates a valid SchemaItemList from merch products with enriched offer data', () => {
       const mockProducts: ProductCatalogItem[] = [

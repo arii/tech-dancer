@@ -65,6 +65,20 @@ export const routes: RouteConfig[] = [
     isTopNav: true
   },
   {
+    path: '/shipping',
+    lazy: () => import('@/pages/ShippingPolicy').then(m => ({ Component: m.default })),
+    label: 'Shipping Policy',
+    skeleton: 'simple',
+    sitemap: true
+  },
+  {
+    path: '/return-policy',
+    lazy: () => import('@/pages/ReturnPolicy').then(m => ({ Component: m.default })),
+    label: 'Return Policy',
+    skeleton: 'simple',
+    sitemap: true
+  },
+  {
     path: '/memes',
     lazy: () => import('@/pages/Memes').then(m => ({ Component: m.default })),
     label: 'Memes',

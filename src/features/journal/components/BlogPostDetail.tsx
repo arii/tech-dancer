@@ -67,11 +67,11 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       {post.imageBack ? (
         <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
           <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
+            <Text variant="mono" size="xs" weight="font-bold" color="dim">Front</Text>
             <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
           <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
+            <Text variant="mono" size="xs" weight="font-bold" color="dim">Back</Text>
             <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
           </Stack>
         </Stack>
@@ -90,7 +90,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <Box width="full">
       <Stack gap={6} width="full">
         <AffiliateDisclosure compact={true} />
-        <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+        <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim">
           Shop selected items
         </Text>
         <Stack gap={3} width="full">
