@@ -52,7 +52,7 @@ export function MerchCollectionCrossLinks({
   const collectionTitle = collectionMeta ? `${collectionMeta.label} Collection` : 'Related Apparel & Merch';
 
   return (
-    <Stack gap={6} width="full" className="border-t border-line/30 paddingTop={10} marginTop={10}">
+    <Stack gap={6} width="full" paddingTop={10} marginTop={10} className="border-t border-line/30">
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align={{ base: 'start', sm: 'center' }} gap={2}>
         <Stack gap={1}>
           <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
@@ -119,18 +119,22 @@ export function MerchCollectionCrossLinks({
                     className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
                   />
                   {item.roles && item.roles.length > 0 && (
-                    <Box position="absolute" className="top-2 left-2 flex gap-1">
-                      {item.roles.map((r) => (
-                        <Box
-                          key={r}
-                          paddingX={2}
-                          paddingY={0.5}
-                          radius="full"
-                          className="bg-bg/80 backdrop-blur-xs border border-accent/30 text-accent font-mono text-[10px] font-bold uppercase"
-                        >
-                          {r}
-                        </Box>
-                      ))}
+                    <Box position="absolute" className="top-2 left-2">
+                      <Stack direction="row" gap={1}>
+                        {item.roles.map((r) => (
+                          <Box
+                            key={r}
+                            paddingX={2}
+                            paddingY={0.5}
+                            radius="full"
+                            className="bg-bg/80 backdrop-blur-xs border border-accent/30 text-accent font-mono font-bold uppercase"
+                          >
+                            <Text variant="mono" size="micro" color="accent" weight="font-bold">
+                              {r}
+                            </Text>
+                          </Box>
+                        ))}
+                      </Stack>
                     </Box>
                   )}
                 </Box>
@@ -151,7 +155,14 @@ export function MerchCollectionCrossLinks({
                 </Stack>
               </Stack>
 
-              <Stack direction="row" justify="between" align="center" marginTop={4} className="pt-2 border-t border-line/15">
+              <Stack
+                direction="row"
+                justify="between"
+                align="center"
+                marginTop={4}
+                paddingTop={2}
+                className="border-t border-line/15"
+              >
                 <Text variant="mono" size="sm" weight="font-bold" color="main">
                   ${item.price}
                 </Text>

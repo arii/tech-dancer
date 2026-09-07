@@ -101,49 +101,57 @@ export function MerchImageGallery({
         />
 
         {/* Badge Overlays */}
-        <Box position="absolute" className="top-3 left-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
-          <Box
-            paddingX={2.5}
-            paddingY={1}
-            radius="full"
-            className="bg-bg/80 backdrop-blur-md border border-line/30 shadow-xs"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" color="main">
-              {getSideLabel(activeImage.side)}
-            </Text>
-          </Box>
-          {roles.map((r) => (
+        <Box position="absolute" className="top-3 left-3 z-10 pointer-events-none">
+          <Stack direction="row" wrap gap={1.5}>
             <Box
-              key={r}
               paddingX={2.5}
               paddingY={1}
               radius="full"
-              className="bg-accent/15 backdrop-blur-md border border-accent/40 shadow-xs"
+              className="bg-bg/80 backdrop-blur-md border border-line/30 shadow-xs"
             >
-              <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase>
-                {r}
+              <Text variant="mono" size="micro" weight="font-bold" color="main">
+                {getSideLabel(activeImage.side)}
               </Text>
             </Box>
-          ))}
-          {badges.map((b) => (
-            <Box
-              key={b}
-              paddingX={2.5}
-              paddingY={1}
-              radius="full"
-              className="bg-surface/80 backdrop-blur-md border border-line/20 shadow-xs"
-            >
-              <Text variant="mono" size="micro" weight="font-bold" color="dim">
-                {b}
-              </Text>
-            </Box>
-          ))}
+            {roles.map((r) => (
+              <Box
+                key={r}
+                paddingX={2.5}
+                paddingY={1}
+                radius="full"
+                className="bg-accent/15 backdrop-blur-md border border-accent/40 shadow-xs"
+              >
+                <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase>
+                  {r}
+                </Text>
+              </Box>
+            ))}
+            {badges.map((b) => (
+              <Box
+                key={b}
+                paddingX={2.5}
+                paddingY={1}
+                radius="full"
+                className="bg-surface/80 backdrop-blur-md border border-line/20 shadow-xs"
+              >
+                <Text variant="mono" size="micro" weight="font-bold" color="dim">
+                  {b}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
         </Box>
 
         {/* Quick Zoom Indicator */}
         <Box
           position="absolute"
-          className="bottom-3 right-3 flex align-center gap-1.5 px-2.5 py-1.5 radius-md bg-bg/80 backdrop-blur-md border border-line/30 shadow-xs opacity-80 group-hover:opacity-100 transition-opacity cursor-pointer"
+          paddingX={2.5}
+          paddingY={1.5}
+          radius="md"
+          display="flex"
+          align="center"
+          gap={1.5}
+          className="bottom-3 right-3 bg-bg/80 backdrop-blur-md border border-line/30 shadow-xs opacity-80 group-hover:opacity-100 transition-opacity cursor-pointer"
           onClick={() => setIsZoomed((prev) => !prev)}
         >
           <ZoomIn className="w-3.5 h-3.5 text-text-dim" />
@@ -200,10 +208,11 @@ export function MerchImageGallery({
                   onClick={() => setActiveIndex(idx)}
                   width={16}
                   height={16}
+                  padding={1}
                   radius="md"
                   overflow="hidden"
                   position="relative"
-                  className={`border-2 transition-all p-1 bg-surface-alt/30 cursor-pointer min-h-12 min-w-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  className={`border-2 transition-all bg-surface-alt/30 cursor-pointer min-h-12 min-w-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     isActive ? 'border-accent ring-1 ring-accent scale-105' : 'border-line/20 opacity-70 hover:opacity-100 hover:border-line/50'
                   }`}
                   aria-label={`Select ${getSideLabel(img.side)}`}

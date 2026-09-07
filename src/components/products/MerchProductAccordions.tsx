@@ -102,51 +102,51 @@ export function MerchProductAccordions({ material, sizeString }: MerchProductAcc
             <table className="w-full text-left font-mono text-xs border-collapse">
               <thead>
                 <tr className="bg-surface-alt/60 border-b border-line/20 text-text-main">
-                  <th className="p-2 font-bold">Size</th>
-                  <th className="p-2 font-bold">Chest (in)</th>
-                  <th className="p-2 font-bold">Length (in)</th>
+                  <Box as="th" padding={2} className="font-bold">Size</Box>
+                  <Box as="th" padding={2} className="font-bold">Chest (in)</Box>
+                  <Box as="th" padding={2} className="font-bold">Length (in)</Box>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line/10 text-text-dim">
                 {sizes.includes('XS') && (
                   <tr>
-                    <td className="p-2 font-bold text-accent">XS</td>
-                    <td className="p-2">31 - 34"</td>
-                    <td className="p-2">27"</td>
+                    <Box as="td" padding={2} className="font-bold text-accent">XS</Box>
+                    <Box as="td" padding={2}>31 - 34"</Box>
+                    <Box as="td" padding={2}>27"</Box>
                   </tr>
                 )}
                 <tr>
-                  <td className="p-2 font-bold text-accent">S</td>
-                  <td className="p-2">34 - 37"</td>
-                  <td className="p-2">28"</td>
+                  <Box as="td" padding={2} className="font-bold text-accent">S</Box>
+                  <Box as="td" padding={2}>34 - 37"</Box>
+                  <Box as="td" padding={2}>28"</Box>
                 </tr>
                 <tr>
-                  <td className="p-2 font-bold text-accent">M</td>
-                  <td className="p-2">38 - 41"</td>
-                  <td className="p-2">29"</td>
+                  <Box as="td" padding={2} className="font-bold text-accent">M</Box>
+                  <Box as="td" padding={2}>38 - 41"</Box>
+                  <Box as="td" padding={2}>29"</Box>
                 </tr>
                 <tr>
-                  <td className="p-2 font-bold text-accent">L</td>
-                  <td className="p-2">42 - 45"</td>
-                  <td className="p-2">30"</td>
+                  <Box as="td" padding={2} className="font-bold text-accent">L</Box>
+                  <Box as="td" padding={2}>42 - 45"</Box>
+                  <Box as="td" padding={2}>30"</Box>
                 </tr>
                 <tr>
-                  <td className="p-2 font-bold text-accent">XL</td>
-                  <td className="p-2">46 - 49"</td>
-                  <td className="p-2">31"</td>
+                  <Box as="td" padding={2} className="font-bold text-accent">XL</Box>
+                  <Box as="td" padding={2}>46 - 49"</Box>
+                  <Box as="td" padding={2}>31"</Box>
                 </tr>
                 {sizes.includes('2XL') && (
                   <tr>
-                    <td className="p-2 font-bold text-accent">2XL</td>
-                    <td className="p-2">50 - 53"</td>
-                    <td className="p-2">32"</td>
+                    <Box as="td" padding={2} className="font-bold text-accent">2XL</Box>
+                    <Box as="td" padding={2}>50 - 53"</Box>
+                    <Box as="td" padding={2}>32"</Box>
                   </tr>
                 )}
                 {sizes.includes('3XL') && (
                   <tr>
-                    <td className="p-2 font-bold text-accent">3XL</td>
-                    <td className="p-2">54 - 57"</td>
-                    <td className="p-2">33"</td>
+                    <Box as="td" padding={2} className="font-bold text-accent">3XL</Box>
+                    <Box as="td" padding={2}>54 - 57"</Box>
+                    <Box as="td" padding={2}>33"</Box>
                   </tr>
                 )}
               </tbody>
@@ -172,7 +172,7 @@ export function MerchProductAccordions({ material, sizeString }: MerchProductAcc
           <Text variant="body" size="xs" color="dim" leading="relaxed">
             Crafted with pre-shrunk premium ring-spun cotton for optimal breathability on intense social dance floors. To keep neon and multi-color prints sharp over dozens of festival washes:
           </Text>
-          <Stack gap={1.5} className="pl-1">
+          <Stack gap={1.5} paddingLeft={1}>
             <Stack direction="row" align="baseline" gap={2}>
               <ShieldCheck className="w-3.5 h-3.5 text-accent shrink-0" />
               <Text variant="body" size="xs" color="dim">
@@ -207,7 +207,7 @@ export function MerchProductAccordions({ material, sizeString }: MerchProductAcc
           <Text variant="body" size="xs" color="dim" leading="relaxed">
             Each apparel piece is custom printed on-demand via Printful to reduce textile waste. Orders ship globally with tracking.
           </Text>
-          <Box className="p-3 bg-surface/60 radius-md border border-line/20 font-mono text-xs">
+          <Box padding={3} radius="md" className="bg-surface/60 border border-line/20 font-mono text-xs">
             <Stack gap={1}>
               <Text variant="mono" size="micro" color="main" weight="font-bold">
                 ⏱ Production Time: 2–7 business days

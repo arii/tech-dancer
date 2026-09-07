@@ -68,7 +68,13 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
     const collectionMeta = COLLECTIONS.find((c) => c.id === primaryCollectionId);
 
     return (
-      <Box width="full" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <Box
+        width="full"
+        margin="auto"
+        paddingX={{ base: 4, sm: 6, lg: 8 }}
+        paddingY={{ base: 6, sm: 10 }}
+        className="max-w-7xl"
+      >
         <Stack gap={8} width="full">
           {/* Top Breadcrumb Navigation */}
           <Box>
@@ -133,13 +139,13 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                     </Text>
                   </Stack>
 
-                  <Text variant="headline" size="3xl" weight="font-bold" color="main" leading="tight">
+                  <Text as="h1" variant="headline" size="3xl" weight="font-bold" color="main" leading="tight">
                     {post.title}
                   </Text>
                 </Stack>
 
                 {/* Price Display & Fulfillment Tag */}
-                <Stack direction="row" align="baseline" justify="between" className="border-y border-line/20 py-3">
+                <Stack direction="row" align="baseline" justify="between" paddingY={3} className="border-y border-line/20">
                   <Stack direction="row" align="baseline" gap={2}>
                     <Text variant="display" size="3xl" weight="font-black" color="main">
                       {priceDisplay}
@@ -167,63 +173,65 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 </Text>
 
                 {/* Quick Attributes (Colors & Sizes) */}
-                <Stack gap={3} className="p-4 bg-surface/40 radius-lg border border-line/20">
-                  {matchedMerch?.color && (
-                    <Stack gap={1.5}>
-                      <Stack direction="row" align="center" gap={1.5}>
-                        <Palette className="w-3.5 h-3.5 text-accent" />
-                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                          Colorways
-                        </Text>
+                <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
+                  <Stack gap={3}>
+                    {matchedMerch?.color && (
+                      <Stack gap={1.5}>
+                        <Stack direction="row" align="center" gap={1.5}>
+                          <Palette className="w-3.5 h-3.5 text-accent" />
+                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                            Colorways
+                          </Text>
+                        </Stack>
+                        <Stack direction="row" wrap gap={1.5}>
+                          {matchedMerch.color.split('/').map((c) => (
+                            <Box
+                              key={c}
+                              paddingX={2.5}
+                              paddingY={1}
+                              surface="alt"
+                              border
+                              radius="full"
+                              className="border-line/20"
+                            >
+                              <Text variant="mono" size="micro" weight="font-medium" color="main">
+                                {c.trim()}
+                              </Text>
+                            </Box>
+                          ))}
+                        </Stack>
                       </Stack>
-                      <Stack direction="row" wrap gap={1.5}>
-                        {matchedMerch.color.split('/').map((c) => (
-                          <Box
-                            key={c}
-                            paddingX={2.5}
-                            paddingY={1}
-                            surface="alt"
-                            border
-                            radius="full"
-                            className="border-line/20"
-                          >
-                            <Text variant="mono" size="micro" weight="font-medium" color="main">
-                              {c.trim()}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Stack>
-                    </Stack>
-                  )}
+                    )}
 
-                  {matchedMerch?.size && (
-                    <Stack gap={1.5}>
-                      <Stack direction="row" align="center" gap={1.5}>
-                        <Ruler className="w-3.5 h-3.5 text-accent" />
-                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                          Available Sizes
-                        </Text>
+                    {matchedMerch?.size && (
+                      <Stack gap={1.5}>
+                        <Stack direction="row" align="center" gap={1.5}>
+                          <Ruler className="w-3.5 h-3.5 text-accent" />
+                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                            Available Sizes
+                          </Text>
+                        </Stack>
+                        <Stack direction="row" wrap gap={1.5}>
+                          {matchedMerch.size.split('/').map((s) => (
+                            <Box
+                              key={s}
+                              paddingX={2.5}
+                              paddingY={1}
+                              surface="alt"
+                              border
+                              radius="sm"
+                              className="border-line/20"
+                            >
+                              <Text variant="mono" size="micro" weight="font-bold" color="main">
+                                {s.trim()}
+                              </Text>
+                            </Box>
+                          ))}
+                        </Stack>
                       </Stack>
-                      <Stack direction="row" wrap gap={1.5}>
-                        {matchedMerch.size.split('/').map((s) => (
-                          <Box
-                            key={s}
-                            paddingX={2.5}
-                            paddingY={1}
-                            surface="alt"
-                            border
-                            radius="sm"
-                            className="border-line/20"
-                          >
-                            <Text variant="mono" size="micro" weight="font-bold" color="main">
-                              {s.trim()}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Stack>
-                    </Stack>
-                  )}
-                </Stack>
+                    )}
+                  </Stack>
+                </Box>
 
                 {/* Primary Direct Checkout CTA Button */}
                 {effectiveShopUrl && (
@@ -243,7 +251,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                       className="min-h-12 bg-accent text-bg hover:bg-accent-sky transition-all font-mono font-black text-sm text-center shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
                       <ShoppingBag className="w-4 h-4 text-bg" />
-                      <span>Order on Official Printful Store</span>
+                      <span>Order on Printful Store</span>
                       <ExternalLink className="w-4 h-4 text-bg opacity-80" />
                     </Box>
 
@@ -257,7 +265,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 )}
 
                 {/* Markdown Content Overview & Styling Advice */}
-                <Stack gap={4} className="border-t border-line/20 pt-6">
+                <Stack gap={4} paddingTop={6} className="border-t border-line/20">
                   <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
                     Design & Dance Floor Styling
                   </Text>
@@ -268,7 +276,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                   </Box>
 
                   {/* Dance Floor Context & Styling Guidelines */}
-                  <Box className="p-4 bg-surface-alt/30 radius-md border border-line/20">
+                  <Box padding={4} radius="md" className="bg-surface-alt/30 border border-line/20">
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" color="main">
                         💡 Dance Floor Fit & Performance Note
