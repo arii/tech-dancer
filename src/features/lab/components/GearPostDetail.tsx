@@ -17,20 +17,20 @@ const getColorHex = (colorName: string): string => {
   switch (name) {
     case 'black':
     case 'black heather':
-      return '#1a1a1a';
+      return 'rgb(26, 26, 26)';
     case 'neon':
-      return '#39FF14';
+      return 'rgb(57, 255, 20)';
     case 'white':
     case 'natural':
-      return '#f3eacb';
+      return 'rgb(243, 234, 203)';
     case 'military green':
-      return '#4b5320';
+      return 'rgb(75, 83, 32)';
     case 'storm':
-      return '#4f4f4f';
+      return 'rgb(79, 79, 79)';
     case 'rainbow':
-      return 'linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7)';
+      return 'linear-gradient(to right, rgb(239, 68, 68), rgb(249, 115, 22), rgb(234, 179, 8), rgb(34, 197, 94), rgb(59, 130, 246), rgb(168, 85, 247))';
     default:
-      return '#e5e7eb'; // fallback gray
+      return 'rgb(229, 231, 235)'; // fallback gray
   }
 };
 
@@ -198,77 +198,22 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                   {matchedMerch?.description || post.excerpt}
                 </Text>
 
-                {/* Quick Attributes (Colors & Sizes) */}
-                <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
-                  <Stack gap={3}>
-                    {matchedMerch?.color && (
-                      <Stack gap={2}>
-                        <Stack direction="row" align="center" gap={1.5}>
-                          <Palette className="w-3.5 h-3.5 text-accent" />
-                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                            Colorways
-                          </Text>
-                        </Stack>
-                        <Stack direction="row" wrap gap={2}>
-                          {matchedMerch.color.split('/').map((c, index) => (
-                            <Box
-                              key={c}
-                              title={c.trim()}
-                              display="flex"
-                              align="center"
-                              justify="center"
-                              height={8}
-                              width={8}
-                              border={index !== 0}
-                              radius="full"
-                              className={index === 0
-                                ? "ring-2 ring-offset-2 ring-offset-bg ring-accent border-transparent hover:scale-110 transition-all cursor-pointer shadow-md"
-                                : "border-line/20 hover:border-accent hover:scale-110 transition-all cursor-pointer shadow-sm"
-                              }
-                              style={{
-                                background: getColorHex(c)
-                              } as React.CSSProperties}
-                            />
-                          ))}
-                        </Stack>
+                {/* Quick Attributes (Sizes) */}
+                {matchedMerch?.size && (
+                  <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
+                    <Stack gap={2}>
+                      <Stack direction="row" align="center" gap={1.5}>
+                        <Ruler className="w-3.5 h-3.5 text-accent" />
+                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                          Available Sizes
+                        </Text>
                       </Stack>
-                    )}
-
-                    {matchedMerch?.size && (
-                      <Stack gap={2}>
-                        <Stack direction="row" align="center" gap={1.5}>
-                          <Ruler className="w-3.5 h-3.5 text-accent" />
-                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                            Available Sizes
-                          </Text>
-                        </Stack>
-                        <Stack direction="row" wrap gap={2}>
-                          {matchedMerch.size.split('/').map((s, index) => (
-                            <Box
-                              key={s}
-                              display="flex"
-                              align="center"
-                              justify="center"
-                              height={9}
-                              width={9}
-                              surface={index === 0 ? "accent" : "alt"}
-                              border={index !== 0}
-                              radius="md"
-                              className={index === 0
-                                ? "border-accent text-bg hover:opacity-90 cursor-pointer transition-opacity shadow-md"
-                                : "border-line/20 hover:border-accent hover:text-accent cursor-pointer transition-colors shadow-sm"
-                              }
-                            >
-                              <Text variant="mono" size="micro" weight="font-bold" color={index === 0 ? "bg" : "main"}>
-                                {s.trim()}
-                              </Text>
-                            </Box>
-                          ))}
-                        </Stack>
-                      </Stack>
-                    )}
-                  </Stack>
-                </Box>
+                      <Text variant="mono" size="sm" color="dim" leading="relaxed">
+                        {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
+                      </Text>
+                    </Stack>
+                  </Box>
+                )}
 
                 {/* Primary Direct Checkout CTA Button */}
                 {effectiveShopUrl && (
