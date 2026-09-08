@@ -39,12 +39,13 @@ MCP tools — do not invoke directly unless a workflow explicitly instructs it.
 
 ## Context Index
 
-`.agent-context.json` (repository root) is the pre-built index consumed by
-`boomtick-mcp` on every tool call. It contains:
+`.agent-context.json` (repository root) is the pre-built submodule tracking and repository version manifest consumed by `boomtick-mcp` on tool operations. It contains:
 
-- `file_tree` — repository structure snapshot
-- `cli_schema` — full `td-cli` command/flag reference
-- `package_json` — dependency and script metadata
+- `packageName` — root package name
+- `updatedAt` — ISO timestamp of context generation
+- `gitCommit` — current HEAD commit SHA
+- `submodules` — active submodule commit pointers (e.g. `boomtick-pkg`)
+- `version` — context schema version
 
 It is rebuilt automatically by:
 - `pnpm run agent:prime` (manual)

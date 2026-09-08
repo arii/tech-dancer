@@ -34,13 +34,14 @@ This script installs and configures:
 
 ## 🗂️ Agent Context Freshness
 
-`.agent-context.json` is the indexed snapshot of the repository consumed by
-`boomtick-mcp` on every tool call. It contains:
+`.agent-context.json` is the lightweight submodule tracking and repository version manifest consumed by
+`boomtick-mcp` on tool operations. It contains:
 
-- `file_tree` — repository structure, used for role gating in code review
-- `cli_schema` — full `td-cli` command/flag reference, used by MCP tools
-  to call `td-cli` correctly without guessing flags
-- `package_json` — dependency and script metadata
+- `packageName` — root package name
+- `updatedAt` — ISO timestamp of context generation
+- `gitCommit` — current HEAD commit SHA
+- `submodules` — active submodule commit pointers (e.g. `boomtick-pkg`)
+- `version` — context schema version
 
 **Automatic refresh** — the git hooks registered by `./setup-agent.sh` keep
 the index current:
@@ -56,11 +57,7 @@ pnpm run agent:prime
 
 Run this before any agent operation if the index may be stale (e.g. after
 pulling changes without the hooks installed, or after modifying `src/`,
-`content/`, or `boomtick-pkg/scripts/build-repo-context.py`).
-
-If `.agent-context.json` is missing or stale, `boomtick-mcp` falls back to
-raw filesystem calls, bypassing the index and significantly increasing token
-usage across all review and audit operations.
+`content/`, or `boomtick-pkg/cli/dev_tools/resources/build-repo-context.py`).
 
 ---
 
@@ -70,9 +67,9 @@ After setup, all agent operations follow the three-tier tool hierarchy defined
 in `.agents/AGENTS.md`:
 
 1. **Tier 1: `boomtick-mcp`** — required first call; auto-injects
-   `.agent-context.json` context on every operation
+   submodule tracking and version context on every operation
 2. **Tier 2: `dev-tools/td-cli`** — fallback when MCP unavailable;
-   read `cli_schema` from `.agent-context.json` before calling
+   query `boomtick-pkg/cli/dev_tools/cli-schema.json` or `td-cli schema <path>` before calling
 3. **Tier 3: raw bash / `gh`** — last resort only
 
 See `.agents/AGENTS.md` for the full tool mapping table.
@@ -91,4 +88,4 @@ cat .agent-context.json | python3 -c \
 ```
 
 The last command confirms `.agent-context.json` is present and contains the
-expected keys (`file_tree`, `cli_schema`, `package_json`).
+expected keys (`packageName`, `updatedAt`, `gitCommit`, `submodules`, `version`).
