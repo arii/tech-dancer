@@ -50,8 +50,7 @@ export function LatestPosts() {
               {post.image ? (
                 <img
                   src={post.image}
-                  alt=""
-                  aria-hidden="true"
+                  alt={post.title}
                   className="block h-full w-full max-w-full object-cover"
                 />
               ) : (

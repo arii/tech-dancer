@@ -69,7 +69,7 @@ export function ListRow(props: ListRowProps) {
         {image ? (
           <img
             src={image}
-            alt=""
+            alt={title}
             loading="lazy"
             className="h-full w-full object-contain p-1"
           />
