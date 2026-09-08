@@ -144,6 +144,40 @@ function getRouteMetadata(route) {
   };
 }
 
+function cleanInjectedHead(html) {
+  return html
+    .replace(/<title>.*?<\/title>\s*/gi, '')
+    .replace(/<meta name="description" content=".*?" \/>\s*/gi, '')
+    .replace(/<link rel="canonical" href=".*?" \/>\s*/gi, '')
+    .replace(/<meta property="og:.*?" content=".*?" \/>\s*/gi, '')
+    .replace(/<meta name="twitter:.*?" content=".*?" \/>\s*/gi, '')
+    .replace(/<script type="application\/ld\+json">.*?<\/script>\s*/gi, '');
+}
+
+function cleanInjectedRoot(html) {
+  return html.replace(/<div id="root"><h1 class="sr-only".*?><\/h1><\/div>/gi, '<div id="root"></div>');
+}
+
+function escapeHtml(str) {
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getPreRenderHeading(meta) {
+  if (meta.rawTitle) {
+    return escapeHtml(meta.rawTitle).slice(0, 150);
+  }
+  let title = meta.title || 'BoomTick.blog';
+  if (title.includes(' | ')) {
+    title = title.split(' | ')[0];
+  }
+  return escapeHtml(title).slice(0, 150);
+}
+
 function generateMetadataTags(route, meta) {
   const canonicalUrl = `${BASE_URL}${route}`;
   const title = meta.title.replace(/"/g, '&quot;');
@@ -249,7 +283,8 @@ async function generateStubs() {
     process.exit(1);
   }
 
-  const indexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
+  const rawIndexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
+  const indexContent = cleanInjectedRoot(cleanInjectedHead(rawIndexContent));
 
   for (const route of filteredRoutes) {
     const dirPath = path.join(DIST_DIR, route);
@@ -261,8 +296,12 @@ async function generateStubs() {
     const meta = getRouteMetadata(route);
     const metaTags = generateMetadataTags(route, meta);
 
-    // Inject meta tags into <head>
-    const stubContent = indexContent.replace('</head>', `    ${metaTags}\n  </head>`);
+    const headingText = getPreRenderHeading(meta);
+    const rootHtml = `<div id="root"><h1 class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;">${headingText}</h1></div>`;
+
+    // Inject meta tags into <head> and fallback h1 into <div id="root">
+    let stubContent = indexContent.replace('</head>', `    ${metaTags}\n  </head>`);
+    stubContent = stubContent.replace('<div id="root"></div>', rootHtml);
 
     const targetFile = path.join(dirPath, 'index.html');
     fs.writeFileSync(targetFile, stubContent);
@@ -272,7 +311,11 @@ async function generateStubs() {
   // Inject metadata for root route ('/') into dist/index.html
   const rootMeta = getRouteMetadata('/');
   const rootMetaTags = generateMetadataTags('/', rootMeta);
-  const rootContent = indexContent.replace('</head>', `    ${rootMetaTags}\n  </head>`);
+  const rootHeadingText = getPreRenderHeading(rootMeta);
+  const rootRootHtml = `<div id="root"><h1 class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;">${rootHeadingText}</h1></div>`;
+
+  let rootContent = indexContent.replace('</head>', `    ${rootMetaTags}\n  </head>`);
+  rootContent = rootContent.replace('<div id="root"></div>', rootRootHtml);
   fs.writeFileSync(INDEX_HTML, rootContent);
   console.log(`Injected root route metadata into ${INDEX_HTML}`);
 

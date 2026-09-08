@@ -10,7 +10,7 @@ export default function ComponentPreview() {
         noindex={true}
       />
       <Stack gap={12}>
-        <Text variant="headline" size="4xl">Component Preview</Text>
+        <Text as="h1" variant="headline" size="4xl">Component Preview</Text>
 
         <Box border padding={6} radius="md">
           <Text variant="body" size="sm">
