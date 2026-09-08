@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useLayoutEffect } from "react";
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION, ASSET_PREFIX } from '@/config/constants';
@@ -65,34 +65,41 @@ export function SEO({
     return JSON.stringify(schemas.length === 1 ? schemas[0] : schemas);
   }, [schema, jsonLd]);
 
+  // Clean up static pre-rendered head tags upon client-side mount / navigation
+  // to avoid duplication with client-side Helmet tags.
+  useLayoutEffect(() => {
+    const prerendered = document.querySelectorAll('head [data-prerendered="true"]');
+    prerendered.forEach(el => el.remove());
+  }, [pathname]);
+
   return (
     <Helmet>
       {/* Standard metadata */}
-      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-      <title>{displayTitle}</title>
-      <meta name="description" content={description} />
-      {keywords && <meta name="keywords" content={keywords} />}
-      <link rel="canonical" href={url} />
+      {googleVerification && <meta data-rh="true" name="google-site-verification" content={googleVerification} />}
+      {noindex && <meta data-rh="true" name="robots" content="noindex, nofollow" />}
+      <title data-rh="true">{displayTitle}</title>
+      <meta data-rh="true" name="description" content={description} />
+      {keywords && <meta data-rh="true" name="keywords" content={keywords} />}
+      <link data-rh="true" rel="canonical" href={url} />
 
       {/* Open Graph / Facebook */}
-      <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={url} />
-      <meta property="og:title" content={displayTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={seoImage} />
+      <meta data-rh="true" property="og:site_name" content={SITE_NAME} />
+      <meta data-rh="true" property="og:type" content={type} />
+      <meta data-rh="true" property="og:url" content={url} />
+      <meta data-rh="true" property="og:title" content={displayTitle} />
+      <meta data-rh="true" property="og:description" content={description} />
+      <meta data-rh="true" property="og:image" content={seoImage} />
 
       {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={url} />
-      <meta name="twitter:title" content={displayTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={seoImage} />
+      <meta data-rh="true" name="twitter:card" content="summary_large_image" />
+      <meta data-rh="true" name="twitter:url" content={url} />
+      <meta data-rh="true" name="twitter:title" content={displayTitle} />
+      <meta data-rh="true" name="twitter:description" content={description} />
+      <meta data-rh="true" name="twitter:image" content={seoImage} />
 
       {/* Structured Data */}
       {combinedSchema && (
-        <script type="application/ld+json">
+        <script data-rh="true" type="application/ld+json">
           {combinedSchema}
         </script>
       )}
