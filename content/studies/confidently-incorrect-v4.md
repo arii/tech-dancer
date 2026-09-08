@@ -1,6 +1,7 @@
 ---
 type: study
 title: "Confidently incorrect: The latest stable major version is @v4"
+seoTitle: "AI Agent Errors: actions/checkout@v4 Downgrades"
 date: "2026-06-20"
 author: "Ariel Anders"
 category: "DevAI"

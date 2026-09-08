@@ -89,8 +89,12 @@ function loadMarkdownMeta(dirPath, routePrefix) {
       img = `${BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`;
     }
 
+    const computedTitle = data.seoTitle
+      ? (data.seoTitle.includes('BoomTick') ? data.seoTitle : `${data.seoTitle} | BoomTick.blog`)
+      : (data.title ? `${data.title} | BoomTick.blog` : 'BoomTick.blog');
+
     markdownMetaMap.set(route, {
-      title: data.seoTitle || (data.title ? `${data.title} | BoomTick.blog` : 'BoomTick.blog'),
+      title: computedTitle,
       description: data.seoDescription || data.excerpt || data.description || 'BoomTick.blog West Coast Swing & AI research article.',
       image: img,
       rawTitle: data.title || slug,
