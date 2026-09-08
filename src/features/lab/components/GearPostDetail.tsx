@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ShoppingBag, ExternalLink, ArrowLeft, CheckCircle2, Palette, Ruler } from 'lucide-react';
+import { ShoppingBag, ExternalLink, ArrowLeft, CheckCircle2, Ruler } from 'lucide-react';
 import { Resource, readingTime } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
@@ -11,28 +11,6 @@ import { Stack, Text, Box, Grid } from '@/layouts/Primitives';
 import { MERCH_PRODUCTS, COLLECTIONS } from '@/data/merch';
 import { MerchImageGallery, type MerchGalleryImage } from '@/components/products/MerchImageGallery';
 import { MerchCollectionCrossLinks } from '@/components/products/MerchCollectionCrossLinks';
-
-const getColorHex = (colorName: string): string => {
-  const name = colorName.trim().toLowerCase();
-  switch (name) {
-    case 'black':
-    case 'black heather':
-      return 'rgb(26, 26, 26)';
-    case 'neon':
-      return 'rgb(57, 255, 20)';
-    case 'white':
-    case 'natural':
-      return 'rgb(243, 234, 203)';
-    case 'military green':
-      return 'rgb(75, 83, 32)';
-    case 'storm':
-      return 'rgb(79, 79, 79)';
-    case 'rainbow':
-      return 'linear-gradient(to right, rgb(239, 68, 68), rgb(249, 115, 22), rgb(234, 179, 8), rgb(34, 197, 94), rgb(59, 130, 246), rgb(168, 85, 247))';
-    default:
-      return 'rgb(229, 231, 235)'; // fallback gray
-  }
-};
 
 interface GearPostDetailProps {
   post: Resource;
