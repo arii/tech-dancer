@@ -30,11 +30,13 @@ export function FeaturedGuidePanel() {
       {/* Background image — fills the column height naturally */}
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
-
+        srcSet={`${ASSET_PREFIX}/assets/home/wcs-travel-pack-400w.webp 400w, ${ASSET_PREFIX}${FEATURED.image} 800w`}
+        sizes="(max-width: 640px) 100vw, 420px"
         alt={FEATURED.imageAlt}
         width={420}
         height={600}
         fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />

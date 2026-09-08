@@ -106,7 +106,7 @@ export function GearCard(props: GearCardProps) {
           className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {image ? (
-            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
+            <img src={image} alt={alt} width={640} height={360} loading="lazy" decoding="async" className={CARD_STYLES.image} />
           ) : (
             <CategoryPlaceholder category={category} />
           )}
@@ -144,7 +144,7 @@ export function GearCard(props: GearCardProps) {
           className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {image ? (
-            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
+            <img src={image} alt={alt} width={640} height={360} loading="lazy" decoding="async" className={CARD_STYLES.image} />
           ) : (
             <CategoryPlaceholder category={category} />
           )}
