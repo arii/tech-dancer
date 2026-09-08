@@ -178,7 +178,7 @@ export default function ResearchDetail() {
     return (
       <>
         <SEO
-          title={study.title}
+          title={study.seoTitle || study.title}
           description={study.excerpt}
           type="article"
           schema={structuredData}
