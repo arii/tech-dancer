@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/perf/mobile-core-web-vitals-optimization-9515807146272483462/sitemap.xml
