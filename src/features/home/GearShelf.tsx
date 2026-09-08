@@ -56,7 +56,7 @@ export function GearShelf() {
               {image ? (
                 <img
                   src={`${ASSET_PREFIX}${image}`}
-                  alt={label}
+                  alt={`${label} preview`}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : imageText ? (
@@ -103,7 +103,7 @@ export function GearShelf() {
               {image ? (
                 <img
                   src={`${ASSET_PREFIX}${image}`}
-                  alt={label}
+                  alt={`${label} preview`}
                   className="block h-full w-full max-w-full object-cover"
                 />
               ) : imageText ? (
