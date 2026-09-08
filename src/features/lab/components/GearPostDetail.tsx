@@ -113,12 +113,12 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 {/* Header Category & Tags */}
                 <Stack gap={2}>
                   <Stack direction="row" align="center" gap={2} wrap>
-                    {collectionMeta && (
+                    {collectionMeta && (!matchedMerch?.roles || matchedMerch.roles.length === 0) && (
                       <Box
-                        paddingX={2.5}
-                        paddingY={1}
+                        paddingX={3}
+                        paddingY={1.5}
                         radius="full"
-                        className="bg-accent/15 border border-accent/30 text-accent font-mono text-xs font-bold"
+                        className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
                       >
                         {collectionMeta.label}
                       </Box>
@@ -128,10 +128,10 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                         {matchedMerch.roles.map((r) => (
                           <Box
                             key={r}
-                            paddingX={2.5}
-                            paddingY={1}
+                            paddingX={3}
+                            paddingY={1.5}
                             radius="full"
-                            className="bg-accent/15 border border-accent/40 text-accent font-mono text-xs font-bold uppercase"
+                            className="bg-accent/15 border border-accent/40 text-accent font-sans text-xs font-semibold tracking-wide uppercase"
                           >
                             {r}
                           </Box>
@@ -180,24 +180,23 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
                   <Stack gap={3}>
                     {matchedMerch?.color && (
-                      <Stack gap={1.5}>
+                      <Stack gap={2}>
                         <Stack direction="row" align="center" gap={1.5}>
                           <Palette className="w-3.5 h-3.5 text-accent" />
                           <Text variant="mono" size="xs" color="dim" weight="font-bold">
                             Colorways
                           </Text>
                         </Stack>
-                        <Stack direction="row" wrap gap={1.5}>
+                        <Stack direction="row" wrap gap={2}>
                           {matchedMerch.color.split('/').map((c) => (
                             <Box
                               key={c}
                               display="flex"
                               align="center"
                               justify="center"
-                              minHeight={8}
-                              minWidth={8}
-                              paddingX={2.5}
-                              paddingY={1}
+                              height={9}
+                              minWidth={9}
+                              paddingX={3}
                               surface="alt"
                               border
                               radius="full"
@@ -213,27 +212,26 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                     )}
 
                     {matchedMerch?.size && (
-                      <Stack gap={1.5}>
+                      <Stack gap={2}>
                         <Stack direction="row" align="center" gap={1.5}>
                           <Ruler className="w-3.5 h-3.5 text-accent" />
                           <Text variant="mono" size="xs" color="dim" weight="font-bold">
                             Available Sizes
                           </Text>
                         </Stack>
-                        <Stack direction="row" wrap gap={1.5}>
+                        <Stack direction="row" wrap gap={2}>
                           {matchedMerch.size.split('/').map((s) => (
                             <Box
                               key={s}
                               display="flex"
                               align="center"
                               justify="center"
-                              minHeight={8}
-                              minWidth={8}
-                              paddingX={2.5}
-                              paddingY={1}
+                              height={9}
+                              minWidth={9}
+                              paddingX={2}
                               surface="alt"
                               border
-                              radius="sm"
+                              radius="md"
                               className="border-line/20"
                             >
                               <Text variant="mono" size="micro" weight="font-bold" color="main">
