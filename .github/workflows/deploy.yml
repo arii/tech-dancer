@@ -56,6 +56,8 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
           OWNER: ${{ github.repository_owner }}
           REF_NAME: ${{ github.ref_name }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          VITE_INDEXNOW_KEY: ${{ secrets.VITE_INDEXNOW_KEY }}
         run: |
           # 1. Determine Base Path
           if [ "$REF_NAME" = "main" ]; then
@@ -79,6 +81,9 @@ jobs:
               echo "Disallow: /$REPO_NAME/404.html"
               echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml"
             } > dist/robots.txt
+
+            # Submit URLs to IndexNow engines
+            pnpm run indexnow:submit || true
 
             echo "SEO assets generated successfully."
           fi
