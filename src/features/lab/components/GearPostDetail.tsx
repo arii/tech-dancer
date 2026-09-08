@@ -12,6 +12,28 @@ import { MERCH_PRODUCTS, COLLECTIONS } from '@/data/merch';
 import { MerchImageGallery, type MerchGalleryImage } from '@/components/products/MerchImageGallery';
 import { MerchCollectionCrossLinks } from '@/components/products/MerchCollectionCrossLinks';
 
+const getColorHex = (colorName: string): string => {
+  const name = colorName.trim().toLowerCase();
+  switch (name) {
+    case 'black':
+    case 'black heather':
+      return '#1a1a1a';
+    case 'neon':
+      return '#39FF14';
+    case 'white':
+    case 'natural':
+      return '#f3eacb';
+    case 'military green':
+      return '#4b5320';
+    case 'storm':
+      return '#4f4f4f';
+    case 'rainbow':
+      return 'linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7)';
+    default:
+      return '#e5e7eb'; // fallback gray
+  }
+};
+
 interface GearPostDetailProps {
   post: Resource;
   onBack: () => void;
@@ -115,8 +137,8 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                   <Stack direction="row" align="center" gap={2} wrap>
                     {collectionMeta && (!matchedMerch?.roles || matchedMerch.roles.length === 0) && (
                       <Box
-                        paddingX={3}
-                        paddingY={1.5}
+                        paddingX={2.5}
+                        paddingY={1}
                         radius="full"
                         className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
                       >
@@ -128,8 +150,8 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                         {matchedMerch.roles.map((r) => (
                           <Box
                             key={r}
-                            paddingX={3}
-                            paddingY={1.5}
+                            paddingX={2.5}
+                            paddingY={1}
                             radius="full"
                             className="bg-accent/15 border border-accent/40 text-accent font-sans text-xs font-semibold tracking-wide uppercase"
                           >
@@ -188,24 +210,25 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                           </Text>
                         </Stack>
                         <Stack direction="row" wrap gap={2}>
-                          {matchedMerch.color.split('/').map((c) => (
+                          {matchedMerch.color.split('/').map((c, index) => (
                             <Box
                               key={c}
+                              title={c.trim()}
                               display="flex"
                               align="center"
                               justify="center"
-                              height={9}
-                              minWidth={9}
-                              paddingX={3}
-                              surface="alt"
-                              border
+                              height={8}
+                              width={8}
+                              border={index !== 0}
                               radius="full"
-                              className="border-line/20"
-                            >
-                              <Text variant="mono" size="micro" weight="font-medium" color="main">
-                                {c.trim()}
-                              </Text>
-                            </Box>
+                              className={index === 0
+                                ? "ring-2 ring-offset-2 ring-offset-bg ring-accent border-transparent hover:scale-110 transition-all cursor-pointer shadow-md"
+                                : "border-line/20 hover:border-accent hover:scale-110 transition-all cursor-pointer shadow-sm"
+                              }
+                              style={{
+                                background: getColorHex(c)
+                              } as React.CSSProperties}
+                            />
                           ))}
                         </Stack>
                       </Stack>
@@ -220,21 +243,23 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                           </Text>
                         </Stack>
                         <Stack direction="row" wrap gap={2}>
-                          {matchedMerch.size.split('/').map((s) => (
+                          {matchedMerch.size.split('/').map((s, index) => (
                             <Box
                               key={s}
                               display="flex"
                               align="center"
                               justify="center"
                               height={9}
-                              minWidth={9}
-                              paddingX={2}
-                              surface="alt"
-                              border
+                              width={9}
+                              surface={index === 0 ? "accent" : "alt"}
+                              border={index !== 0}
                               radius="md"
-                              className="border-line/20"
+                              className={index === 0
+                                ? "border-accent text-bg hover:opacity-90 cursor-pointer transition-opacity shadow-md"
+                                : "border-line/20 hover:border-accent hover:text-accent cursor-pointer transition-colors shadow-sm"
+                              }
                             >
-                              <Text variant="mono" size="micro" weight="font-bold" color="main">
+                              <Text variant="mono" size="micro" weight="font-bold" color={index === 0 ? "bg" : "main"}>
                                 {s.trim()}
                               </Text>
                             </Box>
