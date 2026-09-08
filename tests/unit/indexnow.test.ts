@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { generateIndexNowKeyFile, getIndexNowKey } from '../../scripts/generate-indexnow.js';
@@ -7,7 +7,6 @@ import { buildIndexNowPayload } from '../../scripts/submit-indexnow.js';
 describe('IndexNow Generator & Submission Utility', () => {
   const originalEnv = process.env;
   const publicDir = path.resolve(process.cwd(), 'public');
-  const distDir = path.resolve(process.cwd(), 'dist');
 
   beforeEach(() => {
     process.env = { ...originalEnv };
