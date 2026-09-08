@@ -89,7 +89,7 @@ export function MerchImageDisplay({ title, imageUrl, images, imageDisplayMode, i
   return (
     <Box
       width="full"
-      className={isFeatured ? "aspect-square md:aspect-[4/3]" : "aspect-[4/5] sm:aspect-square"}
+      aspect={isFeatured ? { base: 'square', md: '4/3' } : { base: '4/5', sm: 'square' }}
       radius="md"
       overflow="hidden"
     >

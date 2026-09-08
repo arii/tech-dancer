@@ -191,6 +191,11 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                           {matchedMerch.color.split('/').map((c) => (
                             <Box
                               key={c}
+                              display="flex"
+                              align="center"
+                              justify="center"
+                              minHeight={8}
+                              minWidth={8}
                               paddingX={2.5}
                               paddingY={1}
                               surface="alt"
@@ -219,6 +224,11 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                           {matchedMerch.size.split('/').map((s) => (
                             <Box
                               key={s}
+                              display="flex"
+                              align="center"
+                              justify="center"
+                              minHeight={8}
+                              minWidth={8}
                               paddingX={2.5}
                               paddingY={1}
                               surface="alt"
