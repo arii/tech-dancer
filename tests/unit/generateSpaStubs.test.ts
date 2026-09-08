@@ -8,6 +8,22 @@ const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 const ABOUT_INDEX_HTML = path.join(DIST_DIR, 'about', 'index.html');
 const RESEARCH_INDEX_HTML = path.join(DIST_DIR, 'research', 'index.html');
 
+function findIndexHtmlFiles(dir: string): string[] {
+  let results: string[] = [];
+  if (!fs.existsSync(dir)) return results;
+  const list = fs.readdirSync(dir);
+  for (const file of list) {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(findIndexHtmlFiles(filePath));
+    } else if (file === 'index.html') {
+      results.push(filePath);
+    }
+  }
+  return results;
+}
+
 describe('SPA Stubs & Root Meta Tag Generation', () => {
   beforeAll(() => {
     // Ensure build and postbuild scripts run so dist files are fresh
@@ -42,5 +58,24 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
     expect(researchContent).toContain('<title>Experiments | BoomTick.blog</title>');
     expect(researchContent).toContain('<link rel="canonical" href="https://boomtick.blog/research" />');
     expect(researchContent).not.toContain('<link rel="canonical" href="https://boomtick.blog/" />');
+  });
+
+  it('verifies every generated route stub in dist/ contains a valid semantic <h1> tag under 150 characters', () => {
+    const indexFiles = findIndexHtmlFiles(DIST_DIR);
+    expect(indexFiles.length).toBeGreaterThan(10); // Expect all discovered sitemap route stubs
+
+    for (const filePath of indexFiles) {
+      const relativePath = path.relative(DIST_DIR, filePath);
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      const match = content.match(/<h1[^>]*>(.*?)<\/h1>/s);
+      expect(match, `Missing static <h1> tag in pre-rendered stub: ${relativePath}`).not.toBeNull();
+
+      if (match) {
+        const textOnly = match[1].replace(/<[^>]+>/g, '').trim();
+        expect(textOnly.length, `Heading text empty in ${relativePath}`).toBeGreaterThan(0);
+        expect(textOnly.length, `Heading text exceeds 150 chars in ${relativePath}: "${textOnly}"`).toBeLessThanOrEqual(150);
+      }
+    }
   });
 });

@@ -236,6 +236,7 @@ export default function ResearchDetail() {
                         <PageHeader
                           label={`PROJECT // ${tool.taxonomyBucket || 'RESEARCH'}`}
                           title={tool.title}
+                          as="h2"
                           paddingBottom={0}
                           border="none"
                         />
