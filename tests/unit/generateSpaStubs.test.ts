@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { JSDOM } from 'jsdom';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
@@ -68,11 +69,12 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
       const relativePath = path.relative(DIST_DIR, filePath);
       const content = fs.readFileSync(filePath, 'utf-8');
 
-      const match = content.match(/<h1[^>]*>(.*?)<\/h1>/s);
-      expect(match, `Missing static <h1> tag in pre-rendered stub: ${relativePath}`).not.toBeNull();
+      const dom = new JSDOM(content);
+      const h1Element = dom.window.document.querySelector('h1');
+      expect(h1Element, `Missing static <h1> tag in pre-rendered stub: ${relativePath}`).not.toBeNull();
 
-      if (match) {
-        const textOnly = match[1].replace(/<[^>]+>/g, '').trim();
+      if (h1Element) {
+        const textOnly = (h1Element.textContent || '').trim();
         expect(textOnly.length, `Heading text empty in ${relativePath}`).toBeGreaterThan(0);
         expect(textOnly.length, `Heading text exceeds 150 chars in ${relativePath}: "${textOnly}"`).toBeLessThanOrEqual(150);
       }
