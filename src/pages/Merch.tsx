@@ -99,7 +99,7 @@ export default function Merch() {
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar>
+          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar className="snap-x snap-mandatory">
             <Stack direction="row" gap={2} paddingY={2} paddingX={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
@@ -107,6 +107,7 @@ export default function Merch() {
                   label={collection.label}
                   isActive={activeCollection === collection.id}
                   variant="compact"
+                  className="snap-start"
                   onClick={() => setActiveCollection(collection.id)}
                 />
               ))}
@@ -128,7 +129,7 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={6} width="full" align="stretch">
+                  <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={{ base: 4, sm: 6 }} width="full" align="stretch">
                     <ProductCard
                       item={section.products[0]}
                       isFeatured
@@ -146,7 +147,7 @@ export default function Merch() {
                     ))}
                   </Grid>
                 ) : (
-                  <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full" minWidth="0" align="stretch">
+                  <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 4, sm: 6 }} width="full" minWidth="0" align="stretch">
                     {section.products.map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
@@ -159,7 +160,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full" minWidth="0" align="stretch">
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 4, sm: 6 }} width="full" minWidth="0" align="stretch">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}

@@ -89,11 +89,11 @@ export function MerchImageDisplay({ title, imageUrl, images, imageDisplayMode, i
   return (
     <Box
       width="full"
-      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
+      className={isFeatured ? "aspect-square md:aspect-[4/3]" : "aspect-[4/5] sm:aspect-square"}
       radius="md"
       overflow="hidden"
     >
-      <Box width="full" height="full" minHeight="0">
+      <Box width="full" height="full">
         {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
           <EqualImages images={resolved.equal} />
         ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (

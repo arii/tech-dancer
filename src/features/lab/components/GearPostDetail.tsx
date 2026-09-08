@@ -248,7 +248,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                       display="flex"
                       align="center"
                       justify="center"
-                      paddingY={3.5}
+                      paddingY={{ base: 4, md: 3.5 }}
                       paddingX={6}
                       gap={2.5}
                       radius="md"
