@@ -3,7 +3,7 @@
 | File | Use For | Never Use For |
 | -------------------------------- | ------------------------------- | ----------------------- |
 | `.agents/AGENT_CONTRACT.md` | Invariant rules (always wins) | Specify CLI flags |
-| `dev-tools/cli-schema.json` | Canonical CLI authority | Define UI style rules |
+| `boomtick-pkg/cli/dev_tools/cli-schema.json` | Canonical CLI authority | Define UI style rules |
 | `AGENTS.md` | TSX, PR lifecycle, runtime rules | Duplicate CLI schema |
 | `.agents/AGENTS.md` | MCP tool hierarchy, tool mapping | Redefine contract rules |
 | `.agents/workflows/` | Task-specific protocols | Redefine core rules |
@@ -18,9 +18,9 @@ or a workflow file.
 
 ## Key Relationships
 
-- `.agent-context.json` embeds `cli_schema` and `file_tree` — a single read
-  covers both `cli-schema.json` and repository structure. Use
-  `repo.read_agent_context` (Tier 1 MCP) to get it.
+- `.agent-context.json` tracks submodule commit sync and package versioning.
+  Use `repo.read_agent_context` (Tier 1 MCP) to inspect context version state.
+- `boomtick-pkg/cli/dev_tools/cli-schema.json` is the canonical authority for CLI command flags and subcommands. Use `repo.get_command_schema` or `td-cli schema <path>` for targeted schema discovery.
 - `.agents/AGENTS.md` defines the MCP → `td-cli` → bash escalation path
   for every task category. Consult it before any GitHub or repo operation.
 - `CODEX.md` has been removed — its runtime contract is now in `AGENTS.md`

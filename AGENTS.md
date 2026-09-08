@@ -120,9 +120,8 @@ When multiple agents work simultaneously:
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
-- All agents MUST read `.agent-context.json` (using `repo.read_agent_context`)
-  upon startup to get current repository state and discover available MCP
-  tools and CLI subcommands. Bypassing this step is a contract violation.
+- All agents MUST consult `.agent-context.json` (using `repo.read_agent_context`)
+  upon startup to verify repository commit and submodule synchronization state.
 - **Git Push Restrictions**: Direct `git push` is blocked/intercepted in the
   sandbox environment. Use the `submit` tool or appropriate CLI commands
   that handle submission via the agent's specific workflow.
@@ -142,7 +141,7 @@ executing any GitHub or repository operation.
 
 `boomtick-mcp` is a thin gateway over `td-cli`. Every MCP tool
 call automatically:
-1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
+1. Resolves repository context and command schema authority
 2. Calls the appropriate `td-cli` subcommand internally
 3. Returns structured output with repo context already attached
 
@@ -163,11 +162,8 @@ If a tool failure occurs, you **must** document the failure in `progress_and_nex
 
 ### CLI Schema Authority
 
-`boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
-`cli_schema`) is the single source of truth for all `td-cli` flags.
-MCP tools read this automatically. If calling Tier 2 directly, always
-read `cli_schema` from `.agent-context.json` first — never guess flags,
-never use `--help`.
+`boomtick-pkg/cli/dev_tools/cli-schema.json` is the single source of truth for all `td-cli` flags and command signatures. Dynamic schema lookups are also available via `td-cli schema <path>` or `repo.get_command_schema`.
+MCP tools read this authority automatically. If calling Tier 2 directly, always query the schema via `repo.get_command_schema`, `td-cli schema <path>`, or by inspecting `boomtick-pkg/cli/dev_tools/cli-schema.json` directly — never guess flags, never use `--help`.
 
 ### Code Review Token Budget
 
@@ -235,7 +231,7 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in .githooks/ so .agent-context.json stays fresh automatically by calling
-boomtick-pkg/scripts/build-repo-context.py.
+boomtick-pkg/cli/dev_tools/resources/build-repo-context.py.
 
 ```bash
 ./setup-agent.sh
