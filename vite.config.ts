@@ -122,6 +122,14 @@ export default defineConfig(({mode}) => {
       assetsDir: 'assets',
       chunkSizeWarningLimit: 400,
       minify: skipMinify ? false : 'esbuild',
+      modulePreload: {
+        resolveDependencies(_filename, deps) {
+          // Filter out heavy non-critical dynamic chunks from initial index.html modulepreload links
+          return deps.filter(dep => {
+            return !/react-syntax-highlighter|jspdf|recharts|firebase|hyparquet|yaml|papaparse|fuse\.js|WCSNavigator|UXAuditor|BlogDrafter|WCSScraperTool|DeploymentImpactAnalyzerTool|EcommerceAutomationTool|GitOpsReviewerTool/.test(dep);
+          });
+        },
+      },
       rollupOptions: {
         output: {
           compact: !skipMinify,
