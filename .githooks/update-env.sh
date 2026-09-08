@@ -69,7 +69,7 @@ if check_run "^boomtick-pkg/mcp/"; then
     fi
 fi
 
-if check_run "^(src/|content/|package\.json|boomtick-pkg/scripts/build-repo-context\.py)"; then
+if check_run "^(src/|content/|package\.json|boomtick-pkg/cli/dev_tools/resources/build-repo-context\.py)"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "🔍 Indexable content changed. Updating .agent-context.json..."
         pnpm run agent:prime || echo "❌ ERROR: 'pnpm run agent:prime' failed. Please run it manually to update the agent index."
