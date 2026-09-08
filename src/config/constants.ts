@@ -42,6 +42,14 @@ export const STATIC_SCHEMAS = {
       "name": "BoomTick (BoomTick.blog)",
       "url": BASE_URL,
       "email": "ari@boomtick.blog",
+      "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+      "knowsAbout": [
+        "West Coast Swing",
+        "Social Dancing",
+        "Dance Mechanics and Timing",
+        "WCS Event Travel and Logistics"
+      ],
+      "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
       "logo": {
         "@type": "ImageObject",
         "name": `${SITE_NAME} Logo`,
@@ -58,10 +66,16 @@ export const STATIC_SCHEMAS = {
         "name": "Ariel Anders",
         "jobTitle": "Roboticist & AI Engineer",
         "url": `${BASE_URL}/about`,
+        "knowsAbout": [
+          "West Coast Swing",
+          "Robotics",
+          "Artificial Intelligence"
+        ],
         "sameAs": [
-          SOCIAL_LINKS.PORTFOLIO,
-          SOCIAL_LINKS.GITHUB,
-          SOCIAL_LINKS.LINKEDIN
+          "https://arii.github.io/",
+          "https://github.com/arii",
+          "https://www.linkedin.com/in/ariel-anders/",
+          "https://www.instagram.com/onasafari/"
         ]
       },
       "sameAs": [

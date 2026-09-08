@@ -145,6 +145,49 @@ function generateMetadataTags(route, meta) {
   const description = meta.description.replace(/"/g, '&quot;');
   const image = meta.image;
 
+  const publisherOrganization = {
+    "@type": "Organization",
+    "name": "BoomTick (BoomTick.blog)",
+    "url": BASE_URL,
+    "email": "ari@boomtick.blog",
+    "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+    "knowsAbout": [
+      "West Coast Swing",
+      "Social Dancing",
+      "Dance Mechanics and Timing",
+      "WCS Event Travel and Logistics"
+    ],
+    "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
+    "logo": {
+      "@type": "ImageObject",
+      "name": "BoomTick.blog Logo",
+      "url": `${BASE_URL}/favicon.ico`
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "San Francisco",
+      "addressRegion": "CA",
+      "addressCountry": "US"
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "Ariel Anders",
+      "jobTitle": "Roboticist & AI Engineer",
+      "url": `${BASE_URL}/about`,
+      "knowsAbout": [
+        "West Coast Swing",
+        "Robotics",
+        "Artificial Intelligence"
+      ],
+      "sameAs": [
+        "https://arii.github.io/",
+        "https://github.com/arii",
+        "https://www.linkedin.com/in/ariel-anders/",
+        "https://www.instagram.com/onasafari/"
+      ]
+    }
+  };
+
   let schemaJson = '';
   if (meta.rawTitle) {
     const jsonLd = {
@@ -159,15 +202,7 @@ function generateMetadataTags(route, meta) {
         "name": meta.author || "Ariel Anders",
         "url": `${BASE_URL}/about`
       },
-      "publisher": {
-        "@type": "Organization",
-        "name": "BoomTick.blog",
-        "url": BASE_URL,
-        "logo": {
-          "@type": "ImageObject",
-          "url": `${BASE_URL}/favicon.ico`
-        }
-      }
+      "publisher": publisherOrganization
     };
     if (meta.date) {
       jsonLd.datePublished = meta.date;
@@ -181,11 +216,7 @@ function generateMetadataTags(route, meta) {
       "name": meta.title,
       "description": meta.description,
       "url": canonicalUrl,
-      "publisher": {
-        "@type": "Organization",
-        "name": "BoomTick.blog",
-        "url": BASE_URL
-      }
+      "publisher": publisherOrganization
     };
     schemaJson = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
   }
