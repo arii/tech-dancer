@@ -6,6 +6,7 @@ setup-agent.sh
 **/setup-agent.sh
 public/previews/
 tests/
+index.html
 pnpm-workspace.yaml
 .npmrc
 .github/dependabot.yml
