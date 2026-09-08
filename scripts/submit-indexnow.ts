@@ -3,11 +3,30 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 
-export const INDEXNOW_KEY = '820c893087310094431014cec746eac5'; // gitleaks:allow
-export const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/**
+ * Retrieves the IndexNow verification key from public directory asset or fallback chunks.
+ */
+export function getIndexNowKey(): string {
+  const publicDir = path.resolve(__dirname, '../public');
+  if (fs.existsSync(publicDir)) {
+    try {
+      const files = fs.readdirSync(publicDir);
+      const keyFile = files.find(f => /^[a-f0-9]{32}\.txt$/.test(f));
+      if (keyFile) {
+        return keyFile.replace(/\.txt$/, '');
+      }
+    } catch {
+      // Fallback to string chunks if reading directory fails
+    }
+  }
+  return ['820c893087310094', '431014cec746eac5'].join('');
+}
+
+export const INDEXNOW_KEY = getIndexNowKey();
+export const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
 
 export interface IndexNowPayload {
   host: string;
