@@ -47,8 +47,9 @@ const filteredRoutes = STUB_ROUTES.filter(route => route !== '/');
 const staticRouteMetaMap = new Map();
 ROUTE_CONFIGS.forEach(r => {
   if (r.path && !r.path.includes(':') && r.path !== '*') {
+    const isRoot = r.path === '/';
     staticRouteMetaMap.set(r.path, {
-      title: r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering',
+      title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
       description: 'The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, gear reviews, and AI engineering research.',
       image: `${BASE_URL}/assets/comp_analysis_hero.webp`
     });
@@ -267,6 +268,13 @@ async function generateStubs() {
     fs.writeFileSync(targetFile, stubContent);
     console.log(`Generated stub for ${route}: ${targetFile}`);
   }
+
+  // Inject metadata for root route ('/') into dist/index.html
+  const rootMeta = getRouteMetadata('/');
+  const rootMetaTags = generateMetadataTags('/', rootMeta);
+  const rootContent = indexContent.replace('</head>', `    ${rootMetaTags}\n  </head>`);
+  fs.writeFileSync(INDEX_HTML, rootContent);
+  console.log(`Injected root route metadata into ${INDEX_HTML}`);
 
   console.log('SPA stubs generated successfully.');
 }
