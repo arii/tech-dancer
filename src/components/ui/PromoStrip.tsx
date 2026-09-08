@@ -45,7 +45,10 @@ export function PromoStrip({
         >
           <img
             loading="lazy"
-            src={fullImageSrc}
+            decoding="async"
+            width={48}
+            height={48}
+            src={fullImageSrc.includes('norcal-bestcal-front') ? fullImageSrc.replace('norcal-bestcal-front.webp', 'norcal-bestcal-front-400w.webp') : fullImageSrc}
             alt=""
             className="w-full h-full object-cover"
             onError={(e) => {
