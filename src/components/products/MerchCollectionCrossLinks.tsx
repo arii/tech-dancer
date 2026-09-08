@@ -68,6 +68,8 @@ export function MerchCollectionCrossLinks({
           to="/merch"
           display="inline-flex"
           align="center"
+          paddingX={3}
+          paddingY={2}
           gap={1.5}
           className="text-accent hover:text-accent-sky font-mono text-xs font-bold transition-colors group min-h-11"
         >
@@ -76,7 +78,7 @@ export function MerchCollectionCrossLinks({
         </Box>
       </Stack>
 
-      <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4}>
+      <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 4, sm: 6 }}>
         {displayProducts.map((item) => {
           const itemImg = item.images?.[0]?.src || item.imageUrl;
           return (
@@ -170,6 +172,9 @@ export function MerchCollectionCrossLinks({
                   display="inline-flex"
                   align="center"
                   gap={1}
+                  minHeight={11}
+                  paddingX={2}
+                  paddingY={2}
                   className="text-accent font-mono text-xs font-bold group-hover:underline"
                 >
                   <ShoppingBag className="w-3.5 h-3.5" />

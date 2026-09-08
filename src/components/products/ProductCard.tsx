@@ -177,6 +177,7 @@ export function ProductCard({
             state={{ from: 'merch' }}
             variant="primary"
             fullWidth
+            minHeight={11}
             gap={1.5}
             aria-label={`View details and options for ${item.title}`}
           >
@@ -191,6 +192,7 @@ export function ProductCard({
             rel="sponsored noopener noreferrer"
             variant="primary"
             fullWidth
+            minHeight={11}
             gap={1.5}
             aria-label={`Order ${item.title} on Printful`}
           >

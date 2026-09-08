@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ShoppingBag, ExternalLink, ArrowLeft, CheckCircle2, Palette, Ruler } from 'lucide-react';
+import { ShoppingBag, ExternalLink, ArrowLeft, CheckCircle2, Ruler } from 'lucide-react';
 import { Resource, readingTime } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
@@ -113,12 +113,12 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 {/* Header Category & Tags */}
                 <Stack gap={2}>
                   <Stack direction="row" align="center" gap={2} wrap>
-                    {collectionMeta && (
+                    {collectionMeta && (!matchedMerch?.roles || matchedMerch.roles.length === 0) && (
                       <Box
                         paddingX={2.5}
                         paddingY={1}
                         radius="full"
-                        className="bg-accent/15 border border-accent/30 text-accent font-mono text-xs font-bold"
+                        className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
                       >
                         {collectionMeta.label}
                       </Box>
@@ -131,7 +131,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                             paddingX={2.5}
                             paddingY={1}
                             radius="full"
-                            className="bg-accent/15 border border-accent/40 text-accent font-mono text-xs font-bold uppercase"
+                            className="bg-accent/15 border border-accent/40 text-accent font-sans text-xs font-semibold tracking-wide uppercase"
                           >
                             {r}
                           </Box>
@@ -176,66 +176,22 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                   {matchedMerch?.description || post.excerpt}
                 </Text>
 
-                {/* Quick Attributes (Colors & Sizes) */}
-                <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
-                  <Stack gap={3}>
-                    {matchedMerch?.color && (
-                      <Stack gap={1.5}>
-                        <Stack direction="row" align="center" gap={1.5}>
-                          <Palette className="w-3.5 h-3.5 text-accent" />
-                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                            Colorways
-                          </Text>
-                        </Stack>
-                        <Stack direction="row" wrap gap={1.5}>
-                          {matchedMerch.color.split('/').map((c) => (
-                            <Box
-                              key={c}
-                              paddingX={2.5}
-                              paddingY={1}
-                              surface="alt"
-                              border
-                              radius="full"
-                              className="border-line/20"
-                            >
-                              <Text variant="mono" size="micro" weight="font-medium" color="main">
-                                {c.trim()}
-                              </Text>
-                            </Box>
-                          ))}
-                        </Stack>
+                {/* Quick Attributes (Sizes) */}
+                {matchedMerch?.size && (
+                  <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
+                    <Stack gap={2}>
+                      <Stack direction="row" align="center" gap={1.5}>
+                        <Ruler className="w-3.5 h-3.5 text-accent" />
+                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                          Available Sizes
+                        </Text>
                       </Stack>
-                    )}
-
-                    {matchedMerch?.size && (
-                      <Stack gap={1.5}>
-                        <Stack direction="row" align="center" gap={1.5}>
-                          <Ruler className="w-3.5 h-3.5 text-accent" />
-                          <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                            Available Sizes
-                          </Text>
-                        </Stack>
-                        <Stack direction="row" wrap gap={1.5}>
-                          {matchedMerch.size.split('/').map((s) => (
-                            <Box
-                              key={s}
-                              paddingX={2.5}
-                              paddingY={1}
-                              surface="alt"
-                              border
-                              radius="sm"
-                              className="border-line/20"
-                            >
-                              <Text variant="mono" size="micro" weight="font-bold" color="main">
-                                {s.trim()}
-                              </Text>
-                            </Box>
-                          ))}
-                        </Stack>
-                      </Stack>
-                    )}
-                  </Stack>
-                </Box>
+                      <Text variant="mono" size="sm" color="dim" leading="relaxed">
+                        {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
+                      </Text>
+                    </Stack>
+                  </Box>
+                )}
 
                 {/* Primary Direct Checkout CTA Button */}
                 {effectiveShopUrl && (
@@ -248,7 +204,7 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                       display="flex"
                       align="center"
                       justify="center"
-                      paddingY={3.5}
+                      paddingY={{ base: 4, md: 3.5 }}
                       paddingX={6}
                       gap={2.5}
                       radius="md"
