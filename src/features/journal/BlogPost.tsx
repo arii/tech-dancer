@@ -27,7 +27,7 @@ export default function BlogPost() {
   const structuredData = useMemo(() => {
     if (!post) return null;
 
-    const postImageUrl = post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`;
+    const postImageUrl = post.image || `${BASE_URL}/assets/home/wcs-travel-pack.webp`;
     const authorName = post.author || "Ariel Anders";
 
     const isAriel = !post.author || post.author === 'Ariel Anders' || post.author.includes('Ariel');

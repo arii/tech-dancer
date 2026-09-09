@@ -40,10 +40,10 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
     const indexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
 
     expect(indexContent).toContain('<title data-rh="true" data-prerendered="true">BoomTick.blog - West Coast Swing & AI Engineering</title>');
-    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="description" content="The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, gear reviews, and AI engineering research." />');
+    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="description" content="The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and AI engineering research." />');
     expect(indexContent).toContain('<link data-rh="true" data-prerendered="true" rel="canonical" href="https://boomtick.blog/" />');
     expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:title" content="BoomTick.blog - West Coast Swing & AI Engineering" />');
-    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:description" content="The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, gear reviews, and AI engineering research." />');
+    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:description" content="The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and AI engineering research." />');
     expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="twitter:title" content="BoomTick.blog - West Coast Swing & AI Engineering" />');
   });
 

@@ -6,6 +6,7 @@ import { Icon } from '@/components/ui/Icon';
 
 interface PromoStripProps {
   imageSrc: string;
+  imageAlt?: string;
   title: string;       // e.g. "Shop NorCal pride merch"
   subtitle: string;    // e.g. "Tees, hoodies, and tanks for the dance floor"
   ctaLabel: string;    // e.g. "Shop now"
@@ -14,6 +15,7 @@ interface PromoStripProps {
 
 export function PromoStrip({
   imageSrc,
+  imageAlt,
   title,
   subtitle,
   ctaLabel,
@@ -49,7 +51,7 @@ export function PromoStrip({
             width={48}
             height={48}
             src={fullImageSrc.includes('norcal-bestcal-front') ? fullImageSrc.replace('norcal-bestcal-front.webp', 'norcal-bestcal-front-400w.webp') : fullImageSrc}
-            alt=""
+            alt={imageAlt || title}
             className="w-full h-full object-cover"
             onError={(e) => {
               // Hide image container on error to prevent broken icon
