@@ -56,7 +56,7 @@ export default function GearPost() {
     const price = parsePrice(rawPrice, "25.00");
     const productImageUrl = resource.image
       ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
-      : `${BASE_URL}/assets/comp_analysis_hero.webp`;
+      : `${BASE_URL}/assets/home/wcs-travel-pack.webp`;
 
     const breadcrumbSchema = generateBreadcrumbSchema([
       { name: "Home", path: "/" },

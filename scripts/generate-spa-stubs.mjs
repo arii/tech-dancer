@@ -50,8 +50,8 @@ ROUTE_CONFIGS.forEach(r => {
     const isRoot = r.path === '/';
     staticRouteMetaMap.set(r.path, {
       title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
-      description: 'The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, gear reviews, and AI engineering research.',
-      image: `${BASE_URL}/assets/comp_analysis_hero.webp`
+      description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and AI engineering research.',
+      image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
 });
@@ -62,7 +62,7 @@ RESEARCH_TOOLS.forEach(tool => {
   staticRouteMetaMap.set(toolRoute, {
     title: `${tool.title} | BoomTick Research`,
     description: tool.description,
-    image: tool.image ? (tool.image.startsWith('http') ? tool.image : `${BASE_URL}${tool.image.startsWith('/') ? '' : '/'}${tool.image}`) : `${BASE_URL}/assets/comp_analysis_hero.webp`
+    image: tool.image ? (tool.image.startsWith('http') ? tool.image : `${BASE_URL}${tool.image.startsWith('/') ? '' : '/'}${tool.image}`) : `${BASE_URL}/assets/home/wcs-travel-pack.webp`
   });
 });
 
@@ -85,7 +85,7 @@ function loadMarkdownMeta(dirPath, routePrefix) {
     const slug = file.replace(/\.md$/, '');
     const route = `${routePrefix}/${slug}`;
 
-    let img = data.image || '/assets/comp_analysis_hero.webp';
+    let img = data.image || '/assets/home/wcs-travel-pack.webp';
     if (!img.startsWith('http')) {
       img = `${BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`;
     }
@@ -124,7 +124,7 @@ function getRouteMetadata(route) {
     return {
       title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | BoomTick.blog`,
       description: 'West Coast Swing guide, tips, and insights on BoomTick.blog.',
-      image: `${BASE_URL}/assets/comp_analysis_hero.webp`
+      image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };
   }
 
@@ -133,14 +133,14 @@ function getRouteMetadata(route) {
     return {
       title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | BoomTick Gear`,
       description: 'West Coast Swing gear review and dancer recommendation.',
-      image: `${BASE_URL}/assets/comp_analysis_hero.webp`
+      image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };
   }
 
   return {
     title: 'BoomTick.blog - West Coast Swing & DevAI Research',
-    description: 'The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, gear reviews, and DevAI research.',
-    image: `${BASE_URL}/assets/comp_analysis_hero.webp`
+    description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and DevAI research.',
+    image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
   };
 }
 

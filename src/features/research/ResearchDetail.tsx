@@ -55,7 +55,7 @@ export default function ResearchDetail() {
 
   const structuredData = useMemo(() => {
     if (study) {
-      const studyImageUrl = study.authorImage || `${BASE_URL}/assets/comp_analysis_hero.webp`;
+      const studyImageUrl = study.authorImage || `${BASE_URL}/assets/home/wcs-travel-pack.webp`;
 
       const isAriel = !study.author || study.author === 'Ariel Anders' || study.author.includes('Ariel');
       const authorName = study.author || "Ariel Anders";
