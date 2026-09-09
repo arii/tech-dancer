@@ -146,12 +146,12 @@ function getRouteMetadata(route) {
 
 function cleanInjectedHead(html) {
   return html
-    .replace(/<title>.*?<\/title>\s*/gi, '')
-    .replace(/<meta name="description" content=".*?" \/>\s*/gi, '')
-    .replace(/<link rel="canonical" href=".*?" \/>\s*/gi, '')
-    .replace(/<meta property="og:.*?" content=".*?" \/>\s*/gi, '')
-    .replace(/<meta name="twitter:.*?" content=".*?" \/>\s*/gi, '')
-    .replace(/<script type="application\/ld\+json">.*?<\/script>\s*/gi, '');
+    .replace(/<title[\s\S]*?<\/title>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?name=["']description["'][^>]*\/?>\s*/gi, '')
+    .replace(/<link\s+[^>]*?rel=["']canonical["'][^>]*\/?>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?property=["']og:[^"']*["'][^>]*\/?>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?name=["']twitter:[^"']*["'][^>]*\/?>\s*/gi, '')
+    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '');
 }
 
 function cleanInjectedRoot(html) {
@@ -247,7 +247,7 @@ function generateMetadataTags(route, meta) {
       jsonLd.datePublished = meta.date;
       jsonLd.dateModified = meta.date;
     }
-    schemaJson = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
   } else {
     const jsonLd = {
       "@context": "https://schema.org",
@@ -257,22 +257,22 @@ function generateMetadataTags(route, meta) {
       "url": canonicalUrl,
       "publisher": publisherOrganization
     };
-    schemaJson = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
   }
 
   return [
-    `<title>${title}</title>`,
-    `<meta name="description" content="${description}" />`,
-    `<link rel="canonical" href="${canonicalUrl}" />`,
-    `<meta property="og:type" content="website" />`,
-    `<meta property="og:url" content="${canonicalUrl}" />`,
-    `<meta property="og:title" content="${title}" />`,
-    `<meta property="og:description" content="${description}" />`,
-    `<meta property="og:image" content="${image}" />`,
-    `<meta name="twitter:card" content="summary_large_image" />`,
-    `<meta name="twitter:title" content="${title}" />`,
-    `<meta name="twitter:description" content="${description}" />`,
-    `<meta name="twitter:image" content="${image}" />`,
+    `<title data-rh="true" data-prerendered="true">${title}</title>`,
+    `<meta data-rh="true" data-prerendered="true" name="description" content="${description}" />`,
+    `<link data-rh="true" data-prerendered="true" rel="canonical" href="${canonicalUrl}" />`,
+    `<meta data-rh="true" data-prerendered="true" property="og:type" content="website" />`,
+    `<meta data-rh="true" data-prerendered="true" property="og:url" content="${canonicalUrl}" />`,
+    `<meta data-rh="true" data-prerendered="true" property="og:title" content="${title}" />`,
+    `<meta data-rh="true" data-prerendered="true" property="og:description" content="${description}" />`,
+    `<meta data-rh="true" data-prerendered="true" property="og:image" content="${image}" />`,
+    `<meta data-rh="true" data-prerendered="true" name="twitter:card" content="summary_large_image" />`,
+    `<meta data-rh="true" data-prerendered="true" name="twitter:title" content="${title}" />`,
+    `<meta data-rh="true" data-prerendered="true" name="twitter:description" content="${description}" />`,
+    `<meta data-rh="true" data-prerendered="true" name="twitter:image" content="${image}" />`,
     schemaJson
   ].join('\n    ');
 }
