@@ -417,7 +417,7 @@ export function generateGearCatalogSchema(resources: Resource[]) {
           "@type": "Product",
           "name": resource.title,
           "description": resource.excerpt,
-          "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
+          "image": getImageUrl(resource.image, `/assets/home/wcs-travel-pack.webp`),
           "category": "Apparel & Accessories > Clothing",
           "sku": sku,
           "mpn": sku,

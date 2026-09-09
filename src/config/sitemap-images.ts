@@ -23,7 +23,7 @@ export const STATIC_ROUTE_IMAGES: StaticRouteImage[] = [
   // About / Profile Route
   {
     routePath: '/about',
-    imgLoc: '/assets/comp_analysis_hero.webp',
+    imgLoc: '/assets/home/wcs-travel-pack.webp',
     title: 'Ariel Anders Profile Photo',
     caption: 'Ariel Anders, PhD - Roboticist & WCS Dancer'
   },
