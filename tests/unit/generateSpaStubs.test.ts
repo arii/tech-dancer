@@ -29,7 +29,9 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
   beforeAll(() => {
     // Ensure build and postbuild scripts run so dist files are fresh
     if (!fs.existsSync(INDEX_HTML)) {
-      execSync('pnpm run build', { stdio: 'inherit' });
+      execSync('pnpm run build && pnpm run postbuild', { stdio: 'inherit' });
+    } else {
+      execSync('pnpm exec tsx scripts/generate-spa-stubs.mjs', { stdio: 'inherit' });
     }
   }, 120000);
 

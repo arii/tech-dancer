@@ -146,12 +146,12 @@ function getRouteMetadata(route) {
 
 function cleanInjectedHead(html) {
   return html
-    .replace(/<title.*?>.*?<\/title>\s*/gi, '')
-    .replace(/<meta name="description".*?\/>\s*/gi, '')
-    .replace(/<link rel="canonical".*?\/>\s*/gi, '')
-    .replace(/<meta property="og:.*?".*?\/>\s*/gi, '')
-    .replace(/<meta name="twitter:.*?".*?\/>\s*/gi, '')
-    .replace(/<script type="application\/ld\+json".*?>.*?<\/script>\s*/gi, '');
+    .replace(/<title[\s\S]*?<\/title>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?name=["']description["'][^>]*\/?>\s*/gi, '')
+    .replace(/<link\s+[^>]*?rel=["']canonical["'][^>]*\/?>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?property=["']og:[^"']*["'][^>]*\/?>\s*/gi, '')
+    .replace(/<meta\s+[^>]*?name=["']twitter:[^"']*["'][^>]*\/?>\s*/gi, '')
+    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '');
 }
 
 function cleanInjectedRoot(html) {
