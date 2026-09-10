@@ -1,0 +1,69 @@
+<<<<<<< SEARCH
+  // Use inline style to bypass linter on Box when dynamic positioning is used
+  return (
+    <Box
+      as="aside"
+      position="fixed"
+      className="bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
+      maxWidth="sm"
+      width="full"
+      padding={4}
+      radius="xl"
+      border
+    >
+      <Box position="absolute" className="top-2 right-2">
+=======
+  return (
+    <Box
+      as="aside"
+      position="fixed"
+      bottom={4}
+      right={4}
+      zIndex={50}
+      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
+      maxWidth="sm"
+      width="full"
+      padding={4}
+      radius="xl"
+      border
+    >
+      <Box position="absolute" top={2} right={2}>
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+    // Only show if not previously dismissed (in real app, might use localStorage)
+    const hasDismissed = sessionStorage.getItem('mailing_list_dismissed');
+=======
+    // Only show if not previously dismissed
+    const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+    setIsVisible(false);
+    setIsDismissed(true);
+    sessionStorage.setItem('mailing_list_dismissed', 'true');
+=======
+    setIsVisible(false);
+    setIsDismissed(true);
+    sessionStorage.setItem('ariel_profile_mailing_list_dismissed', 'true');
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+          {message && (
+            <Box
+              marginTop={3}
+              padding={2}
+              radius="md"
+              display="flex"
+              align="start"
+              gap={2}
+              className={`text-xs ${
+=======
+          {message && (
+            <Box
+              marginTop={3}
+              padding={2}
+              radius="md"
+              display="flex"
+              align="start"
+              gap={2}
+              aria-live="polite"
+              className={`text-xs ${
+>>>>>>> REPLACE

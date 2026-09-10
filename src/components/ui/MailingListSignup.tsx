@@ -53,8 +53,8 @@ const MailingListSignup = () => {
 
   // Delayed appearance effect
   useEffect(() => {
-    // Only show if not previously dismissed (in real app, might use localStorage)
-    const hasDismissed = sessionStorage.getItem('mailing_list_dismissed');
+    // Only show if not previously dismissed
+    const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
     if (hasDismissed === 'true') return;
 
     const timer = setTimeout(() => {
@@ -68,24 +68,26 @@ const MailingListSignup = () => {
   const handleDismiss = () => {
     setIsVisible(false);
     setIsDismissed(true);
-    sessionStorage.setItem('mailing_list_dismissed', 'true');
+    sessionStorage.setItem('ariel_profile_mailing_list_dismissed', 'true');
   };
 
   if (!isVisible || isDismissed) return null;
 
-  // Use inline style to bypass linter on Box when dynamic positioning is used
   return (
     <Box
       as="aside"
       position="fixed"
-      className="bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
+      bottom={4}
+      right={4}
+      zIndex={50}
       maxWidth="sm"
       width="full"
       padding={4}
       radius="xl"
       border
+      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
     >
-      <Box position="absolute" className="top-2 right-2">
+      <Box position="absolute" top={2} right={2}>
         <Box
           as="button"
           onClick={handleDismiss}
@@ -171,6 +173,7 @@ const MailingListSignup = () => {
               display="flex"
               align="start"
               gap={2}
+              aria-live="polite"
               className={`text-xs ${
                 status === 'success'
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
