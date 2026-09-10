@@ -1,6 +1,6 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { AlertCircle, CheckCircle2, Loader2, Mail } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, Mail, X } from 'lucide-react';
 
 const MailingListSignup = () => {
   const [name, setName] = useState('');
@@ -94,7 +94,7 @@ const MailingListSignup = () => {
           className="text-text-dim hover:text-text-main hover:bg-surface/80 transition-colors"
           aria-label="Dismiss newsletter signup"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <X size={16} />
         </Box>
       </Box>
 
