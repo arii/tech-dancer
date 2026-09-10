@@ -57,7 +57,7 @@ test.describe('Merch Page', () => {
   test('should render Order on Printful Store button on gear landing pages', async ({ page }) => {
     await page.goto('/gear/2024-06-01-norcal-gate-crop-hoodie');
     await expect(page.getByRole('heading', { name: /Golden Gate Crop Hoodie/i })).toBeVisible();
-    const buyButton = page.getByRole('link', { name: /Order on Printful Store/i });
+    const buyButton = page.getByRole('link', { name: /Order on (Official )?Printful Store/i });
     await expect(buyButton).toBeVisible();
     await expect(buyButton).toHaveAttribute('href', 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie');
     await expect(buyButton).toHaveAttribute('target', '_blank');
