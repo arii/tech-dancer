@@ -143,7 +143,7 @@ const ArielProfile = () => {
       </Stack>
 
       {/* 4. Mailing List Signup */}
-      <MailingListSignup />
+      <MailingListSignup variant="inline" />
 
       {/* 5. Legal, Terms & Social Links */}
       <ProfileLegalAndSocial />

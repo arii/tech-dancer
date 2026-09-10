@@ -4,6 +4,7 @@ import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
+import MailingListSignup from '@/components/ui/MailingListSignup';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
@@ -102,6 +103,10 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <GlobalSearch />
         </Suspense>
       )}
+
+      <Box display={{ base: "none", md: "block" }}>
+        <MailingListSignup variant="popup" />
+      </Box>
     </Box>
   );
 }

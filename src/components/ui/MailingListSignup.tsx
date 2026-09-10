@@ -1,13 +1,37 @@
-import { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { AlertCircle, CheckCircle2, Loader2, Mail, X } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, Mail, X, CheckCircle } from 'lucide-react';
 
-const MailingListSignup = () => {
+interface MailingListSignupProps {
+  variant?: 'popup' | 'inline';
+}
+
+export default function MailingListSignup({ variant = 'popup' }: MailingListSignupProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+
+  // Delayed appearance effect for popup variant
+  useEffect(() => {
+    if (variant === 'inline') {
+      setIsVisible(true);
+      return;
+    }
+
+    // Only show if not previously dismissed
+    const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
+    if (hasDismissed === 'true') return;
+
+    const timer = setTimeout(() => {
+      setIsDismissed(false);
+      setIsVisible(true);
+    }, 2000); // 2 second delay before showing
+
+    return () => clearTimeout(timer);
+  }, [variant]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -49,22 +73,6 @@ const MailingListSignup = () => {
     }
   };
 
-  const [isDismissed, setIsDismissed] = useState(false);
-
-  // Delayed appearance effect
-  useEffect(() => {
-    // Only show if not previously dismissed
-    const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
-    if (hasDismissed === 'true') return;
-
-    const timer = setTimeout(() => {
-      setIsDismissed(false);
-      setIsVisible(true);
-    }, 2000); // 2 second delay before showing
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const handleDismiss = () => {
     setIsVisible(false);
     setIsDismissed(true);
@@ -73,19 +81,129 @@ const MailingListSignup = () => {
 
   if (!isVisible || isDismissed) return null;
 
+  if (variant === 'inline') {
+    return (
+      <Box
+        width="full"
+        maxWidth="md"
+        background="slate-900"
+        borderColor="slate-800"
+        borderWidth={1}
+        radius="xl"
+        padding={8}
+        shadow="lg"
+        marginX="auto"
+      >
+        {status === 'success' ? (
+          <Stack align="center" gap={4} paddingY={6}>
+            <Box background="emerald-500/10" padding={4} radius="full" display="inline-flex">
+              <CheckCircle className="w-8 h-8 text-emerald-400" />
+            </Box>
+            <Text as="h3" align="center" weight="bold" size="xl" color="white">
+              You're on the list!
+            </Text>
+            <Text align="center" color="slate-400">
+              Thanks for subscribing. We'll be in touch soon.
+            </Text>
+          </Stack>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Stack gap={5}>
+              <Stack align="center" gap={3}>
+                <Box background="sky-500/10" padding={3} radius="full" display="inline-flex">
+                  <Mail className="w-6 h-6 text-sky-400" />
+                </Box>
+                <Text as="h3" weight="bold" size="xl" color="white" align="center">
+                  Join the Newsletter
+                </Text>
+                <Text size="sm" color="slate-400" align="center">
+                  Updates on articles, research, and gear. No spam.
+                </Text>
+              </Stack>
+
+              <Stack gap={4}>
+                <Box
+                  as="input"
+                  type="text"
+                  name="name"
+                  placeholder="First Name (optional)"
+                  value={name}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                  disabled={status === 'loading'}
+                  width="full"
+                  background="slate-950"
+                  borderColor="slate-800"
+                  borderWidth={1}
+                  radius="lg"
+                  padding={3}
+                  color="white"
+                  className="placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                />
+                <Box
+                  as="input"
+                  type="email"
+                  name="email"
+                  placeholder="Email Address *"
+                  required
+                  value={email}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  disabled={status === 'loading'}
+                  width="full"
+                  background="slate-950"
+                  borderColor="slate-800"
+                  borderWidth={1}
+                  radius="lg"
+                  padding={3}
+                  color="white"
+                  className="placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                />
+                <Button
+                  type="submit"
+                  variant="primary"
+                  width="full"
+                  disabled={status === 'loading'}
+                  size="lg"
+                >
+                  {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+                </Button>
+              </Stack>
+
+              {status === 'error' && (
+                <Box
+                  marginTop={3}
+                  padding={2}
+                  radius="md"
+                  display="flex"
+                  align="start"
+                  gap={2}
+                  aria-live="polite"
+                  className="bg-red-500/10 text-red-400 border border-red-500/20 text-xs"
+                >
+                  <Box paddingTop={0.5}><AlertCircle size={14} className="shrink-0" /></Box>
+                  <Text size="xs">{message}</Text>
+                </Box>
+              )}
+            </Stack>
+          </form>
+        )}
+      </Box>
+    );
+  }
+
+  // Popup variant
   return (
     <Box
       as="aside"
       position="fixed"
       bottom={4}
-      right={4}
+      left="1/2"
       zIndex={50}
       maxWidth="sm"
       width="full"
       padding={4}
       radius="xl"
       border
-      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
+      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl -translate-x-1/2 w-[calc(100%-2rem)] md:w-full"
     >
       <Box position="absolute" top={2} right={2}>
         <Box
@@ -193,5 +311,3 @@ const MailingListSignup = () => {
     </Box>
   );
 };
-
-export default MailingListSignup;
