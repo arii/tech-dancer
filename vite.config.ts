@@ -187,6 +187,9 @@ export default defineConfig(({mode}) => {
       'import.meta.env.VITE_WCS_API_URL': JSON.stringify(
         process.env.VITE_WCS_API_URL || env.VITE_WCS_API_URL || 'https://wcs-navigator-api-237690545533.us-west1.run.app'
       ),
+      'import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID': JSON.stringify(
+        process.env.VITE_MAILING_LIST_DEPLOYMENT_ID || env.VITE_MAILING_LIST_DEPLOYMENT_ID || process.env.DEPLOYMENT_ID || env.DEPLOYMENT_ID || ''
+      ),
     },
     plugins: [
       react(),
