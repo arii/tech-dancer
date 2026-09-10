@@ -14,13 +14,11 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
+  // Initialize state based on variant without using an effect
+  const [initialized] = useState(() => variant === 'inline');
+
   // Delayed appearance effect for popup variant
   useEffect(() => {
-    if (variant === 'inline') {
-      setIsVisible(true);
-      return;
-    }
-
     // Only show if not previously dismissed
     const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
     if (hasDismissed === 'true') return;
@@ -79,7 +77,7 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
     sessionStorage.setItem('ariel_profile_mailing_list_dismissed', 'true');
   };
 
-  if (!isVisible || isDismissed) return null;
+  if (!initialized && (!isVisible || isDismissed)) return null;
 
   if (variant === 'inline') {
     return (
@@ -96,8 +94,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
       >
         {status === 'success' ? (
           <Stack align="center" gap={4} paddingY={6}>
-            <Box background="emerald-500/10" padding={4} radius="full" display="inline-flex">
-              <CheckCircle className="w-8 h-8 text-emerald-400" />
+            <Box background="emerald-500/10" padding={4} radius="full" display="inline-flex" color="emerald-400">
+              <CheckCircle className="w-8 h-8" />
             </Box>
             <Text as="h3" align="center" weight="bold" size="xl" color="white">
               You're on the list!
@@ -110,8 +108,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
           <form onSubmit={handleSubmit}>
             <Stack gap={5}>
               <Stack align="center" gap={3}>
-                <Box background="sky-500/10" padding={3} radius="full" display="inline-flex">
-                  <Mail className="w-6 h-6 text-sky-400" />
+                <Box background="sky-500/10" padding={3} radius="full" display="inline-flex" color="sky-400">
+                  <Mail className="w-6 h-6" />
                 </Box>
                 <Text as="h3" weight="bold" size="xl" color="white" align="center">
                   Join the Newsletter
@@ -177,7 +175,11 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                   align="start"
                   gap={2}
                   aria-live="polite"
-                  className="bg-red-500/10 text-red-400 border border-red-500/20 text-xs"
+                  background="red-500/10"
+                  color="red-400"
+                  borderColor="red-500/20"
+                  borderWidth={1}
+                  className="text-xs"
                 >
                   <Box paddingTop={0.5}><AlertCircle size={14} className="shrink-0" /></Box>
                   <Text size="xs">{message}</Text>
@@ -203,7 +205,12 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
       padding={4}
       radius="xl"
       border
-      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl -translate-x-1/2 w-[calc(100%-2rem)] md:w-full"
+      style={
+        {
+          width: 'calc(100% - 2rem)'
+        } as React.CSSProperties
+      }
+      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl -translate-x-1/2 md:w-full"
     >
       <Box position="absolute" top={2} right={2}>
         <Box
