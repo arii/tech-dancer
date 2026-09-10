@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.9.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.8.0...tech-dancer-v0.9.0) (2026-09-10)
+
+
+### Features
+
+* **seo:** host IndexNow API key verification and configure instant indexing ([#4543](https://github.com/arii/tech-dancer/issues/4543)) ([b3d1426](https://github.com/arii/tech-dancer/commit/b3d1426f864685cb47c717a5788a7c2aee349178))
+* **ux:** add visual preview asset for Ecommerce Automation card on research experiments index ([#4530](https://github.com/arii/tech-dancer/issues/4530)) ([7410aa9](https://github.com/arii/tech-dancer/commit/7410aa920ce5d9f53208c50a31fa964c70e29c00))
+
+
+### Bug Fixes
+
+* **seo:** inject route-specific meta description for root (/) route ([#4547](https://github.com/arii/tech-dancer/issues/4547)) ([47b65b6](https://github.com/arii/tech-dancer/commit/47b65b65640e46429e0cbc5ddd41413521c6256e))
+* **seo:** truncate or optimize title tag length to under 70 characters for research studies ([#4545](https://github.com/arii/tech-dancer/issues/4545)) ([60bf8ed](https://github.com/arii/tech-dancer/commit/60bf8ed67c7d954397cdb5d3b5ba94aed2596f3e))
+* **ux:** resolve nested link DOM structure and clarify action labels on merch catalog cards ([#4529](https://github.com/arii/tech-dancer/issues/4529)) ([85b8b3f](https://github.com/arii/tech-dancer/commit/85b8b3f81c45ece65fcc452d50df120e1640c1df))
+
+
+### Performance Improvements
+
+* optimize initial page load performance and Core Web Vitals on mobile ([#4548](https://github.com/arii/tech-dancer/issues/4548)) ([1e89fa2](https://github.com/arii/tech-dancer/commit/1e89fa27c46a621057a3e46f048d45ed91fd673d))
+
 ## [0.8.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.7.0...tech-dancer-v0.8.0) (2026-09-04)
 
 
