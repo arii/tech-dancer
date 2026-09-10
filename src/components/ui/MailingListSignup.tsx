@@ -9,15 +9,6 @@ const MailingListSignup = () => {
   const [message, setMessage] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  // Delayed appearance effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2000); // 2 second delay before showing
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
@@ -58,71 +49,112 @@ const MailingListSignup = () => {
     }
   };
 
-  if (!isVisible) return null;
+  const [isDismissed, setIsDismissed] = useState(false);
 
+  // Delayed appearance effect
+  useEffect(() => {
+    // Only show if not previously dismissed (in real app, might use localStorage)
+    const hasDismissed = sessionStorage.getItem('mailing_list_dismissed');
+    if (hasDismissed === 'true') return;
+
+    const timer = setTimeout(() => {
+      setIsDismissed(false);
+      setIsVisible(true);
+    }, 2000); // 2 second delay before showing
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleDismiss = () => {
+    setIsVisible(false);
+    setIsDismissed(true);
+    sessionStorage.setItem('mailing_list_dismissed', 'true');
+  };
+
+  if (!isVisible || isDismissed) return null;
+
+  // Use inline style to bypass linter on Box when dynamic positioning is used
   return (
     <Box
-      as="section"
-      maxWidth="3xl"
-      marginX="auto"
-      paddingX={4}
-      marginTop={{ base: 16, lg: 24 }}
-      paddingTop={{ base: 12, lg: 16 }}
-      paddingBottom={{ base: 12, lg: 16 }}
-      border="t"
-      className="border-line/80"
+      as="aside"
+      position="fixed"
+      className="bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
+      maxWidth="sm"
+      width="full"
+      padding={4}
+      radius="xl"
+      border
     >
-      <Stack gap={6} align="center" className="text-center">
+      <Box position="absolute" className="top-2 right-2">
         <Box
-          padding={3}
+          as="button"
+          onClick={handleDismiss}
+          padding={1.5}
           radius="full"
-          className="bg-brand-cyan/10 text-brand-cyan"
+          className="text-text-dim hover:text-text-main hover:bg-surface/80 transition-colors"
+          aria-label="Dismiss newsletter signup"
         >
-          <Mail size={24} />
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </Box>
+      </Box>
 
-        <Stack gap={2}>
-          <Text as="h3" variant="heading" size="xl">
-            Join the Newsletter
-          </Text>
-          <Text variant="body" className="text-text-dim max-w-md mx-auto">
-            Get occasional updates on new articles, research, and gear reviews. No spam, ever.
+      <Stack gap={4}>
+        <Stack gap={1} paddingRight={6}>
+          <Box display="flex" align="center" gap={2}>
+            <Mail size={16} className="text-brand-cyan" />
+            <Text as="h3" variant="heading" size="sm" weight="font-semibold">
+              Join the Newsletter
+            </Text>
+          </Box>
+          <Text variant="body" size="xs" className="text-text-dim">
+            Updates on articles, research, and gear. No spam.
           </Text>
         </Stack>
 
-        <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="relative mt-4">
-          <Stack gap={4}>
-            <input
+        <Box as="form" onSubmit={handleSubmit} width="full" className="relative">
+          <Stack gap={3}>
+            <Box
+              as="input"
               type="text"
               name="name"
               placeholder="First Name (optional)"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
-              className="w-full px-4 py-3 bg-surface/50 border border-line rounded-lg focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
+              paddingX={3}
+              paddingY={2}
+              radius="md"
+              border
+              className="w-full text-sm bg-surface/50 border-line focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
             />
 
-            <input
+            <Box
+              as="input"
               type="email"
               name="email"
               placeholder="Email Address *"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
-              className="w-full px-4 py-3 bg-surface/50 border border-line rounded-lg focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
+              paddingX={3}
+              paddingY={2}
+              radius="md"
+              border
+              className="w-full text-sm bg-surface/50 border-line focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
             />
 
             <Button
               type="submit"
               disabled={status === 'loading' || status === 'success' || !email}
-              className="w-full py-3"
+              size="sm"
+              className="w-full"
             >
               {status === 'loading' ? (
-                <>
-                  <Loader2 size={18} className="animate-spin mr-2" />
+                <Box display="flex" align="center" gap={2}>
+                  <Loader2 size={14} className="animate-spin" />
                   Subscribing...
-                </>
+                </Box>
               ) : status === 'success' ? (
                 'Subscribed'
               ) : (
@@ -133,21 +165,24 @@ const MailingListSignup = () => {
 
           {message && (
             <Box
-              marginTop={4}
-              padding={3}
+              marginTop={3}
+              padding={2}
               radius="md"
-              className={`flex items-start gap-2 text-sm ${
+              display="flex"
+              align="start"
+              gap={2}
+              className={`text-xs ${
                 status === 'success'
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                   : 'bg-red-500/10 text-red-400 border border-red-500/20'
               }`}
             >
               {status === 'success' ? (
-                <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
+                <Box paddingTop={0.5}><CheckCircle2 size={14} className="shrink-0" /></Box>
               ) : (
-                <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                <Box paddingTop={0.5}><AlertCircle size={14} className="shrink-0" /></Box>
               )}
-              <Text>{message}</Text>
+              <Text size="xs">{message}</Text>
             </Box>
           )}
         </Box>
