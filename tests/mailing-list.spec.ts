@@ -26,7 +26,15 @@ test.describe('Mailing List Verification', () => {
             const originalFetch = window.fetch;
             window.fetch = async (...args) => {
                 const url = args[0] as string;
-                if (url.includes('script.google.com')) {
+                let isGoogleScript = false;
+                try {
+                    const parsedUrl = new URL(url);
+                    isGoogleScript = parsedUrl.hostname === 'script.google.com' || parsedUrl.hostname.endsWith('.script.google.com');
+                } catch (e) {
+                    // ignore invalid URL
+                }
+
+                if (isGoogleScript) {
                     return new Response(JSON.stringify({ status: 'success' }), {
                         status: 200,
                         headers: { 'Content-Type': 'application/json' }
