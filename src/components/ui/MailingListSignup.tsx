@@ -120,41 +120,55 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
               </Stack>
 
               <Stack gap={4}>
-                <Box
-                  as="input"
-                  type="text"
-                  name="name"
-                  placeholder="First Name (optional)"
-                  value={name}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                  disabled={status === 'loading'}
-                  width="full"
-                  background="slate-950"
-                  borderColor="slate-800"
-                  borderWidth={1}
-                  radius="lg"
-                  padding={3}
-                  color="white"
-                  className="placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
-                />
-                <Box
-                  as="input"
-                  type="email"
-                  name="email"
-                  placeholder="Email Address *"
-                  required
-                  value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                  disabled={status === 'loading'}
-                  width="full"
-                  background="slate-950"
-                  borderColor="slate-800"
-                  borderWidth={1}
-                  radius="lg"
-                  padding={3}
-                  color="white"
-                  className="placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
-                />
+                <Stack gap={1.5}>
+                  <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="slate-300">
+                    First Name <span className="opacity-50 font-normal">(optional)</span>
+                  </Text>
+                  <Box
+                    as="input"
+                    id="inline-name"
+                    type="text"
+                    name="name"
+                    placeholder="e.g. Ariel"
+                    value={name}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                    disabled={status === 'loading'}
+                    width="full"
+                    background="slate-800/50"
+                    borderColor="slate-700"
+                    borderWidth={1}
+                    radius="lg"
+                    paddingX={4}
+                    paddingY={3}
+                    color="white"
+                    className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                  />
+                </Stack>
+                <Stack gap={1.5}>
+                  <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="slate-300">
+                    Email Address <span className="text-brand-cyan">*</span>
+                  </Text>
+                  <Box
+                    as="input"
+                    id="inline-email"
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    disabled={status === 'loading'}
+                    width="full"
+                    background="slate-800/50"
+                    borderColor="slate-700"
+                    borderWidth={1}
+                    radius="lg"
+                    paddingX={4}
+                    paddingY={3}
+                    color="white"
+                    className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                  />
+                </Stack>
                 <Button
                   type="submit"
                   variant="primary"
@@ -239,37 +253,57 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
         </Stack>
 
         <Box as="form" onSubmit={handleSubmit} width="full" className="relative">
-          <Stack gap={3}>
-            <Box
-              as="input"
-              type="text"
-              name="name"
-              placeholder="First Name (optional)"
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
-              paddingX={3}
-              paddingY={2}
-              radius="md"
-              border
-              className="w-full text-sm bg-surface/50 border-line focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
-            />
+          <Stack gap={4}>
+            <Stack gap={1.5}>
+              <Text as="label" htmlFor="popup-name" size="sm" weight="medium" color="slate-300">
+                First Name <span className="opacity-50 font-normal">(optional)</span>
+              </Text>
+              <Box
+                as="input"
+                id="popup-name"
+                type="text"
+                name="name"
+                placeholder="e.g. Ariel"
+                value={name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                disabled={status === 'loading' || status === 'success'}
+                width="full"
+                background="slate-800/50"
+                borderColor="slate-700"
+                borderWidth={1}
+                radius="lg"
+                paddingX={4}
+                paddingY={3}
+                color="white"
+                className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+              />
+            </Stack>
 
-            <Box
-              as="input"
-              type="email"
-              name="email"
-              placeholder="Email Address *"
-              required
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
-              paddingX={3}
-              paddingY={2}
-              radius="md"
-              border
-              className="w-full text-sm bg-surface/50 border-line focus:outline-none focus:border-brand-cyan/50 focus:ring-1 focus:ring-brand-cyan/50 disabled:opacity-50 text-text-main transition-colors"
-            />
+            <Stack gap={1.5}>
+              <Text as="label" htmlFor="popup-email" size="sm" weight="medium" color="slate-300">
+                Email Address <span className="text-brand-cyan">*</span>
+              </Text>
+              <Box
+                as="input"
+                id="popup-email"
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                disabled={status === 'loading' || status === 'success'}
+                width="full"
+                background="slate-800/50"
+                borderColor="slate-700"
+                borderWidth={1}
+                radius="lg"
+                paddingX={4}
+                paddingY={3}
+                color="white"
+                className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+              />
+            </Stack>
 
             <Button
               type="submit"
