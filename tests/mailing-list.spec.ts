@@ -30,7 +30,7 @@ test.describe('Mailing List Verification', () => {
                 try {
                     const parsedUrl = new URL(url);
                     isGoogleScript = parsedUrl.hostname === 'script.google.com' || parsedUrl.hostname.endsWith('.script.google.com');
-                } catch (e) {
+                } catch {
                     // ignore invalid URL
                 }
 
