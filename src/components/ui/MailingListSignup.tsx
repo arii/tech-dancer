@@ -19,16 +19,34 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
 
   // Delayed appearance effect for popup variant
   useEffect(() => {
+    if (variant !== 'popup') return;
+
     // Only show if not previously dismissed
     const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
     if (hasDismissed === 'true') return;
 
+    // Show after scrolling or small delay
+    const handleScroll = () => {
+      if (window.scrollY > 150) {
+        setIsDismissed(false);
+        setIsVisible(true);
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+
+    // Also set a fallback timer in case they don't scroll
     const timer = setTimeout(() => {
       setIsDismissed(false);
       setIsVisible(true);
-    }, 2000); // 2 second delay before showing
+      window.removeEventListener('scroll', handleScroll);
+    }, 5000);
 
-    return () => clearTimeout(timer);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [variant]);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -134,8 +152,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="slate-800/50"
-                    borderColor="slate-700"
+                    background="slate-800"
+                    borderColor="slate-600"
                     borderWidth={1}
                     radius="lg"
                     paddingX={4}
@@ -159,8 +177,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="slate-800/50"
-                    borderColor="slate-700"
+                    background="slate-800"
+                    borderColor="slate-600"
                     borderWidth={1}
                     radius="lg"
                     paddingX={4}
@@ -268,8 +286,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                 disabled={status === 'loading' || status === 'success'}
                 width="full"
-                background="slate-800/50"
-                borderColor="slate-700"
+                background="slate-800"
+                borderColor="slate-600"
                 borderWidth={1}
                 radius="lg"
                 paddingX={4}
@@ -294,8 +312,8 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 disabled={status === 'loading' || status === 'success'}
                 width="full"
-                background="slate-800/50"
-                borderColor="slate-700"
+                background="slate-800"
+                borderColor="slate-600"
                 borderWidth={1}
                 radius="lg"
                 paddingX={4}

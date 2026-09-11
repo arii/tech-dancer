@@ -104,9 +104,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         </Suspense>
       )}
 
-      <Box display={{ base: "none", md: "block" }}>
-        <MailingListSignup variant="popup" />
-      </Box>
+      <MailingListSignup variant="popup" />
     </Box>
   );
 }
