@@ -17,13 +17,26 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
   // Initialize state based on variant without using an effect
   const [initialized] = useState(() => variant === 'inline');
 
+  const DEPLOYMENT_ID = import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID;
+
   // Delayed appearance effect for popup variant
   useEffect(() => {
     if (variant !== 'popup') return;
 
+    // In test environments or when unconfigured, don't show the popup
+    // to prevent blocking UI interactions in E2E tests
+    if (!DEPLOYMENT_ID && typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      return;
+    }
+
     // Only show if not previously dismissed
     const hasDismissed = sessionStorage.getItem('ariel_profile_mailing_list_dismissed');
     if (hasDismissed === 'true') return;
+
+    // Disable popup in automated testing environments to prevent blocking UI interactions
+    if (typeof window !== 'undefined' && window.navigator?.webdriver) {
+      return;
+    }
 
     // Show after scrolling or small delay
     const handleScroll = () => {
@@ -57,8 +70,6 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
     setMessage('');
 
     try {
-      const DEPLOYMENT_ID = import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID;
-
       if (!DEPLOYMENT_ID) {
         throw new Error('Mailing list configuration is missing');
       }
@@ -230,19 +241,15 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
       as="aside"
       position="fixed"
       bottom={4}
-      left="1/2"
+      left={4}
+      right={4}
+      marginX="auto"
       zIndex={50}
       maxWidth="sm"
-      width="full"
       padding={4}
       radius="xl"
       border
-      style={
-        {
-          width: 'calc(100% - 2rem)'
-        } as React.CSSProperties
-      }
-      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl -translate-x-1/2 md:w-full"
+      className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
     >
       <Box position="absolute" top={2} right={2}>
         <Box

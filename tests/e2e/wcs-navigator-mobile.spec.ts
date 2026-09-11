@@ -11,6 +11,9 @@ for (const dev of MOBILE_VIEWPORTS) {
     test.use({ viewport: dev.viewport });
 
     test('validates 0 horizontal scroll overflow across all wizard steps', async ({ page }) => {
+      await page.addInitScript(() => {
+        sessionStorage.setItem('ariel_profile_mailing_list_dismissed', 'true');
+      });
       await page.goto('./research/wcs-navigator', { waitUntil: 'networkidle' });
 
       // Helper to assert 0 horizontal scroll overflow
