@@ -150,7 +150,7 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
 
               <Stack gap={4}>
                 <Stack gap={1.5}>
-                  <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="slate-300">
+                  <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="text-dim">
                     First Name <span className="opacity-50 font-normal">(optional)</span>
                   </Text>
                   <Box
@@ -163,18 +163,18 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="slate-800"
-                    borderColor="slate-600"
+                    background="surface-raised"
+                    borderColor="line"
                     borderWidth={1}
                     radius="lg"
                     paddingX={4}
                     paddingY={3}
-                    color="white"
-                    className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                    color="text-main"
+                    className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
                   />
                 </Stack>
                 <Stack gap={1.5}>
-                  <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="slate-300">
+                  <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="text-dim">
                     Email Address <span className="text-brand-cyan">*</span>
                   </Text>
                   <Box
@@ -188,14 +188,14 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="slate-800"
-                    borderColor="slate-600"
+                    background="surface-raised"
+                    borderColor="line"
                     borderWidth={1}
                     radius="lg"
                     paddingX={4}
                     paddingY={3}
-                    color="white"
-                    className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                    color="text-main"
+                    className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
                   />
                 </Stack>
                 <Button
@@ -251,13 +251,14 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
       border
       className="animate-in slide-in-from-bottom-5 fade-in duration-300 border-line bg-surface/95 backdrop-blur shadow-xl"
     >
-      <Box position="absolute" top={2} right={2}>
+      <Box position="absolute" top={2} right={2} zIndex={10}>
         <Box
           as="button"
           onClick={handleDismiss}
           padding={1.5}
           radius="full"
-          className="text-text-dim hover:text-text-main hover:bg-surface/80 transition-colors"
+          color="text-dim"
+          className="hover:text-text-main hover:bg-surface/80 transition-colors"
           aria-label="Dismiss newsletter signup"
         >
           <X size={16} />
@@ -280,7 +281,7 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
         <Box as="form" onSubmit={handleSubmit} width="full" className="relative">
           <Stack gap={4}>
             <Stack gap={1.5}>
-              <Text as="label" htmlFor="popup-name" size="sm" weight="medium" color="slate-300">
+              <Text as="label" htmlFor="popup-name" size="sm" weight="medium" color="text-dim">
                 First Name <span className="opacity-50 font-normal">(optional)</span>
               </Text>
               <Box
@@ -293,19 +294,19 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                 disabled={status === 'loading' || status === 'success'}
                 width="full"
-                background="slate-800"
-                borderColor="slate-600"
+                background="surface-raised"
+                borderColor="line"
                 borderWidth={1}
                 radius="lg"
                 paddingX={4}
                 paddingY={3}
-                color="white"
-                className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                color="text-main"
+                className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
               />
             </Stack>
 
             <Stack gap={1.5}>
-              <Text as="label" htmlFor="popup-email" size="sm" weight="medium" color="slate-300">
+              <Text as="label" htmlFor="popup-email" size="sm" weight="medium" color="text-dim">
                 Email Address <span className="text-brand-cyan">*</span>
               </Text>
               <Box
@@ -319,14 +320,14 @@ export default function MailingListSignup({ variant = 'popup' }: MailingListSign
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 disabled={status === 'loading' || status === 'success'}
                 width="full"
-                background="slate-800"
-                borderColor="slate-600"
+                background="surface-raised"
+                borderColor="line"
                 borderWidth={1}
                 radius="lg"
                 paddingX={4}
                 paddingY={3}
-                color="white"
-                className={`placeholder-slate-400 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                color="text-main"
+                className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
               />
             </Stack>
 
