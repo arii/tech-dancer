@@ -9,6 +9,7 @@ import { generateProfileGallerySchema } from '@/utils/schema';
 import { useProfile } from './useProfile';
 import ProfileStoryRow from './components/ProfileStoryRow';
 import ProfileLegalAndSocial from './components/ProfileLegalAndSocial';
+import MailingListSignup from '@/components/ui/MailingListSignup';
 
 const ArielProfile = () => {
   const { bio } = useProfile();
@@ -141,7 +142,10 @@ const ArielProfile = () => {
         </Reveal>
       </Stack>
 
-      {/* 4. Legal, Terms & Social Links */}
+      {/* 4. Mailing List Signup */}
+      <MailingListSignup />
+
+      {/* 5. Legal, Terms & Social Links */}
       <ProfileLegalAndSocial />
     </Box>
   );
