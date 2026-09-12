@@ -46,7 +46,7 @@ test.describe('Mailing List Verification', () => {
             // Overwrite console.error for testing missing env variable
             const originalError = console.error;
             console.error = (...args) => {
-                if (args[0] === 'Mailing list configuration is missing' || args.length > 0 && String(args[0]).includes('Mailing list configuration is missing')) {
+                if (args[0] === 'Mailing list configuration is missing' || (args.length > 0 && String(args[0]).includes('Mailing list configuration is missing'))) {
                    return; // Ignore this specific error for testing
                 }
                 originalError(...args);
