@@ -111,10 +111,12 @@ export default function MailingListSignup() {
                     color="text-main"
                     outline="none"
                     transition="all"
-                    style={{
-                      '--tw-ring-color': 'var(--color-brand-cyan)',
-                      boxShadow: status === 'idle' ? 'none' : '0 0 15px rgba(0, 240, 255, 0.3)'
-                    } as React.CSSProperties}
+                    style={
+                      {
+                        '--tw-ring-color': 'var(--color-brand-cyan)',
+                        boxShadow: status === 'idle' ? 'none' : 'var(--shadow-glow)'
+                      } as React.CSSProperties
+                    }
                   />
                 </Stack>
                 <Stack gap={1.5}>
@@ -141,10 +143,12 @@ export default function MailingListSignup() {
                     color="text-main"
                     outline="none"
                     transition="all"
-                    style={{
-                      '--tw-ring-color': 'var(--color-brand-cyan)',
-                      boxShadow: status === 'idle' ? 'none' : '0 0 15px rgba(0, 240, 255, 0.3)'
-                    } as React.CSSProperties}
+                    style={
+                      {
+                        '--tw-ring-color': 'var(--color-brand-cyan)',
+                        boxShadow: status === 'idle' ? 'none' : 'var(--shadow-glow)'
+                      } as React.CSSProperties
+                    }
                   />
                 </Stack>
                 <Button
