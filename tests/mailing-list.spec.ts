@@ -16,7 +16,7 @@ test.describe('Mailing List Verification', () => {
     await page.waitForTimeout(1000);
 
     // Take screenshot
-    await page.screenshot({ path: '/home/jules/verification/screenshots/mailing-list-about-page.png' });
+    await page.screenshot({ path: 'artifacts/mailing-list-about-page.png' });
 
     // Mock the deployment ID in the component directly by injecting it into the page BEFORE evaluating it
     await page.addInitScript(() => {
@@ -103,6 +103,6 @@ test.describe('Mailing List Verification', () => {
     await page.waitForTimeout(1000);
 
     // Take screenshot of success state
-    await page.screenshot({ path: '/home/jules/verification/screenshots/mailing-list-success.png' });
+    await page.screenshot({ path: 'artifacts/mailing-list-success.png' });
   });
 });
