@@ -46,7 +46,7 @@ test.describe('Mailing List Verification', () => {
             // Overwrite console.error for testing missing env variable
             const originalError = console.error;
             console.error = (...args) => {
-                if (args[0] === 'Mailing list deployment ID not configured') {
+                if (args[0] === 'Mailing list configuration is missing' || args.length > 0 && String(args[0]).includes('Mailing list configuration is missing')) {
                    return; // Ignore this specific error for testing
                 }
                 originalError(...args);
@@ -60,7 +60,7 @@ test.describe('Mailing List Verification', () => {
 
     // Listen for console errors just in case
     page.on('console', msg => {
-      if (msg.type() === 'error' && !msg.text().includes('Mailing list deployment ID not configured')) {
+      if (msg.type() === 'error' && !msg.text().includes('Mailing list configuration is missing')) {
         console.error(`Page Error: ${msg.text()}`);
       }
     });
