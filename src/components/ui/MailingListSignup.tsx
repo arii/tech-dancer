@@ -63,7 +63,7 @@ export default function MailingListSignup() {
         {status === 'success' ? (
           <Stack align="center" gap={4} paddingY={6}>
             <Box background="emerald-500/10" padding={4} radius="full" display="inline-flex" color="emerald-400">
-              <CheckCircle className="w-8 h-8" />
+              <CheckCircle size={32} />
             </Box>
             <Text as="h3" align="center" weight="bold" size="xl" color="white">
               You're on the list!
@@ -77,7 +77,7 @@ export default function MailingListSignup() {
             <Stack gap={5}>
               <Stack align="center" gap={3}>
                 <Box background="sky-500/10" padding={3} radius="full" display="inline-flex" color="sky-400">
-                  <Mail className="w-6 h-6" />
+                  <Mail size={24} />
                 </Box>
                 <Text as="h3" weight="bold" size="xl" color="white" align="center">
                   Join the Newsletter
@@ -90,7 +90,7 @@ export default function MailingListSignup() {
               <Stack gap={4}>
                 <Stack gap={1.5}>
                   <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="text-dim">
-                    First Name <span className="opacity-50 font-normal">(optional)</span>
+                    First Name <Text as="span" opacity={50} weight="normal">(optional)</Text>
                   </Text>
                   <Box
                     as="input"
@@ -109,12 +109,17 @@ export default function MailingListSignup() {
                     paddingX={4}
                     paddingY={3}
                     color="text-main"
-                    className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                    outline="none"
+                    transition="all"
+                    style={{
+                      '--tw-ring-color': 'var(--color-brand-cyan)',
+                      boxShadow: status === 'idle' ? 'none' : '0 0 15px rgba(0, 240, 255, 0.3)'
+                    } as React.CSSProperties}
                   />
                 </Stack>
                 <Stack gap={1.5}>
                   <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="text-dim">
-                    Email Address <span className="text-brand-cyan">*</span>
+                    Email Address <Text as="span" color="brand-cyan">*</Text>
                   </Text>
                   <Box
                     as="input"
@@ -134,7 +139,12 @@ export default function MailingListSignup() {
                     paddingX={4}
                     paddingY={3}
                     color="text-main"
-                    className={`placeholder-text-dim focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan transition-all ${status === 'idle' ? '' : 'shadow-glow'}`}
+                    outline="none"
+                    transition="all"
+                    style={{
+                      '--tw-ring-color': 'var(--color-brand-cyan)',
+                      boxShadow: status === 'idle' ? 'none' : '0 0 15px rgba(0, 240, 255, 0.3)'
+                    } as React.CSSProperties}
                   />
                 </Stack>
                 <Button
@@ -161,9 +171,8 @@ export default function MailingListSignup() {
                   color="red-400"
                   borderColor="red-500/20"
                   borderWidth={1}
-                  className="text-xs"
                 >
-                  <Box paddingTop={0.5}><AlertCircle size={14} className="shrink-0" /></Box>
+                  <Box paddingTop={0.5} flexShrink={0}><AlertCircle size={14} /></Box>
                   <Text size="xs">{message}</Text>
                 </Box>
               )}
