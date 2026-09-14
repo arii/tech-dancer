@@ -107,14 +107,15 @@ ${additionalImageTags ? `${additionalImageTags}\n` : ''}      <g:condition>new</
       <g:brand>BoomTick</g:brand>
       <g:color>${escapeXml(product.color || 'Black')}</g:color>
       <g:size>${escapeXml(variant.size)}</g:size>
-${product.material ? `      <g:material>${escapeXml(product.material)}</g:material>\n` : ''}      <g:identifier_exists>no</g:identifier_exists>
+${product.material ? `      <g:material>${escapeXml(product.material)}</g:material>\n` : ''}${product.gtin ? `      <g:gtin>${escapeXml(product.gtin)}</g:gtin>\n      <g:identifier_exists>yes</g:identifier_exists>` : '      <g:identifier_exists>no</g:identifier_exists>'}
       <g:google_product_category>${googleCategory}</g:google_product_category>
       <g:product_type>${escapeXml(productType)}</g:product_type>
       <g:age_group>adult</g:age_group>
       <g:gender>${gender}</g:gender>
-      <g:shipping>
+${product.customLabel ? `      <g:custom_label_0>${escapeXml(product.customLabel)}</g:custom_label_0>\n` : ''}      <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>${product.shippingPrice || '4.99'} USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
