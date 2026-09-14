@@ -1,0 +1,25 @@
+# BoomTick.blog - Generative Engine Optimization (GEO) Knowledge Index
+
+> BoomTick.blog is a specialized West Coast Swing (WCS) publication featuring community guides, gear reviews, and select DevAI experiments related to WCS event tools. Authored by Ariel Anders, PhD (Roboticist, AI Engineer, and competitive WCS dancer). Ariel's primary engineering portfolio is featured at [arii.github.io](https://arii.github.io).
+
+## Core West Coast Swing Guides & Tutorials
+- [DIY Suede Shoe Conversion Guide](https://boomtick.blog/blog/2026-04-18-make-shoe-dance): Step-by-step tutorial on converting athletic sneakers or street shoes into dance footwear using adhesive suede, surface prep, and edge sealing.
+- [WCS Event Travel & Packing Guide](https://boomtick.blog/blog/2026-06-01-event-travel-packing): Comprehensive packing strategies, floor survival kits, recovery tools, and venue prep for multi-day WCS conventions.
+- [Competition Metrics & Scoring Fundamentals](https://boomtick.blog/blog/2026-04-18-competition-metrics): Analysis of WSDC relative placement scoring, judge variance, preliminary rounds, and finals strategies.
+- [Why WCS Finals Are Hard](https://boomtick.blog/blog/2026-04-18-why-finals-are-hard): Strategic breakdown of spotlight rounds, musicality expectations, and fatigue management during competition finals.
+- [The Rhythmic Architecture of WCS](https://boomtick.blog/blog/2026-05-06-boomtick-and-b-the-rhythmic-architecture-of-west-coast-swing): Exploring musical structures, extension, rolling count variations, and micro-timing in WCS.
+
+## Curated Gear & Footwear Reviews
+- [Adhesive Suede Sheets Review](https://boomtick.blog/gear/2026-04-12-suede-shoe-diy): Tested suede materials and adhesives for social dancers and competitors.
+- [Loop Experience Earplugs Review](https://boomtick.blog/gear/2023-10-01-loop-earplugs): High-fidelity hearing protection for late-night ballroom social dancing.
+- [Portable Travel Steamer](https://boomtick.blog/gear/2023-11-01-travel-steamer): Compact garment steamers for wrinkle-free WCS competition attire.
+
+## AI Engineering & DevAI Research Tools
+- [VersionTruth](https://boomtick.blog/versiontruth): Real-time ground-truth intelligence for npm, Node.js, and GitHub Actions dependencies to eliminate LLM hallucination errors.
+- [WCS Navigator](https://boomtick.blog/wcs-navigator): Stateless AI schedule engine utilizing Gemini 3.5 Flash to generate personalized RFC 5545 calendar files for WCS conventions.
+- [Visual Regression & UX Auditor](https://boomtick.blog/ux-auditor): Playwright and pixelmatch diffing engine scoring visual regression severity across viewports.
+- [High-Scale Telemetry Ingestion ETL](https://boomtick.blog/research/wcs-scraper): Data engineering pipeline transforming competitive dance telemetry into Parquet formats for analytical queries.
+
+## About the Author
+- [About Ariel Anders, PhD](https://boomtick.blog/about): Background in MIT AI Lab robotics, computer vision, and competitive West Coast Swing dancing.
+- [Primary Engineering Portfolio](https://arii.github.io): Full engineering portfolio and robotics/AI projects.
