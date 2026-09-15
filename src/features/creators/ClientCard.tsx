@@ -1,5 +1,7 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
+import { ShieldCheck } from 'lucide-react';
+
 export interface ClientCardProps {
   name: string;
   location: string;
@@ -24,6 +26,14 @@ export function ClientCard({ name, location, description, niche, tags, imageSrc,
           <Text as="h2" variant="headline" size="xl" weight="font-bold">{name}</Text>
           <Text as="p" className="creator-location" variant="mono" size="xs" color="dim">{location}</Text>
         </Stack>
+
+        <Box display="flex" alignItems="center" gap={1.5} className="text-success">
+          <ShieldCheck size={14} className="shrink-0" />
+          <Text as="span" variant="mono" size="xs" weight="font-medium" color="success">
+            Licensed Professional · 15 Years of Experience
+          </Text>
+        </Box>
+
         <Text as="p" className="creator-description" variant="body" size="sm" color="main" flex={1}>
           {description}
         </Text>

@@ -1,16 +1,35 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { NavLink } from 'react-router-dom';
+import { LayoutDashboard, Users, UserRound, GraduationCap, LucideIcon } from 'lucide-react';
 
 interface ExpansionSlotCardProps {
   title: string;
   description: string;
+  icon: LucideIcon;
 }
 
-function ExpansionSlotCard({ title, description }: ExpansionSlotCardProps) {
+function ExpansionSlotCard({ title, description, icon: Icon }: ExpansionSlotCardProps) {
   return (
-    <Box border radius="lg" padding={6} surface="alt" display="flex" flexDirection="column" justify="center" minHeight={48} className="border-dashed border-line/50 opacity-80 hover:opacity-100 transition-opacity">
-      <Stack gap={2}>
-        <Text variant="mono" size="sm" weight="font-bold" color="dim">{title}</Text>
-        <Text variant="body" size="sm" color="dim">{description}</Text>
+    <Box border radius="lg" overflow="hidden" surface="default" height="full" display="flex" flexDirection="column" className="creator-card group border-dashed opacity-80 hover:opacity-100 transition-opacity">
+      <Box className="creator-media" position="relative" height={48} width="full" bg="surface-alt" display="flex" alignItems="center" justify="center">
+        <Icon size={48} className="text-dim/30" />
+        <Box position="absolute" top={4} right={4} paddingX={3} paddingY={1} radius="full" className="bg-bg/90 backdrop-blur-sm text-xs font-bold uppercase text-accent">
+          Concept — Open Slot
+        </Box>
+      </Box>
+      <Stack className="creator-body" padding={6} gap={4} flex={1}>
+        <Stack gap={1}>
+          <Text as="h2" variant="headline" size="xl" weight="font-bold">Option B Concept Previews</Text>
+          <Text as="p" className="creator-location" variant="mono" size="xs" color="dim">{title}</Text>
+        </Stack>
+        <Text as="p" className="creator-description" variant="body" size="sm" color="main" flex={1}>
+          {description}
+        </Text>
+        <Box className="creator-actions" marginTop={4}>
+          <Button as={NavLink} to="/services#intake-form" variant="outline" width="full">
+            Inquire About Slot ↗
+          </Button>
+        </Box>
       </Stack>
     </Box>
   );
@@ -19,19 +38,23 @@ function ExpansionSlotCard({ title, description }: ExpansionSlotCardProps) {
 const EXPANSION_SLOTS = [
   {
     title: "Dance Instructor / Studio",
-    description: "Private lesson scheduling, workshop registrations, and digital payment pipelines."
+    description: "Private lesson scheduling, workshop registrations, and digital payment pipelines.",
+    icon: Users
   },
   {
     title: "Personal Fitness Trainer",
-    description: "Client onboarding questionnaires, automated check-ins, and recurring subscriptions."
+    description: "Client onboarding questionnaires, automated check-ins, and recurring subscriptions.",
+    icon: LayoutDashboard
   },
   {
     title: "Therapist / Counselor",
-    description: "HIPAA-conscious inquiry workflows, calendar reservation locks, and consultation intake."
+    description: "HIPAA-conscious inquiry workflows, calendar reservation locks, and consultation intake.",
+    icon: UserRound
   },
   {
     title: "Private Tutor / Academic Coach",
-    description: "Curriculum overviews, parent intake forms, and automated lesson reminders."
+    description: "Curriculum overviews, parent intake forms, and automated lesson reminders.",
+    icon: GraduationCap
   }
 ];
 
@@ -43,6 +66,7 @@ export function ExpansionSlots() {
           key={slot.title}
           title={slot.title}
           description={slot.description}
+          icon={slot.icon}
         />
       ))}
     </>

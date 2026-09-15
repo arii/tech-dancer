@@ -64,7 +64,7 @@ export default function Creators() {
           description="Specializing in curly hair cuts, authentic vintage styling, and on-location production styling."
           niche="Hair & Beauty"
           tags={["Edge Web Build", "Appointment Funnel", "Event Intake Automation"]}
-          imageSrc="/images/creators/hair-by-april.jpg"
+          imageSrc="/images/creators/hair-by-april-full.png"
           url="https://hairbyapril.pages.dev"
         />
           <ExpansionSlots />

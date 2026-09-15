@@ -132,9 +132,14 @@ export function IntakeForm() {
               <Box as="textarea" paddingX={4} paddingY={3} id="notes" name="notes" rows={4} className={`${inputClassName} resize-none`} />
             </Stack>
 
-            <Button type="submit" variant="primary" size="lg" width="full" disabled={status === 'submitting'}>
-              {status === 'submitting' ? 'Submitting...' : 'Request Studio Consultation →'}
-            </Button>
+            <Stack gap={4} className="text-center">
+              <Text variant="body" size="sm" color="dim">
+                🔒 We respect your time. Your details remain strictly confidential and will never be shared.
+              </Text>
+              <Button type="submit" variant="primary" size="lg" width="full" disabled={status === 'submitting'}>
+                {status === 'submitting' ? 'Submitting...' : 'Request Studio Consultation →'}
+              </Button>
+            </Stack>
           </Stack>
         </Box>
       </Stack>

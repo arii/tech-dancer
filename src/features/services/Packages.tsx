@@ -64,7 +64,7 @@ export function PackagesGrid() {
       <Grid cols={{ base: 1, lg: 3 }} gap={8}>
         <PackageCard
           title="Presence"
-          price="$1,500+"
+          price="$1,500+ setup / $99-149/mo"
           bestFor="Emerging creatives needing a sharp, modern home base."
           features={[
             "3–5 page high-performance mobile-first website.",
@@ -75,7 +75,7 @@ export function PackagesGrid() {
         />
         <PackageCard
           title="Booked"
-          price="$2,500+"
+          price="$2,500+ setup / $199-349/mo"
           popular
           bestFor="Service providers losing billable hours to scheduling friction."
           features={[
@@ -89,7 +89,7 @@ export function PackagesGrid() {
         />
         <PackageCard
           title="Studio Growth"
-          price="$4,000+"
+          price="$4,000+ setup / $399-799+/mo"
           bestFor="Established pros scaling classes, digital downloads, or merchandise."
           features={[
             "Everything in Booked, plus:",
