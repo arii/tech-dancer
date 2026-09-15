@@ -29,6 +29,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -58,6 +59,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -87,6 +89,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -116,6 +119,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -145,6 +149,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -174,6 +179,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -203,6 +209,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -232,6 +239,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -261,6 +269,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -290,6 +299,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -319,6 +329,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -348,6 +359,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -377,6 +389,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -406,6 +419,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -435,6 +449,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -464,6 +479,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -493,6 +509,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -522,6 +539,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -551,6 +569,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -580,6 +599,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -609,6 +629,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -638,6 +659,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -667,6 +689,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -696,6 +719,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -725,6 +749,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -754,6 +779,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -783,6 +809,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -812,6 +839,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -841,6 +869,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -870,6 +899,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -899,6 +929,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -928,6 +959,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -957,6 +989,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -986,6 +1019,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1015,6 +1049,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1044,6 +1079,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1073,6 +1109,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1102,6 +1139,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1131,6 +1169,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1160,6 +1199,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1189,6 +1229,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1218,6 +1259,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1247,6 +1289,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1276,6 +1319,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1305,6 +1349,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1334,6 +1379,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1363,6 +1409,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1392,6 +1439,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1420,6 +1468,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1448,6 +1497,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1476,6 +1526,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1504,6 +1555,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1532,6 +1584,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1560,6 +1613,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1588,6 +1642,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1616,6 +1671,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1644,6 +1700,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1672,6 +1729,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1700,6 +1758,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1728,6 +1787,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1756,6 +1816,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1784,6 +1845,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1812,6 +1874,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1840,6 +1903,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1868,6 +1932,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1896,6 +1961,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1924,6 +1990,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1952,6 +2019,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -1980,6 +2048,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2008,6 +2077,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2036,6 +2106,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2064,6 +2135,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2092,6 +2164,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2102,7 +2175,7 @@
       <g:id>slot-era-tank-top-xs</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2120,6 +2193,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2130,7 +2204,7 @@
       <g:id>slot-era-tank-top-s</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2148,6 +2222,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2158,7 +2233,7 @@
       <g:id>slot-era-tank-top-m</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2176,6 +2251,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2186,7 +2262,7 @@
       <g:id>slot-era-tank-top-l</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2204,6 +2280,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2214,7 +2291,7 @@
       <g:id>slot-era-tank-top-xl</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2232,6 +2309,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2242,7 +2320,7 @@
       <g:id>slot-era-tank-top-2xl</g:id>
       <g:item_group_id>slot-era-tank-top</g:item_group_id>
       <title>Slot Era WCS Women&apos;s Racerback Tank Top</title>
-      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.</description>
+      <description>Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.</description>
       <link>https://boomtick.blog/gear/slot-era-tank-top</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_racerback.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2260,6 +2338,7 @@
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2268,10 +2347,11 @@
     </item>
     <item>
       <g:id>slot-era-tote-bag</g:id>
-      <title>Slot Era WCS Tote Bag</title>
-      <description>Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.</description>
+      <title>Slot Era WCS Tote Bag - Canvas West Coast Swing Dance Bag, Black 15x15</title>
+      <description>Show off your West Coast Swing pride with this durable 15&quot; x 15&quot; black canvas tote bag, featuring the signature Slot Era dancer graphic and BoomTick branding. Made from 100% spun polyester canvas, it&apos;s sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. Makes a funny gift for WCS dancers for birthdays or holidays.</description>
       <link>https://boomtick.blog/gear/slot-era-tote-bag</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_tote.webp</g:image_link>
+      <g:additional_image_link>https://boomtick.blog/assets/home/wcs-travel-pack.webp</g:additional_image_link>
       <g:condition>new</g:condition>
       <g:availability>in_stock</g:availability>
       <g:price>27.00 USD</g:price>
@@ -2284,9 +2364,11 @@
       <g:product_type>Accessories &gt; Bags &gt; Tote Bags</g:product_type>
       <g:age_group>adult</g:age_group>
       <g:gender>unisex</g:gender>
+      <g:custom_label_0>wcs-dance</g:custom_label_0>
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.59 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
@@ -2296,7 +2378,7 @@
     <item>
       <g:id>slot-era-mug</g:id>
       <title>Slot Era Black Ceramic Mug</title>
-      <description>11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.</description>
+      <description>11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick branding. A funny gift for WCS dancers for birthdays and holidays to power your dance event mornings and late-night competition reviews.</description>
       <link>https://boomtick.blog/gear/slot-era-mug</link>
       <g:image_link>https://boomtick.blog/assets/slot_era_mug.webp</g:image_link>
       <g:condition>new</g:condition>
@@ -2311,9 +2393,11 @@
       <g:product_type>Home &amp; Living &gt; Drinkware &gt; Mugs</g:product_type>
       <g:age_group>adult</g:age_group>
       <g:gender>unisex</g:gender>
+      <g:custom_label_0>boomtick-merch</g:custom_label_0>
       <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
+        <g:price>4.99 USD</g:price>
       </g:shipping>
       <g:min_handling_time>2</g:min_handling_time>
       <g:max_handling_time>7</g:max_handling_time>
