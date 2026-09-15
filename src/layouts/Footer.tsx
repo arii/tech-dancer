@@ -34,7 +34,7 @@ export function Footer() {
           <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
             <Stack gap={1}>
               <Text variant="mono" size="xs" color="main" weight="font-bold" tracking="wider">
-                BoomTick (BoomTick.blog)
+                BoomTick
               </Text>
               <Text variant="body" size="xs" color="dim">
                 San Francisco, CA, USA · Official Support:{' '}

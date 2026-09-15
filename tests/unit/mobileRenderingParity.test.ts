@@ -27,7 +27,7 @@ describe('Mobile-First Indexing & Rendering Parity', () => {
       };
     } | undefined;
     expect(orgSchema).toBeDefined();
-    expect(orgSchema?.name).toBe('BoomTick (BoomTick.blog)');
+    expect(orgSchema?.name).toBe('BoomTick');
     expect(orgSchema?.description).toBe('West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.');
     expect(orgSchema?.knowsAbout).toEqual([
       'West Coast Swing',

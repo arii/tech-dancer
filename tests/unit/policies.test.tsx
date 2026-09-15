@@ -56,7 +56,7 @@ describe('Standalone Policy Pages & Merchant Contact Signals', () => {
     expect(screen.getByText('Terms')).toBeDefined();
     expect(screen.getByText('Contact')).toBeDefined();
 
-    expect(screen.getByText('BoomTick (BoomTick.blog)')).toBeDefined();
+    expect(screen.getByText('BoomTick')).toBeDefined();
     expect(screen.getByText(/San Francisco, CA, USA/i)).toBeDefined();
     expect(screen.getAllByText('ari@boomtick.blog').length).toBeGreaterThan(0);
   });

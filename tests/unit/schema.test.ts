@@ -476,7 +476,7 @@ describe('schema utils', () => {
   describe('PUBLISHER_BOOMTICK Organization & Founder topical authority schema', () => {
     it('contains description, knowsAbout, keywords, address, and founder in PUBLISHER_BOOMTICK', () => {
       expect(PUBLISHER_BOOMTICK['@type']).toBe('Organization');
-      expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick (BoomTick.blog)');
+      expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick');
       expect(PUBLISHER_BOOMTICK.email).toBe('ari@boomtick.blog');
       expect(PUBLISHER_BOOMTICK.description).toBe('West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.');
       expect(PUBLISHER_BOOMTICK.knowsAbout).toEqual([

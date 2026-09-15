@@ -187,7 +187,7 @@ function generateMetadataTags(route, meta) {
   const publisherOrganization = {
     "@id": `${BASE_URL}/#organization`,
     "@type": "Organization",
-    "name": "BoomTick (BoomTick.blog)",
+    "name": "BoomTick",
     "url": BASE_URL,
     "email": "ari@boomtick.blog",
     "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
