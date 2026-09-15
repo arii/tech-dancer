@@ -2,15 +2,32 @@ import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { useState } from 'react';
 
 export function IntakeForm() {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('submitting');
-    // Simulate submission
-    setTimeout(() => {
+
+    const formData = new FormData(e.currentTarget);
+    const deploymentId = import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID;
+
+    if (!deploymentId) {
+      console.warn("Mailing list deployment ID is not set. Simulating success.");
       setStatus('success');
-    }, 1000);
+      return;
+    }
+
+    try {
+      await fetch(`https://script.google.com/macros/s/${deploymentId}/exec`, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+      });
+      setStatus('success');
+    } catch (error) {
+      console.error("Form submission failed:", error);
+      setStatus('error');
+    }
   };
 
   if (status === 'success') {
@@ -32,6 +49,14 @@ export function IntakeForm() {
           <Text as="h2" variant="headline" size="2xl" weight="font-bold">Request Studio Consultation</Text>
           <Text variant="body" size="lg" color="dim">Fill out the form below to get started.</Text>
         </Stack>
+
+        {status === 'error' && (
+          <Box border radius="md" padding={4} surface="alt" className="border-error/50 bg-error/10 text-error">
+            <Text variant="body" size="sm" weight="font-bold">
+              There was a network error submitting your request. Please try again or email Ari@boomtick.blog directly.
+            </Text>
+          </Box>
+        )}
 
         <Box as="form" onSubmit={handleSubmit} width="full">
           <Stack gap={6}>
@@ -70,35 +95,37 @@ export function IntakeForm() {
               <Box as="input" paddingX={4} paddingY={3} type="text" id="website" name="website" placeholder="e.g. instagram.com/mybusiness" className={inputClassName} />
             </Stack>
 
-            <Stack gap={3}>
-              <Text variant="mono" size="sm" weight="font-bold">Primary Operational Challenge</Text>
-              <Stack gap={2}>
-                <label className="cursor-pointer">
-                  <Stack direction="row" align="center" gap={3}>
-                    <input type="radio" name="challenge" value="Need a new website" required className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
-                    <span className="text-sm text-main">Need a new website</span>
-                  </Stack>
-                </label>
-                <label className="cursor-pointer">
-                  <Stack direction="row" align="center" gap={3}>
-                    <input type="radio" name="challenge" value="Booking & scheduling is messy" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
-                    <span className="text-sm text-main">Booking & scheduling is messy</span>
-                  </Stack>
-                </label>
-                <label className="cursor-pointer">
-                  <Stack direction="row" align="center" gap={3}>
-                    <input type="radio" name="challenge" value="Need better Google search visibility" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
-                    <span className="text-sm text-main">Need better Google search visibility</span>
-                  </Stack>
-                </label>
-                <label className="cursor-pointer">
-                  <Stack direction="row" align="center" gap={3}>
-                    <input type="radio" name="challenge" value="All of the above" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
-                    <span className="text-sm text-main">All of the above</span>
-                  </Stack>
-                </label>
+            <Box as="fieldset">
+              <Stack gap={3}>
+                <Text as="legend" variant="mono" size="sm" weight="font-bold">Primary Operational Challenge</Text>
+                <Stack gap={2}>
+                  <label className="cursor-pointer">
+                    <Stack direction="row" align="center" gap={3}>
+                      <input type="radio" name="challenge" value="Need a new website" required className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
+                      <span className="text-sm text-main">Need a new website</span>
+                    </Stack>
+                  </label>
+                  <label className="cursor-pointer">
+                    <Stack direction="row" align="center" gap={3}>
+                      <input type="radio" name="challenge" value="Booking & scheduling is messy" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
+                      <span className="text-sm text-main">Booking & scheduling is messy</span>
+                    </Stack>
+                  </label>
+                  <label className="cursor-pointer">
+                    <Stack direction="row" align="center" gap={3}>
+                      <input type="radio" name="challenge" value="Need better Google search visibility" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
+                      <span className="text-sm text-main">Need better Google search visibility</span>
+                    </Stack>
+                  </label>
+                  <label className="cursor-pointer">
+                    <Stack direction="row" align="center" gap={3}>
+                      <input type="radio" name="challenge" value="All of the above" className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30" />
+                      <span className="text-sm text-main">All of the above</span>
+                    </Stack>
+                  </label>
+                </Stack>
               </Stack>
-            </Stack>
+            </Box>
 
             <Stack gap={2}>
               <label htmlFor="notes" className="text-sm font-bold font-mono">Message / Timeline Notes</label>

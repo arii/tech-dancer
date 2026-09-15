@@ -16,25 +16,35 @@ function ExpansionSlotCard({ title, description }: ExpansionSlotCardProps) {
   );
 }
 
+const EXPANSION_SLOTS = [
+  {
+    title: "Dance Instructor / Studio",
+    description: "Private lesson scheduling, workshop registrations, and digital payment pipelines."
+  },
+  {
+    title: "Personal Fitness Trainer",
+    description: "Client onboarding questionnaires, automated check-ins, and recurring subscriptions."
+  },
+  {
+    title: "Therapist / Counselor",
+    description: "HIPAA-conscious inquiry workflows, calendar reservation locks, and consultation intake."
+  },
+  {
+    title: "Private Tutor / Academic Coach",
+    description: "Curriculum overviews, parent intake forms, and automated lesson reminders."
+  }
+];
+
 export function ExpansionSlots() {
   return (
     <>
-      <ExpansionSlotCard
-        title="Dance Instructor / Studio"
-        description="Private lesson scheduling, workshop registrations, and digital payment pipelines."
-      />
-      <ExpansionSlotCard
-        title="Personal Fitness Trainer"
-        description="Client onboarding questionnaires, automated check-ins, and recurring subscriptions."
-      />
-      <ExpansionSlotCard
-        title="Therapist / Counselor"
-        description="HIPAA-conscious inquiry workflows, calendar reservation locks, and consultation intake."
-      />
-      <ExpansionSlotCard
-        title="Private Tutor / Academic Coach"
-        description="Curriculum overviews, parent intake forms, and automated lesson reminders."
-      />
+      {EXPANSION_SLOTS.map((slot) => (
+        <ExpansionSlotCard
+          key={slot.title}
+          title={slot.title}
+          description={slot.description}
+        />
+      ))}
     </>
   );
 }
