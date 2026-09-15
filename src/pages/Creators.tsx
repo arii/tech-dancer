@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text, Button } from '@/layouts/Primitives';
 import { NavLink } from 'react-router-dom';
 import { ClientCard } from '@/features/creators/ClientCard';
 import { ExpansionSlots } from '@/features/creators/ExpansionSlots';
@@ -26,16 +26,13 @@ export default function Creators() {
           "@type": "ListItem",
           "position": 1,
           "item": {
-            "@type": "ProfessionalService",
+            "@type": "WebSite",
             "name": "Hair by April",
             "url": "https://hairbyapril.pages.dev",
             "description": "Curly hair cuts, authentic vintage styling, and on-location wedding and event hair services across San Francisco.",
-            "serviceType": "Hair Styling & Beauty Operations",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "San Francisco",
-              "addressRegion": "CA",
-              "addressCountry": "US"
+            "creator": {
+              "@type": "Organization",
+              "@id": "https://boomtick.blog/#organization"
             }
           }
         }
@@ -59,9 +56,19 @@ export default function Creators() {
         </Text>
       </Stack>
 
-      <Box marginTop={16} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ClientCard />
-        <ExpansionSlots />
+      <Box marginTop={16}>
+        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+          <ClientCard
+          name="Hair by April"
+          location="San Francisco, CA"
+          description="Specializing in curly hair cuts, authentic vintage styling, and on-location production styling."
+          niche="Hair & Beauty"
+          tags={["Edge Web Build", "Appointment Funnel", "Event Intake Automation"]}
+          imageSrc="/images/creators/hair-by-april.jpg"
+          url="https://hairbyapril.pages.dev"
+        />
+          <ExpansionSlots />
+        </Grid>
       </Box>
 
       <Box marginTop={24} padding={12} surface="accent" radius="xl" className="text-center">

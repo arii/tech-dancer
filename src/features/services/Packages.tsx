@@ -50,9 +50,7 @@ function PackageCard({ title, price, popular, bestFor, features }: PackageCardPr
           ))}
         </Stack>
 
-        <Button variant={popular ? "primary" : "outline"} width="full" marginTop={4} onClick={() => {
-          document.getElementById('intake-form')?.scrollIntoView({ behavior: 'smooth' });
-        }}>
+        <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4}>
           Inquire Now
         </Button>
       </Stack>
@@ -63,7 +61,7 @@ function PackageCard({ title, price, popular, bestFor, features }: PackageCardPr
 export function PackagesGrid() {
   return (
     <Stack gap={8} width="full">
-      <Box className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <Grid cols={{ base: 1, lg: 3 }} gap={8}>
         <PackageCard
           title="Presence"
           price="$1,500+"
@@ -100,7 +98,7 @@ export function PackagesGrid() {
             "Monthly SEO, content execution, and conversion optimization reporting."
           ]}
         />
-      </Box>
+      </Grid>
     </Stack>
   );
 }
