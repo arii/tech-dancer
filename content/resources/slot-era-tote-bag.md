@@ -11,8 +11,8 @@ author: "Ariel Anders"
 date: "2024-06-01"
 tags: ["merch", "slot-era", "accessories", "tote"]
 featured: true
-excerpt: "Show off your West Coast Swing pride with this durable 15\" x 15\" black canvas tote bag, featuring the signature Slot Era dancer graphic. Made from 100% spun polyester canvas, it's sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. A great gift for any swing dancer."
-description: "Show off your West Coast Swing pride with this durable 15\" x 15\" black canvas tote bag, featuring the signature Slot Era dancer graphic. Made from 100% spun polyester canvas, it's sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. A great gift for any swing dancer."
+excerpt: "Show off your West Coast Swing pride with this durable 15\" x 15\" black canvas tote bag, featuring the signature Slot Era dancer graphic and BoomTick branding. Made from 100% spun polyester canvas, it's sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. Makes a funny gift for WCS dancers for birthdays or holidays."
+description: "Show off your West Coast Swing pride with this durable 15\" x 15\" black canvas tote bag, featuring the signature Slot Era dancer graphic and BoomTick branding. Made from 100% spun polyester canvas, it's sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. Makes a funny gift for WCS dancers for birthdays or holidays."
 ---
 
 Spacious and durable spun polyester canvas tote designed to carry dance shoes, shoe brushes, water bottles, and event essentials between workshop ballrooms.

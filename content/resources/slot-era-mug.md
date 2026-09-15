@@ -11,8 +11,8 @@ author: "Ariel Anders"
 date: "2024-06-01"
 tags: ["merch", "slot-era", "accessories", "mug"]
 featured: false
-excerpt: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia."
-description: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia."
+excerpt: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick branding. A funny gift for WCS dancers for birthdays and holidays to power your dance event mornings and late-night competition reviews."
+description: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick branding. A funny gift for WCS dancers for birthdays and holidays to power your dance event mornings and late-night competition reviews."
 ---
 
 Dishwasher and microwave safe black ceramic mug to power your dance event mornings and late-night competition reviews.
