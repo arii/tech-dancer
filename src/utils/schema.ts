@@ -207,22 +207,25 @@ export const AUTHOR_ARIEL_ANDERS = {
   "sameAs": [
     "https://arii.github.io",
     "https://github.com/arii",
-    "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
+    "https://www.linkedin.com/in/ariel-anders/",
     "https://www.instagram.com/onasafari/"
   ]
 };
 
 export const PUBLISHER_BOOMTICK = {
+  "@id": `${BASE_URL}/#organization`,
   "@type": "Organization" as const,
-  "name": "BoomTick (BoomTick.blog)",
+  "name": "BoomTick",
   "url": BASE_URL,
   "email": "ari@boomtick.blog",
-  "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+  "telephone": "+1-661-205-2489",
+  "areaServed": "San Francisco, CA",
+  "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
   "knowsAbout": [
     "West Coast Swing",
-    "Social Dancing",
-    "Dance Mechanics and Timing",
-    "WCS Event Travel and Logistics"
+    "Dance Event Scheduling & Technology",
+    "Creator Operations & Automation",
+    "Dance Apparel & Gear"
   ],
   "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
   "logo": {
@@ -247,7 +250,7 @@ export const PUBLISHER_BOOMTICK = {
       "Artificial Intelligence"
     ],
     "sameAs": [
-      "https://arii.github.io/",
+      "https://arii.github.io",
       "https://github.com/arii",
       "https://www.linkedin.com/in/ariel-anders/",
       "https://www.instagram.com/onasafari/"
@@ -267,7 +270,7 @@ export function generateCollectionPageSchema(params: {
     "name": params.name,
     "description": params.description,
     "url": params.url.startsWith('http') ? params.url : `${BASE_URL}${params.url.startsWith('/') ? '' : '/'}${params.url}`,
-    "publisher": PUBLISHER_BOOMTICK,
+    "publisher": { "@id": `${BASE_URL}/#organization` },
   };
 
   if (params.breadcrumbs && params.breadcrumbs.length > 0) {

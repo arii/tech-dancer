@@ -476,14 +476,16 @@ describe('schema utils', () => {
   describe('PUBLISHER_BOOMTICK Organization & Founder topical authority schema', () => {
     it('contains description, knowsAbout, keywords, address, and founder in PUBLISHER_BOOMTICK', () => {
       expect(PUBLISHER_BOOMTICK['@type']).toBe('Organization');
-      expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick (BoomTick.blog)');
+      expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick');
       expect(PUBLISHER_BOOMTICK.email).toBe('ari@boomtick.blog');
-      expect(PUBLISHER_BOOMTICK.description).toBe('West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.');
+      expect(PUBLISHER_BOOMTICK.telephone).toBe('+1-661-205-2489');
+      expect(PUBLISHER_BOOMTICK.areaServed).toBe('San Francisco, CA');
+      expect(PUBLISHER_BOOMTICK.description).toBe('West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.');
       expect(PUBLISHER_BOOMTICK.knowsAbout).toEqual([
         'West Coast Swing',
-        'Social Dancing',
-        'Dance Mechanics and Timing',
-        'WCS Event Travel and Logistics'
+        'Dance Event Scheduling & Technology',
+        'Creator Operations & Automation',
+        'Dance Apparel & Gear'
       ]);
       expect(PUBLISHER_BOOMTICK.keywords).toBe('West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions');
       expect(PUBLISHER_BOOMTICK.address).toEqual({
@@ -503,7 +505,7 @@ describe('schema utils', () => {
           'Artificial Intelligence'
         ],
         sameAs: [
-          'https://arii.github.io/',
+          'https://arii.github.io',
           'https://github.com/arii',
           'https://www.linkedin.com/in/ariel-anders/',
           'https://www.instagram.com/onasafari/'
@@ -531,7 +533,7 @@ describe('schema utils', () => {
         name: 'West Coast Swing Articles',
         description: 'Guide collection',
         url: `${BASE_URL}/blog`,
-        publisher: PUBLISHER_BOOMTICK
+        publisher: { "@id": `${BASE_URL}/#organization` }
       });
       expect(schemas[1]).toMatchObject({
         '@context': 'https://schema.org',

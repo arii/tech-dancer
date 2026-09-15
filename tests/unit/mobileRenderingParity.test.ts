@@ -27,13 +27,13 @@ describe('Mobile-First Indexing & Rendering Parity', () => {
       };
     } | undefined;
     expect(orgSchema).toBeDefined();
-    expect(orgSchema?.name).toBe('BoomTick (BoomTick.blog)');
-    expect(orgSchema?.description).toBe('West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.');
+    expect(orgSchema?.name).toBe('BoomTick');
+    expect(orgSchema?.description).toBe('West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.');
     expect(orgSchema?.knowsAbout).toEqual([
       'West Coast Swing',
-      'Social Dancing',
-      'Dance Mechanics and Timing',
-      'WCS Event Travel and Logistics'
+      'Dance Event Scheduling & Technology',
+      'Creator Operations & Automation',
+      'Dance Apparel & Gear'
     ]);
     expect(orgSchema?.keywords).toBe('West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions');
     expect(orgSchema?.address).toEqual({
@@ -54,7 +54,7 @@ describe('Mobile-First Indexing & Rendering Parity', () => {
       'Artificial Intelligence'
     ]);
     expect(founder?.sameAs).toEqual([
-      'https://arii.github.io/',
+      'https://arii.github.io',
       'https://github.com/arii',
       'https://www.linkedin.com/in/ariel-anders/',
       'https://www.instagram.com/onasafari/'

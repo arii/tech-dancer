@@ -50,7 +50,7 @@ ROUTE_CONFIGS.forEach(r => {
     const isRoot = r.path === '/';
     staticRouteMetaMap.set(r.path, {
       title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
-      description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and AI engineering research.',
+      description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
@@ -139,7 +139,7 @@ function getRouteMetadata(route) {
 
   return {
     title: 'BoomTick.blog - West Coast Swing & DevAI Research',
-    description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and DevAI research.',
+    description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
     image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
   };
 }
@@ -185,16 +185,19 @@ function generateMetadataTags(route, meta) {
   const image = meta.image;
 
   const publisherOrganization = {
+    "@id": `${BASE_URL}/#organization`,
     "@type": "Organization",
-    "name": "BoomTick (BoomTick.blog)",
+    "name": "BoomTick",
     "url": BASE_URL,
     "email": "ari@boomtick.blog",
-    "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+    "telephone": "+1-661-205-2489",
+    "areaServed": "San Francisco, CA",
+    "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
     "knowsAbout": [
       "West Coast Swing",
-      "Social Dancing",
-      "Dance Mechanics and Timing",
-      "WCS Event Travel and Logistics"
+      "Dance Event Scheduling & Technology",
+      "Creator Operations & Automation",
+      "Dance Apparel & Gear"
     ],
     "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
     "logo": {
@@ -219,7 +222,7 @@ function generateMetadataTags(route, meta) {
         "Artificial Intelligence"
       ],
       "sameAs": [
-        "https://arii.github.io/",
+        "https://arii.github.io",
         "https://github.com/arii",
         "https://www.linkedin.com/in/ariel-anders/",
         "https://www.instagram.com/onasafari/"
@@ -227,9 +230,25 @@ function generateMetadataTags(route, meta) {
     }
   };
 
-  let schemaJson = '';
+  const schemas = [{ "@context": "https://schema.org", ...publisherOrganization }];
+
+  if (route === '/') {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BoomTick.blog",
+      "url": BASE_URL,
+      "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${BASE_URL}/blog?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    });
+  }
+
   if (meta.rawTitle) {
-    const jsonLd = {
+    const articleLd = {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": meta.rawTitle,
@@ -241,24 +260,25 @@ function generateMetadataTags(route, meta) {
         "name": meta.author || "Ariel Anders",
         "url": `${BASE_URL}/about`
       },
-      "publisher": publisherOrganization
+      "publisher": { "@id": `${BASE_URL}/#organization` }
     };
     if (meta.date) {
-      jsonLd.datePublished = meta.date;
-      jsonLd.dateModified = meta.date;
+      articleLd.datePublished = meta.date;
+      articleLd.dateModified = meta.date;
     }
-    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+    schemas.push(articleLd);
   } else {
-    const jsonLd = {
+    schemas.push({
       "@context": "https://schema.org",
       "@type": "WebPage",
       "name": meta.title,
       "description": meta.description,
       "url": canonicalUrl,
-      "publisher": publisherOrganization
-    };
-    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+      "publisher": { "@id": `${BASE_URL}/#organization` }
+    });
   }
+
+  const schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(schemas)}</script>`;
 
   return [
     `<title data-rh="true" data-prerendered="true">${title}</title>`,

@@ -4,7 +4,7 @@ export const SITE_NAME = 'BoomTick.blog';
 
 export const SOCIAL_LINKS = {
   INSTAGRAM: 'https://www.instagram.com/onasafari/',
-  LINKEDIN: 'https://www.linkedin.com/in/ariel-anders/?skipRedirect=true',
+  LINKEDIN: 'https://www.linkedin.com/in/ariel-anders/',
   GITHUB: 'https://github.com/arii',
   PORTFOLIO: 'https://arii.github.io'
 } as const;
@@ -20,7 +20,7 @@ export const PRINTFUL_REFERRAL = {
   FOOTER_DESCRIPTION: 'Supporting BoomTick helps us keep the servers running and the content flowing. Save $5 on your first Printful order and support the blog at the same time.'
 } as const;
 
-const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.";
+const DEFAULT_DESCRIPTION = "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.";
 
 export const STATIC_SCHEMAS = {
   HOME: [
@@ -38,16 +38,19 @@ export const STATIC_SCHEMAS = {
     },
     {
       "@context": "https://schema.org",
+      "@id": `${BASE_URL}/#organization`,
       "@type": "Organization",
-      "name": "BoomTick (BoomTick.blog)",
+      "name": "BoomTick",
       "url": BASE_URL,
       "email": "ari@boomtick.blog",
-      "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+      "telephone": "+1-661-205-2489",
+      "areaServed": "San Francisco, CA",
+      "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
       "knowsAbout": [
         "West Coast Swing",
-        "Social Dancing",
-        "Dance Mechanics and Timing",
-        "WCS Event Travel and Logistics"
+        "Dance Event Scheduling & Technology",
+        "Creator Operations & Automation",
+        "Dance Apparel & Gear"
       ],
       "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
       "logo": {
@@ -72,18 +75,12 @@ export const STATIC_SCHEMAS = {
           "Artificial Intelligence"
         ],
         "sameAs": [
-          "https://arii.github.io/",
-          "https://github.com/arii",
-          "https://www.linkedin.com/in/ariel-anders/",
-          "https://www.instagram.com/onasafari/"
+          SOCIAL_LINKS.PORTFOLIO,
+          SOCIAL_LINKS.GITHUB,
+          SOCIAL_LINKS.LINKEDIN,
+          SOCIAL_LINKS.INSTAGRAM
         ]
-      },
-      "sameAs": [
-        SOCIAL_LINKS.PORTFOLIO,
-        SOCIAL_LINKS.GITHUB,
-        SOCIAL_LINKS.LINKEDIN,
-        SOCIAL_LINKS.INSTAGRAM
-      ]
+      }
     }
   ],
   ABOUT: (bioName: string, bioRole: string) => [
