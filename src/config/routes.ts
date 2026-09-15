@@ -84,8 +84,7 @@ export const routes: RouteConfig[] = [
     label: 'Memes',
     icon: Laugh,
     skeleton: 'grid',
-    isTopNav: true,
-    isMobileVisible: true
+    sitemap: false
   },
   {
     path: '/research',
