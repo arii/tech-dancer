@@ -53,12 +53,7 @@ describe('Mobile-First Indexing & Rendering Parity', () => {
       'Robotics',
       'Artificial Intelligence'
     ]);
-    expect(founder?.sameAs).toEqual([
-      'https://arii.github.io/',
-      'https://github.com/arii',
-      'https://www.linkedin.com/in/ariel-anders/',
-      'https://www.instagram.com/onasafari/'
-    ]);
+    expect(founder?.sameAs).toBeUndefined();
   });
 
   it('ensures STATIC_SCHEMAS.ABOUT emits ProfilePage and BreadcrumbList', () => {

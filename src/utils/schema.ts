@@ -246,12 +246,6 @@ export const PUBLISHER_BOOMTICK = {
       "West Coast Swing",
       "Robotics",
       "Artificial Intelligence"
-    ],
-    "sameAs": [
-      "https://arii.github.io/",
-      "https://github.com/arii",
-      "https://www.linkedin.com/in/ariel-anders/",
-      "https://www.instagram.com/onasafari/"
     ]
   },
   "sameAs": [
