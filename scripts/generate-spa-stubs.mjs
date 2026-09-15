@@ -185,6 +185,7 @@ function generateMetadataTags(route, meta) {
   const image = meta.image;
 
   const publisherOrganization = {
+    "@id": `${BASE_URL}/#organization`,
     "@type": "Organization",
     "name": "BoomTick (BoomTick.blog)",
     "url": BASE_URL,
@@ -224,12 +225,34 @@ function generateMetadataTags(route, meta) {
         "https://www.linkedin.com/in/ariel-anders/",
         "https://www.instagram.com/onasafari/"
       ]
-    }
+    },
+    "sameAs": [
+      "https://arii.github.io",
+      "https://github.com/arii",
+      "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
+      "https://www.instagram.com/onasafari/"
+    ]
   };
 
-  let schemaJson = '';
+  const schemas = [{ "@context": "https://schema.org", ...publisherOrganization }];
+
+  if (route === '/') {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BoomTick.blog",
+      "url": BASE_URL,
+      "description": "The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${BASE_URL}/blog?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    });
+  }
+
   if (meta.rawTitle) {
-    const jsonLd = {
+    const articleLd = {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": meta.rawTitle,
@@ -241,24 +264,25 @@ function generateMetadataTags(route, meta) {
         "name": meta.author || "Ariel Anders",
         "url": `${BASE_URL}/about`
       },
-      "publisher": publisherOrganization
+      "publisher": { "@id": `${BASE_URL}/#organization` }
     };
     if (meta.date) {
-      jsonLd.datePublished = meta.date;
-      jsonLd.dateModified = meta.date;
+      articleLd.datePublished = meta.date;
+      articleLd.dateModified = meta.date;
     }
-    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+    schemas.push(articleLd);
   } else {
-    const jsonLd = {
+    schemas.push({
       "@context": "https://schema.org",
       "@type": "WebPage",
       "name": meta.title,
       "description": meta.description,
       "url": canonicalUrl,
-      "publisher": publisherOrganization
-    };
-    schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+      "publisher": { "@id": `${BASE_URL}/#organization` }
+    });
   }
+
+  const schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(schemas)}</script>`;
 
   return [
     `<title data-rh="true" data-prerendered="true">${title}</title>`,

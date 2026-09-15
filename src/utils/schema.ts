@@ -213,6 +213,7 @@ export const AUTHOR_ARIEL_ANDERS = {
 };
 
 export const PUBLISHER_BOOMTICK = {
+  "@id": `${BASE_URL}/#organization`,
   "@type": "Organization" as const,
   "name": "BoomTick (BoomTick.blog)",
   "url": BASE_URL,
@@ -252,7 +253,13 @@ export const PUBLISHER_BOOMTICK = {
       "https://www.linkedin.com/in/ariel-anders/",
       "https://www.instagram.com/onasafari/"
     ]
-  }
+  },
+  "sameAs": [
+    "https://arii.github.io",
+    "https://github.com/arii",
+    "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
+    "https://www.instagram.com/onasafari/"
+  ]
 };
 
 export function generateCollectionPageSchema(params: {
@@ -267,7 +274,7 @@ export function generateCollectionPageSchema(params: {
     "name": params.name,
     "description": params.description,
     "url": params.url.startsWith('http') ? params.url : `${BASE_URL}${params.url.startsWith('/') ? '' : '/'}${params.url}`,
-    "publisher": PUBLISHER_BOOMTICK,
+    "publisher": { "@id": `${BASE_URL}/#organization` },
   };
 
   if (params.breadcrumbs && params.breadcrumbs.length > 0) {

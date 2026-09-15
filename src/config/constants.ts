@@ -38,6 +38,7 @@ export const STATIC_SCHEMAS = {
     },
     {
       "@context": "https://schema.org",
+      "@id": `${BASE_URL}/#organization`,
       "@type": "Organization",
       "name": "BoomTick (BoomTick.blog)",
       "url": BASE_URL,

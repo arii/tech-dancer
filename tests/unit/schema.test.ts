@@ -531,7 +531,7 @@ describe('schema utils', () => {
         name: 'West Coast Swing Articles',
         description: 'Guide collection',
         url: `${BASE_URL}/blog`,
-        publisher: PUBLISHER_BOOMTICK
+        publisher: { "@id": `${BASE_URL}/#organization` }
       });
       expect(schemas[1]).toMatchObject({
         '@context': 'https://schema.org',
