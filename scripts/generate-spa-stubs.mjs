@@ -50,7 +50,7 @@ ROUTE_CONFIGS.forEach(r => {
     const isRoot = r.path === '/';
     staticRouteMetaMap.set(r.path, {
       title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
-      description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and AI engineering research.',
+      description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
@@ -139,7 +139,7 @@ function getRouteMetadata(route) {
 
   return {
     title: 'BoomTick.blog - West Coast Swing & DevAI Research',
-    description: 'The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, gear reviews, and DevAI research.',
+    description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
     image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
   };
 }
@@ -190,12 +190,14 @@ function generateMetadataTags(route, meta) {
     "name": "BoomTick",
     "url": BASE_URL,
     "email": "ari@boomtick.blog",
-    "description": "West Coast Swing dance resources, event guides, competition timing mechanics, and custom dancer apparel.",
+    "telephone": "+1-661-205-2489",
+    "areaServed": "San Francisco, CA",
+    "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
     "knowsAbout": [
       "West Coast Swing",
-      "Social Dancing",
-      "Dance Mechanics and Timing",
-      "WCS Event Travel and Logistics"
+      "Dance Event Scheduling & Technology",
+      "Creator Operations & Automation",
+      "Dance Apparel & Gear"
     ],
     "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
     "logo": {
@@ -218,14 +220,14 @@ function generateMetadataTags(route, meta) {
         "West Coast Swing",
         "Robotics",
         "Artificial Intelligence"
+      ],
+      "sameAs": [
+        "https://arii.github.io",
+        "https://github.com/arii",
+        "https://www.linkedin.com/in/ariel-anders/",
+        "https://www.instagram.com/onasafari/"
       ]
-    },
-    "sameAs": [
-      "https://arii.github.io",
-      "https://github.com/arii",
-      "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true",
-      "https://www.instagram.com/onasafari/"
-    ]
+    }
   };
 
   const schemas = [{ "@context": "https://schema.org", ...publisherOrganization }];
@@ -236,7 +238,7 @@ function generateMetadataTags(route, meta) {
       "@type": "WebSite",
       "name": "BoomTick.blog",
       "url": BASE_URL,
-      "description": "The West Coast Swing Lifestyle Blog by Ariel Anders. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.",
+      "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
       "potentialAction": {
         "@type": "SearchAction",
         "target": `${BASE_URL}/blog?q={search_term_string}`,
