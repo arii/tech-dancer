@@ -1,5 +1,4 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { NavLink } from 'react-router-dom';
 
 export function ClientCard() {
   return (
