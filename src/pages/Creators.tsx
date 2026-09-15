@@ -4,42 +4,42 @@ import { NavLink } from 'react-router-dom';
 import { ClientCard } from '@/features/creators/ClientCard';
 import { ExpansionSlots } from '@/features/creators/ExpansionSlots';
 
-export default function Creators() {
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": "https://boomtick.blog/creators/#webpage",
-    "url": "https://boomtick.blog/creators",
-    "name": "Featured Creators | BoomTick",
-    "description": "Directory of independent creators, stylists, instructors, and solopreneurs whose digital operations and web platforms are powered by BoomTick.",
-    "isPartOf": {
-      "@type": "WebSite",
-      "@id": "https://boomtick.blog/#website",
-      "name": "BoomTick",
-      "url": "https://boomtick.blog"
-    },
-    "mainEntity": {
-      "@type": "ItemList",
-      "name": "Creators Powered by BoomTick",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "item": {
-            "@type": "WebSite",
-            "name": "Hair by April",
-            "url": "https://hairbyapril.pages.dev",
-            "description": "Curly hair cuts, authentic vintage styling, and on-location wedding and event hair services across San Francisco.",
-            "creator": {
-              "@type": "Organization",
-              "@id": "https://boomtick.blog/#organization"
-            }
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://boomtick.blog/creators/#webpage",
+  "url": "https://boomtick.blog/creators",
+  "name": "Featured Creators | BoomTick",
+  "description": "Directory of independent creators, stylists, instructors, and solopreneurs whose digital operations and web platforms are powered by BoomTick.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://boomtick.blog/#website",
+    "name": "BoomTick",
+    "url": "https://boomtick.blog"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "Creators Powered by BoomTick",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "WebSite",
+          "name": "Hair by April",
+          "url": "https://hairbyapril.pages.dev",
+          "description": "Curly hair cuts, authentic vintage styling, and on-location wedding and event hair services across San Francisco.",
+          "creator": {
+            "@type": "Organization",
+            "@id": "https://boomtick.blog/#organization"
           }
         }
-      ]
-    }
-  };
+      }
+    ]
+  }
+};
 
+export default function Creators() {
   return (
     <Box as="main" width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO

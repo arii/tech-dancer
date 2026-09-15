@@ -18,7 +18,7 @@ function PackageCard({ title, price, popular, bestFor, features }: PackageCardPr
       surface={popular ? "accent" : "default"}
       display="flex"
       flexDirection="column"
-      className={popular ? "border-accent ring-2 ring-accent/20 scale-100 lg:scale-105 z-10 shadow-lg flex flex-col" : "border-line/50 flex flex-col"}
+      className={popular ? "border-accent ring-2 ring-accent/20 scale-100 lg:scale-105 z-10 shadow-lg" : "border-line/50"}
     >
       <Stack gap={6} flex={1}>
         <Stack gap={2}>

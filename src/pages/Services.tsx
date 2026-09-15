@@ -3,23 +3,22 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
 import { IntakeForm } from '@/features/services/IntakeForm';
 
-export default function Services() {
-  const serviceSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://boomtick.blog/services/#webpage",
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://boomtick.blog/services/#webpage",
+  "url": "https://boomtick.blog/services",
+  "name": "Services & Packages | BoomTick",
+  "description": "Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals.",
+  "provider": {
+    "@type": "Organization",
+    "@id": "https://boomtick.blog/#organization"
+  },
+  "mainEntity": {
+    "@type": "ProfessionalService",
+    "name": "BoomTick",
     "url": "https://boomtick.blog/services",
-    "name": "Services & Packages | BoomTick",
-    "description": "Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals.",
-    "provider": {
-      "@type": "Organization",
-      "@id": "https://boomtick.blog/#organization"
-    },
-    "mainEntity": {
-      "@type": "ProfessionalService",
-      "name": "BoomTick",
-      "url": "https://boomtick.blog/services",
-      "logo": "https://boomtick.blog/images/logo.png",
+    "logo": "https://boomtick.blog/images/logo.png",
     "image": "https://boomtick.blog/images/boomtick-services.png",
     "description": "Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals.",
     "priceRange": "$$",
@@ -58,7 +57,7 @@ export default function Services() {
         "closes": "17:00"
       }
     ],
-      "hasOfferCatalog": {
+    "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Digital Studio Packages",
       "itemListElement": [
@@ -87,10 +86,11 @@ export default function Services() {
           }
         }
       ]
-      }
     }
-  };
+  }
+};
 
+export default function Services() {
   return (
     <Box as="main" width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
