@@ -11,8 +11,8 @@ author: "Ariel Anders"
 date: "2024-06-01"
 tags: ["merch", "slot-era", "apparel", "dance"]
 featured: true
-excerpt: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers."
-description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers."
+excerpt: "Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events."
+description: "Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events."
 ---
 
 Features soft, breathable fabric and a flattering racerback cut built for long social dancing nights and intense workshop weekends. 

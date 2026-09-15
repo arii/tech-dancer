@@ -6,10 +6,13 @@ export interface MerchProduct {
   title: string;
   description: string;
   price: string;
+  shippingPrice?: string;
   color: string;
   size: string;
   material?: string;
   imageUrl: string;
+  customLabel?: string;
+  gtin?: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
   printfulUrl: string;
@@ -242,7 +245,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'slot-era-tank-top',
     gearSlug: 'slot-era-tank-top',
     title: "Slot Era WCS Women's Racerback Tank Top",
-    description: "Fitted racerback tank top featuring the vibrant retro Slot Era design for West Coast Swing dancers.",
+    description: "Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events.",
     price: '16.50',
     color: 'Black/Rainbow',
     size: 'XS/S/M/L/XL/2XL',
@@ -259,27 +262,31 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'slot-era-tote-bag',
     gearSlug: 'slot-era-tote-bag',
-    title: 'Slot Era WCS Tote Bag',
-    description: 'Durable black canvas tote bag printed with the signature Slot Era West Coast Swing dancer graphic.',
+    title: 'Slot Era WCS Tote Bag - Canvas West Coast Swing Dance Bag, Black 15x15',
+    description: 'Show off your West Coast Swing pride with this durable 15" x 15" black canvas tote bag, featuring the signature Slot Era dancer graphic and BoomTick branding. Made from 100% spun polyester canvas, it\'s sturdy enough for dance shoes, water bottles, and convention gear — perfect for WCS dancers heading to socials, workshops, or weekend dance events. Makes a funny gift for WCS dancers for birthdays or holidays.',
     price: '27.00',
+    shippingPrice: '4.59',
     color: 'Black',
     size: '15" x 15"',
     material: '100% spun polyester canvas',
     imageUrl: '/assets/slot_era_tote.webp',
     images: [
       { src: '/assets/slot_era_tote.webp', side: 'front', alt: 'Front view of Slot Era WCS Tote Bag' },
+      { src: '/assets/home/wcs-travel-pack.webp', side: 'front', alt: 'Dancer with gear bag heading to event' },
     ],
     imageDisplayMode: 'front-only',
     printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-tote-bag',
     collections: ['slot-era'],
     tags: ['Accessories', 'Merch', 'Tote'],
+    customLabel: 'wcs-dance',
   },
   {
     id: 'slot-era-mug',
     gearSlug: 'slot-era-mug',
     title: 'Slot Era Black Ceramic Mug',
-    description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick insignia.',
+    description: '11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick branding. A funny gift for WCS dancers for birthdays and holidays to power your dance event mornings and late-night competition reviews.',
     price: '16.50',
+    shippingPrice: '4.99',
     color: 'Black',
     size: '11 oz',
     material: 'Ceramic (dishwasher & microwave safe)',
@@ -291,5 +298,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/boomtick-slot-era-west-coast-swing-dancer-mug',
     collections: ['slot-era'],
     tags: ['Accessories', 'Merch', 'Mug'],
+    customLabel: 'boomtick-merch',
   },
 ];
