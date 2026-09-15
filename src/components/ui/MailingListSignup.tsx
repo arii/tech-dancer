@@ -52,14 +52,14 @@ export default function MailingListSignup() {
     <Box
       width="full"
       maxWidth="md"
-      background="slate-900"
-        borderColor="slate-800"
-        borderWidth={1}
-        radius="xl"
-        padding={8}
-        shadow="lg"
-        marginX="auto"
-      >
+      background="surface-raised"
+      borderColor="line"
+      borderWidth={1}
+      radius="xl"
+      padding={8}
+      shadow="lg"
+      marginX="auto"
+    >
         {status === 'success' ? (
           <Stack align="center" gap={4} paddingY={6}>
             <Box background="emerald-500/10" padding={4} radius="full" display="inline-flex" color="emerald-400">
@@ -76,20 +76,20 @@ export default function MailingListSignup() {
           <form onSubmit={handleSubmit}>
             <Stack gap={5}>
               <Stack align="center" gap={3}>
-                <Box background="sky-500/10" padding={3} radius="full" display="inline-flex" color="sky-400">
+                <Box background="brand-cyan" opacity={10} padding={3} radius="full" display="inline-flex" color="brand-cyan">
                   <Mail size={24} />
                 </Box>
-                <Text as="h3" weight="bold" size="xl" color="white" align="center">
+                <Text as="h3" weight="bold" size="xl" color="text-main" align="center">
                   Join the Newsletter
                 </Text>
-                <Text size="sm" color="slate-400" align="center">
+                <Text size="sm" color="text-sub" align="center">
                   Updates on articles, research, and gear. No spam.
                 </Text>
               </Stack>
 
               <Stack gap={4}>
                 <Stack gap={1.5}>
-                  <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="text-dim">
+                  <Text as="label" htmlFor="inline-name" size="sm" weight="medium" color="text-main">
                     First Name <Text as="span" opacity={50} weight="normal">(optional)</Text>
                   </Text>
                   <Box
@@ -102,7 +102,7 @@ export default function MailingListSignup() {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="surface-raised"
+                    background="surface-default"
                     borderColor="line"
                     borderWidth={1}
                     radius="lg"
@@ -120,7 +120,7 @@ export default function MailingListSignup() {
                   />
                 </Stack>
                 <Stack gap={1.5}>
-                  <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="text-dim">
+                  <Text as="label" htmlFor="inline-email" size="sm" weight="medium" color="text-main">
                     Email Address <Text as="span" color="brand-cyan">*</Text>
                   </Text>
                   <Box
@@ -134,7 +134,7 @@ export default function MailingListSignup() {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     disabled={status === 'loading'}
                     width="full"
-                    background="surface-raised"
+                    background="surface-default"
                     borderColor="line"
                     borderWidth={1}
                     radius="lg"
