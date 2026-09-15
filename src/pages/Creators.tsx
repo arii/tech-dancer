@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { Box, Grid, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { NavLink } from 'react-router-dom';
 import { ClientCard } from '@/features/creators/ClientCard';
 import { ExpansionSlots } from '@/features/creators/ExpansionSlots';
