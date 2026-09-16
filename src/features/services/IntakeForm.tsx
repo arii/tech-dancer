@@ -41,7 +41,15 @@ export function IntakeForm() {
     );
   }
 
-  const inputClassName = "w-full rounded-md bg-surface-alt/50 border border-line/30 text-main focus:outline-none focus:ring-2 focus:ring-accent/50";
+  const inputProps = {
+    width: "full",
+    radius: "md",
+    border: true,
+    paddingX: 4,
+    paddingY: 3,
+    className: "bg-surface-alt/50 border-line/30 text-main focus:outline-none focus:ring-2 focus:ring-accent/50"
+  } as const;
+
   return (
     <Box id="intake-form" border radius="lg" padding={8} surface="default" maxWidth="3xl" marginX="auto" className="border-line/50">
       <Stack gap={8}>
@@ -63,22 +71,22 @@ export function IntakeForm() {
             <Grid cols={{ base: 1, md: 2 }} gap={6}>
               <Stack gap={2}>
                 <label htmlFor="fullName" className="text-sm font-bold font-mono">Full Name</label>
-                <Box as="input" paddingX={4} paddingY={3} type="text" id="fullName" name="fullName" required className={inputClassName} />
+                <Box as="input" type="text" id="fullName" name="fullName" required {...inputProps} />
               </Stack>
               <Stack gap={2}>
                 <label htmlFor="email" className="text-sm font-bold font-mono">Email Address</label>
-                <Box as="input" paddingX={4} paddingY={3} type="email" id="email" name="email" required className={inputClassName} />
+                <Box as="input" type="email" id="email" name="email" required {...inputProps} />
               </Stack>
             </Grid>
 
             <Grid cols={{ base: 1, md: 2 }} gap={6}>
               <Stack gap={2}>
                 <label htmlFor="businessName" className="text-sm font-bold font-mono">Business / Practice Name</label>
-                <Box as="input" paddingX={4} paddingY={3} type="text" id="businessName" name="businessName" required className={inputClassName} />
+                <Box as="input" type="text" id="businessName" name="businessName" required {...inputProps} />
               </Stack>
               <Stack gap={2}>
                 <label htmlFor="industry" className="text-sm font-bold font-mono">Industry / Niche</label>
-                <Box as="select" paddingX={4} paddingY={3} id="industry" name="industry" required className={inputClassName}>
+                <Box as="select" id="industry" name="industry" required {...inputProps}>
                   <option value="">Select an option</option>
                   <option value="Hair & Beauty">Hair & Beauty</option>
                   <option value="Dance & Movement">Dance & Movement</option>
@@ -92,7 +100,7 @@ export function IntakeForm() {
 
             <Stack gap={2}>
               <label htmlFor="website" className="text-sm font-bold font-mono">Current Website or Social Handle</label>
-              <Box as="input" paddingX={4} paddingY={3} type="text" id="website" name="website" placeholder="e.g. instagram.com/mybusiness" className={inputClassName} />
+              <Box as="input" type="text" id="website" name="website" placeholder="e.g. instagram.com/mybusiness" {...inputProps} />
             </Stack>
 
             <Box as="fieldset">
@@ -129,7 +137,7 @@ export function IntakeForm() {
 
             <Stack gap={2}>
               <label htmlFor="notes" className="text-sm font-bold font-mono">Message / Timeline Notes</label>
-              <Box as="textarea" paddingX={4} paddingY={3} id="notes" name="notes" rows={4} className={`${inputClassName} resize-none`} />
+              <Box as="textarea" id="notes" name="notes" rows={4} {...inputProps} className={`${inputProps.className} resize-none`} />
             </Stack>
 
             <Stack gap={4} className="text-center">
