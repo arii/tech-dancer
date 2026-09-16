@@ -16,7 +16,7 @@ export function ClientCard({ name, location, description, niche, tags, imageSrc,
   return (
     <Box as="article" border radius="lg" overflow="hidden" surface="default" height="full" display="flex" flexDirection="column" className="creator-card group">
       <Box className="creator-media" position="relative" height={48} width="full" bg="surface-alt">
-        <Box as="img" src={imageSrc} alt={`${name} - ${location} ${niche}`} className="w-full h-full object-cover" />
+        <Box as="img" src={imageSrc} alt={`${name} - ${location} ${niche}`} width="full" height="full" className="object-cover" />
         <Box position="absolute" top={4} right={4} paddingX={3} paddingY={1} radius="full" className="bg-bg/90 backdrop-blur-sm text-xs font-bold uppercase text-accent">
           {niche}
         </Box>
