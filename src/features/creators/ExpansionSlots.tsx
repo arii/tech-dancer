@@ -12,7 +12,7 @@ function ExpansionSlotCard({ title, description, icon: Icon }: ExpansionSlotCard
   return (
     <Box border radius="lg" overflow="hidden" surface="default" height="full" display="flex" flexDirection="column" className="creator-card group border-dashed opacity-80 hover:opacity-100 transition-opacity">
       <Box className="creator-media" position="relative" height={48} width="full" bg="surface-alt" display="flex" alignItems="center" justify="center">
-        <Icon size={48} className="text-dim/30" />
+        <Icon size={48} className="text-dim/50" />
         <Box position="absolute" top={4} right={4} paddingX={3} paddingY={1} radius="full" className="bg-bg/90 backdrop-blur-sm text-xs font-bold uppercase text-accent">
           Concept — Open Slot
         </Box>
