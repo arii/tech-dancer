@@ -104,7 +104,7 @@ export default function Services() {
           Digital Business Operations for Independent Creatives
         </Text>
         <Text as="p" variant="body" size="lg" color="dim" maxWidth="3xl">
-          Fast edge-hosted websites, hands-off booking systems, and automated workflows designed to let you focus on your clients, not your tech stack.
+          Lightning-fast, mobile-ready websites, hands-off booking systems, and automated workflows designed to let you focus on your clients, not your tech stack.
         </Text>
       </Stack>
 
