@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="22.613787mm"
+   height="6.0730228mm"
+   viewBox="0 0 22.613787 6.0730228"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (1:1.4.4+202605061432+dcaf3e7d9e)"
+   sodipodi:docname="boomtick_bw.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.9505836"
+     inkscape:cx="91.846237"
+     inkscape:cy="41.856127"
+     inkscape:window-width="2490"
+     inkscape:window-height="1376"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-72.231249,-130.43958)">
+    <g
+       id="g124"
+       transform="matrix(0.69275027,0,0,0.69275027,22.956768,1.629341)"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         style="font-weight:bold;font-size:5.54553px;font-family:'Cooper*', 'Arial Rounded MT Bold', Arial, sans-serif;-inkscape-font-specification:'Cooper*, Arial Rounded MT Bold, Arial, sans-serif, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         x="80.398727"
+         y="191.72491"
+         id="text109"><tspan
+           sodipodi:role="line"
+           id="tspan109"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.54553px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+           x="80.398727"
+           y="191.72491">boom<tspan
+   style="font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+   id="tspan112">tick</tspan></tspan></text>
+      <path
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 75.512051,185.94037 -0.351163,3.7873 -1.442502,-1.19769 1.1977,1.4425 -3.787307,0.35116 3.787316,0.35115 -1.197709,1.44251 1.442502,-1.19769 0.351163,3.7873 0.351154,-3.78731 1.442502,1.1977 -1.197699,-1.44251 3.787317,-0.35115 -3.787308,-0.35116 1.19769,-1.4425 -1.442502,1.1977 z"
+         id="path4140"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>

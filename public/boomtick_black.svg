@@ -1,0 +1,29 @@
+<svg
+   width="22.613787mm"
+   height="6.0730228mm"
+   viewBox="0 0 22.613787 6.0730228"
+   version="1.1"
+   id="svg_boomtick_black"
+   xmlns="http://www.w3.org/2000/svg"
+   aria-label="boomtick">
+  <g transform="translate(-72.231249,-130.43958)">
+    <g
+       transform="matrix(0.69275027,0,0,0.69275027,22.956768,1.629341)"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         style="font-weight:bold;font-size:5.54553px;font-family:'Cooper*', 'Arial Rounded MT Bold', Arial, sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         x="80.398727"
+         y="191.72491">
+        <tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.54553px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+           x="80.398727"
+           y="191.72491">boom<tspan
+   style="font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1">tick</tspan></tspan>
+      </text>
+      <path
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.998286;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 75.512051,185.94037 -0.351163,3.7873 -1.442502,-1.19769 1.1977,1.4425 -3.787307,0.35116 3.787316,0.35115 -1.197709,1.44251 1.442502,-1.19769 0.351163,3.7873 0.351154,-3.78731 1.442502,1.1977 -1.197699,-1.44251 3.787317,-0.35115 -3.787308,-0.35116 1.19769,-1.4425 -1.442502,1.1977 z" />
+    </g>
+  </g>
+</svg>
