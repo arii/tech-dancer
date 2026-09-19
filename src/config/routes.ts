@@ -2,12 +2,13 @@ import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh, Compass
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
+import { lazyWithRetry } from '../lib/lazyWithRetry';
 
 export const routes: RouteConfig[] = [
   {
     path: '/',
     index: true,
-    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Home').then(m => ({ Component: m.default }))),
     label: 'Home',
     icon: Home,
     skeleton: 'grid',
@@ -15,7 +16,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/blog',
-    lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Blog').then(m => ({ Component: m.default }))),
     label: 'Blog Posts',
     icon: BookOpen,
     skeleton: 'grid',
@@ -24,12 +25,12 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/blog/:slug',
-    lazy: () => import('@/pages/BlogPost').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/BlogPost').then(m => ({ Component: m.default }))),
     skeleton: 'post'
   },
   {
     path: '/gear',
-    lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Gear').then(m => ({ Component: m.default }))),
     label: 'Gear',
     icon: Shirt,
     skeleton: 'grid',
@@ -38,18 +39,18 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/gear/:slug',
-    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/features/lab/GearPost').then(m => ({ Component: m.default }))),
     skeleton: 'post'
   },
   ...['/events', '/events/:slug'].map(path => ({
     path,
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/RemovedPage').then(m => ({ Component: m.default }))),
     skeleton: 'simple' as const,
     sitemap: false
   })),
   {
     path: '/merch',
-    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Merch').then(m => ({ Component: m.default }))),
     label: 'Merch',
     icon: Tag,
     skeleton: 'grid',
@@ -58,7 +59,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/about',
-    lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/About').then(m => ({ Component: m.default }))),
     label: 'About',
     icon: User,
     skeleton: 'simple',
@@ -66,21 +67,21 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/shipping',
-    lazy: () => import('@/pages/ShippingPolicy').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/ShippingPolicy').then(m => ({ Component: m.default }))),
     label: 'Shipping Policy',
     skeleton: 'simple',
     sitemap: true
   },
   {
     path: '/return-policy',
-    lazy: () => import('@/pages/ReturnPolicy').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/ReturnPolicy').then(m => ({ Component: m.default }))),
     label: 'Return Policy',
     skeleton: 'simple',
     sitemap: true
   },
   {
     path: '/memes',
-    lazy: () => import('@/pages/Memes').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Memes').then(m => ({ Component: m.default }))),
     label: 'Memes',
     icon: Laugh,
     skeleton: 'grid',
@@ -88,7 +89,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/research',
-    lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/Research').then(m => ({ Component: m.default }))),
     label: 'Experiments',
     icon: Database,
     skeleton: 'grid',
@@ -97,7 +98,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/research/wcs-navigator',
-    lazy: () => import('@/pages/WCSNavigator').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/WCSNavigator').then(m => ({ Component: m.default }))),
     label: 'WCS Navigator',
     icon: Compass,
     skeleton: 'grid',
@@ -106,30 +107,30 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/wcs-navigator',
-    lazy: () => import('@/pages/WCSNavigator').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/WCSNavigator').then(m => ({ Component: m.default }))),
     skeleton: 'grid',
     sitemap: false
   },
   {
     path: '/research/:id',
-    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/ResearchDetail').then(m => ({ Component: m.default }))),
     skeleton: 'post'
   },
   {
     path: '/versiontruth',
-    lazy: () => import('@/pages/VersionTruth').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/VersionTruth').then(m => ({ Component: m.default }))),
     label: 'VersionTruth',
     icon: ShieldCheck,
     skeleton: 'simple'
   },
   {
     path: '/ux-auditor',
-    lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/UXAuditor').then(m => ({ Component: m.default }))),
     skeleton: 'grid'
   },
   {
     path: '/preview',
-    lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/ComponentPreview').then(m => ({ Component: m.default }))),
     skeleton: 'grid',
     sitemap: false
   },
@@ -146,7 +147,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '*',
-    lazy: () => import('@/pages/NotFound').then(m => ({ Component: m.default })),
+    lazy: lazyWithRetry(() => import('@/pages/NotFound').then(m => ({ Component: m.default }))),
     skeleton: 'simple'
   },
 ];

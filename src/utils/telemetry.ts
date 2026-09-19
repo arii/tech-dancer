@@ -3,6 +3,8 @@
  * Catch uncaught exceptions, unhandled rejections, and React boundary crashes.
  */
 
+import { isChunkLoadError, handleChunkLoadError } from '@/lib/lazyWithRetry';
+
 export interface TelemetryPayload {
   message: string;
   type: 'error' | 'unhandledrejection' | 'react-error';
@@ -93,6 +95,9 @@ export function initTelemetry() {
   if (typeof window === 'undefined') return;
 
   window.addEventListener('error', (event) => {
+    if (isChunkLoadError(event.error || event.message)) {
+      handleChunkLoadError(event.error || event.message);
+    }
     reportError({
       message: event.message,
       type: 'error',
@@ -101,6 +106,9 @@ export function initTelemetry() {
   });
 
   window.addEventListener('unhandledrejection', (event) => {
+    if (isChunkLoadError(event.reason)) {
+      handleChunkLoadError(event.reason);
+    }
     reportError({
       message: event.reason?.message || String(event.reason),
       type: 'unhandledrejection',
