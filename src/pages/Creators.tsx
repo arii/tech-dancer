@@ -77,7 +77,7 @@ export default function Creators() {
             Running an independent practice?
           </Text>
           <Text as="p" variant="body" size="lg" maxWidth="2xl">
-            Streamline your bookings and operations with our digital studio workflows, automated intake pipelines, and edge-hosted performance.
+            Streamline your bookings and operations with our digital studio workflows, automated intake pipelines, and lightning-fast web performance.
           </Text>
           <Button as={NavLink} to="/services" variant="primary" size="lg" marginTop={4}>
             View Services & Packages →

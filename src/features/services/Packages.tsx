@@ -68,7 +68,7 @@ export function PackagesGrid() {
           bestFor="Emerging creatives needing a sharp, modern home base."
           features={[
             "3–5 page high-performance mobile-first website.",
-            "Domain, DNS, and fast edge deployment (Cloudflare Pages).",
+            "Custom domain setup & security (SSL).",
             "Foundational on-page SEO and Google Search Console registration.",
             "Care Plan includes hosting maintenance, security monitoring, and minor content updates."
           ]}
@@ -82,8 +82,8 @@ export function PackagesGrid() {
             "Everything in Presence, plus:",
             "End-to-end appointment scheduling integration and calendar synchronization.",
             "Custom booking and intake forms (e.g., event quotes, bridal parties, lesson inquiries).",
-            "Automated pipeline notifications (Spreadsheet/CRM/Email triggers).",
-            "San Francisco Local SEO Program (Google Business Profile optimization, local citation architecture).",
+            "Instant client lead alerts sent straight to your email or phone.",
+            "San Francisco Local SEO Program (Getting found on local SF maps & directories).",
             "Monthly system checks, booking validation, and content passes."
           ]}
         />
@@ -95,7 +95,7 @@ export function PackagesGrid() {
             "Everything in Booked, plus:",
             "E-commerce setup (print-on-demand, digital assets, or physical merchandise).",
             "Custom deposit routing and multi-tier booking flows.",
-            "Monthly SEO, content execution, and conversion optimization reporting."
+            "Monthly insights on visits and booking rates."
           ]}
         />
       </Grid>
@@ -114,7 +114,7 @@ export function ScopeBoundaries() {
           <Stack gap={4}>
             <Text variant="mono" size="sm" weight="font-bold" color="success" uppercase>We Handle</Text>
             <Text variant="body" size="sm" color="dim">
-              Web engineering, edge hosting, booking engines, form automations, Google Business optimization, e-commerce integrations, and ongoing tech support.
+              Website build & updates, booking setups, calendar sync, Google profile setup, and ongoing tech support.
             </Text>
           </Stack>
           <Stack gap={4}>
