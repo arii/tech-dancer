@@ -7,8 +7,9 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
+import { lazyWithRetry } from '@/lib/lazyWithRetry';
 
-const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch }))));
 
 
 

@@ -1,11 +1,19 @@
 // impeccable-ignore-file
+import { useEffect } from 'react';
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { isChunkLoadError, handleChunkLoadError } from '@/lib/lazyWithRetry';
 
 export function GlobalErrorBoundary() {
   const error = useRouteError();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isChunkLoadError(error)) {
+      handleChunkLoadError(error);
+    }
+  }, [error]);
 
   let errorMessage = 'An unexpected error occurred.';
   let errorDetail = '';
