@@ -17,13 +17,14 @@ import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
+import { lazyWithRetry } from '@/lib/lazyWithRetry';
 
 // Lazy load tool components to help with bundle size
-const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
-const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
-const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
-const DeploymentImpactAnalyzerTool = lazy(() => import('./components/DeploymentImpactAnalyzerTool').then(m => ({ default: m.DeploymentImpactAnalyzerTool })));
-const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool })));
+const BlogDrafter = lazy(lazyWithRetry(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter }))));
+const WCSScraperTool = lazy(lazyWithRetry(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool }))));
+const GitOpsReviewerTool = lazy(lazyWithRetry(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool }))));
+const DeploymentImpactAnalyzerTool = lazy(lazyWithRetry(() => import('./components/DeploymentImpactAnalyzerTool').then(m => ({ default: m.DeploymentImpactAnalyzerTool }))));
+const EcommerceAutomationTool = lazy(lazyWithRetry(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool }))));
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
