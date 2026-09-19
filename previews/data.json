@@ -1,10 +1,4 @@
 {
-  "dependabot/npm_and_yarn/npm_and_yarn-6a38152728": {
-    "commitTimestamp": 1789339449,
-    "deployTimestamp": 1789339449,
-    "sha": "unknown"
-  }
-,
   "feat/creators-services-pages-16199781085140525020": {
     "commitTimestamp": 1789539742,
     "deployTimestamp": 1789539742,
