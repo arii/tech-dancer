@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/</loc><lastmod>2026-09-15T17:55:43.590Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/</loc><lastmod>2026-09-19T00:33:15.396Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/dancer_hero.webp</image:loc>
       <image:title>West Coast Swing Social Dancer</image:title>
@@ -17,9 +17,9 @@
   </url>
   <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/gear</loc><lastmod>2026-04-12T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/merch</loc><lastmod>2026-09-15T17:52:36.857Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/merch</loc><lastmod>2026-09-19T00:30:15.609Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about</loc><lastmod>2026-09-15T17:52:36.857Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about</loc><lastmod>2026-09-19T00:30:15.609Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/home/wcs-travel-pack.webp</image:loc>
       <image:title>Ariel Anders Profile Photo</image:title>
@@ -57,65 +57,33 @@
       <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
     </image:image>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/shipping</loc><lastmod>2026-09-15T17:55:43.590Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/shipping</loc><lastmod>2026-09-19T00:33:15.396Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/return-policy</loc><lastmod>2026-09-15T17:52:36.857Z</lastmod>
-  </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/memes</loc><lastmod>2026-09-15T17:52:36.857Z</lastmod>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/memes/9c2lc9.jpg</image:loc>
-      <image:title>West Coast Swing Meme</image:title>
-      <image:caption>WCS is a slotted dance. The slot: curves around and takes up the whole floor anyway.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/memes/9buj8i.jpg</image:loc>
-      <image:title>West Coast Swing Meme</image:title>
-      <image:caption>When you learn a cool new pattern in class vs when you try to execute it on the social floor and freeze completely.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/memes/a0hmu1.jpg</image:loc>
-      <image:title>West Coast Swing Meme</image:title>
-      <image:caption>Trying to maintain a perfect slotted connection when your partner wants to spin and travel everywhere.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/memes/9hz3zx.jpg</image:loc>
-      <image:title>West Coast Swing Meme</image:title>
-      <image:caption>Hearing the perfect West Coast Swing song start to play right after you just sat down to rest your feet.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/memes/9hz3pj.jpg</image:loc>
-      <image:title>West Coast Swing Meme</image:title>
-      <image:caption>Understanding the mechanics perfectly when the pro explains it vs when the music starts and your body forgets everything.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/about#terms</image:license>
-    </image:image>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/return-policy</loc><lastmod>2026-09-19T00:30:15.609Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research</loc><lastmod>2026-08-28T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-15T17:55:43.590Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-19T00:33:15.396Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/versiontruth</loc><lastmod>2026-09-15T17:55:43.590Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/versiontruth</loc><lastmod>2026-09-19T00:33:15.396Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/ux-auditor</loc><lastmod>2026-09-15T17:52:36.857Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/ux-auditor</loc><lastmod>2026-09-19T00:30:15.609Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/blog-drafter</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/blog-drafter</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-15T17:52:36.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-19T00:30:15.600Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/release-please--branches--main--components--tech-dancer/assets/studies/deployment-impact-analyzer/before.png</image:loc>
       <image:title>Baseline</image:title>
