@@ -41,7 +41,7 @@ describe('Google Merchant Center XML Feed Generator', () => {
     // Mug
     expect(xml).toContain('<g:google_product_category>6413</g:google_product_category>');
     // Shirts
-    expect(xml).toContain('<g:google_product_category>1604</g:google_product_category>');
+    expect(xml).toContain('<g:google_product_category>212</g:google_product_category>');
   });
 
   it('includes handling/transit times, support email, and dynamic shipping fees', () => {
