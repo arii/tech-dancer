@@ -114,7 +114,7 @@ ${product.material ? `      <g:material>${escapeXml(product.material)}</g:materi
       <g:google_product_category>${googleCategory}</g:google_product_category>
       <g:product_type>${escapeXml(productType)}</g:product_type>
       <g:age_group>adult</g:age_group>
-      <g:gender>${gender}</g:gender>
+      <g:gender>${escapeXml(gender)}</g:gender>
 ${product.customLabel ? `      <g:custom_label_0>${escapeXml(product.customLabel)}</g:custom_label_0>\n` : ''}      <g:shipping>
         <g:country>US</g:country>
         <g:service>Standard Shipping</g:service>
