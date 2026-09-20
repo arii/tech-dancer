@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { TierVisual } from './TierVisuals';
 
@@ -7,11 +7,12 @@ export interface PackageCardProps {
   title: string;
   price: string;
   popular?: boolean;
+  clientProofBadge?: string;
   bestFor: string;
   features: string[];
 }
 
-const PackageCard = ({ tier, title, price, popular, bestFor, features }: PackageCardProps) => {
+const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, features }: PackageCardProps) => {
   return (
     <Stack
       border
@@ -22,13 +23,24 @@ const PackageCard = ({ tier, title, price, popular, bestFor, features }: Package
     >
       <Stack gap={6} flex={1}>
         <Stack gap={2}>
-          {popular && (
+          {clientProofBadge ? (
+            <Box
+              paddingX={3}
+              paddingY={1}
+              radius="full"
+              border
+              className="bg-accent/15 border-accent/40 text-accent font-mono text-xs font-bold w-fit flex items-center gap-1.5 shadow-sm"
+            >
+              <Sparkles size={12} className="text-accent" />
+              <span>{clientProofBadge}</span>
+            </Box>
+          ) : popular ? (
             <Box paddingX={3} paddingY={1} className="bg-bg w-fit rounded-full border border-accent/30 shadow-sm">
               <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase>
                 Most Popular
               </Text>
             </Box>
-          )}
+          ) : null}
           <Text as="h3" variant="headline" size="2xl" weight="font-bold">{title}</Text>
           <Text variant="mono" size="sm" color="dim">{price}</Text>
         </Stack>
@@ -85,6 +97,7 @@ export const PackagesGrid = () => {
           title="Booked"
           price="Custom Quote · Tailored to Your Schedule"
           popular
+          clientProofBadge="Hair by April runs on Booked"
           bestFor="Independent service professionals losing hours to manual scheduling and DMs."
           features={[
             "Everything in Presence, plus:",

@@ -1,10 +1,8 @@
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import { SEO } from '@/components/SEO';
-import { BusinessCapabilities } from '@/features/services/BusinessCapabilities';
 import { CaseStudySpotlight } from '@/features/services/CaseStudySpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
 import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
-import { PracticeWorkflowBanner } from '@/features/services/PracticeWorkflowBanner';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 const serviceSchema = {
@@ -88,7 +86,7 @@ const Services = () => {
         schema={serviceSchema}
       />
 
-      {/* 1. Hero Section with Badging & Capability Pills */}
+      {/* 1. Hero Section */}
       <Stack gap={6} width="full" maxWidth="full" minWidth={0} align="center" className="text-center" marginBottom={16}>
         <Box
           paddingX={3.5}
@@ -125,37 +123,27 @@ const Services = () => {
           </Box>
           <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
             <CheckCircle2 size={12} className="text-accent-purple" />
-            <span>Mailing List & Smart Inquiries</span>
+            <span>Mailing List & Inquiries</span>
           </Box>
         </Box>
       </Stack>
 
-      {/* 2. Core Business Capabilities */}
-      <Box marginBottom={16}>
-        <BusinessCapabilities />
-      </Box>
-
-      {/* 3. Case Study Spotlight (Proof First: Hair by April Live GIF) */}
+      {/* 2. Case Study Spotlight (Lead with Proof First: Hair by April Live GIF + Production Workflow) */}
       <Box marginBottom={16}>
         <CaseStudySpotlight />
       </Box>
 
-      {/* 4. How It Works (Systematized Automation Workflow) */}
-      <Box marginBottom={16}>
-        <PracticeWorkflowBanner />
-      </Box>
-
-      {/* 5. Packages Section */}
-      <Box marginBottom={16}>
-        <PackagesGrid />
-      </Box>
-
-      {/* 6. Scope Boundaries (Trust & Boundary Block) */}
+      {/* 3. Scope Boundaries (Trust & Boundary Block) */}
       <Box marginBottom={16}>
         <ScopeBoundaries />
       </Box>
 
-      {/* 7. Intake Inquiry Form */}
+      {/* 4. Packages & Pricing (Single Source of Truth for What's Included) */}
+      <Box marginBottom={16}>
+        <PackagesGrid />
+      </Box>
+
+      {/* 5. Intake Inquiry Form */}
       <Box marginBottom={16}>
         <IntakeForm />
       </Box>

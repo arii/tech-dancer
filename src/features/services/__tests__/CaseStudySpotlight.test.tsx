@@ -8,7 +8,7 @@ describe('CaseStudySpotlight Component', () => {
     cleanup();
   });
 
-  it('renders the case study spotlight with headline, story, authentic features, and live proof image', () => {
+  it('renders the case study spotlight with headline, story, integrated workflow, and live proof image', () => {
     render(
       <MemoryRouter>
         <CaseStudySpotlight />
@@ -16,9 +16,9 @@ describe('CaseStudySpotlight Component', () => {
     );
 
     // Section title & badges
-    expect(screen.getByText('LIVE CLIENT PRODUCTION SPOTLIGHT')).toBeDefined();
+    expect(screen.getByText('LIVE CLIENT PROOF')).toBeDefined();
     expect(screen.getByText('Case Study: Hair by April')).toBeDefined();
-    expect(screen.getByText(/How a top San Francisco hair specialist/i)).toBeDefined();
+    expect(screen.getByText(/How a top San Francisco curly hair specialist/i)).toBeDefined();
 
     // Before & After comparison
     expect(screen.getByText('The Friction Before')).toBeDefined();
@@ -26,10 +26,12 @@ describe('CaseStudySpotlight Component', () => {
     expect(screen.getByText('The Solution Built')).toBeDefined();
     expect(screen.getByText(/Custom mobile-first portfolio/i)).toBeDefined();
 
-    // Production Features (no fabricated statistics)
-    expect(screen.getByText('Direct Client Self-Booking:')).toBeDefined();
-    expect(screen.getByText('Live Calendar Synchronization:')).toBeDefined();
-    expect(screen.getByText('Structured Intake & Event Routing:')).toBeDefined();
+    // Integrated Production Workflow
+    expect(screen.getByText('The Production System Hair by April Runs On')).toBeDefined();
+    expect(screen.getByText('Smart Intake')).toBeDefined();
+    expect(screen.getByText('Live Calendar Lock')).toBeDefined();
+    expect(screen.getByText('Instant Confirmation')).toBeDefined();
+    expect(screen.getByText('Automated Reminders')).toBeDefined();
 
     // Verify hallucinated numbers are completely absent
     expect(screen.queryByText(/5\+ hours saved weekly/i)).toBeNull();
@@ -37,7 +39,7 @@ describe('CaseStudySpotlight Component', () => {
     // Live Recording image & badge
     const img = screen.getByAltText('Hair by April Live Booking Flow') as HTMLImageElement;
     expect(img).toBeDefined();
-    expect(img.src).toContain('images/creators/hair-by-april-booking.gif');
+    expect(img.src).toContain('hair-by-april-booking.gif');
     expect(screen.getByText('Live Production Workflow')).toBeDefined();
 
     // Client Link button

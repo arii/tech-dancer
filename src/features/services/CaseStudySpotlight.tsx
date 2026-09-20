@@ -1,18 +1,37 @@
-import { ArrowUpRight, CheckCircle2, Lock, Sparkles, Calendar, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Lock, Sparkles, MessageSquare, CalendarCheck, ShieldCheck, BellRing, ArrowRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { ASSET_PREFIX } from '@/config/constants';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
-export const CaseStudySpotlight = () => {
-  const gifSrc = `${ASSET_PREFIX}/images/creators/hair-by-april-booking.gif`;
+const WORKFLOW_STEPS = [
+  {
+    step: '01',
+    icon: MessageSquare,
+    title: 'Smart Intake',
+    desc: 'Structured consultation forms capture curl history, goals, and event details.',
+  },
+  {
+    step: '02',
+    icon: CalendarCheck,
+    title: 'Live Calendar Lock',
+    desc: 'Clients self-book open slots directly without back-and-forth DM messaging.',
+  },
+  {
+    step: '03',
+    icon: ShieldCheck,
+    title: 'Instant Confirmation',
+    desc: 'Automatic calendar invites and slot locking prevent double-booking.',
+  },
+  {
+    step: '04',
+    icon: BellRing,
+    title: 'Automated Reminders',
+    desc: 'Email and calendar alerts keep clients on schedule with zero manual texting.',
+  },
+];
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const target = e.currentTarget;
-    if (!target.dataset.triedFallback) {
-      target.dataset.triedFallback = 'true';
-      target.src = '/images/creators/hair-by-april-booking.gif';
-    }
-  };
+export const CaseStudySpotlight = () => {
+  const gifSrc = `${ASSET_PREFIX}/images/services/hair-by-april-booking.gif`;
 
   return (
     <Box
@@ -22,9 +41,9 @@ export const CaseStudySpotlight = () => {
       surface="default"
       overflow="hidden"
       padding={{ base: 6, sm: 8, md: 10 }}
-      className="border-line/60 bg-gradient-to-br from-surface to-surface-alt/40 shadow-xl relative"
+      className="border-accent/40 bg-gradient-to-br from-surface via-surface-alt/50 to-surface shadow-2xl relative"
     >
-      <Stack gap={8}>
+      <Stack gap={10}>
         {/* Section Header */}
         <Stack gap={3}>
           <Box display="flex" align="center" gap={2}>
@@ -33,28 +52,28 @@ export const CaseStudySpotlight = () => {
               paddingY={1}
               radius="full"
               border
-              className="border-accent/40 bg-accent/10 text-accent font-mono text-xs font-bold flex items-center gap-1.5"
+              className="border-accent/40 bg-accent/10 text-accent font-mono text-xs font-bold flex items-center gap-1.5 shadow-sm"
             >
               <Sparkles size={13} />
-              <span>LIVE CLIENT PRODUCTION SPOTLIGHT</span>
+              <span>LIVE CLIENT PROOF</span>
             </Box>
           </Box>
           <Text as="h2" variant="headline" size="3xl" weight="font-bold">
             Case Study: Hair by April
           </Text>
-          <Text variant="body" size="md" color="dim" maxWidth="3xl">
-            How a top San Francisco hair specialist transitioned from manual Instagram DM inquiries to an automated, hands-off booking and intake workflow.
+          <Text variant="body" size="lg" color="dim" maxWidth="3xl">
+            How a top San Francisco curly hair specialist transitioned from manual Instagram DM inquiries to an automated, hands-off booking and intake workflow.
           </Text>
         </Stack>
 
-        {/* Main Content Grid: Workflow comparison on left, Live Recording Preview on right */}
+        {/* Main Content Grid: Story & Contrast on left, Live Recording Preview on right */}
         <Grid cols={{ base: 1, lg: 12 }} gap={8} align="center">
           {/* Left Column: Problem & True Solution Built */}
-          <Box className="lg:col-span-6">
+          <Box className="lg:col-span-5">
             <Stack gap={6}>
               {/* Before & After comparison card */}
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                <Stack surface="sunken" radius="lg" border padding={4} gap={2} className="border-line/40 bg-surface-alt/40">
+                <Stack surface="sunken" radius="xl" border padding={4} gap={2} className="border-line/40 bg-surface-alt/40">
                   <Text variant="mono" size="xs" weight="font-bold" color="error" uppercase>
                     The Friction Before
                   </Text>
@@ -62,7 +81,7 @@ export const CaseStudySpotlight = () => {
                     Manual messaging across DMs, coordinating open time slots over text messages, and chasing down consultation details.
                   </Text>
                 </Stack>
-                <Stack surface="sunken" radius="lg" border padding={4} gap={2} className="border-accent/30 bg-accent/5">
+                <Stack surface="sunken" radius="xl" border padding={4} gap={2} className="border-accent/40 bg-accent/5">
                   <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase>
                     The Solution Built
                   </Text>
@@ -72,33 +91,6 @@ export const CaseStudySpotlight = () => {
                 </Stack>
               </Grid>
 
-              {/* Verified Technical Capabilities */}
-              <Stack gap={3}>
-                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase>
-                  Production Features Implemented
-                </Text>
-                <Stack gap={2.5}>
-                  <Box display="flex" align="start" gap={3}>
-                    <Calendar size={16} className="text-accent shrink-0 mt-0.5" />
-                    <Text variant="body" size="sm" color="main">
-                      <strong className="text-accent">Direct Client Self-Booking:</strong> Clients browse service menus and lock open calendar slots instantly.
-                    </Text>
-                  </Box>
-                  <Box display="flex" align="start" gap={3}>
-                    <Zap size={16} className="text-success shrink-0 mt-0.5" />
-                    <Text variant="body" size="sm" color="main">
-                      <strong className="text-success">Live Calendar Synchronization:</strong> Real-time slot locking prevents double bookings and sends automated calendar invites.
-                    </Text>
-                  </Box>
-                  <Box display="flex" align="start" gap={3}>
-                    <ShieldCheck size={16} className="text-accent-sky shrink-0 mt-0.5" />
-                    <Text variant="body" size="sm" color="main">
-                      <strong className="text-accent-sky">Structured Intake & Event Routing:</strong> Dedicated consultation forms capture specific requirements, party sizes, and hair goals.
-                    </Text>
-                  </Box>
-                </Stack>
-              </Stack>
-
               {/* Action link */}
               <Box display="flex" align="center" gap={4} className="pt-2">
                 <Button
@@ -107,6 +99,7 @@ export const CaseStudySpotlight = () => {
                   target="_blank"
                   rel="noopener"
                   variant="primary"
+                  size="lg"
                   className="shadow-md"
                 >
                   Visit Live Client Site <ArrowUpRight size={15} className="ml-1" />
@@ -116,13 +109,13 @@ export const CaseStudySpotlight = () => {
           </Box>
 
           {/* Right Column: Live Interactive GIF in Polished Browser Frame */}
-          <Box className="lg:col-span-6">
+          <Box className="lg:col-span-7">
             <Box
               border
               radius="2xl"
               overflow="hidden"
               surface="sunken"
-              className="border-line/60 shadow-2xl relative group bg-surface"
+              className="border-line/60 shadow-2xl relative group bg-surface ring-1 ring-accent/20"
             >
               {/* Browser Chrome Bar */}
               <Box
@@ -163,7 +156,6 @@ export const CaseStudySpotlight = () => {
                   alt="Hair by April Live Booking Flow"
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
-                  onError={handleImageError}
                 />
                 <Box
                   position="absolute"
@@ -181,6 +173,63 @@ export const CaseStudySpotlight = () => {
             </Box>
           </Box>
         </Grid>
+
+        {/* Integrated Production Workflow: The System Hair by April Runs On */}
+        <Stack gap={4}>
+          <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wider">
+            The Production System Hair by April Runs On
+          </Text>
+          <Box
+            display="grid"
+            className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative"
+          >
+            {WORKFLOW_STEPS.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Stack
+                  key={item.step}
+                  surface="default"
+                  radius="xl"
+                  border
+                  padding={5}
+                  className="border-line/40 bg-surface/80 relative group hover:border-accent/40 transition-colors shadow-sm"
+                >
+                  <Box display="flex" align="center" justify="between" marginBottom={2}>
+                    <Box
+                      width={9}
+                      height={9}
+                      radius="lg"
+                      border
+                      display="flex"
+                      align="center"
+                      justify="center"
+                      className="border-accent/30 bg-accent/10 text-accent"
+                    >
+                      <Icon size={16} />
+                    </Box>
+                    <span className="font-mono text-[10px] font-bold text-dim/60">{item.step}</span>
+                  </Box>
+
+                  <Text variant="headline" size="sm" weight="font-bold" color="main" className="mb-1">
+                    {item.title}
+                  </Text>
+                  <Text variant="body" size="xs" color="dim">
+                    {item.desc}
+                  </Text>
+
+                  {/* Desktop forward connector arrow */}
+                  {index < WORKFLOW_STEPS.length - 1 && (
+                    <Box
+                      className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-5 h-5 rounded-full bg-surface border border-accent/40 items-center justify-center text-accent shadow-sm"
+                    >
+                      <ArrowRight size={10} />
+                    </Box>
+                  )}
+                </Stack>
+              );
+            })}
+          </Box>
+        </Stack>
 
         {/* Studio Credibility Footnote */}
         <Box border radius="lg" padding={4} surface="sunken" className="border-line/30 bg-surface-alt/30 text-center">
