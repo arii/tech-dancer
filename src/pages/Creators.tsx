@@ -2,7 +2,6 @@ import { SEO } from '@/components/SEO';
 import { Box, Grid, Stack, Text, Button } from '@/layouts/Primitives';
 import { NavLink } from 'react-router-dom';
 import { ClientCard } from '@/features/creators/ClientCard';
-import { ExpansionSlots } from '@/features/creators/ExpansionSlots';
 
 const collectionSchema = {
   "@context": "https://schema.org",
@@ -59,15 +58,14 @@ export default function Creators() {
       <Box marginTop={16}>
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
           <ClientCard
-          name="Hair by April"
-          location="San Francisco, CA"
-          description="Specializing in curly hair cuts, authentic vintage styling, and on-location production styling."
-          niche="Hair & Beauty"
-          tags={["Edge Web Build", "Appointment Funnel", "Event Intake Automation"]}
-          imageSrc="/images/creators/hair-by-april-full.png"
-          url="https://hairbyapril.pages.dev"
-        />
-          <ExpansionSlots />
+            name="Hair by April"
+            location="San Francisco, CA"
+            description="Specializing in curly hair cuts, authentic vintage styling, and on-location production styling."
+            niche="Hair & Beauty"
+            tags={["Edge Web Build", "Appointment Funnel", "Event Intake Automation"]}
+            imageSrc="/images/creators/hair-by-april-full.png"
+            url="https://hairbyapril.pages.dev"
+          />
         </Grid>
       </Box>
 
