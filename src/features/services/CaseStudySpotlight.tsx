@@ -6,6 +6,14 @@ import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 export const CaseStudySpotlight = () => {
   const gifSrc = `${ASSET_PREFIX}/images/creators/hair-by-april-booking.gif`;
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.currentTarget;
+    if (!target.dataset.triedFallback) {
+      target.dataset.triedFallback = 'true';
+      target.src = '/images/creators/hair-by-april-booking.gif';
+    }
+  };
+
   return (
     <Box
       id="case-study"
@@ -155,6 +163,7 @@ export const CaseStudySpotlight = () => {
                   alt="Hair by April Live Booking Flow"
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
+                  onError={handleImageError}
                 />
                 <Box
                   position="absolute"

@@ -60,7 +60,7 @@ function safelyRewriteSpaUrl(
   else if (
     pathname.startsWith(baseWithSlash) &&
     !pathname.startsWith(`${baseWithSlash}assets/`) &&
-    !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+    !pathname.match(/\.(html|js|css|png|jpg|jpeg|gif|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml|parquet|webmanifest)$/)
   ) {
     // Keep the query string attached so that the browser/test runner doesn't lose it.
     req.url = `${baseWithSlash}index.html${finalQuery}`;
