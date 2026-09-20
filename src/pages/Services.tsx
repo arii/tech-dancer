@@ -1,7 +1,11 @@
+import { CheckCircle2, Sparkles } from 'lucide-react';
 import { SEO } from '@/components/SEO';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
+import { BusinessCapabilities } from '@/features/services/BusinessCapabilities';
+import { CaseStudySpotlight } from '@/features/services/CaseStudySpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
+import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
+import { PracticeWorkflowBanner } from '@/features/services/PracticeWorkflowBanner';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -9,7 +13,7 @@ const serviceSchema = {
   "@id": "https://boomtick.blog/services/#webpage",
   "url": "https://boomtick.blog/services",
   "name": "Services & Packages | BoomTick",
-  "description": "Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals.",
+  "description": "Digital business studio providing custom web engineering, Google Business Profile optimization, Google Shopping merchandise feeds, 24/7 appointment scheduling, and automated client workflows.",
   "provider": {
     "@type": "Organization",
     "@id": "https://boomtick.blog/#organization"
@@ -18,11 +22,10 @@ const serviceSchema = {
     "@type": "ProfessionalService",
     "name": "BoomTick",
     "url": "https://boomtick.blog/services",
-    "logo": "https://boomtick.blog/images/logo.png",
-    "image": "https://boomtick.blog/images/boomtick-services.png",
-    "description": "Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals.",
+    "logo": "https://boomtick.blog/favicon.ico",
+    "description": "Digital business studio providing custom web engineering, Google Business Profile optimization, Google Shopping merchandise feeds, 24/7 appointment scheduling, and automated client workflows.",
     "priceRange": "$$",
-    "email": "Ari@boomtick.blog",
+    "email": "ari@boomtick.blog",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "San Francisco",
@@ -43,20 +46,6 @@ const serviceSchema = {
         "name": "United States"
       }
     ],
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "09:00",
-        "closes": "17:00"
-      }
-    ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Digital Studio Packages",
@@ -66,7 +55,7 @@ const serviceSchema = {
           "itemOffered": {
             "@type": "Service",
             "name": "Presence Package",
-            "description": "Custom mobile-first website build, DNS configuration, and ongoing maintenance care plan."
+            "description": "Custom mobile-first website build, Google Business Profile optimization, rich schema markup, and mailing list integration."
           }
         },
         {
@@ -74,7 +63,7 @@ const serviceSchema = {
           "itemOffered": {
             "@type": "Service",
             "name": "Booked Package",
-            "description": "Custom website build, client booking system integration, custom intake routing, and local SEO configuration."
+            "description": "Custom website build, 24/7 online calendar booking integration, custom intake routing, and local SEO configuration."
           }
         },
         {
@@ -82,7 +71,7 @@ const serviceSchema = {
           "itemOffered": {
             "@type": "Service",
             "name": "Studio Growth Package",
-            "description": "Comprehensive digital studio setup, e-commerce integration, inquiry routing, and ongoing monthly optimization retainers."
+            "description": "Comprehensive digital studio setup, automated Google Shopping & Merchant Center product feeds, e-commerce integration, and monthly optimization retainers."
           }
         }
       ]
@@ -90,38 +79,88 @@ const serviceSchema = {
   }
 };
 
-export default function Services() {
+const Services = () => {
   return (
     <Box as="main" width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
         title="Services & Packages"
-        description="Digital business studio providing custom web design, appointment booking integrations, and workflow automation for independent creative professionals."
+        description="Digital business studio providing custom web engineering, Google Business Profile optimization, Google Shopping merchandise feeds, 24/7 appointment scheduling, and automated client workflows."
         schema={serviceSchema}
       />
-      {/* Hero Section */}
-      <Stack gap={8} width="full" maxWidth="full" minWidth={0} align="center" className="text-center" marginBottom={16}>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" uppercase tracking="tight">
-          Digital Business Operations for Independent Creatives
+
+      {/* 1. Hero Section with Badging & Capability Pills */}
+      <Stack gap={6} width="full" maxWidth="full" minWidth={0} align="center" className="text-center" marginBottom={16}>
+        <Box
+          paddingX={3.5}
+          paddingY={1}
+          radius="full"
+          border
+          className="border-accent/40 bg-accent/10 text-accent font-mono text-xs font-bold flex items-center gap-2 shadow-sm"
+        >
+          <Sparkles size={13} className="text-accent" />
+          <span>DIGITAL BUSINESS STUDIO & AUTOMATION</span>
+        </Box>
+
+        <Text as="h1" variant="display" size="4xl" weight="font-black" uppercase tracking="tight" className="max-w-4xl">
+          Digital Operations & Online Booking for Independent Creatives
         </Text>
+
         <Text as="p" variant="body" size="lg" color="dim" maxWidth="3xl">
-          Lightning-fast, mobile-ready websites, hands-off booking systems, and automated workflows designed to let you focus on your clients, not your tech stack.
+          Lightning-fast web engineering, 24/7 hands-off calendar scheduling, Google Business search optimization, and automated Google Shopping merchandise feeds.
         </Text>
+
+        {/* Core capability pills */}
+        <Box display="flex" wrap justify="center" gap={2.5} className="pt-2">
+          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
+            <CheckCircle2 size={12} className="text-accent" />
+            <span>Google Business Profile</span>
+          </Box>
+          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
+            <CheckCircle2 size={12} className="text-accent-sky" />
+            <span>Google Shopping Feeds</span>
+          </Box>
+          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
+            <CheckCircle2 size={12} className="text-success" />
+            <span>24/7 Calendar Sync</span>
+          </Box>
+          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
+            <CheckCircle2 size={12} className="text-accent-purple" />
+            <span>Mailing List & Smart Inquiries</span>
+          </Box>
+        </Box>
       </Stack>
 
-      {/* Packages Section */}
+      {/* 2. Core Business Capabilities */}
+      <Box marginBottom={16}>
+        <BusinessCapabilities />
+      </Box>
+
+      {/* 3. Case Study Spotlight (Proof First: Hair by April Live GIF) */}
+      <Box marginBottom={16}>
+        <CaseStudySpotlight />
+      </Box>
+
+      {/* 4. How It Works (Systematized Automation Workflow) */}
+      <Box marginBottom={16}>
+        <PracticeWorkflowBanner />
+      </Box>
+
+      {/* 5. Packages Section */}
       <Box marginBottom={16}>
         <PackagesGrid />
       </Box>
 
-      {/* Scope Boundaries */}
+      {/* 6. Scope Boundaries (Trust & Boundary Block) */}
       <Box marginBottom={16}>
         <ScopeBoundaries />
       </Box>
 
-      {/* Intake Inquiry Form */}
+      {/* 7. Intake Inquiry Form */}
       <Box marginBottom={16}>
         <IntakeForm />
       </Box>
     </Box>
   );
-}
+};
+
+export default Services;

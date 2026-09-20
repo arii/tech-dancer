@@ -116,6 +116,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
+    "@langchain/langgraph": "^1.4.16",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.61.1",
     "@tailwindcss/typography": "^0.5.19",

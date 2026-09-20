@@ -1,8 +1,8 @@
-import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { Check } from 'lucide-react';
+import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { TierVisual } from './TierVisuals';
 
-interface PackageCardProps {
+export interface PackageCardProps {
   tier: 'presence' | 'booked' | 'growth';
   title: string;
   price: string;
@@ -11,21 +11,19 @@ interface PackageCardProps {
   features: string[];
 }
 
-function PackageCard({ tier, title, price, popular, bestFor, features }: PackageCardProps) {
+const PackageCard = ({ tier, title, price, popular, bestFor, features }: PackageCardProps) => {
   return (
-    <Box
+    <Stack
       border
-      radius="xl"
+      radius="2xl"
       padding={8}
       surface={popular ? "accent" : "default"}
-      display="flex"
-      flexDirection="column"
-      className={popular ? "border-accent ring-2 ring-accent/20 scale-100 lg:scale-105 z-10 shadow-lg" : "border-line/50"}
+      className={popular ? "border-accent ring-2 ring-accent/20 scale-100 lg:scale-105 z-10 shadow-xl" : "border-line/50 shadow-md"}
     >
       <Stack gap={6} flex={1}>
         <Stack gap={2}>
           {popular && (
-            <Box paddingX={3} paddingY={1} className="bg-bg w-fit rounded-full border border-accent/20">
+            <Box paddingX={3} paddingY={1} className="bg-bg w-fit rounded-full border border-accent/30 shadow-sm">
               <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase>
                 Most Popular
               </Text>
@@ -57,84 +55,86 @@ function PackageCard({ tier, title, price, popular, bestFor, features }: Package
           ))}
         </Stack>
 
-        <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4}>
+        <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4} className="shadow-md">
           Inquire Now
         </Button>
       </Stack>
-    </Box>
+    </Stack>
   );
-}
+};
 
-export function PackagesGrid() {
+export const PackagesGrid = () => {
   return (
     <Stack gap={8} width="full">
       <Grid cols={{ base: 1, lg: 3 }} gap={8}>
         <PackageCard
           tier="presence"
           title="Presence"
-          price="$1,500+ setup / $99-149/mo"
-          bestFor="Emerging creatives needing a sharp, modern home base."
+          price="Starting at $1,500 setup"
+          bestFor="Emerging creatives and solo practitioners needing a fast, verified home base."
           features={[
-            "3–5 page high-performance mobile-first website.",
-            "Custom domain setup & security (SSL).",
-            "Foundational on-page SEO and Google Search Console registration.",
-            "Care Plan includes hosting maintenance, security monitoring, and minor content updates."
+            "Fast, mobile-first website build with custom domain & SSL security.",
+            "Google Business Profile setup & Google Maps local search indexing.",
+            "Rich Schema.org structured data for accurate search engine listings.",
+            "Integrated newsletter & mailing list signup to build an owned client list.",
+            "Care Plan includes cloud hosting maintenance and security monitoring."
           ]}
         />
         <PackageCard
           tier="booked"
           title="Booked"
-          price="$2,500+ setup / $199-349/mo"
+          price="Custom Quote · Tailored to Your Schedule"
           popular
-          bestFor="Service providers losing billable hours to scheduling friction."
+          bestFor="Independent service professionals losing hours to manual scheduling and DMs."
           features={[
             "Everything in Presence, plus:",
-            "End-to-end appointment scheduling integration and calendar synchronization.",
-            "Custom booking and intake forms (e.g., event quotes, bridal parties, lesson inquiries).",
-            "Instant client lead alerts sent straight to your email or phone.",
-            "San Francisco Local SEO Program (Getting found on local SF maps & directories).",
-            "Monthly system checks, booking validation, and content passes."
+            "24/7 online client appointment booking synced directly with your calendar.",
+            "Automated calendar invites and reminder alerts for you and your clients.",
+            "Custom booking & intake routing (consultations, event quotes, party sizes).",
+            "San Francisco & Local SEO optimization to capture nearby customer searches.",
+            "Quarterly check-ins to review booking flows and site performance."
           ]}
         />
         <PackageCard
           tier="growth"
           title="Studio Growth"
-          price="$4,000+ setup / $399-799+/mo"
-          bestFor="Established pros scaling classes, digital downloads, or merchandise."
+          price="Custom Quote · Multi-Channel Retainer"
+          bestFor="Established practitioners ready to sell merchandise, classes, or digital assets."
           features={[
             "Everything in Booked, plus:",
-            "E-commerce setup (print-on-demand, digital assets, or physical merchandise).",
-            "Custom deposit routing and multi-tier booking flows.",
-            "Monthly insights on visits and booking rates."
+            "E-commerce setup (print-on-demand merch, physical goods, or digital downloads).",
+            "Automated Google Shopping & Google Merchant Center XML feed integration.",
+            "Stripe Connect direct deposit and multi-tier deposit collection.",
+            "Monthly analytics reports covering traffic, booking conversion, and search impressions."
           ]}
         />
       </Grid>
     </Stack>
   );
-}
+};
 
-export function ScopeBoundaries() {
+export const ScopeBoundaries = () => {
   return (
-    <Box border radius="lg" padding={8} surface="default" className="border-line/50 bg-surface/50">
+    <Box border radius="2xl" padding={8} surface="default" className="border-line/50 bg-surface/50 shadow-md">
       <Stack gap={6}>
         <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-center">
-          Scope Boundaries
+          Scope Boundaries & Responsibilities
         </Text>
         <Grid cols={{ base: 1, md: 2 }} gap={8}>
           <Stack gap={4}>
             <Text variant="mono" size="sm" weight="font-bold" color="success" uppercase>We Handle</Text>
             <Text variant="body" size="sm" color="dim">
-              Website build & updates, booking setups, calendar sync, Google profile setup, and ongoing tech support.
+              Modern website engineering, Google Business Profile & search setup, Google Shopping merchant feeds, 24/7 calendar booking systems, mailing list capture, and ongoing infrastructure maintenance.
             </Text>
           </Stack>
           <Stack gap={4}>
             <Text variant="mono" size="sm" weight="font-bold" color="error" uppercase>We Do Not Handle</Text>
             <Text variant="body" size="sm" color="dim">
-              Tax advisory, legal services, bookkeeping/accounting, payroll, physical inventory shipping, or on-site event management.
+              Tax advisory, legal counsel, bookkeeping/accounting, payroll processing, manual physical shipping/warehousing, or on-site event coordination.
             </Text>
           </Stack>
         </Grid>
       </Stack>
     </Box>
   );
-}
+};
