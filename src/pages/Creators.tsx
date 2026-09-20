@@ -1,7 +1,7 @@
 import { SEO } from '@/components/SEO';
-import { Box, Grid, Stack, Text, Button } from '@/layouts/Primitives';
-import { NavLink } from 'react-router-dom';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { ClientCard } from '@/features/creators/ClientCard';
+import { PracticeWorkflowBanner } from '@/features/services/PracticeWorkflowBanner';
 
 const collectionSchema = {
   "@context": "https://schema.org",
@@ -69,18 +69,8 @@ export default function Creators() {
         </Grid>
       </Box>
 
-      <Box marginTop={24} padding={12} surface="accent" radius="xl" className="text-center">
-        <Stack gap={6} align="center">
-          <Text as="h2" variant="headline" size="2xl" weight="font-bold">
-            Running an independent practice?
-          </Text>
-          <Text as="p" variant="body" size="lg" maxWidth="2xl">
-            Streamline your bookings and operations with our digital studio workflows, automated intake pipelines, and lightning-fast web performance.
-          </Text>
-          <Button as={NavLink} to="/services" variant="primary" size="lg" marginTop={4}>
-            View Services & Packages →
-          </Button>
-        </Stack>
+      <Box marginTop={24}>
+        <PracticeWorkflowBanner />
       </Box>
     </Box>
   );

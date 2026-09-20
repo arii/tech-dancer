@@ -1,7 +1,9 @@
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { Check } from 'lucide-react';
+import { TierVisual } from './TierVisuals';
 
 interface PackageCardProps {
+  tier: 'presence' | 'booked' | 'growth';
   title: string;
   price: string;
   popular?: boolean;
@@ -9,7 +11,7 @@ interface PackageCardProps {
   features: string[];
 }
 
-function PackageCard({ title, price, popular, bestFor, features }: PackageCardProps) {
+function PackageCard({ tier, title, price, popular, bestFor, features }: PackageCardProps) {
   return (
     <Box
       border
@@ -32,6 +34,11 @@ function PackageCard({ title, price, popular, bestFor, features }: PackageCardPr
           <Text as="h3" variant="headline" size="2xl" weight="font-bold">{title}</Text>
           <Text variant="mono" size="sm" color="dim">{price}</Text>
         </Stack>
+
+        {/* Visual Preview per Tier */}
+        <Box width="full" marginY={1}>
+          <TierVisual tier={tier} />
+        </Box>
 
         <Box paddingBottom={4} className="border-b border-line/30">
           <Text variant="body" size="sm" weight="font-medium" color="main" className="italic">
@@ -63,6 +70,7 @@ export function PackagesGrid() {
     <Stack gap={8} width="full">
       <Grid cols={{ base: 1, lg: 3 }} gap={8}>
         <PackageCard
+          tier="presence"
           title="Presence"
           price="$1,500+ setup / $99-149/mo"
           bestFor="Emerging creatives needing a sharp, modern home base."
@@ -74,6 +82,7 @@ export function PackagesGrid() {
           ]}
         />
         <PackageCard
+          tier="booked"
           title="Booked"
           price="$2,500+ setup / $199-349/mo"
           popular
@@ -88,6 +97,7 @@ export function PackagesGrid() {
           ]}
         />
         <PackageCard
+          tier="growth"
           title="Studio Growth"
           price="$4,000+ setup / $399-799+/mo"
           bestFor="Established pros scaling classes, digital downloads, or merchandise."
