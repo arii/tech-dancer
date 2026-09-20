@@ -1,7 +1,10 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import { BusinessCapabilities } from '@/features/services/BusinessCapabilities';
+=======
+>>>>>>> 64ba8793e6 (update)
 import { TierVisual } from '@/features/services/TierVisuals';
 import { PracticeWorkflowBanner } from '@/features/services/PracticeWorkflowBanner';
 import { PackagesGrid } from '@/features/services/Packages';
@@ -17,7 +20,10 @@ describe('Services Page Visual Enhancements', () => {
     // Check Presence tier visual
     expect(screen.getByText('Presence')).toBeDefined();
     expect(screen.getByText('yourstudio.com')).toBeDefined();
+<<<<<<< HEAD
     expect(screen.getByText('Google Search Verified')).toBeDefined();
+=======
+>>>>>>> 64ba8793e6 (update)
 
     // Check Booked tier visual
     expect(screen.getByText('Booked')).toBeDefined();
@@ -42,6 +48,7 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('yourstudio.com/store')).toBeDefined();
   });
 
+<<<<<<< HEAD
   it('renders BusinessCapabilities with Google Business Profile, Google Shopping, Scheduling, and Mailing List cards', () => {
     render(<BusinessCapabilities />);
 
@@ -52,6 +59,8 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('Mailing Lists & Smart Inquiry Forms')).toBeDefined();
   });
 
+=======
+>>>>>>> 64ba8793e6 (update)
   it('renders PracticeWorkflowBanner with 4-step workflow diagram and CTA', () => {
     render(
       <MemoryRouter>
@@ -59,6 +68,7 @@ describe('Services Page Visual Enhancements', () => {
       </MemoryRouter>
     );
 
+<<<<<<< HEAD
     expect(screen.getByText('Systematized Operations for Independent Practices')).toBeDefined();
     expect(screen.getByText('AUTOMATED CLIENT WORKFLOWS')).toBeDefined();
     expect(screen.getByText('01')).toBeDefined();
@@ -66,5 +76,14 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('Confirmation')).toBeDefined();
     expect(screen.getByText('Reminder')).toBeDefined();
     expect(screen.getByText(/Request Studio Consultation/i)).toBeDefined();
+=======
+    expect(screen.getByText('Running an independent practice?')).toBeDefined();
+    expect(screen.getByText('EDGE-HOSTED AUTOMATION WORKFLOWS')).toBeDefined();
+    expect(screen.getByText('Inquiry')).toBeDefined();
+    expect(screen.getByText('Booking')).toBeDefined();
+    expect(screen.getByText('Confirmation')).toBeDefined();
+    expect(screen.getByText('Reminder')).toBeDefined();
+    expect(screen.getByText(/View Services & Request Consultation/i)).toBeDefined();
+>>>>>>> 64ba8793e6 (update)
   });
 });
