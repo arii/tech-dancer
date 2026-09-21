@@ -99,18 +99,18 @@ export const ModularPackages = () => {
       >
         <Stack gap={6}>
           {/* Header Row: Title on Left, Price at Top Right */}
-          <Box display="flex" justify="between" align="start" wrap gap={4} className="border-b border-line/30 pb-6">
+          <Box display="flex" justify="between" align="start" wrap gap={4} paddingBottom={6} className="border-b border-line/30">
             <Stack gap={2}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main tracking-[0.01em]">
+              <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="wordmark" className="text-main">
                 Build your digital foundation
               </Text>
             </Stack>
 
             <Box className="text-left sm:text-right shrink-0">
-              <Text variant="body" size="xs" weight="font-semibold" className="text-[11px] tracking-wider text-dim/80 uppercase font-sans mb-1 block">
+              <Text variant="body" size="tiny" weight="font-semibold" tracking="wider" marginBottom={1} className="text-dim/80 uppercase font-sans block">
                 Starting Setup
               </Text>
-              <Text variant="headline" size="3xl" weight="font-bold" className="text-main tracking-[0.01em]">
+              <Text variant="headline" size="3xl" weight="font-bold" tracking="wordmark" className="text-main">
                 $1,500
               </Text>
             </Box>
@@ -118,7 +118,7 @@ export const ModularPackages = () => {
 
           {/* Description & Feature Grid spanning across the card */}
           <Stack gap={6} width="full">
-            <Text variant="body" size="base" color="dim" className="leading-[1.65] max-w-4xl">
+            <Text variant="body" size="base" color="dim" leading="relaxed" className="max-w-4xl">
               A fast, polished website designed around your work, your customers, and the way your business operates. We handle the technical details so you can focus on your craft.
             </Text>
 
@@ -126,8 +126,8 @@ export const ModularPackages = () => {
             <Grid cols={{ base: 1, sm: 2 }} gap={4}>
               {foundationFeatures.map((feat) => (
                 <Box key={feat} display="flex" align="start">
-                  <Check className="w-4 h-4 text-accent mr-3 mt-0.5 shrink-0" />
-                  <Text variant="body" size="sm" color="main" className="leading-[1.5]">{feat}</Text>
+                  <Box as="span" marginRight={3} marginTop={0.5} shrink={0}><Check className="w-4 h-4 text-accent" /></Box>
+                  <Text variant="body" size="sm" color="main" leading="relaxed">{feat}</Text>
                 </Box>
               ))}
             </Grid>
@@ -138,7 +138,7 @@ export const ModularPackages = () => {
       {/* 2. Connect, Grow & Automate (Structured Capabilities) */}
       <Stack gap={6}>
         <Box>
-          <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main tracking-[0.01em]">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="wordmark" className="text-main">
             Connect, grow & automate your business
           </Text>
         </Box>
@@ -147,13 +147,15 @@ export const ModularPackages = () => {
           {capabilityCategories.map((cat) => {
             const IconComp = cat.icon;
             return (
-              <Box
+              <Stack
                 key={cat.id}
+                direction="col"
+                justify="between"
                 border
                 radius="xl"
                 padding={6}
                 surface="default"
-                className="border-line/30 bg-surface/40 flex flex-col justify-between hover:border-line/60 transition-colors h-full"
+                className="border-line/30 bg-surface/40 hover:border-line/60 transition-colors h-full"
               >
                 <Stack gap={4}>
                   <Box display="flex" justify="between" align="center">
@@ -165,28 +167,28 @@ export const ModularPackages = () => {
                       >
                         <IconComp className="w-5 h-5" />
                       </Box>
-                      <Text as="h3" variant="headline" size="base" weight="font-bold" className="text-main tracking-[0.01em]">
+                      <Text as="h3" variant="headline" size="base" weight="font-bold" tracking="wordmark" className="text-main">
                         {cat.title}
                       </Text>
                     </Box>
                   </Box>
 
-                  <Text variant="body" size="xs" color="dim" className="leading-[1.6] min-h-[36px]">
+                  <Text variant="body" size="xs" color="dim" leading="relaxed" minHeight={9}>
                     {cat.tagline}
                   </Text>
 
-                  <Stack gap={2} className="pt-2 border-t border-line/20">
+                  <Stack gap={2} paddingTop={2} className="border-t border-line/20">
                     {cat.features.map((feature) => (
                       <Box key={feature} display="flex" align="start" className="text-xs">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent/60 mr-2.5 mt-1.5 shrink-0" />
-                        <Text variant="body" size="xs" color="main" className="leading-[1.5]">
+                        <Box as="span" width={1.5} height={1.5} marginRight={2.5} marginTop={1.5} shrink={0} className="rounded-full bg-accent/60" />
+                        <Text variant="body" size="xs" color="main" leading="relaxed">
                           {feature}
                         </Text>
                       </Box>
                     ))}
                   </Stack>
                 </Stack>
-              </Box>
+              </Stack>
             );
           })}
         </Grid>
