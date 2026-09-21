@@ -2,7 +2,7 @@
 type: post
 title: "The Ultimate West Coast Swing Event Survival Guide"
 seoTitle: "The Ultimate West Coast Swing Event Survival Guide | West Coast Swing Guide | BoomTick"
-date: "2026-06-15"
+date: "2026-01-01"
 author: "Ariel Anders"
 category: "Travel"
 excerpt: "Your hub for mastering West Coast Swing conventions: from packing essentials and DIY dance shoes to recovery routines and understanding WSDC points calculation."

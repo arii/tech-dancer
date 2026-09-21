@@ -1,7 +1,7 @@
 ---
 type: post
 title: "WSDC Points Tier Calculation & Scoring Explained"
-date: "2026-06-16"
+date: "2026-01-02"
 author: "Ariel Anders"
 category: "WCS"
 excerpt: "Learn how WSDC scoring works, how WSDC points tier calculations are done, and strategies for making Novice WCS finals."
