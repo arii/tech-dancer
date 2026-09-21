@@ -15,11 +15,6 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   image?: string;
   imageAlt?: string;
   excerptClamp?: number;
-  /**
-   * Whether to display the category pill badge.
-   * Defaults to false to prevent visual clutter on index grids.
-   */
-  showCategory?: boolean;
   [key: string]: unknown;
 }
 
@@ -37,15 +32,13 @@ export function ContentCard(props: ContentCardProps) {
     image,
     imageAlt,
     excerptClamp = 3,
-    showCategory = false,
   } = props;
 
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
     'basePath',
-    'excerptClamp',
-    'showCategory'
+    'excerptClamp'
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -81,25 +74,23 @@ export function ContentCard(props: ContentCardProps) {
       )}
 
       <Stack gap={4} padding={6} flex={true}>
-        {showCategory && (
-          <Box
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            border
-            className="border-line w-fit"
-          >
-            <Text
-              variant="mono"
-              size="xs"
-              weight="font-black"
-              tracking="wide"
-              className={getTagColorClass(category)}
-            >
-              {category}
-            </Text>
-          </Box>
-        )}
+        <Box
+          paddingX={2}
+          paddingY={1}
+          radius="full"
+          border
+          className="border-line w-fit"
+        >
+        <Text
+          variant="mono"
+          size="xs"
+          weight="font-black"
+          tracking="wide"
+          className={getTagColorClass(category)}
+        >
+          {category}
+        </Text>
+      </Box>
 
       <Stack gap={2}>
         <Text
