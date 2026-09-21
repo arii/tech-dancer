@@ -79,8 +79,8 @@ describe('Merch UI Detail Components', () => {
       );
 
       expect(screen.getByText(/More from the Lead\/Follow\/Switch Collection/i)).toBeTruthy();
-      expect(screen.getByText('Ask Me to Lead - LOVE Neon Performance Tee')).toBeTruthy();
-      expect(screen.queryByText('Ask Me to Follow - LOVE Neon Performance Tee')).toBeNull();
+      expect(screen.getByText('Ask Me to Lead - LOVE Neon Performance Tee - West Coast Swing, Partner & Social Dance Apparel')).toBeTruthy();
+      expect(screen.queryByText('Ask Me to Follow - LOVE Neon Performance Tee - West Coast Swing, Partner & Social Dance Apparel')).toBeNull();
     });
   });
 });
