@@ -64,7 +64,7 @@ export function ListRow(props: ListRowProps) {
         align="center"
         justify="center"
         border
-        className="bg-white border-line/30"
+        className="bg-surface-alt/40 border-line/30"
       >
         {image ? (
           <img
