@@ -54,9 +54,9 @@ export function ListRow(props: ListRowProps) {
     >
       <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box
-        width={16}
-        height={16}
-        margin={4}
+        width={{ base: 14, sm: 16 }}
+        height={{ base: 14, sm: 16 }}
+        margin={{ base: 3, sm: 4 }}
         shrink={0}
         radius="md"
         overflow="hidden"
@@ -64,20 +64,20 @@ export function ListRow(props: ListRowProps) {
         align="center"
         justify="center"
         border
-        className="bg-white border-line/30"
+        className="bg-surface-alt border-line/40 shrink-0"
       >
         {image ? (
           <img
             src={image}
             alt={title}
             loading="lazy"
-            className="h-full w-full object-contain p-1"
+            className="h-full w-full object-contain p-1 rounded-md"
           />
         ) : (
           <CategoryPlaceholder category={category} size="md" />
         )}
       </Box>
-      <Stack gap={1} flex paddingY={3} className="min-w-0">
+      <Stack gap={1.5} flex paddingY={3.5} paddingRight={{ base: 2, sm: 4 }} className="min-w-0">
         <Box display="flex" align="center" gap={3}>
           <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
           <Text variant="mono" size="micro" color="dim">{date}</Text>
