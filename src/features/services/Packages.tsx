@@ -6,7 +6,6 @@ import {
   ChevronDown,
   Globe,
   ShoppingBag,
-  Calendar,
   Sparkles,
   TrendingUp,
   Cpu
@@ -124,7 +123,8 @@ export const ModularPackages = () => {
             >
               {/* Clickable Header */}
               <Box
-                className="cursor-pointer p-6 sm:p-8 hover:bg-surface-hover/30 transition-colors"
+                className="cursor-pointer"
+                padding={{ base: 6, sm: 8 }}
                 onClick={() => toggleAccordion(index)}
               >
                 <Box display="flex" justify="between" align="start" gap={4}>
@@ -161,12 +161,12 @@ export const ModularPackages = () => {
                 className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
               >
                 <div className="overflow-hidden">
-                  <Box className="p-6 sm:p-8 pt-0">
+                  <Box padding={{ base: 6, sm: 8 }} className="pt-0">
                     <Grid cols={{ base: 1, md: 2 }} gap={8} className="mt-6">
                       {/* Left: Image */}
                       <Box
                         radius="xl"
-                        className="overflow-hidden aspect-video bg-surface-hover/50"
+                        className="overflow-hidden aspect-video bg-surface-alt"
                       >
                         <img
                           src={service.imageSrc}
@@ -179,7 +179,8 @@ export const ModularPackages = () => {
                       <Stack gap={4} justify="center">
                         {service.features.map((feature, i) => (
                           <Box key={i} display="flex" align="start">
-                            <Check className="w-5 h-5 text-accent mr-3 mt-0.5 shrink-0" />
+                            <Check className="w-5 h-5 text-accent shrink-0" />
+                            <Box className="ml-3 mt-0.5" />
                             <Text variant="body" size="base" color="main" className="leading-[1.5]">
                               {feature}
                             </Text>
