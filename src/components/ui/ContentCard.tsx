@@ -15,6 +15,10 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   image?: string;
   imageAlt?: string;
   excerptClamp?: number;
+  /**
+   * Whether to display the category pill badge.
+   * Defaults to false to prevent visual clutter on index grids.
+   */
   showCategory?: boolean;
   [key: string]: unknown;
 }
