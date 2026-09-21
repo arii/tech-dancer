@@ -577,7 +577,7 @@ export function extractHowToFromMarkdown(post: {
   const tools: string[] = [];
   const supplies: string[] = [];
 
-  const gearTableMatch = post.content.match(/##\s*(?:Required Gear|Tools and Supplies|Required Items|Materials)[\s\S]*?\n\n/i);
+  const gearTableMatch = post.content.match(/##\s*(?:Recommended Materials|Required Gear|Tools and Supplies|Required Items|Materials)[\s\S]*?\n\n/i);
   if (gearTableMatch) {
     const tableText = gearTableMatch[0];
     const lines = tableText.split('\n');

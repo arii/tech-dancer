@@ -4,7 +4,7 @@ title: "Practice & Social Dance Apparel"
 date: "2026-06-01"
 author: "Ariel Anders"
 category: "Gear"
-excerpt: "Basic functional dance wear and layering accessories for your next practice or social."
+excerpt: "Figure out what to wear to a WCS social with basic functional dance wear and layering accessories for your next practice or social."
 image: "/images/gear/sketches/mesh-fishnet-top.webp"
 imageFit: "contain"
 
@@ -19,7 +19,9 @@ tags:
   - "practice"
 ---
 
-Functional dance wear should be comfortable, breathable, and stylish. These non-merch basics are perfect for layering and creating your own unique look on the dance floor. Explore our full [curated social dance apparel and gear](/gear) catalog or check out our [lead and follow switch dynamics](/gear/2024-06-01-love-neon-switch-shirt) collection.
+## What to Wear to a WCS Social
+
+Functional dance wear should be comfortable, breathable, and stylish. If you are wondering what to wear to a WCS social, these non-merch basics are perfect for layering and creating your own unique look on the dance floor. Explore our full [curated social dance apparel and gear](/gear) catalog or check out our [lead and follow switch dynamics](/gear/2024-06-01-love-neon-switch-shirt) collection.
 
 ![Crop Top](/images/gear/amazon/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.jpg)
 

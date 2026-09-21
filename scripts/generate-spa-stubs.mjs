@@ -90,9 +90,18 @@ function loadMarkdownMeta(dirPath, routePrefix) {
       img = `${BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`;
     }
 
-    const computedTitle = data.seoTitle
-      ? (data.seoTitle.includes('BoomTick') ? data.seoTitle : `${data.seoTitle} | BoomTick.blog`)
-      : (data.title ? `${data.title} | BoomTick.blog` : 'BoomTick.blog');
+    let computedTitle = '';
+    if (data.seoTitle) {
+      computedTitle = data.seoTitle.includes('BoomTick') ? data.seoTitle : `${data.seoTitle} | BoomTick`;
+    } else if (data.title) {
+      if (route.startsWith('/blog/') || route.startsWith('/gear/')) {
+        computedTitle = `${data.title} | West Coast Swing Guide | BoomTick`;
+      } else {
+        computedTitle = `${data.title} | BoomTick`;
+      }
+    } else {
+      computedTitle = 'BoomTick';
+    }
 
     markdownMetaMap.set(route, {
       title: computedTitle,
@@ -122,8 +131,8 @@ function getRouteMetadata(route) {
   if (route.startsWith('/blog/')) {
     const slugName = route.replace('/blog/', '').replace(/-/g, ' ');
     return {
-      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | BoomTick.blog`,
-      description: 'West Coast Swing guide, tips, and insights on BoomTick.blog.',
+      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | West Coast Swing Guide | BoomTick`,
+      description: 'West Coast Swing guide, tips, and insights on BoomTick.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };
   }
@@ -131,14 +140,14 @@ function getRouteMetadata(route) {
   if (route.startsWith('/gear/')) {
     const slugName = route.replace('/gear/', '').replace(/-/g, ' ');
     return {
-      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | BoomTick Gear`,
+      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | West Coast Swing Guide | BoomTick`,
       description: 'West Coast Swing gear review and dancer recommendation.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };
   }
 
   return {
-    title: 'BoomTick.blog - West Coast Swing & DevAI Research',
+    title: 'BoomTick - West Coast Swing & DevAI Research',
     description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
     image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
   };
