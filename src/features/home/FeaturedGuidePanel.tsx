@@ -4,7 +4,6 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const FEATURED = {
-  eyebrow: 'FEATURED GUIDE',
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',
@@ -49,9 +48,6 @@ export function FeaturedGuidePanel() {
       />
       {/* Content pinned to bottom */}
       <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
-        <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
-          {FEATURED.eyebrow}
-        </Text>
         <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
           {FEATURED.title}
         </Text>

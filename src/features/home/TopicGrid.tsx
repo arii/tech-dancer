@@ -62,8 +62,7 @@ export function TopicGrid() {
             gap={4}
             padding={4}
             radius="md"
-            border
-            className={`group cursor-pointer bg-surface/30 border-line/30 topic-card-${id}`}
+            className={`group cursor-pointer hover:bg-surface-alt transition-colors topic-card-${id}`}
           >
             <Box
               width={10}
