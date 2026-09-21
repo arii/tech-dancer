@@ -4,7 +4,7 @@ title: "General Health & Home Care for Dancers"
 date: "2026-06-01"
 author: "Ariel Anders"
 category: "Health"
-excerpt: "Master your dance competition recovery routine with targeted foam-rolling techniques, muscle maintenance, and professional self-care strategies designed for the active West Coast Swing dancer."
+excerpt: "Master your post-event recovery routine with targeted foam-rolling techniques, muscle maintenance, and self-care strategies for the active West Coast Swing dancer."
 image: "/images/gear/sketches/foam-roller.webp"
 imageAlt: "A technical sketch of a high-density foam roller used for dancer recovery."
 imageFit: "contain"
@@ -22,9 +22,9 @@ affiliateIds:
   - "pedialyte"
 ---
 
-## Building a Dance Competition Recovery Routine
+## Post-Event Recovery & Maintenance
 
-Recovery is just as important as practice. After a long weekend of dancing on hard ballroom floors, your muscles need targeted attention to prevent injury, reduce soreness, and maintain the flexibility required for high-level West Coast Swing. Establishing a solid dance competition recovery routine will allow you to bounce back faster.
+Recovery is just as important as practice. After a long weekend of dancing on hard ballroom floors, your muscles need targeted attention to prevent injury, reduce soreness, and maintain the flexibility required for high-level West Coast Swing.
 
 ### Muscle Recovery & Myofascial Release
 

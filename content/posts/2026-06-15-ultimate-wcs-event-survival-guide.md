@@ -14,38 +14,28 @@ tags:
   - guide
 ---
 
-## Surviving Your Next West Coast Swing Convention
+Multi-day West Coast Swing events are a marathon. Between daytime workshops, Jack & Jill competitions, and social dancing until 4 AM, you need stamina, preparation, and the right gear. Whether you're heading to Boogie by the Bay or Capital Swing, here are the core resources to help you survive the weekend.
 
-Attending a multi-day West Coast Swing (WCS) event requires stamina, preparation, and the right gear. Whether you're heading to Boogie by the Bay, Capital Swing, or Jack & Jill O'Rama, being prepared will help you maximize your dancing, learning, and fun while minimizing stress and fatigue.
+### 1. The WCS Travel Pack
 
-Here is a comprehensive hub of our best resources to help you survive and thrive at your next WCS convention.
+A well-packed bag is the foundation of a successful event.
 
-### 1. The WCS Travel Pack & Packing Checklist
-
-Before you head to the airport or hit the road, make sure you have everything you need. A well-packed bag is the foundation of a successful event.
-
-→ Read the guide: **[The WCS Travel Pack](/blog/2026-04-19-practical-tools-essentials)**
-
-This resource includes a practical packing checklist for West Coast Swing weekends, covering shoes, earplugs, layers, recovery tools, hygiene essentials, and travel tech.
+→ **[The WCS Travel Pack](/blog/2026-04-19-practical-tools-essentials)** covers shoes, earplugs, layers, recovery tools, and travel tech.
 
 ### 2. Upgrading Your Footwear
 
-You will be spending a lot of time on your feet. Proper footwear is essential for performance and injury prevention. If you want the comfort of your favorite sneakers with the performance of dedicated dance shoes, a DIY modification is often the best path.
+You will be spending hours on your feet. If you want the comfort of your favorite sneakers with the performance of dedicated dance shoes, a DIY modification is often the best path.
 
-→ Read the tutorial: **[Make Any Shoe a Dance Shoe (DIY Suede Tutorial)](/blog/2026-04-18-make-shoe-dance)**
+→ **[Make Any Shoe a Dance Shoe (DIY Suede Tutorial)](/blog/2026-04-18-make-shoe-dance)**
 
-### 3. Post-Event Recovery Tips
+### 3. Post-Event Recovery
 
-Social dancing until 4 AM and competing during the day takes a toll on your body. To survive a weekend event (and the days that follow), you need a targeted recovery strategy.
+Dancing all night takes a toll. You need a targeted recovery strategy to survive a weekend event (and the days that follow).
 
-→ Read the guide: **[General Health & Home Care for Dancers](/blog/2026-06-01-general-health-home-care)**
+→ **[General Health & Home Care for Dancers](/blog/2026-06-01-general-health-home-care)**
 
-This resource covers post-event recovery routines, foam-rolling techniques, and self-care strategies specifically designed for the active West Coast Swing dancer.
+### 4. WSDC Points and Scoring
 
-### 4. Understanding WSDC Points and Scoring
+If you are competing, understanding how the World Swing Dance Council points system works is crucial for tracking your progress.
 
-If you are competing, understanding how the World Swing Dance Council (WSDC) points system works is crucial for tracking your progress and setting goals.
-
-→ Read the breakdown: **[WSDC Points Tier Calculation & Scoring Explained](/blog/2026-06-16-wsdc-points-tier-calculation)**
-
-Learn how WSDC scoring works, how points are calculated across tiers, and what it takes to start making those Novice WCS finals.
+→ **[WSDC Points Tier Calculation Explained](/blog/2026-06-16-wsdc-points-tier-calculation)**

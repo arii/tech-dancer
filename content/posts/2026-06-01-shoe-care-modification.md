@@ -4,7 +4,7 @@ title: "The Most Effective Way to Combat Smelly Dance Shoes"
 date: "2026-06-01"
 author: "Ariel Anders"
 category: "Gear"
-excerpt: "Stop masking odors and start eliminating them. Learn the best approach to dance shoe odor removal and why an electric shoe dryer has proven to be the most effective tool in my gear bag."
+excerpt: "Stop masking odors and start eliminating them. Why an electric shoe dryer has proven to be the most effective tool in my gear bag."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
 imageAlt: "A minimalist sketch of an electric shoe dryer with a timer control unit, highlighting its portability for dance travel."
 imageFit: "contain"
@@ -15,9 +15,9 @@ tags:
   - "hygiene"
 ---
 
-## Mastering Dance Shoe Odor Removal
+## Eliminating Dance Shoe Odor
 
-Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded "dance shoe smell." For years, I tried almost every remedy in the book for dance shoe odor removal: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
+Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded funk. For years, I tried almost every remedy in the book: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
 
 While some of these provided temporary relief, I found that none of them were a long-term solution. The powders created a messy paste when combined with sweat, the sprays often just added a floral scent to the funk, and the dryer sheets struggled against the deep-seated moisture that builds up during a multi-day event.
 

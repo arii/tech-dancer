@@ -4,7 +4,7 @@ title: "Make Any Shoe a Dance Shoe"
 date: "2026-04-18"
 author: "Ariel Anders"
 category: "Gear"
-excerpt: "Learn how to suede dance shoes DIY. Turn your favorite sneakers or flats into dance shoes with adhesive suede to improve spins and reduce joint strain."
+excerpt: "Turn your favorite sneakers or flats into dance shoes with adhesive suede. A DIY modification that improves spins, reduces joint strain, and survives long social dance weekends."
 image: "/images/gear/diy/hero.webp"
 affiliateIds:
   - suede-sheets
@@ -16,9 +16,9 @@ tags:
   - wcs
 ---
 
-## Why I Modify My Own Dance Shoes (How to Suede Dance Shoes DIY)
+## Why I Modify My Own Dance Shoes
 
-Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. Whether you're searching for the best sneakers for west coast swing or just want to upgrade your current pair, my preferred solution is to "upgrade" high-comfort sneakers or flats using industrial-strength adhesive suede. Learning how to suede dance shoes DIY gives you the ultimate control over comfort and aesthetics. Learn more about [author Ariel Anders' dance and engineering background](/about) or explore our full [curated West Coast Swing footwear gear directory](/gear).
+Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. If you're looking for the best sneakers for West Coast Swing, my preferred solution is to build them yourself. Upgrading high-comfort athletic shoes with industrial-strength adhesive suede gives you ultimate control over comfort, aesthetics, and floor feel.
 
 ![Finished shoe](/images/gear/diy/step5-finished.svg)
 

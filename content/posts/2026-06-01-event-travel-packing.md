@@ -4,7 +4,7 @@ title: "Event Travel & Packing"
 date: "2026-06-01"
 author: "Ariel Anders"
 category: "Travel"
-excerpt: "Build your ultimate west coast swing convention packing checklist with these organizers and garment care items for out-of-town events."
+excerpt: "Build your ultimate convention packing checklist with these organizers and garment care essentials for out-of-town West Coast Swing events."
 image: "/images/gear/sketches/compression-cubes.webp"
 imageAlt: "A set of navy blue compression packing cubes with mesh tops and double-zipper systems, shown compressing stacked clothing to minimize suitcase volume."
 imageFit: "contain"
@@ -18,9 +18,9 @@ tags:
   - "organization"
 ---
 
-## The West Coast Swing Convention Packing Checklist
+## The Convention Packing Checklist
 
-Travel conventions can be stressful, but being organized makes a world of difference. A comprehensive west coast swing convention packing checklist ensures you have everything you need. These packing essentials help you fit more in your bag and keep your dance clothes looking their best. Before heading out, generate your [WCS competition travel checklist](/wcs-navigator) and browse our [curated West Coast Swing gear essentials catalog](/gear) for dance travel.
+Travel conventions can be stressful, but an organized bag makes a world of difference. These packing essentials help you maximize suitcase space and keep your dance clothes looking their best. Before heading to the airport, generate your [WCS competition travel checklist](/wcs-navigator) and browse our [curated gear essentials](/gear).
 
 ## Smart Packing Strategies
 
