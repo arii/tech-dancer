@@ -148,7 +148,7 @@ export const ModularPackages = () => {
             >
               {/* Clickable Header */}
               <Box
-                as="button"
+                as="button" type="button"
                 aria-expanded={isExpanded}
                 aria-controls={`accordion-content-${service.id}`}
                 id={`accordion-header-${service.id}`}
