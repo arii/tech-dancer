@@ -32,11 +32,13 @@ export const COLLECTIONS = [
 
 const gearImage = (fileName: string) => `/assets/gear/${fileName}`;
 
+const SEO_SUFFIX = ' - West Coast Swing, Partner & Social Dance Apparel';
+
 export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'love-neon-follow',
     gearSlug: '2024-06-01-love-neon-follow-shirt',
-    title: 'Ask Me to Follow - LOVE Neon Performance Tee - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'Ask Me to Follow - LOVE Neon Performance Tee' + SEO_SUFFIX,
     description: 'Both roles. No rules. Designed for West Coast Swing (WCS) and social dance events, the floor is yours from every angle.',
     price: '24.50',
     color: 'Black/Neon',
@@ -56,7 +58,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'love-neon-lead',
     gearSlug: '2024-06-01-love-neon-lead-shirt',
-    title: 'Ask Me to Lead - LOVE Neon Performance Tee - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'Ask Me to Lead - LOVE Neon Performance Tee' + SEO_SUFFIX,
     description: 'Any body leads. Any role is a choice. Designed for West Coast Swing (WCS) and social dance events, wear it, own it, drive the floor.',
     price: '24.00',
     color: 'Black/Neon',
@@ -76,7 +78,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'lead-follow-switch-love-neon',
     gearSlug: '2024-06-01-love-neon-switch-shirt',
-    title: 'Lead . Follow . Switch - Partner Dance Role Tee - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'Lead . Follow . Switch - Partner Dance Role Tee' + SEO_SUFFIX,
     description: 'Check all three. Designed for West Coast Swing (WCS) and social dance events, the dancer who does it all - this is your shirt.',
     price: '24.00',
     color: 'Black/Neon',
@@ -96,7 +98,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'war-eagle-oversized',
     gearSlug: '2024-06-01-war-eagle-shirt',
-    title: 'Rainbow War Eagle - Pride Back Print Organic Oversized Tee - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'Rainbow War Eagle - Pride Back Print Organic Oversized Tee' + SEO_SUFFIX,
     description: 'Turn around and make a statement with this premium organic oversized tee. Featuring a soaring rainbow war eagle back print, this piece combines sustainable streetwear style with a bold message of pride and freedom. Perfect for the social dance floor or making an impression wherever you go.',
     price: '22.00',
     color: 'Natural/Rainbow',
@@ -115,7 +117,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-golden-gate-pride',
     gearSlug: '2024-06-01-norcal-pride-gate-shirt',
-    title: 'NorCal Best Cal - Golden Gate Rainbow Pride T-Shirt - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal Best Cal - Golden Gate Rainbow Pride T-Shirt' + SEO_SUFFIX,
     description: 'Bold Bay Area energy captured in a single design. Featuring the iconic Golden Gate Bridge set against a vibrant rainbow sky, this tee is definitive proof that NorCal is Best Cal. High-quality print on a soft, comfortable fabric that\'s ready for festival season or everyday wear. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '23.00',
     color: 'Black/Rainbow',
@@ -134,7 +136,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-pride-bear',
     gearSlug: '2024-06-01-norcal-pride-bear-shirt',
-    title: 'NorCal BestCal Pride Bear Shirt - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal BestCal Pride Bear Shirt' + SEO_SUFFIX,
     description: 'The iconic California bear gets a rainbow pride makeover for NorCal dancers. Show your local spirit and LGBTQ+ support on West Coast Swing and partner dance floors.',
     price: '15.50',
     color: 'Black/Rainbow',
@@ -153,7 +155,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'love-lead-follow-switch-unisex',
     gearSlug: '2024-06-01-love-unisex-shirt',
-    title: 'LOVE Lead Follow or Switch Unisex Shirt - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'LOVE Lead Follow or Switch Unisex Shirt' + SEO_SUFFIX,
     description: 'A classic role-neutral shirt for social dancers who love the Lead/Follow/Switch message. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '18.64',
     color: 'Black',
@@ -173,7 +175,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'mens-bear-tank-norcal',
     gearSlug: '2024-06-01-norcal-bear-tank',
-    title: 'NorCal BestCal Rainbow Bear Dance Tank Top - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal BestCal Rainbow Bear Dance Tank Top' + SEO_SUFFIX,
     description: 'The Bay on your chest. A NorCal pride classic for warm-weather weekends, festivals, and every day that calls for something bold. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '18.50',
     color: 'Black',
@@ -191,7 +193,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-cropped-top',
     gearSlug: '2024-06-01-norcal-crop-top',
-    title: 'NorCal Best Cal - Golden Gate Crop Top - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal Best Cal - Golden Gate Crop Top' + SEO_SUFFIX,
     description: 'NorCal pride, cropped and colorful. Festival-ready, dance-floor-ready, Bay Area-ready. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '20.50',
     color: 'Black',
@@ -209,7 +211,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-golden-gate-hoodie',
     gearSlug: '2024-06-01-norcal-gate-crop-hoodie',
-    title: 'NorCal Best Cal - Golden Gate Crop Hoodie - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal Best Cal - Golden Gate Crop Hoodie' + SEO_SUFFIX,
     description: 'Fog-season approved. A NorCal pride crop hoodie for Bay Area evenings, festival nights, and every golden California moment. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '34.00',
     color: 'Black/Military Green/Storm',
@@ -227,7 +229,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-classic',
     gearSlug: '2024-06-01-norcal-bestcal-tshirt',
-    title: 'NorCal Best Cal - Golden Gate Classic Unisex Tee - West Coast Swing, Partner & Social Dance Apparel',
+    title: 'NorCal Best Cal - Golden Gate Classic Unisex Tee' + SEO_SUFFIX,
     description: 'The NorCal classic, in soft black heather. XS to 5XL - because NorCal pride belongs to every body. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
     price: '12.00',
     color: 'Black Heather/Black',
