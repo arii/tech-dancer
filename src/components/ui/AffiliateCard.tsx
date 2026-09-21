@@ -40,7 +40,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
             border
             className={cn(
               "border-line/40 shrink-0",
-              link.imageMode === 'contain' ? "bg-surface-alt" : "bg-surface-alt/20"
+              link.imageMode === 'contain' ? "bg-white" : "bg-surface-alt/20"
             )}
             display="flex"
             align="center"

@@ -1,7 +1,7 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { ContentCard } from './ContentCard';
 import { describe, it, expect, afterEach } from 'vitest';
+import { ContentCard } from './ContentCard';
 
 describe('ContentCard', () => {
   afterEach(() => {
@@ -12,41 +12,32 @@ describe('ContentCard', () => {
     slug: 'test-post',
     title: 'Test Post Title',
     category: 'COMMUNITY',
-    excerpt: 'Test excerpt description.',
+    date: '2026-06-14',
+    excerpt: 'Test post excerpt text.',
     basePath: '/blog',
-    date: '2026-09-21',
-    readingTime: '5 min read',
   };
 
-  it('renders title and excerpt correctly', () => {
-    render(
+  it('renders title and excerpt without category pill by default', () => {
+    const { container } = render(
       <MemoryRouter>
         <ContentCard {...defaultProps} />
       </MemoryRouter>
     );
 
     expect(screen.getByText('Test Post Title')).toBeTruthy();
-    expect(screen.getByText('Test excerpt description.')).toBeTruthy();
+    expect(screen.getByText('Test post excerpt text.')).toBeTruthy();
+    expect(container.querySelector('.rounded-full')).toBeNull();
   });
 
-  it('does not render category pill badge by default when showCategory is false', () => {
-    render(
-      <MemoryRouter>
-        <ContentCard {...defaultProps} />
-      </MemoryRouter>
-    );
-
-    // With date and readingTime provided, category text is not rendered anywhere
-    expect(screen.queryByText('COMMUNITY')).toBeNull();
-  });
-
-  it('renders category pill badge when showCategory is true', () => {
-    render(
+  it('renders category pill when showCategory is true', () => {
+    const { container } = render(
       <MemoryRouter>
         <ContentCard {...defaultProps} showCategory={true} />
       </MemoryRouter>
     );
 
-    expect(screen.getByText('COMMUNITY')).toBeTruthy();
+    const categoryPill = container.querySelector('.rounded-full');
+    expect(categoryPill).toBeTruthy();
+    expect(categoryPill?.textContent).toBe('COMMUNITY');
   });
 });
