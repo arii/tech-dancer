@@ -154,12 +154,12 @@ const Services = () => {
       />
 
       {/* 1. Header Section */}
-      <Stack gap={5} width="full" maxWidth="4xl" align="center" className="text-center mx-auto mb-16">
-        <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="normal" className="tracking-[0.01em]">
+      <Stack gap={5} width="full" maxWidth="4xl" align="center" marginX="auto" marginBottom={16} className="text-center">
+        <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="wordmark">
           Digital business systems for independent creatives
         </Text>
 
-        <Text as="p" variant="body" size="lg" color="main" className="font-medium max-w-3xl leading-[1.65]">
+        <Text as="p" variant="body" size="lg" color="main" leading="relaxed" className="font-medium max-w-3xl">
           We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
         </Text>
       </Stack>
@@ -176,7 +176,7 @@ const Services = () => {
         </Box>
 
         {/* 4. Dedicated Next Steps Consultation & Ongoing Management Intake */}
-        <Box id="consultation" className="pt-4">
+        <Box id="consultation" paddingTop={4}>
           <IntakeForm />
         </Box>
       </Stack>

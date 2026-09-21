@@ -1,5 +1,5 @@
 import { Globe, Calendar, ShoppingBag, Sparkles, ShieldCheck, Zap, Search } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 export interface TierVisualProps {
   tier: 'presence' | 'booked' | 'growth';
@@ -25,9 +25,9 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
+          className="border-line/30 bg-surface/80 font-mono text-dim"
         >
-          <span className="font-semibold text-main">yourstudio.com</span>
+          <Text as="span" size="tiny" weight="font-semibold" color="main">yourstudio.com</Text>
           <Globe size={13} className="text-dim/70" />
         </Box>
 
@@ -41,17 +41,17 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/20 bg-surface/90"
           >
-            <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-accent mb-1 font-semibold">
-              <Search size={12} /> Google Search Verified
+            <Box display="flex" align="center" gap={1} marginBottom={1} weight="font-semibold" className="font-mono text-accent">
+              <Search size={12} /> <Text as="span" size="micro">Google Search Verified</Text>
             </Box>
-            <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" className="truncate text-xs">
+            <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" truncate>
               Your Studio · San Francisco, CA
             </Text>
-            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1 mt-1">
+            <Text variant="body" size="xs" color="dim" clamp={1} marginTop={1}>
               Custom responsive website, verified map listing, and client intake.
             </Text>
-            <Box marginTop={1} className="text-[9px] font-mono text-dim/80">
-              Illustrative local search setup
+            <Box marginTop={1} className="font-mono text-dim/80">
+              <Text as="span" size="micro">Illustrative local search setup</Text>
             </Box>
           </Box>
         </Stack>
@@ -78,9 +78,9 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/90 text-[11px] font-mono text-dim"
+          className="border-line/30 bg-surface/90 font-mono text-dim"
         >
-          <span className="font-semibold text-main">yourstudio.com/book</span>
+          <Text as="span" size="tiny" weight="font-semibold" color="main">yourstudio.com/book</Text>
           <Calendar size={13} className="text-dim" />
         </Box>
 
@@ -95,46 +95,46 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             className="border-line/30 bg-surface/70"
           >
             <Box display="flex" justify="between" align="center" marginBottom={2}>
-              <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">
+              <Text variant="mono" size="xs" weight="font-bold" color="main">
                 OCTOBER 2026
               </Text>
-              <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-dim">
-                <Zap size={11} className="text-accent" /> Real-Time Sync
+              <Box display="flex" align="center" gap={1} className="font-mono text-dim">
+                <Zap size={11} className="text-accent" /> <Text as="span" size="micro">Real-Time Sync</Text>
               </Box>
             </Box>
 
-            <Box display="grid" className="grid-cols-4 gap-1.5">
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
-                9:00 AM
+            <Grid cols={4} gap={1.5}>
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 font-mono text-main">
+                <Text as="span" size="micro">9:00 AM</Text>
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-[10px] font-mono text-main font-bold">
-                11:30 AM
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 font-mono text-main font-bold">
+                <Text as="span" size="micro">11:30 AM</Text>
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[10px] font-mono text-main line-through">
-                1:00 PM
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 font-mono text-main line-through">
+                <Text as="span" size="micro">1:00 PM</Text>
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
-                3:30 PM
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 font-mono text-main">
+                <Text as="span" size="micro">3:30 PM</Text>
               </Box>
-            </Box>
+            </Grid>
           </Box>
 
           {/* Automated Notification Badge */}
-          <Box
+          <Stack
+            direction="row"
+            align="center"
+            justify="between"
             radius="sm"
             paddingX={2.5}
             paddingY={1.5}
-            display="flex"
-            align="center"
-            justify="between"
-            className="bg-surface-alt/60 border border-line/30 text-[10px] font-mono text-dim"
+            className="bg-surface-alt/60 border border-line/30 font-mono text-dim"
           >
             <Box display="flex" align="center" gap={1.5}>
               <ShieldCheck size={12} className="text-success" />
-              <span>Auto-SMS & Calendar Sync</span>
+              <Text as="span" size="micro">Auto-SMS & Calendar Sync</Text>
             </Box>
-            <span className="font-bold text-main">Active</span>
-          </Box>
+            <Text as="span" size="micro" weight="font-bold" color="main">Active</Text>
+          </Stack>
         </Stack>
       </Box>
     );
@@ -158,16 +158,16 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         display="flex"
         align="center"
         justify="between"
-        className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
+        className="border-line/30 bg-surface/80 font-mono text-dim"
       >
-        <span className="font-semibold text-main">yourstudio.com/store</span>
+        <Text as="span" size="tiny" weight="font-semibold" color="main">yourstudio.com/store</Text>
         <ShoppingBag size={13} className="text-accent-sky" />
       </Box>
 
       {/* Multi-tier Store & Google Shopping Feed Visual */}
       <Stack padding={3} gap={2}>
         {/* Store Grid Preview */}
-        <Box display="grid" className="grid-cols-2 gap-2">
+        <Grid cols={2} gap={2}>
           <Box
             surface="default"
             radius="md"
@@ -175,10 +175,10 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 mb-1 flex items-center justify-center">
+            <Stack align="center" justify="center" width="full" height={8} radius="xs" marginBottom={1} className="bg-accent-purple/20 border border-accent-purple/30">
               <Sparkles size={14} className="text-accent-purple" />
-            </Box>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Merch & Digital</Text>
+            </Stack>
+            <Text variant="mono" size="micro" weight="font-bold" color="main">Merch & Digital</Text>
           </Box>
 
           <Box
@@ -188,26 +188,29 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 mb-1 flex items-center justify-center">
+            <Stack align="center" justify="center" width="full" height={8} radius="xs" marginBottom={1} className="bg-accent-sky/20 border border-accent-sky/30">
               <ShoppingBag size={14} className="text-accent-sky" />
-            </Box>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Google Feed</Text>
+            </Stack>
+            <Text variant="mono" size="micro" weight="font-bold" color="main">Google Feed</Text>
           </Box>
-        </Box>
+        </Grid>
 
         {/* Revenue Analytics Status */}
-        <Box
+        <Stack
+          direction="row"
+          align="center"
+          justify="between"
           radius="sm"
           padding={2}
           surface="default"
           border
-          className="border-line/30 flex items-center justify-between"
+          className="border-line/30"
         >
-          <Text variant="mono" size="xs" color="dim" className="text-[10px]">Direct Deposit Active</Text>
-          <Box paddingX={1.5} paddingY={0.5} radius="xs" className="bg-success/20 border border-success/30 flex items-center justify-center text-[9px] font-mono text-success font-bold">
-            STRIPE CONNECT
-          </Box>
-        </Box>
+          <Text variant="mono" size="micro" color="dim">Direct Deposit Active</Text>
+          <Stack align="center" justify="center" paddingX={1.5} paddingY={0.5} radius="xs" className="bg-success/20 border border-success/30 font-mono text-success font-bold">
+            <Text as="span" size="micro">STRIPE CONNECT</Text>
+          </Stack>
+        </Stack>
       </Stack>
     </Box>
   );
