@@ -132,7 +132,7 @@ export const ModularPackages = () => {
         </Text>
       </Box>
 
-      <Grid cols={{ base: 1, lg: 2 }} align="start" gap={4}>
+      <div className="columns-1 lg:columns-2 gap-4 space-y-4">
         {services.map((service, index) => {
           const IconComp = service.icon;
           const isExpanded = expandedIndex === index;
@@ -140,10 +140,11 @@ export const ModularPackages = () => {
           return (
             <Box
               key={service.id}
+              className="border-line/30 bg-surface/60 overflow-hidden shadow-sm break-inside-avoid mb-4"
               border
               radius="2xl"
               surface="default"
-              className="border-line/30 bg-surface/60 overflow-hidden shadow-sm"
+
             >
               {/* Clickable Header */}
               <Box
@@ -226,7 +227,7 @@ export const ModularPackages = () => {
             </Box>
           );
         })}
-      </Grid>
+      </div>
     </Stack>
   );
 };
