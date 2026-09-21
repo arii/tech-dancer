@@ -6,6 +6,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Box, Stack } from "@/layouts/Primitives"
 
 const Accordion = AccordionPrimitive.Root
 
@@ -25,19 +26,21 @@ const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Header style={{ display: "flex" }}>
+  <Box as={AccordionPrimitive.Header} display="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 justify-between py-4 text-sm font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        "py-4 text-sm font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
         className
       )}
       {...props}
     >
-      {children}
-      <ChevronDown className="h-4 w-4 shrink-0 text-text-dim transition-transform duration-200" />
+      <Stack direction="row" align="center" justify="between" width="full">
+        {children}
+        <ChevronDown className="h-4 w-4 shrink-0 text-text-dim transition-transform duration-200" />
+    </Stack>
     </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
+  </Box>
 ))
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 

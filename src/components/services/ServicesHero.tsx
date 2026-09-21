@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 // src/components/services/ServicesHero.tsx
 import { Sparkles } from 'lucide-react';
 import { Grid, Stack, Box } from '@/layouts/Primitives';
@@ -14,7 +13,7 @@ export const ServicesHero = () => {
         <Box as="p" className="text-xl text-text-dim max-w-2xl">
           We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
         </Box>
-        <Stack direction="row" gap={4} paddingTop={4} className="flex-wrap text-xs font-semibold text-text-dim uppercase tracking-widest">
+        <Stack direction="row" gap={4} paddingTop={4} className="text-xs font-semibold text-text-dim uppercase tracking-widest" flexWrap="wrap">
           <span>Artists</span> • <span>Stylists</span> • <span>Makers</span> • <span>Instructors</span> • <span>Performers</span>
         </Stack>
       </Stack>

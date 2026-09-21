@@ -2,7 +2,7 @@
 // src/components/services/CoreServicesGrid.tsx
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Globe, Calendar, ShoppingBag, Ticket, TrendingUp, Settings } from 'lucide-react';
-import { Stack, Box } from '@/layouts/Primitives';
+import { Stack, Box, Grid } from '@/layouts/Primitives';
 
 const SERVICES = [
   { id: 'website', title: 'Website & Digital Presence', icon: <Globe className="w-5 h-5 text-accent" /> },
@@ -16,17 +16,16 @@ const SERVICES = [
 export const CoreServicesGrid = () => {
   return (
     // items-start is critical here so collapsed accordions don't stretch to match expanded ones
-    <Accordion
+    <Grid as={Accordion} cols={{ base: 1, lg: 2 }} gap={6} align="start"
       type="single"
       collapsible
       defaultValue="website"
-      className="grid-cols-1 lg:grid-cols-2 gap-6 items-start" style={{ display: "grid" }}
     >
       {SERVICES.map((service) => (
-        <AccordionItem
+        <Box as={AccordionItem}
           key={service.id}
           value={service.id}
-          className="border-line bg-surface/50 rounded-xl px-6 py-2 overflow-hidden border data-[state=open]:border-line"
+          className="bg-surface/50 overflow-hidden data-[state=open]:border-line" radius="xl" paddingX={6} paddingY={2} border
         >
           <AccordionTrigger className="hover:no-underline text-lg font-semibold">
             <Stack align="center" gap={3}>
@@ -34,7 +33,7 @@ export const CoreServicesGrid = () => {
               {service.title}
             </Stack>
           </AccordionTrigger>
-          <AccordionContent className="pt-4 pb-6 text-text-main">
+          <Box as={AccordionContent} paddingTop={4} paddingBottom={6} className="text-text-main">
             {service.id === 'website' && (
               <Stack gap={4}>
                 <Box as="p">A professional online home for your work.</Box>
@@ -109,9 +108,9 @@ export const CoreServicesGrid = () => {
                 </Stack>
               </Stack>
             )}
-          </AccordionContent>
-        </AccordionItem>
+          </Box>
+        </Box>
       ))}
-    </Accordion>
+    </Grid>
   );
 };

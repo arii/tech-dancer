@@ -145,7 +145,7 @@ const serviceSchema = {
   }
 };
 
-export const ServicesPage = () => {
+const Services = () => {
   return (
     <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
@@ -179,4 +179,4 @@ export const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default Services;

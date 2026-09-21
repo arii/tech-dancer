@@ -17,24 +17,26 @@ export const FeatureTabs = () => {
   return (
     <Tabs defaultValue="website" className="w-full">
       <Box width="full" paddingBottom={2} border="b" className="overflow-x-auto whitespace-nowrap scrollbar-none border-line">
-        <TabsList className="bg-transparent h-auto p-0 w-max min-w-full border-none" style={{ display: "inline-flex", justifyContent: "flex-start" }}>
+        <TabsList className="bg-transparent h-auto w-max min-w-full border-none">
+          <Stack direction="row" align="center" justify="start">
           {TABS_DATA.map((tab) => (
-            <TabsTrigger
+            <Box as={TabsTrigger}
               key={tab.id}
               value={tab.id}
-              className="data-[active=true]:bg-transparent data-[active=true]:shadow-none data-[active=true]:border-b-2 data-[active=true]:border-accent data-[active=true]:text-accent rounded-none px-4 py-3 text-sm text-text-dim hover:text-text-main transition-colors"
+              className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-accent data-[state=active]:text-accent rounded-none text-sm text-text-dim hover:text-text-main transition-colors" paddingX={4} paddingY={3}
             >
               <Stack align="center">
                 {tab.icon}
                 {tab.shortTitle}
               </Stack>
-            </TabsTrigger>
+            </Box>
           ))}
+        </Stack>
         </TabsList>
       </Box>
 
       {TABS_DATA.map((tab) => (
-        <TabsContent key={tab.id} value={tab.id} className="pt-8">
+        <Box as={TabsContent} key={tab.id} value={tab.id} paddingTop={8}>
           <Grid cols={{ base: 1, md: 12 }} gap={{ base: 8, lg: 12 }}>
             <Stack gap={4} className="md:col-span-4">
               <Box as="h3" className="text-xl font-bold">{tab.title}</Box>
@@ -77,7 +79,7 @@ export const FeatureTabs = () => {
               </Box>
             </Box>
           </Grid>
-        </TabsContent>
+        </Box>
       ))}
     </Tabs>
   );
