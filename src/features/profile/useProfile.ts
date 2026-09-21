@@ -19,7 +19,7 @@ const PROFILE_DATA: ProfileData = {
         {
           src: firstComp,
           alt: "Ariel Anders performing a West Coast Swing extension during a competition",
-          caption: "First WCS Competition • San Francisco, CA"
+          caption: "First WCS Competition • Los Angeles, CA"
         }
       ]
     },

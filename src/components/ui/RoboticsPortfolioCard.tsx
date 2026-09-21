@@ -10,13 +10,7 @@ export function RoboticsPortfolioCard() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 lg:gap-8 items-center w-full">
         <Stack gap={3} className="relative z-10">
-          <div className="inline-flex items-center gap-2 w-fit px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan">
-            <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse shrink-0" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider">
-              Production Software &amp; Case Studies
-            </span>
-          </div>
-          <Text as="h3" variant="display" size="xl" weight="font-bold" color="main" className="text-xl sm:text-2xl tracking-tight">
+          <Text as="h2" variant="display" size="xl" weight="font-bold" color="main" className="text-xl sm:text-2xl tracking-tight">
             Robotics &amp; Autonomous Systems Portfolio
           </Text>
           <Text variant="body" size="sm" color="dim" leading="relaxed">

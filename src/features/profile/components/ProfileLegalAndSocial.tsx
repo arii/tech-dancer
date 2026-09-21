@@ -18,7 +18,7 @@ const ProfileLegalAndSocial = () => {
         {/* Social Links */}
         <Stack gap={4}>
           <Text
-            as="h4"
+            as="h3"
             variant="mono"
             size="xs"
             weight="font-bold"

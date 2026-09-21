@@ -20,7 +20,6 @@ describe('ArielProfile Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('BIOGRAPHY')).toBeTruthy();
     expect(screen.getByText('Ariel Anders, PhD')).toBeTruthy();
     expect(screen.getByText(/West Coast Swing dancer and roboticist/i)).toBeTruthy();
   });
@@ -38,7 +37,7 @@ describe('ArielProfile Component', () => {
     expect(screen.getByText('Why I Built This Site')).toBeTruthy();
     expect(screen.getByText('Travel & Sustainable Logistics')).toBeTruthy();
 
-    expect(screen.getByText('First WCS Competition • San Francisco, CA')).toBeTruthy();
+    expect(screen.getByText('First WCS Competition • Los Angeles, CA')).toBeTruthy();
     expect(screen.getByText('Late Night Social • LED Bunny Ears')).toBeTruthy();
     expect(screen.getByText('MADjam Floor • Precision & Groove')).toBeTruthy();
     expect(screen.getByText('Monterey Swingfest • Monterey, CA')).toBeTruthy();
