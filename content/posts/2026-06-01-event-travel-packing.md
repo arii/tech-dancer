@@ -24,6 +24,8 @@ Travel conventions can be stressful, but an organized bag makes a world of diffe
 
 ## Smart Packing Strategies
 
+Navigating a hotel weekend means packing for multiple scenarios: daytime workshop schedules, evening competitions, and late-night socials. To minimize suitcase volume, prioritize wrinkle-resistant fabrics and use compression cubes. For your competition attire, a compact travel garment bag keeps your lines crisp. Don't forget the invisible essentials: hydration multipliers for your water bottle and high-fidelity earplugs to protect your hearing when you're dancing near the speakers during a 2 AM jam circle.
+
 ### Space-Saving Organization
 Standard folding often leaves gaps in your luggage. Instead, try the "bundle" method or use high-quality compression cubes. These cubes allow you to group outfits by day or performance type, making it easy to find exactly what you need without unpacking your entire bag. If you are preparing footwear for event ballrooms, see our [DIY suede dance shoe modification guide](/blog/2026-04-18-make-shoe-dance).
 
@@ -50,3 +52,5 @@ Don't let suitcase wrinkles ruin your competition look. A portable garment steam
 | :--- | :--- | :--- |
 | **Steaming** | Delicate fabrics, competition wear | Requires bringing a portable steamer |
 | **Folding** | Practice wear, casual outfits | Use compression cubes to minimize wrinkles |
+
+Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).

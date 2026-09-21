@@ -636,29 +636,47 @@ export function generateFAQPageSchema(faqs: Array<{ question: string; answer: st
 export function extractFaqFromMarkdown(content: string): SchemaFAQPage | null {
   if (!content) return null;
 
-  // Find FAQ section
-  const faqSectionMatch = content.match(/##\s*(?:FAQs|Frequently Asked Questions)[\s\S]*/i);
-  if (!faqSectionMatch) return null;
+  // Isolate the FAQ section
+  const faqMatch = content.match(/##\s*(?:Frequently Asked Questions|FAQ|FAQs)[\s\S]*?(?=\n##\s|$)/i);
+  if (!faqMatch) return null;
 
-  const faqText = faqSectionMatch[0];
-  const qnaRegex = /\*\*(.*?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*|\n##|$)/g;
+  const faqContent = faqMatch[0];
 
-  const faqs: Array<{ question: string; answer: string }> = [];
-  let match;
+  // Match ### headings that end in a question mark, capturing the question and the following paragraph(s)
+  const questionMatches = [...faqContent.matchAll(/###\s*([^?]+\?)\n+([\s\S]+?)(?=\n###\s|$)/g)];
 
-  while ((match = qnaRegex.exec(faqText)) !== null) {
-    const question = match[1].trim();
-    const rawAnswer = match[2].trim();
-    const answer = rawAnswer.replace(/[*_#`]/g, '').replace(/\n+/g, ' ').trim();
+  // Fallback to old format (bold questions) if no H3 questions are found
+  if (questionMatches.length === 0) {
+    const qnaRegex = /\*\*(.*?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*|\n##|$)/g;
+    const faqs: Array<{ question: string; answer: string }> = [];
+    let match;
 
-    if (question && answer) {
-      faqs.push({ question, answer });
+    while ((match = qnaRegex.exec(faqContent)) !== null) {
+      const question = match[1].trim();
+      const rawAnswer = match[2].trim();
+      const answer = rawAnswer.replace(/[*_#`]/g, '').replace(/\n+/g, ' ').trim();
+
+      if (question && answer) {
+        faqs.push({ question, answer });
+      }
     }
+
+    if (faqs.length === 0) return null;
+    return generateFAQPageSchema(faqs);
   }
 
-  if (faqs.length === 0) return null;
-
-  return generateFAQPageSchema(faqs);
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": questionMatches.map(match => ({
+      "@type": "Question",
+      "name": match[1].trim(),
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": match[2].trim()
+      }
+    }))
+  };
 }
 
 export function generateMemeGallerySchema(memes: Array<{ id: string; title: string; imageSrc: string; altText: string }>) {
