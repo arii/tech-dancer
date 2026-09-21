@@ -1,8 +1,9 @@
 import { SEO } from '@/components/SEO';
-import { ClientSpotlight } from '@/features/services/ClientSpotlight';
-import { IntakeForm } from '@/features/services/IntakeForm';
-import { PackagesGrid } from '@/features/services/Packages';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ServicesHero } from '@/components/services/ServicesHero';
+import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
+import { FeatureTabs } from '@/components/services/FeatureTabs';
+import { CtaBanner } from '@/components/services/CtaBanner';
+import { Box } from '@/layouts/Primitives';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -144,7 +145,7 @@ const serviceSchema = {
   }
 };
 
-const Services = () => {
+export const ServicesPage = () => {
   return (
     <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
@@ -153,39 +154,29 @@ const Services = () => {
         schema={serviceSchema}
       />
 
-      {/* 1. Header Section */}
-      <Stack gap={5} width="full" maxWidth="4xl" align="center" className="text-center" marginX="auto" marginBottom={16}>
-        <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="normal" >
-          Digital business systems for independent creatives
-        </Text>
+      <div className="max-w-7xl mx-auto space-y-24">
+        <ServicesHero />
 
-        <Text as="p" variant="body" size="lg" color="main" className="font-medium max-w-3xl leading-relaxed">
-          We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
-        </Text>
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold tracking-tight">Our Core Services</h2>
+            <p className="text-slate-400">Click each section to learn more about what's included.</p>
+          </div>
+          <CoreServicesGrid />
+        </section>
 
-        <Text variant="body" size="sm" weight="font-bold" className="uppercase tracking-widest text-dim" marginTop={2}>
-          ARTISTS • STYLISTS • MAKERS • INSTRUCTORS • PERFORMERS • CREATIVE STUDIOS
-        </Text>
-      </Stack>
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight">Feature Details</h2>
+            <p className="text-slate-400">Take a closer look at what each core service includes.</p>
+          </div>
+          <FeatureTabs />
+        </section>
 
-      <Stack gap={16} width="full">
-        {/* 2. Platform Foundation & Connected Capabilities */}
-        <Box>
-          <PackagesGrid />
-        </Box>
-
-        {/* 3. Real Client Proof: Hair by April */}
-        <Box>
-          <ClientSpotlight />
-        </Box>
-
-        {/* 4. Dedicated Next Steps Consultation & Ongoing Management Intake */}
-        <Box id="consultation" paddingTop={4}>
-          <IntakeForm />
-        </Box>
-      </Stack>
+        <CtaBanner />
+      </div>
     </Box>
   );
 };
 
-export default Services;
+export default ServicesPage;
