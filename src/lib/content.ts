@@ -238,6 +238,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
         imageAlt: data.imageAlt ? String(data.imageAlt) : undefined,
         imageFit: (data.imageFit === 'cover' || data.imageFit === 'contain') ? data.imageFit : undefined,
+        unlisted: Boolean(data.unlisted),
 
         status: normalizeStatus(data.status),
         readTime: normalizeReadTime(data.readTime),
@@ -249,6 +250,11 @@ function transform<T extends { date?: string; draft?: boolean }>(
       return result as unknown as T;
     })
     .filter((item) => {
+      // Filter out posts explicitly marked as unlisted
+      if (typeof item === 'object' && item !== null && 'unlisted' in item && item.unlisted === true) {
+        return false;
+      }
+
       // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
       // on the Research page without being indexed as full articles.
       if (item.draft) {
