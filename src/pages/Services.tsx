@@ -1,9 +1,9 @@
-import { CheckCircle2, Sparkles } from 'lucide-react';
+import { CheckCircle2, Sparkles, ArrowDown } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { CaseStudySpotlight } from '@/features/services/CaseStudySpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
 import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -125,6 +125,17 @@ const Services = () => {
             <CheckCircle2 size={12} className="text-accent-purple" />
             <span>Mailing List & Inquiries</span>
           </Box>
+        </Box>
+
+        {/* Hero Actions / Primary Conversion CTA */}
+        <Box display="flex" wrap justify="center" gap={4} className="pt-4">
+          <Button as="a" href="#intake-form" variant="primary" size="lg" className="shadow-lg">
+            Request Studio Consultation →
+          </Button>
+          <Button as="a" href="#case-study" variant="outline" size="lg" className="flex items-center gap-2">
+            <span>Explore Hair by April Case Study</span>
+            <ArrowDown size={14} className="text-accent" />
+          </Button>
         </Box>
       </Stack>
 

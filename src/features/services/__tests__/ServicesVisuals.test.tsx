@@ -27,6 +27,13 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('Studio Growth')).toBeDefined();
     expect(screen.getByText('yourstudio.com/store')).toBeDefined();
     expect(screen.getByText('STRIPE CONNECT')).toBeDefined();
+
+    // Check standardized primary CTA buttons across all cards
+    const ctas = screen.getAllByRole('link', { name: /Request Studio Consultation/i });
+    expect(ctas.length).toBe(3);
+    ctas.forEach((cta) => {
+      expect(cta.getAttribute('href')).toBe('#intake-form');
+    });
   });
 
   it('renders TierVisual standalone for all 3 tiers', () => {

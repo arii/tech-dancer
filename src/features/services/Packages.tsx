@@ -45,8 +45,8 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
           <Text variant="mono" size="sm" color="dim">{price}</Text>
         </Stack>
 
-        {/* Visual Preview per Tier */}
-        <Box width="full" marginY={1}>
+        {/* Visual Preview per Tier - Hidden on mobile to avoid cognitive overload */}
+        <Box width="full" marginY={1} className="hidden sm:block">
           <TierVisual tier={tier} />
         </Box>
 
@@ -102,7 +102,7 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
         </Stack>
 
         <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4} className="shadow-md">
-          Inquire Now
+          Request Studio Consultation
         </Button>
       </Stack>
     </Stack>

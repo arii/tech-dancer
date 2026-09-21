@@ -165,16 +165,16 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             </Box>
 
             <Box display="grid" className="grid-cols-4 gap-1.5">
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-dim">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-main">
                 9:00 AM
               </Box>
               <Box paddingY={1} radius="xs" className="bg-accent/20 text-center border border-accent text-[9px] font-mono text-accent font-bold">
                 11:30 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[9px] font-mono text-body line-through">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[9px] font-mono text-main line-through">
                 1:00 PM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-dim">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-main">
                 3:30 PM
               </Box>
             </Box>
