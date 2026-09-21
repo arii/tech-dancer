@@ -171,7 +171,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
               <Box paddingY={1} radius="xs" className="bg-accent/20 text-center border border-accent text-[9px] font-mono text-accent font-bold">
                 11:30 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-dim opacity-40 line-through">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[9px] font-mono text-body line-through">
                 1:00 PM
               </Box>
               <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-dim">

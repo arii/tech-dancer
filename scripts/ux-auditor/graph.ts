@@ -215,7 +215,7 @@ export function createUXAuditGraph(
         }).join('\n')
       : 'No expanded viewports requested; audited based on primary viewport.';
 
-    const synthesisPrompt = buildSynthesisPrompt(ragContext, expandedSummary);
+    const synthesisPrompt = buildSynthesisPrompt(ragContext, expandedSummary, state.baseScan?.axeViolations || []);
     const conversationHistoryText = state.messages.map(m => `[${m.getType()}]: ${m.content}`).join('\n\n');
 
     // Collect all screenshot paths

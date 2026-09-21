@@ -56,8 +56,8 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
           </Text>
         </Box>
 
-        <Stack as="ul" gap={4} flex={1}>
-          {features.map((feature, i) => (
+        <Stack as="ul" gap={3} flex={1}>
+          {features.slice(0, 3).map((feature, i) => (
             <Box as="li" key={i} display="flex" gap={3} align="start">
               <Box shrink={false} marginTop={1}>
                 <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
@@ -65,6 +65,40 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
               <Text variant="body" size="sm" color="main">{feature}</Text>
             </Box>
           ))}
+
+          {features.length > 3 && (
+            <>
+              {/* Desktop view: always show remaining features */}
+              {features.slice(3).map((feature, i) => (
+                <Box as="li" key={`sec-desktop-${i}`} display="flex" gap={3} align="start" className="hidden md:flex">
+                  <Box shrink={false} marginTop={1}>
+                    <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
+                  </Box>
+                  <Text variant="body" size="sm" color="main">{feature}</Text>
+                </Box>
+              ))}
+
+              {/* Mobile view: progressive disclosure toggle */}
+              <Box as="li" className="md:hidden list-none pt-1">
+                <details className="group/details">
+                  <summary className="cursor-pointer text-xs font-mono text-accent hover:text-accent-sky focus:outline-none focus:ring-1 focus:ring-accent rounded flex items-center gap-1.5 py-1 select-none">
+                    <span className="group-open/details:hidden">+ Show {features.length - 3} more features</span>
+                    <span className="hidden group-open/details:inline">− Show fewer features</span>
+                  </summary>
+                  <Stack gap={3} marginTop={2} className="pt-2 border-t border-line/20">
+                    {features.slice(3).map((feature, i) => (
+                      <Box key={`sec-mobile-${i}`} display="flex" gap={3} align="start">
+                        <Box shrink={false} marginTop={1}>
+                          <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
+                        </Box>
+                        <Text variant="body" size="sm" color="main">{feature}</Text>
+                      </Box>
+                    ))}
+                  </Stack>
+                </details>
+              </Box>
+            </>
+          )}
         </Stack>
 
         <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4} className="shadow-md">

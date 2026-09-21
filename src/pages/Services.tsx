@@ -79,7 +79,7 @@ const serviceSchema = {
 
 const Services = () => {
   return (
-    <Box as="main" width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
+    <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
         title="Services & Packages"
         description="Digital business studio providing custom web engineering, Google Business Profile optimization, Google Shopping merchandise feeds, 24/7 appointment scheduling, and automated client workflows."

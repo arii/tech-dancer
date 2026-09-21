@@ -42,15 +42,15 @@ export class DesignSystemRAGRetriever {
       }
     }
 
-    // 2. Index Primitives layout conventions
+    // 2. Index Primitives layout conventions and import path
     const primitivesPath = path.join(rootDir, 'src', 'layouts', 'Primitives.tsx');
     if (fs.existsSync(primitivesPath)) {
       try {
         const content = fs.readFileSync(primitivesPath, 'utf8');
         this.indexedSnippets.push({
-          title: 'Primitives Layout Components (Box, Stack, Grid, Text)',
+          title: 'Primitives Layout Components (<Box>, <Stack>, <Grid>, <Text>)',
           source: 'src/layouts/Primitives.tsx',
-          content: content.slice(0, 1200)
+          content: `IMPORT PATH: import { Box, Stack, Grid, Text } from '@/layouts/Primitives';\n\n${content.slice(0, 1200)}`
         });
       } catch {
         // ignore
@@ -99,7 +99,6 @@ export class DesignSystemRAGRetriever {
         lines.push(`- **${violationId}**: ${WCAG_REMEDIATION_RULES[violationId]}`);
       }
     }
-    // Include general WCAG guidance if none explicitly matched
     if (axeViolationIds.length === 0) {
       lines.push('- Maintain high contrast (>= 4.5:1), touch targets (>= 44x44px), and clear heading hierarchy.');
     }
