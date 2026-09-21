@@ -100,7 +100,7 @@ export const ModularPackages = () => {
         <Stack gap={6}>
           {/* Header Row: Title on Left, Price at Top Right */}
           <Box display="flex" justify="between" align="start" wrap gap={4} paddingBottom={6} className="border-b border-line/30">
-            <Stack gap={2}>
+            <Stack gap={3}>
               <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="wordmark" className="text-main">
                 Build your digital foundation
               </Text>
@@ -177,7 +177,7 @@ export const ModularPackages = () => {
                     {cat.tagline}
                   </Text>
 
-                  <Stack gap={2} paddingTop={2} className="border-t border-line/20">
+                  <Stack gap={3} paddingTop={2} className="border-t border-line/20">
                     {cat.features.map((feature) => (
                       <Box key={feature} display="flex" align="start" className="text-xs">
                         <Box as="span" width={1.5} height={1.5} marginRight={2.5} marginTop={1.5} shrink={0} className="rounded-full bg-accent/60" />
