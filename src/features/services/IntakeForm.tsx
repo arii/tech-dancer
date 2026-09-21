@@ -47,7 +47,7 @@ export function IntakeForm() {
 
   if (status === 'success') {
     return (
-      <Box border radius="2xl" padding={10} surface="default" className="text-center border-line/40 bg-surface/50 shadow-md max-w-2xl ">
+      <Box border radius="2xl" padding={10} surface="default" className="text-center border-line/40 bg-surface/50 shadow-md" maxWidth="2xl">
         <Stack gap={3} align="center">
           <Text variant="headline" size="2xl" weight="font-bold">Thank You for Reaching Out!</Text>
           <Text variant="body" size="base" color="dim" maxWidth="md">
@@ -81,7 +81,7 @@ export function IntakeForm() {
       <Stack gap={6}>
         <Stack gap={2} className="text-center">
           <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="">Request a Consultation</Text>
-          <Text variant="body" size="sm" color="dim" className="leading-relaxed max-w-lg ">
+          <Text variant="body" size="sm" color="dim" className="leading-relaxed" maxWidth="lg">
             Whether you're looking to build a new site or need ongoing management for your existing systems, tell us about your practice, current setup, and goals.
           </Text>
         </Stack>

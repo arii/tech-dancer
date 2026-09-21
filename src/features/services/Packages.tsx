@@ -187,7 +187,7 @@ export const ModularPackages = () => {
               <Box
                 id={`accordion-content-${service.id}`}
                 aria-labelledby={`accordion-header-${service.id}`}
-                role="region" style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: 'all 300ms' } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: 'all 300ms' }}>
+                role="region" style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: "all 300ms", willChange: "grid-template-rows, opacity" } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: "all 300ms", willChange: "grid-template-rows, opacity" }}>
                 <Box overflow="hidden">
                   <Box paddingX={{ base: 6, sm: 8 }} paddingBottom={{ base: 6, sm: 8 }} paddingTop={0}>
                     <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={6}>
