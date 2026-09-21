@@ -251,7 +251,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
     })
     .filter((item) => {
       // Filter out posts explicitly marked as unlisted
-      if ((item as any).unlisted === true) {
+      if (typeof item === 'object' && item !== null && 'unlisted' in item && item.unlisted === true) {
         return false;
       }
 
