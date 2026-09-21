@@ -148,7 +148,12 @@ export const ModularPackages = () => {
             >
               {/* Clickable Header */}
               <Box
-                className="cursor-pointer"
+                as="button"
+                aria-expanded={isExpanded}
+                aria-controls={`accordion-content-${service.id}`}
+                id={`accordion-header-${service.id}`}
+                width="full"
+                className="cursor-pointer text-left"
                 padding={6}
                 onClick={() => toggleAccordion(index)}
               >
@@ -179,7 +184,10 @@ export const ModularPackages = () => {
 
               {/* Expandable Content Area */}
               {/* Wrap in Box with external style to avoid inline style linter regex */}
-              <Box style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: 'all 300ms' } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: 'all 300ms' }}>
+              <Box
+                id={`accordion-content-${service.id}`}
+                aria-labelledby={`accordion-header-${service.id}`}
+                role="region" style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: 'all 300ms' } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: 'all 300ms' }}>
                 <Box overflow="hidden">
                   <Box paddingX={{ base: 6, sm: 8 }} paddingBottom={{ base: 6, sm: 8 }} paddingTop={0}>
                     <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={6}>
