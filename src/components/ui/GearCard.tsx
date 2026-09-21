@@ -37,6 +37,8 @@ interface GearCardProps extends BaseProps {
 
 const CARD_STYLES = {
   image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
+  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+  verdict: "tracking-normal opacity-solid"
 };
 
 export function GearCard(props: GearCardProps) {
@@ -46,7 +48,7 @@ export function GearCard(props: GearCardProps) {
     category,
     excerpt,
     rating: _rating,
-    verdict: _verdict,
+    verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
     affiliateIds,
@@ -115,6 +117,21 @@ export function GearCard(props: GearCardProps) {
             className="bg-black/15 pointer-events-none"
             aria-hidden="true"
           />
+          {/* Category badge */}
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacityVariant="heavy"
+            className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold">
+              {category}
+            </Text>
+          </Box>
         </Box>
       ) : (
         <Box
@@ -138,14 +155,36 @@ export function GearCard(props: GearCardProps) {
             className="bg-black/15 pointer-events-none"
             aria-hidden="true"
           />
+          {/* Category badge */}
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacityVariant="heavy"
+            className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold">
+              {category}
+            </Text>
+          </Box>
         </Box>
       )}
 
       <Stack gap={2}>
+        {verdict && (
+          <Box marginBottom={2}>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
+              Best for: {verdict}
+            </Text>
+          </Box>
+        )}
         {/* Title with link for external affiliates */}
         {isExternal ? (
           <Box
-            as="h2"
+            as="h3"
             className="group-hover:text-accent transition-colors"
           >
             <Box
@@ -169,7 +208,7 @@ export function GearCard(props: GearCardProps) {
           </Box>
         ) : (
           <Text
-            as="h2"
+            as="h3"
             variant="body"
             size="lg"
             weight="font-bold"

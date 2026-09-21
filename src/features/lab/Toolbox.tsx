@@ -58,7 +58,7 @@ export default function Toolbox() {
           </Box>
         </Stack>
 
-        <Box display="flex" justify="center" marginBottom={4} className="overflow-x-auto max-w-full">
+        <Box display="flex" justify="center" marginBottom={4} className="overflow-x-auto">
           <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">
             <FilterButton
               label={ALL_GEAR_FILTER.label}
