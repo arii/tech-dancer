@@ -55,7 +55,7 @@ const services: CoreService[] = [
     title: 'Booking & Customer Workflows',
     description: 'Let your customers book, pay, and get the information they need—automatically.',
     icon: CalendarDays,
-    imageSrc: '/assets/services/digital-presence.png',
+    imageSrc: '/assets/services/booking.gif',
     features: [
       '24/7 calendar availability & sync',
       'Automated appointment scheduling',
@@ -68,7 +68,7 @@ const services: CoreService[] = [
     title: 'Marketing & Growth',
     description: 'Get discovered, build your audience, and turn visitors into loyal customers.',
     icon: TrendingUp,
-    imageSrc: '/assets/services/digital-presence.png',
+    imageSrc: '/assets/services/mobile.png',
     features: [
       'Local SEO & Google Business Profile',
       'Editorial content & portfolio strategy',
@@ -81,7 +81,7 @@ const services: CoreService[] = [
     title: 'Ecommerce',
     description: 'Sell products, services, and digital downloads directly from your site.',
     icon: ShoppingBag,
-    imageSrc: '/assets/services/digital-presence.png',
+    imageSrc: '/assets/services/ecommerce.png',
     features: [
       'Merchandise & physical products',
       'Digital downloads & instant delivery',
