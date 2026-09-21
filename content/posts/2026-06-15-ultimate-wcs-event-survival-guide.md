@@ -1,7 +1,7 @@
 ---
 type: post
 title: "The Ultimate West Coast Swing Event Survival Guide"
-seoTitle: "The Ultimate West Coast Swing Event Survival Guide | BoomTick"
+seoTitle: "The Ultimate West Coast Swing Event Survival Guide | West Coast Swing Guide | BoomTick"
 date: "2026-06-15"
 author: "Ariel Anders"
 category: "Travel"
