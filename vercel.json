@@ -1,5 +1,18 @@
 {
   "installCommand": "corepack enable && corepack prepare pnpm@10.28.2 --activate && SKIP_BOOMTICK_PKG=true pnpm install --frozen-lockfile",
   "buildCommand": "SKIP_BOOMTICK_PKG=true pnpm build",
-  "framework": "vite"
+  "framework": "vite",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.boomtick.blog"
+        }
+      ],
+      "destination": "https://boomtick.blog/$1",
+      "statusCode": 301
+    }
+  ]
 }

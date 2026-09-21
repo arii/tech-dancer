@@ -25,13 +25,12 @@ export function GearCallout() {
         <Box
           as={NavLink}
           to="/gear"
-          border
           radius="md"
           padding={3}
           display="flex"
           align="center"
           justify="between"
-          className="group bg-surface/30 hover:border-accent/40 hover:bg-surface/50 transition-colors"
+          className="group transition-colors hover:bg-surface-alt"
         >
           <Stack direction="row" align="center" gap={3}>
             <Box padding={1.5} radius="md" className="bg-accent-sky/10 text-accent-sky group-hover:bg-accent-sky/20 transition-colors">
@@ -52,13 +51,12 @@ export function GearCallout() {
         <Box
           as={NavLink}
           to="/merch"
-          border
           radius="md"
           padding={3}
           display="flex"
           align="center"
           justify="between"
-          className="group bg-surface/30 hover:border-accent/40 hover:bg-surface/50 transition-colors"
+          className="group transition-colors hover:bg-surface-alt"
         >
           <Stack direction="row" align="center" gap={3}>
             <Box padding={1.5} radius="md" className="bg-accent-magenta/10 text-accent-magenta group-hover:bg-accent-magenta/20 transition-colors">
