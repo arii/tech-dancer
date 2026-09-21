@@ -1,56 +1,64 @@
-import { Check, Calendar, ShoppingBag, Sparkles, TrendingUp, Cpu } from 'lucide-react';
+"use client";
+
+import { useState } from 'react';
+import {
+  Check,
+  ChevronDown,
+  Globe,
+  ShoppingBag,
+  Calendar,
+  Sparkles,
+  TrendingUp,
+  Cpu
+} from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
-export interface CapabilityCategory {
+export interface CoreService {
   id: string;
-  pillar: 'Connect' | 'Grow' | 'Automate';
   title: string;
-  tagline: string;
-  icon: typeof Calendar;
+  description: string;
+  icon: React.ElementType;
+  imageSrc: string;
   features: string[];
+  price?: string;
 }
 
-const foundationFeatures = [
-  'Mobile-responsive design',
-  'Built to help customers find you through local search',
-  'Your own professional domain and secure hosting',
-  'Booking, contact, and customer workflows built in',
-  'Ongoing updates, maintenance, and technical support',
-];
-
-const capabilityCategories: CapabilityCategory[] = [
+const services: CoreService[] = [
   {
-    id: 'booking-workflows',
-    pillar: 'Connect',
-    title: 'Booking & Customer Workflows',
-    tagline: 'Appointments, inquiries, calendars, and automated customer communication.',
-    icon: Calendar,
+    id: 'digital-presence',
+    title: 'Website & Digital Presence',
+    description: 'A fast, polished website designed around your work, your customers, and the way your business operates.',
+    icon: Globe,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
-      '24/7 calendar availability & sync',
-      'Automated appointment scheduling',
-      'Intake questionnaires & screening',
-      'Deposit & online payment processing',
+      'Mobile-responsive design',
+      'Built to help customers find you through local search',
+      'Your own professional domain and secure hosting',
+      'Booking, contact, and customer workflows built in',
+      'Ongoing updates, maintenance, and technical support',
     ],
+    price: 'Starting at $1,500',
   },
   {
     id: 'ecommerce',
-    pillar: 'Connect',
     title: 'Ecommerce & Digital Products',
-    tagline: 'Sell products, digital downloads, and commissions directly from your site.',
+    description: 'Sell products, digital downloads, and commissions directly from your site.',
     icon: ShoppingBag,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
       'Merchandise & physical products',
       'Digital downloads & instant delivery',
       'Custom orders & commission inquiries',
       'Streamlined checkout & payment integrations',
     ],
+    price: 'Pricing varies based on catalog size',
   },
   {
     id: 'marketing',
-    pillar: 'Grow',
     title: 'Marketing & Discovery',
-    tagline: 'Help local clients discover your work and convert into loyal customers.',
+    description: 'Help local clients discover your work and convert into loyal customers.',
     icon: TrendingUp,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
       'Local SEO & Google Business Profile',
       'Editorial content & portfolio strategy',
@@ -60,10 +68,10 @@ const capabilityCategories: CapabilityCategory[] = [
   },
   {
     id: 'events',
-    pillar: 'Grow',
     title: 'Events & Experiences',
-    tagline: 'Run workshops, classes, and creative pop-ups with zero booking friction.',
+    description: 'Run workshops, classes, and creative pop-ups with zero booking friction.',
     icon: Sparkles,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
       'Workshop & class scheduling',
       'Online registration & ticketing',
@@ -73,127 +81,133 @@ const capabilityCategories: CapabilityCategory[] = [
   },
   {
     id: 'automation',
-    pillar: 'Automate',
     title: 'Business Automation',
-    tagline: 'Connect your everyday tools and eliminate hours of repetitive admin work.',
+    description: 'Connect your everyday tools and eliminate hours of repetitive admin work.',
     icon: Cpu,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
       'Form-to-calendar automated workflows',
       'Lead routing & CRM/spreadsheet sync',
       'Automated client status updates',
       'Custom AI-assisted workflow engines',
     ],
-  },
+  }
 ];
 
 export const ModularPackages = () => {
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  const toggleAccordion = (index: number) => {
+    setExpandedIndex((prev) => (prev === index ? null : index));
+  };
+
   return (
-    <Stack gap={16} width="full">
-      {/* 1. Build your digital foundation */}
-      <Box
-        border
-        radius="2xl"
-        padding={{ base: 6, sm: 8, md: 10 }}
-        surface="default"
-        className="border-accent/40 bg-surface/60 shadow-lg shadow-accent/5"
-      >
-        <Stack gap={6}>
-          {/* Header Row: Title on Left, Price at Top Right */}
-          <Box display="flex" justify="between" align="start" wrap gap={4} className="border-b border-line/30 pb-6">
-            <Stack gap={2}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main tracking-[0.01em]">
-                Build your digital foundation
-              </Text>
-            </Stack>
-
-            <Box className="text-left sm:text-right shrink-0">
-              <Text variant="body" size="xs" weight="font-semibold" className="text-[11px] tracking-wider text-dim/80 uppercase font-sans mb-1 block">
-                Starting Setup
-              </Text>
-              <Text variant="headline" size="3xl" weight="font-bold" className="text-main tracking-[0.01em]">
-                $1,500
-              </Text>
-            </Box>
-          </Box>
-
-          {/* Description & Feature Grid spanning across the card */}
-          <Stack gap={6} width="full">
-            <Text variant="body" size="base" color="dim" className="leading-[1.65] max-w-4xl">
-              A fast, polished website designed around your work, your customers, and the way your business operates. We handle the technical details so you can focus on your craft.
-            </Text>
-
-            {/* Feature Grid spanning wide */}
-            <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-              {foundationFeatures.map((feat) => (
-                <Box key={feat} display="flex" align="start">
-                  <Check className="w-4 h-4 text-accent mr-3 mt-0.5 shrink-0" />
-                  <Text variant="body" size="sm" color="main" className="leading-[1.5]">{feat}</Text>
-                </Box>
-              ))}
-            </Grid>
-          </Stack>
-        </Stack>
+    <Stack gap={8} width="full">
+      <Box>
+        <Text as="h2" variant="headline" size="3xl" weight="font-bold" className="text-main tracking-[0.01em] mb-2">
+          Our Core Services
+        </Text>
       </Box>
 
-      {/* 2. Connect, Grow & Automate (Structured Capabilities) */}
-      <Stack gap={6}>
-        <Box>
-          <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main tracking-[0.01em]">
-            Connect, grow & automate your business
-          </Text>
-        </Box>
+      <Stack gap={4}>
+        {services.map((service, index) => {
+          const IconComp = service.icon;
+          const isExpanded = expandedIndex === index;
 
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
-          {capabilityCategories.map((cat) => {
-            const IconComp = cat.icon;
-            return (
+          return (
+            <Box
+              key={service.id}
+              border
+              radius="2xl"
+              surface="default"
+              className="border-line/30 bg-surface/60 overflow-hidden shadow-sm"
+            >
+              {/* Clickable Header */}
               <Box
-                key={cat.id}
-                border
-                radius="xl"
-                padding={6}
-                surface="default"
-                className="border-line/30 bg-surface/40 flex flex-col justify-between hover:border-line/60 transition-colors h-full"
+                className="cursor-pointer p-6 sm:p-8 hover:bg-surface-hover/30 transition-colors"
+                onClick={() => toggleAccordion(index)}
               >
-                <Stack gap={4}>
-                  <Box display="flex" justify="between" align="center">
-                    <Box display="flex" align="center" gap={3}>
-                      <Box
-                        padding={2}
-                        radius="lg"
-                        className="bg-accent/10 text-accent"
-                      >
-                        <IconComp className="w-5 h-5" />
-                      </Box>
-                      <Text as="h3" variant="headline" size="base" weight="font-bold" className="text-main tracking-[0.01em]">
-                        {cat.title}
-                      </Text>
+                <Box display="flex" justify="between" align="start" gap={4}>
+                  {/* Left content */}
+                  <Box display="flex" gap={4} className="flex-1">
+                    <Box
+                      padding={3}
+                      radius="xl"
+                      className="bg-accent/10 text-accent shrink-0"
+                    >
+                      <IconComp className="w-6 h-6" />
                     </Box>
+                    <Stack gap={2} className="mt-1">
+                      <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-main">
+                        {service.title}
+                      </Text>
+                      <Text variant="body" size="sm" color="dim" className="leading-[1.6]">
+                        {service.description}
+                      </Text>
+                    </Stack>
                   </Box>
 
-                  <Text variant="body" size="xs" color="dim" className="leading-[1.6] min-h-[36px]">
-                    {cat.tagline}
-                  </Text>
-
-                  <Stack gap={2} className="pt-2 border-t border-line/20">
-                    {cat.features.map((feature) => (
-                      <Box key={feature} display="flex" align="start" className="text-xs">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent/60 mr-2.5 mt-1.5 shrink-0" />
-                        <Text variant="body" size="xs" color="main" className="leading-[1.5]">
-                          {feature}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Stack>
-                </Stack>
+                  {/* Right chevron */}
+                  <Box className="shrink-0 mt-2">
+                    <ChevronDown
+                      className={`w-6 h-6 text-dim transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
+                    />
+                  </Box>
+                </Box>
               </Box>
-            );
-          })}
-        </Grid>
+
+              {/* Expandable Content Area */}
+              <div
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+              >
+                <div className="overflow-hidden">
+                  <Box className="p-6 sm:p-8 pt-0">
+                    <Grid cols={{ base: 1, md: 2 }} gap={8} className="mt-6">
+                      {/* Left: Image */}
+                      <Box
+                        radius="xl"
+                        className="overflow-hidden aspect-video bg-surface-hover/50"
+                      >
+                        <img
+                          src={service.imageSrc}
+                          alt={`${service.title} preview`}
+                          className="w-full h-full object-cover"
+                        />
+                      </Box>
+
+                      {/* Right: Checklist */}
+                      <Stack gap={4} justify="center">
+                        {service.features.map((feature, i) => (
+                          <Box key={i} display="flex" align="start">
+                            <Check className="w-5 h-5 text-accent mr-3 mt-0.5 shrink-0" />
+                            <Text variant="body" size="base" color="main" className="leading-[1.5]">
+                              {feature}
+                            </Text>
+                          </Box>
+                        ))}
+                      </Stack>
+                    </Grid>
+
+                    {/* Pricing Footer */}
+                    {service.price && (
+                      <Box className="mt-8 pt-6 border-t border-line/20">
+                        <Box display="flex" align="center" gap={3}>
+                          <Sparkles className="w-5 h-5 text-accent" />
+                          <Text variant="headline" size="lg" weight="font-bold" className="text-main">
+                            {service.price}
+                          </Text>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                </div>
+              </div>
+            </Box>
+          );
+        })}
       </Stack>
     </Stack>
   );
 };
 
-// Backwards compatibility alias
 export { ModularPackages as PackagesGrid };
