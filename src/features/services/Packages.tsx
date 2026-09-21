@@ -39,7 +39,7 @@ const services: CoreService[] = [
     title: 'Website & Digital Presence',
     description: 'A professional online home for your work.',
     icon: Globe,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       'Custom website design & development',
       'Mobile-first, responsive design',
@@ -55,7 +55,7 @@ const services: CoreService[] = [
     title: 'Booking & Customer Workflows',
     description: 'Let your customers book, pay, and get the information they need—automatically.',
     icon: CalendarDays,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       '24/7 calendar availability & sync',
       'Automated appointment scheduling',
@@ -68,7 +68,7 @@ const services: CoreService[] = [
     title: 'Marketing & Growth',
     description: 'Get discovered, build your audience, and turn visitors into loyal customers.',
     icon: TrendingUp,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       'Local SEO & Google Business Profile',
       'Editorial content & portfolio strategy',
@@ -81,7 +81,7 @@ const services: CoreService[] = [
     title: 'Ecommerce',
     description: 'Sell products, services, and digital downloads directly from your site.',
     icon: ShoppingBag,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       'Merchandise & physical products',
       'Digital downloads & instant delivery',
@@ -94,7 +94,7 @@ const services: CoreService[] = [
     title: 'Automation & Integrations',
     description: 'Connect your tools and automate the repetitive work so you can focus on your craft.',
     icon: Settings,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       'Form-to-calendar automated workflows',
       'Lead routing & CRM/spreadsheet sync',
@@ -107,7 +107,7 @@ const services: CoreService[] = [
     title: 'Events & Experiences',
     description: 'Run workshops, classes, and special events with ease.',
     icon: Calendar,
-    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    imageSrc: '/assets/services/digital-presence.png',
     features: [
       'Workshop & class scheduling',
       'Online registration & ticketing',
@@ -127,7 +127,7 @@ export const ModularPackages = () => {
   return (
     <Stack gap={8} width="full">
       <Box>
-        <Text as="h2" variant="headline" size="3xl" weight="font-bold" className="text-main tracking-[0.01em] mb-2">
+        <Text as="h2" variant="headline" size="3xl" weight="font-bold" className="text-main">
           Our Core Services
         </Text>
       </Box>
@@ -153,24 +153,22 @@ export const ModularPackages = () => {
               >
                 <Box display="flex" justify="between" align="start" gap={4}>
                   {/* Left content */}
-                  <Box display="flex" gap={4} className="flex-1">
-                    <Box
-                      className="text-accent shrink-0"
-                    >
+                  <Box display="flex" gap={4} flex={1}>
+                    <Box className="text-accent" shrink={0}>
                       <IconComp className="w-6 h-6" />
                     </Box>
-                    <Stack gap={2} className="mt-1">
+                    <Stack gap={2} marginTop={1}>
                       <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-main">
                         {service.title}
                       </Text>
-                      <Text variant="body" size="sm" color="dim" className="leading-[1.6]">
+                      <Text variant="body" size="sm" color="dim" className="leading-relaxed">
                         {service.description}
                       </Text>
                     </Stack>
                   </Box>
 
                   {/* Right chevron */}
-                  <Box className="shrink-0 mt-2">
+                  <Box shrink={0} marginTop={2}>
                     <ChevronDown
                       className={`w-6 h-6 text-dim transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
                     />
@@ -183,8 +181,8 @@ export const ModularPackages = () => {
                 className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
               >
                 <div className="overflow-hidden">
-                  <Box padding={{ base: 6, sm: 8 }} className="pt-0">
-                    <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" className="mt-6">
+                  <Box paddingX={{ base: 6, sm: 8 }} paddingBottom={{ base: 6, sm: 8 }} paddingTop={0}>
+                    <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={6}>
                       {/* Left: Image */}
                       <Box
                         radius="xl"
@@ -193,7 +191,7 @@ export const ModularPackages = () => {
                         <img
                           src={service.imageSrc}
                           alt={`${service.title} preview`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
                         />
                       </Box>
 
@@ -202,8 +200,8 @@ export const ModularPackages = () => {
                         {service.features.map((feature, i) => (
                           <Box key={i} display="flex" align="start">
                             <Check className="w-5 h-5 text-accent shrink-0" />
-                            <Box className="ml-3 mt-0.5" />
-                            <Text variant="body" size="base" color="main" className="leading-[1.5]">
+                            <Box marginLeft={3} marginTop={0.5} />
+                            <Text variant="body" size="base" color="main" className="leading-relaxed">
                               {feature}
                             </Text>
                           </Box>
@@ -213,7 +211,7 @@ export const ModularPackages = () => {
 
                     {/* Pricing Footer */}
                     {service.price && (
-                      <Box className="mt-6 pt-6 border-t border-line/20">
+                      <Box marginTop={6} paddingTop={6} className="border-t border-line/20">
                         <Box display="flex" align="center" gap={3}>
                           <Sparkles className="w-5 h-5 text-accent" />
                           <Text variant="headline" size="lg" weight="font-bold" className="text-main">
