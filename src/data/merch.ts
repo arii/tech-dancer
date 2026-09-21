@@ -10,6 +10,7 @@ export interface MerchProduct {
   color: string;
   size: string;
   material?: string;
+  pattern?: string;
   imageUrl: string;
   customLabel?: string;
   gtin?: string;
