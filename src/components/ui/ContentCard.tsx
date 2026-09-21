@@ -15,6 +15,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   image?: string;
   imageAlt?: string;
   excerptClamp?: number;
+  showCategory?: boolean;
   [key: string]: unknown;
 }
 
@@ -32,13 +33,15 @@ export function ContentCard(props: ContentCardProps) {
     image,
     imageAlt,
     excerptClamp = 3,
+    showCategory = false,
   } = props;
 
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
     'basePath',
-    'excerptClamp'
+    'excerptClamp',
+    'showCategory'
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -74,23 +77,25 @@ export function ContentCard(props: ContentCardProps) {
       )}
 
       <Stack gap={4} padding={6} flex={true}>
-        <Box
-          paddingX={2}
-          paddingY={1}
-          radius="full"
-          border
-          className="border-line w-fit"
-        >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
-        >
-          {category}
-        </Text>
-      </Box>
+        {showCategory && (
+          <Box
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            border
+            className="border-line w-fit"
+          >
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-black"
+              tracking="wide"
+              className={getTagColorClass(category)}
+            >
+              {category}
+            </Text>
+          </Box>
+        )}
 
       <Stack gap={2}>
         <Text
