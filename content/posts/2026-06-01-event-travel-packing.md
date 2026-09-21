@@ -53,4 +53,6 @@ Don't let suitcase wrinkles ruin your competition look. A portable garment steam
 | **Steaming** | Delicate fabrics, competition wear | Requires bringing a portable steamer |
 | **Folding** | Practice wear, casual outfits | Use compression cubes to minimize wrinkles |
 
+<Notice type="related">
 Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+</Notice>

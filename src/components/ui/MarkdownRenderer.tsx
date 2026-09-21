@@ -120,7 +120,7 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
       );
     }
   }
-  return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
+  return <Notice type={props.type as 'info' | 'warning' | 'related'}>{props.children}</Notice>;
 };
 
 /**

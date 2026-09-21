@@ -129,4 +129,6 @@ Dancers should implement a targeted recovery routine that includes flushing lact
 ### How do you prevent foot pain from social dancing?
 Prevent foot pain by wearing ergonomic footwear, utilizing shock-absorbing insoles, and prioritizing myofascial release. Rolling your arches on a massage ball before sleep reduces the risk of repetitive stress issues like plantar fasciitis.
 
+<Notice type="related">
 Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+</Notice>

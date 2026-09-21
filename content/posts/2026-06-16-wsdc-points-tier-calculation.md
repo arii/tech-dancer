@@ -1,7 +1,8 @@
 ---
 type: post
 title: "WSDC Points Tier Calculation & Scoring Explained"
-date: "2026-01-02"
+date: "2026-06-16"
+unlisted: true
 author: "Ariel Anders"
 category: "WCS"
 excerpt: "Learn how WSDC scoring works, how WSDC points tier calculations are done, and strategies for making Novice WCS finals."
@@ -38,4 +39,6 @@ WSDC points are calculated using relative placement in the finals. The exact num
 ### Do Strictly Swing points count toward Jack & Jill advancement?
 No. Points earned in Strictly Swing or Pro-Am divisions are tracked separately in the registry and do not count toward your Jack & Jill advancement or division leveling.
 
+<Notice type="related">
 Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+</Notice>

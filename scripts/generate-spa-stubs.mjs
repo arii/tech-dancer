@@ -95,7 +95,7 @@ function loadMarkdownMeta(dirPath, routePrefix) {
       computedTitle = data.seoTitle.includes('BoomTick') ? data.seoTitle : `${data.seoTitle} | BoomTick`;
     } else if (data.title) {
       if (route.startsWith('/blog/') || route.startsWith('/gear/')) {
-        computedTitle = `${data.title} | West Coast Swing Guide | BoomTick`;
+        computedTitle = `${data.title} | WCS Guide`;
       } else {
         computedTitle = `${data.title} | BoomTick`;
       }
@@ -131,7 +131,7 @@ function getRouteMetadata(route) {
   if (route.startsWith('/blog/')) {
     const slugName = route.replace('/blog/', '').replace(/-/g, ' ');
     return {
-      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | West Coast Swing Guide | BoomTick`,
+      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | WCS Guide`,
       description: 'West Coast Swing guide, tips, and insights on BoomTick.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };
@@ -140,7 +140,7 @@ function getRouteMetadata(route) {
   if (route.startsWith('/gear/')) {
     const slugName = route.replace('/gear/', '').replace(/-/g, ' ');
     return {
-      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | West Coast Swing Guide | BoomTick`,
+      title: `${slugName.charAt(0).toUpperCase() + slugName.slice(1)} | WCS Guide`,
       description: 'West Coast Swing gear review and dancer recommendation.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     };

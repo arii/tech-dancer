@@ -643,40 +643,33 @@ export function extractFaqFromMarkdown(content: string): SchemaFAQPage | null {
   const faqContent = faqMatch[0];
 
   // Match ### headings that end in a question mark, capturing the question and the following paragraph(s)
-  const questionMatches = [...faqContent.matchAll(/###\s*([^?]+\?)\n+([\s\S]+?)(?=\n###\s|$)/g)];
+  const questionMatches = [...faqContent.matchAll(/###\s*([^?]+\?)\n+([\s\S]+?)(?=\n#+\s|$)/g)];
 
-  // Fallback to old format (bold questions) if no H3 questions are found
-  if (questionMatches.length === 0) {
-    const qnaRegex = /\*\*(.*?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*|\n##|$)/g;
-    const faqs: Array<{ question: string; answer: string }> = [];
-    let match;
-
-    while ((match = qnaRegex.exec(faqContent)) !== null) {
-      const question = match[1].trim();
-      const rawAnswer = match[2].trim();
-      const answer = rawAnswer.replace(/[*_#`]/g, '').replace(/\n+/g, ' ').trim();
-
-      if (question && answer) {
-        faqs.push({ question, answer });
-      }
-    }
-
-    if (faqs.length === 0) return null;
+  if (questionMatches.length > 0) {
+    const faqs = questionMatches.map(match => ({
+      question: match[1].trim(),
+      answer: match[2].trim()
+    }));
     return generateFAQPageSchema(faqs);
   }
 
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": questionMatches.map(match => ({
-      "@type": "Question",
-      "name": match[1].trim(),
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": match[2].trim()
-      }
-    }))
-  };
+  // Fallback to old format (bold questions) if no H3 questions are found
+  const qnaRegex = /\*\*(.*?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*|\n##|$)/g;
+  const faqs: Array<{ question: string; answer: string }> = [];
+  let match;
+
+  while ((match = qnaRegex.exec(faqContent)) !== null) {
+    const question = match[1].trim();
+    const rawAnswer = match[2].trim();
+    const answer = rawAnswer.replace(/[*_#`]/g, '').replace(/\n+/g, ' ').trim();
+
+    if (question && answer) {
+      faqs.push({ question, answer });
+    }
+  }
+
+  if (faqs.length === 0) return null;
+  return generateFAQPageSchema(faqs);
 }
 
 export function generateMemeGallerySchema(memes: Array<{ id: string; title: string; imageSrc: string; altText: string }>) {

@@ -146,4 +146,6 @@ Chrome leather, also known as industrial-strength adhesive suede, is the industr
 ### What kind of glue is used for dance shoe soles?
 For DIY conversions, use industrial contact cement or high-grade adhesive backing that comes pre-applied to suede sheets. The rubber sole of the sneaker must be sanded and roughed up first to ensure the adhesive bonds permanently.
 
+<Notice type="related">
 Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+</Notice>
