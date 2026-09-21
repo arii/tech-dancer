@@ -97,10 +97,11 @@ export function generateGoogleMerchantXml(): string {
 
       const fullTitle = `BoomTick ${product.title} - ${product.color || 'Black'}, ${variant.size}`;
       const title = fullTitle.length > 150 ? fullTitle.substring(0, 150) : fullTitle;
+      const enrichedDescription = `${product.description} Color: ${product.color || 'Standard'}. Material: ${product.material || 'Standard'}.`;
       return `    <item>
       <g:id>${escapeXml(variant.id)}</g:id>
 ${groupTag}      <title>${escapeXml(title)}</title>
-      <description>${escapeXml(product.description)}</description>
+      <description>${escapeXml(enrichedDescription)}</description>
       <link>${escapeXml(gearUrl)}</link>
       <g:image_link>${escapeXml(mainImage)}</g:image_link>
 ${additionalImageTags ? `${additionalImageTags}\n` : ''}      <g:condition>new</g:condition>
