@@ -3,7 +3,7 @@ import { ServicesHero } from '@/components/services/ServicesHero';
 import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
 import { FeatureTabs } from '@/components/services/FeatureTabs';
 import { CtaBanner } from '@/components/services/CtaBanner';
-import { Box } from '@/layouts/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -154,27 +154,27 @@ export const ServicesPage = () => {
         schema={serviceSchema}
       />
 
-      <div className="max-w-7xl mx-auto space-y-24">
+      <Stack gap={24} maxWidth="7xl" marginX="auto">
         <ServicesHero />
 
-        <section className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Our Core Services</h2>
-            <p className="text-slate-400">Click each section to learn more about what's included.</p>
-          </div>
+        <Stack as="section" gap={6}>
+          <Stack gap={2}>
+            <Box as="h2" className="text-3xl font-bold tracking-tight">Our Core Services</Box>
+            <Box as="p" className="text-text-dim">Click each section to learn more about what's included.</Box>
+          </Stack>
           <CoreServicesGrid />
-        </section>
+        </Stack>
 
-        <section className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Feature Details</h2>
-            <p className="text-slate-400">Take a closer look at what each core service includes.</p>
-          </div>
+        <Stack as="section" gap={6}>
+          <Stack gap={2}>
+            <Box as="h2" className="text-2xl font-bold tracking-tight">Feature Details</Box>
+            <Box as="p" className="text-text-dim">Take a closer look at what each core service includes.</Box>
+          </Stack>
           <FeatureTabs />
-        </section>
+        </Stack>
 
         <CtaBanner />
-      </div>
+      </Stack>
     </Box>
   );
 };

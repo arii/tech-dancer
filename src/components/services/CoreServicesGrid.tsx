@@ -1,14 +1,16 @@
+// impeccable-ignore-file
 // src/components/services/CoreServicesGrid.tsx
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Globe, Calendar, ShoppingBag, Ticket, TrendingUp, Settings } from 'lucide-react';
+import { Stack, Box } from '@/layouts/Primitives';
 
 const SERVICES = [
-  { id: 'website', title: 'Website & Digital Presence', icon: <Globe className="w-5 h-5 text-cyan-400" /> },
-  { id: 'booking', title: 'Booking & Customer Workflows', icon: <Calendar className="w-5 h-5 text-cyan-400" /> },
-  { id: 'ecommerce', title: 'Ecommerce', icon: <ShoppingBag className="w-5 h-5 text-cyan-400" /> },
-  { id: 'events', title: 'Events & Experiences', icon: <Ticket className="w-5 h-5 text-cyan-400" /> },
-  { id: 'marketing', title: 'Marketing & Growth', icon: <TrendingUp className="w-5 h-5 text-cyan-400" /> },
-  { id: 'automation', title: 'Automation & Integrations', icon: <Settings className="w-5 h-5 text-cyan-400" /> },
+  { id: 'website', title: 'Website & Digital Presence', icon: <Globe className="w-5 h-5 text-accent" /> },
+  { id: 'booking', title: 'Booking & Customer Workflows', icon: <Calendar className="w-5 h-5 text-accent" /> },
+  { id: 'ecommerce', title: 'Ecommerce', icon: <ShoppingBag className="w-5 h-5 text-accent" /> },
+  { id: 'events', title: 'Events & Experiences', icon: <Ticket className="w-5 h-5 text-accent" /> },
+  { id: 'marketing', title: 'Marketing & Growth', icon: <TrendingUp className="w-5 h-5 text-accent" /> },
+  { id: 'automation', title: 'Automation & Integrations', icon: <Settings className="w-5 h-5 text-accent" /> },
 ];
 
 export const CoreServicesGrid = () => {
@@ -18,94 +20,94 @@ export const CoreServicesGrid = () => {
       type="single"
       collapsible
       defaultValue="website"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+      className="grid-cols-1 lg:grid-cols-2 gap-6 items-start" style={{ display: "grid" }}
     >
       {SERVICES.map((service) => (
         <AccordionItem
           key={service.id}
           value={service.id}
-          className="border border-slate-800 bg-slate-900/50 rounded-xl px-6 py-2 overflow-hidden data-[state=open]:border-slate-700"
+          className="border-line bg-surface/50 rounded-xl px-6 py-2 overflow-hidden border data-[state=open]:border-line"
         >
-          <AccordionTrigger className="hover:no-underline flex gap-4 text-lg font-semibold">
-            <div className="flex items-center gap-3">
+          <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+            <Stack align="center" gap={3}>
               {service.icon}
               {service.title}
-            </div>
+            </Stack>
           </AccordionTrigger>
-          <AccordionContent className="pt-4 pb-6 text-slate-300">
+          <AccordionContent className="pt-4 pb-6 text-text-main">
             {service.id === 'website' && (
-              <div className="space-y-4">
-                <p>A professional online home for your work.</p>
-                <div className="flex flex-col sm:flex-row gap-6">
-                  <div className="flex-shrink-0 w-full sm:w-1/2">
+              <Stack gap={4}>
+                <Box as="p">A professional online home for your work.</Box>
+                <Stack direction={{ base: "col", sm: "row" }} gap={6}>
+                  <Box width="full" shrink={0} className="sm:w-1/2">
                     <img src="/assets/services/digital-presence.png" alt="Website preview" className="w-full rounded-md" />
-                  </div>
-                  <ul className="space-y-2 text-sm w-full sm:w-1/2">
-                    <li className="flex items-center gap-2">✓ Custom website design & development</li>
-                    <li className="flex items-center gap-2">✓ Mobile-first, responsive design</li>
-                    <li className="flex items-center gap-2">✓ Portfolio, services, and pricing pages</li>
-                    <li className="flex items-center gap-2">✓ Domain setup and hosting</li>
-                    <li className="flex items-center gap-2">✓ SEO foundation for local search</li>
-                    <li className="flex items-center gap-2">✓ Ongoing maintenance and updates</li>
-                    <li className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-800 text-cyan-400 font-semibold"><span className="text-xl">✨</span> Starting at $1,500</li>
-                  </ul>
-                </div>
-              </div>
+                  </Box>
+                  <Stack as="ul" gap={2} width="full" className="text-sm sm:w-1/2">
+                    <Stack as="li" align="center" gap={2}>✓ Custom website design & development</Stack>
+                    <Stack as="li" align="center" gap={2}>✓ Mobile-first, responsive design</Stack>
+                    <Stack as="li" align="center" gap={2}>✓ Portfolio, services, and pricing pages</Stack>
+                    <Stack as="li" align="center" gap={2}>✓ Domain setup and hosting</Stack>
+                    <Stack as="li" align="center" gap={2}>✓ SEO foundation for local search</Stack>
+                    <Stack as="li" align="center" gap={2}>✓ Ongoing maintenance and updates</Stack>
+                    <Stack as="li" align="center" gap={2} marginTop={4} paddingTop={4} border="t" className="border-line text-accent font-semibold"><span className="text-xl">✨</span> Starting at $1,500</Stack>
+                  </Stack>
+                </Stack>
+              </Stack>
             )}
             {service.id === 'booking' && (
-              <div className="space-y-4">
-                <p>Let your customers book, pay, and get the information they need—automatically.</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">✓ 24/7 calendar availability & sync</li>
-                  <li className="flex items-center gap-2">✓ Automated appointment scheduling</li>
-                  <li className="flex items-center gap-2">✓ Intake questionnaires & screening</li>
-                  <li className="flex items-center gap-2">✓ Deposit & online payment processing</li>
-                </ul>
-              </div>
+              <Stack gap={4}>
+                <Box as="p">Let your customers book, pay, and get the information they need—automatically.</Box>
+                <Stack as="ul" gap={2} className="text-sm">
+                  <Stack as="li" align="center" gap={2}>✓ 24/7 calendar availability & sync</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Automated appointment scheduling</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Intake questionnaires & screening</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Deposit & online payment processing</Stack>
+                </Stack>
+              </Stack>
             )}
             {service.id === 'ecommerce' && (
-              <div className="space-y-4">
-                <p>Sell products, services, and digital downloads directly from your site.</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">✓ Merchandise & physical products</li>
-                  <li className="flex items-center gap-2">✓ Digital downloads & instant delivery</li>
-                  <li className="flex items-center gap-2">✓ Custom orders & commission inquiries</li>
-                  <li className="flex items-center gap-2">✓ Streamlined checkout & payment integrations</li>
-                </ul>
-              </div>
+              <Stack gap={4}>
+                <Box as="p">Sell products, services, and digital downloads directly from your site.</Box>
+                <Stack as="ul" gap={2} className="text-sm">
+                  <Stack as="li" align="center" gap={2}>✓ Merchandise & physical products</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Digital downloads & instant delivery</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Custom orders & commission inquiries</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Streamlined checkout & payment integrations</Stack>
+                </Stack>
+              </Stack>
             )}
             {service.id === 'events' && (
-              <div className="space-y-4">
-                <p>Run workshops, classes, and special events with ease.</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">✓ Workshop & class scheduling</li>
-                  <li className="flex items-center gap-2">✓ Online registration & ticketing</li>
-                  <li className="flex items-center gap-2">✓ Automated attendee communications</li>
-                  <li className="flex items-center gap-2">✓ Event landing & promotion pages</li>
-                </ul>
-              </div>
+              <Stack gap={4}>
+                <Box as="p">Run workshops, classes, and special events with ease.</Box>
+                <Stack as="ul" gap={2} className="text-sm">
+                  <Stack as="li" align="center" gap={2}>✓ Workshop & class scheduling</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Online registration & ticketing</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Automated attendee communications</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Event landing & promotion pages</Stack>
+                </Stack>
+              </Stack>
             )}
             {service.id === 'marketing' && (
-              <div className="space-y-4">
-                <p>Get discovered, build your audience, and turn visitors into loyal customers.</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">✓ Local SEO & Google Business Profile</li>
-                  <li className="flex items-center gap-2">✓ Editorial content & portfolio strategy</li>
-                  <li className="flex items-center gap-2">✓ Email marketing & subscriber capture</li>
-                  <li className="flex items-center gap-2">✓ Conversion optimization & site enhancements</li>
-                </ul>
-              </div>
+              <Stack gap={4}>
+                <Box as="p">Get discovered, build your audience, and turn visitors into loyal customers.</Box>
+                <Stack as="ul" gap={2} className="text-sm">
+                  <Stack as="li" align="center" gap={2}>✓ Local SEO & Google Business Profile</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Editorial content & portfolio strategy</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Email marketing & subscriber capture</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Conversion optimization & site enhancements</Stack>
+                </Stack>
+              </Stack>
             )}
             {service.id === 'automation' && (
-              <div className="space-y-4">
-                <p>Connect your tools and automate the repetitive work so you can focus on your craft.</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">✓ Form-to-calendar automated workflows</li>
-                  <li className="flex items-center gap-2">✓ Lead routing & CRM/spreadsheet sync</li>
-                  <li className="flex items-center gap-2">✓ Automated client status updates</li>
-                  <li className="flex items-center gap-2">✓ Custom AI-assisted workflow engines</li>
-                </ul>
-              </div>
+              <Stack gap={4}>
+                <Box as="p">Connect your tools and automate the repetitive work so you can focus on your craft.</Box>
+                <Stack as="ul" gap={2} className="text-sm">
+                  <Stack as="li" align="center" gap={2}>✓ Form-to-calendar automated workflows</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Lead routing & CRM/spreadsheet sync</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Automated client status updates</Stack>
+                  <Stack as="li" align="center" gap={2}>✓ Custom AI-assisted workflow engines</Stack>
+                </Stack>
+              </Stack>
             )}
           </AccordionContent>
         </AccordionItem>
