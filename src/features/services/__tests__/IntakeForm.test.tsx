@@ -7,40 +7,37 @@ describe('IntakeForm Component', () => {
     cleanup();
   });
 
-  it('renders Step 1 with required inputs and step progress indicator', () => {
+  it('renders low-friction consultation form with Name, Email, and Notes', () => {
     render(<IntakeForm />);
 
     expect(screen.queryByText('STUDIO INTAKE & INQUIRY')).toBeNull();
     expect(screen.getByText('Request a Consultation')).toBeDefined();
-    expect(screen.getByText('1. Studio & Contact')).toBeDefined();
-    expect(screen.getByText('2. Focus & Scope')).toBeDefined();
 
     expect(screen.getByLabelText(/Full Name/i)).toBeDefined();
     expect(screen.getByLabelText(/Email Address/i)).toBeDefined();
-    expect(screen.getByLabelText(/Business \/ Practice Name/i)).toBeDefined();
-    expect(screen.getByLabelText(/Industry \/ Niche/i)).toBeDefined();
+    expect(screen.getByLabelText(/Project Scope & Notes/i)).toBeDefined();
 
-    expect(screen.getByRole('button', { name: /Continue to Project Focus/i })).toBeDefined();
+    // Verify unnecessary fields are removed
+    expect(screen.queryByLabelText(/Business \/ Practice/i)).toBeNull();
+    expect(screen.queryByLabelText(/Industry \/ Niche/i)).toBeNull();
+    expect(screen.queryByText('PRIMARY FOCUS')).toBeNull();
+
+    expect(screen.getByRole('button', { name: /Send Message/i })).toBeDefined();
   });
 
-  it('advances to Step 2 when required Step 1 fields are provided and allows going back', () => {
+  it('allows filling input fields in the low-friction form', () => {
     render(<IntakeForm />);
 
-    fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'Jane Doe' } });
-    fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'jane@example.com' } });
-    fireEvent.change(screen.getByLabelText(/Business \/ Practice Name/i), { target: { value: 'Jane Studio' } });
-    fireEvent.change(screen.getByLabelText(/Industry \/ Niche/i), { target: { value: 'Hair & Beauty' } });
+    const nameInput = screen.getByLabelText(/Full Name/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
+    const notesInput = screen.getByLabelText(/Project Scope & Notes/i) as HTMLTextAreaElement;
 
-    fireEvent.click(screen.getByRole('button', { name: /Continue to Project Focus/i }));
+    fireEvent.change(nameInput, { target: { value: 'Jane Doe' } });
+    fireEvent.change(emailInput, { target: { value: 'jane@example.com' } });
+    fireEvent.change(notesInput, { target: { value: 'Need booking system setup' } });
 
-    // Now in Step 2
-    expect(screen.getByText('Primary Operational Focus')).toBeDefined();
-    expect(screen.getByLabelText(/Current Website or Social Handle/i)).toBeDefined();
-    expect(screen.getByLabelText(/Project Scope & Notes/i)).toBeDefined();
-    expect(screen.getByRole('button', { name: /Request a Consultation/i })).toBeDefined();
-
-    // Go back to Step 1
-    fireEvent.click(screen.getByRole('button', { name: /Back to Contact Info/i }));
-    expect((screen.getByLabelText(/Full Name/i) as HTMLInputElement).value).toBe('Jane Doe');
+    expect(nameInput.value).toBe('Jane Doe');
+    expect(emailInput.value).toBe('jane@example.com');
+    expect(notesInput.value).toBe('Need booking system setup');
   });
 });

@@ -48,9 +48,16 @@ const staticRouteMetaMap = new Map();
 ROUTE_CONFIGS.forEach(r => {
   if (r.path && !r.path.includes(':') && r.path !== '*') {
     const isRoot = r.path === '/';
+    const isServices = r.path === '/services';
     staticRouteMetaMap.set(r.path, {
-      title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
-      description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
+      title: isRoot
+        ? 'BoomTick.blog - West Coast Swing & AI Engineering'
+        : (isServices
+          ? 'Web Design & Digital Systems for San Francisco Creatives | BoomTick'
+          : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering')),
+      description: isServices
+        ? 'Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation.'
+        : 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
@@ -151,7 +158,8 @@ function cleanInjectedHead(html) {
     .replace(/<link\s+[^>]*?rel=["']canonical["'][^>]*\/?>\s*/gi, '')
     .replace(/<meta\s+[^>]*?property=["']og:[^"']*["'][^>]*\/?>\s*/gi, '')
     .replace(/<meta\s+[^>]*?name=["']twitter:[^"']*["'][^>]*\/?>\s*/gi, '')
-    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '');
+    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '')
+    .replace(/<link\s+[^>]*?rel=["']preload["'][^>]*?as=["']image["'][^>]*\/?>\s*/gi, '');
 }
 
 function cleanInjectedRoot(html) {
@@ -280,7 +288,7 @@ function generateMetadataTags(route, meta) {
 
   const schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(schemas)}</script>`;
 
-  return [
+  const tags = [
     `<title data-rh="true" data-prerendered="true">${title}</title>`,
     `<meta data-rh="true" data-prerendered="true" name="description" content="${description}" />`,
     `<link data-rh="true" data-prerendered="true" rel="canonical" href="${canonicalUrl}" />`,
@@ -294,7 +302,13 @@ function generateMetadataTags(route, meta) {
     `<meta data-rh="true" data-prerendered="true" name="twitter:description" content="${description}" />`,
     `<meta data-rh="true" data-prerendered="true" name="twitter:image" content="${image}" />`,
     schemaJson
-  ].join('\n    ');
+  ];
+
+  if (route === '/') {
+    tags.unshift('<link rel="preload" as="image" href="/assets/home/wcs-travel-pack-400w.webp" imagesrcset="/assets/home/wcs-travel-pack-400w.webp 400w, /assets/home/wcs-travel-pack.webp 800w" imagesizes="(max-width: 640px) 100vw, 420px" fetchpriority="high" />');
+  }
+
+  return tags.join('\n    ');
 }
 
 async function generateStubs() {

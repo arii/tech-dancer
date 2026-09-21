@@ -1,4 +1,4 @@
-import { Globe, Calendar, ShoppingBag, Sparkles, ShieldCheck, Zap, Search, Star } from 'lucide-react';
+import { Globe, Calendar, ShoppingBag, Sparkles, ShieldCheck, Zap, Search } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface TierVisualProps {
@@ -16,7 +16,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         width="full"
         className="border-line/50 bg-surface-alt/40 shadow-inner select-none"
       >
-        {/* Browser Mockup Chrome */}
+        {/* Tier Header Bar */}
         <Box
           paddingX={3}
           paddingY={2}
@@ -25,26 +25,13 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/80"
+          className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
         >
-          <Box display="flex" align="center" gap={1.5}>
-            <Box width={2} height={2} radius="full" className="bg-error/60" />
-            <Box width={2} height={2} radius="full" className="bg-brand-amber/60" />
-            <Box width={2} height={2} radius="full" className="bg-success/60" />
-          </Box>
-          <Box
-            paddingX={2}
-            paddingY={0.5}
-            radius="sm"
-            surface="sunken"
-            className="text-[10px] font-mono text-dim truncate max-w-[140px] border border-line/20"
-          >
-            yourstudio.com
-          </Box>
-          <Globe size={12} className="text-dim/60" />
+          <span className="font-semibold text-main">yourstudio.com</span>
+          <Globe size={13} className="text-dim/70" />
         </Box>
 
-        {/* Mockup Canvas: Google Search & Web Presence */}
+        {/* Visual Canvas: Google Search & Web Presence */}
         <Stack padding={3} gap={2}>
           {/* Google Search Result Snippet */}
           <Box
@@ -60,17 +47,12 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" className="truncate text-xs">
               Your Studio · San Francisco, CA
             </Text>
-            <Box display="flex" align="center" gap={1} className="text-brand-amber mt-0.5 mb-1">
-              <Star size={10} fill="currentColor" />
-              <Star size={10} fill="currentColor" />
-              <Star size={10} fill="currentColor" />
-              <Star size={10} fill="currentColor" />
-              <Star size={10} fill="currentColor" />
-              <span className="text-dim text-[9px] font-mono ml-1">5.0 Verified Local Listing</span>
-            </Box>
-            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1">
+            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1 mt-1">
               Custom responsive website, verified map listing, and client intake.
             </Text>
+            <Box marginTop={1} className="text-[9px] font-mono text-dim/80">
+              Illustrative local search setup
+            </Box>
           </Box>
         </Stack>
       </Box>
@@ -87,7 +69,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         width="full"
         className="border-line/40 bg-surface-alt/40 shadow-inner select-none"
       >
-        {/* Browser Mockup Chrome */}
+        {/* Tier Header Bar */}
         <Box
           paddingX={3}
           paddingY={2}
@@ -96,26 +78,13 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/90"
+          className="border-line/30 bg-surface/90 text-[11px] font-mono text-dim"
         >
-          <Box display="flex" align="center" gap={1.5}>
-            <Box width={2} height={2} radius="full" className="bg-error/60" />
-            <Box width={2} height={2} radius="full" className="bg-brand-amber/60" />
-            <Box width={2} height={2} radius="full" className="bg-success/60" />
-          </Box>
-          <Box
-            paddingX={2}
-            paddingY={0.5}
-            radius="sm"
-            surface="sunken"
-            className="text-[10px] font-mono text-dim truncate max-w-[140px] border border-line/20"
-          >
-            yourstudio.com/book
-          </Box>
-          <Calendar size={12} className="text-dim" />
+          <span className="font-semibold text-main">yourstudio.com/book</span>
+          <Calendar size={13} className="text-dim" />
         </Box>
 
-        {/* Interactive Booking Funnel Mockup */}
+        {/* Interactive Booking Funnel Visual */}
         <Stack padding={3} gap={2}>
           {/* Calendar Slot Mockup */}
           <Box
@@ -180,7 +149,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
       width="full"
       className="border-line/50 bg-surface-alt/40 shadow-inner select-none"
     >
-      {/* Browser Mockup Chrome */}
+      {/* Tier Header Bar */}
       <Box
         paddingX={3}
         paddingY={2}
@@ -189,26 +158,13 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         display="flex"
         align="center"
         justify="between"
-        className="border-line/30 bg-surface/80"
+        className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
       >
-        <Box display="flex" align="center" gap={1.5}>
-          <Box width={2} height={2} radius="full" className="bg-error/60" />
-          <Box width={2} height={2} radius="full" className="bg-brand-amber/60" />
-          <Box width={2} height={2} radius="full" className="bg-success/60" />
-        </Box>
-        <Box
-          paddingX={2}
-          paddingY={0.5}
-          radius="sm"
-          surface="sunken"
-          className="text-[10px] font-mono text-dim truncate max-w-[140px] border border-line/20"
-        >
-          yourstudio.com/store
-        </Box>
-        <ShoppingBag size={12} className="text-accent-sky" />
+        <span className="font-semibold text-main">yourstudio.com/store</span>
+        <ShoppingBag size={13} className="text-accent-sky" />
       </Box>
 
-      {/* Multi-tier Store & Google Shopping Feed Mockup */}
+      {/* Multi-tier Store & Google Shopping Feed Visual */}
       <Stack padding={3} gap={2}>
         {/* Store Grid Preview */}
         <Box display="grid" className="grid-cols-2 gap-2">
@@ -239,7 +195,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           </Box>
         </Box>
 
-        {/* Revenue Analytics Mockup */}
+        {/* Revenue Analytics Status */}
         <Box
           radius="sm"
           padding={2}

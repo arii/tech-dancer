@@ -1,57 +1,36 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
-import { TierVisual } from '@/features/services/TierVisuals';
-import { PackagesGrid, ScopeBoundaries } from '@/features/services/Packages';
+import { ModularPackages } from '@/features/services/Packages';
 
-describe('Services Page Visual Enhancements', () => {
+describe('Services Page Modular Packages', () => {
   afterEach(() => {
     cleanup();
   });
 
-  it('renders visual previews and client proof badge in PackagesGrid', () => {
-    render(<PackagesGrid />);
+  it('renders Digital Foundation and 6 modular capability cards', () => {
+    render(<ModularPackages />);
 
-    // Check Presence tier visual & content
-    expect(screen.getByText('Presence')).toBeDefined();
-    expect(screen.getByText('yourstudio.com')).toBeDefined();
-    expect(screen.getByText('Google Search Verified')).toBeDefined();
+    // Check Build your digital foundation & benefits
+    expect(screen.getByText('Build your digital foundation')).toBeDefined();
+    expect(screen.getByText(/A fast, polished website designed around your work/i)).toBeDefined();
+    expect(screen.getByText('Mobile-responsive design')).toBeDefined();
+    expect(screen.getByText('Built to help customers find you through local search')).toBeDefined();
+    expect(screen.getByText('Your own professional domain and secure hosting')).toBeDefined();
+    expect(screen.getByText('Booking, contact, and customer workflows built in')).toBeDefined();
+    expect(screen.getByText('Ongoing updates, maintenance, and technical support')).toBeDefined();
+    expect(screen.getByText('$1,500')).toBeDefined();
 
-    // Check Booked tier visual & client proof badge
-    expect(screen.getByText('Booked')).toBeDefined();
-    expect(screen.getByText('Hair by April runs on Booked')).toBeDefined();
-    expect(screen.getByText('yourstudio.com/book')).toBeDefined();
-    expect(screen.getByText('OCTOBER 2026')).toBeDefined();
-    expect(screen.getByText('Auto-SMS & Calendar Sync')).toBeDefined();
+    // Check Connect, grow & automate your business title & capability cards
+    expect(screen.getByText('Connect, grow & automate your business')).toBeDefined();
+    expect(screen.getByText('Booking & Customer Workflows')).toBeDefined();
+    expect(screen.getByText('Ecommerce & Digital Products')).toBeDefined();
+    expect(screen.getByText('Events & Experiences')).toBeDefined();
+    expect(screen.getByText('Marketing & Discovery')).toBeDefined();
+    expect(screen.getByText('Business Automation')).toBeDefined();
 
-    // Check Studio Growth tier visual
-    expect(screen.getByText('Studio Growth')).toBeDefined();
-    expect(screen.getByText('yourstudio.com/store')).toBeDefined();
-    expect(screen.getByText('STRIPE CONNECT')).toBeDefined();
-
-    // Check standardized primary CTA buttons across all cards
-    const ctas = screen.getAllByRole('link', { name: /Request a Consultation/i });
-    expect(ctas.length).toBe(3);
-    ctas.forEach((cta) => {
-      expect(cta.getAttribute('href')).toBe('#intake-form');
-    });
-  });
-
-  it('renders TierVisual standalone for all 3 tiers', () => {
-    const { rerender } = render(<TierVisual tier="presence" />);
-    expect(screen.getByText('yourstudio.com')).toBeDefined();
-
-    rerender(<TierVisual tier="booked" />);
-    expect(screen.getByText('yourstudio.com/book')).toBeDefined();
-
-    rerender(<TierVisual tier="growth" />);
-    expect(screen.getByText('yourstudio.com/store')).toBeDefined();
-  });
-
-  it('renders ScopeBoundaries with what we handle vs do not handle', () => {
-    render(<ScopeBoundaries />);
-
-    expect(screen.getByText("What we handle vs. what we don't")).toBeDefined();
-    expect(screen.getByText('We Handle')).toBeDefined();
-    expect(screen.getByText('We Do Not Handle')).toBeDefined();
+    // Check key capability items
+    expect(screen.getByText('24/7 calendar availability & sync')).toBeDefined();
+    expect(screen.getByText('Intake questionnaires & screening')).toBeDefined();
+    expect(screen.getByText('Custom AI-assisted workflow engines')).toBeDefined();
   });
 });

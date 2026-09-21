@@ -4,8 +4,7 @@ import {
   UXAuditSynthesisSchema,
   type UXHypothesesResponse,
   type UXAuditSynthesis,
-  type UXFinding,
-  type ViewportScanResult
+  type UXFinding
 } from './types';
 
 const GEMINI_HYPOTHESIS_SCHEMA = {
@@ -147,7 +146,7 @@ function normalizeHypothesesData(raw: unknown): UXHypothesesResponse {
   };
 }
 
-function normalizeSynthesisData(raw: any): UXAuditSynthesis {
+function normalizeSynthesisData(raw: unknown): UXAuditSynthesis {
   if (!raw || typeof raw !== 'object') {
     return {
       overallScore: 80,
