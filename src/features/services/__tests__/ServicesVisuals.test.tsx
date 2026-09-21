@@ -21,7 +21,7 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('Hair by April runs on Booked')).toBeDefined();
     expect(screen.getByText('yourstudio.com/book')).toBeDefined();
     expect(screen.getByText('OCTOBER 2026')).toBeDefined();
-    expect(screen.getByText('Auto-SMS & Calendar Sync Enabled')).toBeDefined();
+    expect(screen.getByText('Auto-SMS & Calendar Sync')).toBeDefined();
 
     // Check Studio Growth tier visual
     expect(screen.getByText('Studio Growth')).toBeDefined();

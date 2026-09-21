@@ -76,9 +76,9 @@ async function main() {
   };
 
   try {
-    const finalState = await graph.invoke(initialInput as any, {
+    const finalState = (await graph.invoke(initialInput, {
       configurable: { thread_id: threadId }
-    }) as UXAuditState;
+    })) as unknown as UXAuditState;
 
     formatTerminalSummary(finalState);
     const { reportPath, jsonPath } = saveAuditArtifacts(finalState, config.output ? path.join(config.output, slug) : undefined);

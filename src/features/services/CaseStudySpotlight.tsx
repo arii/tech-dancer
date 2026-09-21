@@ -1,4 +1,4 @@
-import { ArrowUpRight, CheckCircle2, Lock } from 'lucide-react';
+import { ArrowUpRight, Lock } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { ASSET_PREFIX } from '@/config/constants';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
@@ -118,18 +118,6 @@ export const CaseStudySpotlight = () => {
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
                 />
-                <Box
-                  position="absolute"
-                  bottom={3}
-                  right={3}
-                  paddingX={2.5}
-                  paddingY={1}
-                  radius="md"
-                  className="bg-bg/90 backdrop-blur-md text-[11px] font-mono font-bold text-main border border-line/30 flex items-center gap-1.5 shadow-sm"
-                >
-                  <CheckCircle2 size={12} className="text-success" />
-                  <span>Live Production Workflow</span>
-                </Box>
               </Box>
             </Box>
           </Box>

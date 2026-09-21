@@ -34,11 +34,10 @@ describe('CaseStudySpotlight Component', () => {
     // Verify hallucinated numbers are completely absent
     expect(screen.queryByText(/5\+ hours saved weekly/i)).toBeNull();
 
-    // Live Recording image & badge
+    // Live Recording image
     const img = screen.getByAltText('Hair by April Live Booking Flow') as HTMLImageElement;
     expect(img).toBeDefined();
     expect(img.src).toContain('hair-by-april-booking.gif');
-    expect(screen.getByText('Live Production Workflow')).toBeDefined();
 
     // Client Link button
     const ctaButton = screen.getByRole('link', { name: /Visit Live Client Site/i });

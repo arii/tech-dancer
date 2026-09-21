@@ -1,4 +1,4 @@
-import { Globe, Calendar, ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Zap, Search, Star } from 'lucide-react';
+import { Globe, Calendar, ShoppingBag, Sparkles, ShieldCheck, Zap, Search, Star } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export interface TierVisualProps {
@@ -54,35 +54,23 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/20 bg-surface/90"
           >
-            <Box display="flex" align="center" gap={1} className="text-[9px] font-mono text-accent mb-1">
-              <Search size={10} /> Google Search Verified
+            <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-accent mb-1 font-semibold">
+              <Search size={12} /> Google Search Verified
             </Box>
-            <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" className="truncate text-[11px]">
+            <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" className="truncate text-xs">
               Your Studio · San Francisco, CA
             </Text>
-            <Box display="flex" align="center" gap={1} className="text-[9px] text-brand-amber mt-0.5 mb-1">
-              <Star size={9} fill="currentColor" />
-              <Star size={9} fill="currentColor" />
-              <Star size={9} fill="currentColor" />
-              <Star size={9} fill="currentColor" />
-              <Star size={9} fill="currentColor" />
-              <span className="text-dim text-[8px] font-mono">5.0 Local Pack</span>
+            <Box display="flex" align="center" gap={1} className="text-brand-amber mt-0.5 mb-1">
+              <Star size={10} fill="currentColor" />
+              <Star size={10} fill="currentColor" />
+              <Star size={10} fill="currentColor" />
+              <Star size={10} fill="currentColor" />
+              <Star size={10} fill="currentColor" />
+              <span className="text-dim text-[9px] font-mono ml-1">5.0 Verified Local Listing</span>
             </Box>
-            <Text variant="body" size="xs" color="dim" className="text-[10px] line-clamp-1">
+            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1">
               Custom responsive website, verified map listing, and client intake.
             </Text>
-          </Box>
-
-          {/* Quick Stats Grid */}
-          <Box display="grid" className="grid-cols-2 gap-1.5">
-            <Box surface="default" radius="sm" padding={1.5} border className="border-line/20 text-center">
-              <Text variant="mono" size="xs" color="accent" className="text-[10px] font-bold">100% Mobile</Text>
-              <Text variant="body" size="xs" color="dim" className="text-[8px]">Responsive Layout</Text>
-            </Box>
-            <Box surface="default" radius="sm" padding={1.5} border className="border-line/20 text-center">
-              <Text variant="mono" size="xs" color="success" className="text-[10px] font-bold">SSL / DNS</Text>
-              <Text variant="body" size="xs" color="dim" className="text-[8px]">Full Security</Text>
-            </Box>
           </Box>
         </Stack>
       </Box>
@@ -129,24 +117,6 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
 
         {/* Interactive Booking Funnel Mockup */}
         <Stack padding={3} gap={2}>
-          {/* Step Indicator */}
-          <Box display="flex" align="center" justify="between" paddingX={1}>
-            <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/40 text-main text-[8px] font-mono font-bold flex items-center justify-center">1</Box>
-              <Text variant="mono" size="xs" color="main" className="text-[10px]">Service</Text>
-            </Box>
-            <ArrowRight size={10} className="text-dim" />
-            <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/40 text-main text-[8px] font-mono font-bold flex items-center justify-center">2</Box>
-              <Text variant="mono" size="xs" color="main" className="text-[10px]">Date</Text>
-            </Box>
-            <ArrowRight size={10} className="text-dim" />
-            <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/30 text-dim text-[8px] font-mono flex items-center justify-center">3</Box>
-              <Text variant="mono" size="xs" color="dim" className="text-[10px]">Confirm</Text>
-            </Box>
-          </Box>
-
           {/* Calendar Slot Mockup */}
           <Box
             surface="default"
@@ -156,25 +126,25 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             className="border-line/30 bg-surface/70"
           >
             <Box display="flex" justify="between" align="center" marginBottom={2}>
-              <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">
+              <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">
                 OCTOBER 2026
               </Text>
-              <Box display="flex" align="center" gap={1} className="text-[9px] font-mono text-dim">
-                <Zap size={10} className="text-dim" /> Live Sync
+              <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-dim">
+                <Zap size={11} className="text-accent" /> Real-Time Sync
               </Box>
             </Box>
 
             <Box display="grid" className="grid-cols-4 gap-1.5">
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-main">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
                 9:00 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-[9px] font-mono text-main font-bold">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-[10px] font-mono text-main font-bold">
                 11:30 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[9px] font-mono text-main line-through">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[10px] font-mono text-main line-through">
                 1:00 PM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-main">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
                 3:30 PM
               </Box>
             </Box>
@@ -183,16 +153,16 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           {/* Automated Notification Badge */}
           <Box
             radius="sm"
-            paddingX={2}
-            paddingY={1}
+            paddingX={2.5}
+            paddingY={1.5}
             display="flex"
             align="center"
             justify="between"
-            className="bg-surface-alt/60 border border-line/30 text-[9px] font-mono text-dim"
+            className="bg-surface-alt/60 border border-line/30 text-[10px] font-mono text-dim"
           >
             <Box display="flex" align="center" gap={1.5}>
-              <ShieldCheck size={11} className="text-dim" />
-              <span>Auto-SMS & Calendar Sync Enabled</span>
+              <ShieldCheck size={12} className="text-success" />
+              <span>Auto-SMS & Calendar Sync</span>
             </Box>
             <span className="font-bold text-main">Active</span>
           </Box>
@@ -247,16 +217,12 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             radius="md"
             padding={2}
             border
-            className="border-line/30 bg-surface/80"
+            className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={10} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 mb-1.5 flex items-center justify-center">
-              <Sparkles size={12} className="text-accent-purple" />
+            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 mb-1 flex items-center justify-center">
+              <Sparkles size={14} className="text-accent-purple" />
             </Box>
-            <Box width="80%" height={2} radius="xs" className="bg-main/60 mb-1" />
-            <Box display="flex" justify="between" align="center">
-              <span className="text-[9px] font-mono font-bold text-accent-sky">$45.00</span>
-              <span className="text-[8px] font-mono text-dim uppercase">Merch</span>
-            </Box>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Merch & Digital</Text>
           </Box>
 
           <Box
@@ -264,16 +230,12 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             radius="md"
             padding={2}
             border
-            className="border-line/30 bg-surface/80"
+            className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={10} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 mb-1.5 flex items-center justify-center">
-              <ShoppingBag size={12} className="text-accent-sky" />
+            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 mb-1 flex items-center justify-center">
+              <ShoppingBag size={14} className="text-accent-sky" />
             </Box>
-            <Box width="70%" height={2} radius="xs" className="bg-main/60 mb-1" />
-            <Box display="flex" justify="between" align="center">
-              <span className="text-[9px] font-mono font-bold text-accent-sky">Google Feed</span>
-              <span className="text-[8px] font-mono text-success uppercase">Active</span>
-            </Box>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Google Feed</Text>
           </Box>
         </Box>
 
@@ -285,11 +247,8 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           border
           className="border-line/30 flex items-center justify-between"
         >
-          <Stack gap={0.5}>
-            <Text variant="mono" size="xs" color="dim" className="text-[8px] uppercase">Automated Payouts</Text>
-            <Text variant="mono" size="sm" weight="font-bold" color="success" className="text-[11px]">Direct Deposit Active</Text>
-          </Stack>
-          <Box width={16} height={4} radius="xs" className="bg-success/20 border border-success/30 flex items-center justify-center text-[8px] font-mono text-success font-bold">
+          <Text variant="mono" size="xs" color="dim" className="text-[10px]">Direct Deposit Active</Text>
+          <Box paddingX={1.5} paddingY={0.5} radius="xs" className="bg-success/20 border border-success/30 flex items-center justify-center text-[9px] font-mono text-success font-bold">
             STRIPE CONNECT
           </Box>
         </Box>

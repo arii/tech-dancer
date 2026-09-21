@@ -1,9 +1,10 @@
-import { StateGraph, MemorySaver, START, END } from '@langchain/langgraph';
+import { StateGraph, type StateGraphArgs, MemorySaver, START, END } from '@langchain/langgraph';
 import { BaseMessage, HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
 import readline from 'readline';
 import {
   type UXAuditState,
   type UXHypothesisQuestion,
+  type UXFinding,
   type ViewportScanResult
 } from './types';
 import { captureViewport, type CaptureOptions } from './capture';
@@ -52,7 +53,7 @@ const auditStateChannels = {
   visualHierarchySummary: { value: (x?: string, y?: string) => y ?? x ?? '', default: () => '' },
   primaryConversionGoal: { value: (x?: string, y?: string) => y ?? x ?? '', default: () => '' },
   isApproved: { value: (x?: boolean, y?: boolean) => y ?? x ?? false, default: () => false },
-  finalFindings: { value: (x: any[] = [], y: any[] = []) => y ?? x ?? [], default: () => [] },
+  finalFindings: { value: (x: UXFinding[] = [], y: UXFinding[] = []) => y ?? x ?? [], default: () => [] },
   summaryMarkdown: { value: (x?: string, y?: string) => y ?? x ?? '', default: () => '' },
   overallScore: { value: (x?: number, y?: number) => y ?? x ?? 100, default: () => 100 }
 };
@@ -241,7 +242,7 @@ export function createUXAuditGraph(
 
   // Build the StateGraph
   const workflow = new StateGraph<UXAuditState>({
-    channels: auditStateChannels as any
+    channels: auditStateChannels as StateGraphArgs<UXAuditState>['channels']
   })
     .addNode('baseCapture', baseCaptureNode)
     .addNode('analyzeAndAsk', analyzeAndAskNode)
