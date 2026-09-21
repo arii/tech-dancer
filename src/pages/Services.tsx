@@ -162,6 +162,10 @@ const Services = () => {
         <Text as="p" variant="body" size="lg" color="main" className="font-medium max-w-3xl leading-[1.65]">
           We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
         </Text>
+
+        <Text variant="body" size="sm" weight="font-bold" className="uppercase tracking-widest text-dim mt-2">
+          ARTISTS • STYLISTS • MAKERS • INSTRUCTORS • PERFORMERS • CREATIVE STUDIOS
+        </Text>
       </Stack>
 
       <Stack gap={16} width="full">

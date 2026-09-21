@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from 'react';
 import {
   Check,
   ChevronDown,
@@ -8,9 +7,21 @@ import {
   ShoppingBag,
   Sparkles,
   TrendingUp,
-  Cpu
+  Settings,
+  CalendarDays,
+  Calendar
 } from 'lucide-react';
+import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+
+export interface CapabilityCategory {
+  id: string;
+  pillar: 'Connect' | 'Grow' | 'Automate';
+  title: string;
+  tagline: string;
+  icon: typeof Calendar;
+  features: string[];
+}
 
 export interface CoreService {
   id: string;
@@ -26,36 +37,36 @@ const services: CoreService[] = [
   {
     id: 'digital-presence',
     title: 'Website & Digital Presence',
-    description: 'A fast, polished website designed around your work, your customers, and the way your business operates.',
+    description: 'A professional online home for your work.',
     icon: Globe,
     imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
-      'Mobile-responsive design',
-      'Built to help customers find you through local search',
-      'Your own professional domain and secure hosting',
-      'Booking, contact, and customer workflows built in',
-      'Ongoing updates, maintenance, and technical support',
+      'Custom website design & development',
+      'Mobile-first, responsive design',
+      'Portfolio, services, and pricing pages',
+      'Domain setup and hosting',
+      'SEO foundation for local search',
+      'Ongoing maintenance and updates',
     ],
     price: 'Starting at $1,500',
   },
   {
-    id: 'ecommerce',
-    title: 'Ecommerce & Digital Products',
-    description: 'Sell products, digital downloads, and commissions directly from your site.',
-    icon: ShoppingBag,
+    id: 'booking',
+    title: 'Booking & Customer Workflows',
+    description: 'Let your customers book, pay, and get the information they need—automatically.',
+    icon: CalendarDays,
     imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
-      'Merchandise & physical products',
-      'Digital downloads & instant delivery',
-      'Custom orders & commission inquiries',
-      'Streamlined checkout & payment integrations',
+      '24/7 calendar availability & sync',
+      'Automated appointment scheduling',
+      'Intake questionnaires & screening',
+      'Deposit & online payment processing',
     ],
-    price: 'Pricing varies based on catalog size',
   },
   {
     id: 'marketing',
-    title: 'Marketing & Discovery',
-    description: 'Help local clients discover your work and convert into loyal customers.',
+    title: 'Marketing & Growth',
+    description: 'Get discovered, build your audience, and turn visitors into loyal customers.',
     icon: TrendingUp,
     imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
@@ -66,29 +77,42 @@ const services: CoreService[] = [
     ],
   },
   {
-    id: 'events',
-    title: 'Events & Experiences',
-    description: 'Run workshops, classes, and creative pop-ups with zero booking friction.',
-    icon: Sparkles,
+    id: 'ecommerce',
+    title: 'Ecommerce',
+    description: 'Sell products, services, and digital downloads directly from your site.',
+    icon: ShoppingBag,
     imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
-      'Workshop & class scheduling',
-      'Online registration & ticketing',
-      'Automated attendee communications',
-      'Event landing & promotion pages',
+      'Merchandise & physical products',
+      'Digital downloads & instant delivery',
+      'Custom orders & commission inquiries',
+      'Streamlined checkout & payment integrations',
     ],
   },
   {
     id: 'automation',
-    title: 'Business Automation',
-    description: 'Connect your everyday tools and eliminate hours of repetitive admin work.',
-    icon: Cpu,
+    title: 'Automation & Integrations',
+    description: 'Connect your tools and automate the repetitive work so you can focus on your craft.',
+    icon: Settings,
     imageSrc: '/assets/home/wcs-travel-pack.webp',
     features: [
       'Form-to-calendar automated workflows',
       'Lead routing & CRM/spreadsheet sync',
       'Automated client status updates',
       'Custom AI-assisted workflow engines',
+    ],
+  },
+  {
+    id: 'events',
+    title: 'Events & Experiences',
+    description: 'Run workshops, classes, and special events with ease.',
+    icon: Calendar,
+    imageSrc: '/assets/home/wcs-travel-pack.webp',
+    features: [
+      'Workshop & class scheduling',
+      'Online registration & ticketing',
+      'Automated attendee communications',
+      'Event landing & promotion pages',
     ],
   }
 ];
@@ -108,7 +132,7 @@ export const ModularPackages = () => {
         </Text>
       </Box>
 
-      <Stack gap={4}>
+      <Grid cols={{ base: 1, lg: 2 }} align="start" gap={4}>
         {services.map((service, index) => {
           const IconComp = service.icon;
           const isExpanded = expandedIndex === index;
@@ -124,16 +148,14 @@ export const ModularPackages = () => {
               {/* Clickable Header */}
               <Box
                 className="cursor-pointer"
-                padding={{ base: 6, sm: 8 }}
+                padding={6}
                 onClick={() => toggleAccordion(index)}
               >
                 <Box display="flex" justify="between" align="start" gap={4}>
                   {/* Left content */}
                   <Box display="flex" gap={4} className="flex-1">
                     <Box
-                      padding={3}
-                      radius="xl"
-                      className="bg-accent/10 text-accent shrink-0"
+                      className="text-accent shrink-0"
                     >
                       <IconComp className="w-6 h-6" />
                     </Box>
@@ -162,7 +184,7 @@ export const ModularPackages = () => {
               >
                 <div className="overflow-hidden">
                   <Box padding={{ base: 6, sm: 8 }} className="pt-0">
-                    <Grid cols={{ base: 1, md: 2 }} gap={8} className="mt-6">
+                    <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" className="mt-6">
                       {/* Left: Image */}
                       <Box
                         radius="xl"
@@ -191,7 +213,7 @@ export const ModularPackages = () => {
 
                     {/* Pricing Footer */}
                     {service.price && (
-                      <Box className="mt-8 pt-6 border-t border-line/20">
+                      <Box className="mt-6 pt-6 border-t border-line/20">
                         <Box display="flex" align="center" gap={3}>
                           <Sparkles className="w-5 h-5 text-accent" />
                           <Text variant="headline" size="lg" weight="font-bold" className="text-main">
@@ -206,9 +228,12 @@ export const ModularPackages = () => {
             </Box>
           );
         })}
-      </Stack>
+      </Grid>
     </Stack>
   );
 };
 
+
+
+// Backwards compatibility alias
 export { ModularPackages as PackagesGrid };
