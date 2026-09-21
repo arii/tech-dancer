@@ -187,7 +187,7 @@ export const ModularPackages = () => {
               <Box
                 id={`accordion-content-${service.id}`}
                 aria-labelledby={`accordion-header-${service.id}`}
-                role="region" style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: "all 300ms", willChange: "grid-template-rows, opacity" } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: "all 300ms", willChange: "grid-template-rows, opacity" }}>
+                className="motion-reduce:transition-none" role="region" style={isExpanded ? { display: "grid", gridTemplateRows: "1fr", opacity: 1, transition: "grid-template-rows 300ms, opacity 300ms", willChange: "grid-template-rows, opacity" } : { display: "grid", gridTemplateRows: "0fr", opacity: 0, transition: "grid-template-rows 300ms, opacity 300ms", willChange: "grid-template-rows, opacity" }}>
                 <Box overflow="hidden">
                   <Box paddingX={{ base: 6, sm: 8 }} paddingBottom={{ base: 6, sm: 8 }} paddingTop={0}>
                     <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={6}>
@@ -219,7 +219,7 @@ export const ModularPackages = () => {
 
                     {/* Pricing Footer */}
                     {service.price && (
-                      <Box marginTop={6} paddingTop={6} className="border-t border-line/20">
+                      <Box marginTop={6} paddingTop={4} className="border-t border-line/20">
                         <Box display="flex" align="center" gap={3}>
                           <Sparkles className="w-5 h-5 text-accent" />
                           <Text variant="headline" size="lg" weight="font-bold" className="text-main">

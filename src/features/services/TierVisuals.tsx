@@ -175,7 +175,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 ">
+            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30" marginBottom={1} display="flex" align="center" justify="center">
               <Sparkles size={14} className="text-accent-purple" />
             </Box>
             <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">Merch & Digital</Text>
@@ -188,7 +188,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 ">
+            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30" marginBottom={1} display="flex" align="center" justify="center">
               <ShoppingBag size={14} className="text-accent-sky" />
             </Box>
             <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">Google Feed</Text>
