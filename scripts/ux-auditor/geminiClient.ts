@@ -66,7 +66,7 @@ const SYNTHESIS_RESPONSE_SCHEMA = {
           id: { type: 'STRING' },
           category: {
             type: 'STRING',
-            enum: ['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM']
+            enum: ['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM', 'AI_SLOP_PRUNING']
           },
           severity: {
             type: 'STRING',
@@ -167,7 +167,7 @@ function normalizeSynthesisData(raw: any): UXAuditSynthesis {
     ? raw.issues
     : [];
 
-  const validCategories = new Set(['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM']);
+  const validCategories = new Set(['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM', 'AI_SLOP_PRUNING']);
   const validSeverities = new Set(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'POLISH']);
 
   const findings = rawFindings.map((f: any, idx: number) => {

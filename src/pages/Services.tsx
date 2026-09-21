@@ -1,4 +1,4 @@
-import { CheckCircle2, Sparkles, ArrowDown } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { CaseStudySpotlight } from '@/features/services/CaseStudySpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
@@ -88,53 +88,22 @@ const Services = () => {
 
       {/* 1. Hero Section */}
       <Stack gap={6} width="full" maxWidth="full" minWidth={0} align="center" className="text-center" marginBottom={16}>
-        <Box
-          paddingX={3.5}
-          paddingY={1}
-          radius="full"
-          border
-          className="border-accent/40 bg-accent/10 text-accent font-mono text-xs font-bold flex items-center gap-2 shadow-sm"
-        >
-          <Sparkles size={13} className="text-accent" />
-          <span>DIGITAL BUSINESS STUDIO & AUTOMATION</span>
-        </Box>
-
         <Text as="h1" variant="display" size="4xl" weight="font-black" uppercase tracking="tight" className="max-w-4xl">
-          Digital Operations & Online Booking for Independent Creatives
+          Websites and booking systems for independent studios and solo practitioners
         </Text>
 
         <Text as="p" variant="body" size="lg" color="dim" maxWidth="3xl">
-          Lightning-fast web engineering, 24/7 hands-off calendar scheduling, Google Business search optimization, and automated Google Shopping merchandise feeds.
+          Fast mobile websites, automated calendar scheduling, Google Maps search setup, and online merchandise stores.
         </Text>
 
-        {/* Core capability pills */}
-        <Box display="flex" wrap justify="center" gap={2.5} className="pt-2">
-          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
-            <CheckCircle2 size={12} className="text-accent" />
-            <span>Google Business Profile</span>
-          </Box>
-          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
-            <CheckCircle2 size={12} className="text-accent-sky" />
-            <span>Google Shopping Feeds</span>
-          </Box>
-          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
-            <CheckCircle2 size={12} className="text-success" />
-            <span>24/7 Calendar Sync</span>
-          </Box>
-          <Box paddingX={3} paddingY={1} radius="full" border className="border-line/40 bg-surface/80 text-dim text-xs font-mono flex items-center gap-1.5 shadow-sm">
-            <CheckCircle2 size={12} className="text-accent-purple" />
-            <span>Mailing List & Inquiries</span>
-          </Box>
-        </Box>
-
         {/* Hero Actions / Primary Conversion CTA */}
-        <Box display="flex" wrap justify="center" gap={4} className="pt-4">
+        <Box display="flex" wrap justify="center" gap={4} className="pt-2">
           <Button as="a" href="#intake-form" variant="primary" size="lg" className="shadow-lg">
-            Request Studio Consultation →
+            Request a Consultation →
           </Button>
           <Button as="a" href="#case-study" variant="outline" size="lg" className="flex items-center gap-2">
-            <span>Explore Hair by April Case Study</span>
-            <ArrowDown size={14} className="text-accent" />
+            <span>See Hair by April Case Study</span>
+            <ArrowDown size={14} className="text-dim" />
           </Button>
         </Box>
       </Stack>

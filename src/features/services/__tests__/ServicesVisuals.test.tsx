@@ -29,7 +29,7 @@ describe('Services Page Visual Enhancements', () => {
     expect(screen.getByText('STRIPE CONNECT')).toBeDefined();
 
     // Check standardized primary CTA buttons across all cards
-    const ctas = screen.getAllByRole('link', { name: /Request Studio Consultation/i });
+    const ctas = screen.getAllByRole('link', { name: /Request a Consultation/i });
     expect(ctas.length).toBe(3);
     ctas.forEach((cta) => {
       expect(cta.getAttribute('href')).toBe('#intake-form');
@@ -50,7 +50,7 @@ describe('Services Page Visual Enhancements', () => {
   it('renders ScopeBoundaries with what we handle vs do not handle', () => {
     render(<ScopeBoundaries />);
 
-    expect(screen.getByText('Scope Boundaries & Responsibilities')).toBeDefined();
+    expect(screen.getByText("What we handle vs. what we don't")).toBeDefined();
     expect(screen.getByText('We Handle')).toBeDefined();
     expect(screen.getByText('We Do Not Handle')).toBeDefined();
   });

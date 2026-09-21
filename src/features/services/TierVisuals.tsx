@@ -97,7 +97,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         surface="sunken"
         overflow="hidden"
         width="full"
-        className="border-accent/40 bg-surface-alt/40 shadow-inner select-none ring-1 ring-accent/20"
+        className="border-line/40 bg-surface-alt/40 shadow-inner select-none"
       >
         {/* Browser Mockup Chrome */}
         <Box
@@ -108,7 +108,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-accent/30 bg-surface/90"
+          className="border-line/30 bg-surface/90"
         >
           <Box display="flex" align="center" gap={1.5}>
             <Box width={2} height={2} radius="full" className="bg-error/60" />
@@ -120,11 +120,11 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             paddingY={0.5}
             radius="sm"
             surface="sunken"
-            className="text-[10px] font-mono text-accent truncate max-w-[140px] border border-accent/20"
+            className="text-[10px] font-mono text-dim truncate max-w-[140px] border border-line/20"
           >
             yourstudio.com/book
           </Box>
-          <Calendar size={12} className="text-accent" />
+          <Calendar size={12} className="text-dim" />
         </Box>
 
         {/* Interactive Booking Funnel Mockup */}
@@ -132,17 +132,17 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           {/* Step Indicator */}
           <Box display="flex" align="center" justify="between" paddingX={1}>
             <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-accent text-bg text-[8px] font-mono font-bold flex items-center justify-center">1</Box>
-              <Text variant="mono" size="xs" color="accent" className="text-[10px]">Service</Text>
+              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/40 text-main text-[8px] font-mono font-bold flex items-center justify-center">1</Box>
+              <Text variant="mono" size="xs" color="main" className="text-[10px]">Service</Text>
             </Box>
             <ArrowRight size={10} className="text-dim" />
             <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-accent text-bg text-[8px] font-mono font-bold flex items-center justify-center">2</Box>
-              <Text variant="mono" size="xs" color="accent" className="text-[10px]">Date</Text>
+              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/40 text-main text-[8px] font-mono font-bold flex items-center justify-center">2</Box>
+              <Text variant="mono" size="xs" color="main" className="text-[10px]">Date</Text>
             </Box>
             <ArrowRight size={10} className="text-dim" />
             <Box display="flex" align="center" gap={1}>
-              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/40 text-dim text-[8px] font-mono flex items-center justify-center">3</Box>
+              <Box width={3.5} height={3.5} radius="full" className="bg-surface-alt border border-line/30 text-dim text-[8px] font-mono flex items-center justify-center">3</Box>
               <Text variant="mono" size="xs" color="dim" className="text-[10px]">Confirm</Text>
             </Box>
           </Box>
@@ -159,8 +159,8 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
               <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">
                 OCTOBER 2026
               </Text>
-              <Box display="flex" align="center" gap={1} className="text-[9px] font-mono text-accent">
-                <Zap size={10} /> Live Sync
+              <Box display="flex" align="center" gap={1} className="text-[9px] font-mono text-dim">
+                <Zap size={10} className="text-dim" /> Live Sync
               </Box>
             </Box>
 
@@ -168,7 +168,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
               <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[9px] font-mono text-main">
                 9:00 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-accent/20 text-center border border-accent text-[9px] font-mono text-accent font-bold">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-[9px] font-mono text-main font-bold">
                 11:30 AM
               </Box>
               <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[9px] font-mono text-main line-through">
@@ -188,13 +188,13 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             display="flex"
             align="center"
             justify="between"
-            className="bg-accent/10 border border-accent/30 text-[9px] font-mono text-accent"
+            className="bg-surface-alt/60 border border-line/30 text-[9px] font-mono text-dim"
           >
             <Box display="flex" align="center" gap={1.5}>
-              <ShieldCheck size={11} className="text-accent" />
+              <ShieldCheck size={11} className="text-dim" />
               <span>Auto-SMS & Calendar Sync Enabled</span>
             </Box>
-            <span className="font-bold">Active</span>
+            <span className="font-bold text-main">Active</span>
           </Box>
         </Stack>
       </Box>

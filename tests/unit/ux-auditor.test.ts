@@ -118,6 +118,26 @@ describe('UX Auditor: Zod Schemas', () => {
     const parsed = UXAuditSynthesisSchema.parse(validSynthesis);
     expect(parsed.overallScore).toBe(88);
     expect(parsed.findings[0].category).toBe('RESPONSIVE_LAYOUT');
+
+    const slopFinding = {
+      overallScore: 75,
+      summaryMarkdown: 'Page suffers from pill badge overload.',
+      findings: [
+        {
+          id: 'UX-02',
+          category: 'AI_SLOP_PRUNING' as const,
+          severity: 'MEDIUM' as const,
+          title: 'Redundant hero pill badges echo subheadline',
+          description: 'Row of 4 checkmark badges merely repeats the preceding paragraph.',
+          elementSelector: 'section#hero .badge-row',
+          recommendedFix: 'Remove badge row to increase data-ink ratio.',
+          suggestedTailwindSnippet: '--- a/src/pages/Services.tsx\n+++ b/src/pages/Services.tsx\n@@ -1,4 +1,0 @@\n-<div className="badge-row">...</div>'
+        }
+      ]
+    };
+
+    const parsedSlop = UXAuditSynthesisSchema.parse(slopFinding);
+    expect(parsedSlop.findings[0].category).toBe('AI_SLOP_PRUNING');
   });
 });
 

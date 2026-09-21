@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Shield, Sparkles } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
 export function IntakeForm() {
@@ -68,11 +68,8 @@ export function IntakeForm() {
 
   if (status === 'success') {
     return (
-      <Box border radius="2xl" padding={12} surface="accent" className="text-center bg-gradient-to-b from-surface to-surface-alt/80 border-accent/40 shadow-xl">
+      <Box border radius="2xl" padding={12} surface="default" className="text-center border-line/40 bg-surface/50 shadow-md">
         <Stack gap={4} align="center">
-          <Box width={12} height={12} radius="full" className="bg-accent/20 border border-accent/40 flex items-center justify-center text-accent">
-            <Sparkles size={24} />
-          </Box>
           <Text variant="headline" size="2xl" weight="font-bold">Thank You for Reaching Out!</Text>
           <Text variant="body" size="lg" color="dim" maxWidth="xl">
             We will review your business requirements and reply promptly to coordinate an operational consultation.
@@ -100,39 +97,27 @@ export function IntakeForm() {
       surface="default"
       maxWidth="3xl"
       marginX="auto"
-      className="border-line/60 bg-gradient-to-b from-surface to-surface-alt/40 shadow-xl relative"
+      className="border-line/40 bg-surface/50 shadow-md relative"
     >
       <Stack gap={8}>
-        <Stack gap={3} className="text-center">
-          <Box display="flex" align="center" justify="center" gap={2}>
-            <Box
-              paddingX={3}
-              paddingY={1}
-              radius="full"
-              border
-              className="border-accent/40 bg-accent/10 text-accent font-mono text-xs font-bold flex items-center gap-1.5"
-            >
-              <Send size={12} />
-              <span>STUDIO INTAKE & INQUIRY</span>
-            </Box>
-          </Box>
-          <Text as="h2" variant="headline" size="3xl" weight="font-bold">Request Studio Consultation</Text>
-          <Text variant="body" size="md" color="dim">Tell us about your practice, current bottlenecks, and scheduling goals.</Text>
+        <Stack gap={2} className="text-center">
+          <Text as="h2" variant="headline" size="3xl" weight="font-bold">Request a Consultation</Text>
+          <Text variant="body" size="md" color="dim">Tell us about your practice, current scheduling setup, and goals.</Text>
 
           {/* 2-Step Progress Indicator */}
-          <Box className="pt-2 max-w-sm mx-auto w-full">
+          <Box className="pt-3 max-w-sm mx-auto w-full">
             <Box display="flex" justify="between" align="center" className="text-xs font-mono mb-2">
-              <span className={step === 1 ? "text-accent font-bold" : "text-dim"}>
+              <span className={step === 1 ? "text-main font-bold" : "text-dim"}>
                 1. Studio & Contact
               </span>
-              <span className={step === 2 ? "text-accent font-bold" : "text-dim"}>
+              <span className={step === 2 ? "text-main font-bold" : "text-dim"}>
                 2. Focus & Scope
               </span>
             </Box>
             <Box width="full" height={1.5} radius="full" className="bg-surface-alt overflow-hidden border border-line/30">
               <Box
                 height="full"
-                className={`bg-accent transition-all duration-300 ${step === 1 ? 'w-1/2' : 'w-full'}`}
+                className={`bg-main transition-all duration-300 ${step === 1 ? 'w-1/2' : 'w-full'}`}
               />
             </Box>
           </Box>
@@ -253,7 +238,7 @@ export function IntakeForm() {
                       <label
                         key={focus}
                         className={`cursor-pointer border p-3 rounded-lg bg-surface-alt/30 transition-colors flex items-center gap-3 ${
-                          formData.challenge === focus ? 'border-accent ring-1 ring-accent/30 bg-accent/5' : 'border-line/40 hover:border-accent/50'
+                          formData.challenge === focus ? 'border-line/80 bg-surface-alt/60' : 'border-line/30 hover:border-line/60'
                         }`}
                       >
                         <input
@@ -262,7 +247,7 @@ export function IntakeForm() {
                           value={focus}
                           checked={formData.challenge === focus}
                           onChange={handleChange}
-                          className="text-accent focus:ring-accent/50 w-4 h-4 bg-surface-alt/50 border-line/30"
+                          className="w-4 h-4 bg-surface-alt/50 border-line/30"
                         />
                         <span className="text-xs font-medium text-main">{focus}</span>
                       </label>
@@ -316,9 +301,9 @@ export function IntakeForm() {
                   size="lg"
                   width="full"
                   disabled={status === 'submitting'}
-                  className="shadow-lg"
+                  className="shadow-md"
                 >
-                  {status === 'submitting' ? 'Submitting Request...' : 'Submit Consultation Request →'}
+                  {status === 'submitting' ? 'Submitting Request...' : 'Request a Consultation →'}
                 </Button>
               </Grid>
             </Stack>

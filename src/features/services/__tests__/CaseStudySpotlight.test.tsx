@@ -8,30 +8,28 @@ describe('CaseStudySpotlight Component', () => {
     cleanup();
   });
 
-  it('renders the case study spotlight with headline, story, integrated workflow, and live proof image', () => {
+  it('renders the case study spotlight with headline, story, booking flow description, and live proof image', () => {
     render(
       <MemoryRouter>
         <CaseStudySpotlight />
       </MemoryRouter>
     );
 
-    // Section title & badges
-    expect(screen.getByText('LIVE CLIENT PROOF')).toBeDefined();
+    // Section title & human description (no emoji/caps badges)
+    expect(screen.queryByText('LIVE CLIENT PROOF')).toBeNull();
     expect(screen.getByText('Case Study: Hair by April')).toBeDefined();
-    expect(screen.getByText(/How a top San Francisco curly hair specialist/i)).toBeDefined();
+    expect(screen.getByText(/How a San Francisco curly hair specialist moved from manual Instagram DMs/i)).toBeDefined();
 
     // Before & After comparison
     expect(screen.getByText('The Friction Before')).toBeDefined();
-    expect(screen.getByText(/Manual messaging across DMs/i)).toBeDefined();
+    expect(screen.getByText(/Coordinating open time slots over direct messages/i)).toBeDefined();
     expect(screen.getByText('The Solution Built')).toBeDefined();
-    expect(screen.getByText(/Custom mobile-first portfolio/i)).toBeDefined();
+    expect(screen.getByText(/A mobile-first website where clients book directly/i)).toBeDefined();
 
-    // Integrated Production Workflow
-    expect(screen.getByText('The Production System Hair by April Runs On')).toBeDefined();
-    expect(screen.getByText('Smart Intake')).toBeDefined();
-    expect(screen.getByText('Live Calendar Lock')).toBeDefined();
-    expect(screen.getByText('Instant Confirmation')).toBeDefined();
-    expect(screen.getByText('Automated Reminders')).toBeDefined();
+    // Single-Sentence Client Booking Flow (replaces 4 fragmented cards)
+    expect(screen.getByText(/How the booking process works:/i)).toBeDefined();
+    expect(screen.getByText(/When a client books, they choose an open slot on your calendar/i)).toBeDefined();
+    expect(screen.queryByText('The Production System Hair by April Runs On')).toBeNull();
 
     // Verify hallucinated numbers are completely absent
     expect(screen.queryByText(/5\+ hours saved weekly/i)).toBeNull();

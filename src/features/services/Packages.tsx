@@ -1,4 +1,4 @@
-import { Check, Sparkles } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { TierVisual } from './TierVisuals';
 
@@ -18,27 +18,20 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
       border
       radius="2xl"
       padding={8}
-      surface={popular ? "accent" : "default"}
-      className={popular ? "border-accent ring-2 ring-accent/20 scale-100 lg:scale-105 z-10 shadow-xl" : "border-line/50 shadow-md"}
+      surface="default"
+      className="border-line/40 bg-surface/50 shadow-sm"
     >
       <Stack gap={6} flex={1}>
         <Stack gap={2}>
           {clientProofBadge ? (
             <Box
-              paddingX={3}
-              paddingY={1}
+              paddingX={2.5}
+              paddingY={0.5}
               radius="full"
               border
-              className="bg-accent/15 border-accent/40 text-accent font-mono text-xs font-bold w-fit flex items-center gap-1.5 shadow-sm"
+              className="bg-surface-alt/60 border-line/30 text-dim font-mono text-[11px] w-fit"
             >
-              <Sparkles size={12} className="text-accent" />
               <span>{clientProofBadge}</span>
-            </Box>
-          ) : popular ? (
-            <Box paddingX={3} paddingY={1} className="bg-bg w-fit rounded-full border border-accent/30 shadow-sm">
-              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase>
-                Most Popular
-              </Text>
             </Box>
           ) : null}
           <Text as="h3" variant="headline" size="2xl" weight="font-bold">{title}</Text>
@@ -60,7 +53,7 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
           {features.slice(0, 3).map((feature, i) => (
             <Box as="li" key={i} display="flex" gap={3} align="start">
               <Box shrink={false} marginTop={1}>
-                <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
+                <Check className="w-4 h-4 text-dim" />
               </Box>
               <Text variant="body" size="sm" color="main">{feature}</Text>
             </Box>
@@ -72,7 +65,7 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
               {features.slice(3).map((feature, i) => (
                 <Box as="li" key={`sec-desktop-${i}`} display="flex" gap={3} align="start" className="hidden md:flex">
                   <Box shrink={false} marginTop={1}>
-                    <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
+                    <Check className="w-4 h-4 text-dim" />
                   </Box>
                   <Text variant="body" size="sm" color="main">{feature}</Text>
                 </Box>
@@ -81,7 +74,7 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
               {/* Mobile view: progressive disclosure toggle */}
               <Box as="li" className="md:hidden list-none pt-1">
                 <details className="group/details">
-                  <summary className="cursor-pointer text-xs font-mono text-accent hover:text-accent-sky focus:outline-none focus:ring-1 focus:ring-accent rounded flex items-center gap-1.5 py-1 select-none">
+                  <summary className="cursor-pointer text-xs font-mono text-dim hover:text-main focus:outline-none focus:ring-1 focus:ring-accent rounded flex items-center gap-1.5 py-1 select-none">
                     <span className="group-open/details:hidden">+ Show {features.length - 3} more features</span>
                     <span className="hidden group-open/details:inline">− Show fewer features</span>
                   </summary>
@@ -89,7 +82,7 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
                     {features.slice(3).map((feature, i) => (
                       <Box key={`sec-mobile-${i}`} display="flex" gap={3} align="start">
                         <Box shrink={false} marginTop={1}>
-                          <Check className={`w-4 h-4 ${popular ? 'text-accent' : 'text-accent-sky'}`} />
+                          <Check className="w-4 h-4 text-dim" />
                         </Box>
                         <Text variant="body" size="sm" color="main">{feature}</Text>
                       </Box>
@@ -101,8 +94,8 @@ const PackageCard = ({ tier, title, price, popular, clientProofBadge, bestFor, f
           )}
         </Stack>
 
-        <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4} className="shadow-md">
-          Request Studio Consultation
+        <Button as="a" href="#intake-form" variant={popular ? "primary" : "outline"} width="full" marginTop={4} className="shadow-sm">
+          Request a Consultation
         </Button>
       </Stack>
     </Stack>
@@ -162,10 +155,10 @@ export const PackagesGrid = () => {
 
 export const ScopeBoundaries = () => {
   return (
-    <Box border radius="2xl" padding={8} surface="default" className="border-line/50 bg-surface/50 shadow-md">
+    <Box border radius="2xl" padding={8} surface="default" className="border-line/40 bg-surface/50 shadow-sm">
       <Stack gap={6}>
         <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-center">
-          Scope Boundaries & Responsibilities
+          What we handle vs. what we don't
         </Text>
         <Grid cols={{ base: 1, md: 2 }} gap={8}>
           <Stack gap={4}>

@@ -10,8 +10,8 @@ describe('IntakeForm Component', () => {
   it('renders Step 1 with required inputs and step progress indicator', () => {
     render(<IntakeForm />);
 
-    expect(screen.getByText('STUDIO INTAKE & INQUIRY')).toBeDefined();
-    expect(screen.getByText('Request Studio Consultation')).toBeDefined();
+    expect(screen.queryByText('STUDIO INTAKE & INQUIRY')).toBeNull();
+    expect(screen.getByText('Request a Consultation')).toBeDefined();
     expect(screen.getByText('1. Studio & Contact')).toBeDefined();
     expect(screen.getByText('2. Focus & Scope')).toBeDefined();
 
@@ -37,7 +37,7 @@ describe('IntakeForm Component', () => {
     expect(screen.getByText('Primary Operational Focus')).toBeDefined();
     expect(screen.getByLabelText(/Current Website or Social Handle/i)).toBeDefined();
     expect(screen.getByLabelText(/Project Scope & Notes/i)).toBeDefined();
-    expect(screen.getByRole('button', { name: /Submit Consultation Request/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Request a Consultation/i })).toBeDefined();
 
     // Go back to Step 1
     fireEvent.click(screen.getByRole('button', { name: /Back to Contact Info/i }));

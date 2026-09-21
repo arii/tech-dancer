@@ -22,7 +22,8 @@ export const UXFindingSchema = z.object({
     'RESPONSIVE_LAYOUT',
     'ACCESSIBILITY',
     'CONTENT_DENSITY',
-    'DESIGN_SYSTEM'
+    'DESIGN_SYSTEM',
+    'AI_SLOP_PRUNING'
   ]),
   severity: z.enum(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'POLISH']),
   title: z.string(),
