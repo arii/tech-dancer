@@ -19,10 +19,10 @@ export const ClientSpotlight = () => {
         {/* Left Column: Vertically Centered Story & Actions */}
         <Stack gap={5} justify="center">
           <Stack gap={3}>
-            <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main tracking-[0.01em]">
+            <Text as="h2" variant="headline" size="2xl" weight="font-bold" className="text-main">
               See it in action: Hair by April
             </Text>
-            <Text variant="body" size="sm" color="main" className="leading-[1.65]">
+            <Text variant="body" size="sm" color="main" className="leading-relaxed">
               We built a mobile-first website for Hair by April that brings together services, pricing, appointment booking, and customer intake.
             </Text>
 
@@ -32,23 +32,23 @@ export const ClientSpotlight = () => {
               radius="lg"
               padding={4}
               surface="default"
-              className="border-line/20 bg-surface/80 my-2"
+              className="border-line/20 bg-surface/80" marginY={2}
             >
-              <Text variant="body" size="xs" weight="font-semibold" className="text-[11px] font-sans uppercase mb-2 block tracking-wider text-dim">
+              <Text variant="body" size="xs" weight="font-semibold" className="font-sans uppercase block tracking-wider text-dim" marginBottom={2} >
                 How customers interact:
               </Text>
-              <Text variant="body" size="xs" color="main" className="font-medium leading-[1.6]">
-                Find the business <span className="text-accent mx-1">→</span> Explore services <span className="text-accent mx-1">→</span> Choose an available time <span className="text-accent mx-1">→</span> Submit their information <span className="text-accent mx-1">→</span> Receive confirmation
+              <Text variant="body" size="xs" color="main" className="font-medium leading-relaxed">
+                Find the business <Box as="span" className="text-accent" marginX={1}>→</Box> Explore services <Box as="span" className="text-accent" marginX={1}>→</Box> Choose an available time <Box as="span" className="text-accent" marginX={1}>→</Box> Submit their information <Box as="span" className="text-accent" marginX={1}>→</Box> Receive confirmation
               </Text>
             </Box>
 
-            <Text variant="body" size="xs" color="dim" className="leading-[1.6]">
+            <Text variant="body" size="xs" color="dim" className="leading-relaxed">
               No back-and-forth messages. No manually checking availability.
             </Text>
           </Stack>
 
           {/* Action link */}
-          <Box display="flex" align="center" gap={3} className="pt-1">
+          <Box display="flex" align="center" gap={3} paddingTop={1}>
             <Button
               as="a"
               href="https://hairbyapril.pages.dev/"
@@ -58,7 +58,7 @@ export const ClientSpotlight = () => {
               size="md"
               className="shadow-sm font-medium"
             >
-              Visit the live client site <ArrowUpRight size={14} className="ml-1.5" />
+              Visit the live client site <ArrowUpRight size={14} marginLeft={1.5} />
             </Button>
           </Box>
         </Stack>
@@ -72,11 +72,11 @@ export const ClientSpotlight = () => {
             surface="sunken"
             className="border-line/30 shadow-md relative bg-surface-alt w-full"
           >
-            <Box className="relative w-full aspect-[16/10] overflow-hidden">
+            <Box className="relative w-full overflow-hidden" aspect="16/10">
               <img
                 src={imgSrc}
                 alt="Hair by April Live Website & Booking"
-                className="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform duration-300"
+                className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
                 loading="lazy"
               />
             </Box>

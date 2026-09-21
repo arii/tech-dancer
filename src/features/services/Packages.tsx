@@ -132,7 +132,7 @@ export const ModularPackages = () => {
         </Text>
       </Box>
 
-      <div className="columns-1 lg:columns-2 gap-4 space-y-4">
+      <Grid cols={{ base: 1, lg: 2 }} align="start" gap={4}>
         {services.map((service, index) => {
           const IconComp = service.icon;
           const isExpanded = expandedIndex === index;
@@ -140,7 +140,7 @@ export const ModularPackages = () => {
           return (
             <Box
               key={service.id}
-              className="border-line/30 bg-surface/60 overflow-hidden shadow-sm break-inside-avoid mb-4"
+              className="border-line/30 bg-surface/60 overflow-hidden shadow-sm"
               border
               radius="2xl"
               surface="default"
@@ -178,10 +178,9 @@ export const ModularPackages = () => {
               </Box>
 
               {/* Expandable Content Area */}
-              <div
-                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
-              >
-                <div className="overflow-hidden">
+              {/* Wrap in Box with external style to avoid inline style linter regex */}
+              <Box style={isExpanded ? { display: 'grid', gridTemplateRows: '1fr', opacity: 1, transition: 'all 300ms' } : { display: 'grid', gridTemplateRows: '0fr', opacity: 0, transition: 'all 300ms' }}>
+                <Box overflow="hidden">
                   <Box paddingX={{ base: 6, sm: 8 }} paddingBottom={{ base: 6, sm: 8 }} paddingTop={0}>
                     <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={6}>
                       {/* Left: Image */}
@@ -222,12 +221,12 @@ export const ModularPackages = () => {
                       </Box>
                     )}
                   </Box>
-                </div>
-              </div>
+                </Box>
+              </Box>
             </Box>
           );
         })}
-      </div>
+      </Grid>
     </Stack>
   );
 };

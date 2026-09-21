@@ -1,5 +1,5 @@
 import { Globe, Calendar, ShoppingBag, Sparkles, ShieldCheck, Zap, Search } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 export interface TierVisualProps {
   tier: 'presence' | 'booked' | 'growth';
@@ -25,7 +25,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
+          className="border-line/30 bg-surface/80 text-xs font-mono text-dim"
         >
           <span className="font-semibold text-main">yourstudio.com</span>
           <Globe size={13} className="text-dim/70" />
@@ -41,16 +41,16 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/20 bg-surface/90"
           >
-            <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-accent mb-1 font-semibold">
+            <Box display="flex" align="center" gap={1} className="text-xs font-mono text-accent font-semibold" marginBottom={1}>
               <Search size={12} /> Google Search Verified
             </Box>
             <Text variant="headline" size="xs" weight="font-bold" color="accent-sky" className="truncate text-xs">
               Your Studio · San Francisco, CA
             </Text>
-            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1 mt-1">
+            <Text variant="body" size="xs" color="dim" className="text-xs line-clamp-1" marginTop={1}>
               Custom responsive website, verified map listing, and client intake.
             </Text>
-            <Box marginTop={1} className="text-[9px] font-mono text-dim/80">
+            <Box marginTop={1} className="text-xs font-mono text-dim/80">
               Illustrative local search setup
             </Box>
           </Box>
@@ -78,7 +78,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           display="flex"
           align="center"
           justify="between"
-          className="border-line/30 bg-surface/90 text-[11px] font-mono text-dim"
+          className="border-line/30 bg-surface/90 text-xs font-mono text-dim"
         >
           <span className="font-semibold text-main">yourstudio.com/book</span>
           <Calendar size={13} className="text-dim" />
@@ -98,25 +98,25 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
               <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">
                 OCTOBER 2026
               </Text>
-              <Box display="flex" align="center" gap={1} className="text-[10px] font-mono text-dim">
+              <Box display="flex" align="center" gap={1} className="text-xs font-mono text-dim">
                 <Zap size={11} className="text-accent" /> Real-Time Sync
               </Box>
             </Box>
 
-            <Box display="grid" className="grid-cols-4 gap-1.5">
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
+            <Grid cols={4} gap={1.5}>
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-xs font-mono text-main">
                 9:00 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-[10px] font-mono text-main font-bold">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/40 text-xs font-mono text-main font-bold">
                 11:30 AM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-[10px] font-mono text-main line-through">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/30 text-xs font-mono text-main line-through">
                 1:00 PM
               </Box>
-              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-[10px] font-mono text-main">
+              <Box paddingY={1} radius="xs" className="bg-surface-alt text-center border border-line/20 text-xs font-mono text-main">
                 3:30 PM
               </Box>
-            </Box>
+            </Grid>
           </Box>
 
           {/* Automated Notification Badge */}
@@ -127,7 +127,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             display="flex"
             align="center"
             justify="between"
-            className="bg-surface-alt/60 border border-line/30 text-[10px] font-mono text-dim"
+            className="bg-surface-alt/60 border border-line/30 text-xs font-mono text-dim"
           >
             <Box display="flex" align="center" gap={1.5}>
               <ShieldCheck size={12} className="text-success" />
@@ -158,7 +158,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
         display="flex"
         align="center"
         justify="between"
-        className="border-line/30 bg-surface/80 text-[11px] font-mono text-dim"
+        className="border-line/30 bg-surface/80 text-xs font-mono text-dim"
       >
         <span className="font-semibold text-main">yourstudio.com/store</span>
         <ShoppingBag size={13} className="text-accent-sky" />
@@ -167,7 +167,7 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
       {/* Multi-tier Store & Google Shopping Feed Visual */}
       <Stack padding={3} gap={2}>
         {/* Store Grid Preview */}
-        <Box display="grid" className="grid-cols-2 gap-2">
+        <Grid cols={2} gap={2}>
           <Box
             surface="default"
             radius="md"
@@ -175,10 +175,10 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 mb-1 flex items-center justify-center">
+            <Box width="full" height={8} radius="xs" className="bg-accent-purple/20 border border-accent-purple/30 ">
               <Sparkles size={14} className="text-accent-purple" />
             </Box>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Merch & Digital</Text>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">Merch & Digital</Text>
           </Box>
 
           <Box
@@ -188,12 +188,12 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
             border
             className="border-line/30 bg-surface/80 text-center"
           >
-            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 mb-1 flex items-center justify-center">
+            <Box width="full" height={8} radius="xs" className="bg-accent-sky/20 border border-accent-sky/30 ">
               <ShoppingBag size={14} className="text-accent-sky" />
             </Box>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-[10px]">Google Feed</Text>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className="text-xs">Google Feed</Text>
           </Box>
-        </Box>
+        </Grid>
 
         {/* Revenue Analytics Status */}
         <Box
@@ -201,10 +201,10 @@ export const TierVisual = ({ tier }: TierVisualProps) => {
           padding={2}
           surface="default"
           border
-          className="border-line/30 flex items-center justify-between"
+          className="border-line/30" display="flex" align="center" justify="between"
         >
-          <Text variant="mono" size="xs" color="dim" className="text-[10px]">Direct Deposit Active</Text>
-          <Box paddingX={1.5} paddingY={0.5} radius="xs" className="bg-success/20 border border-success/30 flex items-center justify-center text-[9px] font-mono text-success font-bold">
+          <Text variant="mono" size="xs" color="dim" className="text-xs">Direct Deposit Active</Text>
+          <Box paddingX={1.5} paddingY={0.5} radius="xs" className="bg-success/20 border border-success/30 text-xs font-mono text-success font-bold" display="flex" align="center" justify="center">
             STRIPE CONNECT
           </Box>
         </Box>
