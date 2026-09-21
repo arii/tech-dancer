@@ -1,4 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, devices } from '@playwright/test';
 import { assertVisualMatch } from './utils/visual-helpers';
 
 test.use({ ...devices['Pixel 5'] });

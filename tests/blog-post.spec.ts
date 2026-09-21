@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/visual';
+import { test } from './fixtures/visual';
 import { assertVisualMatch } from './utils/visual-helpers';
 
 test('visual comparison for event-travel-packing', async ({ page }) => {
