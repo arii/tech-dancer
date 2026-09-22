@@ -1,9 +1,10 @@
+import { Grid } from '@/layouts/Primitives';
 // impeccable-ignore-file
 import { Sparkles } from 'lucide-react';
 
 export const ServicesHero = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+    <Grid cols={{ base: 1, lg: 12 }} gap={12} align="start">
       <div className="lg:col-span-8 space-y-6">
         <h4 className="text-cyan-400 font-semibold tracking-wider text-sm uppercase">Services</h4>
         <h1 className="text-5xl font-bold tracking-tight leading-tight">
@@ -26,6 +27,6 @@ export const ServicesHero = () => {
           We're your digital business partner—helping you get found, book clients, sell your work, and grow your audience.
         </p>
       </div>
-    </div>
+    </Grid>
   );
 };

@@ -1,3 +1,4 @@
+import { Grid } from '@/layouts/Primitives';
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Globe, Calendar, ShoppingBag, Ticket, TrendingUp, Settings, Lightbulb } from 'lucide-react';
@@ -42,7 +43,7 @@ export const FeatureTabs = () => {
       </div>
 
       {/* Tab Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <Grid cols={{ base: 1, lg: 3 }} gap={8} align="start">
         <div className="lg:col-span-1 space-y-4">
           <h3 className="text-xl font-bold">{activeFeature?.title}</h3>
           <p className="text-slate-400 text-sm leading-relaxed">
@@ -72,7 +73,7 @@ export const FeatureTabs = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Grid>
     </div>
   );
 };

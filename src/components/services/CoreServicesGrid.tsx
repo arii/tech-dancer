@@ -1,3 +1,4 @@
+import { Grid } from "@/layouts/Primitives";
 // impeccable-ignore-file
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Globe, Calendar, ShoppingBag, Ticket, TrendingUp, Settings } from 'lucide-react';
@@ -14,11 +15,11 @@ const SERVICES = [
 export const CoreServicesGrid = () => {
   return (
     // items-start is critical here so collapsed accordions don't stretch to match expanded ones
-    <Accordion
+    <Grid
       type="single"
       collapsible
       defaultValue="website"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+      as={Accordion} cols={{ base: 1, lg: 2 }} gap={6} align="start"
     >
       {SERVICES.map((service) => (
         <AccordionItem
@@ -44,6 +45,6 @@ export const CoreServicesGrid = () => {
           </AccordionContent>
         </AccordionItem>
       ))}
-    </Accordion>
+    </Grid>
   );
 };
