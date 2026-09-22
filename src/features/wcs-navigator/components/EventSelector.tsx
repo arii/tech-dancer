@@ -12,7 +12,7 @@ export interface EventSelectorProps {
 export const EventSelector = ({
   selectedEventId,
   onSelectEvent
-}) => {
+}: EventSelectorProps) => {
   const selectedEvent = CALIFORNIA_2026_EVENTS.find(e => e.id === selectedEventId) || CALIFORNIA_2026_EVENTS[0];
 
   return (

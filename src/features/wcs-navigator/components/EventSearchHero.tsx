@@ -276,7 +276,6 @@ export const EventSearchHero: React.FC<EventSearchHeroProps> = ({
   );
 };
 
-export default EventSearchHero;
 
 
 
