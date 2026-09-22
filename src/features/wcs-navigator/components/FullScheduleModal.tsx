@@ -334,4 +334,3 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
   );
 };
 
-export default FullScheduleModal;

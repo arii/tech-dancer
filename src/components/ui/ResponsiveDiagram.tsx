@@ -265,4 +265,3 @@ export const ResponsiveDiagram: React.FC<ResponsiveDiagramProps> = ({
   );
 };
 
-export default ResponsiveDiagram;

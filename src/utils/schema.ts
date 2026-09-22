@@ -144,8 +144,6 @@ export interface SchemaItemList {
   "itemListElement": SchemaListItem[];
 }
 
-export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may earn from qualifying purchases.";
-
 export const DEFAULT_BRAND: SchemaBrand = {
   "@type": "Brand",
   "name": "BoomTick"

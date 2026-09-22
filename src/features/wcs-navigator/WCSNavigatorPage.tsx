@@ -450,5 +450,4 @@ export const WCSNavigatorPage: React.FC = () => {
   );
 };
 
-export default WCSNavigatorPage;
 
