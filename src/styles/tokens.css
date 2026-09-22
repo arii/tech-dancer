@@ -1,31 +1,9 @@
 /* Design Token Registry for BoomTick UI */
 :root {
   /* Colors - High-Tech Dark Theme Refined */
-  --raw-color-bg: #020617; /* impeccable-ignore */
-  --raw-color-surface: #0f172a; /* impeccable-ignore */
-  --raw-color-surface-alt: #1e293b; /* impeccable-ignore */
-  --raw-color-line: #334155; /* impeccable-ignore */
-  --raw-color-accent: #22d3ee; /* impeccable-ignore */
-  --raw-color-accent-sky: #38bdf8; /* impeccable-ignore */
-  --raw-color-accent-purple: #a78bfa; /* impeccable-ignore */
-  --raw-color-accent-magenta: #e879f9; /* impeccable-ignore */
-  --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
-  --raw-color-accent-navy: #f1f5f9; /* impeccable-ignore */
-  --raw-color-accent-brand: #22d3ee; /* impeccable-ignore */
-  --raw-color-text-main: #f1f5f9; /* impeccable-ignore */
-  --raw-color-text-body: #e2e8f0; /* impeccable-ignore */
-  --raw-color-text-dim: #cbd5e1; /* impeccable-ignore */
-  --raw-color-error: #ef4444; /* impeccable-ignore */
-  --raw-color-error-bg: #1a0a0a; /* impeccable-ignore */
-
-  /* Brand Palette Extension */
-  --raw-color-brand-green: #34d399; /* impeccable-ignore */
-  --raw-color-brand-amber: #fbbf24; /* impeccable-ignore */
-  --raw-color-brand-terminal-red: #ff5f56; /* impeccable-ignore */
-  --raw-color-brand-terminal-yellow: #ffbd2e; /* impeccable-ignore */
-  --raw-color-brand-terminal-green: #27c93f; /* impeccable-ignore */
-
-  /* Banner Support */
+  --raw-color-bg: #020617; --raw-color-surface: #0f172a; --raw-color-surface-alt: #1e293b; --raw-color-line: #334155; --raw-color-accent: #22d3ee; --raw-color-accent-sky: #38bdf8; --raw-color-accent-purple: #a78bfa; --raw-color-accent-magenta: #e879f9; --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
+  --raw-color-accent-navy: #f1f5f9; --raw-color-accent-brand: #22d3ee; --raw-color-text-main: #f1f5f9; --raw-color-text-body: #e2e8f0; --raw-color-text-dim: #cbd5e1; --raw-color-error: #ef4444; --raw-color-error-bg: #1a0a0a; /* Brand Palette Extension */
+  --raw-color-brand-green: #34d399; --raw-color-brand-amber: #fbbf24; --raw-color-brand-terminal-red: #ff5f56; --raw-color-brand-terminal-yellow: #ffbd2e; --raw-color-brand-terminal-green: #27c93f; /* Banner Support */
   --color-background-secondary: var(--raw-color-surface-alt);
   --color-text-primary: var(--raw-color-text-main);
   --color-text-secondary: var(--raw-color-text-body);
@@ -46,7 +24,7 @@
   --raw-radius-md: 0.75rem;
   --raw-radius-lg: 1rem;
   --raw-radius-xl: 1rem;
-  --raw-radius-full: 9999px /* impeccable-ignore */;
+  --raw-radius-full: 9999px
 
   /* Spacing */
   --raw-spacing-container-sm: 1.5rem;
