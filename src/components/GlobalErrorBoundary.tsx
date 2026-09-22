@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useEffect } from 'react';
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -41,7 +40,7 @@ export function GlobalErrorBoundary() {
       padding={6}
       surface="main"
     >
-      <Stack gap={8} align="center" maxWidth="2xl" className="text-center">
+      <Stack gap={8} align="center" maxWidth="2xl" textAlign="center">
         <Box
           padding={4}
           radius="full"
@@ -65,9 +64,13 @@ export function GlobalErrorBoundary() {
           radius="md"
           surface="sunken"
           width="full"
-          className="text-left border border-line/50 overflow-auto max-h-[300px]"
+          maxHeight={72}
+          overflow="auto"
+          textAlign="left"
+          border
+          className="border-line/50"
         >
-          <Text weight="bold" color="error" className="mb-2 block">
+          <Text weight="bold" color="error" marginBottom={2} display="block">
             {errorMessage}
           </Text>
           {!isProduction && errorDetail && (

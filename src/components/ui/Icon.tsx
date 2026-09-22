@@ -1,8 +1,21 @@
-// impeccable-ignore-file
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { opacity as opacityTokens } from "@/styles/design-tokens"
+
+const OPACITY_CLASS_MAP: Record<keyof typeof opacityTokens, string> = {
+  none: "opacity-0",
+  ghost: "opacity-10",
+  low: "opacity-20",
+  medium: "opacity-30",
+  subtle: "opacity-40",
+  muted: "opacity-50",
+  dim: "opacity-60",
+  high: "opacity-70",
+  heavy: "opacity-80",
+  solid: "opacity-90",
+  full: "opacity-100",
+};
 
 const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
   variants: {
@@ -40,8 +53,7 @@ export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, op
     <span
       className={cn(
         iconVariants({ size, color }),
-        // impeccable-ignore - Using design tokens via JIT for dynamic opacity
-        opacityVariant && `opacity-[${opacityTokens[opacityVariant]}]`,
+        opacityVariant && OPACITY_CLASS_MAP[opacityVariant],
         className
       )}
       {...props}
