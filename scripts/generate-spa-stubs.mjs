@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { parse } from 'yaml';
+import { JSDOM } from 'jsdom';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 import { routes as ROUTE_CONFIGS } from '../src/config/routes.ts';
 import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
@@ -151,19 +152,22 @@ function getRouteMetadata(route) {
   };
 }
 
-function cleanInjectedHead(html) {
-  return html
-    .replace(/<title[\s\S]*?<\/title>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?name=["']description["'][^>]*\/?>\s*/gi, '')
-    .replace(/<link\s+[^>]*?rel=["']canonical["'][^>]*\/?>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?property=["']og:[^"']*["'][^>]*\/?>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?name=["']twitter:[^"']*["'][^>]*\/?>\s*/gi, '')
-    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '')
-    .replace(/<link\s+[^>]*?rel=["']preload["'][^>]*?as=["']image["'][^>]*\/?>\s*/gi, '');
-}
+function cleanInjectedHtml(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
 
-function cleanInjectedRoot(html) {
-  return html.replace(/<div id="root"><h1 class="sr-only".*?><\/h1><\/div>/gi, '<div id="root"></div>');
+  const toRemove = doc.head.querySelectorAll(
+    'title, meta[name="description"], link[rel="canonical"], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"], link[rel="preload"][as="image"]'
+  );
+  toRemove.forEach(el => el.remove());
+
+  const rootEl = doc.getElementById('root');
+  if (rootEl) {
+    const h1 = rootEl.querySelector('h1.sr-only');
+    if (h1) h1.remove();
+  }
+
+  return dom.serialize();
 }
 
 function escapeHtml(str) {
@@ -177,19 +181,19 @@ function escapeHtml(str) {
 
 function getPreRenderHeading(meta) {
   if (meta.rawTitle) {
-    return escapeHtml(meta.rawTitle).slice(0, 150);
+    return escapeHtml((meta.rawTitle || '').slice(0, 150));
   }
   let title = meta.title || 'BoomTick.blog';
   if (title.includes(' | ')) {
     title = title.split(' | ')[0];
   }
-  return escapeHtml(title).slice(0, 150);
+  return escapeHtml(title.slice(0, 150));
 }
 
 function generateMetadataTags(route, meta) {
   const canonicalUrl = `${BASE_URL}${route}`;
-  const title = meta.title.replace(/"/g, '&quot;');
-  const description = meta.description.replace(/"/g, '&quot;');
+  const title = (meta.title || '').replace(/"/g, '&quot;');
+  const description = (meta.description || '').replace(/"/g, '&quot;');
   const image = meta.image;
 
   const publisherOrganization = {
@@ -318,7 +322,7 @@ async function generateStubs() {
   }
 
   const rawIndexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
-  const indexContent = cleanInjectedRoot(cleanInjectedHead(rawIndexContent));
+  const indexContent = cleanInjectedHtml(rawIndexContent);
 
   for (const route of filteredRoutes) {
     const dirPath = path.join(DIST_DIR, route);
