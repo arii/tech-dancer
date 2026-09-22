@@ -104,9 +104,6 @@ const ResearchAnalytics = () => {
                         </Box>
                         <StatusBadge label={tool.status} />
                       </Box>
-                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
-                        {tool.status === 'Live Tool' ? '● LIVE UTILITY' : '● PRODUCTION SANDBOX'}
-                      </Text>
                       <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                         {tool.title}
                       </Text>
