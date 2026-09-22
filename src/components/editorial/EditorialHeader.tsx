@@ -62,7 +62,16 @@ export function EditorialHeader({
                  <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {readTime}
                </Text>
                {onShare && (
-                 <Stack as="button" direction="row" align="center" gap={1.5} minHeight={8} onClick={onShare} className={journalVariants.shareAction()}>
+                 <Stack
+                   as="button"
+                   direction="row"
+                   align="center"
+                   gap={1.5}
+                   minHeight={8}
+                   onClick={onShare}
+                   className={journalVariants.shareAction()}
+                   aria-label={isShared ? "URL copied to clipboard" : "Share article"}
+                 >
                    <Share2 className="w-3.5 h-3.5" />
                    <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                      {isShared ? "COPIED!" : "SHARE"}
