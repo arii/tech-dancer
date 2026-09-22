@@ -37,8 +37,7 @@ interface GearCardProps extends BaseProps {
 
 const CARD_STYLES = {
   image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
-  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
-  verdict: "tracking-normal opacity-solid"
+  badge: "bg-accent text-white backdrop-blur-md shadow-sm"
 };
 
 export function GearCard(props: GearCardProps) {
@@ -48,7 +47,7 @@ export function GearCard(props: GearCardProps) {
     category,
     excerpt,
     rating: _rating,
-    verdict,
+    verdict: _verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
     affiliateIds,
@@ -174,17 +173,10 @@ export function GearCard(props: GearCardProps) {
       )}
 
       <Stack gap={2}>
-        {verdict && (
-          <Box marginBottom={2}>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
-              Best for: {verdict}
-            </Text>
-          </Box>
-        )}
         {/* Title with link for external affiliates */}
         {isExternal ? (
           <Box
-            as="h3"
+            as="h2"
             className="group-hover:text-accent transition-colors"
           >
             <Box
@@ -208,7 +200,7 @@ export function GearCard(props: GearCardProps) {
           </Box>
         ) : (
           <Text
-            as="h3"
+            as="h2"
             variant="body"
             size="lg"
             weight="font-bold"
