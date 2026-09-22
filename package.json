@@ -145,9 +145,9 @@
     "playwright": "1.61.1",
     "pngjs": "^7.0.0",
     "rollup-plugin-visualizer": "^7.0.1",
-    "sharp": "^0.35.0",
+    "sharp": "^0.35.4",
     "shx": "^0.4.0",
-    "svgo": "^4.0.2",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
@@ -156,7 +156,7 @@
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-sitemap": "^0.8.2",
-    "vitest": "^4.1.5"
+    "vitest": "^5.0.1"
   },
   "packageManager": "pnpm@10.28.2",
   "knip": {
