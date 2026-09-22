@@ -109,7 +109,7 @@ export const CoreServicesGrid = () => {
                 <Box className="text-accent" shrink={0}>
                   <Icon className="w-6 h-6" />
                 </Box>
-                <Stack gap={1} className="text-left mt-1">
+                <Stack gap={1} marginTop={1} className="text-left">
                   <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-main">
                     {service.title}
                   </Text>
