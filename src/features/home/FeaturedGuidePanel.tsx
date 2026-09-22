@@ -6,7 +6,6 @@ const FEATURED = {
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',
-  imageAlt: 'Overhead view of a West Coast Swing travel pack containing dance shoes, earplugs, and travel essentials',
   href: '/blog/2026-04-19-practical-tools-essentials',
 };
 
@@ -31,7 +30,7 @@ export function FeaturedGuidePanel() {
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         srcSet={`${ASSET_PREFIX}/assets/home/wcs-travel-pack-400w.webp 400w, ${ASSET_PREFIX}${FEATURED.image} 800w`}
         sizes="(max-width: 40rem) 100vw, 26.25rem"
-        alt={FEATURED.imageAlt}
+        alt=""
         width={420}
         height={600}
         fetchPriority="high"

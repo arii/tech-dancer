@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -5,7 +6,7 @@ import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 export function LatestPosts() {
-  const posts = getPosts().slice(0, 3);
+  const posts = useMemo(() => getPosts().slice(0, 3), []);
 
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
