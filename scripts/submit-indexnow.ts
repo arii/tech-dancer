@@ -7,7 +7,31 @@ import { getAllRoutes } from '../src/lib/routes-discovery.js';
  * Builds the IndexNow submission payload and endpoint parameters.
  */
 export function buildIndexNowPayload(appUrlInput?: string, keyInput?: string) {
-  const appUrl = (appUrlInput || process.env.VITE_APP_URL || 'https://boomtick.blog').trim();
+  let appUrl = (appUrlInput || process.env.INDEXNOW_APP_URL || '').trim();
+  if (!appUrl) {
+    const viteUrl = (process.env.VITE_APP_URL || '').trim();
+    if (viteUrl) {
+      try {
+        const parsed = new URL(viteUrl);
+        const host = parsed.hostname;
+        if (
+          host !== 'github.io' &&
+          !host.endsWith('.github.io') &&
+          host !== 'localhost' &&
+          !host.endsWith('.localhost')
+        ) {
+          appUrl = viteUrl;
+        } else {
+          appUrl = 'https://boomtick.blog';
+        }
+      } catch {
+        // If parsing fails, fallback to default
+        appUrl = 'https://boomtick.blog';
+      }
+    } else {
+      appUrl = 'https://boomtick.blog';
+    }
+  }
   const normalizedAppUrl = appUrl.endsWith('/') ? appUrl : `${appUrl}/`;
   const parsedUrl = new URL(normalizedAppUrl);
   const host = parsedUrl.hostname;
