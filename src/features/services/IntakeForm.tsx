@@ -2,6 +2,30 @@ import { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
+const Spinner = () => (
+  <svg
+    className="animate-spin h-5 w-5 text-current inline-block mr-2"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+    />
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+    />
+  </svg>
+);
+
 export function IntakeForm() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({
@@ -40,24 +64,12 @@ export function IntakeForm() {
         mode: 'no-cors'
       });
       setStatus('success');
+      setFormData({ fullName: '', email: '', notes: '' });
     } catch (error) {
       console.error("Form submission failed:", error);
       setStatus('error');
     }
   };
-
-  if (status === 'success') {
-    return (
-      <Box border radius="2xl" padding={10} surface="default" marginX="auto" maxWidth="2xl" className="text-center border-line/40 bg-surface/50 shadow-md">
-        <Stack gap={3} align="center">
-          <Text variant="headline" size="2xl" weight="font-bold">Thank You for Reaching Out!</Text>
-          <Text variant="body" size="base" color="dim" maxWidth="md">
-            We will review your business requirements and reply promptly to coordinate an operational consultation.
-          </Text>
-        </Stack>
-      </Box>
-    );
-  }
 
   const inputProps = {
     width: "full",
@@ -87,12 +99,30 @@ export function IntakeForm() {
           </Text>
         </Stack>
 
+        {status === 'success' && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="p-4 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-sm"
+          >
+            <strong>Message sent!</strong> Thanks for reaching out. I&apos;ll review your project details and get back to you shortly.
+          </div>
+        )}
+
         {status === 'error' && (
-          <Box border radius="md" padding={3} surface="alt" className="border-error/50 bg-error/10 text-error text-center">
-            <Text variant="body" size="xs" weight="font-bold">
-              There was a network error submitting your request. Please email ari@boomtick.blog directly.
-            </Text>
-          </Box>
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="p-4 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-200 text-sm"
+          >
+            <strong>Something went wrong.</strong> Please try again later, or reach out directly at{' '}
+            <a
+              href="mailto:ari@boomtick.blog"
+              className="underline hover:text-white transition-colors"
+            >
+              ari@boomtick.blog
+            </a>.
+          </div>
         )}
 
         <Box as="form" onSubmit={handleSubmit} width="full">
@@ -151,9 +181,17 @@ export function IntakeForm() {
                 size="lg"
                 width="full"
                 disabled={status === 'submitting'}
-                className="shadow-md font-semibold"
+                aria-busy={status === 'submitting'}
+                className="shadow-md font-semibold flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
-                {status === 'submitting' ? 'Sending Message...' : 'Send Message →'}
+                {status === 'submitting' ? (
+                  <>
+                    <Spinner />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  'Send Message →'
+                )}
               </Button>
               <Box display="flex" align="center" justify="center" gap={1.5} className="text-dim text-xs text-center">
                 <Shield size={13} className="text-accent" />
