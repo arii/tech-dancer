@@ -364,8 +364,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 size="xl"
                 color="main"
                 margin={0}
-                paddingLeft={4}
-                className="border-l-2 border-accent/30"
                 {...props}
               />
             </Box>
