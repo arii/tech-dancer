@@ -100,17 +100,18 @@ export const CoreServicesGrid = () => {
           const Icon = service.icon;
 
           return (
-            <Box key={service.id} asChild paddingX={6} paddingY={2} radius="xl" className="border border-line/30 bg-surface/60 overflow-hidden shadow-sm">
-              <AccordionItem
-                value={service.id}
-              >
+            <AccordionItem
+              key={service.id}
+              value={service.id}
+              className="border border-line/30 bg-surface/60 rounded-xl px-6 py-2 overflow-hidden shadow-sm"
+            >
                 <AccordionTrigger className="hover:no-underline">
                   <Stack direction="row" align="start" gap={3}>
                 <Box className="text-accent" shrink={0}>
                   <Icon className="w-6 h-6" />
                 </Box>
                 <Stack gap={1} marginTop={1} className="text-left">
-                  <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-main">
+                  <Text as="h3" variant="headline" size="xl" weight="font-bold" className="text-main text-balance">
                     {service.title}
                   </Text>
                   <Text variant="body" size="sm" color="dim" className="leading-relaxed font-normal">
@@ -159,7 +160,6 @@ export const CoreServicesGrid = () => {
               </Box>
             </AccordionContent>
           </AccordionItem>
-          </Box>
         );
       })}
       </Accordion>

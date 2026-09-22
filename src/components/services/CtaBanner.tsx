@@ -21,7 +21,7 @@ export const CtaBanner = () => {
         className="relative z-10"
       >
         <Stack gap={2} maxWidth="2xl">
-          <Text as="h3" size="2xl" weight="bold" color="primary">
+          <Text as="h3" size="2xl" weight="bold" color="primary" className="text-balance">
             Ready to upgrade your digital presence?
           </Text>
           <Text color="dim" size="lg">

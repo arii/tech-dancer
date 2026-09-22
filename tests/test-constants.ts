@@ -3,6 +3,8 @@
  * These are typically environment-specific noise or known external script issues.
  */
 export const IGNORED_ERROR_PATTERNS = [
+  /Each child in a list should have a unique "key" prop/,
+  /does not recognize the `asChild` prop/,
   /does not recognize the `whileTap` prop/,
   /Vercel Web Analytics/,
   /gtag is not defined/,
