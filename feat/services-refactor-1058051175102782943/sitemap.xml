@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/</loc><lastmod>2026-09-22T10:03:14.436Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/</loc><lastmod>2026-09-22T10:48:03.603Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/assets/dancer_hero.webp</image:loc>
       <image:title>West Coast Swing Social Dancer</image:title>
@@ -17,11 +17,11 @@
   </url>
   <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/gear</loc><lastmod>2026-04-12T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/merch</loc><lastmod>2026-09-22T10:00:00.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/merch</loc><lastmod>2026-09-22T10:45:01.609Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/services</loc><lastmod>2026-09-22T10:00:00.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/services</loc><lastmod>2026-09-22T10:45:01.609Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/about</loc><lastmod>2026-09-22T10:00:00.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/about</loc><lastmod>2026-09-22T10:45:01.609Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/assets/home/wcs-travel-pack.webp</image:loc>
       <image:title>Ariel Anders Profile Photo</image:title>
@@ -59,33 +59,33 @@
       <image:license>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/about#terms</image:license>
     </image:image>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/shipping</loc><lastmod>2026-09-22T10:03:14.436Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/shipping</loc><lastmod>2026-09-22T10:48:03.603Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/return-policy</loc><lastmod>2026-09-22T10:00:00.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/return-policy</loc><lastmod>2026-09-22T10:45:01.609Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research</loc><lastmod>2026-08-28T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/wcs-navigator</loc><lastmod>2026-09-22T10:03:14.436Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/wcs-navigator</loc><lastmod>2026-09-22T10:48:03.603Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/versiontruth</loc><lastmod>2026-09-22T10:03:14.436Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/versiontruth</loc><lastmod>2026-09-22T10:48:03.603Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/ux-auditor</loc><lastmod>2026-09-22T10:00:00.852Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/ux-auditor</loc><lastmod>2026-09-22T10:45:01.609Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/blog-drafter</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/blog-drafter</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/wcs-scraper</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/wcs-scraper</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/gitops-pr-reviewer</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/gitops-pr-reviewer</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/ecommerce-automation</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/ecommerce-automation</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/hrm-flagship</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/hrm-flagship</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/repo-auditor-ai</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/repo-auditor-ai</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/boomtick-blog</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/boomtick-blog</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/deployment-impact-analyzer</loc><lastmod>2026-09-22T10:00:00.842Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/research/deployment-impact-analyzer</loc><lastmod>2026-09-22T10:45:01.602Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/feat/services-refactor-1058051175102782943/assets/studies/deployment-impact-analyzer/before.png</image:loc>
       <image:title>Baseline</image:title>
