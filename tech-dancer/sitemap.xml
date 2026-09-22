@@ -1,91 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-09-22T16:22:22.981Z</lastmod>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/dancer_hero.webp</image:loc>
-      <image:title>West Coast Swing Social Dancer</image:title>
-      <image:caption>Hero illustration of West Coast Swing dancers on the floor.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/roboticist_hero.webp</image:loc>
-      <image:title>Ariel Anders PhD Roboticist</image:title>
-      <image:caption>Hero illustration of Ariel Anders in robotics engineering laboratory.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
+  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-09-22T20:10:09.334Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/blog</loc><lastmod>2026-06-24T00:00:00.000Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/gear</loc><lastmod>2026-04-12T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-09-22T16:18:49.053Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-09-22T20:06:59.127Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/services</loc><lastmod>2026-09-22T16:18:49.053Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/services</loc><lastmod>2026-09-22T20:06:59.127Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-09-22T16:18:49.053Z</lastmod>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/home/wcs-travel-pack.webp</image:loc>
-      <image:title>Ariel Anders Profile Photo</image:title>
-      <image:caption>Ariel Anders, PhD - Roboticist &amp; WCS Dancer</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/first_comp.jpg</image:loc>
-      <image:title>First WCS Competition</image:title>
-      <image:caption>Ariel Anders performing a West Coast Swing extension during a competition</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/glow_bunny.jpg</image:loc>
-      <image:title>Late Night Social LED Bunny</image:title>
-      <image:caption>Ariel Anders wearing a creative LED light-up bunny costume</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/mad_jam_ari.jpg</image:loc>
-      <image:title>MADjam Precision &amp; Groove</image:title>
-      <image:caption>Ariel Anders social dancing at the MADjam West Coast Swing convention</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/monterey.jpg</image:loc>
-      <image:title>Monterey Swingfest</image:title>
-      <image:caption>Ariel Anders on stage at a West Coast Swing event in Monterey</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/www_ari.jpg</image:loc>
-      <image:title>Weekend Social Dance</image:title>
-      <image:caption>Ariel Anders demonstrating athletic connection in a high-energy social dance session</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
+  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-09-22T20:06:59.126Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/shipping</loc><lastmod>2026-09-22T16:22:22.981Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/shipping</loc><lastmod>2026-09-22T20:10:09.334Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/return-policy</loc><lastmod>2026-09-22T16:18:49.053Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/return-policy</loc><lastmod>2026-09-22T20:06:59.127Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/research</loc><lastmod>2026-08-28T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-22T16:22:22.981Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-09-22T20:10:09.334Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/versiontruth</loc><lastmod>2026-09-22T16:22:22.981Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/versiontruth</loc><lastmod>2026-09-22T20:10:09.334Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/ux-auditor</loc><lastmod>2026-09-22T16:18:49.053Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/ux-auditor</loc><lastmod>2026-09-22T20:06:59.127Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/blog-drafter</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/blog-drafter</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/wcs-scraper</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/gitops-pr-reviewer</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/ecommerce-automation</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/hrm-flagship</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/repo-auditor-ai</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/boomtick-blog</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-22T16:18:49.043Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-09-22T20:06:59.117Z</lastmod>
     <image:image>
       <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/before.png</image:loc>
       <image:title>Baseline</image:title>
