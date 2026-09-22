@@ -173,7 +173,7 @@ export const CoreServicesGrid = () => {
                     {/* Right: Checklist */}
                     <Stack gap={4} justify="center">
                       {service.features.map((feature, i) => (
-                        <Box key={i} display="flex" align="start" gap={2}>
+                        <Stack key={i} direction="row" align="start" gap={2}>
                           <Check className="w-5 h-5 text-accent shrink-0" />
                           <Text
                             variant="body"
@@ -183,7 +183,7 @@ export const CoreServicesGrid = () => {
                           >
                             {feature}
                           </Text>
-                        </Box>
+                        </Stack>
                       ))}
                     </Stack>
                   </Grid>
@@ -195,7 +195,7 @@ export const CoreServicesGrid = () => {
                       paddingTop={4}
                       className="border-t border-line/20"
                     >
-                      <Box display="flex" align="center" gap={3}>
+                      <Stack direction="row" align="center" gap={3}>
                         <Sparkles className="w-5 h-5 text-accent" />
                         <Text
                           variant="headline"
@@ -205,7 +205,7 @@ export const CoreServicesGrid = () => {
                         >
                           {service.price}
                         </Text>
-                      </Box>
+                      </Stack>
                     </Box>
                   )}
                 </Box>

@@ -29,9 +29,10 @@ export const CtaBanner = () => {
           </Text>
         </Stack>
 
-        <Box
+        <Stack
           as={Link}
           to="/about#contact"
+          direction="row"
           display="inline-flex"
           align="center"
           gap={2}
@@ -43,7 +44,7 @@ export const CtaBanner = () => {
         >
           <Text weight="semibold">Get in Touch</Text>
           <ArrowRight className="w-4 h-4" />
-        </Box>
+        </Stack>
       </Stack>
     </Box>
   );
