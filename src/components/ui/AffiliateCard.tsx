@@ -25,7 +25,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
       <Stack
         direction={isVertical ? 'col' : 'row'}
         gap={3}
-        align={isVertical ? 'start' : 'center'}
+        align='start'
         width="full"
       >
         {/* Product Image Thumbnail */}
