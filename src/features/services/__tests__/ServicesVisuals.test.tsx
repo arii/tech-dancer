@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { ModularPackages } from '@/features/services/Packages';
+import { IntakeForm } from '@/features/services/IntakeForm';
 
 describe('Services Page Modular Packages', () => {
   afterEach(() => {
@@ -32,5 +33,20 @@ describe('Services Page Modular Packages', () => {
     expect(screen.getByText('24/7 calendar availability & sync')).toBeDefined();
     expect(screen.getByText('Intake questionnaires & screening')).toBeDefined();
     expect(screen.getByText('Custom AI-assisted workflow engines')).toBeDefined();
+  });
+});
+
+describe('IntakeForm', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it('renders the consultation form with all required fields', () => {
+    render(<IntakeForm />);
+
+    expect(screen.getByLabelText(/full name/i)).toBeDefined();
+    expect(screen.getByLabelText(/email address/i)).toBeDefined();
+    expect(screen.getByLabelText(/project scope/i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /send message/i })).toBeDefined();
   });
 });

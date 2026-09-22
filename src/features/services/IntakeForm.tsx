@@ -19,19 +19,20 @@ export function IntakeForm() {
     e.preventDefault();
     setStatus('submitting');
 
-    const deploymentId = import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID;
+    const deploymentId = import.meta.env.VITE_SERVICES_INTAKE_DEPLOYMENT_ID;
 
     if (!deploymentId) {
-      console.warn("Mailing list deployment ID is not set. Simulating success.");
+      console.warn("Services intake deployment ID is not set. Simulating success.");
       setStatus('success');
       return;
     }
 
     try {
       const data = new FormData();
-      Object.entries(formData).forEach(([key, val]) => {
-        data.append(key, val);
-      });
+      // Map form fields to GAS parameter names: name, email, message
+      data.append('name', formData.fullName);
+      data.append('email', formData.email);
+      data.append('message', formData.notes);
 
       await fetch(`https://script.google.com/macros/s/${deploymentId}/exec`, {
         method: 'POST',
