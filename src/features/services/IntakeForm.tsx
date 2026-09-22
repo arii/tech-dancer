@@ -19,10 +19,10 @@ export function IntakeForm() {
     e.preventDefault();
     setStatus('submitting');
 
-    const deploymentId = import.meta.env.VITE_SERVICES_INTAKE_DEPLOYMENT_ID;
+    const deploymentId = import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID;
 
     if (!deploymentId) {
-      console.warn("Services intake deployment ID is not set. Simulating success.");
+      console.warn("Deployment ID is not set. Simulating success.");
       setStatus('success');
       return;
     }
