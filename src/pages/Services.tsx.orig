@@ -1,7 +1,6 @@
 import { SEO } from '@/components/SEO';
 import { ServicesHero } from '@/components/services/ServicesHero';
 import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
-import { FeatureTabs } from '@/components/services/FeatureTabs';
 import { CtaBanner } from '@/components/services/CtaBanner';
 import { Box, Stack } from '@/layouts/Primitives';
 

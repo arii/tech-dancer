@@ -164,14 +164,6 @@ const Services = () => {
           <CoreServicesGrid />
         </Stack>
 
-        <Stack as="section" gap={6}>
-          <Stack gap={2}>
-            <Box as="h2" className="text-2xl font-bold tracking-tight">Feature Details</Box>
-            <Box as="p" className="text-text-dim">Take a closer look at what each core service includes.</Box>
-          </Stack>
-          <FeatureTabs />
-        </Stack>
-
         <CtaBanner />
       </Stack>
     </Box>
