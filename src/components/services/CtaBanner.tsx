@@ -9,9 +9,9 @@ export const CtaBanner = () => {
       surface="base"
       padding={8}
       radius="xl"
-      border="y"
+      border="all"
       borderColor="line"
-      className="bg-accent/5 relative overflow-hidden"
+      className="relative overflow-hidden"
     >
       <Stack
         direction={{ base: 'col', md: 'row' }}

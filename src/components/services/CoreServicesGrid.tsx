@@ -117,7 +117,7 @@ export const CoreServicesGrid = () => {
             <AccordionItem
               key={service.id}
               value={service.id}
-              className="border border-line/30 bg-surface/60 rounded-xl px-6 py-2 overflow-hidden shadow-sm"
+              className="rounded-xl px-6 py-2 overflow-hidden shadow-sm"
             >
               <AccordionTrigger className="hover:no-underline">
                 <Stack direction="row" align="start" gap={3}>
