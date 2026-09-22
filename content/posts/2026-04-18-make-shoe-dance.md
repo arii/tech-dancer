@@ -18,7 +18,9 @@ tags:
 
 ## Why I Modify My Own Dance Shoes
 
-Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. My preferred solution is to "upgrade" high-comfort sneakers or flats using industrial-strength adhesive suede. Learn more about [author Ariel Anders' dance and engineering background](/about) or explore our full [curated West Coast Swing footwear gear directory](/gear).
+Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. If you're looking for the best sneakers for West Coast Swing, my preferred solution is to build them yourself. Upgrading high-comfort athletic shoes with industrial-strength adhesive suede gives you ultimate control over comfort, aesthetics, and floor feel.
+
+The key to a successful conversion is understanding floor friction. Standard athletic soles grip the wood, which can wreak havoc on your knees during multiple spins. By applying chrome leather—the industry standard for dance suede—directly to the pivot points of your sneakers, you get the perfect balance of slip and grip. Proper sole prep is crucial here. If you don't rough up the rubber surface and use an industrial adhesive like contact cement, the suede will peel off halfway through your first Jack & Jill.
 
 ![Finished shoe](/images/gear/diy/step5-finished.svg)
 
@@ -135,3 +137,15 @@ Suede sheets typically last for several months of regular dancing, depending on 
 
 **How do I remove them?**
 If you need to replace the sheets or return the shoes to everyday use, peel them off slowly. Any residual adhesive can usually be removed with rubbing alcohol or an adhesive remover like Goo Gone.
+
+## Frequently Asked Questions
+
+### What is the best material for DIY dance shoe soles?
+Chrome leather, also known as industrial-strength adhesive suede, is the industry standard for dance shoe modification. It provides the ideal balance of slip and grip on wooden ballroom floors to protect your joints during spins.
+
+### What kind of glue is used for dance shoe soles?
+For DIY conversions, use industrial contact cement or high-grade adhesive backing that comes pre-applied to suede sheets. The rubber sole of the sneaker must be sanded and roughed up first to ensure the adhesive bonds permanently.
+
+<Notice type="related">
+Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+</Notice>

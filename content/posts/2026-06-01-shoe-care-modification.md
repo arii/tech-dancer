@@ -15,9 +15,11 @@ tags:
   - "hygiene"
 ---
 
-Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded "dance shoe smell." For years, I tried almost every remedy in the book: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
+## Eliminating Dance Shoe Odor
 
-While some of these provided temporary relief, I found that none of them were a long-term solution. The powders created a messy paste when combined with sweat, the sprays often just added a floral scent to the funk, and the dryer sheets struggled against the deep-seated moisture that builds up during a multi-day event.
+Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded funk. For years, I tried almost every remedy in the book: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
+
+While some of these provided temporary relief, none addressed the root cause: deep-seated moisture buildup in the footbed. When sweat gets trapped inside your shoes during a multi-day event, it creates the perfect environment for microbial growth. An electric shoe dryer forces warm air through the material, stopping that growth before it starts. Pair this daily drying routine with proper suede brushing to keep the soles clean, and wear sweat-wicking socks to protect the interior lining.
 
 
 ### The Science of the Stink
@@ -45,3 +47,11 @@ If you are looking for a reliable way to maintain your gear and your hygiene dur
 For additional footwear maintenance, use a [dance shoe suede sole brush](/gear/2026-04-12-suede-shoe-diy) to restore traction on compressed nap, or review our [custom adhesive suede shoe modification](/blog/2026-04-18-make-shoe-dance) tutorial. For complete event preparation, see our [WCS competition travel checklist](/blog/2026-06-01-event-travel-packing).
 
 <notice type="affiliate" id="shoe-dryer"></notice>
+
+## Frequently Asked Questions
+
+### How do you get the smell out of dance shoes?
+The most effective method is using a portable electric shoe dryer immediately after dancing. This eliminates the deep-seated moisture in the footbed and stops microbial growth before it starts, rather than just masking the odor with powders or sprays.
+
+### Can you wash suede sole dance shoes?
+You should never submerge suede soles in water. To clean them, use a wire suede brush to remove dirt and restore the nap of the leather. Keep moisture restricted to the interior lining.

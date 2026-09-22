@@ -1,7 +1,7 @@
 import { Box, Text } from '@/layouts/Primitives';
 
 interface NoticeProps {
-  type?: 'info' | 'warning';
+  type?: 'info' | 'warning' | 'related';
   children: React.ReactNode;
 }
 
@@ -14,7 +14,9 @@ const PROSE_MARGIN_RESET = "[&>.markdown-paragraph:first-child]:mt-0 [&>.markdow
 
 export function Notice({ type = 'info', children }: NoticeProps) {
   const surface = type === 'warning' ? 'warning' : 'accent';
-  const label = type === 'warning' ? 'CAUTION' : 'NOTE';
+  let label = 'NOTE';
+  if (type === 'warning') label = 'CAUTION';
+  if (type === 'related') label = 'RELATED GUIDE';
 
   return (
     <Box

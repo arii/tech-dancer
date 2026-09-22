@@ -60,14 +60,9 @@ export function LatestPosts() {
 
             {/* Text content */}
             <Stack gap={1} className="min-w-0 flex-1">
-              <Box display="flex" align="center" gap={3}>
-                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
-                  {post.category}
-                </Text>
-                <Text variant="mono" size="xs" color="dim">
-                  {post.date}
-                </Text>
-              </Box>
+              <Text variant="mono" size="xs" color="dim">
+                {post.date}
+              </Text>
               <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
                 {post.title}
               </Text>

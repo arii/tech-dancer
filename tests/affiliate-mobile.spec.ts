@@ -1,4 +1,5 @@
 import { test, expect, devices } from '@playwright/test';
+import { getVisualTestMasks } from './utils/playwright-helpers';
 
 test.use({ ...devices['Pixel 5'] });
 
@@ -19,5 +20,7 @@ test('Capture affiliate card on mobile', async ({ page }) => {
   await affiliateCard.scrollIntoViewIfNeeded();
 
   // Take a screenshot
-  await expect(affiliateCard).toHaveScreenshot('affiliate-card-mobile.png');
+  await expect(affiliateCard).toHaveScreenshot('affiliate-card-mobile.png', {
+    mask: getVisualTestMasks(page)
+  });
 });

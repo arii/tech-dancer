@@ -577,7 +577,7 @@ export function extractHowToFromMarkdown(post: {
   const tools: string[] = [];
   const supplies: string[] = [];
 
-  const gearTableMatch = post.content.match(/##\s*(?:Required Gear|Tools and Supplies|Required Items|Materials)[\s\S]*?\n\n/i);
+  const gearTableMatch = post.content.match(/##\s*(?:Recommended Materials|Required Gear|Tools and Supplies|Required Items|Materials)[\s\S]*?\n\n/i);
   if (gearTableMatch) {
     const tableText = gearTableMatch[0];
     const lines = tableText.split('\n');
@@ -636,17 +636,29 @@ export function generateFAQPageSchema(faqs: Array<{ question: string; answer: st
 export function extractFaqFromMarkdown(content: string): SchemaFAQPage | null {
   if (!content) return null;
 
-  // Find FAQ section
-  const faqSectionMatch = content.match(/##\s*(?:FAQs|Frequently Asked Questions)[\s\S]*/i);
-  if (!faqSectionMatch) return null;
+  // Isolate the FAQ section
+  const faqMatch = content.match(/##\s*(?:Frequently Asked Questions|FAQ|FAQs)[\s\S]*?(?=\n##\s|$)/i);
+  if (!faqMatch) return null;
 
-  const faqText = faqSectionMatch[0];
+  const faqContent = faqMatch[0];
+
+  // Match ### headings that end in a question mark, capturing the question and the following paragraph(s)
+  const questionMatches = [...faqContent.matchAll(/###\s*([^?]+\?)\n+([\s\S]+?)(?=\n#+\s|$)/g)];
+
+  if (questionMatches.length > 0) {
+    const faqs = questionMatches.map(match => ({
+      question: match[1].trim(),
+      answer: match[2].trim()
+    }));
+    return generateFAQPageSchema(faqs);
+  }
+
+  // Fallback to old format (bold questions) if no H3 questions are found
   const qnaRegex = /\*\*(.*?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*|\n##|$)/g;
-
   const faqs: Array<{ question: string; answer: string }> = [];
   let match;
 
-  while ((match = qnaRegex.exec(faqText)) !== null) {
+  while ((match = qnaRegex.exec(faqContent)) !== null) {
     const question = match[1].trim();
     const rawAnswer = match[2].trim();
     const answer = rawAnswer.replace(/[*_#`]/g, '').replace(/\n+/g, ' ').trim();
@@ -657,7 +669,6 @@ export function extractFaqFromMarkdown(content: string): SchemaFAQPage | null {
   }
 
   if (faqs.length === 0) return null;
-
   return generateFAQPageSchema(faqs);
 }
 
