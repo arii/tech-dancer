@@ -46,8 +46,6 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    rating: _rating,
-    verdict: _verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
     affiliateIds,
