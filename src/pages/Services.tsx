@@ -1,8 +1,10 @@
+import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/SEO';
+import { CALENDAR_BOOKING_URL } from '@/config/constants';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
 import { PackagesGrid } from '@/features/services/Packages';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -162,6 +164,32 @@ const Services = () => {
         <Text as="p" variant="body" size="lg" color="main" leading="relaxed" className="font-medium max-w-3xl">
           We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
         </Text>
+
+        <Stack direction={{ base: 'col', sm: 'row' }} gap={3} justify="center" align="center" paddingTop={2}>
+          <Button
+            as="a"
+            href="#consultation"
+            variant="primary"
+            size="lg"
+            className="shadow-md font-semibold"
+          >
+            Request Consultation →
+          </Button>
+          <Button
+            as="a"
+            href={CALENDAR_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="outline"
+            size="lg"
+            className="shadow-md font-semibold"
+          >
+            <Stack direction="row" align="center" justify="center" gap={2}>
+              <Calendar size={18} />
+              <span>Book Discovery Call</span>
+            </Stack>
+          </Button>
+        </Stack>
       </Stack>
 
       <Stack gap={16} width="full">

@@ -10,6 +10,7 @@ export const SOCIAL_LINKS = {
 } as const;
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
+export const CALENDAR_BOOKING_URL = import.meta.env.VITE_CALENDAR_BOOKING_URL || 'https://cal.com/boomtick';
 
 export const PRINTFUL_REFERRAL = {
   URL: 'https://www.printful.com/give-5-get-5/GZB6C4',
