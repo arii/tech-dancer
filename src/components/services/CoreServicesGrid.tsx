@@ -90,23 +90,23 @@ const SERVICES = [
 export const CoreServicesGrid = () => {
   return (
     // items-start is critical here so collapsed accordions don't stretch to match expanded ones
-    <Accordion
-      type="single"
-      collapsible
-      defaultValue="digital-presence"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
-    >
-      {SERVICES.map((service) => {
-        const Icon = service.icon;
+    <Grid cols={{ base: 1, lg: 2 }} gap={6} align="start" asChild>
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue="digital-presence"
+      >
+        {SERVICES.map((service) => {
+          const Icon = service.icon;
 
-        return (
-          <AccordionItem
-            key={service.id}
-            value={service.id}
-            className="border border-line/30 bg-surface/60 rounded-xl px-6 py-2 overflow-hidden shadow-sm"
-          >
-            <AccordionTrigger className="hover:no-underline flex gap-4 text-lg font-semibold">
-              <Stack direction="row" align="start" gap={3}>
+          return (
+            <Box asChild paddingX={6} paddingY={2} radius="xl" className="border border-line/30 bg-surface/60 overflow-hidden shadow-sm">
+              <AccordionItem
+                key={service.id}
+                value={service.id}
+              >
+                <AccordionTrigger className="hover:no-underline">
+                  <Stack direction="row" align="start" gap={3}>
                 <Box className="text-accent" shrink={0}>
                   <Icon className="w-6 h-6" />
                 </Box>
@@ -120,16 +120,18 @@ export const CoreServicesGrid = () => {
                 </Stack>
               </Stack>
             </AccordionTrigger>
-            <AccordionContent className="pt-2 pb-6 px-2 sm:px-4">
-              <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={2}>
-                {/* Left: Image */}
-                <Box radius="xl" className="overflow-hidden aspect-video bg-surface-alt">
-                  <img
-                    src={service.imageSrc}
-                    alt={`${service.title} preview`}
-                    className="w-full h-full object-cover object-top"
-                  />
-                </Box>
+            <AccordionContent>
+              <Box paddingTop={2} paddingBottom={6} paddingX={{ base: 2, sm: 4 }}>
+                <Grid cols={{ base: 1, md: 2 }} gap={6} align="center" marginTop={2}>
+                  {/* Left: Image */}
+                  <Box radius="xl" className="overflow-hidden aspect-video bg-surface-alt">
+                    <img
+                      src={service.imageSrc}
+                      alt={`${service.title} preview`}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </Box>
 
                 {/* Right: Checklist */}
                 <Stack gap={4} justify="center">
@@ -144,21 +146,24 @@ export const CoreServicesGrid = () => {
                 </Stack>
               </Grid>
 
-              {/* Pricing Footer */}
-              {service.price && (
-                <Box marginTop={6} paddingTop={4} className="border-t border-line/20">
-                  <Box display="flex" align="center" gap={3}>
-                    <Sparkles className="w-5 h-5 text-accent" />
-                    <Text variant="headline" size="lg" weight="font-bold" className="text-main">
-                      {service.price}
-                    </Text>
+                {/* Pricing Footer */}
+                {service.price && (
+                  <Box marginTop={6} paddingTop={4} className="border-t border-line/20">
+                    <Box display="flex" align="center" gap={3}>
+                      <Sparkles className="w-5 h-5 text-accent" />
+                      <Text variant="headline" size="lg" weight="font-bold" className="text-main">
+                        {service.price}
+                      </Text>
+                    </Box>
                   </Box>
-                </Box>
-              )}
+                )}
+              </Box>
             </AccordionContent>
           </AccordionItem>
+          </Box>
         );
       })}
-    </Accordion>
+      </Accordion>
+    </Grid>
   );
 };
