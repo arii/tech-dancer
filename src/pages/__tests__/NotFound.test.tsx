@@ -9,7 +9,7 @@ describe('NotFound Page Component', () => {
   });
 
   it('renders page headers and return button', () => {
-    const { container } = render(
+    render(
       <BrowserRouter>
         <NotFound />
       </BrowserRouter>
