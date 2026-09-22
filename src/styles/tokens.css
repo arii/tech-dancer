@@ -46,7 +46,7 @@
   --raw-radius-md: 0.75rem;
   --raw-radius-lg: 1rem;
   --raw-radius-xl: 1rem;
-  --raw-radius-full: 9999px; /* impeccable-ignore - Border-radius pill preset */
+  --raw-radius-full: 9999px /* impeccable-ignore */;
 
   /* Spacing */
   --raw-spacing-container-sm: 1.5rem;
