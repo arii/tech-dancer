@@ -85,7 +85,7 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
           href={PRINTFUL_REFERRAL.URL}
           target="_blank"
           rel="sponsored noopener noreferrer"
-          variant="primary"
+          variant="outline"
           className={cn(!isCompact && "w-fit")}
         >
           {config.buttonText}
