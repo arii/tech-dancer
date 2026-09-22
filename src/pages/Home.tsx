@@ -1,14 +1,16 @@
 // impeccable-ignore-file
+import React, { Suspense } from 'react';
 import { SEO } from '@/components/SEO';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
-import { TopicGrid } from '@/features/home/TopicGrid';
-import { GearShelf } from '@/features/home/GearShelf';
-import { LatestPosts } from '@/features/home/LatestPosts';
-import { GearCallout } from '@/features/home/GearCallout';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { PromoStrip } from '@/components/ui/PromoStrip';
+
+const TopicGrid = React.lazy(() => import('@/features/home/TopicGrid').then(module => ({ default: module.TopicGrid })));
+const GearShelf = React.lazy(() => import('@/features/home/GearShelf').then(module => ({ default: module.GearShelf })));
+const LatestPosts = React.lazy(() => import('@/features/home/LatestPosts').then(module => ({ default: module.LatestPosts })));
+const GearCallout = React.lazy(() => import('@/features/home/GearCallout').then(module => ({ default: module.GearCallout })));
 
 export default function Home() {
   return (
@@ -45,28 +47,30 @@ export default function Home() {
         />
       </Box>
 
-      <Stack
-        gap={{ base: 12, lg: 'section-spacing' }}
-        marginTop={{ base: 12, lg: 'section-spacing' }}
-        width="full"
-        maxWidth="full"
-        minWidth={0}
-      >
-        <GearShelf />
-
-        <Grid
-          cols={{ base: 1 }}
-          gap={8}
+      <Suspense fallback={<Box minHeight={300} />}>
+        <Stack
+          gap={{ base: 12, lg: 'section-spacing' }}
+          marginTop={{ base: 12, lg: 'section-spacing' }}
           width="full"
           maxWidth="full"
           minWidth={0}
-          className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
-          <LatestPosts />
-          <GearCallout />
-        </Grid>
-        <TopicGrid />
-      </Stack>
+          <GearShelf />
+
+          <Grid
+            cols={{ base: 1 }}
+            gap={8}
+            width="full"
+            maxWidth="full"
+            minWidth={0}
+            className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          >
+            <LatestPosts />
+            <GearCallout />
+          </Grid>
+          <TopicGrid />
+        </Stack>
+      </Suspense>
     </Box>
   );
 }
