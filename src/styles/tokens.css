@@ -1,10 +1,11 @@
+/* Design Token Registry for BoomTick UI */
 :root {
   /* Colors - High-Tech Dark Theme Refined */
   --raw-color-bg: #020617; /* impeccable-ignore */
   --raw-color-surface: #0f172a; /* impeccable-ignore */
   --raw-color-surface-alt: #1e293b; /* impeccable-ignore */
   --raw-color-line: #334155; /* impeccable-ignore */
-  --raw-color-accent: #22d3ee; /* Cyan 400 for WCAG AA contrast on dark surfaces */ /* impeccable-ignore */
+  --raw-color-accent: #22d3ee; /* impeccable-ignore */
   --raw-color-accent-sky: #38bdf8; /* impeccable-ignore */
   --raw-color-accent-purple: #a78bfa; /* impeccable-ignore */
   --raw-color-accent-magenta: #e879f9; /* impeccable-ignore */
@@ -13,11 +14,18 @@
   --raw-color-accent-brand: #22d3ee; /* impeccable-ignore */
   --raw-color-text-main: #f1f5f9; /* impeccable-ignore */
   --raw-color-text-body: #e2e8f0; /* impeccable-ignore */
-  --raw-color-text-dim: #cbd5e1; /* Slate 300 for better contrast against surface */ /* impeccable-ignore */
+  --raw-color-text-dim: #cbd5e1; /* impeccable-ignore */
   --raw-color-error: #ef4444; /* impeccable-ignore */
   --raw-color-error-bg: #1a0a0a; /* impeccable-ignore */
 
-  /* in-dev-banner support */
+  /* Brand Palette Extension */
+  --raw-color-brand-green: #34d399; /* impeccable-ignore */
+  --raw-color-brand-amber: #fbbf24; /* impeccable-ignore */
+  --raw-color-brand-terminal-red: #ff5f56; /* impeccable-ignore */
+  --raw-color-brand-terminal-yellow: #ffbd2e; /* impeccable-ignore */
+  --raw-color-brand-terminal-green: #27c93f; /* impeccable-ignore */
+
+  /* Banner Support */
   --color-background-secondary: var(--raw-color-surface-alt);
   --color-text-primary: var(--raw-color-text-main);
   --color-text-secondary: var(--raw-color-text-body);
@@ -31,14 +39,14 @@
   --raw-font-mono: "Space Mono", monospace;
 
   /* Radius */
-  --raw-radius-none: 0rem; /* impeccable-ignore */
-  --raw-radius-subtle: 0.25rem; /* impeccable-ignore */
-  --raw-radius-standard: 0.5rem; /* impeccable-ignore */
-  --raw-radius-sm: 0.375rem; /* impeccable-ignore */
-  --raw-radius-md: 0.75rem; /* impeccable-ignore */
-  --raw-radius-lg: 1rem; /* impeccable-ignore */
-  --raw-radius-xl: 1rem; /* impeccable-ignore */
-  --raw-radius-full: 9999px; /* impeccable-ignore - Full pill border-radius */ /* impeccable-ignore */
+  --raw-radius-none: 0rem;
+  --raw-radius-subtle: 0.25rem;
+  --raw-radius-standard: 0.5rem;
+  --raw-radius-sm: 0.375rem;
+  --raw-radius-md: 0.75rem;
+  --raw-radius-lg: 1rem;
+  --raw-radius-xl: 1rem;
+  --raw-radius-full: 9999px; /* impeccable-ignore - Border-radius pill preset */
 
   /* Spacing */
   --raw-spacing-container-sm: 1.5rem;
@@ -57,18 +65,18 @@
   --raw-duration-fast: 150ms;
   --raw-duration-normal: 300ms;
   --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-  --raw-reveal-distance: 1.25rem; /* impeccable-ignore */
+  --raw-reveal-distance: 1.25rem;
   --raw-leading-tightest: 0.95;
 
   /* Icon Sizes */
-  --raw-icon-xs: 0.75rem; /* impeccable-ignore */
-  --raw-icon-sm: 1rem; /* impeccable-ignore */
-  --raw-icon-md: 1.25rem; /* impeccable-ignore */
-  --raw-icon-lg: 1.5rem; /* impeccable-ignore */
-  --raw-icon-xl: 2rem; /* impeccable-ignore */
+  --raw-icon-xs: 0.75rem;
+  --raw-icon-sm: 1rem;
+  --raw-icon-md: 1.25rem;
+  --raw-icon-lg: 1.5rem;
+  --raw-icon-xl: 2rem;
 
   /* Image Sizes */
-  --raw-image-profile: 25rem; /* impeccable-ignore */
+  --raw-image-profile: 25rem;
 
   /* Z-Index */
   --raw-z-hide: -1;
@@ -85,38 +93,35 @@
   --raw-z-search: 200;
 
   /* Shadows */
-  --raw-shadow-top-overlay: 0 -10px 2.5rem rgba(0,0,0,0.3); /* impeccable-ignore */
+  --raw-shadow-top-overlay: 0 -0.625rem 2.5rem rgba(0,0,0,0.3);
 
   /* Brand Logo */
-  --brand-logo-size-text: 3.25rem; /* impeccable-ignore */
-  --brand-logo-tracking: -0.09375rem; /* impeccable-ignore */
+  --brand-logo-size-text: 3.25rem;
+  --brand-logo-tracking: -0.09375rem;
 }
-/* ── Hero Section ────────────────────────────────────── */
-:root {
-  /* Background */
-  --hero-bg: var(--raw-color-bg);
 
-  /* Hero accents derived from design tokens */
+:root {
+  /* Hero Theme */
+  --hero-bg: var(--raw-color-bg);
   --hero-accent: var(--raw-color-accent-brand);
   --hero-slash-gradient: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
-  --hero-slash-glow: 0 0 2rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 4rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent); /* impeccable-ignore */
+  --hero-slash-glow: 0 0 2rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 4rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent);
   --hero-accent-shadow: color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent);
   --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 60%, transparent);
   --brand-gradient-main: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
   --brand-gradient-alt: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-magenta) 100%);
 }
 
-/* Keyframes used by HeroSection.tsx */
 @keyframes glowPulse {
-  from { box-shadow: 0 0 1.25rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 40px color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent); } /* impeccable-ignore */
-  to   { box-shadow: 0 0 3rem color-mix(in srgb, var(--raw-color-accent-brand) 70%, transparent), 0 0 6rem color-mix(in srgb, var(--raw-color-accent-purple) 40%, transparent); } /* impeccable-ignore */
+  from { box-shadow: 0 0 1.25rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 2.5rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent); }
+  to   { box-shadow: 0 0 3rem color-mix(in srgb, var(--raw-color-accent-brand) 70%, transparent), 0 0 6rem color-mix(in srgb, var(--raw-color-accent-purple) 40%, transparent); }
 }
 @keyframes bounce {
   from { transform: scaleY(0.15); }
   to   { transform: scaleY(1); }
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(1.25rem); } /* impeccable-ignore */
+  from { opacity: 0; transform: translateY(1.25rem); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeIn {
@@ -124,49 +129,30 @@
   to { opacity: 1; }
 }
 
-/* Flagship tag styling */
 .flagship-tag {
-  font-size: 0.6875rem !important; /* impeccable-ignore */
-  padding: 0.125rem 0.5rem !important; /* impeccable-ignore */
-  border-radius: 0.25rem !important; /* impeccable-ignore */
+  font-size: 0.6875rem !important;
+  padding: 0.125rem 0.5rem !important;
+  border-radius: 0.25rem !important;
   background: rgba(255, 255, 255, 0.06) !important;
   color: var(--color-text-secondary) !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.1) !important; /* impeccable-ignore */
+  border: 0.03125rem solid rgba(255, 255, 255, 0.1) !important;
   display: inline-flex !important;
   align-items: center !important;
 }
 
-/* Card border utility classes */
-.card-border {
-  border: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-}
-.card-border-t {
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-}
-.card-border-b {
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-}
-.card-border-l {
-  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-}
-.card-border-r {
-  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-}
+.card-border { border: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
+.card-border-t { border-top: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
+.card-border-b { border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
+.card-border-l { border-left: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
+.card-border-r { border-right: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
 .card-border-x {
-  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
+  border-left: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
 }
 .card-border-y {
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important; /* impeccable-ignore */
+  border-top: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Content visibility optimization for offscreen cards and list rows */
-.cv-auto-card {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 23.75rem; /* impeccable-ignore */
-}
-.cv-auto-row {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 5rem; /* impeccable-ignore */
-}
+.cv-auto-card { content-visibility: auto; contain-intrinsic-size: 0 23.75rem; }
+.cv-auto-row { content-visibility: auto; contain-intrinsic-size: 0 5rem; }
