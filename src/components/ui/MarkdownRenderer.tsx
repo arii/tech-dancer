@@ -155,9 +155,9 @@ const RenderBlockquote = ({ children, node: _node, ...props }: { children: React
 
   if (depth > 0) {
     return (
-      <blockquote className="border-l-2 border-accent/40 pl-4 my-2 italic text-text-main" {...props}>
+      <Box as="blockquote" paddingLeft={4} marginY={2} className="border-l-2 border-accent/40 italic text-text-main" {...props}>
         {children}
-      </blockquote>
+      </Box>
     );
   }
 
