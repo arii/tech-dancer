@@ -14,6 +14,7 @@ interface PageHeaderProps {
   titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
   cta?: ReactNode;
   ctaMarginTop?: BaseProps['marginTop'];
+  labelColor?: BaseProps['color'];
 }
 
 export function PageHeader({ 
@@ -26,7 +27,8 @@ export function PageHeader({
   descriptionMaxWidth = "prose",
   titleSize = "fluid-5",
   cta,
-  ctaMarginTop = 6
+  ctaMarginTop = 6,
+  labelColor = "brand"
 }: PageHeaderProps) {
   return (
     <Box
@@ -34,7 +36,7 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+        <Text variant="mono" size="xs" color={labelColor} weight="font-black" tracking="wide-editorial" uppercase>
           {label}
         </Text>
         <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">

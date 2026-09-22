@@ -40,7 +40,7 @@ const collectionSchema = {
 
 export default function Creators() {
   return (
-    <Box as="main" width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
+    <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
         title="Featured Creators"
         description="Directory of independent creators, stylists, instructors, and solopreneurs whose digital operations and web platforms are powered by BoomTick."
