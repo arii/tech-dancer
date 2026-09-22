@@ -135,28 +135,6 @@ export function ProductCard({
         <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription}>
           {item.description}
         </Text>
-
-        {item.roles && (
-          <Stack direction="row" gap={1.5} wrap="wrap">
-            {item.roles.map((role) => (
-              <Box
-                key={role}
-                paddingX={2}
-                paddingY={0.5}
-                radius="md"
-                surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                className={cn(
-                  "border border-line/30",
-                  role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
-                )}
-              >
-                <Text size="micro" weight="font-bold" uppercase tracking="wider">
-                  {role}
-                </Text>
-              </Box>
-            ))}
-          </Stack>
-        )}
       </Stack>
 
       <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
