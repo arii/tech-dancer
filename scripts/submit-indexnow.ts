@@ -10,8 +10,24 @@ export function buildIndexNowPayload(appUrlInput?: string, keyInput?: string) {
   let appUrl = (appUrlInput || process.env.INDEXNOW_APP_URL || '').trim();
   if (!appUrl) {
     const viteUrl = (process.env.VITE_APP_URL || '').trim();
-    if (viteUrl && !viteUrl.includes('github.io') && !viteUrl.includes('localhost')) {
-      appUrl = viteUrl;
+    if (viteUrl) {
+      try {
+        const parsed = new URL(viteUrl);
+        const host = parsed.hostname;
+        if (
+          host !== 'github.io' &&
+          !host.endsWith('.github.io') &&
+          host !== 'localhost' &&
+          !host.endsWith('.localhost')
+        ) {
+          appUrl = viteUrl;
+        } else {
+          appUrl = 'https://boomtick.blog';
+        }
+      } catch (e) {
+        // If parsing fails, fallback to default
+        appUrl = 'https://boomtick.blog';
+      }
     } else {
       appUrl = 'https://boomtick.blog';
     }
