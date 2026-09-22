@@ -1,13 +1,14 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import React from 'react';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
-import { vi } from 'vitest';
+
 
 vi.mock('@/components/ui/accordion', () => ({
-  Accordion: ({ children, className }: any) => <div className={className}>{children}</div>,
-  AccordionItem: ({ children, className }: any) => <div className={className}>{children}</div>,
-  AccordionTrigger: ({ children, className }: any) => <button className={className}>{children}</button>,
-  AccordionContent: ({ children, className }: any) => <div className={className}>{children}</div>,
+  Accordion: ({ children, className }: { children: React.ReactNode, className?: string }) => <div className={className}>{children}</div>,
+  AccordionItem: ({ children, className }: { children: React.ReactNode, className?: string }) => <div className={className}>{children}</div>,
+  AccordionTrigger: ({ children, className }: { children: React.ReactNode, className?: string }) => <button className={className}>{children}</button>,
+  AccordionContent: ({ children, className }: { children: React.ReactNode, className?: string }) => <div className={className}>{children}</div>,
 }));
 
 describe('Services Page Components', () => {
