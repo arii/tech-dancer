@@ -100,9 +100,8 @@ export const CoreServicesGrid = () => {
           const Icon = service.icon;
 
           return (
-            <Box asChild paddingX={6} paddingY={2} radius="xl" className="border border-line/30 bg-surface/60 overflow-hidden shadow-sm">
+            <Box key={service.id} asChild paddingX={6} paddingY={2} radius="xl" className="border border-line/30 bg-surface/60 overflow-hidden shadow-sm">
               <AccordionItem
-                key={service.id}
                 value={service.id}
               >
                 <AccordionTrigger className="hover:no-underline">
