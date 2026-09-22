@@ -1,8 +1,11 @@
 import { SEO } from '@/components/SEO';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
-import { PackagesGrid } from '@/features/services/Packages';
+import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
+import { ServicesHero } from '@/components/services/ServicesHero';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { FeatureTabs } from '@/components/services/FeatureTabs';
+import { CtaBanner } from '@/components/services/CtaBanner';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -144,7 +147,7 @@ const serviceSchema = {
   }
 };
 
-const Services = () => {
+export const ServicesPage = () => {
   return (
     <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
@@ -152,27 +155,26 @@ const Services = () => {
         description="Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation."
         schema={serviceSchema}
       />
+      <Stack gap={24} maxWidth="7xl" marginX="auto">
+        <ServicesHero />
 
-      {/* 1. Header Section */}
-      <Stack gap={5} width="full" maxWidth="4xl" align="center" className="text-center" marginX="auto" marginBottom={16}>
-        <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="normal" >
-          Digital business systems for independent creatives
-        </Text>
+        <Stack as="section" gap={6}>
+          <Stack gap={2}>
+            <Text as="h2" size="3xl" weight="bold" tracking="tight" className="text-main">Our Core Services</Text>
+            <Text as="p" color="dim">Click each section to learn more about what's included.</Text>
+          </Stack>
+          <CoreServicesGrid />
+        </Stack>
 
-        <Text as="p" variant="body" size="lg" color="main" className="font-medium max-w-3xl leading-relaxed">
-          We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
-        </Text>
+        <Stack as="section" gap={6}>
+          <Stack gap={2}>
+            <Text as="h2" size="2xl" weight="bold" tracking="tight" className="text-main">Feature Details</Text>
+            <Text as="p" color="dim">Take a closer look at what each core service includes.</Text>
+          </Stack>
+          <FeatureTabs />
+        </Stack>
 
-        <Text variant="body" size="sm" weight="font-bold" className="uppercase tracking-widest text-dim" marginTop={2}>
-          ARTISTS • STYLISTS • MAKERS • INSTRUCTORS • PERFORMERS • CREATIVE STUDIOS
-        </Text>
-      </Stack>
-
-      <Stack gap={16} width="full">
-        {/* 2. Platform Foundation & Connected Capabilities */}
-        <Box>
-          <PackagesGrid />
-        </Box>
+        <CtaBanner />
 
         {/* 3. Real Client Proof: Hair by April */}
         <Box>
@@ -188,4 +190,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default ServicesPage;

@@ -3,6 +3,7 @@
  * These are typically environment-specific noise or known external script issues.
  */
 export const IGNORED_ERROR_PATTERNS = [
+  /does not recognize the `whileTap` prop/,
   /Vercel Web Analytics/,
   /gtag is not defined/,
   /chrome-extension/,
