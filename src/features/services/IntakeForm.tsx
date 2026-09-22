@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
+const SPINNER_STYLE = { marginRight: '0.5rem' };
+
 const Spinner = () => (
   <svg
-    className="animate-spin h-5 w-5 text-current inline-block mr-2"
+    className="animate-spin h-5 w-5 text-current inline-block"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
     aria-hidden="true"
+    style={SPINNER_STYLE}
   >
     <circle
       className="opacity-25"
@@ -100,20 +103,26 @@ export function IntakeForm() {
         </Stack>
 
         {status === 'success' && (
-          <div
+          <Box
             role="status"
             aria-live="polite"
-            className="p-4 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-sm"
+            padding={4}
+            radius="lg"
+            border
+            className="bg-success/20 border-success/40 text-success text-sm"
           >
             <strong>Message sent!</strong> Thanks for reaching out. I&apos;ll review your project details and get back to you shortly.
-          </div>
+          </Box>
         )}
 
         {status === 'error' && (
-          <div
+          <Box
             role="alert"
             aria-live="assertive"
-            className="p-4 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-200 text-sm"
+            padding={4}
+            radius="lg"
+            border
+            className="bg-error/20 border-error/40 text-error text-sm"
           >
             <strong>Something went wrong.</strong> Please try again later, or reach out directly at{' '}
             <a
@@ -122,7 +131,7 @@ export function IntakeForm() {
             >
               ari@boomtick.blog
             </a>.
-          </div>
+          </Box>
         )}
 
         <Box as="form" onSubmit={handleSubmit} width="full">
@@ -182,21 +191,23 @@ export function IntakeForm() {
                 width="full"
                 disabled={status === 'submitting'}
                 aria-busy={status === 'submitting'}
-                className="shadow-md font-semibold flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="shadow-md font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
-                {status === 'submitting' ? (
-                  <>
-                    <Spinner />
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  'Send Message →'
-                )}
+                <Stack direction="row" align="center" justify="center">
+                  {status === 'submitting' ? (
+                    <>
+                      <Spinner />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    'Send Message →'
+                  )}
+                </Stack>
               </Button>
-              <Box display="flex" align="center" justify="center" gap={1.5} className="text-dim text-xs text-center">
+              <Stack direction="row" align="center" justify="center" gap={1.5} className="text-dim text-xs text-center">
                 <Shield size={13} className="text-accent" />
                 <span>Strict confidentiality guaranteed · Zero spam policy</span>
-              </Box>
+              </Stack>
             </Stack>
           </Stack>
         </Box>

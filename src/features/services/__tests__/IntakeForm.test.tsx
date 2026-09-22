@@ -42,7 +42,7 @@ describe('IntakeForm Component', () => {
   });
 
   describe('Submission States', () => {
-    let fetchMock: any;
+    let fetchMock: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
       fetchMock = vi.fn();
@@ -56,7 +56,7 @@ describe('IntakeForm Component', () => {
     });
 
     it('shows loading spinner and disables button during submission', async () => {
-      let resolveFetch: (value: any) => void;
+      let resolveFetch: (value: unknown) => void;
       fetchMock.mockReturnValue(new Promise((resolve) => {
         resolveFetch = resolve;
       }));
