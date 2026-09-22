@@ -1,0 +1,34 @@
+--- src/pages/Services.tsx
++++ src/pages/Services.tsx
+@@ -1,6 +1,5 @@
+ // src/pages/Services.tsx
+ import { ServicesHero } from '@/components/services/ServicesHero';
+ import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
+-import { FeatureTabs } from '@/components/services/FeatureTabs';
+ import { CtaBanner } from '@/components/services/CtaBanner';
+ import SEO from '@/components/SEO';
+
+@@ -51,20 +50,12 @@
+         <ServicesHero />
+
+         <Box as="section">
+-          <Stack gap={2} marginBottom={6}>
+-            <Box as="h2" className="text-3xl font-bold tracking-tight">Our Core Services</Box>
+-            <Box as="p" className="text-text-dim text-lg">Click each section to learn more about what's included.</Box>
++          <Stack gap={2} marginBottom={8}>
++            <Box as="h2" className="text-3xl font-bold tracking-tight">Capabilities & Solutions</Box>
++            <Box as="p" className="text-text-dim text-lg">Click each section to learn more about our approach and what's included.</Box>
+           </Stack>
+           <CoreServicesGrid />
+         </Box>
+-
+-        <Box as="section">
+-          <Stack gap={2} marginBottom={6}>
+-            <Box as="h2" className="text-2xl font-bold tracking-tight">Feature Details</Box>
+-            <Box as="p" className="text-text-dim">Take a closer look at what each core service includes.</Box>
+-          </Stack>
+-          <FeatureTabs />
+-        </Box>
+
+         <CtaBanner />
+       </Stack>
