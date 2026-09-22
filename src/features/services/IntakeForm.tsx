@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
-const SPINNER_STYLE = { marginRight: '0.5rem' };
-
 const Spinner = () => (
-  <svg
+  <Box
+    as="svg"
     className="animate-spin h-5 w-5 text-current inline-block"
+    marginRight={2}
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
     aria-hidden="true"
-    style={SPINNER_STYLE}
   >
     <circle
       className="opacity-25"
@@ -26,7 +25,7 @@ const Spinner = () => (
       fill="currentColor"
       d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
     />
-  </svg>
+    </Box>
 );
 
 export function IntakeForm() {
