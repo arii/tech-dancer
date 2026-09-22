@@ -21,7 +21,7 @@ describe('ArielProfile Component', () => {
     );
 
     expect(screen.getByText('Ariel Anders, PhD')).toBeTruthy();
-    expect(screen.getByText(/West Coast Swing dancer and roboticist/i)).toBeTruthy();
+    expect(screen.getByText(/West Coast Swing dancer & roboticist/i)).toBeTruthy();
   });
 
   it('renders interspersed alternating zigzag sections with unique titles and captions', () => {
@@ -31,17 +31,15 @@ describe('ArielProfile Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('My Dance Background')).toBeTruthy();
+    expect(screen.getByText('My Dance Story & Why BoomTick Exists')).toBeTruthy();
     expect(screen.getByText('Style & Visual Expression')).toBeTruthy();
     expect(screen.getByText('Timing & Musicality')).toBeTruthy();
-    expect(screen.getByText('Why I Built This Site')).toBeTruthy();
-    expect(screen.getByText('Travel & Sustainable Logistics')).toBeTruthy();
+    expect(screen.getByText('Travel & Hotel Points Strategy')).toBeTruthy();
 
     expect(screen.getByText('First WCS Competition • Los Angeles, CA')).toBeTruthy();
-    expect(screen.getByText('Late Night Social • LED Bunny Ears')).toBeTruthy();
-    expect(screen.getByText('MADjam Floor • Precision & Groove')).toBeTruthy();
-    expect(screen.getByText('Monterey Swingfest • Monterey, CA')).toBeTruthy();
-    expect(screen.getByText('Weekend Socials • Community & Travel')).toBeTruthy();
+    expect(screen.getByText('Late Night Social Set • Custom LED Bunny Ears')).toBeTruthy();
+    expect(screen.getByText('MADjam Social Floor • Late Night Groove')).toBeTruthy();
+    expect(screen.getByText('Weekend Socials • High-Energy Extension')).toBeTruthy();
   });
 
   it('renders social and legal links with proper spacing', () => {
@@ -54,7 +52,7 @@ describe('ArielProfile Component', () => {
     expect(screen.getByText('INSTAGRAM')).toBeTruthy();
     expect(screen.getByText('LINKEDIN')).toBeTruthy();
     expect(screen.getByText('GITHUB')).toBeTruthy();
-    expect(screen.getByText('Privacy Policy')).toBeTruthy();
-    expect(screen.getByText('Terms of Use')).toBeTruthy();
+    expect(screen.getByText('Privacy')).toBeTruthy();
+    expect(screen.getByText('Terms')).toBeTruthy();
   });
 });

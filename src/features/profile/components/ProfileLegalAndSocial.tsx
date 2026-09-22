@@ -8,13 +8,13 @@ const ProfileLegalAndSocial = () => {
       maxWidth="6xl"
       marginX="auto"
       paddingX={4}
-      marginTop={{ base: 24, lg: 32 }}
-      paddingTop={{ base: 16, lg: 20 }}
-      paddingBottom={{ base: 12, lg: 16 }}
+      marginTop={{ base: 20, lg: 28 }}
+      paddingTop={{ base: 12, lg: 16 }}
+      paddingBottom={{ base: 8, lg: 12 }}
       border="t"
       className="border-line/80"
     >
-      <Grid cols={{ default: 1, md: 2 }} gap={12}>
+      <Grid cols={{ default: 1, md: 2 }} gap={10}>
         {/* Social Links */}
         <Stack gap={4}>
           <Text
@@ -71,12 +71,12 @@ const ProfileLegalAndSocial = () => {
           </Box>
         </Stack>
 
-        {/* Privacy, Terms & Official Contact */}
+        {/* Privacy, Terms & Contact Anchor Targets */}
         <Grid
           cols={{ default: 1, sm: 3 }}
           gap={6}
           paddingLeft={{ md: 8 }}
-          paddingTop={{ default: 8, md: 0 }}
+          paddingTop={{ default: 6, md: 0 }}
           className="text-xs text-text-dim border-t md:border-t-0 md:border-l md:border-line/40"
         >
           <Box id="contact" scrollMarginTop={24}>
@@ -90,10 +90,10 @@ const ProfileLegalAndSocial = () => {
                 tracking="wider"
                 className="text-text-main"
               >
-                Contact Signal
+                Contact
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                Official Merchant Support: <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>
+                For feedback, scoring tools, or site inquiries, reach out at <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>.
               </Text>
             </Stack>
           </Box>
@@ -108,10 +108,10 @@ const ProfileLegalAndSocial = () => {
                 tracking="wider"
                 className="text-text-main"
               >
-                Privacy Policy
+                Privacy
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                This site is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Form info is used solely for its intended purpose.
+                Personal project. No data sales. Basic privacy-preserving analytics only.
               </Text>
             </Stack>
           </Box>
@@ -126,10 +126,10 @@ const ProfileLegalAndSocial = () => {
                 tracking="wider"
                 className="text-text-main"
               >
-                Terms of Use
+                Terms
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                Content is provided for informational and entertainment purposes. We are not responsible for issues arising from tools, products, or travel advice mentioned.
+                Informational content provided as-is without warranty.
               </Text>
             </Stack>
           </Box>

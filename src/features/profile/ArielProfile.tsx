@@ -17,7 +17,6 @@ const ArielProfile = () => {
   const danceBackground = bio.sections.find(s => s.id === 'dance-background');
   const stylePillar = bio.sections.find(s => s.id === 'style-expression');
   const timingPillar = bio.sections.find(s => s.id === 'timing-musicality');
-  const whyBuilt = bio.sections.find(s => s.id === 'why-built');
   const travelPillar = bio.sections.find(s => s.id === 'financial-strategies');
 
   const profileSchema = useMemo(() => {
@@ -52,26 +51,21 @@ const ArielProfile = () => {
         schema={profileSchema}
       />
 
-      {/* 1. Standardized Page Header (Consistent with Blog, Gear, Merch, Research) */}
+      {/* 1. Page Header */}
       <PageHeader
         title={bio.name}
         description={bio.role}
       />
 
-      {/* 2. Robotics & Autonomous Systems Portfolio CTA Card */}
-      <Box marginTop={{ base: 8, lg: 12 }} marginBottom={{ base: 8, lg: 12 }}>
-        <RoboticsPortfolioCard />
-      </Box>
-
-      {/* 3. Interspersed Alternating Zigzag Story Sections with Unique Photography */}
-      <Stack gap={{ base: 20, lg: 28 }} marginTop={{ base: 12, lg: 16 }}>
+      {/* 2. Dance Story & Core Pillars */}
+      <Stack gap={{ base: 16, lg: 24 }} marginTop={{ base: 12, lg: 16 }}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
-          <Stack gap={{ base: 24, lg: 32 }}>
-            {/* Section 1: Dance Background (Text Left, Image Right) */}
+          <Stack gap={{ base: 20, lg: 28 }}>
+            {/* Section 1: Dance Background & Site Origin (Text Left, Image Right) */}
             {danceBackground && (
               <ProfileStoryRow
                 id={danceBackground.id}
-                title={danceBackground.title || 'My Dance Background'}
+                title={danceBackground.title || 'My Dance Story'}
                 content={danceBackground.content}
                 imageSrc={danceBackground.gallery?.[0]?.src}
                 imageAlt={danceBackground.gallery?.[0]?.alt}
@@ -106,36 +100,28 @@ const ArielProfile = () => {
               />
             )}
 
-            {/* Section 4: Why I Built This Site (Image Left, Text Right) */}
-            {whyBuilt && (
-              <ProfileStoryRow
-                id={whyBuilt.id}
-                title={whyBuilt.title || 'Why I Built This Site'}
-                content={whyBuilt.content}
-                imageSrc={whyBuilt.gallery?.[0]?.src}
-                imageAlt={whyBuilt.gallery?.[0]?.alt}
-                caption={whyBuilt.gallery?.[0]?.caption}
-                reverse={true}
-              />
-            )}
-
-            {/* Section 5: Core Pillar - Travel & Logistics (Text Left, Image Right) */}
+            {/* Section 4: Core Pillar - Travel & Hotel Points (Image Left, Text Right) */}
             {travelPillar && (
               <ProfileStoryRow
                 id={travelPillar.id}
-                title={travelPillar.title || 'Travel & Sustainable Logistics'}
+                title={travelPillar.title || 'Travel & Hotel Points Strategy'}
                 content={travelPillar.content}
                 imageSrc={travelPillar.gallery?.[0]?.src}
                 imageAlt={travelPillar.gallery?.[0]?.alt}
                 caption={travelPillar.gallery?.[0]?.caption}
-                reverse={false}
+                reverse={true}
               />
             )}
           </Stack>
         </Reveal>
       </Stack>
 
-      {/* 4. Legal, Terms & Social Links */}
+      {/* 3. Anchored Work & Engineering Section */}
+      <Box marginTop={{ base: 20, lg: 28 }} marginBottom={{ base: 8, lg: 12 }}>
+        <RoboticsPortfolioCard />
+      </Box>
+
+      {/* 4. Streamlined Footer & Legal Bar */}
       <ProfileLegalAndSocial />
     </Box>
   );

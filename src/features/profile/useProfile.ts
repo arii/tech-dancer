@@ -8,17 +8,16 @@ import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
-  role: "West Coast Swing dancer and roboticist based in San Francisco, sharing practical competition insights, travel hacks, and web experiments.",
+  role: "West Coast Swing dancer & roboticist based in San Francisco. Building scoring tools, packing LED wire for late-night socials, and chasing hotel points.",
   sections: [
     {
       id: "dance-background",
-      title: "My Dance Background",
-      eyebrow: "Dance Journey",
-      content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After moving to San Francisco, I got back into social dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked immediately — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a welcoming community.",
+      title: "My Dance Story & Why BoomTick Exists",
+      content: "I started in partner dance with Lindy Hop and Fusion in 2019 before finding West Coast Swing at Mission City Swing in San Francisco. WCS hooked me immediately—the improvised elasticity, room for musical humor, and late-night social energy. I built BoomTick to share raw event notes, judges' scoring breakdowns, and practical tools I actually use on the circuit.",
       gallery: [
         {
           src: firstComp,
-          alt: "Ariel Anders performing a West Coast Swing extension during a competition",
+          alt: "Ariel Anders performing a West Coast Swing extension in competition",
           caption: "First WCS Competition • Los Angeles, CA"
         }
       ]
@@ -26,58 +25,46 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "style-expression",
       title: "Style & Visual Expression",
-      eyebrow: "Pillar: Style",
-      content: "West Coast Swing gives dancers the freedom to showcase personal expression through clean lines, bright outfits, and theme-night creativity. From late-night social sessions with light-up gear to competition spotlights, finding your visual identity brings energy to the floor.",
+      content: "I love bright lines, high-contrast outfits, and theme nights that take themselves just seriously enough. From late-night social sets where I pack an absurd amount of LED wire into costume ears, to competition spotlights where clean lines matter most, visual expression is half the fun on the floor.",
       gallery: [
         {
           src: glowBunny,
-          alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event",
-          caption: "Late Night Social • LED Bunny Ears"
+          alt: "Ariel Anders wearing a custom LED light-up bunny costume at a dance event",
+          caption: "Late Night Social Set • Custom LED Bunny Ears"
         }
       ]
     },
     {
       id: "timing-musicality",
       title: "Timing & Musicality",
-      eyebrow: "Pillar: Timing",
-      content: "Musicality and connection matter just as much as dynamic movement. Dancing in the pocket of the groove, hitting subtle rhythmic breaks, and actively listening to your partner create the effortless flow that makes West Coast Swing addictive.",
+      content: "I care most about dancing inside the pocket of the groove. Hitting subtle rhythmic breaks without blowing past your partner's connection is what makes WCS addictive. Give me a heavy blues track or a sparse acoustic breakdown over a wall-of-sound pop remix any day.",
       gallery: [
         {
           src: madJamAri,
-          alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention",
-          caption: "MADjam Floor • Precision & Groove"
-        }
-      ]
-    },
-    {
-      id: "why-built",
-      title: "Why I Built This Site",
-      eyebrow: "Behind The Blog",
-      content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, scoring and judge breakdown tools, event notes, and the small choices that make a big difference over a season of dancing.",
-      gallery: [
-        {
-          src: monterey,
-          alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California",
-          caption: "Monterey Swingfest • Monterey, CA"
+          alt: "Ariel Anders social dancing on the MADjam floor",
+          caption: "MADjam Social Floor • Late Night Groove"
         }
       ]
     },
     {
       id: "financial-strategies",
-      title: "Travel & Sustainable Logistics",
-      eyebrow: "Pillar: Travel",
-      content: "Traveling for dance conventions every month requires smart planning. I maximize credit card rewards, airline perks, and hotel points to make frequent weekend trips feasible and sustainable, keeping energy focused on dancing rather than travel stress.",
+      title: "Travel & Hotel Points Strategy",
+      content: "Hitting 12+ weekend conventions a year gets expensive fast if you pay rack rates. I obsess over credit card reward redemptions, airline status perks, and hotel point transfers so I can stay on-site at main event hotels and keep my energy focused on dancing.",
       gallery: [
         {
           src: wwwAri,
-          alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session",
-          caption: "Weekend Socials • Community & Travel"
+          alt: "Ariel Anders demonstrating athletic connection in a social dance session",
+          caption: "Weekend Socials • High-Energy Extension"
+        },
+        {
+          src: monterey,
+          alt: "Ariel Anders on stage at Monterey Swingfest in California",
+          caption: "Monterey Swingfest • Stage Spotlight"
         }
       ]
     },
     {
       id: "connect",
-      eyebrow: "Connect & Networking",
       links: [
         { label: 'Instagram', url: SOCIAL_LINKS.INSTAGRAM },
         { label: 'LinkedIn', url: SOCIAL_LINKS.LINKEDIN },
