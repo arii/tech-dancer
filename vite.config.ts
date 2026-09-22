@@ -60,7 +60,7 @@ function safelyRewriteSpaUrl(
   else if (
     pathname.startsWith(baseWithSlash) &&
     !pathname.startsWith(`${baseWithSlash}assets/`) &&
-    !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+    !pathname.match(/\.(html|js|css|png|jpg|jpeg|gif|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml|parquet|webmanifest)$/)
   ) {
     // Keep the query string attached so that the browser/test runner doesn't lose it.
     req.url = `${baseWithSlash}index.html${finalQuery}`;
@@ -186,6 +186,9 @@ export default defineConfig(({mode}) => {
       ),
       'import.meta.env.VITE_WCS_API_URL': JSON.stringify(
         process.env.VITE_WCS_API_URL || env.VITE_WCS_API_URL || 'https://wcs-navigator-api-237690545533.us-west1.run.app'
+      ),
+      'import.meta.env.VITE_MAILING_LIST_DEPLOYMENT_ID': JSON.stringify(
+        process.env.VITE_MAILING_LIST_DEPLOYMENT_ID || env.VITE_MAILING_LIST_DEPLOYMENT_ID || ''
       ),
     },
     plugins: [

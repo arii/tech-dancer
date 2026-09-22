@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { parse } from 'yaml';
+import { JSDOM } from 'jsdom';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 import { routes as ROUTE_CONFIGS } from '../src/config/routes.ts';
 import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
@@ -48,9 +49,16 @@ const staticRouteMetaMap = new Map();
 ROUTE_CONFIGS.forEach(r => {
   if (r.path && !r.path.includes(':') && r.path !== '*') {
     const isRoot = r.path === '/';
+    const isServices = r.path === '/services';
     staticRouteMetaMap.set(r.path, {
-      title: isRoot ? 'BoomTick.blog - West Coast Swing & AI Engineering' : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering'),
-      description: 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
+      title: isRoot
+        ? 'BoomTick.blog - West Coast Swing & AI Engineering'
+        : (isServices
+          ? 'Web Design & Digital Systems for San Francisco Creatives | BoomTick'
+          : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering')),
+      description: isServices
+        ? 'Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation.'
+        : 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
@@ -153,18 +161,22 @@ function getRouteMetadata(route) {
   };
 }
 
-function cleanInjectedHead(html) {
-  return html
-    .replace(/<title[\s\S]*?<\/title>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?name=["']description["'][^>]*\/?>\s*/gi, '')
-    .replace(/<link\s+[^>]*?rel=["']canonical["'][^>]*\/?>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?property=["']og:[^"']*["'][^>]*\/?>\s*/gi, '')
-    .replace(/<meta\s+[^>]*?name=["']twitter:[^"']*["'][^>]*\/?>\s*/gi, '')
-    .replace(/<script\s+[^>]*?type=["']application\/ld\+json["'][\s\S]*?<\/script>\s*/gi, '');
-}
+function cleanInjectedHtml(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
 
-function cleanInjectedRoot(html) {
-  return html.replace(/<div id="root"><h1 class="sr-only".*?><\/h1><\/div>/gi, '<div id="root"></div>');
+  const toRemove = doc.head.querySelectorAll(
+    'title, meta[name="description"], link[rel="canonical"], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"], link[rel="preload"][as="image"]'
+  );
+  toRemove.forEach(el => el.remove());
+
+  const rootEl = doc.getElementById('root');
+  if (rootEl) {
+    const h1 = rootEl.querySelector('h1.sr-only');
+    if (h1) h1.remove();
+  }
+
+  return dom.serialize();
 }
 
 function escapeHtml(str) {
@@ -178,19 +190,19 @@ function escapeHtml(str) {
 
 function getPreRenderHeading(meta) {
   if (meta.rawTitle) {
-    return escapeHtml(meta.rawTitle).slice(0, 150);
+    return escapeHtml((meta.rawTitle || '').slice(0, 150));
   }
   let title = meta.title || 'BoomTick.blog';
   if (title.includes(' | ')) {
     title = title.split(' | ')[0];
   }
-  return escapeHtml(title).slice(0, 150);
+  return escapeHtml(title.slice(0, 150));
 }
 
 function generateMetadataTags(route, meta) {
   const canonicalUrl = `${BASE_URL}${route}`;
-  const title = meta.title.replace(/"/g, '&quot;');
-  const description = meta.description.replace(/"/g, '&quot;');
+  const title = (meta.title || '').replace(/"/g, '&quot;');
+  const description = (meta.description || '').replace(/"/g, '&quot;');
   const image = meta.image;
 
   const publisherOrganization = {
@@ -289,7 +301,7 @@ function generateMetadataTags(route, meta) {
 
   const schemaJson = `<script data-rh="true" data-prerendered="true" type="application/ld+json">${JSON.stringify(schemas)}</script>`;
 
-  return [
+  const tags = [
     `<title data-rh="true" data-prerendered="true">${title}</title>`,
     `<meta data-rh="true" data-prerendered="true" name="description" content="${description}" />`,
     `<link data-rh="true" data-prerendered="true" rel="canonical" href="${canonicalUrl}" />`,
@@ -303,7 +315,13 @@ function generateMetadataTags(route, meta) {
     `<meta data-rh="true" data-prerendered="true" name="twitter:description" content="${description}" />`,
     `<meta data-rh="true" data-prerendered="true" name="twitter:image" content="${image}" />`,
     schemaJson
-  ].join('\n    ');
+  ];
+
+  if (route === '/') {
+    tags.unshift('<link rel="preload" as="image" href="/assets/home/wcs-travel-pack-400w.webp" imagesrcset="/assets/home/wcs-travel-pack-400w.webp 400w, /assets/home/wcs-travel-pack.webp 800w" imagesizes="(max-width: 640px) 100vw, 420px" fetchpriority="high" />');
+  }
+
+  return tags.join('\n    ');
 }
 
 async function generateStubs() {
@@ -313,7 +331,7 @@ async function generateStubs() {
   }
 
   const rawIndexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
-  const indexContent = cleanInjectedRoot(cleanInjectedHead(rawIndexContent));
+  const indexContent = cleanInjectedHtml(rawIndexContent);
 
   for (const route of filteredRoutes) {
     const dirPath = path.join(DIST_DIR, route);

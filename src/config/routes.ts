@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh, Compass } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh, Compass, Briefcase } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -54,6 +54,15 @@ export const routes: RouteConfig[] = [
     label: 'Merch',
     icon: Tag,
     skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
+  },
+  {
+    path: '/services',
+    lazy: lazyWithRetry(() => import('@/pages/Services').then(m => ({ Component: m.default }))),
+    label: 'Services',
+    icon: Briefcase,
+    skeleton: 'simple',
     isMobileVisible: true,
     isTopNav: true
   },

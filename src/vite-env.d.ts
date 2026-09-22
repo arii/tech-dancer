@@ -14,6 +14,7 @@ declare global {
     readonly VITE_COMMIT_SHA: string;
     readonly VITE_BUILD_TIME: string;
     readonly VITE_SIMULATE_LOADING?: string;
+    readonly VITE_MAILING_LIST_DEPLOYMENT_ID?: string;
   }
 
   interface ImportMeta {

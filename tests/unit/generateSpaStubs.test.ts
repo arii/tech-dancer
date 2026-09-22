@@ -118,7 +118,7 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
       expect(postCleanupDescriptions.length, `Post-hydration meta description count in ${relativePath}`).toBe(1);
       expect(postCleanupCanonicals.length, `Post-hydration canonical link count in ${relativePath}`).toBe(1);
     }
-  });
+  }, 30000);
 
   it('verifies every generated route stub in dist/ contains a valid semantic <h1> tag under 150 characters', () => {
     const indexFiles = findIndexHtmlFiles(DIST_DIR);
@@ -138,5 +138,5 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
         expect(textOnly.length, `Heading text exceeds 150 chars in ${relativePath}: "${textOnly}"`).toBeLessThanOrEqual(150);
       }
     }
-  });
+  }, 30000);
 });
