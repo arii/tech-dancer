@@ -1,0 +1,175 @@
+--- src/components/services/CoreServicesGrid.tsx
++++ src/components/services/CoreServicesGrid.tsx
+@@ -19,103 +19,121 @@
+         <Box as={AccordionItem}
+           key={service.id}
+           value={service.id}
+-          className="bg-surface/50 overflow-hidden data-[state=open]:border-line" radius="xl" paddingX={6} paddingY={2} border
++          className="bg-surface/40 overflow-hidden data-[state=open]:bg-surface/80 data-[state=open]:border-accent/40 transition-colors duration-300" radius="xl" border
+         >
+-          <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+-            <Stack align="center" gap={3}>
++          <AccordionTrigger className="hover:no-underline text-lg font-semibold group" paddingX={{ base: 5, sm: 6 }} paddingY={5}>
++            <Stack direction="row" align="center" gap={3}>
+               {service.icon}
+-              {service.title}
++              <Box as="span" className="group-data-[state=open]:text-accent transition-colors">{service.title}</Box>
+             </Stack>
+           </AccordionTrigger>
+-          <Box as={AccordionContent} paddingTop={4} paddingBottom={6} className="text-text-main">
++          <Box as={AccordionContent} paddingX={{ base: 5, sm: 6 }} paddingBottom={6} paddingTop={1} className="text-text-main">
+             {service.id === 'website' && (
+-              <Stack gap={4}>
+-                <Box as="p">A professional online home for your work.</Box>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  A fast, beautiful website built specifically for independent practitioners. We handle the technical details so your business is easy to find on Google and ready to grow.
++                </Box>
+                 <Stack direction={{ base: "col", sm: "row" }} gap={6}>
+                   <Box width="full" shrink={0} className="sm:w-1/2">
+-                    <img src="/assets/services/digital-presence.png" alt="Website preview" className="w-full rounded-md" />
++                    <img src="/assets/services/digital-presence.png" alt="Website preview" className="w-full rounded-md opacity-90" />
+                   </Box>
+-                  <Stack as="ul" gap={2} width="full" className="text-sm sm:w-1/2">
+-                    <Stack as="li" align="center" gap={2}>✓ Custom website design & development</Stack>
+-                    <Stack as="li" align="center" gap={2}>✓ Mobile-first, responsive design</Stack>
+-                    <Stack as="li" align="center" gap={2}>✓ Portfolio, services, and pricing pages</Stack>
+-                    <Stack as="li" align="center" gap={2}>✓ Domain setup and hosting</Stack>
+-                    <Stack as="li" align="center" gap={2}>✓ SEO foundation for local search</Stack>
+-                    <Stack as="li" align="center" gap={2}>✓ Ongoing maintenance and updates</Stack>
+-                    <Stack as="li" align="center" gap={2} marginTop={4} paddingTop={4} border="t" className="border-line text-accent font-semibold"><span className="text-xl">✨</span> Starting at $1,500</Stack>
++                  <Stack as="ul" gap={3} width="full" className="text-sm sm:w-1/2">
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Custom design & development</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Mobile-first, responsive layouts</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Domain setup and fast hosting</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">SEO foundation for local search</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3} marginTop={4} paddingTop={4} border="t" className="border-line text-accent font-semibold"><span className="text-xl leading-none">✨</span> Starting at $1,500</Stack>
+                   </Stack>
+                 </Stack>
+               </Stack>
+             )}
+             {service.id === 'booking' && (
+-              <Stack gap={4}>
+-                <Box as="p">Let your customers book, pay, and get the information they need—automatically.</Box>
+-                <Stack as="ul" gap={2} className="text-sm">
+-                  <Stack as="li" align="center" gap={2}>✓ 24/7 calendar availability & sync</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Automated appointment scheduling</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Intake questionnaires & screening</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Deposit & online payment processing</Stack>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  Streamline your scheduling with automated booking workflows that save you time and provide a seamless, professional experience for your clients.
++                </Box>
++                <Stack direction={{ base: "col", sm: "row" }} gap={6}>
++                  <Stack as="ul" gap={3} width="full" className="text-sm sm:w-1/2">
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">A clean Google booking link synced directly to your personal calendar</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Automated intake forms to pre-screen clients</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Automatic deposit collection at the time of booking</Box></Stack>
++                  </Stack>
++                  <Box width="full" shrink={0} className="sm:w-1/2">
++                    <Stack gap={2} padding={4} radius="lg" border className="bg-surface-alt/30 border-line">
++                      <Box as="span" className="text-xs font-bold text-accent tracking-wider uppercase">Authentic Use Case</Box>
++                      <Box as="p" className="text-sm text-text-dim italic leading-relaxed">
++                        "Clients book via Instagram link, pay a 20% deposit upfront, and get automated text reminders 24 hours before their appointment."
++                      </Box>
++                    </Stack>
++                  </Box>
+                 </Stack>
+               </Stack>
+             )}
+             {service.id === 'ecommerce' && (
+-              <Stack gap={4}>
+-                <Box as="p">Sell products, services, and digital downloads directly from your site.</Box>
+-                <Stack as="ul" gap={2} className="text-sm">
+-                  <Stack as="li" align="center" gap={2}>✓ Merchandise & physical products</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Digital downloads & instant delivery</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Custom orders & commission inquiries</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Streamlined checkout & payment integrations</Stack>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  Expand your revenue streams by selling physical products, digital goods, or merchandise directly to your audience without the Shopify overhead.
++                </Box>
++                <Stack direction={{ base: "col", sm: "row" }} gap={6}>
++                  <Stack as="ul" gap={3} width="full" className="text-sm sm:w-1/2">
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Zero-monthly-fee storefront using Stripe</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Automated digital download delivery via email</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Print-on-demand merchandise integrations</Box></Stack>
++                  </Stack>
++                  <Box width="full" shrink={0} className="sm:w-1/2">
++                    <Stack gap={2} padding={4} radius="lg" border className="bg-surface-alt/30 border-line">
++                      <Box as="span" className="text-xs font-bold text-accent tracking-wider uppercase">Authentic Use Case</Box>
++                      <Box as="p" className="text-sm text-text-dim italic leading-relaxed">
++                        "Sell a $15 PDF guide or a $40 custom t-shirt directly from your site. Orders route to Printful automatically for fulfillment."
++                      </Box>
++                    </Stack>
++                  </Box>
+                 </Stack>
+               </Stack>
+             )}
+             {service.id === 'events' && (
+-              <Stack gap={4}>
+-                <Box as="p">Run workshops, classes, and special events with ease.</Box>
+-                <Stack as="ul" gap={2} className="text-sm">
+-                  <Stack as="li" align="center" gap={2}>✓ Workshop & class scheduling</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Online registration & ticketing</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Automated attendee communications</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Event landing & promotion pages</Stack>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  Run workshops, retreats, and group classes without getting buried in DMs and manual spreadsheets.
++                </Box>
++                <Stack as="ul" gap={3} className="text-sm">
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Dedicated landing pages with integrated checkout</Box></Stack>
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Tiered ticketing (Early Bird, VIP, General Admission)</Box></Stack>
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Automated 'know before you go' email blasts 48 hours prior to the event</Box></Stack>
+                 </Stack>
+               </Stack>
+             )}
+             {service.id === 'marketing' && (
+-              <Stack gap={4}>
+-                <Box as="p">Get discovered, build your audience, and turn visitors into loyal customers.</Box>
+-                <Stack as="ul" gap={2} className="text-sm">
+-                  <Stack as="li" align="center" gap={2}>✓ Local SEO & Google Business Profile</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Editorial content & portfolio strategy</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Email marketing & subscriber capture</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Conversion optimization & site enhancements</Stack>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  Get discovered and build an audience that actually books your services, rather than just liking your posts.
++                </Box>
++                <Stack as="ul" gap={3} className="text-sm">
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Google Business Profile optimization to dominate local search</Box></Stack>
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">High-converting link-in-bio pages connected to your domain</Box></Stack>
++                  <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Automated post-appointment review request emails</Box></Stack>
+                 </Stack>
+               </Stack>
+             )}
+             {service.id === 'automation' && (
+-              <Stack gap={4}>
+-                <Box as="p">Connect your tools and automate the repetitive work so you can focus on your craft.</Box>
+-                <Stack as="ul" gap={2} className="text-sm">
+-                  <Stack as="li" align="center" gap={2}>✓ Form-to-calendar automated workflows</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Lead routing & CRM/spreadsheet sync</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Automated client status updates</Stack>
+-                  <Stack as="li" align="center" gap={2}>✓ Custom AI-assisted workflow engines</Stack>
++              <Stack gap={6}>
++                <Box as="p" className="text-text-dim text-[15px] leading-relaxed">
++                  Connect your tools and automate the repetitive busywork so you can focus entirely on your craft.
++                </Box>
++                <Stack direction={{ base: "col", sm: "row" }} gap={6}>
++                  <Stack as="ul" gap={3} width="full" className="text-sm sm:w-1/2">
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">New client inquiries automatically sync to a Notion tracking board</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Zero-touch invoice generation when projects are marked complete</Box></Stack>
++                    <Stack as="li" direction="row" align="start" gap={3}><Box as="span" className="text-accent/60 mt-0.5">✓</Box><Box as="span">Custom AI tools trained on your personal style and workflows</Box></Stack>
++                  </Stack>
++                  <Box width="full" shrink={0} className="sm:w-1/2">
++                    <Stack gap={2} padding={4} radius="lg" border className="bg-surface-alt/30 border-line">
++                      <Box as="span" className="text-xs font-bold text-accent tracking-wider uppercase">Authentic Use Case</Box>
++                      <Box as="p" className="text-sm text-text-dim italic leading-relaxed">
++                        "When an inquiry form is submitted, they immediately get a pricing PDF via email, and a draft reply is created in your Gmail."
++                      </Box>
++                    </Stack>
++                  </Box>
+                 </Stack>
+               </Stack>
+             )}

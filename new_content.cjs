@@ -1,4 +1,6 @@
-// impeccable-ignore-file
+const fs = require('fs');
+
+const content = `// impeccable-ignore-file
 // src/components/services/CoreServicesGrid.tsx
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Globe, Calendar, ShoppingBag, Ticket, TrendingUp, Settings } from 'lucide-react';
@@ -149,3 +151,6 @@ export const CoreServicesGrid = () => {
     </Grid>
   );
 };
+`;
+
+fs.writeFileSync('src/components/services/CoreServicesGrid.tsx', content);

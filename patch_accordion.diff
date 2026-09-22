@@ -1,0 +1,25 @@
+--- src/components/ui/accordion.tsx
++++ src/components/ui/accordion.tsx
+@@ -21,17 +21,15 @@
+   React.ElementRef<typeof AccordionPrimitive.Trigger>,
+   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+ >(({ className, children, ...props }, ref) => (
+-  <Box as={AccordionPrimitive.Header} display="flex">
++  <Box as={AccordionPrimitive.Header} display="flex" width="full">
+     <AccordionPrimitive.Trigger
+       ref={ref}
+       className={cn(
+-        "py-4 text-sm font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
++        "flex w-full flex-1 items-center justify-between text-left text-sm font-medium transition-all [&[data-state=open]>svg]:rotate-180",
+         className
+       )}
+       {...props}
+     >
+-      <Stack direction="row" align="center" justify="between" width="full">
+-        {children}
+-        <ChevronDown className="h-4 w-4 shrink-0 text-text-dim transition-transform duration-200" />
+-    </Stack>
++      {children}
++      <ChevronDown className="h-5 w-5 shrink-0 text-text-dim transition-transform duration-200 ml-4" />
+     </AccordionPrimitive.Trigger>
+   </Box>
