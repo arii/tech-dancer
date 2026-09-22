@@ -24,7 +24,7 @@ export function buildIndexNowPayload(appUrlInput?: string, keyInput?: string) {
         } else {
           appUrl = 'https://boomtick.blog';
         }
-      } catch (e) {
+      } catch {
         // If parsing fails, fallback to default
         appUrl = 'https://boomtick.blog';
       }
