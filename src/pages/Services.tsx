@@ -160,7 +160,7 @@ export const ServicesPage = () => {
 
         <Stack as="section" gap={6}>
           <Stack gap={2}>
-            <Text as="h2" size="3xl" weight="bold" tracking="tight" className="text-main">Our Core Services</Text>
+            <Text as="h2" size="3xl" weight="bold" tracking="tight" color="main" className="text-balance">Our Core Services</Text>
             <Text as="p" color="dim">Click each section to learn more about what's included.</Text>
           </Stack>
           <CoreServicesGrid />
@@ -168,7 +168,7 @@ export const ServicesPage = () => {
 
         <Stack as="section" gap={6}>
           <Stack gap={2}>
-            <Text as="h2" size="2xl" weight="bold" tracking="tight" className="text-main">Feature Details</Text>
+            <Text as="h2" size="2xl" weight="bold" tracking="tight" color="main" className="text-balance">Feature Details</Text>
             <Text as="p" color="dim">Take a closer look at what each core service includes.</Text>
           </Stack>
           <FeatureTabs />
