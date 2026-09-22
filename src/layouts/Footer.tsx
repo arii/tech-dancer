@@ -28,7 +28,7 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
+      <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t">
         <Stack gap={6}>
           {/* Contact & Business Info */}
           <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
