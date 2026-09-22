@@ -85,14 +85,14 @@
   /* Static Defaults */
   --container-blog: 68.75rem;
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
-  --gap-cards: 2rem ;
+  --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
   --section-spacing: clamp(3rem, 10vw, 8rem);
 
   /* Font Sizes */
   --text-micro: 0.5625rem /* impeccable-ignore - CSS component utility */;
-  --text-tiny: 0.625rem ;
+  --text-tiny: 0.625rem;
 }
 
 @layer utilities {
@@ -122,8 +122,8 @@
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
   .text-glow { text-shadow: 0 0 1.25rem rgba(8, 145, 178, 0.4); }
-  .gold-accent { @apply /* impeccable-ignore */ border-line hover:border-accent transition-colors; } /* impeccable-ignore - CSS component utility */;
-  .scanline-hover { @apply /* impeccable-ignore */ relative overflow-hidden; } /* impeccable-ignore - CSS component utility */;
+  .gold-accent { @apply /* impeccable-ignore */ border-line hover:border-accent transition-colors; } /* impeccable-ignore */
+  .scanline-hover { @apply /* impeccable-ignore */ relative overflow-hidden; } /* impeccable-ignore */
   .scanline-hover::after {
     content: "";
     @apply /* impeccable-ignore */ absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20 /* impeccable-ignore - CSS component utility */;
@@ -198,8 +198,8 @@
 }
 
 @utility responsive-grid {
-  display: grid ;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.875rem), 1fr)) ;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.875rem), 1fr));
 }
 
 @utility transition-nav {
@@ -403,8 +403,8 @@
 }
 
 .in-dev-banner {
-  display: flex ;
-  align-items: flex-start ;
+  display: flex;
+  align-items: flex-start;
   gap: 0.75rem;
   background: var(--color-background-secondary);
   border-radius: var(--border-radius-md);
@@ -417,7 +417,7 @@
   font-size: 0.9375rem;
   color: var(--color-text-tertiary);
   margin-top: 0.0625rem;
-  flex-shrink: 0 ;
+  flex-shrink: 0;
 }
 
 .in-dev-banner p {
@@ -478,9 +478,9 @@
 /* BoomTick Blog Mock Preview */
 .boomtick-blog-preview {
   background-color: var(--raw-color-bg) !important;
-  display: flex !important ;
-  flex-direction: column !important ;
-  align-items: flex-start !important ;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   justify-content: center !important;
   padding: 1.5rem !important;
   position: relative !important;
