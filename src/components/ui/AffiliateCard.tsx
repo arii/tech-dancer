@@ -62,20 +62,19 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
         )}
 
         <Stack gap={1} flex={1} minWidth={0} width="full">
-          <Box display="flex" align="center" justify="end" gap={1.5} width="full" className="relative z-20 pointer-events-none">
-            <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
+          <Box display="flex" align="start" justify="between" gap={2} width="full" className="relative z-20 pointer-events-none">
+            <Text
+              as="h3"
+              variant="body"
+              size="sm"
+              weight="font-bold"
+              leading="snug"
+              className="line-clamp-2 group-hover:text-accent transition-colors text-text-main break-words"
+            >
+              {link.name}
+            </Text>
+            <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0 mt-0.5" />
           </Box>
-
-          <Text
-            as="h3"
-            variant="body"
-            size="sm"
-            weight="font-bold"
-            leading="snug"
-            className="line-clamp-2 group-hover:text-accent transition-colors relative z-20 pointer-events-none text-text-main break-words"
-          >
-            {link.name}
-          </Text>
 
           <Text
             variant="body"
