@@ -93,7 +93,7 @@ const ProfileLegalAndSocial = () => {
                 Contact
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                For feedback, scoring tools, or site inquiries, reach out at <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>.
+                For questions, feedback, or collaborations, reach out at <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>.
               </Text>
             </Stack>
           </Box>

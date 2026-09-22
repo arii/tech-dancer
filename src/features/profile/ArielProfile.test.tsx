@@ -34,7 +34,7 @@ describe('ArielProfile Component', () => {
     expect(screen.getByText('My Dance Story & Why BoomTick Exists')).toBeTruthy();
     expect(screen.getByText('Style & Visual Expression')).toBeTruthy();
     expect(screen.getByText('Timing & Musicality')).toBeTruthy();
-    expect(screen.getByText('Travel & Hotel Points Strategy')).toBeTruthy();
+    expect(screen.getByText('Travel & Event Logistics')).toBeTruthy();
 
     expect(screen.getByText('First WCS Competition • Los Angeles, CA')).toBeTruthy();
     expect(screen.getByText('Late Night Social Set • Custom LED Bunny Ears')).toBeTruthy();

@@ -8,12 +8,12 @@ import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
-  role: "West Coast Swing dancer & roboticist based in San Francisco. Building scoring tools, packing LED wire for late-night socials, and chasing hotel points.",
+  role: "West Coast Swing dancer & roboticist based in San Francisco. Building web tools, designing floor-ready merch, and publishing event guides.",
   sections: [
     {
       id: "dance-background",
       title: "My Dance Story & Why BoomTick Exists",
-      content: "I started in partner dance with Lindy Hop and Fusion in 2019 before finding West Coast Swing at Mission City Swing in San Francisco. WCS hooked me immediately—the improvised elasticity, room for musical humor, and late-night social energy. I built BoomTick to share raw event notes, judges' scoring breakdowns, and practical tools I actually use on the circuit.",
+      content: "I started partner dancing in 2019 with Lindy Hop and Fusion before discovering West Coast Swing at Mission City Swing in San Francisco. The partner connection, footwork freedom, and late-night socials drew me in right away. I built BoomTick to combine software engineering with dance culture—developing web resources, practical gear guides, and custom apparel designed specifically for the community.",
       gallery: [
         {
           src: firstComp,
@@ -25,7 +25,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "style-expression",
       title: "Style & Visual Expression",
-      content: "I love bright lines, high-contrast outfits, and theme nights that take themselves just seriously enough. From late-night social sets where I pack an absurd amount of LED wire into costume ears, to competition spotlights where clean lines matter most, visual expression is half the fun on the floor.",
+      content: "Clean lines, high-contrast silhouettes, and playful theme-night outfits shape how I present on the floor. That visual focus drives the BoomTick merch line, where I design apparel and accessories made for movement, social comfort, and weekend conventions.",
       gallery: [
         {
           src: glowBunny,
@@ -37,7 +37,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "timing-musicality",
       title: "Timing & Musicality",
-      content: "I care most about dancing inside the pocket of the groove. Hitting subtle rhythmic breaks without blowing past your partner's connection is what makes WCS addictive. Give me a heavy blues track or a sparse acoustic breakdown over a wall-of-sound pop remix any day.",
+      content: "I focus on settling into the pocket of the groove and letting the rhythm drive the connection. Rather than rushing accents, I prioritize partnering clarity across blues, acoustic arrangements, and funk tracks.",
       gallery: [
         {
           src: madJamAri,
@@ -48,8 +48,8 @@ const PROFILE_DATA: ProfileData = {
     },
     {
       id: "financial-strategies",
-      title: "Travel & Hotel Points Strategy",
-      content: "Hitting 12+ weekend conventions a year gets expensive fast if you pay rack rates. I obsess over credit card reward redemptions, airline status perks, and hotel point transfers so I can stay on-site at main event hotels and keep my energy focused on dancing.",
+      title: "Travel & Event Logistics",
+      content: "Attending weekend events across the country takes serious planning. To take the friction out of conflicting workshop schedules and competition timelines, I built an AI scheduling tool that organizes chaotic weekend agendas so dancers can spend less time planning and more time dancing.",
       gallery: [
         {
           src: wwwAri,

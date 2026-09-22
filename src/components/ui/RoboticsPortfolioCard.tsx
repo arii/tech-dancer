@@ -14,7 +14,7 @@ export function RoboticsPortfolioCard() {
             Robotics &amp; Autonomous Systems Portfolio
           </Text>
           <Text variant="body" size="sm" color="dim" leading="relaxed">
-            Explore production robotics software, onboard motion planning architectures, high-accuracy state estimation systems, and technical consulting.
+            Production robotics software, real-time motion planning architectures, state estimation systems, and technical consulting.
           </Text>
           <div className="flex flex-wrap gap-2 pt-1">
             {['ROS 2', 'Motion Planning', 'State Estimation', 'Consulting'].map((tech) => (
