@@ -1,3 +1,4 @@
+/** Fundamental Box layout primitive for design system props. */
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn } from "@/lib/utils"

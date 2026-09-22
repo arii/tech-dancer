@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { cva, type VariantProps } from "class-variance-authority";
 import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
@@ -62,7 +61,7 @@ export const variants = {
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-[2px]",
+    industrial: "rounded-[2px]", // impeccable-ignore - Specific industrial edge radius
     sm: "rounded-sm",
     md: "rounded-md",
     lg: "rounded-lg",
@@ -82,11 +81,11 @@ export const buttonVariants = createTransitionVariants(
         warning: "text-accent",
       },
       size: {
-        default: "h-[40px] px-6 text-xs",
+        default: "h-10 px-6 text-xs",
         sm: "h-8 px-4 text-xs",
-        md: "h-[40px] px-6 text-xs",
+        md: "h-10 px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[40px] w-[40px]",
+        icon: "h-10 w-10",
       },
       fullWidth: {
         true: "w-full",

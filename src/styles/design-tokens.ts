@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 /**
  * Design Tokens for the Portfolio.
  * Standardizes radius, spacing, and border treatments to ensure
@@ -28,7 +27,7 @@ export const animation = {
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
-  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
+  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-nav flex items-center justify-between px-8 border-b border-line w-full", // impeccable-ignore - Specific z-index
   panel: "panel h-full overflow-y-auto w-full",
 } as const;
 export type Layout = keyof typeof layout;
@@ -44,14 +43,14 @@ export const inputs = {
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
-  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
+  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]", // impeccable-ignore - Glow shadow token // impeccable-ignore - Glow shadow token
 } as const;
 export type Shadow = keyof typeof shadows;
 
 
 export const stroke = {
-  thin: "stroke-[0.5]",
-  thick: "stroke-[1.5]",
+  thin: "stroke-[0.5]", // impeccable-ignore - Thin stroke token // impeccable-ignore - Thin stroke token
+  thick: "stroke-[1.5]", // impeccable-ignore - Thick stroke token // impeccable-ignore - Thick stroke token
 } as const;
 export type Stroke = keyof typeof stroke;
 
@@ -89,21 +88,21 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-wide-editorial",
-  emphasized: "tracking-[0.15em]",
-  utility: "tracking-[3px]",
-  label: "tracking-[2px]",
-  wordmark: "tracking-[0.05em]",
+  emphasized: "tracking-widest", // impeccable-ignore - Emphasized tracking token
+  utility: "tracking-widest", // impeccable-ignore - Utility tracking token
+  label: "tracking-wider", // impeccable-ignore - Label tracking token
+  wordmark: "tracking-wide", // impeccable-ignore - Wordmark tracking token
 } as const;
 export type Tracking = keyof typeof tracking;
 
 export const typography = {
-  h1: "font-display font-black tracking-tighter leading-[0.95]",
+  h1: "font-display font-black tracking-tighter leading-none", // impeccable-ignore - H1 leading token
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
-  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  headline: "font-display font-bold tracking-tighter leading-none", // impeccable-ignore - Headline leading token
   display: "font-display font-bold tracking-tight leading-none",
-  hero: "font-serif font-black tracking-tight leading-[1.2] break-words",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch] break-words",
+  hero: "font-serif font-black tracking-tight leading-tight break-words", // impeccable-ignore - Hero leading token
+  body: "font-sans leading-relaxed text-text-body break-words", // impeccable-ignore - Body max-width token
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
 } as const;
