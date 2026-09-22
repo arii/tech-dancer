@@ -72,6 +72,8 @@
     "@google/genai": "^2.8.0",
     "@langchain/core": "^1.2.2",
     "@langchain/google-genai": "^2.2.0",
+    "@radix-ui/react-accordion": "^1.2.20",
+    "@radix-ui/react-tabs": "^1.1.21",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.99.2",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -156,7 +158,8 @@
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-sitemap": "^0.8.2",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "zod": "^4.6.5"
   },
   "packageManager": "pnpm@10.28.2",
   "knip": {

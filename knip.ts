@@ -10,7 +10,11 @@ const config: KnipConfig = {
         'src/config/impact-interactions.ts',
         'src/features/home/DevLabCallout.tsx',
         'src/features/wcs-navigator/components/FormFields/**',
-        'src/features/wcs-navigator/data/goldenTraces.ts'
+        'src/features/wcs-navigator/data/goldenTraces.ts',
+        'src/config/sitemap-images.ts',
+        'src/features/creators/ClientCard.tsx',
+        'src/features/services/CaseStudySpotlight.tsx',
+        'src/pages/Creators.tsx'
       ],
       ignoreDependencies: [
         'tw-animate-css',
@@ -19,6 +23,7 @@ const config: KnipConfig = {
         'dependency-cruiser',
         '@types/pixelmatch',
         '@google/genai',
+
         '@vercel/node'
       ],
     }
