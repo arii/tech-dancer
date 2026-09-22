@@ -59,7 +59,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/services',
-    lazy: lazyWithRetry(() => import('@/pages/Services').then(m => ({ Component: m.default }))),
+    lazy: lazyWithRetry(() => import('@/pages/Services').then(m => ({ Component: m.ServicesPage }))),
     label: 'Services',
     icon: Briefcase,
     skeleton: 'simple',
