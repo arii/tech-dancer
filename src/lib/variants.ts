@@ -121,9 +121,6 @@ export const actionButtonVariants = createTransitionVariants(
   }
 );
 
-/** Derived TypeScript props for ActionButton components. */
-export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
-
 /**
  * Card variants for reports, tools, and callout blocks
  */
@@ -151,9 +148,6 @@ export const cardVariants = createTransitionVariants(
     }
   }
 );
-
-/** Derived TypeScript props for Card components. */
-export type CardVariants = VariantProps<typeof cardVariants>;
 
 /**
  * FilterButton variants for collection and category filtering.
@@ -230,9 +224,6 @@ export const tagVariants = createTransitionVariants(
   }
 );
 
-/** Derived TypeScript props for Tag components. */
-export type TagVariants = VariantProps<typeof tagVariants>;
-
 /**
  * Journal/Blog specific variants for editorial consistency.
  */
@@ -269,15 +260,6 @@ export const journalVariants = {
   })
 };
 
-/** Derived TypeScript props for Journal Card components. */
-export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
-/** Derived TypeScript props for Journal Share Action components. */
-export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
-/** Derived TypeScript props for Journal Tag components. */
-export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
-/** Derived TypeScript props for Journal Nav Link components. */
-export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
-
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
@@ -296,5 +278,3 @@ export const listRowVariants = createTransitionVariants(
   }
 );
 
-/** Derived TypeScript props for List Row components. */
-export type ListRowVariants = VariantProps<typeof listRowVariants>;
