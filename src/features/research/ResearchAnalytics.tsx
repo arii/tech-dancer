@@ -1,5 +1,4 @@
-// impeccable-ignore-file
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Activity,
@@ -87,16 +86,20 @@ const ResearchAnalytics = () => {
             {liveTools.map((tool) => (
               <BaseCard key={tool.id} padding={0} gap={0} surface="surface" overflow="hidden">
                 <Grid cols={{ base: 1, lg: 12 }}>
-                  <Box className="lg:col-span-8 cursor-zoom-in" onClick={() => setLightboxImage(tool.image?.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image || '')}>
+                  <Box
+                    span={{ base: 12, lg: 8 }}
+                    cursor="pointer"
+                    onClick={() => setLightboxImage(tool.image?.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image || '')}
+                  >
                     {tool.image && (
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.imageAlt || `Preview of ${tool.title}`}
-                        className="w-full h-full object-cover opacity-heavy hover:opacity-100 transition-opacity duration-500"
+                        className="block w-full h-full object-cover opacity-heavy hover:opacity-100 transition-opacity duration-500"
                       />
                     )}
                   </Box>
-                  <Box className="lg:col-span-4" padding={6}>
+                  <Box span={{ base: 12, lg: 4 }} padding={6}>
                     <Stack gap={0} height="full">
                       <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
                         <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
@@ -119,13 +122,13 @@ const ResearchAnalytics = () => {
                         {tool.description}
                       </Text>
 
-                      <Box display="flex" wrap="wrap" gap={1.5} marginBottom={5}>
+                      <Box display="flex" wrap align="center" gap={1.5} marginBottom={5}>
                         {tool.tags.map(tag => (
                           <Text key={tag} className="flagship-tag">{tag}</Text>
                         ))}
                       </Box>
 
-                      <Stack direction="col" gap={2.5} marginTop="auto" width="full">
+                      <Stack gap={2.5} marginTop="auto" width="full">
                         {tool.canonicalPath && (
                           <ActionButton as={Link} to={tool.canonicalPath} variant="primary" paddingX={4} paddingY={3} width="full" className="bg-brand-cyan hover:opacity-95 text-black border-brand-cyan font-bold">
                             OPEN LIVE TOOL →
@@ -157,9 +160,22 @@ const ResearchAnalytics = () => {
           </Box>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
             {experimentTools.map((tool) => (
-              <BaseCard key={tool.id} padding={0} gap={0} surface="surface" overflow="hidden" className="flex flex-col h-full">
-                <Stack gap={0} height="full" className="flex-1 flex flex-col justify-between">
-                  <Box width="full" className="border-b border-line/40 cursor-zoom-in bg-surface-muted min-h-[160px] flex items-center justify-center relative overflow-hidden" onClick={() => setLightboxImage(tool.image?.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image || '')}>
+              <BaseCard key={tool.id} padding={0} gap={0} surface="surface" overflow="hidden" height="full">
+                <Stack gap={0} height="full" flex={1} justify="between">
+                  <Box
+                    width="full"
+                    border="b"
+                    borderColor="line"
+                    cursor="pointer"
+                    surface="muted"
+                    minHeight={40}
+                    display="flex"
+                    align="center"
+                    justify="center"
+                    position="relative"
+                    overflow="hidden"
+                    onClick={() => setLightboxImage(tool.image?.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image || '')}
+                  >
                     {tool.image ? (
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
@@ -170,7 +186,7 @@ const ResearchAnalytics = () => {
                        <Icon icon={Activity} size="xl" color="dim" className="opacity-30" />
                     )}
                   </Box>
-                  <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0} className="flex flex-col justify-between">
+                  <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0} justify="between">
                     <Box>
                       <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
                         <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center">
@@ -187,24 +203,24 @@ const ResearchAnalytics = () => {
                       <Text variant="body" size="sm" color="dim" leading="relaxed" marginBottom={3} className="line-clamp-3">
                         {tool.description}
                       </Text>
-                      <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+                      <Box display="flex" wrap align="center" gap={1.5} marginBottom={3}>
                         {tool.tags.slice(0, 3).map(tag => (
                           <Text key={tag} className="flagship-tag">{tag}</Text>
                         ))}
                       </Box>
                     </Box>
-                    <Box display="flex" align="center" gap={2} marginTop="auto" width="full">
+                    <Stack direction="row" align="center" gap={2} marginTop="auto" width="full">
                       {tool.canonicalPath && (
-                        <ActionButton as={Link} to={tool.canonicalPath} variant="primary" paddingX={3} paddingY={1.5} className="flex-1 text-center justify-center">
+                        <ActionButton as={Link} to={tool.canonicalPath} variant="primary" paddingX={3} paddingY={1.5} flex={1}>
                           Open Tool <Icon icon={ArrowRight} size="sm" />
                         </ActionButton>
                       )}
                       {tool.deepDivePath && (
-                        <ActionButton as={Link} to={tool.deepDivePath} variant="secondary" paddingX={3} paddingY={1.5} className="text-center justify-center">
+                        <ActionButton as={Link} to={tool.deepDivePath} variant="secondary" paddingX={3} paddingY={1.5}>
                           Deep-Dive <Icon icon={FileText} size="sm" />
                         </ActionButton>
                       )}
-                    </Box>
+                    </Stack>
                   </Stack>
                 </Stack>
               </BaseCard>
@@ -218,27 +234,29 @@ const ResearchAnalytics = () => {
       {lightboxImage && (
         <Box
           position="fixed"
-          inset={0}
+          inset
           zIndex={100}
           display="flex"
           align="center"
           justify="center"
-          className="bg-black/90 cursor-zoom-out"
+          cursor="pointer"
+          padding={4}
+          surface="black"
+          opacity="heavy"
           onClick={() => setLightboxImage(null)}
         >
-          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
+          <Box position="absolute" top={4} right={4} padding={2} color="main" className="hover:text-accent">
             <Icon icon={X} size="lg" />
           </Box>
           <img
             src={lightboxImage}
             alt="Enlarged screenshot preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+            className="max-w-full max-h-full object-contain radius-lg border border-line shadow-2xl"
           />
         </Box>
       )}
     </Box>
   );
 };
-
 
 export default ResearchAnalytics;

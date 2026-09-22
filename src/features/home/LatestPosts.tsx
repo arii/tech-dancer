@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -9,7 +8,7 @@ export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
 
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
           Latest from BoomTick
@@ -23,14 +22,17 @@ export function LatestPosts() {
           weight="font-bold"
           paddingY={{ base: 4, sm: 0 }}
           paddingX={{ base: 4, sm: 0 }}
-          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
+          shrink={0}
+          uppercase
+          tracking="widest"
+          className="transition-colors hover:text-accent"
         >
           View all →
         </Text>
       </Box>
 
       {/* Compact editorial post rows — no card wrapper, border-bottom only */}
-      <Stack gap={0} border="t" className="border-line">
+      <Stack gap={0} border="t" borderColor="line">
         {posts.map((post) => (
           <Box
             key={post.slug}
@@ -39,13 +41,23 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            border="b"
+            borderColor="line"
+            paddingY={3.5}
+            width="full"
+            maxWidth="full"
+            minWidth={0}
+            className="group transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
               radius="md"
               overflow="hidden"
-              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+              height={14}
+              width={18}
+              shrink={0}
+              marginTop={0.5}
+              surface="alt"
             >
               {post.image ? (
                 <img
@@ -59,7 +71,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} className="min-w-0 flex-1">
+            <Stack gap={1} flex={1} minWidth={0}>
               <Text variant="mono" size="xs" color="dim">
                 {post.date}
               </Text>
@@ -71,7 +83,9 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            <Box marginTop={1} shrink={0}>
+              <ArrowRight className="h-4 w-4 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            </Box>
           </Box>
         ))}
       </Stack>

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -15,11 +14,11 @@ import { types, EVENT_TYPES } from './config';
 const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
   return (
     <Stack gap={2}>
-      <Text variant="mono" size="micro" color="dim" className="tracking-wider uppercase font-bold" marginBottom={0}>{label}</Text>
+      <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" marginBottom={0}>{label}</Text>
       {type === 'textarea' ? (
-        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={40} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none" {...props} />
+        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={40} paddingX={3} paddingY={2} radius="lg" surface="alt" border borderColor="line" className="w-full text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none" {...props} />
       ) : (
-        <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
+        <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} paddingX={3} paddingY={2} radius="lg" surface="alt" border borderColor="line" className="w-full text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
       )}
     </Stack>
   );
@@ -108,7 +107,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
 
         {/* Type Selector */}
-        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border borderColor="line">
           {types.map((type) => {
             const Icon = type.icon;
             const isActive = data.type === type.id;
@@ -137,8 +136,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Grid>
 
         <Box border padding="compact" className="bg-accent/5 border-accent/20">
-           <Stack gap={2} display="flex" align="baseline" direction="row">
-              <Box as="span" className="shrink-0">
+           <Stack gap={2} align="baseline" direction="row" display="flex">
+              <Box as="span" shrink={0}>
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
@@ -310,7 +309,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                          <Text variant="mono" size="xs" weight="font-bold">
                           {entry.data.title || 'Untitled Snapshot'}
                         </Text>
-                        <Box paddingX={1} className="bg-accent/20 rounded">
+                        <Box paddingX={1} radius="sm" surface="alt">
                            <Text variant="mono" size="micro" color="accent">{entry.data.type.toUpperCase()}</Text>
                         </Box>
                       </Box>
@@ -322,12 +321,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                       <Box
                         as="button"
                         onClick={() => rollback(entry)}
-                        surface="accent"
                         paddingX={2}
                         paddingY={1}
-                        className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
+                        surface="alt"
+                        className="text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
                       >
-                        <Text variant="mono" size="micro" weight="font-bold" className="text-inherit">ROLLBACK</Text>
+                        <Text variant="mono" size="micro" weight="font-bold" color="accent">ROLLBACK</Text>
                       </Box>
                       <Box
                         as="button"
@@ -398,12 +397,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
 
           <Box
-            flex
+            flex={1}
             border
             surface="muted"
             padding={6}
             overflow="y-auto"
-            maxHeight="600px"
+            maxHeight={140}
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
             <MarkdownRenderer content={markdownPreview} />

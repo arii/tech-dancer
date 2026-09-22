@@ -128,7 +128,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     whileTransitionSelection: _whileTransitionSelection,
     ...props 
   }, ref) => {
-    const isMotion = typeof Component !== "string"
+    const isMotion = typeof Component !== "string" && Boolean((Component as any)?.render?.displayName?.startsWith('motion'));
     
     const MOTION_PROPS = [
       'initial', 'animate', 'exit', 'transition', 'variants',

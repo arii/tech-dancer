@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
@@ -24,13 +23,14 @@ export function FeaturedGuidePanel() {
       overflow="hidden"
       border
       radius="md"
-      className="group self-stretch"
+      self="stretch"
+      className="group"
     >
       {/* Background image — fills the column height naturally */}
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         srcSet={`${ASSET_PREFIX}/assets/home/wcs-travel-pack-400w.webp 400w, ${ASSET_PREFIX}${FEATURED.image} 800w`}
-        sizes="(max-width: 640px) 100vw, 420px"
+        sizes="(max-width: 40rem) 100vw, 26.25rem"
         alt={FEATURED.imageAlt}
         width={420}
         height={600}
@@ -43,7 +43,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
+        bgGradient="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -59,7 +59,8 @@ export function FeaturedGuidePanel() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="mt-1 group-hover:underline"
+          marginTop={1}
+          className="group-hover:underline"
         >
           Read the guide →
         </Text>
