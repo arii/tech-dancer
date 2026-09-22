@@ -73,7 +73,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
             >
               {link.name}
             </Text>
-            <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0 mt-0.5" />
+            <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
           </Box>
 
           <Text
