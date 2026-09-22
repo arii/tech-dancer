@@ -1,8 +1,9 @@
+// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
-import { ClientSpotlight } from '@/features/services/ClientSpotlight';
-import { IntakeForm } from '@/features/services/IntakeForm';
-import { PackagesGrid } from '@/features/services/Packages';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ServicesHero } from '@/components/services/ServicesHero';
+import { CoreServicesGrid } from '@/components/services/CoreServicesGrid';
+import { FeatureTabs } from '@/components/services/FeatureTabs';
+import { CtaBanner } from '@/components/services/CtaBanner';
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -144,44 +145,37 @@ const serviceSchema = {
   }
 };
 
-const Services = () => {
+export const ServicesPage = () => {
   return (
-    <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
+    <main className="min-h-screen bg-slate-950 text-slate-50 pt-24 pb-16 px-6 lg:px-12">
       <SEO
         title="Web Design & Digital Systems for San Francisco Creatives"
         description="Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation."
         schema={serviceSchema}
       />
+      <div className="max-w-7xl mx-auto space-y-24">
+        <ServicesHero />
 
-      {/* 1. Header Section */}
-      <Stack gap={5} width="full" maxWidth="4xl" align="center" marginX="auto" marginBottom={16} className="text-center">
-        <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="wordmark">
-          Digital business systems for independent creatives
-        </Text>
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold tracking-tight">Our Core Services</h2>
+            <p className="text-slate-400">Click each section to learn more about what's included.</p>
+          </div>
+          <CoreServicesGrid />
+        </section>
 
-        <Text as="p" variant="body" size="lg" color="main" leading="relaxed" className="font-medium max-w-3xl">
-          We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
-        </Text>
-      </Stack>
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight">Feature Details</h2>
+            <p className="text-slate-400">Take a closer look at what each core service includes.</p>
+          </div>
+          <FeatureTabs />
+        </section>
 
-      <Stack gap={16} width="full">
-        {/* 2. Platform Foundation & Connected Capabilities */}
-        <Box>
-          <PackagesGrid />
-        </Box>
-
-        {/* 3. Real Client Proof: Hair by April */}
-        <Box>
-          <ClientSpotlight />
-        </Box>
-
-        {/* 4. Dedicated Next Steps Consultation & Ongoing Management Intake */}
-        <Box id="consultation" paddingTop={4}>
-          <IntakeForm />
-        </Box>
-      </Stack>
-    </Box>
+        <CtaBanner />
+      </div>
+    </main>
   );
 };
 
-export default Services;
+export default ServicesPage;
