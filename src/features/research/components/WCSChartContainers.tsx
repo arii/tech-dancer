@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { BarChart2, TrendingUp, LucideIcon } from 'lucide-react';
 import {
@@ -27,10 +26,10 @@ interface TrendData {
 
 const customTooltipStyle = {
   backgroundColor: 'var(--raw-color-surface)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  fontSize: '11px',
+  border: 'thin solid rgba(255,255,255,0.1)',
+  fontSize: 'var(--font-size-xs, 0.75rem)',
   fontFamily: 'var(--font-mono)',
-  padding: '8px'
+  padding: 'var(--spacing-2, 0.5rem)'
 };
 
 const commonXAxisProps = {
@@ -69,7 +68,7 @@ interface ChartContainerProps {
 }
 
 const ChartContainer = ({ title, icon: Icon, children, hasData, emptyLabel }: ChartContainerProps) => (
-  <Box border surface="default" padding="card" height="[400px]">
+  <Box border surface="default" padding="card" height={96}>
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <Icon className="w-4 h-4 text-accent" />

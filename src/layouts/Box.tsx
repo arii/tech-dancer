@@ -81,6 +81,12 @@ export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
   [key: string]: unknown
 }
 
+interface ComponentWithDisplayName {
+  render?: {
+    displayName?: string
+  }
+}
+
 export const Box = forwardRef<HTMLDivElement, BoxProps>(
   ({ 
     className, 
@@ -128,7 +134,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     whileTransitionSelection: _whileTransitionSelection,
     ...props 
   }, ref) => {
-    const isMotion = typeof Component !== "string"
+    const isMotion = typeof Component !== "string" && Boolean((Component as ComponentWithDisplayName)?.render?.displayName?.startsWith('motion'));
     
     const MOTION_PROPS = [
       'initial', 'animate', 'exit', 'transition', 'variants',
