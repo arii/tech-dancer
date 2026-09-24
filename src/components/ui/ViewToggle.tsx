@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { LayoutGrid, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box } from '@/layouts/Primitives';
@@ -34,7 +33,11 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           aria-label={v === 'card' ? 'Grid view' : 'List view'}
           aria-pressed={view === v}
         >
-          {v === 'card' ? <LayoutGrid className="w-5 h-5" /> : <List className="w-5 h-5" />}
+          {v === 'card' ? (
+            <Box as={LayoutGrid} width={5} height={5} />
+          ) : (
+            <Box as={List} width={5} height={5} />
+          )}
         </Box>
       ))}
     </Box>

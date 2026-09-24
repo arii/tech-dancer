@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
@@ -63,4 +62,3 @@ export function PageHeader({
     </Box>
   );
 }
-

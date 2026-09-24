@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -151,7 +150,6 @@ export function GlobalSearch() {
         height="full"
         paddingTop={{ base: 4, lg: 20 }}
         paddingX={4}
-        className=""
       >
         <Box
           as="section"
@@ -201,7 +199,7 @@ export function GlobalSearch() {
           }}
         >
           <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
-            <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+            <Box as={Search} width={5} height={5} shrink={0} className="text-accent" aria-hidden="true" />
             <Text
               as="input"
               ref={inputRef}
@@ -228,7 +226,7 @@ export function GlobalSearch() {
               border
               className="group hover:bg-accent/10 transition-colors border-line/50"
             >
-              <X className="w-4 h-4 text-text-dim group-hover:text-accent" aria-hidden="true" />
+              <Box as={X} width={4} height={4} className="text-text-dim group-hover:text-accent" aria-hidden="true" />
             </Box>
           </Box>
 
@@ -261,14 +259,14 @@ export function GlobalSearch() {
                         </Box>
                         <Text variant="body" size="xs" color="dim" opacityVariant="heavy" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                      </Stack>
-                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-dim transition-opacity" />
+                     <Box as={CornerDownLeft} width={4} height={4} className="text-accent opacity-0 group-hover:opacity-dim transition-opacity" />
                   </Box>
                 ))}
               </Stack>
             ) : (
               <Box padding={20} display="flex" align="center" justify="center">
                 <Stack align="center" gap={4} opacityVariant="dim">
-                  <Sparkles className="w-10 h-10 text-accent animate-pulse" />
+                  <Box as={Sparkles} width={10} height={10} className="text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
                      {query ? "No results found" : "Search gear, guides, and posts"}
                   </Text>
@@ -277,7 +275,7 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search">
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center">
             <Box display="flex" align="center" gap={6}>
               {[ { key: 'ESC', label: 'CLOSE' }, { key: '↵', label: 'SELECT', bold: true } ].map(hint => (
                 <Box key={hint.key} display="flex" align="center" gap={2}>

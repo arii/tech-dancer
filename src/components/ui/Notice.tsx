@@ -39,7 +39,7 @@ export function Notice({ type = 'info', children }: NoticeProps) {
       >
         {label}
       </Text>
-      <Box className={`prose-direct-children ${PROSE_MARGIN_RESET}`}> {/* impeccable-ignore */}
+      <Box className={`prose-direct-children ${PROSE_MARGIN_RESET}`}>
         {children}
       </Box>
     </Box>
