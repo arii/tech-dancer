@@ -6,7 +6,6 @@ export const HERO_CONFIG = {
   PARTICLE_ALPHA_MIN: 0.1,
   PARTICLE_ALPHA_MAX: 0.4,
   PARTICLE_HUES: [190, 270],
-  BAR_COUNT: 48,
   MOBILE_PY: 4,
   DESKTOP_PY: 4,
   // Performance tuning
@@ -15,9 +14,6 @@ export const HERO_CONFIG = {
   RESIZE_DEBOUNCE_MS: 200,
   // Deterministic seeds for stable animations
   SEEDS: {
-    BAR_HEIGHT: 137.5,
-    BAR_DUR: 222.2,
-    BAR_DELAY: 333.3,
     PARTICLE_X: 777.7,
     PARTICLE_Y: 333.3,
     PARTICLE_R: 123.4,

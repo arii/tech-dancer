@@ -472,9 +472,6 @@
     line-height: 1.8;
     max-width: 65ch;
   }
-  .hero-waveform-anim {
-    animation: fadeIn 0.8s ease forwards 0.8s;
-  }
   .hero-cta-anim {
     animation: fadeIn 0.8s ease forwards 1.0s;
   }
