@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.9.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.8.0...tech-dancer-v0.9.0) (2026-09-24)
+
+
+### Features
+
+* add loading spinner and submission feedback to IntakeForm ([#4610](https://github.com/arii/tech-dancer/issues/4610)) ([a9580f1](https://github.com/arii/tech-dancer/commit/a9580f128a19af9a039b8515edc161cde91bb6ff))
+* **assets:** add monochrome black/white BoomTick logo variants and Hair by April media assets ([#4576](https://github.com/arii/tech-dancer/issues/4576)) ([8df2254](https://github.com/arii/tech-dancer/commit/8df22542873cce97c1fe6efdb924b17831b317e7))
+* implement /creators and /services hub pages ([#4575](https://github.com/arii/tech-dancer/issues/4575)) ([4cf8af5](https://github.com/arii/tech-dancer/commit/4cf8af5c197908a3b6b007316ac255c0ec33fefa))
+* **seo:** host IndexNow API key verification and configure instant indexing ([#4543](https://github.com/arii/tech-dancer/issues/4543)) ([b3d1426](https://github.com/arii/tech-dancer/commit/b3d1426f864685cb47c717a5788a7c2aee349178))
+* **ux:** add visual preview asset for Ecommerce Automation card on research experiments index ([#4530](https://github.com/arii/tech-dancer/issues/4530)) ([7410aa9](https://github.com/arii/tech-dancer/commit/7410aa920ce5d9f53208c50a31fa964c70e29c00))
+
+
+### Bug Fixes
+
+* **accessibility:** remove duplicate main landmark and dashed line in NotFound ([#4616](https://github.com/arii/tech-dancer/issues/4616)) ([3749984](https://github.com/arii/tech-dancer/commit/3749984546a557aba891b8923952644e3fea1516))
+* append color and material to google merchant feed descriptions ([#4583](https://github.com/arii/tech-dancer/issues/4583)) ([58edaf0](https://github.com/arii/tech-dancer/commit/58edaf0c71fe53f6e1b77e01fad84d2bdf74d496))
+* **blog:** address UX audit and accessibility issues for shoe modification guide ([#4621](https://github.com/arii/tech-dancer/issues/4621)) ([9c5444e](https://github.com/arii/tech-dancer/commit/9c5444e291d9bc81041c98749364a452a981826e))
+* **client:** auto-reload on failed dynamic module chunk import ([#4581](https://github.com/arii/tech-dancer/issues/4581)) ([7edfaad](https://github.com/arii/tech-dancer/commit/7edfaadb4e56ae1752d4b08aa80e52a8f9914370))
+* Google Merchant XML feed optimizations for custom products ([#4582](https://github.com/arii/tech-dancer/issues/4582)) ([5e53b92](https://github.com/arii/tech-dancer/commit/5e53b92e1c04cf4a1061d252b90c4e9b6bcce93c))
+* missing shipping price in merchant XML feed & SEO tuning ([#4572](https://github.com/arii/tech-dancer/issues/4572)) ([1c238e5](https://github.com/arii/tech-dancer/commit/1c238e5d2f41d895fa23ef676b53d687ba05705d))
+* **seo:** inject route-specific meta description for root (/) route ([#4547](https://github.com/arii/tech-dancer/issues/4547)) ([47b65b6](https://github.com/arii/tech-dancer/commit/47b65b65640e46429e0cbc5ddd41413521c6256e))
+* **seo:** target canonical boomtick.blog production domain for IndexNow indexing ([#4625](https://github.com/arii/tech-dancer/issues/4625)) ([ead6c5a](https://github.com/arii/tech-dancer/commit/ead6c5a715dca9dc0f452712e1c2e07d6b3f4eea))
+* **seo:** truncate or optimize title tag length to under 70 characters for research studies ([#4545](https://github.com/arii/tech-dancer/issues/4545)) ([60bf8ed](https://github.com/arii/tech-dancer/commit/60bf8ed67c7d954397cdb5d3b5ba94aed2596f3e))
+* Technical SEO and Content Targeting Implementation ([#4585](https://github.com/arii/tech-dancer/issues/4585)) ([fc5c216](https://github.com/arii/tech-dancer/commit/fc5c216b166b824ac44c41af304dd178d794fc78))
+* **ux:** resolve nested link DOM structure and clarify action labels on merch catalog cards ([#4529](https://github.com/arii/tech-dancer/issues/4529)) ([85b8b3f](https://github.com/arii/tech-dancer/commit/85b8b3f81c45ece65fcc452d50df120e1640c1df))
+
+
+### Performance Improvements
+
+* optimize assets and resolve CLS regression ([#4627](https://github.com/arii/tech-dancer/issues/4627)) ([2cfd182](https://github.com/arii/tech-dancer/commit/2cfd182e9724f737ce9a273fdef26fc884b7fea5))
+* optimize initial page load performance and Core Web Vitals on mobile ([#4548](https://github.com/arii/tech-dancer/issues/4548)) ([1e89fa2](https://github.com/arii/tech-dancer/commit/1e89fa27c46a621057a3e46f048d45ed91fd673d))
+
 ## [0.8.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.7.0...tech-dancer-v0.8.0) (2026-09-04)
 
 
