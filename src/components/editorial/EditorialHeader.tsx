@@ -31,6 +31,10 @@ export function EditorialHeader({
   isShared,
   hero,
 }: EditorialHeaderProps) {
+  const filteredTags = tags?.filter(
+    (tag) => tag.trim().toLowerCase() !== category.trim().toLowerCase()
+  );
+
   return (
     <Stack gap={4}>
       <Stack gap={3}>
@@ -64,6 +68,7 @@ export function EditorialHeader({
                {onShare && (
                  <Stack
                    as="button"
+                   type="button"
                    direction="row"
                    align="center"
                    gap={1.5}
@@ -72,7 +77,7 @@ export function EditorialHeader({
                    className={journalVariants.shareAction()}
                    aria-label={isShared ? "URL copied to clipboard" : "Share article"}
                  >
-                   <Share2 className="w-3.5 h-3.5" />
+                   <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                    <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                      {isShared ? "COPIED!" : "SHARE"}
                    </Text>
@@ -81,10 +86,19 @@ export function EditorialHeader({
              </Stack>
           </Stack>
 
-          {tags && tags.length > 0 && (
-            <Stack direction="row" align="center" gap={1.5} wrap="wrap" className="max-w-full">
-              <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
-              {tags.map((tag) => (
+          {filteredTags && filteredTags.length > 0 && (
+            <Stack
+              direction="row"
+              align="center"
+              gap={1.5}
+              wrap="wrap"
+              className="max-w-full"
+              data-section="article-tags"
+            >
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>
+                TAGS:
+              </Text>
+              {filteredTags.map((tag) => (
                 <Box
                   key={tag}
                   paddingX={2}
