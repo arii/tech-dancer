@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Shield } from 'lucide-react';
+import { Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
+import { CALENDAR_BOOKING_URL } from '@/config/constants';
 
 const Spinner = () => (
   <Box
@@ -28,7 +29,11 @@ const Spinner = () => (
     </Box>
 );
 
-export function IntakeForm() {
+export interface IntakeFormProps {
+  onOpenBookingModal?: () => void;
+}
+
+export const IntakeForm = ({ onOpenBookingModal }: IntakeFormProps = {}) => {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -73,6 +78,8 @@ export function IntakeForm() {
     }
   };
 
+  const calendarUrl = import.meta.env.VITE_CALENDAR_BOOKING_URL || CALENDAR_BOOKING_URL;
+
   const inputProps = {
     width: "full",
     radius: "lg",
@@ -99,19 +106,75 @@ export function IntakeForm() {
           <Text variant="body" size="sm" color="dim" leading="relaxed" marginX="auto" maxWidth="lg">
             Whether you're looking to build a new site or need ongoing management for your existing systems, tell us about your practice, current setup, and goals.
           </Text>
+          <Text variant="body" size="xs" color="dim" marginTop={1}>
+            Need immediate scheduling?{' '}
+            {onOpenBookingModal ? (
+              <Box
+                as="button"
+                type="button"
+                onClick={onOpenBookingModal}
+                className="text-accent hover:underline font-medium inline-block cursor-pointer bg-transparent border-0 p-0"
+              >
+                Book a 20-minute Discovery Call directly →
+              </Box>
+            ) : (
+              <Box
+                as="a"
+                href={calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline font-medium"
+              >
+                Book a 20-minute Discovery Call directly →
+              </Box>
+            )}
+          </Text>
         </Stack>
 
         {status === 'success' && (
-          <Box
-            role="status"
-            aria-live="polite"
-            padding={4}
-            radius="lg"
-            border
-            className="bg-success/20 border-success/40 text-success text-sm"
-          >
-            <strong>Message sent!</strong> Thanks for reaching out. I&apos;ll review your project details and get back to you shortly.
-          </Box>
+          <Stack gap={3}>
+            <Box
+              role="status"
+              aria-live="polite"
+              padding={4}
+              radius="lg"
+              border
+              className="bg-success/20 border-success/40 text-success text-sm"
+            >
+              <strong>Message sent!</strong> Thanks for reaching out. I&apos;ll review your project details and get back to you shortly.
+            </Box>
+            {onOpenBookingModal ? (
+              <Button
+                type="button"
+                onClick={onOpenBookingModal}
+                variant="primary"
+                size="lg"
+                width="full"
+                className="shadow-md font-semibold"
+              >
+                <Stack direction="row" align="center" justify="center" gap={2}>
+                  <Calendar size={18} />
+                  <span>Book Discovery Call on Calendar →</span>
+                </Stack>
+              </Button>
+            ) : (
+              <Button
+                as="a"
+                href={calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary"
+                size="lg"
+                width="full"
+                className="shadow-md font-semibold"
+              >
+                <Stack direction="row" align="center" justify="center" gap={2}>
+                  <Calendar size={18} />
+                  <span>Book Discovery Call on Calendar →</span>
+                </Stack>
+              </Button>
+            )}
+          </Stack>
         )}
 
         {status === 'error' && (
