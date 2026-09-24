@@ -15,10 +15,7 @@ excerpt: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick
 description: "11oz black ceramic coffee mug featuring the colorful Slot Era BoomTick branding. A funny gift for WCS dancers for birthdays and holidays to power your dance event mornings and late-night competition reviews."
 ---
 
-Dishwasher and microwave safe black ceramic mug to power your dance event mornings and late-night competition reviews.
-
-### Highlights & Features
+## Highlights & Features
 - **High-Gloss Ceramic**: Premium glossy black ceramic finish with scratch-resistant rainbow Slot Era graphic print.
 - **Microwave & Dishwasher Safe**: Durable build safe for daily dishwashers and microwave heating.
 - **Comfortable C-Handle**: Ergonomic handle designed for a sturdy, comfortable grip.
-

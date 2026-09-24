@@ -113,15 +113,18 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
                 {/* Header Category & Tags */}
                 <Stack gap={2}>
                   <Stack direction="row" align="center" gap={2} wrap>
-                    {collectionMeta && (!matchedMerch?.roles || matchedMerch.roles.length === 0) && (
-                      <Box
-                        paddingX={2.5}
-                        paddingY={1}
-                        radius="full"
-                        className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
-                      >
-                        {collectionMeta.label}
-                      </Box>
+                    {collectionMeta &&
+                      (!matchedMerch?.roles || matchedMerch.roles.length === 0) &&
+                      !post.title.toLowerCase().includes(collectionMeta.label.toLowerCase()) && (
+                        <Box
+                          data-component="product-badge"
+                          paddingX={2.5}
+                          paddingY={1}
+                          radius="full"
+                          className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
+                        >
+                          {collectionMeta.label}
+                        </Box>
                     )}
                     {matchedMerch?.roles && matchedMerch.roles.length > 0 && (
                       <Stack direction="row" gap={1.5}>
@@ -178,17 +181,17 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
 
                 {/* Quick Attributes (Sizes) */}
                 {matchedMerch?.size && (
-                  <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
-                    <Stack gap={2}>
+                  <Box data-component="product-size-card">
+                    <Stack gap={1.5}>
                       <Stack direction="row" align="center" gap={1.5}>
                         <Ruler className="w-3.5 h-3.5 text-accent" />
                         <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                          Available Sizes
+                          Available Sizes:
+                        </Text>
+                        <Text variant="mono" size="sm" color="main" weight="font-medium">
+                          {matchedMerch.size.split('/').map((s) => s.trim()).join(', ')}
                         </Text>
                       </Stack>
-                      <Text variant="mono" size="sm" color="dim" leading="relaxed">
-                        {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
-                      </Text>
                     </Stack>
                   </Box>
                 )}
