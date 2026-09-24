@@ -43,15 +43,19 @@ export function RootLayout() {
     let initialized = false;
     let scriptElement: HTMLScriptElement | null = null;
 
-    const initGA = () => {
-      if (initialized) return;
-      if (!isTrackingAllowed()) return;
-      initialized = true;
-
+    const cleanupListeners = () => {
       window.removeEventListener('pointerdown', initGA);
       window.removeEventListener('scroll', initGA);
       window.removeEventListener('keydown', initGA);
       window.removeEventListener('touchstart', initGA);
+    };
+
+    const initGA = () => {
+      if (initialized) return;
+      cleanupListeners();
+
+      if (!isTrackingAllowed()) return;
+      initialized = true;
 
       // Inject Google Analytics script
       scriptElement = document.createElement('script');
@@ -79,10 +83,24 @@ export function RootLayout() {
       });
     };
 
-    window.addEventListener('pointerdown', initGA, { passive: true, once: true });
-    window.addEventListener('scroll', initGA, { passive: true, once: true });
-    window.addEventListener('keydown', initGA, { passive: true, once: true });
-    window.addEventListener('touchstart', initGA, { passive: true, once: true });
+    const setupListeners = () => {
+      if (!isTrackingAllowed()) return;
+      window.addEventListener('pointerdown', initGA, { passive: true, once: true });
+      window.addEventListener('scroll', initGA, { passive: true, once: true });
+      window.addEventListener('keydown', initGA, { passive: true, once: true });
+      window.addEventListener('touchstart', initGA, { passive: true, once: true });
+    };
+
+    setupListeners();
+
+    const handleConsentChanged = () => {
+      applyGa4DisableFlag();
+      if (!initialized && isTrackingAllowed()) {
+        initGA();
+      }
+    };
+
+    window.addEventListener('boomtick_privacy_consent_changed', handleConsentChanged);
 
     let idleId: number | undefined;
     let timerId: ReturnType<typeof setTimeout> | undefined;
@@ -94,10 +112,8 @@ export function RootLayout() {
     }
 
     return () => {
-      window.removeEventListener('pointerdown', initGA);
-      window.removeEventListener('scroll', initGA);
-      window.removeEventListener('keydown', initGA);
-      window.removeEventListener('touchstart', initGA);
+      cleanupListeners();
+      window.removeEventListener('boomtick_privacy_consent_changed', handleConsentChanged);
       if (idleId !== undefined && 'cancelIdleCallback' in window) {
         window.cancelIdleCallback(idleId);
       }
