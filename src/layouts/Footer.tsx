@@ -4,8 +4,10 @@ import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 import { formatRelativeTime } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { usePrivacyConsent } from '@/lib/hooks/usePrivacyConsent';
 
 export function Footer() {
+  const { openBanner } = usePrivacyConsent();
   const [lastUpdated, setLastUpdated] = useState<string>('');
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export function Footer() {
   const policyLinks = [
     { label: 'Shipping', to: '/shipping' },
     { label: 'Returns', to: '/return-policy' },
-    { label: 'Privacy', to: '/about#privacy' },
+    { label: 'Privacy', to: '/privacy' },
     { label: 'Terms', to: '/about#terms' },
     { label: 'Contact', to: '/about#contact' },
   ];
@@ -70,6 +72,25 @@ export function Footer() {
                   </Text>
                 </ActionButton>
               ))}
+              <ActionButton
+                type="button"
+                variant="ghost"
+                paddingX={{ base: 3, md: 3 }}
+                paddingY={{ base: 4, md: 2 }}
+                onClick={openBanner}
+                aria-label="Do Not Sell or Share My Personal Information"
+              >
+                <Text
+                  variant="mono"
+                  size="xs"
+                  uppercase
+                  weight="font-bold"
+                  tracking="widest"
+                  className="text-text-dim hover:text-accent transition-colors"
+                >
+                  Do Not Sell or Share My Personal Info
+                </Text>
+              </ActionButton>
             </Stack>
           </Stack>
 

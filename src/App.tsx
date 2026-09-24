@@ -16,6 +16,8 @@ import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
+import { CookieConsentBanner } from './components/ui/CookieConsentBanner';
+import { isTrackingAllowed, applyGa4DisableFlag } from './lib/privacyConsent';
 
 export function HydrateFallback() {
   return (
@@ -34,6 +36,8 @@ export function RootLayout() {
   const location = useLocation();
 
   useEffect(() => {
+    applyGa4DisableFlag();
+
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
     let initialized = false;
@@ -41,6 +45,7 @@ export function RootLayout() {
 
     const initGA = () => {
       if (initialized) return;
+      if (!isTrackingAllowed()) return;
       initialized = true;
 
       window.removeEventListener('pointerdown', initGA);
@@ -108,7 +113,7 @@ export function RootLayout() {
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
-    if (window.gtag) {
+    if (window.gtag && isTrackingAllowed()) {
       window.gtag('event', 'page_view', {
         page_path: location.pathname + location.search,
         page_location: window.location.href,
@@ -144,6 +149,7 @@ export function RootLayout() {
           <SpeedInsights />
         </>
       )}
+      <CookieConsentBanner />
     </Box>
   );
 }

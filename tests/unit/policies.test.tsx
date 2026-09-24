@@ -4,9 +4,26 @@ import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import ShippingPolicy from '@/pages/ShippingPolicy';
 import ReturnPolicy from '@/pages/ReturnPolicy';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import { Footer } from '@/layouts/Footer';
 
 describe('Standalone Policy Pages & Merchant Contact Signals', () => {
+  test('renders Privacy Policy page with CalOPPA, CCPA, and GPC disclosures', () => {
+    render(
+      <HelmetProvider>
+        <MemoryRouter>
+          <PrivacyPolicy />
+        </MemoryRouter>
+      </HelmetProvider>
+    );
+
+    expect(screen.getByTestId('privacy-policy-page')).toBeDefined();
+    expect(screen.getByText('Privacy Policy')).toBeDefined();
+    expect(screen.getByText(/Information We Collect/i)).toBeDefined();
+    expect(screen.getByText(/Global Privacy Control \(GPC\) & DNT/i)).toBeDefined();
+    expect(screen.getByText(/Your California Privacy Rights \(CCPA \/ CPRA\)/i)).toBeDefined();
+    expect(screen.getAllByText('ari@boomtick.blog').length).toBeGreaterThan(0);
+  });
   test('renders Shipping Policy page with fulfillment timelines and dynamic calculation disclosures', () => {
     render(
       <HelmetProvider>
@@ -22,7 +39,7 @@ describe('Standalone Policy Pages & Merchant Contact Signals', () => {
     expect(screen.getByText(/4–8 business days/i)).toBeDefined();
     expect(screen.getByText(/6–15 business days/i)).toBeDefined();
     expect(screen.getByText(/calculated dynamically at checkout by Printful/i)).toBeDefined();
-    expect(screen.getByText('ari@boomtick.blog')).toBeDefined();
+    expect(screen.getAllByText('ari@boomtick.blog').length).toBeGreaterThan(0);
   });
 
   test('renders Return Policy page with 30-day claims and damaged/defective guidelines', () => {
