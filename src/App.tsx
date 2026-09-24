@@ -54,6 +54,15 @@ export function RootLayout() {
       if (initialized) return;
       cleanupListeners();
 
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+        idleId = undefined;
+      }
+      if (timerId !== undefined) {
+        clearTimeout(timerId);
+        timerId = undefined;
+      }
+
       if (!isTrackingAllowed()) return;
       initialized = true;
 
@@ -83,22 +92,22 @@ export function RootLayout() {
       });
     }
 
-    const setupListeners = () => {
+    function setupListeners() {
       if (!isTrackingAllowed()) return;
       window.addEventListener('pointerdown', initGA, { passive: true, once: true });
       window.addEventListener('scroll', initGA, { passive: true, once: true });
       window.addEventListener('keydown', initGA, { passive: true, once: true });
       window.addEventListener('touchstart', initGA, { passive: true, once: true });
-    };
+    }
 
     setupListeners();
 
-    const handleConsentChanged = () => {
+    function handleConsentChanged() {
       applyGa4DisableFlag();
       if (!initialized && isTrackingAllowed()) {
         initGA();
       }
-    };
+    }
 
     window.addEventListener('boomtick_privacy_consent_changed', handleConsentChanged);
 
