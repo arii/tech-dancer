@@ -19,6 +19,7 @@ export function CookieConsentBanner() {
 
   return (
     <Box
+      as="aside"
       position="fixed"
       bottom={0}
       left={0}

@@ -12,19 +12,15 @@ import {
 
 export function usePrivacyConsent() {
   const [consent, setConsent] = useState<ConsentState>(() => getStoredConsent());
-  const [isBannerOpen, setIsBannerOpen] = useState<boolean>(false);
 
   const hasOptOutSignal = isOptOutSignalActive();
   const gpcActive = isGpcActive();
   const dntActive = isDntActive();
 
+  const [isBannerOpen, setIsBannerOpen] = useState<boolean>(() => !getStoredConsent() && !hasOptOutSignal);
+
   useEffect(() => {
     applyGa4DisableFlag();
-
-    // Show banner if no consent stored and no browser opt-out signal active
-    if (!getStoredConsent() && !hasOptOutSignal) {
-      setIsBannerOpen(true);
-    }
 
     const handleConsentChange = (event: Event) => {
       const customEvent = event as CustomEvent<{ consent: ConsentState }>;
