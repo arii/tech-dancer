@@ -43,14 +43,14 @@ export function RootLayout() {
     let initialized = false;
     let scriptElement: HTMLScriptElement | null = null;
 
-    const cleanupListeners = () => {
+    function cleanupListeners() {
       window.removeEventListener('pointerdown', initGA);
       window.removeEventListener('scroll', initGA);
       window.removeEventListener('keydown', initGA);
       window.removeEventListener('touchstart', initGA);
-    };
+    }
 
-    const initGA = () => {
+    function initGA() {
       if (initialized) return;
       cleanupListeners();
 
@@ -81,7 +81,7 @@ export function RootLayout() {
         page_location: window.location.href,
         page_title: document.title
       });
-    };
+    }
 
     const setupListeners = () => {
       if (!isTrackingAllowed()) return;
