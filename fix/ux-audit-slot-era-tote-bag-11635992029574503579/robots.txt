@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/fix/ux-audit-slot-era-tote-bag-11635992029574503579/sitemap.xml
