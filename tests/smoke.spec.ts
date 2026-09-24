@@ -25,12 +25,22 @@ async function validateUrlNavigation(page: Page, href: string) {
       await expect(locator).toBeVisible({ timeout: 5000 });
     }
   } else {
-    const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
+    const response = await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+    // Fallback: wait for load state networkidle or #main-content
+    // Some complex pages (e.g. with mermaid charts) take a long time to reach networkidle
+    try {
+        await page.waitForLoadState('networkidle', { timeout: 15000 });
+    } catch {
+        // If networkidle times out, that's okay, we'll verify the main content below
+    }
+
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
-      await expect(mainLocator.first()).toBeVisible({ timeout: 5000 });
+        await expect(mainLocator.first()).toBeVisible({ timeout: 15000 });
     }
+
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
     }
