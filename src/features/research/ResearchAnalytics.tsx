@@ -80,7 +80,7 @@ const ResearchAnalytics = () => {
         {/* LIVE TOOLS SECTION */}
         <Stack gap={8} id="experiments" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
-            <Text variant="headline" size="2xl" weight="font-black">Live Tools</Text>
+            <Text as="h2" variant="headline" size="2xl" weight="font-black">Live Tools</Text>
           </Box>
           <Grid cols={1} gap={6} width="full">
             {liveTools.map((tool) => (
@@ -105,11 +105,7 @@ const ResearchAnalytics = () => {
                         <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
                           <Icon icon={tool.category.includes('DevAI') ? Cpu : (tool.id.includes('scraper') || tool.id.includes('pipeline') ? Activity : Search)} size="lg" color="accent" />
                         </Box>
-                        <StatusBadge label={tool.status} />
                       </Box>
-                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
-                        {tool.status === 'Live Tool' ? '● LIVE UTILITY' : '● PRODUCTION SANDBOX'}
-                      </Text>
                       <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                         {tool.title}
                       </Text>
@@ -156,7 +152,7 @@ const ResearchAnalytics = () => {
         {/* EXPERIMENTS SECTION */}
         <Stack gap={8} id="experiments-list" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
-            <Text variant="headline" size="2xl" weight="font-black">Active Experiments</Text>
+            <Text as="h2" variant="headline" size="2xl" weight="font-black">Active Experiments</Text>
           </Box>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
             {experimentTools.map((tool) => (
