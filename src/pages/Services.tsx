@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/SEO';
-import { CALENDAR_BOOKING_URL } from '@/config/constants';
+import { BookingModal } from '@/features/services/BookingModal';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
 import { PackagesGrid } from '@/features/services/Packages';
@@ -147,6 +148,8 @@ const serviceSchema = {
 };
 
 const Services = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
   return (
     <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
@@ -176,10 +179,8 @@ const Services = () => {
             Request Consultation →
           </Button>
           <Button
-            as="a"
-            href={CALENDAR_BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            type="button"
+            onClick={() => setIsBookingModalOpen(true)}
             variant="outline"
             size="lg"
             className="shadow-md font-semibold"
@@ -205,9 +206,14 @@ const Services = () => {
 
         {/* 4. Dedicated Next Steps Consultation & Ongoing Management Intake */}
         <Box id="consultation" paddingTop={4}>
-          <IntakeForm />
+          <IntakeForm onOpenBookingModal={() => setIsBookingModalOpen(true)} />
         </Box>
       </Stack>
+
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+      />
     </Box>
   );
 };

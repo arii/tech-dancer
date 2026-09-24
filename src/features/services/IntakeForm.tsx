@@ -29,7 +29,11 @@ const Spinner = () => (
     </Box>
 );
 
-export function IntakeForm() {
+export interface IntakeFormProps {
+  onOpenBookingModal?: () => void;
+}
+
+export const IntakeForm = ({ onOpenBookingModal }: IntakeFormProps = {}) => {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -104,15 +108,26 @@ export function IntakeForm() {
           </Text>
           <Text variant="body" size="xs" color="dim" marginTop={1}>
             Need immediate scheduling?{' '}
-            <Box
-              as="a"
-              href={calendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:underline font-medium"
-            >
-              Book a 15-minute Discovery Call directly →
-            </Box>
+            {onOpenBookingModal ? (
+              <Box
+                as="button"
+                type="button"
+                onClick={onOpenBookingModal}
+                className="text-accent hover:underline font-medium inline-block cursor-pointer bg-transparent border-0 p-0"
+              >
+                Book a 20-minute Discovery Call directly →
+              </Box>
+            ) : (
+              <Box
+                as="a"
+                href={calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline font-medium"
+              >
+                Book a 20-minute Discovery Call directly →
+              </Box>
+            )}
           </Text>
         </Stack>
 
@@ -128,21 +143,37 @@ export function IntakeForm() {
             >
               <strong>Message sent!</strong> Thanks for reaching out. I&apos;ll review your project details and get back to you shortly.
             </Box>
-            <Button
-              as="a"
-              href={calendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="primary"
-              size="lg"
-              width="full"
-              className="shadow-md font-semibold"
-            >
-              <Stack direction="row" align="center" justify="center" gap={2}>
-                <Calendar size={18} />
-                <span>Book Discovery Call on Calendar →</span>
-              </Stack>
-            </Button>
+            {onOpenBookingModal ? (
+              <Button
+                type="button"
+                onClick={onOpenBookingModal}
+                variant="primary"
+                size="lg"
+                width="full"
+                className="shadow-md font-semibold"
+              >
+                <Stack direction="row" align="center" justify="center" gap={2}>
+                  <Calendar size={18} />
+                  <span>Book Discovery Call on Calendar →</span>
+                </Stack>
+              </Button>
+            ) : (
+              <Button
+                as="a"
+                href={calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary"
+                size="lg"
+                width="full"
+                className="shadow-md font-semibold"
+              >
+                <Stack direction="row" align="center" justify="center" gap={2}>
+                  <Calendar size={18} />
+                  <span>Book Discovery Call on Calendar →</span>
+                </Stack>
+              </Button>
+            )}
           </Stack>
         )}
 

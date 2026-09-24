@@ -28,11 +28,21 @@ describe('IntakeForm Component', () => {
   it('renders direct calendar booking link in form header', () => {
     render(<IntakeForm />);
 
-    const headerLink = screen.getByText(/Book a 15-minute Discovery Call directly/i).closest('a');
+    const headerLink = screen.getByText(/Book a 20-minute Discovery Call directly/i).closest('a');
     expect(headerLink).not.toBeNull();
-    expect(headerLink?.getAttribute('href')).toBe('https://cal.com/boomtick');
+    expect(headerLink?.getAttribute('href')).toBe('https://cal.com/ariel-anders/20min');
     expect(headerLink?.getAttribute('target')).toBe('_blank');
     expect(headerLink?.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+
+  it('triggers onOpenBookingModal callback when clicking header link if provided', () => {
+    const handleOpenModal = vi.fn();
+    render(<IntakeForm onOpenBookingModal={handleOpenModal} />);
+
+    const headerButton = screen.getByText(/Book a 20-minute Discovery Call directly/i);
+    fireEvent.click(headerButton);
+
+    expect(handleOpenModal).toHaveBeenCalledTimes(1);
   });
 
   it('allows filling input fields in the low-friction form', () => {
@@ -119,7 +129,7 @@ describe('IntakeForm Component', () => {
 
       const successBookingButton = screen.getByText(/Book Discovery Call on Calendar/i).closest('a');
       expect(successBookingButton).not.toBeNull();
-      expect(successBookingButton?.getAttribute('href')).toBe('https://cal.com/boomtick');
+      expect(successBookingButton?.getAttribute('href')).toBe('https://cal.com/ariel-anders/20min');
       expect(successBookingButton?.getAttribute('target')).toBe('_blank');
       expect(successBookingButton?.getAttribute('rel')).toBe('noopener noreferrer');
 
@@ -128,13 +138,34 @@ describe('IntakeForm Component', () => {
       expect(notesInput.value).toBe('');
     });
 
+    it('triggers onOpenBookingModal on success button click when provided', async () => {
+      fetchMock.mockResolvedValue({ ok: true });
+      const handleOpenModal = vi.fn();
+
+      render(<IntakeForm onOpenBookingModal={handleOpenModal} />);
+
+      const submitButton = screen.getByRole('button', { name: /Send Message/i });
+      fireEvent.change(screen.getByLabelText(/Full Name/i), { target: { value: 'Jane Doe' } });
+      fireEvent.change(screen.getByLabelText(/Email Address/i), { target: { value: 'jane@example.com' } });
+      fireEvent.change(screen.getByLabelText(/Project Scope & Notes/i), { target: { value: 'Test notes' } });
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/Message sent!/)).toBeDefined();
+      });
+
+      const successBookingButton = screen.getByText(/Book Discovery Call on Calendar/i);
+      fireEvent.click(successBookingButton);
+      expect(handleOpenModal).toHaveBeenCalledTimes(1);
+    });
+
     it('uses custom VITE_CALENDAR_BOOKING_URL when provided', async () => {
       vi.stubEnv('VITE_CALENDAR_BOOKING_URL', 'https://calendly.com/custom-boomtick');
       fetchMock.mockResolvedValue({ ok: true });
 
       render(<IntakeForm />);
 
-      const headerLink = screen.getByText(/Book a 15-minute Discovery Call directly/i).closest('a');
+      const headerLink = screen.getByText(/Book a 20-minute Discovery Call directly/i).closest('a');
       expect(headerLink?.getAttribute('href')).toBe('https://calendly.com/custom-boomtick');
 
       const submitButton = screen.getByRole('button', { name: /Send Message/i });
