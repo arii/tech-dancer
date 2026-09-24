@@ -7,7 +7,7 @@ category: "Travel"
 excerpt: "Compact, efficient, and dual-voltage. Keep your competition shirts and skirts wrinkle-free on the road."
 image: "/images/gear/sketches/travel-steamer.webp"
 affiliateIds: ["portable-steamer"]
-tags: ["travel", "clothing", "competition"]
+tags: ["competition"]
 verdict: "Essential for Competitors"
 updatedDate: "Nov 2023"
 affiliateProvider: "amazon"
@@ -49,13 +49,3 @@ When prepping in cramped hotel rooms between workshop tracks and prelims, effici
 1. **The bathroom door hook setup:** Hang your garment on a sturdy wooden hanger attached to the bathroom door hook. The vertical elevation gives you full 360-degree access to steam sleeves and skirts evenly.
 2. **Post-shower humidity boost:** Hang tricky satin pieces inside the bathroom while taking a hot shower before applying direct steam. The ambient moisture softens deep creases, cutting your steaming time in half.
 3. **Distilled water tip:** Use bottled water from hotel pantries in hard-water cities to prevent mineral buildup in the steam nozzle during long convention weekends.
-
-### Technical specifications
-
-| Feature | Specification |
-| --- | --- |
-| Heat-Up Time | 30 Seconds |
-| Voltage Rating | 110V – 240V Dual Voltage |
-| Reservoir Capacity | 120 ml (4.0 oz) |
-| Dry Weight | 1.1 lbs (500 g) |
-| Steam Runtime | 8–10 Minutes continuous |
