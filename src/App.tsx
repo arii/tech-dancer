@@ -16,6 +16,8 @@ import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
+import { CookieConsentBanner } from './components/ui/CookieConsentBanner';
+import { isTrackingAllowed, applyGa4DisableFlag } from './lib/privacyConsent';
 
 export function HydrateFallback() {
   return (
@@ -34,19 +36,35 @@ export function RootLayout() {
   const location = useLocation();
 
   useEffect(() => {
+    applyGa4DisableFlag();
+
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
     let initialized = false;
     let scriptElement: HTMLScriptElement | null = null;
 
-    const initGA = () => {
-      if (initialized) return;
-      initialized = true;
-
+    function cleanupListeners() {
       window.removeEventListener('pointerdown', initGA);
       window.removeEventListener('scroll', initGA);
       window.removeEventListener('keydown', initGA);
       window.removeEventListener('touchstart', initGA);
+    }
+
+    function initGA() {
+      if (initialized) return;
+      cleanupListeners();
+
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+        idleId = undefined;
+      }
+      if (timerId !== undefined) {
+        clearTimeout(timerId);
+        timerId = undefined;
+      }
+
+      if (!isTrackingAllowed()) return;
+      initialized = true;
 
       // Inject Google Analytics script
       scriptElement = document.createElement('script');
@@ -72,12 +90,26 @@ export function RootLayout() {
         page_location: window.location.href,
         page_title: document.title
       });
-    };
+    }
 
-    window.addEventListener('pointerdown', initGA, { passive: true, once: true });
-    window.addEventListener('scroll', initGA, { passive: true, once: true });
-    window.addEventListener('keydown', initGA, { passive: true, once: true });
-    window.addEventListener('touchstart', initGA, { passive: true, once: true });
+    function setupListeners() {
+      if (!isTrackingAllowed()) return;
+      window.addEventListener('pointerdown', initGA, { passive: true, once: true });
+      window.addEventListener('scroll', initGA, { passive: true, once: true });
+      window.addEventListener('keydown', initGA, { passive: true, once: true });
+      window.addEventListener('touchstart', initGA, { passive: true, once: true });
+    }
+
+    setupListeners();
+
+    function handleConsentChanged() {
+      applyGa4DisableFlag();
+      if (!initialized && isTrackingAllowed()) {
+        initGA();
+      }
+    }
+
+    window.addEventListener('boomtick_privacy_consent_changed', handleConsentChanged);
 
     let idleId: number | undefined;
     let timerId: ReturnType<typeof setTimeout> | undefined;
@@ -89,10 +121,8 @@ export function RootLayout() {
     }
 
     return () => {
-      window.removeEventListener('pointerdown', initGA);
-      window.removeEventListener('scroll', initGA);
-      window.removeEventListener('keydown', initGA);
-      window.removeEventListener('touchstart', initGA);
+      cleanupListeners();
+      window.removeEventListener('boomtick_privacy_consent_changed', handleConsentChanged);
       if (idleId !== undefined && 'cancelIdleCallback' in window) {
         window.cancelIdleCallback(idleId);
       }
@@ -108,7 +138,7 @@ export function RootLayout() {
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
-    if (window.gtag) {
+    if (window.gtag && isTrackingAllowed()) {
       window.gtag('event', 'page_view', {
         page_path: location.pathname + location.search,
         page_location: window.location.href,
@@ -144,6 +174,7 @@ export function RootLayout() {
           <SpeedInsights />
         </>
       )}
+      <CookieConsentBanner />
     </Box>
   );
 }
