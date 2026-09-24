@@ -64,6 +64,7 @@ export function EditorialHeader({
                {onShare && (
                  <Stack
                    as="button"
+                   type="button"
                    direction="row"
                    align="center"
                    gap={1.5}
@@ -72,7 +73,7 @@ export function EditorialHeader({
                    className={journalVariants.shareAction()}
                    aria-label={isShared ? "URL copied to clipboard" : "Share article"}
                  >
-                   <Share2 className="w-3.5 h-3.5" />
+                   <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                    <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                      {isShared ? "COPIED!" : "SHARE"}
                    </Text>
@@ -81,35 +82,50 @@ export function EditorialHeader({
              </Stack>
           </Stack>
 
-          {tags && tags.length > 0 && (
-            <Stack direction="row" align="center" gap={1.5} wrap="wrap" className="max-w-full">
-              <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
-              {tags.map((tag) => (
-                <Box
-                  key={tag}
-                  paddingX={2}
-                  paddingY={0.5}
-                  display="inline-flex"
-                  align="center"
-                  justify="center"
-                  radius="full"
-                  surface="alt"
-                  border
-                  className="border-line/20 hover:border-accent/40 transition-colors cursor-default"
-                >
-                  <Text
-                    variant="mono"
-                    size="micro"
-                    color="dim"
-                    weight="font-medium"
-                    className="whitespace-nowrap"
+          {(() => {
+            const filteredTags = tags?.filter(
+              (tag) => tag.trim().toLowerCase() !== category.trim().toLowerCase()
+            );
+            if (!filteredTags || filteredTags.length === 0) return null;
+            return (
+              <Stack
+                direction="row"
+                align="center"
+                gap={1.5}
+                wrap="wrap"
+                className="max-w-full"
+                data-section="article-tags"
+              >
+                <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>
+                  TAGS:
+                </Text>
+                {filteredTags.map((tag) => (
+                  <Box
+                    key={tag}
+                    paddingX={2}
+                    paddingY={0.5}
+                    display="inline-flex"
+                    align="center"
+                    justify="center"
+                    radius="full"
+                    surface="alt"
+                    border
+                    className="border-line/20 hover:border-accent/40 transition-colors cursor-default"
                   >
-                    {tag.toUpperCase()}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
-          )}
+                    <Text
+                      variant="mono"
+                      size="micro"
+                      color="dim"
+                      weight="font-medium"
+                      className="whitespace-nowrap"
+                    >
+                      {tag.toUpperCase()}
+                    </Text>
+                  </Box>
+                ))}
+              </Stack>
+            );
+          })()}
         </Stack>
       </Box>
 

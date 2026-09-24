@@ -55,6 +55,7 @@ export function EditorialLayout({
         {/* Navigation */}
         <Stack
           as="button"
+          type="button"
           direction="row"
           onClick={onBack}
           align="center"
@@ -66,6 +67,7 @@ export function EditorialLayout({
           <Icon
             icon={ArrowLeft}
             size="sm"
+            aria-hidden="true"
             className="transition-transform group-hover:-translate-x-1"
           />
           <Text variant="mono" size="xs" weight="font-bold">
@@ -140,6 +142,7 @@ export function EditorialLayout({
       >
         <Stack
           as="button"
+          type="button"
           onClick={scrollToTop}
           align="center"
           justify="center"
@@ -152,7 +155,7 @@ export function EditorialLayout({
           className="shadow-glow hover:text-accent transition-colors"
           aria-label="Back to top"
         >
-          <Icon icon={ArrowUp} size="sm" />
+          <Icon icon={ArrowUp} size="sm" aria-hidden="true" />
         </Stack>
       </Box>
     </Box>

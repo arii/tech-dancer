@@ -38,9 +38,10 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 <Icon
                   icon={ArrowLeft}
                   size="sm"
+                  aria-hidden="true"
                   className="transition-transform group-hover:-translate-x-1"
                 />
-                <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                <Text as="h2" variant="mono" size="xs" color="dim" weight="font-bold">
                   Previous Article
                 </Text>
               </Stack>
@@ -56,6 +57,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 readingTime={previous.readingTime}
                 image={previous.image}
                 imageAlt={previous.imageAlt}
+                titleAs="h3"
               />
             </Stack>
           )}
@@ -64,12 +66,13 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
           {next && (
             <Stack gap={2} align="end" height="full">
               <Stack direction="row" align="center" gap={2} minHeight={11}>
-                <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                <Text as="h2" variant="mono" size="xs" color="dim" weight="font-bold">
                   Next Article
                 </Text>
                 <Icon
                   icon={ArrowRight}
                   size="sm"
+                  aria-hidden="true"
                   className="transition-transform group-hover:translate-x-1"
                 />
               </Stack>
@@ -85,6 +88,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 readingTime={next.readingTime}
                 image={next.image}
                 imageAlt={next.imageAlt}
+                titleAs="h3"
               />
             </Stack>
           )}
