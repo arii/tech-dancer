@@ -31,6 +31,10 @@ export function EditorialHeader({
   isShared,
   hero,
 }: EditorialHeaderProps) {
+  const filteredTags = tags?.filter(
+    (tag) => tag.trim().toLowerCase() !== category.trim().toLowerCase()
+  );
+
   return (
     <Stack gap={4}>
       <Stack gap={3}>
@@ -82,50 +86,44 @@ export function EditorialHeader({
              </Stack>
           </Stack>
 
-          {(() => {
-            const filteredTags = tags?.filter(
-              (tag) => tag.trim().toLowerCase() !== category.trim().toLowerCase()
-            );
-            if (!filteredTags || filteredTags.length === 0) return null;
-            return (
-              <Stack
-                direction="row"
-                align="center"
-                gap={1.5}
-                wrap="wrap"
-                className="max-w-full"
-                data-section="article-tags"
-              >
-                <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>
-                  TAGS:
-                </Text>
-                {filteredTags.map((tag) => (
-                  <Box
-                    key={tag}
-                    paddingX={2}
-                    paddingY={0.5}
-                    display="inline-flex"
-                    align="center"
-                    justify="center"
-                    radius="full"
-                    surface="alt"
-                    border
-                    className="border-line/20 hover:border-accent/40 transition-colors cursor-default"
+          {filteredTags && filteredTags.length > 0 && (
+            <Stack
+              direction="row"
+              align="center"
+              gap={1.5}
+              wrap="wrap"
+              className="max-w-full"
+              data-section="article-tags"
+            >
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>
+                TAGS:
+              </Text>
+              {filteredTags.map((tag) => (
+                <Box
+                  key={tag}
+                  paddingX={2}
+                  paddingY={0.5}
+                  display="inline-flex"
+                  align="center"
+                  justify="center"
+                  radius="full"
+                  surface="alt"
+                  border
+                  className="border-line/20 hover:border-accent/40 transition-colors cursor-default"
+                >
+                  <Text
+                    variant="mono"
+                    size="micro"
+                    color="dim"
+                    weight="font-medium"
+                    className="whitespace-nowrap"
                   >
-                    <Text
-                      variant="mono"
-                      size="micro"
-                      color="dim"
-                      weight="font-medium"
-                      className="whitespace-nowrap"
-                    >
-                      {tag.toUpperCase()}
-                    </Text>
-                  </Box>
-                ))}
-              </Stack>
-            );
-          })()}
+                    {tag.toUpperCase()}
+                  </Text>
+                </Box>
+              ))}
+            </Stack>
+          )}
         </Stack>
       </Box>
 
