@@ -66,4 +66,25 @@ describe('IndexNow Generator & Submission Utility', () => {
     expect(payload?.urlList).toContain('https://boomtick.blog/');
     expect(payload?.urlList).toContain('https://boomtick.blog/blog');
   });
+
+  it('defaults to boomtick.blog when VITE_APP_URL is a github.io staging domain', () => {
+    const testKey = 'payloadkey123';
+    process.env.INDEXNOW_KEY = testKey;
+    process.env.VITE_APP_URL = 'https://arii.github.io/tech-dancer/';
+
+    const payload = buildIndexNowPayload(undefined, testKey);
+    expect(payload?.host).toBe('boomtick.blog');
+    expect(payload?.keyLocation).toBe(`https://boomtick.blog/${testKey}.txt`);
+  });
+
+  it('respects INDEXNOW_APP_URL when set', () => {
+    const testKey = 'payloadkey123';
+    process.env.INDEXNOW_KEY = testKey;
+    process.env.INDEXNOW_APP_URL = 'https://custom-domain.com';
+    process.env.VITE_APP_URL = 'https://arii.github.io/tech-dancer/';
+
+    const payload = buildIndexNowPayload(undefined, testKey);
+    expect(payload?.host).toBe('custom-domain.com');
+    expect(payload?.keyLocation).toBe(`https://custom-domain.com/${testKey}.txt`);
+  });
 });

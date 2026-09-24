@@ -58,7 +58,6 @@ export function Footer() {
                   variant="ghost"
                   paddingX={{ base: 3, md: 3 }}
                   paddingY={{ base: 4, md: 2 }}
-                  whileTap={{ scale: 0.95 }}
                 >
                   <Text
                     variant="mono"

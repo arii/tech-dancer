@@ -31,17 +31,15 @@ test.describe('Merch Page', () => {
     await expect(page.getByRole('link', { name: /Slot Era Black Ceramic Mug/i }).first()).toBeVisible();
   });
 
-  test('should filter products by collection', async ({ page }) => {
-    // Click on 'Lead/Follow/Switch' filter
-    await page.getByRole('button', { name: 'Lead/Follow/Switch' }).click();
+  test('should display product sections for each collection', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /Featured Picks/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Slot Era Merchandise Collection/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Lead, Follow, and Switch Dance Shirts/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /NorCal BestCal Pride Apparel/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Rainbow Pride Dance Apparel/i })).toBeVisible();
 
-    // Check that we only see relevant products (should be 4 based on data)
-    const filteredCards = page.getByTestId('product-card');
-    await expect(filteredCards).toHaveCount(4);
-
-    // Reset filter
-    await page.getByRole('button', { name: 'All' }).click();
-    expect(await filteredCards.count()).toBeGreaterThanOrEqual(14);
+    const productCards = page.getByTestId('product-card');
+    expect(await productCards.count()).toBeGreaterThanOrEqual(14);
   });
 
   test('should have correct attributes on Printful external links', async ({ page }) => {

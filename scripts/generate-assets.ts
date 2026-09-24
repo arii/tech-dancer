@@ -1,3 +1,4 @@
+/** Utility script to generate favicons and brand assets from CSS tokens. */
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';

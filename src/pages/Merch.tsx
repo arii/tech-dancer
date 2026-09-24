@@ -1,27 +1,19 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { COLLECTIONS } from '@/data/merch';
 import { ProductCard, EDITORIAL_CLAMP } from '@/components/products/ProductCard';
-import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
+import { getAllMerchProducts } from '@/lib/productCatalog';
 import { generateMerchSchema, generateBreadcrumbSchema } from '@/utils/schema';
-import { FilterButton } from '@/components/ui/FilterButton';
 import { PRINTFUL_REFERRAL } from '@/config/constants';
 
 export default function Merch() {
-  const [activeCollection, setActiveCollection] = useState("all");
-
-
   const allProducts = getAllMerchProducts();
-  const filteredProducts = getMerchByCollection(activeCollection);
 
-  // Group products for editorial sections when "all" is active
+  // Group products into clear editorial sections
   const sections = useMemo(() => {
-    if (activeCollection !== 'all') return null;
-
     const featuredIds = [
       'lead-follow-switch-love-neon',
       'war-eagle-oversized',
@@ -60,7 +52,7 @@ export default function Merch() {
         products: allProducts.filter(p => p.collections.includes('rainbow-pride') && !featuredIds.includes(p.id)),
       }
     ];
-  }, [activeCollection, allProducts]);
+  }, [allProducts]);
 
   const breadcrumbs = useMemo(() => generateBreadcrumbSchema([
     { name: "Home", path: "/" },
@@ -78,7 +70,6 @@ export default function Merch() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
           ctaMarginTop={{ base: 8, sm: 10 }}
@@ -94,78 +85,49 @@ export default function Merch() {
           }
         />
 
-        {/* Collection Filters */}
-        <Stack gap={5} marginTop={{ base: 8, sm: 12 }}>
-          <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
-            Shop by Style
-          </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar className="snap-x snap-mandatory">
-            <Stack direction="row" gap={2} paddingY={2} paddingX={1} minWidth="max">
-              {COLLECTIONS.map((collection) => (
-                <FilterButton
-                  key={collection.id}
-                  label={collection.label}
-                  isActive={activeCollection === collection.id}
-                  variant="compact"
-                  className="snap-start"
-                  onClick={() => setActiveCollection(collection.id)}
-                />
-              ))}
-            </Stack>
-          </Box>
-        </Stack>
-
-        {/* Product Sections or Grid */}
-        {activeCollection === 'all' && sections ? (
-          <Stack gap={12}>
-            {sections.map((section) => (
-              <Stack key={section.id} gap={8}>
-                <Stack gap={3}>
-                  <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
-                    {section.title}
-                  </Text>
-                  <Text variant="body" color="dim">
-                    {section.description}
-                  </Text>
-                </Stack>
-                {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={{ base: 4, sm: 6 }} width="full" align="stretch">
-                    <ProductCard
-                      item={section.products[0]}
-                      isFeatured
-                      span={{ base: 1, sm: 2, lg: 2 }}
-                      className="lg:row-span-1"
-                    />
-                    {section.products.slice(1, 3).map((product) => (
-                      <ProductCard
-                        key={`${section.id}-${product.id}`}
-                        item={product}
-                        span={{ base: 1, sm: 1, lg: 1 }}
-                        clampTitle={EDITORIAL_CLAMP}
-                        clampDescription={EDITORIAL_CLAMP}
-                      />
-                    ))}
-                  </Grid>
-                ) : (
-                  <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 4, sm: 6 }} width="full" minWidth="0" align="stretch">
-                    {section.products.map((product) => (
-                      <ProductCard
-                        key={`${section.id}-${product.id}`}
-                        item={product}
-                      />
-                    ))}
-                  </Grid>
-                )}
+        {/* Product Sections */}
+        <Stack gap={12}>
+          {sections.map((section) => (
+            <Stack key={section.id} gap={8}>
+              <Stack gap={3}>
+                <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
+                  {section.title}
+                </Text>
+                <Text variant="body" color="dim">
+                  {section.description}
+                </Text>
               </Stack>
-            ))}
-          </Stack>
-        ) : (
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 4, sm: 6 }} width="full" minWidth="0" align="stretch">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} item={product} />
-            ))}
-          </Grid>
-        )}
+              {section.id === 'featured' ? (
+                <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={{ base: 4, sm: 6 }} width="full" align="stretch">
+                  <ProductCard
+                    item={section.products[0]}
+                    isFeatured
+                    span={{ base: 1, sm: 2, lg: 2 }}
+                    className="lg:row-span-1"
+                  />
+                  {section.products.slice(1, 3).map((product) => (
+                    <ProductCard
+                      key={`${section.id}-${product.id}`}
+                      item={product}
+                      span={{ base: 1, sm: 1, lg: 1 }}
+                      clampTitle={EDITORIAL_CLAMP}
+                      clampDescription={EDITORIAL_CLAMP}
+                    />
+                  ))}
+                </Grid>
+              ) : (
+                <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 4, sm: 6 }} width="full" minWidth="0" align="stretch">
+                  {section.products.map((product) => (
+                    <ProductCard
+                      key={`${section.id}-${product.id}`}
+                      item={product}
+                    />
+                  ))}
+                </Grid>
+              )}
+            </Stack>
+          ))}
+        </Stack>
 
         {/* Return Policy & Printful Fulfillment Info */}
         <Box id="return-policy" padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full" scrollMarginTop={24}>

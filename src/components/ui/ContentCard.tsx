@@ -15,6 +15,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   image?: string;
   imageAlt?: string;
   excerptClamp?: number;
+  showCategoryPill?: boolean;
   [key: string]: unknown;
 }
 
@@ -32,13 +33,15 @@ export function ContentCard(props: ContentCardProps) {
     image,
     imageAlt,
     excerptClamp = 3,
+    showCategoryPill = false,
   } = props;
 
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
     'basePath',
-    'excerptClamp'
+    'excerptClamp',
+    'showCategoryPill',
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -74,55 +77,62 @@ export function ContentCard(props: ContentCardProps) {
       )}
 
       <Stack gap={4} padding={6} flex={true}>
-        <Box
-          paddingX={2}
-          paddingY={1}
-          radius="full"
-          border
-          className="border-line w-fit"
-        >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
-        >
-          {category}
-        </Text>
-      </Box>
+        {showCategoryPill && (
+          <Box
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            border
+            className="border-line w-fit"
+          >
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-black"
+              tracking="wide"
+              className={getTagColorClass(category)}
+            >
+              {category}
+            </Text>
+          </Box>
+        )}
 
-      <Stack gap={2}>
-        <Text
-          as="h2"
-          variant="body"
-          size="lg"
-          weight="font-bold"
+        <Stack gap={2}>
+          <Text
+            as="h2"
+            variant="body"
+            size="lg"
+            weight="font-bold"
             color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+          >
+            {title}
+          </Text>
 
-        <Text
-          variant="body"
-          size="sm"
-          color="dim"
-          leading="relaxed"
-          className={cn(excerptClamp === 2 ? "line-clamp-2" : "line-clamp-3")}
-          maxWidth="prose"
-        >
-           {excerpt}
-        </Text>
-      </Stack>
+          <Text
+            variant="body"
+            size="sm"
+            color="dim"
+            leading="relaxed"
+            className={cn(excerptClamp === 2 ? "line-clamp-2" : "line-clamp-3")}
+            maxWidth="prose"
+          >
+            {excerpt}
+          </Text>
+        </Stack>
 
         <Box display="flex" align="center" justify="between" marginTop="auto">
           <Text variant="mono" size="xs" color="dim" data-testid="content-date">
             {[date, readingTime].filter(Boolean).join(' • ') || category}
           </Text>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read article
+          <Text
+            variant="body"
+            size="sm"
+            color="body"
+            className="group-hover:text-accent transition-colors duration-200"
+          >
+            Read article &rarr;
           </Text>
         </Box>
       </Stack>

@@ -10,9 +10,6 @@ affiliateIds:
   - suede-sheets
 tags:
   - diy
-  - shoes
-  - dance-shoes
-  - footwear
   - wcs
 ---
 
@@ -21,8 +18,6 @@ tags:
 Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. If you're looking for the best sneakers for West Coast Swing, my preferred solution is to build them yourself. Upgrading high-comfort athletic shoes with industrial-strength adhesive suede gives you ultimate control over comfort, aesthetics, and floor feel.
 
 The key to a successful conversion is understanding floor friction. Standard athletic soles grip the wood, which can wreak havoc on your knees during multiple spins. By applying chrome leather—the industry standard for dance suede—directly to the pivot points of your sneakers, you get the perfect balance of slip and grip. Proper sole prep is crucial here. If you don't rough up the rubber surface and use an industrial adhesive like contact cement, the suede will peel off halfway through your first Jack & Jill.
-
-![Finished shoe](/images/gear/diy/step5-finished.svg)
 
 Predictable traction is the foundation of safe social dancing. The goal is not maximum grip, but a controlled balance between friction and glide. If you're dancing indoors, you need a shoe that allows controlled rotation. Too much grip can be just as dangerous as too little, especially during spins and turns.
 
@@ -41,11 +36,7 @@ Hotel ballroom floors, convention centers, and social dance venues rarely offer 
 
 ## Why Suede Works: The Physics of Traction
 
-Ballroom and social dance shoes have used suede soles for decades because they provide a consistent balance between grip and glide.
-
-- **Rubber grips too aggressively:** Most athletic shoes are designed for maximum traction, which can create excessive torque during pivots.
-- **Suede creates controlled slip:** It allows for predictable movement and easier spins.
-- **Reduced knee torque:** More predictable movement means less strain on your joints.
+Ballroom and social dance shoes have used suede soles for decades because they provide a consistent balance between grip and glide. Unlike athletic rubber, which grips aggressively and causes joint strain during spins, suede creates controlled slip for predictable rotation and reduced torque on your knees.
 
 ## Why I Don't Use Spot Stickers
 

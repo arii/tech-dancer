@@ -82,8 +82,8 @@ jobs:
               echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml"
             } > dist/robots.txt
 
-            # Submit URLs to IndexNow engines
-            pnpm run indexnow:submit || true
+            # Submit URLs to IndexNow engines for canonical production domain
+            INDEXNOW_APP_URL="https://boomtick.blog" pnpm run indexnow:submit || true
 
             echo "SEO assets generated successfully."
           fi

@@ -61,6 +61,7 @@ export function EditorialLayout({
           gap={2}
           minHeight={11}
           className={journalVariants.navLink()}
+          aria-label={backLabel}
         >
           <Icon
             icon={ArrowLeft}
@@ -149,6 +150,7 @@ export function EditorialLayout({
           surface="surface"
           border
           className="shadow-glow hover:text-accent transition-colors"
+          aria-label="Back to top"
         >
           <Icon icon={ArrowUp} size="sm" />
         </Stack>

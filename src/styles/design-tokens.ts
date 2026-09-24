@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 /**
  * Design Tokens for the Portfolio.
  * Standardizes radius, spacing, and border treatments to ensure
@@ -11,7 +10,6 @@ export const spacing = {
   card: "p-card",
   compact: "p-compact",
 } as const;
-export type Spacing = keyof typeof spacing;
 
 export const animation = {
   fast: "duration-fast",
@@ -28,10 +26,9 @@ export const animation = {
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
-  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
+  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-nav flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
 } as const;
-export type Layout = keyof typeof layout;
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans text-slate-100 placeholder:text-slate-400 placeholder:opacity-100 focus:outline-none focus:border-accent transition-all duration-150",
@@ -44,16 +41,14 @@ export const inputs = {
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
-  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
+  glow: "shadow-glow",
 } as const;
-export type Shadow = keyof typeof shadows;
 
 
 export const stroke = {
-  thin: "stroke-[0.5]",
-  thick: "stroke-[1.5]",
+  thin: "stroke-thin",
+  thick: "stroke-thick",
 } as const;
-export type Stroke = keyof typeof stroke;
 
 export const iconSizes = {
   xs: 12,
@@ -62,7 +57,6 @@ export const iconSizes = {
   lg: 24,
   xl: 32,
 } as const;
-export type IconSize = keyof typeof iconSizes;
 
 export const zIndex = {
   hide: "hide",
@@ -89,21 +83,20 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-wide-editorial",
-  emphasized: "tracking-[0.15em]",
-  utility: "tracking-[3px]",
-  label: "tracking-[2px]",
-  wordmark: "tracking-[0.05em]",
+  emphasized: "tracking-widest",
+  utility: "tracking-widest",
+  label: "tracking-wider",
+  wordmark: "tracking-wide",
 } as const;
-export type Tracking = keyof typeof tracking;
 
 export const typography = {
-  h1: "font-display font-black tracking-tighter leading-[0.95]",
+  h1: "font-display font-black tracking-tighter leading-none",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
-  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  headline: "font-display font-bold tracking-tighter leading-none",
   display: "font-display font-bold tracking-tight leading-none",
-  hero: "font-serif font-black tracking-tight leading-[1.2] break-words",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch] break-words",
+  hero: "font-serif font-black tracking-tight leading-tight break-words",
+  body: "font-sans leading-relaxed text-text-body break-words",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
 } as const;
@@ -121,7 +114,6 @@ export const opacity = {
   solid: 0.9,
   full: 1,
 } as const;
-export type Opacity = keyof typeof opacity;
 
 export const typeSizes = {
   micro: "text-micro",
