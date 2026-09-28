@@ -18,7 +18,7 @@ const ProfileLegalAndSocial = () => {
         {/* Social Links */}
         <Stack gap={4}>
           <Text
-            as="h4"
+            as="h3"
             variant="mono"
             size="xs"
             weight="font-bold"
@@ -82,7 +82,7 @@ const ProfileLegalAndSocial = () => {
           <Box id="contact" scrollMarginTop={24}>
             <Stack gap={1.5}>
               <Text
-                as="h5"
+                as="h4"
                 variant="mono"
                 size="xs"
                 weight="font-semibold"
@@ -100,7 +100,7 @@ const ProfileLegalAndSocial = () => {
           <Box id="privacy" scrollMarginTop={24}>
             <Stack gap={1.5}>
               <Text
-                as="h5"
+                as="h4"
                 variant="mono"
                 size="xs"
                 weight="font-semibold"
@@ -118,7 +118,7 @@ const ProfileLegalAndSocial = () => {
           <Box id="terms" scrollMarginTop={24}>
             <Stack gap={1.5}>
               <Text
-                as="h5"
+                as="h4"
                 variant="mono"
                 size="xs"
                 weight="font-semibold"
