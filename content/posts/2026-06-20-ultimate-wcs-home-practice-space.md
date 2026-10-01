@@ -17,7 +17,7 @@ tags:
 
 Practicing West Coast Swing at home usually means dodging furniture and guessing what your footwork actually looks like. I finally decided to upgrade my home office and workout space into a proper practice area, and the secret turned out to be surprisingly simple: stick-on mirrors.
 
-I picked up a pack of 20 mirror panels from Amazon ([you can find the exact ones here](https://a.co/d/03oedvuH)), and they completely transformed the room. If you are looking for the best way to drill your basics or check your styling without committing to a massive, expensive studio mirror, this is the route to take.
+I picked up a pack of 20 mirror panels from Amazon ([you can find the exact ones here](/gear/2026-06-20-stick-on-mirrors)), and they completely transformed the room. If you are looking for the best way to drill your basics or check your styling without committing to a massive, expensive studio mirror, this is the route to take.
 
 ### Why These Mirrors Work Perfectly for Home Studios
 
