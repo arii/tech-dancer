@@ -5,7 +5,7 @@ date: '2026-06-20'
 author: Ariel Anders
 category: Dance Gear
 excerpt: "Renter-friendly, shatterproof mirror panels perfect for building a West Coast Swing home practice space."
-image: /assets/blog/wcs-practice-space-mirrors-product.webp
+image: /images/gear/sketches/stick-on-mirrors.jpeg
 affiliateIds:
 - stick-on-mirrors
 tags:
@@ -20,7 +20,7 @@ affiliateProvider: amazon
 
 If you are building a home practice space for West Coast Swing, these renter-friendly mirror panels are the perfect solution for checking your basics and styling.
 
-![Product Overview](/assets/blog/wcs-practice-space-mirrors-product.webp)
+![Product Overview](/images/gear/sketches/stick-on-mirrors.jpeg)
 
 ### Key Features
 - **Shatterproof Material:** Made from durable, flexible acrylic that won't break if bumped.
