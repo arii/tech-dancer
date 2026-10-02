@@ -88,7 +88,7 @@ export const ClientSpotlight = () => {
     >
       <Stack gap={8} width="full">
         {/* Section Header with Tabs */}
-        <Box display="flex" justify="between" align={{ base: 'start', md: 'end' }} wrap gap={4} className="border-b border-line/20 pb-6">
+        <Box display="flex" justify="between" align={{ base: 'start', md: 'end' }} wrap gap={4} paddingBottom={6} className="border-b border-line/20">
           <Stack gap={2} className="max-w-2xl">
             <Text variant="mono" size="xs" weight="font-bold" tracking="widest" className="text-accent uppercase">
               Portfolio & Case Studies
@@ -102,16 +102,23 @@ export const ClientSpotlight = () => {
           </Stack>
 
           {/* Client Switcher Tabs */}
-          <Box display="flex" gap={2} wrap className="bg-surface/80 p-1.5 rounded-xl border border-line/30 shadow-inner">
+          <Box display="flex" gap={2} wrap padding={1.5} radius="xl" className="bg-surface/80 border border-line/30 shadow-inner">
             {portfolioClients.map((client) => {
               const isSelected = client.id === activeId;
               const Icon = client.icon;
               return (
-                <button
+                <Box
+                  as="button"
                   key={client.id}
                   type="button"
                   onClick={() => setActiveId(client.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  paddingX={4}
+                  paddingY={2}
+                  radius="lg"
+                  className={`text-xs sm:text-sm font-bold transition-all ${
                     isSelected
                       ? 'bg-accent text-slate-950 shadow-sm'
                       : 'text-dim hover:text-main hover:bg-surface-alt/50'
@@ -121,7 +128,7 @@ export const ClientSpotlight = () => {
                 >
                   <Icon size={16} />
                   <span>{client.name}</span>
-                </button>
+                </Box>
               );
             })}
           </Box>
@@ -138,7 +145,10 @@ export const ClientSpotlight = () => {
                     paddingX={2.5}
                     paddingY={0.5}
                     radius="full"
-                    className="bg-accent/10 text-accent text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-1.5"
+                    display="inline-flex"
+                    align="center"
+                    gap={1.5}
+                    className="bg-accent/10 text-accent text-xs font-semibold uppercase tracking-wider"
                   >
                     <ActiveIcon size={13} />
                     <span>{activeClient.category}</span>
@@ -168,11 +178,11 @@ export const ClientSpotlight = () => {
                 <Box display="flex" wrap align="center" gap={1.5} className="text-xs font-medium text-main">
                   {activeClient.flowSteps.map((step, idx) => (
                     <Box key={step} display="flex" align="center" gap={1.5}>
-                      <span className="px-2 py-1 rounded bg-surface-alt/80 border border-line/20 text-main font-medium">
+                      <Box as="span" paddingX={2} paddingY={1} radius="sm" className="bg-surface-alt/80 border border-line/20 text-main font-medium">
                         {step}
-                      </span>
+                      </Box>
                       {idx < activeClient.flowSteps.length - 1 && (
-                        <span className="text-accent font-bold">→</span>
+                        <Box as="span" className="text-accent font-bold">→</Box>
                       )}
                     </Box>
                   ))}
@@ -183,8 +193,10 @@ export const ClientSpotlight = () => {
               <Grid cols={{ base: 1, sm: 2 }} gap={2.5} paddingTop={1}>
                 {activeClient.features.map((feat) => (
                   <Box key={feat} display="flex" align="start" gap={2} className="text-xs text-dim">
-                    <CheckCircle2 size={15} className="text-accent shrink-0 mt-0.5" />
-                    <span>{feat}</span>
+                    <Box as="span" marginTop={0.5} shrink={0} display="inline-flex">
+                      <CheckCircle2 size={15} className="text-accent" />
+                    </Box>
+                    <Text as="span">{feat}</Text>
                   </Box>
                 ))}
               </Grid>
@@ -224,7 +236,16 @@ export const ClientSpotlight = () => {
                   loading="lazy"
                 />
                 <Box className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                <Box className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none text-white text-xs font-medium px-2 py-1 bg-black/60 backdrop-blur-md rounded-md">
+                <Box
+                  position="absolute"
+                  display="flex"
+                  align="center"
+                  justify="between"
+                  paddingX={2}
+                  paddingY={1}
+                  radius="md"
+                  className="bottom-3 left-3 right-3 pointer-events-none text-white text-xs font-medium bg-black/60 backdrop-blur-md"
+                >
                   <span>{activeClient.name}</span>
                   <span className="opacity-80">Live Production</span>
                 </Box>

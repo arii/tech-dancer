@@ -8,7 +8,6 @@ export const SOCIAL_LINKS = {
   GITHUB: 'https://github.com/arii',
   PORTFOLIO: 'https://arii.github.io'
 } as const;
-export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
 export const CALENDAR_BOOKING_URL = import.meta.env.VITE_CALENDAR_BOOKING_URL || 'https://cal.com/ariel-anders/20min';
 
