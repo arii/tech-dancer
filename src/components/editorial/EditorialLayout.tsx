@@ -140,6 +140,7 @@ export function EditorialLayout({
       >
         <Stack
           as="button"
+          type="button"
           onClick={scrollToTop}
           align="center"
           justify="center"
@@ -150,7 +151,7 @@ export function EditorialLayout({
           surface="surface"
           border
           className="shadow-glow hover:text-accent transition-colors"
-          aria-label="Back to top"
+          aria-label="Scroll to top"
         >
           <Icon icon={ArrowUp} size="sm" />
         </Stack>
