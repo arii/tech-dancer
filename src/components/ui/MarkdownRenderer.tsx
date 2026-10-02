@@ -394,17 +394,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={12} width="full" display="flex" justify="center" className="markdown-image-wrapper">
+              <Box marginY={8} width="full" display="flex" justify="center" className="markdown-image-wrapper flex justify-center my-8">
                 <Box
                   as="img"
                   src={normalizedSrc}
-                  radius="lg"
-                  shadow="sm"
+                  radius="xl"
+                  shadow="md"
                   border
                   loading="lazy"
                   alt={alt || "Article illustration"}
-                  maxWidth={{ base: 'full', md: '2xl' }}
-                  height="auto"
+                  className="max-h-[500px] w-auto rounded-xl shadow-md border border-line object-contain"
                   {...props}
                 />
               </Box>

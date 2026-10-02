@@ -7,12 +7,19 @@ interface EditorialHeroProps {
   alt: string;
   aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
   objectFit?: 'cover' | 'contain';
+  objectPosition?: 'top' | 'center' | 'bottom';
 }
 
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'contain' }: EditorialHeroProps) {
+export function EditorialHero({
+  src,
+  alt,
+  aspectRatio = { base: "square", md: "video" },
+  objectFit = 'cover',
+  objectPosition = 'top'
+}: EditorialHeroProps) {
   return (
     <Box
       width="full"
@@ -26,6 +33,7 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
         src={src}
         alt={alt}
         objectFit={objectFit}
+        objectPosition={objectPosition}
         border={false}
         radius="none"
         aspect="auto"

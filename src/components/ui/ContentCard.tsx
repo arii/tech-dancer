@@ -69,7 +69,7 @@ export function ContentCard(props: ContentCardProps) {
             alt={imageAlt || title}
             width={640}
             height={360}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
             decoding="async"
           />

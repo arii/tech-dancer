@@ -67,15 +67,15 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <Stack direction="row" gap={2} paddingBottom={2} className="overflow-x-auto snap-x snap-mandatory">
           <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" color="dim">Front</Text>
-            <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
+            <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
           </Stack>
           <Stack gap={2} minWidth="85%" flex={1} className="snap-center md:min-w-0">
             <Text variant="mono" size="xs" weight="font-bold" color="dim">Back</Text>
-            <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
+            <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
           </Stack>
         </Stack>
       ) : (
-        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
       )}
       {post.image?.includes('/sketches/') && (
         <Text variant="mono" size="xs" color="dim" className="italic">
