@@ -8,4 +8,6 @@ export const IGNORED_ERROR_PATTERNS = [
   /chrome-extension/,
   /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
   /Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin/, // External media with restrictive CORP/COEP headers
+  /Looks like your website URL has changed/i, // CookieYes domain mismatch warning on localhost
+  /cookieyes/i, // Third-party CookieYes script noise in test runners
 ];

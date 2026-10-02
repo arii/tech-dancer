@@ -10,7 +10,6 @@ import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
-import { GA_MEASUREMENT_ID } from './config/constants';
 import { routes as routeConfig } from './config/routes';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
@@ -32,78 +31,6 @@ export function HydrateFallback() {
 
 export function RootLayout() {
   const location = useLocation();
-
-  useEffect(() => {
-    if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
-
-    let initialized = false;
-    let scriptElement: HTMLScriptElement | null = null;
-
-    const initGA = () => {
-      if (initialized) return;
-      initialized = true;
-
-      window.removeEventListener('pointerdown', initGA);
-      window.removeEventListener('scroll', initGA);
-      window.removeEventListener('keydown', initGA);
-      window.removeEventListener('touchstart', initGA);
-
-      // Inject Google Analytics script
-      scriptElement = document.createElement('script');
-      scriptElement.async = true;
-      scriptElement.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-      document.head.appendChild(scriptElement);
-
-      // Initialize dataLayer and gtag
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function() {
-        // eslint-disable-next-line prefer-rest-params
-        window.dataLayer?.push(arguments);
-      };
-      window.gtag?.('js', new Date());
-
-      // Configure GA4 with automatic page_view tracking disabled
-      window.gtag?.('config', GA_MEASUREMENT_ID, {
-        send_page_view: false
-      });
-
-      window.gtag?.('event', 'page_view', {
-        page_path: window.location.pathname + window.location.search,
-        page_location: window.location.href,
-        page_title: document.title
-      });
-    };
-
-    window.addEventListener('pointerdown', initGA, { passive: true, once: true });
-    window.addEventListener('scroll', initGA, { passive: true, once: true });
-    window.addEventListener('keydown', initGA, { passive: true, once: true });
-    window.addEventListener('touchstart', initGA, { passive: true, once: true });
-
-    let idleId: number | undefined;
-    let timerId: ReturnType<typeof setTimeout> | undefined;
-
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(() => initGA(), { timeout: 3500 });
-    } else {
-      timerId = setTimeout(initGA, 3000);
-    }
-
-    return () => {
-      window.removeEventListener('pointerdown', initGA);
-      window.removeEventListener('scroll', initGA);
-      window.removeEventListener('keydown', initGA);
-      window.removeEventListener('touchstart', initGA);
-      if (idleId !== undefined && 'cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId);
-      }
-      if (timerId !== undefined) {
-        clearTimeout(timerId);
-      }
-      if (scriptElement && document.head.contains(scriptElement)) {
-        document.head.removeChild(scriptElement);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
