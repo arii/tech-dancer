@@ -69,6 +69,7 @@ export const tailwindSafelist = Array.from(new Set([
   'pb-64',
   'pl-4',
   'pl-6',
+  'pl-10',
   'pt-0',
   'pt-12',
   'pt-16',
