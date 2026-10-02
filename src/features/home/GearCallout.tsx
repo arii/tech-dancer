@@ -4,24 +4,17 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export function GearCallout() {
   return (
-    <Box border radius="md" padding={5} className="w-full max-w-full min-w-0">
-      {/* Header row */}
-      <Stack direction="row" align="center" gap={3}>
-        <Box padding={2} radius="md" shrink={0} className="bg-accent/10">
-          <Shirt className="h-4 w-4 text-accent" />
-        </Box>
-        <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          Dancer Gear & Merch
-        </Text>
-      </Stack>
+    <Box border radius="md" padding={6} className="w-full max-w-full min-w-0">
+      <Text as="h3" variant="h4" marginBottom={2}>
+        WCS Collection: Gear & Apparel
+      </Text>
 
-      {/* Description */}
-      <Text variant="body" size="xs" color="dim" leading="relaxed" marginTop={3}>
-        Get ready for your next West Coast Swing event! Browse our handpicked dancer gear recommendations, from DIY shoe modifications to packing essentials, or grab exclusive partner dance tees and accessories designed for the social floor.
+      <Text variant="body" color="body" size="sm" leading="relaxed" marginBottom={4}>
+        Get ready for your next West Coast Swing event! Browse our handpicked dancer gear recommendations, including DIY shoe modifications, packing essentials, and exclusive partner dance tees and accessories designed for the social floor.
       </Text>
 
       {/* Content links/sections */}
-      <Stack gap={4} marginTop={4}>
+      <Stack gap={3} marginBottom={4}>
         <Box
           as={NavLink}
           to="/gear"
@@ -79,17 +72,14 @@ export function GearCallout() {
       <Text
         as={NavLink}
         to="/gear"
-        display="block"
-        marginTop={5}
-        paddingY={{ base: 4, sm: 0 }}
-        paddingX={{ base: 4, sm: 0 }}
+        display="inline-block"
         variant="mono"
         size="xs"
         color="accent"
         weight="font-bold"
         className="hover:underline"
       >
-        Explore WCS Collection →
+        EXPLORE WCS COLLECTION →
       </Text>
     </Box>
   );

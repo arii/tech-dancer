@@ -58,13 +58,17 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+const BlockquoteDepthContext = React.createContext<number>(0);
+
 /**
  * Preprocesses markdown content to fix rendering issues.
- * Specifically, it ensures blank lines around Notice tag inner content
- * so that markdown inside the tags is parsed correctly by rehype-raw.
+ * 1. Strips any accidental git merge conflict markers (e.g. <<<<<<< HEAD, =======, >>>>>>> branch)
+ * 2. Ensures blank lines around Notice tag inner content so that markdown inside the tags is parsed correctly by rehype-raw.
  */
 const preprocessMarkdown = (content: string): string => {
-  return content.replace(
+  const cleaned = content.replace(/^(?:<{7}[^\n]*|={7}|>{7}[^\n]*)\n?/gm, '');
+
+  return cleaned.replace(
     /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
     (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
   );
@@ -147,16 +151,26 @@ function propMap<T>(props: Record<string, unknown>): T {
 }
 
 const RenderBlockquote = ({ children, node: _node, ...props }: { children: React.ReactNode, node?: unknown }) => {
+  const depth = React.useContext(BlockquoteDepthContext);
+
+  if (depth > 0) {
+    return (
+      <Box as="blockquote" paddingLeft={4} marginY={2} className="italic text-text-main" {...props}>
+        {children}
+      </Box>
+    );
+  }
+
   // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
   const childArray = Array.isArray(children) ? children : [children];
   let label = 'Note';
-  const firstChild = childArray[0];
+  const firstChild = childArray.find((c) => React.isValidElement(c));
 
   if (React.isValidElement(firstChild)) {
     const pChildren = firstChild.props.children;
     const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
     const firstStrong = pArr.find(
-      (c) => React.isValidElement(c) && c.type === 'strong'
+      (c) => React.isValidElement(c) && (c.type === 'strong' || (typeof c.type === 'function' && c.props?.as === 'strong'))
     );
 
     if (React.isValidElement(firstStrong) && firstStrong.props.children) {
@@ -167,14 +181,16 @@ const RenderBlockquote = ({ children, node: _node, ...props }: { children: React
     }
   }
   return (
-    <Box border surface="warning" padding={6} marginY={12} radius="lg">
-      <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
-        {label}
-      </Text>
-      <blockquote className="italic font-medium text-text-main" {...props}>
-        {children}
-      </blockquote>
-    </Box>
+    <BlockquoteDepthContext.Provider value={depth + 1}>
+      <Box border surface="warning" padding={6} marginY={12} radius="lg">
+        <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
+          {label}
+        </Text>
+        <blockquote className="italic font-medium text-text-main" {...props}>
+          {children}
+        </blockquote>
+      </Box>
+    </BlockquoteDepthContext.Provider>
   );
 };
 
@@ -348,8 +364,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 size="xl"
                 color="main"
                 margin={0}
-                paddingLeft={4}
-                className="border-l-2 border-accent/30"
                 {...props}
               />
             </Box>

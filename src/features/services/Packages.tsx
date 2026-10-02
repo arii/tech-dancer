@@ -113,13 +113,16 @@ export const ModularPackages = () => {
               <Text variant="headline" size="3xl" weight="font-bold" tracking="wordmark" className="text-main">
                 $1,500
               </Text>
+              <Text variant="mono" size="xs" weight="font-bold" tracking="widest" marginTop={1} className="text-dim/80 uppercase block">
+                CONSULTANT: ARIEL ANDERS
+              </Text>
             </Box>
           </Box>
 
           {/* Description & Feature Grid spanning across the card */}
           <Stack gap={6} width="full">
             <Text variant="body" size="base" color="dim" leading="relaxed" className="max-w-4xl">
-              A fast, polished website designed around your work, your customers, and the way your business operates. We handle the technical details so you can focus on your craft.
+              A fast, polished website designed around your work, your customers, and the way your business operates. I handle the technical details so you can focus on your craft.
             </Text>
 
             {/* Feature Grid spanning wide */}

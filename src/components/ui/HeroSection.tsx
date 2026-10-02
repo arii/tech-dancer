@@ -1,19 +1,8 @@
-
-
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
-import { HERO_CONFIG } from '@/config/hero';
-
-// Generate deterministic bar data based on index to prevent visual regression flakiness
-const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
-  height: 20 + ((i * HERO_CONFIG.SEEDS.BAR_HEIGHT) % 36),
-  dur: (0.4 + ((i * HERO_CONFIG.SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
-  delay: ((i * HERO_CONFIG.SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
-})) as const;
 
 export function HeroSection() {
-
   return (
     <Stack
       as="section"
@@ -52,8 +41,6 @@ export function HeroSection() {
         maxWidth="screen-xl"
         marginX={{ base: 0, xl: "auto" }}
       >
-
-
         <Wordmark
           variant="hero"
           opacity={0}
@@ -118,41 +105,7 @@ export function HeroSection() {
             The west coast swing dancer's guide to gear, travel, and better dance weekends.
           </Text>
         </Stack>
-
-        {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
-
-
-
-
-        <Stack
-          direction="row"
-          align="end"
-          gap={1}
-          marginY={4}
-          height={12}
-          width="full"
-          maxWidth="full"
-          overflow="hidden"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-waveform-anim"
-          aria-hidden="true"
-        >
-          {BARS.map((bar, i) => (
-            <Box
-              key={i}
-              radius="none"
-              className="hero-bar"
-              style={ {
-                '--hero-bar-height': `${bar.height / 16}rem`,
-                '--hero-bar-dur': bar.dur,
-                '--hero-bar-delay': bar.delay,
-              } as React.CSSProperties }
-            />
-          ))}
-        </Stack>
       </Stack>
-
     </Stack>
   );
 }

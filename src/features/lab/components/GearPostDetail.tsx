@@ -8,7 +8,7 @@ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
 import { VerdictCallout } from '@/components/layout/DetailElements';
 import { Stack, Text, Box, Grid } from '@/layouts/Primitives';
-import { MERCH_PRODUCTS, COLLECTIONS } from '@/data/merch';
+import { MERCH_PRODUCTS } from '@/data/merch';
 import { MerchImageGallery, type MerchGalleryImage } from '@/components/products/MerchImageGallery';
 import { MerchCollectionCrossLinks } from '@/components/products/MerchCollectionCrossLinks';
 
@@ -64,7 +64,6 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
         ];
 
     const primaryCollectionId = matchedMerch?.collections?.[0];
-    const collectionMeta = COLLECTIONS.find((c) => c.id === primaryCollectionId);
 
     return (
       <Box
@@ -110,38 +109,32 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
             {/* Right Column: Title, Metadata, CTA, Order Guarantees & Overview */}
             <Box span={{ base: 1, lg: 5 }}>
               <Stack gap={6} className="lg:sticky lg:top-24">
-                {/* Header Category & Tags */}
+                {/* Header Category & Roles */}
                 <Stack gap={2}>
-                  <Stack direction="row" align="center" gap={2} wrap>
-                    {collectionMeta && (!matchedMerch?.roles || matchedMerch.roles.length === 0) && (
-                      <Box
-                        paddingX={2.5}
-                        paddingY={1}
-                        radius="full"
-                        className="bg-accent/15 border border-accent/30 text-accent font-sans text-xs font-semibold tracking-wide"
-                      >
-                        {collectionMeta.label}
-                      </Box>
-                    )}
-                    {matchedMerch?.roles && matchedMerch.roles.length > 0 && (
-                      <Stack direction="row" gap={1.5}>
-                        {matchedMerch.roles.map((r) => (
-                          <Box
-                            key={r}
-                            paddingX={2.5}
-                            paddingY={1}
-                            radius="full"
-                            className="bg-accent/15 border border-accent/40 text-accent font-sans text-xs font-semibold tracking-wide uppercase"
-                          >
-                            {r}
-                          </Box>
-                        ))}
-                      </Stack>
-                    )}
-                    <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
-                      {post.category || 'Official Merch'}
-                    </Text>
-                  </Stack>
+                  {(matchedMerch?.roles && matchedMerch.roles.length > 0) || (post.category && post.category !== 'Accessories' && post.category !== 'Apparel' && !post.title.includes(post.category)) ? (
+                    <Stack direction="row" align="center" gap={2} wrap>
+                      {matchedMerch?.roles && matchedMerch.roles.length > 0 && (
+                        <Stack direction="row" gap={1.5}>
+                          {matchedMerch.roles.map((r) => (
+                            <Box
+                              key={r}
+                              paddingX={2.5}
+                              paddingY={1}
+                              radius="full"
+                              className="bg-accent/15 border border-accent/40 text-accent font-sans text-xs font-semibold tracking-wide uppercase"
+                            >
+                              {r}
+                            </Box>
+                          ))}
+                        </Stack>
+                      )}
+                      {post.category && post.category !== 'Accessories' && post.category !== 'Apparel' && !post.title.includes(post.category) && (
+                        <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
+                          {post.category}
+                        </Text>
+                      )}
+                    </Stack>
+                  ) : null}
 
                   <Text as="h1" variant="headline" size="3xl" weight="font-bold" color="main" leading="tight">
                     {post.title}
@@ -178,19 +171,17 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
 
                 {/* Quick Attributes (Sizes) */}
                 {matchedMerch?.size && (
-                  <Box padding={4} radius="lg" className="bg-surface/40 border border-line/20">
-                    <Stack gap={2}>
-                      <Stack direction="row" align="center" gap={1.5}>
-                        <Ruler className="w-3.5 h-3.5 text-accent" />
-                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                          Available Sizes
-                        </Text>
-                      </Stack>
-                      <Text variant="mono" size="sm" color="dim" leading="relaxed">
-                        {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
+                  <Stack gap={1.5}>
+                    <Stack direction="row" align="center" gap={1.5}>
+                      <Ruler className="w-3.5 h-3.5 text-accent" />
+                      <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                        Available Sizes
                       </Text>
                     </Stack>
-                  </Box>
+                    <Text variant="mono" size="sm" color="dim" leading="relaxed">
+                      {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
+                    </Text>
+                  </Stack>
                 )}
 
                 {/* Primary Direct Checkout CTA Button */}
