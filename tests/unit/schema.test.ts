@@ -473,44 +473,14 @@ describe('schema utils', () => {
     });
   });
 
-  describe('PUBLISHER_BOOMTICK Organization & Founder topical authority schema', () => {
-    it('contains description, knowsAbout, keywords, address, and founder in PUBLISHER_BOOMTICK', () => {
+  describe('PUBLISHER_BOOMTICK Organization topical authority schema', () => {
+    it('contains name, url, logo, and image in PUBLISHER_BOOMTICK', () => {
       expect(PUBLISHER_BOOMTICK['@type']).toBe('Organization');
+      expect(PUBLISHER_BOOMTICK['@id']).toBe(`${BASE_URL}/#organization`);
       expect(PUBLISHER_BOOMTICK.name).toBe('BoomTick');
-      expect(PUBLISHER_BOOMTICK.email).toBe('ari@boomtick.blog');
-      expect(PUBLISHER_BOOMTICK.telephone).toBe('+1-661-205-2489');
-      expect(PUBLISHER_BOOMTICK.areaServed).toBe('San Francisco, CA');
-      expect(PUBLISHER_BOOMTICK.description).toBe('West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.');
-      expect(PUBLISHER_BOOMTICK.knowsAbout).toEqual([
-        'West Coast Swing',
-        'Dance Event Scheduling & Technology',
-        'Creator Operations & Automation',
-        'Dance Apparel & Gear'
-      ]);
-      expect(PUBLISHER_BOOMTICK.keywords).toBe('West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions');
-      expect(PUBLISHER_BOOMTICK.address).toEqual({
-        '@type': 'PostalAddress',
-        addressLocality: 'San Francisco',
-        addressRegion: 'CA',
-        addressCountry: 'US'
-      });
-      expect(PUBLISHER_BOOMTICK.founder).toEqual({
-        '@type': 'Person',
-        name: 'Ariel Anders',
-        jobTitle: 'Roboticist & AI Engineer',
-        url: `${BASE_URL}/about`,
-        knowsAbout: [
-          'West Coast Swing',
-          'Robotics',
-          'Artificial Intelligence'
-        ],
-        sameAs: [
-          'https://arii.github.io',
-          'https://github.com/arii',
-          'https://www.linkedin.com/in/ariel-anders/',
-          'https://www.instagram.com/onasafari/'
-        ]
-      });
+      expect(PUBLISHER_BOOMTICK.url).toBe(BASE_URL);
+      expect(PUBLISHER_BOOMTICK.logo).toBe(`${BASE_URL}/assets/boomtick-logo.png`);
+      expect(PUBLISHER_BOOMTICK.image).toBe(`${BASE_URL}/assets/boomtick-og-banner.jpg`);
     });
   });
 

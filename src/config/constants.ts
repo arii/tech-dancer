@@ -21,69 +21,81 @@ export const PRINTFUL_REFERRAL = {
   FOOTER_DESCRIPTION: 'Supporting BoomTick helps us keep the servers running and the content flowing. Save $5 on your first Printful order and support the blog at the same time.'
 } as const;
 
-const DEFAULT_DESCRIPTION = "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.";
-
-export const STATIC_SCHEMAS = {
-  HOME: [
+export const CONSULTING_SERVICE_SCHEMA = {
+  "@type": "ProfessionalService",
+  "@id": `${BASE_URL}/#consulting`,
+  "name": "Ariel Anders Consulting",
+  "url": `${BASE_URL}/services`,
+  "telephone": "+1-661-205-2489",
+  "priceRange": "$$$",
+  "image": `${BASE_URL}/assets/ariel-anders-consulting-banner.jpg`,
+  "areaServed": [
     {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": SITE_NAME,
-      "url": BASE_URL,
-      "description": DEFAULT_DESCRIPTION,
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": `${BASE_URL}/blog?q={search_term_string}`,
-        "query-input": "required name=search_term_string"
-      }
+      "@type": "City",
+      "name": "San Francisco"
     },
     {
-      "@context": "https://schema.org",
-      "@id": `${BASE_URL}/#organization`,
-      "@type": "Organization",
-      "name": "BoomTick",
-      "url": BASE_URL,
-      "email": "ari@boomtick.blog",
-      "telephone": "+1-661-205-2489",
-      "areaServed": "San Francisco, CA",
-      "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
-      "knowsAbout": [
-        "West Coast Swing",
-        "Dance Event Scheduling & Technology",
-        "Creator Operations & Automation",
-        "Dance Apparel & Gear"
-      ],
-      "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
-      "logo": {
-        "@type": "ImageObject",
-        "name": `${SITE_NAME} Logo`,
-        "url": `${BASE_URL}/favicon.ico`
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "San Francisco",
-        "addressRegion": "CA",
-        "addressCountry": "US"
-      },
-      "founder": {
-        "@type": "Person",
-        "name": "Ariel Anders",
-        "jobTitle": "Roboticist & AI Engineer",
-        "url": `${BASE_URL}/about`,
-        "knowsAbout": [
-          "West Coast Swing",
-          "Robotics",
-          "Artificial Intelligence"
-        ],
-        "sameAs": [
-          SOCIAL_LINKS.PORTFOLIO,
-          SOCIAL_LINKS.GITHUB,
-          SOCIAL_LINKS.LINKEDIN,
-          SOCIAL_LINKS.INSTAGRAM
-        ]
-      }
+      "@type": "AdministrativeArea",
+      "name": "California"
     }
   ],
+  "founder": {
+    "@id": `${BASE_URL}/#founder`
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Digital Consulting Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Digital Foundation Setup",
+          "description": "Custom mobile-responsive website, local SEO optimization, domain configuration, and integrated booking workflows."
+        },
+        "price": "1500",
+        "priceCurrency": "USD"
+      }
+    ]
+  }
+} as const;
+
+export const BOOMTICK_WEBSITE_SCHEMA = {
+  "@type": "WebSite",
+  "@id": `${BASE_URL}/#website`,
+  "url": `${BASE_URL}/`,
+  "name": "BoomTick",
+  "publisher": {
+    "@type": "Organization",
+    "@id": `${BASE_URL}/#organization`,
+    "name": "BoomTick",
+    "logo": `${BASE_URL}/assets/boomtick-logo.png`,
+    "image": `${BASE_URL}/assets/boomtick-og-banner.jpg`
+  }
+} as const;
+
+export const FOUNDER_PERSON_SCHEMA = {
+  "@type": "Person",
+  "@id": `${BASE_URL}/#founder`,
+  "name": "Ariel Anders",
+  "jobTitle": "Roboticist, AI Engineer & Consultant",
+  "url": `${BASE_URL}/about`,
+  "sameAs": [
+    "https://arii.github.io/",
+    "https://github.com/arii",
+    "https://www.linkedin.com/in/ariel-anders/"
+  ]
+} as const;
+
+export const STATIC_SCHEMAS = {
+  HOME: {
+    "@context": "https://schema.org",
+    "@graph": [
+      BOOMTICK_WEBSITE_SCHEMA,
+      CONSULTING_SERVICE_SCHEMA,
+      FOUNDER_PERSON_SCHEMA
+    ]
+  },
   ABOUT: (bioName: string, bioRole: string) => [
     {
       "@context": "https://schema.org",

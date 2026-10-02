@@ -3,61 +3,59 @@ import { STATIC_SCHEMAS, BASE_URL } from '@/config/constants';
 import { getPosts, getResources } from '@/lib/content';
 
 describe('Mobile-First Indexing & Rendering Parity', () => {
-  it('ensures STATIC_SCHEMAS.HOME contains WebSite and Organization with proper topical authority and founder affiliation', () => {
-    const homeSchemas = STATIC_SCHEMAS.HOME;
-    expect(Array.isArray(homeSchemas)).toBe(true);
+  it('ensures STATIC_SCHEMAS.HOME contains WebSite, ProfessionalService, and Person in @graph array', () => {
+    const homeSchema = STATIC_SCHEMAS.HOME;
+    expect(homeSchema['@context']).toBe('https://schema.org');
+    expect(Array.isArray(homeSchema['@graph'])).toBe(true);
 
-    const websiteSchema = homeSchemas.find((s: Record<string, unknown>) => s['@type'] === 'WebSite');
+    const graph = homeSchema['@graph'];
+
+    const websiteSchema = graph.find((s: Record<string, unknown>) => s['@type'] === 'WebSite') as Record<string, unknown> | undefined;
     expect(websiteSchema).toBeDefined();
-    expect(websiteSchema?.url).toBe(BASE_URL);
-    expect(websiteSchema?.potentialAction).toBeDefined();
-
-    const orgSchema = homeSchemas.find((s: Record<string, unknown>) => s['@type'] === 'Organization') as {
-      name?: string;
-      description?: string;
-      knowsAbout?: string[];
-      keywords?: string;
-      address?: Record<string, string>;
-      founder?: {
-        name?: string;
-        jobTitle?: string;
-        url?: string;
-        knowsAbout?: string[];
-        sameAs?: string[];
-      };
-    } | undefined;
-    expect(orgSchema).toBeDefined();
-    expect(orgSchema?.name).toBe('BoomTick');
-    expect(orgSchema?.description).toBe('West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.');
-    expect(orgSchema?.knowsAbout).toEqual([
-      'West Coast Swing',
-      'Dance Event Scheduling & Technology',
-      'Creator Operations & Automation',
-      'Dance Apparel & Gear'
-    ]);
-    expect(orgSchema?.keywords).toBe('West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions');
-    expect(orgSchema?.address).toEqual({
-      '@type': 'PostalAddress',
-      addressLocality: 'San Francisco',
-      addressRegion: 'CA',
-      addressCountry: 'US'
+    expect(websiteSchema?.['@id']).toBe(`${BASE_URL}/#website`);
+    expect(websiteSchema?.url).toBe(`${BASE_URL}/`);
+    expect(websiteSchema?.name).toBe('BoomTick');
+    expect(websiteSchema?.publisher).toEqual({
+      '@type': 'Organization',
+      '@id': `${BASE_URL}/#organization`,
+      name: 'BoomTick',
+      logo: `${BASE_URL}/assets/boomtick-logo.png`,
+      image: `${BASE_URL}/assets/boomtick-og-banner.jpg`
     });
 
-    const founder = orgSchema?.founder;
-    expect(founder).toBeDefined();
-    expect(founder?.name).toBe('Ariel Anders');
-    expect(founder?.jobTitle).toBe('Roboticist & AI Engineer');
-    expect(founder?.url).toBe(`${BASE_URL}/about`);
-    expect(founder?.knowsAbout).toEqual([
-      'West Coast Swing',
-      'Robotics',
-      'Artificial Intelligence'
+    const consultingSchema = graph.find((s: Record<string, unknown>) => s['@type'] === 'ProfessionalService') as Record<string, unknown> | undefined;
+    expect(consultingSchema).toBeDefined();
+    expect(consultingSchema?.['@id']).toBe(`${BASE_URL}/#consulting`);
+    expect(consultingSchema?.name).toBe('Ariel Anders Consulting');
+    expect(consultingSchema?.url).toBe(`${BASE_URL}/services`);
+    expect(consultingSchema?.telephone).toBe('+1-661-205-2489');
+    expect(consultingSchema?.priceRange).toBe('$$$');
+    expect(consultingSchema?.image).toBe(`${BASE_URL}/assets/ariel-anders-consulting-banner.jpg`);
+    expect(consultingSchema?.areaServed).toEqual([
+      {
+        '@type': 'City',
+        name: 'San Francisco'
+      },
+      {
+        '@type': 'AdministrativeArea',
+        name: 'California'
+      }
     ]);
-    expect(founder?.sameAs).toEqual([
-      'https://arii.github.io',
+    expect(consultingSchema?.founder).toEqual({
+      '@id': `${BASE_URL}/#founder`
+    });
+    expect(consultingSchema?.hasOfferCatalog).toBeDefined();
+
+    const founderSchema = graph.find((s: Record<string, unknown>) => s['@type'] === 'Person') as Record<string, unknown> | undefined;
+    expect(founderSchema).toBeDefined();
+    expect(founderSchema?.['@id']).toBe(`${BASE_URL}/#founder`);
+    expect(founderSchema?.name).toBe('Ariel Anders');
+    expect(founderSchema?.jobTitle).toBe('Roboticist, AI Engineer & Consultant');
+    expect(founderSchema?.url).toBe(`${BASE_URL}/about`);
+    expect(founderSchema?.sameAs).toEqual([
+      'https://arii.github.io/',
       'https://github.com/arii',
-      'https://www.linkedin.com/in/ariel-anders/',
-      'https://www.instagram.com/onasafari/'
+      'https://www.linkedin.com/in/ariel-anders/'
     ]);
   });
 
