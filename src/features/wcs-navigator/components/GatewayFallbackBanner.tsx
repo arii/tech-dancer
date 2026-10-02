@@ -102,4 +102,3 @@ export const GatewayFallbackBanner = ({
   );
 };
 
-export default GatewayFallbackBanner;

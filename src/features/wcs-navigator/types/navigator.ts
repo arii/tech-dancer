@@ -27,8 +27,3 @@ export interface DiscoveryResponse {
   suggested_form_questions: FormQuestion[];
 }
 
-export interface PersonaChip {
-  id: string;
-  label: string;
-  answers: Record<string, QuestionAnswerValue>;
-}

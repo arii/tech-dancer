@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
@@ -35,7 +34,7 @@ export function PageHeader({
     >
       <Stack gap={4}>
         {label && (
-          <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+          <Text variant="mono" size="xs" color="dim" weight="font-black" tracking="wide-editorial" uppercase>
             {label}
           </Text>
         )}
@@ -63,4 +62,3 @@ export function PageHeader({
     </Box>
   );
 }
-

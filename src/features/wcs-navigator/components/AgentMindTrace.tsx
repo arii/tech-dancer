@@ -685,6 +685,5 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   );
 };
 
-export default AgentMindTrace;
 
 

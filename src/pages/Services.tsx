@@ -161,11 +161,11 @@ const Services = () => {
       {/* 1. Header Section */}
       <Stack gap={5} width="full" maxWidth="4xl" align="center" marginX="auto" marginBottom={16} className="text-center">
         <Text as="h1" variant="display" size="3xl" weight="font-black" tracking="wordmark">
-          Digital business systems for independent creatives
+          Ariel Anders Consulting: Digital business systems for independent creatives
         </Text>
 
         <Text as="p" variant="body" size="lg" color="main" leading="relaxed" className="font-medium max-w-3xl">
-          We build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
+          I build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
         </Text>
 
         <Stack direction={{ base: 'col', sm: 'row' }} gap={3} justify="center" align="center" paddingTop={2}>

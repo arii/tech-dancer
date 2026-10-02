@@ -51,4 +51,3 @@ export function RoboticsPortfolioCard() {
   );
 }
 
-export default RoboticsPortfolioCard;

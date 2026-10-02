@@ -2,44 +2,8 @@ import { ExternalLink, ShoppingBag, Palette, Ruler, CheckCircle2 } from 'lucide-
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
-import { ResourceGrid } from '../ResourceGrid';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 import { MERCH_PRODUCTS } from '@/data/merch';
-
-interface ResourceHeaderExtrasProps {
-  author: string;
-  rating?: number;
-  durability?: number;
-  value?: number;
-  priceCategory: string;
-}
-
-export function ResourceHeaderExtras({ author, rating: _rating, durability, value, priceCategory }: ResourceHeaderExtrasProps) {
-  return (
-    <Stack gap={6} marginTop={6}>
-      <Stack direction="row" align="center" gap={2} color="dim">
-        <Box width={8} height={8} radius="full" surface="muted" />
-        <Text variant="mono" size="xs">{author}</Text>
-      </Stack>
-
-      <ResourceGrid
-        rating={0}
-        durability={durability}
-        value={value}
-        priceCategory={priceCategory}
-      />
-    </Stack>
-  );
-}
-
-export function ResourceBodyExtras({ heading }: { heading?: string }) {
-  if (!heading) return null;
-  return (
-    <Box marginBottom={6}>
-      <Text variant="headline" size="2xl" color="main">{heading}</Text>
-    </Box>
-  );
-}
 
 interface ResourceSidebarProps {
   slug?: string;

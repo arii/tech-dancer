@@ -189,4 +189,3 @@ export const AgentGenerationTransition: React.FC<AgentGenerationTransitionProps>
   );
 };
 
-export default AgentGenerationTransition;

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import React, { Suspense } from 'react';
 import { SEO } from '@/components/SEO';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
@@ -14,7 +13,16 @@ const GearCallout = React.lazy(() => import('@/features/home/GearCallout').then(
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth="7xl"
+      minWidth={0}
+      overflowX="hidden"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+    >
       <SEO
         title="West Coast Swing Dance Guides & Gear"
         description="Discover West Coast Swing dance training tips, competition travel guides, and curated dance gear reviews by Ariel Anders. Level up your dancing today."
@@ -24,16 +32,19 @@ export default function Home() {
       {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
       <Grid
         as="section"
-        cols={{ base: 1 }}
+        cols={{ base: 1, lg: 12 }}
         gap={{ base: 8, lg: 6 }}
         width="full"
         maxWidth="full"
         minWidth={0}
         align="center"
-        className="lg:grid-cols-[minmax(0,1fr)_420px]"
       >
-        <HeroSection />
-        <FeaturedGuidePanel />
+        <Box span={{ base: 12, lg: 7 }}>
+          <HeroSection />
+        </Box>
+        <Box span={{ base: 12, lg: 5 }}>
+          <FeaturedGuidePanel />
+        </Box>
       </Grid>
 
       <Box marginTop={{ base: 12, lg: 8 }}>
@@ -58,15 +69,18 @@ export default function Home() {
           <GearShelf />
 
           <Grid
-            cols={{ base: 1 }}
+            cols={{ base: 1, lg: 12 }}
             gap={8}
             width="full"
             maxWidth="full"
             minWidth={0}
-            className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
           >
-            <LatestPosts />
-            <GearCallout />
+            <Box span={{ base: 12, lg: 8 }}>
+              <LatestPosts />
+            </Box>
+            <Box span={{ base: 12, lg: 4 }}>
+              <GearCallout />
+            </Box>
           </Grid>
           <TopicGrid />
         </Stack>

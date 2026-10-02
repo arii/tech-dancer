@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -57,6 +56,7 @@ export function ListRow(props: ListRowProps) {
         width={16}
         height={16}
         margin={4}
+        padding={1}
         shrink={0}
         radius="md"
         overflow="hidden"
@@ -71,7 +71,7 @@ export function ListRow(props: ListRowProps) {
             src={image}
             alt={title}
             loading="lazy"
-            className="h-full w-full object-contain p-1"
+            className="h-full w-full object-contain"
           />
         ) : (
           <CategoryPlaceholder category={category} size="md" />
@@ -87,7 +87,7 @@ export function ListRow(props: ListRowProps) {
       </Stack>
       <Box display="flex" align="center" gap={3} padding={4} shrink={0}>
         <Text variant="mono" size="micro" color="dim">{rt} min</Text>
-        <ChevronRight className="w-3.5 h-3.5 opacity-medium group-hover:opacity-full transition-opacity text-text-dim" />
+        <Box as={ChevronRight} width={3.5} height={3.5} className="opacity-medium group-hover:opacity-full transition-opacity text-text-dim" />
       </Box>
     </Box>
   );

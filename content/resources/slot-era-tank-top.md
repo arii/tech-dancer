@@ -17,7 +17,7 @@ description: "Fitted racerback tank top featuring the vibrant retro Slot Era des
 
 Features soft, breathable fabric and a flattering racerback cut built for long social dancing nights and intense workshop weekends. 
 
-### Why You'll Love It
+## Why You'll Love It
 - **Dance-Floor Ready**: Lightweight, breathable blend (60% combed ring-spun cotton, 40% polyester) keeps you cool during high-energy sets.
 - **Racerback Cut**: Provides full range of shoulder and arm movement for turns, spins, and expressive styling.
 - **Signature Slot Era Artwork**: High-definition print that stays vibrant through countless wash and dance cycles.

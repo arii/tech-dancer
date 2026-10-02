@@ -283,7 +283,6 @@ export const DynamicQuestionnaire: React.FC<DynamicQuestionnaireProps> = ({
   );
 };
 
-export default DynamicQuestionnaire;
 
 
 

@@ -1,5 +1,3 @@
-// impeccable-ignore-file
-
 /**
  * GearCard component for displaying gear items in grid/list view.
  *
@@ -36,8 +34,7 @@ interface GearCardProps extends BaseProps {
 }
 
 const CARD_STYLES = {
-  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
-  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105",
   verdict: "tracking-normal opacity-solid"
 };
 
@@ -48,7 +45,7 @@ export function GearCard(props: GearCardProps) {
     category,
     excerpt,
     rating: _rating,
-    verdict,
+    verdict: _verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
     affiliateIds,
@@ -174,17 +171,10 @@ export function GearCard(props: GearCardProps) {
       )}
 
       <Stack gap={2}>
-        {verdict && (
-          <Box marginBottom={2}>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
-              Best for: {verdict}
-            </Text>
-          </Box>
-        )}
         {/* Title with link for external affiliates */}
         {isExternal ? (
           <Box
-            as="h3"
+            as="h2"
             className="group-hover:text-accent transition-colors"
           >
             <Box
@@ -208,7 +198,7 @@ export function GearCard(props: GearCardProps) {
           </Box>
         ) : (
           <Text
-            as="h3"
+            as="h2"
             variant="body"
             size="lg"
             weight="font-bold"
@@ -241,7 +231,7 @@ export function GearCard(props: GearCardProps) {
             <Text variant="mono" size="sm" weight="font-bold" color="accent">
               View deal
             </Text>
-            <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
+            <Box as={ExternalLink} width={4} height={4} className="text-accent" aria-hidden="true" />
           </Box>
         ) : (
           <Box
@@ -255,7 +245,7 @@ export function GearCard(props: GearCardProps) {
             <Text variant="mono" size="sm" weight="font-bold" color="accent">
               Read review
             </Text>
-            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
+            <Box as={ArrowRight} width={4} height={4} className="text-accent" aria-hidden="true" />
           </Box>
         )}
       </Box>
