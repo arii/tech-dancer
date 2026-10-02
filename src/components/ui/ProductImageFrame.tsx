@@ -6,6 +6,7 @@ interface ProductImageFrameProps {
   src: string;
   alt: string;
   objectFit?: 'cover' | 'contain';
+  objectPosition?: 'top' | 'center' | 'bottom';
   aspect?: ResponsiveProp<'video' | 'square' | 'auto' | string>;
   className?: string;
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y";
@@ -16,6 +17,7 @@ export function ProductImageFrame({
   src,
   alt,
   objectFit = 'cover',
+  objectPosition = 'top',
   aspect = 'video',
   className,
   border = true,
@@ -37,7 +39,8 @@ export function ProductImageFrame({
         loading="lazy"
         className={cn(
           "w-full h-full transition-opacity duration-300",
-          objectFit === 'contain' ? "object-contain p-4" : "object-cover"
+          objectFit === 'contain' ? "object-contain p-4" : "object-cover",
+          objectPosition === 'top' ? "object-top" : objectPosition === 'bottom' ? "object-bottom" : "object-center"
         )}
       />
     </Box>

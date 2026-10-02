@@ -655,5 +655,14 @@
     "gearSlug": "relavel-travel-bag",
     "image": "/images/gear/sketches/relavel-travel-bag.webp",
     "imageMode": "contain"
+  },
+  "stick-on-mirrors": {
+    "id": "stick-on-mirrors",
+    "name": "Stick-on Mirrors",
+    "url": "https://a.co/d/03oedvuH",
+    "category": "gear",
+    "description": "Renter-friendly, shatterproof mirror panels perfect for home practice spaces.",
+    "image": "/images/gear/sketches/stick-on-mirrors.jpeg",
+    "imageMode": "contain"
   }
 }
