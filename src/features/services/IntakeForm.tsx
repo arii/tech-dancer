@@ -113,7 +113,8 @@ export const IntakeForm = ({ onOpenBookingModal }: IntakeFormProps = {}) => {
                 as="button"
                 type="button"
                 onClick={onOpenBookingModal}
-                className="text-accent hover:underline font-medium inline-block cursor-pointer bg-transparent border-0 p-0"
+                padding={0}
+                className="text-accent hover:underline font-medium inline-block cursor-pointer bg-transparent border-0"
               >
                 Book a 20-minute Discovery Call directly →
               </Box>

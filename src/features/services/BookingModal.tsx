@@ -25,6 +25,8 @@ const formatEmbedUrl = (url: string): string => {
   }
 };
 
+const iframeStyle = { minHeight: 480 };
+
 export const BookingModal = ({
   isOpen,
   onClose,
@@ -78,7 +80,8 @@ export const BookingModal = ({
         padding={{ default: 4, sm: 6 }}
         overflow="hidden"
         marginY="auto"
-        className="max-h-[90vh] border-line/60 bg-surface/95"
+        maxHeight="90vh"
+        className="border-line/60 bg-surface/95"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -122,12 +125,14 @@ export const BookingModal = ({
           border
           radius="xl"
           overflow="hidden"
-          className="border-line/60 bg-surface-alt relative min-h-[480px]"
+          minHeight={480}
+          className="border-line/60 bg-surface-alt relative"
         >
           <iframe
             src={embedUrl}
             title="Schedule a consultation on Cal.com"
-            className="w-full h-full min-h-[480px] border-0"
+            className="w-full h-full border-0"
+            style={iframeStyle}
             loading="lazy"
           />
         </Box>
@@ -150,16 +155,20 @@ export const BookingModal = ({
             <span>20-minute Discovery Call · Virtual (Zoom / Meet)</span>
           </Stack>
 
-          <Box
+          <Stack
             as="a"
+            direction="row"
+            display="inline-flex"
+            align="center"
+            gap={1}
             href={activeBookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-main font-semibold hover:text-accent transition-colors"
+            className="text-main font-semibold hover:text-accent transition-colors"
           >
             <span>Open in new tab</span>
             <ExternalLink className="w-3 h-3" />
-          </Box>
+          </Stack>
         </Box>
       </Stack>
     </Box>,
