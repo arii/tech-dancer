@@ -34,7 +34,7 @@ export function PageHeader({
     >
       <Stack gap={4}>
         {label && (
-          <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+          <Text variant="mono" size="xs" color="dim" weight="font-black" tracking="wide-editorial" uppercase>
             {label}
           </Text>
         )}

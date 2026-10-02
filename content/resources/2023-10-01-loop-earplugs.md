@@ -7,7 +7,7 @@ author: "Ariel Anders"
 date: "2023-10-01"
 price: "$35.00"
 image: "/images/gear/sketches/loop-earplugs.jpg"
-affiliateIds: ["loop-experience"]
+affiliateIds: ["loop-experience", "loop-quiet"]
 affiliateProvider: "amazon"
 featured: true
 verdict: "Best High-Fidelity Earplugs for Social Dancers"
@@ -66,3 +66,7 @@ Every pair of Loop Experience 2 earplugs includes a comprehensive accessory pack
 | Included Tip Sizes | Extra Small (XS), Small (S), Medium (M), Large (L) |
 | Carrying Solution | Compact Twist-Lock Keychain Capsule |
 | Optional Mute Insert | Adds +3 dB Additional Sound Reduction |
+
+### Loop Quiet for rest and recovery
+
+For sleeping at events in noisy convention hotels, consider the Loop Quiet version. They are made of soft silicone for comfort and provide even more decibel reduction to help you rest and recover.

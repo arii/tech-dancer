@@ -45,7 +45,7 @@ export function GearCard(props: GearCardProps) {
     category,
     excerpt,
     rating: _rating,
-    verdict,
+    verdict: _verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
     affiliateIds,
@@ -171,17 +171,10 @@ export function GearCard(props: GearCardProps) {
       )}
 
       <Stack gap={2}>
-        {verdict && (
-          <Box marginBottom={2}>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
-              Best for: {verdict}
-            </Text>
-          </Box>
-        )}
         {/* Title with link for external affiliates */}
         {isExternal ? (
           <Box
-            as="h3"
+            as="h2"
             className="group-hover:text-accent transition-colors"
           >
             <Box
@@ -205,7 +198,7 @@ export function GearCard(props: GearCardProps) {
           </Box>
         ) : (
           <Text
-            as="h3"
+            as="h2"
             variant="body"
             size="lg"
             weight="font-bold"
