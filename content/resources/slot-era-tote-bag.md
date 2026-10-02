@@ -17,7 +17,7 @@ description: "Show off your West Coast Swing pride with this durable 15\" x 15\"
 
 Spacious and durable spun polyester canvas tote designed to carry dance shoes, shoe brushes, water bottles, and event essentials between workshop ballrooms.
 
-### Highlights & Features
+## Highlights & Features
 - **Heavy-Duty Construction**: 100% spun polyester canvas with reinforced stitching holds up to dance shoes, extra shirts, and electronics.
 - **Spacious 15" x 15" Capacity**: Large enough for multiple pairs of dance shoes plus toiletries and personal accessories.
 - **Dual Handles**: Comfortable black cotton webbing handles for shoulder or hand carry.
