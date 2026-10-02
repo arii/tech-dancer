@@ -25,6 +25,8 @@ const formatEmbedUrl = (url: string): string => {
   }
 };
 
+const iframeStyle = { minHeight: 480 };
+
 export const BookingModal = ({
   isOpen,
   onClose,
@@ -48,8 +50,6 @@ export const BookingModal = ({
 
   const activeBookingUrl = bookingUrl || CALENDAR_BOOKING_URL;
   const embedUrl = formatEmbedUrl(activeBookingUrl);
-
-  const iframeStyle = { minHeight: 480 };
 
   return createPortal(
     <Box
