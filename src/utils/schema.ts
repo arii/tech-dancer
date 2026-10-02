@@ -186,8 +186,9 @@ export const DEFAULT_PRINTFUL_RETURN_POLICY: SchemaMerchantReturnPolicy = {
 
 export const AUTHOR_ARIEL_ANDERS = {
   "@type": "Person" as const,
+  "@id": `${BASE_URL}/#founder`,
   "name": "Ariel Anders",
-  "jobTitle": "Roboticist & AI Engineer",
+  "jobTitle": "Roboticist, AI Engineer & Consultant",
   "url": `${BASE_URL}/about`,
   "knowsAbout": [
     "West Coast Swing",
@@ -203,10 +204,9 @@ export const AUTHOR_ARIEL_ANDERS = {
     }
   ],
   "sameAs": [
-    "https://arii.github.io",
+    "https://arii.github.io/",
     "https://github.com/arii",
-    "https://www.linkedin.com/in/ariel-anders/",
-    "https://www.instagram.com/onasafari/"
+    "https://www.linkedin.com/in/ariel-anders/"
   ]
 };
 
@@ -215,45 +215,8 @@ export const PUBLISHER_BOOMTICK = {
   "@type": "Organization" as const,
   "name": "BoomTick",
   "url": BASE_URL,
-  "email": "ari@boomtick.blog",
-  "telephone": "+1-661-205-2489",
-  "areaServed": "San Francisco, CA",
-  "description": "West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.",
-  "knowsAbout": [
-    "West Coast Swing",
-    "Dance Event Scheduling & Technology",
-    "Creator Operations & Automation",
-    "Dance Apparel & Gear"
-  ],
-  "keywords": "West Coast Swing, WCS dance guides, social dancing, dance footwear, WCS competitions",
-  "logo": {
-    "@type": "ImageObject" as const,
-    "name": "BoomTick.blog Logo",
-    "url": `${BASE_URL}/favicon.ico`
-  },
-  "address": {
-    "@type": "PostalAddress" as const,
-    "addressLocality": "San Francisco",
-    "addressRegion": "CA",
-    "addressCountry": "US"
-  },
-  "founder": {
-    "@type": "Person" as const,
-    "name": "Ariel Anders",
-    "jobTitle": "Roboticist & AI Engineer",
-    "url": `${BASE_URL}/about`,
-    "knowsAbout": [
-      "West Coast Swing",
-      "Robotics",
-      "Artificial Intelligence"
-    ],
-    "sameAs": [
-      "https://arii.github.io",
-      "https://github.com/arii",
-      "https://www.linkedin.com/in/ariel-anders/",
-      "https://www.instagram.com/onasafari/"
-    ]
-  }
+  "logo": `${BASE_URL}/assets/boomtick-logo.png`,
+  "image": `${BASE_URL}/assets/boomtick-og-banner.jpg`
 };
 
 export function generateCollectionPageSchema(params: {
