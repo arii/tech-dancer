@@ -1,4 +1,4 @@
-import { Check, Calendar, ShoppingBag, Sparkles, TrendingUp, Cpu } from 'lucide-react';
+import { Check, Calendar, ShoppingBag, Sparkles, TrendingUp, Cpu, Server } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 export interface CapabilityCategory {
@@ -82,6 +82,19 @@ const capabilityCategories: CapabilityCategory[] = [
       'Lead routing & CRM/spreadsheet sync',
       'Automated client status updates',
       'Custom AI-assisted workflow engines',
+    ],
+  },
+  {
+    id: 'architecture-devops',
+    pillar: 'Automate',
+    title: 'DevOps & Systems Advisory',
+    tagline: 'Cloud deployments, automated CI/CD pipelines, and senior software architecture.',
+    icon: Server,
+    features: [
+      'Automated CI/CD build pipelines & zero downtime',
+      'Cloud hosting configuration & edge CDN',
+      'Codebase audits & performance optimization',
+      'Senior technical advisory & system architecture',
     ],
   },
 ];

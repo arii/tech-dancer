@@ -15,8 +15,8 @@ const serviceSchema = {
       "@type": "WebPage",
       "@id": "https://boomtick.blog/services/#webpage",
       "url": "https://boomtick.blog/services",
-      "name": "Web Design & Digital Systems for San Francisco Creatives | Ariel Anders Consulting",
-      "description": "Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation.",
+      "name": "Web Design, Intake Automation & Digital Systems | Ariel Anders Consulting",
+      "description": "High-performance websites, automated booking & intake workflows, local SEO, custom AI applications, and cloud architecture for service businesses, private practices, and independent creators.",
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [
@@ -36,7 +36,21 @@ const serviceSchema = {
       },
       "mainEntity": {
         "@id": "https://boomtick.blog/#consulting"
-      }
+      },
+      "workExample": [
+        {
+          "@type": "WebSite",
+          "name": "Marcella Therapy",
+          "url": "https://marcella-therapy.pages.dev/",
+          "description": "Private psychotherapy practice platform with Cal.com integration and screening intake."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Hair by April",
+          "url": "https://hairbyapril.pages.dev/",
+          "description": "Mobile-first booking and service showcase for an independent salon creative."
+        }
+      ]
     },
     CONSULTING_SERVICE_SCHEMA,
     FOUNDER_PERSON_SCHEMA
@@ -50,7 +64,7 @@ const Services = () => {
     <Box width="full" maxWidth="container" marginX="auto" minWidth={0} overflow="x-clip" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingY={12}>
       <SEO
         title="Web Design & Digital Systems for San Francisco Creatives"
-        description="Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation."
+        description="High-performance websites, automated booking & intake workflows, local SEO, custom AI applications, and cloud architecture for service businesses, private practices, and independent creators."
         schema={serviceSchema}
       />
 
@@ -61,7 +75,7 @@ const Services = () => {
         </Text>
 
         <Text as="p" variant="body" size="lg" color="main" leading="relaxed" className="font-medium max-w-3xl">
-          I build and manage the digital side of your business—from your website and online booking to marketing, ecommerce, and automation.
+          I build and manage the digital side of your business—from custom web design and automated client intake to local SEO, custom AI tools, and cloud infrastructure.
         </Text>
 
         <Stack direction={{ base: 'col', sm: 'row' }} gap={3} justify="center" align="center" paddingTop={2}>
@@ -95,7 +109,7 @@ const Services = () => {
           <PackagesGrid />
         </Box>
 
-        {/* 3. Real Client Proof: Hair by April */}
+        {/* 3. Real Client Proof: Dual Portfolio Showcase (Marcella Therapy & Hair by April) */}
         <Box>
           <ClientSpotlight />
         </Box>
