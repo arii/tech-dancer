@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
-import { Box } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 
 interface SearchBoxProps {
   value: string;
@@ -19,11 +19,11 @@ export function SearchBox({
     <Box
       display="flex"
       align="center"
-      position="relative"
       surface="default"
       border
       paddingX={4}
       paddingY={1}
+      gap={2}
       maxWidth={maxWidth}
       flex={1}
       minHeight={11}
@@ -34,18 +34,18 @@ export function SearchBox({
         as={Search}
         width={4.5}
         height={4.5}
-        position="absolute"
-        left={4}
+        shrink={0}
         pointerEvents="none"
         className="text-text-dim"
       />
-      <Box
+      <Text
         as="input"
         type="text"
         placeholder={placeholder}
-        paddingLeft={10}
         width="full"
-        className="bg-transparent border-none outline-none focus:ring-0 font-mono text-sm"
+        variant="mono"
+        size="sm"
+        className="bg-transparent border-none outline-none focus:ring-0"
         value={value}
         onChange={onChange}
         data-testid="search-input"
