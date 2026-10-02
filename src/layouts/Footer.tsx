@@ -106,9 +106,14 @@ export function Footer() {
               border
               className="border-line/20 bg-surface-alt/10"
             >
-              <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
-                {DISCLOSURE_TEXT}
-              </Text>
+              <Stack gap={2}>
+                <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
+                  {DISCLOSURE_TEXT}
+                </Text>
+                <Text variant="body" size="xs" color="dim" weight="font-semibold" opacityVariant="solid" italic={false}>
+                  BoomTick Merch and Ariel Anders Consulting are independently operated by Ariel Anders.
+                </Text>
+              </Stack>
             </Box>
           </Stack>
         </Stack>
