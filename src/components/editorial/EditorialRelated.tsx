@@ -19,7 +19,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
   return (
     <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
       <Stack gap={6}>
-        <Text variant="mono" size="xs" color="dim" weight="font-bold">
+        <Text as="h2" variant="mono" size="xs" color="dim" weight="font-bold">
           {title}
         </Text>
         <Stack gap={4}>
@@ -32,7 +32,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
                       {item.category}
                     </Text>
                   )}
-                  <Text variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
+                  <Text as="h3" variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
                     {item.title}
                   </Text>
                 </Stack>

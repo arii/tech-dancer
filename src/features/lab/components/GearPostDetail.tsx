@@ -171,17 +171,19 @@ export function GearPostDetail({ post, onBack, backLabel, isMerch: forcedIsMerch
 
                 {/* Quick Attributes (Sizes) */}
                 {matchedMerch?.size && (
-                  <Stack gap={1.5}>
-                    <Stack direction="row" align="center" gap={1.5}>
-                      <Ruler className="w-3.5 h-3.5 text-accent" />
-                      <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                        Available Sizes
-                      </Text>
+                  <Box data-component="product-size-card">
+                    <Stack gap={1.5}>
+                      <Stack direction="row" align="center" gap={1.5}>
+                        <Ruler className="w-3.5 h-3.5 text-accent" />
+                        <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                          Available Sizes:
+                        </Text>
+                        <Text variant="mono" size="sm" color="main" weight="font-medium">
+                          {matchedMerch.size.split('/').map((s) => s.trim()).join(', ')}
+                        </Text>
+                      </Stack>
                     </Stack>
-                    <Text variant="mono" size="sm" color="dim" leading="relaxed">
-                      {matchedMerch.size.split('/').map(s => s.trim()).join(', ')}
-                    </Text>
-                  </Stack>
+                  </Box>
                 )}
 
                 {/* Primary Direct Checkout CTA Button */}
