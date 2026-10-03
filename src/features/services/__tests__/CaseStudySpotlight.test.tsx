@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
 
@@ -8,7 +8,7 @@ describe('ClientSpotlight Component', () => {
     cleanup();
   });
 
-  it('renders the client spotlight with headline, stylist positioning, customer flow, and live proof image', () => {
+  it('renders the dual client portfolio showcase with Marcella Therapy and Hair by April', () => {
     render(
       <MemoryRouter>
         <ClientSpotlight />
@@ -16,21 +16,41 @@ describe('ClientSpotlight Component', () => {
     );
 
     // Section title & positioning
-    expect(screen.getByText('See it in action: Hair by April')).toBeDefined();
+    expect(screen.getByText('See it in action: Real client platforms')).toBeDefined();
 
-    // Verified features and customer mechanics
-    expect(screen.getByText(/We built a mobile-first website for Hair by April/i)).toBeDefined();
-    expect(screen.getByText(/Find the business/i)).toBeDefined();
-    expect(screen.getByText(/No back-and-forth messages. No manually checking availability./i)).toBeDefined();
+    // Default view: Marcella Therapy
+    expect(screen.getAllByText('Marcella Therapy').length).toBeGreaterThan(0);
+    expect(screen.getByText(/High-trust clinical web platform & Cal.com booking sync/i)).toBeDefined();
+    expect(screen.getByText(/We engineered a calm, accessible digital presence for a San Francisco therapy practice/i)).toBeDefined();
+    expect(screen.getByText('Discover Practice')).toBeDefined();
 
-    // Live screenshot image
-    const img = screen.getByAltText('Hair by April Live Website & Booking') as HTMLImageElement;
-    expect(img).toBeDefined();
-    expect(img.src).toContain('hair-by-april.jpg');
+    // Live screenshot image for Marcella Therapy
+    const marcellaImg = screen.getByAltText('Marcella Therapy Practice Website & Online Consultation Booking') as HTMLImageElement;
+    expect(marcellaImg).toBeDefined();
+    expect(marcellaImg.src).toContain('marcella-therapy.jpg');
 
-    // Client Link button
-    const ctaButton = screen.getByRole('link', { name: /Visit the live client site/i });
-    expect(ctaButton).toBeDefined();
-    expect(ctaButton.getAttribute('href')).toBe('https://hairbyapril.pages.dev/');
+    // Marcella Therapy Client Link button
+    const marcellaCta = screen.getByRole('link', { name: /Visit live Marcella Therapy site/i });
+    expect(marcellaCta).toBeDefined();
+    expect(marcellaCta.getAttribute('href')).toBe('https://marcella-therapy.pages.dev/');
+
+    // Switch to Hair by April
+    const hairByAprilTab = screen.getByRole('button', { name: /View Hair by April case study/i });
+    fireEvent.click(hairByAprilTab);
+
+    // Verified features and customer mechanics for Hair by April
+    expect(screen.getByText(/Mobile-first storefront & direct appointment booking/i)).toBeDefined();
+    expect(screen.getByText(/A mobile-first website for an independent San Francisco hair stylist/i)).toBeDefined();
+    expect(screen.getByText('Find Business')).toBeDefined();
+
+    // Live screenshot image for Hair by April
+    const aprilImg = screen.getByAltText('Hair by April Live Website & Booking System') as HTMLImageElement;
+    expect(aprilImg).toBeDefined();
+    expect(aprilImg.src).toContain('hair-by-april.jpg');
+
+    // Hair by April Client Link button
+    const aprilCta = screen.getByRole('link', { name: /Visit live Hair by April site/i });
+    expect(aprilCta).toBeDefined();
+    expect(aprilCta.getAttribute('href')).toBe('https://hairbyapril.pages.dev/');
   });
 });

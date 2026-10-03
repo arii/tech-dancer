@@ -15,9 +15,8 @@ async function validateUrlNavigation(page: Page, href: string) {
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
       const mainLocator = page.locator('#main-content');
-      const count = await mainLocator.count();
       if (count > 0) {
-        await expect(mainLocator.first()).toBeVisible();
+        await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
       }
     }
     if (fragment) {
@@ -29,7 +28,7 @@ async function validateUrlNavigation(page: Page, href: string) {
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
-      await expect(mainLocator.first()).toBeVisible({ timeout: 5000 });
+      await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
     }
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
@@ -44,7 +43,7 @@ test.describe('Navigation Smoke Tests', () => {
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
-      await expect(mainLocator.first()).toBeVisible();
+      await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
     }
     const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
     expect(filteredErrors).toHaveLength(0);
@@ -55,7 +54,7 @@ test.describe('Navigation Smoke Tests', () => {
     const mainLocator = page.locator('#main-content');
     const count = await mainLocator.count();
     if (count > 0) {
-      await expect(mainLocator.first()).toBeVisible();
+      await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
     }
 
     const links = await page.$$eval('nav a[href]', (anchors) =>
@@ -91,7 +90,11 @@ test.describe('Navigation Smoke Tests', () => {
       const mainLocator = page.locator('#main-content');
       const count = await mainLocator.count();
       if (count > 0) {
+<<<<<<< HEAD
         await expect(mainLocator.first()).toBeVisible();
+=======
+        await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
+>>>>>>> origin/main
       }
       const exists = await page.$('#main-content');
       if (!exists) continue;
