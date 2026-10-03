@@ -90,11 +90,7 @@ test.describe('Navigation Smoke Tests', () => {
       const mainLocator = page.locator('#main-content');
       const count = await mainLocator.count();
       if (count > 0) {
-<<<<<<< HEAD
-        await expect(mainLocator.first()).toBeVisible();
-=======
         await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
->>>>>>> origin/main
       }
       const exists = await page.$('#main-content');
       if (!exists) continue;
