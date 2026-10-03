@@ -25,7 +25,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
       <Stack
         direction={isVertical ? 'col' : 'row'}
         gap={3}
-        align={isVertical ? 'start' : 'center'}
+        align="start"
         width="full"
       >
         {/* Product Image Thumbnail */}
@@ -37,9 +37,8 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
             shrink={0}
             radius="md"
             overflow="hidden"
-            border
             className={cn(
-              "border-line/40 shrink-0",
+              "shrink-0",
               link.imageMode === 'contain' ? "bg-white" : "bg-surface-alt/20"
             )}
             display="flex"
@@ -62,30 +61,42 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
         )}
 
         <Stack gap={1} flex={1} minWidth={0} width="full">
-          <Stack direction="row" align="center" justify="end" gap={1.5} width="full" className="relative z-20 pointer-events-none">
-            <ExternalLink className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
+          <Stack
+            direction="row"
+            align="start"
+            justify="between"
+            gap={2}
+            width="full"
+            className="relative z-20 pointer-events-none"
+          >
+            <Text
+              as="h3"
+              variant="body"
+              size="sm"
+              weight="font-bold"
+              leading="snug"
+              flex={1}
+              className="line-clamp-2 group-hover:text-accent transition-colors text-text-main break-words"
+            >
+              {link.name}
+            </Text>
+            <ExternalLink
+              className="w-3.5 h-3.5 text-accent opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
+              aria-hidden="true"
+            />
           </Stack>
 
-          <Text
-            as="h3"
-            variant="body"
-            size="sm"
-            weight="font-bold"
-            leading="snug"
-            className="line-clamp-2 group-hover:text-accent transition-colors relative z-20 pointer-events-none text-text-main break-words"
-          >
-            {link.name}
-          </Text>
-
-          <Text
-            variant="body"
-            size="xs"
-            color="dim"
-            leading="relaxed"
-            className="line-clamp-2 relative z-20 pointer-events-none break-words"
-          >
-            {link.description}
-          </Text>
+          {link.description && (
+            <Text
+              variant="body"
+              size="xs"
+              color="dim"
+              leading="relaxed"
+              className="line-clamp-2 relative z-20 pointer-events-none break-words"
+            >
+              {link.description}
+            </Text>
+          )}
         </Stack>
       </Stack>
     </BaseCard>
