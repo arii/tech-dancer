@@ -32,7 +32,9 @@ export function SEO({
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  const url = canonical || `${BASE_URL}${pathname}`;
+  // Normalize pathname to prevent trailing slash inconsistencies in canonical URLs (except root "/")
+  const normalizedPathname = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+  const url = canonical || `${BASE_URL}${normalizedPathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
   const defaultImage = `${BASE_URL}${ASSET_PREFIX}/assets/home/wcs-travel-pack.webp`;
