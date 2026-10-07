@@ -15,8 +15,6 @@ excerpt: "Fitted racerback tank top featuring the vibrant retro Slot Era design 
 description: "Fitted racerback tank top featuring the vibrant retro Slot Era design and BoomTick branding. A funny gift for WCS dancers for birthdays, holidays, and summer events."
 ---
 
-Features soft, breathable fabric and a flattering racerback cut built for long social dancing nights and intense workshop weekends. 
-
 ## Why You'll Love It
 - **Dance-Floor Ready**: Lightweight, breathable blend (60% combed ring-spun cotton, 40% polyester) keeps you cool during high-energy sets.
 - **Racerback Cut**: Provides full range of shoulder and arm movement for turns, spins, and expressive styling.

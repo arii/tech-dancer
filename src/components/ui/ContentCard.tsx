@@ -16,6 +16,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   imageAlt?: string;
   excerptClamp?: number;
   showCategoryPill?: boolean;
+  titleAs?: 'h2' | 'h3' | 'h4';
   [key: string]: unknown;
 }
 
@@ -34,6 +35,7 @@ export function ContentCard(props: ContentCardProps) {
     imageAlt,
     excerptClamp = 3,
     showCategoryPill = false,
+    titleAs = 'h3',
   } = props;
 
   const motionProps = pickRest(props, [
@@ -42,6 +44,7 @@ export function ContentCard(props: ContentCardProps) {
     'basePath',
     'excerptClamp',
     'showCategoryPill',
+    'titleAs',
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -99,7 +102,7 @@ export function ContentCard(props: ContentCardProps) {
 
         <Stack gap={2}>
           <Text
-            as="h2"
+            as={titleAs}
             variant="body"
             size="lg"
             weight="font-bold"

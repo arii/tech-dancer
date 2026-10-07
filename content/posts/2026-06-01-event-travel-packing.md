@@ -13,7 +13,6 @@ affiliateIds:
   - "travel-bottles"
   - "portable-steamer"
 tags:
-  - "travel"
   - "packing"
   - "organization"
 ---

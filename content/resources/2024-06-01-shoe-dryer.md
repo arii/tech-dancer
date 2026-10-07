@@ -7,10 +7,10 @@ category: "Dance Gear"
 excerpt: "Fast shoe dryer-- the best way to handle stinky shoes."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
 affiliateIds: ["shoe-dryer"]
-tags: ["gear", "shoes", "maintenance"]
+tags: ["maintenance"]
 verdict: "Essential maintenance"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
 ---
 
-Keeps your dance shoes dry and fresh between events. The timer makes it perfect for overnight drying without damage.
+Features dual heat-ventilated ports with an adjustable 0–120 minute auto-shutoff timer to eliminate moisture and dance floor odor, preserving leather and suede soles without thermal damage.
