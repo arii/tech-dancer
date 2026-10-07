@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/fix-canonical-trailing-slash-13327389225160538277/sitemap.xml
