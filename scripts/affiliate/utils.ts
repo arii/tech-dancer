@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export const DEFAULT_AFFILIATE_TAG = 'onasafari04-20';
+export const DEFAULT_AFFILIATE_TAG = 'onasafari0a-20';
 
 export function getAffiliateTag(): string {
   return process.env.AMAZON_AFFILIATE_TAG || DEFAULT_AFFILIATE_TAG;

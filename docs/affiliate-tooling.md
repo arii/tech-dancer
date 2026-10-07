@@ -43,7 +43,7 @@ pnpm drafter ... --apply --create-pr
 - `--create-pr`: (Optional) Automatically create a branch, commit changes, and open a PR. Requires `--apply`.
 - `--force`: (Optional) Overwrite existing images or proceed with Amazon URLs that lack a clear ASIN.
 - `--force-branch`: (Optional) Use `--force` when pushing the new branch to origin.
-- `--tag`: (Optional) Affiliate tracking tag. Defaults to `AMAZON_AFFILIATE_TAG` env var or `onasafari04-20`.
+- `--tag`: (Optional) Affiliate tracking tag. Defaults to `AMAZON_AFFILIATE_TAG` env var or `onasafari0a-20`.
 
 ## Features
 
