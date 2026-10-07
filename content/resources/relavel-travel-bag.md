@@ -7,7 +7,7 @@ author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "An absolute must-have travel bag for dance conventions. Waterproof, spacious, and hangs in hotel bathrooms for instant organization."
 image: "/images/gear/sketches/relavel-travel-bag.webp"
-url: "https://www.amazon.com/dp/B07TBCXCJH?tag=onasafari04-20"
+url: "https://www.amazon.com/dp/B07TBCXCJH?tag=onasafari0a-20"
 affiliateIds: ["relavel-travel-bag"]
 tags: ["travel", "packing", "organization", "toiletry"]
 verdict: "Essential for Travel"

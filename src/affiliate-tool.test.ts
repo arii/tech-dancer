@@ -11,7 +11,7 @@ describe('Affiliate Tool Utilities', () => {
 
     it('should use DEFAULT_AFFILIATE_TAG if environment variable is not set', () => {
         delete process.env.AMAZON_AFFILIATE_TAG;
-        expect(getAffiliateTag()).toBe('onasafari04-20');
+        expect(getAffiliateTag()).toBe('onasafari0a-20');
     });
 
     it('should use AMAZON_AFFILIATE_TAG from environment if set', () => {
