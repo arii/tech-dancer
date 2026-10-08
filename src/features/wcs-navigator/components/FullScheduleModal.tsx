@@ -20,13 +20,14 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
   onToggleSession,
   eventName = 'Event Schedule',
 }) => {
-  const [activeDay, setActiveDay] = useState<'all' | 'friday' | 'saturday' | 'sunday'>('all');
+  const [activeDay, setActiveDay] = useState<'all' | 'thursday' | 'friday' | 'saturday' | 'sunday'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredSessions = useMemo(() => {
     return sessions.filter((s) => {
       const matchesDay =
         activeDay === 'all' ||
+        (activeDay === 'thursday' && s.time.toLowerCase().includes('thu')) ||
         (activeDay === 'friday' && s.time.toLowerCase().includes('fri')) ||
         (activeDay === 'saturday' && s.time.toLowerCase().includes('sat')) ||
         (activeDay === 'sunday' && s.time.toLowerCase().includes('sun'));
@@ -108,6 +109,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           border="b"
           borderColor="line"
           surface="alt"
+          shrink={0}
         >
           <Stack gap={0.5}>
             <Text id="full-schedule-title" weight="font-bold" size="base" color="main">
@@ -141,10 +143,11 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           border="b"
           borderColor="line"
           surface="surface"
+          shrink={0}
         >
           {/* Day Tabs */}
           <Stack direction="row" align="center" gap={1.5}>
-            {(['all', 'friday', 'saturday', 'sunday'] as const).map((day) => (
+            {(['all', 'thursday', 'friday', 'saturday', 'sunday'] as const).map((day) => (
               <Box
                 as="button"
                 key={day}
@@ -189,7 +192,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
         </Box>
 
         {/* Sessions Scrollable Feed */}
-        <Box flex={1} overflow="auto" padding={4}>
+        <Box flex={1} overflow="auto" padding={4} className="min-h-0">
           {filteredSessions.length === 0 ? (
             <Box padding={8} textAlign="center">
               <Text size="sm" color="dim">
@@ -316,6 +319,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
           border="t"
           borderColor="line"
           surface="alt"
+          shrink={0}
         >
           <Text size="xs" color="dim" variant="mono">
             {sessions.filter((s) => s.status === 'included').length} of {sessions.length} sessions active in your itinerary
