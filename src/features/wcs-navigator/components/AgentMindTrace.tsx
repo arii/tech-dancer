@@ -91,7 +91,7 @@ function buildDynamicIcs(
 
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   trace,
-  visualScheduleMarkdown,
+  visualScheduleMarkdown: _visualScheduleMarkdown,
   className,
   activeEventName = 'South Bay Dance Fling 2026',
   selectedDivision = 'novice',
