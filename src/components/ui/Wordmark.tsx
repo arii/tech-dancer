@@ -1,7 +1,7 @@
 import { Text, TextProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
-export type WordmarkVariant = "default" | "hero" | "navigation" | "nav";
+export type WordmarkVariant = "default" | "hero" | "navigation";
 
 export interface WordmarkProps extends Omit<TextProps, 'variant'> {
   variant?: WordmarkVariant;
@@ -11,14 +11,12 @@ const VARIANT_MAP: Record<WordmarkVariant, TextProps["variant"]> = {
   default: "sans",
   hero: "display",
   navigation: "sans",
-  nav: "sans", // Legacy alias for navigation
 };
 
 const VARIANT_CLASSES: Record<WordmarkVariant, string> = {
   default: "",
   hero: "wordmark-hero",
   navigation: "wordmark-nav",
-  nav: "wordmark-nav",
 };
 
 export function Wordmark({
@@ -30,7 +28,7 @@ export function Wordmark({
   ...props
 }: WordmarkProps) {
   const isHero = variant === "hero";
-  const isNav = variant === "navigation" || variant === "nav";
+  const isNav = variant === "navigation";
 
   return (
     <Text
