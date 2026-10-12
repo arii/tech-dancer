@@ -82,6 +82,20 @@ export const routes: RouteConfig[] = [
     sitemap: true
   },
   {
+    path: '/privacy',
+    lazy: lazyWithRetry(() => import('@/pages/Privacy').then(m => ({ Component: m.default }))),
+    label: 'Privacy Policy',
+    skeleton: 'simple',
+    sitemap: true
+  },
+  {
+    path: '/terms',
+    lazy: lazyWithRetry(() => import('@/pages/Terms').then(m => ({ Component: m.default }))),
+    label: 'Terms of Service',
+    skeleton: 'simple',
+    sitemap: true
+  },
+  {
     path: '/return-policy',
     lazy: lazyWithRetry(() => import('@/pages/ReturnPolicy').then(m => ({ Component: m.default }))),
     label: 'Return Policy',
