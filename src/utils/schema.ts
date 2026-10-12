@@ -360,7 +360,7 @@ export function generateImageObjectSchema(params: {
       "name": authorName
     },
     "copyrightNotice": params.copyrightNotice || `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
-    "license": params.license || `${BASE_URL}/about#terms`,
+    "license": params.license || `${BASE_URL}/terms`,
     "acquireLicensePage": params.acquireLicensePage || `${BASE_URL}/about`
   };
 }
@@ -659,7 +659,7 @@ export function generateMemeGallerySchema(memes: Array<{ id: string; title: stri
           "name": "Ariel Anders"
         },
         "copyrightNotice": `© ${new Date().getFullYear()} Ariel Anders. All rights reserved.`,
-        "license": `${BASE_URL}/about#terms`,
+        "license": `${BASE_URL}/terms`,
         "acquireLicensePage": `${BASE_URL}/about`
       }
     }))

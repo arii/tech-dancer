@@ -72,7 +72,7 @@ export default function BlogPost() {
             "name": authorName
           },
           "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
-          "license": `${BASE_URL}/about#terms`,
+          "license": `${BASE_URL}/terms`,
           "acquireLicensePage": `${BASE_URL}/about`
         }
       ],

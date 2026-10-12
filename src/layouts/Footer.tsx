@@ -15,10 +15,11 @@ export function Footer() {
   }, []);
 
   const policyLinks = [
+    { label: 'Home', to: '/' },
     { label: 'Shipping', to: '/shipping' },
     { label: 'Returns', to: '/return-policy' },
-    { label: 'Privacy', to: '/about#privacy' },
-    { label: 'Terms', to: '/about#terms' },
+    { label: 'Privacy', to: '/privacy' },
+    { label: 'Terms', to: '/terms' },
     { label: 'Contact', to: '/about#contact' },
   ];
 

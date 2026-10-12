@@ -111,7 +111,10 @@ const ProfileLegalAndSocial = () => {
                 Privacy Policy
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                This site is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Form info is used solely for its intended purpose.
+                Review our comprehensive data handling, privacy protection, and security practices on our dedicated{' '}
+                <Box as="a" href="/privacy" className="text-brand-cyan hover:underline font-semibold">
+                  Privacy Policy page
+                </Box>.
               </Text>
             </Stack>
           </Box>
@@ -126,10 +129,13 @@ const ProfileLegalAndSocial = () => {
                 tracking="wider"
                 className="text-text-main"
               >
-                Terms of Use
+                Terms of Service
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
-                Content is provided for informational and entertainment purposes. We are not responsible for issues arising from tools, products, or travel advice mentioned.
+                Review user responsibilities, intellectual property, and service terms on our dedicated{' '}
+                <Box as="a" href="/terms" className="text-brand-cyan hover:underline font-semibold">
+                  Terms of Service page
+                </Box>.
               </Text>
             </Stack>
           </Box>
