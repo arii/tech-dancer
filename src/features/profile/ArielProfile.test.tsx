@@ -56,6 +56,8 @@ describe('ArielProfile Component', () => {
     expect(screen.getByText('LINKEDIN')).toBeTruthy();
     expect(screen.getByText('GITHUB')).toBeTruthy();
     expect(screen.getByText('Privacy Policy')).toBeTruthy();
-    expect(screen.getByText('Terms of Use')).toBeTruthy();
+    expect(screen.getByText('Terms of Service')).toBeTruthy();
+    expect(screen.getByRole('link', { name: /Privacy Policy page/i })).toBeTruthy();
+    expect(screen.getByRole('link', { name: /Terms of Service page/i })).toBeTruthy();
   });
 });

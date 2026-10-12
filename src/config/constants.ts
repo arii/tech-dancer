@@ -120,7 +120,7 @@ export const STATIC_SCHEMAS = {
             "name": "Ariel Anders"
           },
           "copyrightNotice": `© ${new Date().getFullYear()} Ariel Anders. All rights reserved.`,
-          "license": `${BASE_URL}/about#terms`,
+          "license": `${BASE_URL}/terms`,
           "acquireLicensePage": `${BASE_URL}/about`
         },
         "jobTitle": "Roboticist & AI Engineer",
