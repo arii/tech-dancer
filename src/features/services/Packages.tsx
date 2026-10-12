@@ -212,6 +212,3 @@ export const ModularPackages = () => {
     </Stack>
   );
 };
-
-// Backwards compatibility alias
-export { ModularPackages as PackagesGrid };

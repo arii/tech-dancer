@@ -5,12 +5,12 @@ const front = { src: '/front.webp', side: 'front' as const, alt: 'Front view' };
 const back = { src: '/back.webp', side: 'back' as const, alt: 'Back view' };
 
 describe('resolveMerchImages', () => {
-  it('falls back to the legacy imageUrl as a front-only image', () => {
-    const resolved = resolveMerchImages({ title: 'Legacy shirt', imageUrl: '/legacy.webp' });
+  it('falls back to the imageUrl as a front-only image', () => {
+    const resolved = resolveMerchImages({ title: 'Standard shirt', imageUrl: '/standard.webp' });
 
     expect(resolved).toEqual({
       mode: 'front-only',
-      primary: { src: '/legacy.webp', side: 'front', alt: 'Legacy shirt product image' },
+      primary: { src: '/standard.webp', side: 'front', alt: 'Standard shirt product image' },
       secondary: undefined,
       equal: [],
     });

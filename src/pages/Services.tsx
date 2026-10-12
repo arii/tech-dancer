@@ -4,7 +4,7 @@ import { SEO } from '@/components/SEO';
 import { BookingModal } from '@/features/services/BookingModal';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
 import { IntakeForm } from '@/features/services/IntakeForm';
-import { PackagesGrid } from '@/features/services/Packages';
+import { ModularPackages } from '@/features/services/Packages';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { CONSULTING_SERVICE_SCHEMA, FOUNDER_PERSON_SCHEMA } from '@/config/constants';
 
@@ -106,7 +106,7 @@ const Services = () => {
       <Stack gap={16} width="full">
         {/* 2. Platform Foundation & Connected Capabilities */}
         <Box>
-          <PackagesGrid />
+          <ModularPackages />
         </Box>
 
         {/* 3. Real Client Proof: Dual Portfolio Showcase (Marcella Therapy & Hair by April) */}
