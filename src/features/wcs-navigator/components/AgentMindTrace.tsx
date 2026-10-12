@@ -91,7 +91,7 @@ function buildDynamicIcs(
 
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   trace,
-  visualScheduleMarkdown,
+  visualScheduleMarkdown: _visualScheduleMarkdown,
   className,
   activeEventName = 'South Bay Dance Fling 2026',
   selectedDivision = 'novice',
@@ -230,7 +230,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
       ),
     ].join('\n');
 
-    const content = visualScheduleMarkdown || dynamicMarkdown;
+    const content = dynamicMarkdown;
     const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -249,20 +249,26 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
   // Group sessions by day
   const sessionsByDay = useMemo(() => {
+    const thursday = includedSessions.filter((s) => s.time.toLowerCase().includes('thu'));
     const friday = includedSessions.filter((s) => s.time.toLowerCase().includes('fri'));
     const saturday = includedSessions.filter((s) => s.time.toLowerCase().includes('sat'));
     const sunday = includedSessions.filter((s) => s.time.toLowerCase().includes('sun'));
+    const other = includedSessions.filter((s) => {
+      const t = s.time.toLowerCase();
+      return !t.includes('thu') && !t.includes('fri') && !t.includes('sat') && !t.includes('sun');
+    });
 
-    return { friday, saturday, sunday };
+    return { thursday, friday, saturday, sunday, other };
   }, [includedSessions]);
 
   const themesByDay = useMemo(() => {
     const rawThemes = trace?.themeDressCodes || [];
+    const thursday = rawThemes.find((t) => t.day.toLowerCase().includes('thu'));
     const friday = rawThemes.find((t) => t.day.toLowerCase().includes('fri'));
     const saturday = rawThemes.find((t) => t.day.toLowerCase().includes('sat'));
     const sunday = rawThemes.find((t) => t.day.toLowerCase().includes('sun'));
 
-    return { friday, saturday, sunday };
+    return { thursday, friday, saturday, sunday };
   }, [trace?.themeDressCodes]);
 
   const getSessionCategory = (session: AuditSession) => {
@@ -588,6 +594,31 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
       {/* UNIFIED CHRONOLOGICAL DAY-BY-DAY FEED */}
       <Stack gap={6} width="full">
+        {/* THURSDAY SECTION (Conditional) */}
+        {(sessionsByDay.thursday.length > 0 || themesByDay.thursday) && (
+          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+              <Stack direction="row" align="center" gap={2}>
+                <Calendar className="w-4 h-4 text-brand-cyan" />
+                <Text as="h3" weight="font-bold" size="base" color="main">
+                  Thursday — Early Arrivals &amp; Pre-Party
+                </Text>
+              </Stack>
+              <Text size="xs" color="dim">Day 0</Text>
+            </Stack>
+
+            {/* Thursday Sessions */}
+            {sessionsByDay.thursday.length > 0 && (
+              <Stack gap={2.5} width="full">
+                {sessionsByDay.thursday.map(renderSessionCard)}
+              </Stack>
+            )}
+
+            {/* Thursday Night Theme */}
+            {renderThemeCard(themesByDay.thursday)}
+          </Stack>
+        )}
+
         {/* FRIDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
@@ -671,6 +702,26 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           {/* Sunday Night Theme */}
           {renderThemeCard(themesByDay.sunday)}
         </Stack>
+
+        {/* OTHER / UNKNOWN SESSIONS SECTION (Conditional) */}
+        {sessionsByDay.other.length > 0 && (
+          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+              <Stack direction="row" align="center" gap={2}>
+                <Calendar className="w-4 h-4 text-brand-cyan" />
+                <Text as="h3" weight="font-bold" size="base" color="main">
+                  Other Scheduled Sessions
+                </Text>
+              </Stack>
+              <Text size="xs" color="dim">Additional</Text>
+            </Stack>
+
+            {/* Other Sessions */}
+            <Stack gap={2.5} width="full">
+              {sessionsByDay.other.map(renderSessionCard)}
+            </Stack>
+          </Stack>
+        )}
       </Stack>
 
       {/* Full Schedule Browser Modal */}
