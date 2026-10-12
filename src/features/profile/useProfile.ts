@@ -26,7 +26,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "style-expression",
       title: "Style & Visual Expression",
-      eyebrow: "Pillar: Style",
       content: "West Coast Swing gives dancers the freedom to showcase personal expression through clean lines, bright outfits, and theme-night creativity. From late-night social sessions with light-up gear to competition spotlights, finding your visual identity brings energy to the floor.",
       gallery: [
         {
@@ -39,7 +38,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "timing-musicality",
       title: "Timing & Musicality",
-      eyebrow: "Pillar: Timing",
       content: "Musicality and connection matter just as much as dynamic movement. Dancing in the pocket of the groove, hitting subtle rhythmic breaks, and actively listening to your partner create the effortless flow that makes West Coast Swing addictive.",
       gallery: [
         {
@@ -65,7 +63,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "financial-strategies",
       title: "Travel & Sustainable Logistics",
-      eyebrow: "Pillar: Travel",
       content: "Traveling for dance conventions every month requires smart planning. I maximize credit card rewards, airline perks, and hotel points to make frequent weekend trips feasible and sustainable, keeping energy focused on dancing rather than travel stress.",
       gallery: [
         {
