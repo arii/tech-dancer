@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { AuditSession } from '../types';
@@ -41,6 +41,17 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
       return matchesDay && matchesSearch;
     });
   }, [sessions, activeDay, searchQuery]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen || typeof document === 'undefined') return null;
 
@@ -192,7 +203,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
         </Box>
 
         {/* Sessions Scrollable Feed */}
-        <Box flex={1} overflow="auto" padding={4} className="min-h-0">
+        <Box flex={1} overflow="auto" padding={4} className="min-h-0 overscroll-contain">
           {filteredSessions.length === 0 ? (
             <Box padding={8} textAlign="center">
               <Text size="sm" color="dim">
