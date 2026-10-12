@@ -72,7 +72,6 @@ const ArielProfile = () => {
             {danceBackground && (
               <ProfileStoryRow
                 id={danceBackground.id}
-                eyebrow={danceBackground.eyebrow}
                 title={danceBackground.title || 'My Dance Background'}
                 content={danceBackground.content}
                 imageSrc={danceBackground.gallery?.[0]?.src}
@@ -86,7 +85,6 @@ const ArielProfile = () => {
             {stylePillar && (
               <ProfileStoryRow
                 id={stylePillar.id}
-                eyebrow={stylePillar.eyebrow}
                 title={stylePillar.title || 'Style & Visual Expression'}
                 content={stylePillar.content}
                 imageSrc={stylePillar.gallery?.[0]?.src}
@@ -100,7 +98,6 @@ const ArielProfile = () => {
             {timingPillar && (
               <ProfileStoryRow
                 id={timingPillar.id}
-                eyebrow={timingPillar.eyebrow}
                 title={timingPillar.title || 'Timing & Musicality'}
                 content={timingPillar.content}
                 imageSrc={timingPillar.gallery?.[0]?.src}
@@ -114,7 +111,6 @@ const ArielProfile = () => {
             {whyBuilt && (
               <ProfileStoryRow
                 id={whyBuilt.id}
-                eyebrow={whyBuilt.eyebrow}
                 title={whyBuilt.title || 'Why I Built This Site'}
                 content={whyBuilt.content}
                 imageSrc={whyBuilt.gallery?.[0]?.src}
@@ -128,7 +124,6 @@ const ArielProfile = () => {
             {travelPillar && (
               <ProfileStoryRow
                 id={travelPillar.id}
-                eyebrow={travelPillar.eyebrow}
                 title={travelPillar.title || 'Travel & Sustainable Logistics'}
                 content={travelPillar.content}
                 imageSrc={travelPillar.gallery?.[0]?.src}

@@ -3,7 +3,6 @@ import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 
 export interface ProfileStoryRowProps {
   id?: string;
-  eyebrow?: string;
   title: string;
   content?: string;
   imageSrc?: string;
@@ -15,7 +14,6 @@ export interface ProfileStoryRowProps {
 
 const ProfileStoryRow = ({
   id,
-  eyebrow,
   title,
   content,
   imageSrc,
@@ -39,23 +37,6 @@ const ProfileStoryRow = ({
           }`}
         >
           <Stack gap={4} className="max-w-2xl">
-            {eyebrow && (
-              <Box
-                display="inline-flex"
-                align="center"
-                gap={2}
-                paddingX={2.5}
-                paddingY={0.5}
-                radius="md"
-                border
-                className="bg-surface border-line/60 text-brand-cyan w-fit"
-              >
-                <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
-                  {eyebrow}
-                </Text>
-              </Box>
-            )}
-
             <Text
               as="h2"
               variant="headline"

@@ -13,7 +13,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "dance-background",
       title: "My Dance Background",
-      eyebrow: "Dance Journey",
       content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After moving to San Francisco, I got back into social dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked immediately — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a welcoming community.",
       gallery: [
         {
@@ -26,7 +25,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "style-expression",
       title: "Style & Visual Expression",
-      eyebrow: "Pillar: Style",
       content: "West Coast Swing gives dancers the freedom to showcase personal expression through clean lines, bright outfits, and theme-night creativity. From late-night social sessions with light-up gear to competition spotlights, finding your visual identity brings energy to the floor.",
       gallery: [
         {
@@ -39,7 +37,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "timing-musicality",
       title: "Timing & Musicality",
-      eyebrow: "Pillar: Timing",
       content: "Musicality and connection matter just as much as dynamic movement. Dancing in the pocket of the groove, hitting subtle rhythmic breaks, and actively listening to your partner create the effortless flow that makes West Coast Swing addictive.",
       gallery: [
         {
@@ -52,7 +49,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "why-built",
       title: "Why I Built This Site",
-      eyebrow: "Behind The Blog",
       content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, scoring and judge breakdown tools, event notes, and the small choices that make a big difference over a season of dancing.",
       gallery: [
         {
@@ -65,7 +61,6 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "financial-strategies",
       title: "Travel & Sustainable Logistics",
-      eyebrow: "Pillar: Travel",
       content: "Traveling for dance conventions every month requires smart planning. I maximize credit card rewards, airline perks, and hotel points to make frequent weekend trips feasible and sustainable, keeping energy focused on dancing rather than travel stress.",
       gallery: [
         {
@@ -77,7 +72,6 @@ const PROFILE_DATA: ProfileData = {
     },
     {
       id: "connect",
-      eyebrow: "Connect & Networking",
       links: [
         { label: 'Instagram', url: SOCIAL_LINKS.INSTAGRAM },
         { label: 'LinkedIn', url: SOCIAL_LINKS.LINKEDIN },

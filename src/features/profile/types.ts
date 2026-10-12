@@ -1,7 +1,6 @@
 export interface ProfileSection {
   id: string;
   title?: string;
-  eyebrow?: string;
   content?: string;
   cards?: ProfileCard[];
   items?: ProfileItem[];
