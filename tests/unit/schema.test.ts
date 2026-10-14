@@ -467,7 +467,7 @@ describe('schema utils', () => {
           name: 'Ariel Anders, PhD'
         },
         copyrightNotice: `© ${new Date().getFullYear()} Ariel Anders, PhD. All rights reserved.`,
-        license: `${BASE_URL}/about#terms`,
+        license: `${BASE_URL}/terms`,
         acquireLicensePage: `${BASE_URL}/about`
       });
     });
@@ -605,7 +605,7 @@ If you need to replace the sheets, peel them off slowly.
       const item = gallery.itemListElement[0].item;
       expect(item.name).toBe('The Slotted Dance Debate');
       expect(item.creditText).toBe('Ariel Anders');
-      expect(item.license).toBe(`${BASE_URL}/about#terms`);
+      expect(item.license).toBe(`${BASE_URL}/terms`);
       expect(item.acquireLicensePage).toBe(`${BASE_URL}/about`);
     });
 

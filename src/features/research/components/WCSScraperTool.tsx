@@ -32,7 +32,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
     <Box border surface="default">
-      <Box padding="compact" borderBottom display="flex" justify="between" align="center">
+      <Box padding="compact" className="border-b" display="flex" justify="between" align="center">
         <Text variant="mono" size="xs" weight="font-bold" uppercase>Scoring Results</Text>
         <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
       </Box>
@@ -105,7 +105,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
         </table>
       </Box>
       {data.length > 20 && (
-        <Box padding="compact" textAlign="center" borderTop>
+        <Box padding="compact" textAlign="center" className="border-t">
           <Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text>
         </Box>
       )}
@@ -185,17 +185,17 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
       <Stack gap={4}>
         <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Stats</Text>
         <Stack gap={4}>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+          <Box display="flex" justify="between" align="center" paddingBottom={2} className="border-b border-line/20">
             <Text variant="body" size="xs" color="dim">Status</Text>
             <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
           </Box>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+          <Box display="flex" justify="between" align="center" paddingBottom={2} className="border-b border-line/20">
             <Text variant="body" size="xs" color="dim">Latency</Text>
             <Text variant="mono" size="xs" color="brand" weight="font-bold">
               {latency ? `${(latency / 1000).toFixed(2)}s` : '---'}
             </Text>
           </Box>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+          <Box display="flex" justify="between" align="center" paddingBottom={2} className="border-b border-line/20">
             <Text variant="body" size="xs" color="dim">Events Processed</Text>
             <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
           </Box>
@@ -265,7 +265,7 @@ export function WCSScraperTool() {
 
   return (
     <Stack gap={8}>
-      <Box paddingBottom={8} borderBottom>
+      <Box paddingBottom={8} className="border-b">
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
             <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scoring Tool</Text>
@@ -374,7 +374,7 @@ export function WCSScraperTool() {
         </Box>
 
         {isMethodologyOpen && (
-          <Box id="methodology-drawer-content" borderTop padding={6} surface="muted">
+          <Box id="methodology-drawer-content" className="border-t" padding={6} surface="muted">
             <Grid cols={{ base: 1, md: 3 }} gap={6}>
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>

@@ -319,9 +319,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           gap={2}
           paddingBottom={{ base: 2.5, sm: 0 }}
           paddingRight={{ base: 0, sm: 4 }}
-          border={{ base: 'b', sm: 'r' }}
-          borderColor="line"
-          className="sm:w-60 md:w-64 shrink-0 min-w-0"
+          className="sm:w-60 md:w-64 shrink-0 min-w-0 border-b sm:border-b-0 sm:border-r border-line"
         >
           <Stack direction="row" align="center" gap={2} className="min-w-0">
             <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
@@ -353,7 +351,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Stack>
 
         {/* Right: Quick Remove Action Button */}
-        <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: 'none' }} borderColor="line" className="shrink-0">
+        <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} className="shrink-0 border-t sm:border-t-0 border-line">
           <Stack
             as="button"
             direction="row"
