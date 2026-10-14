@@ -50,6 +50,7 @@ def generate_text_ai(model, prompt):
             "required": ["current_timestamp", "target_id", "task_objective", "interaction_history"],
         }
         try:
+            # pylint: disable=assignment-from-none
             res = call_ai(prompt, model=model, schema=schema)
             if res:
                 return clean_llm_output(res)
