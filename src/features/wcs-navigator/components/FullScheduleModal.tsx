@@ -239,11 +239,9 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                       gap={2}
                       paddingBottom={{ base: 2.5, sm: 0 }}
                       paddingRight={{ base: 0, sm: 4 }}
-                      border={{ base: 'b', sm: 'r' }}
-                      borderColor="line"
                       shrink={0}
                       minWidth={0}
-                      className="sm:w-60 md:w-64"
+                      className="sm:w-60 md:w-64 border-b sm:border-b-0 sm:border-r border-line"
                     >
                       <Stack direction="row" align="center" gap={2} minWidth={0}>
                         <Icon icon={Clock} size="sm" color="accent" className="shrink-0" />
@@ -284,7 +282,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
                     </Stack>
 
                     {/* Right: Quieter Modal Action Button */}
-                    <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} border={{ base: 't', sm: false }} borderColor="line" shrink={0}>
+                    <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} className="border-t sm:border-t-0 border-line" shrink={0}>
                       <Stack
                         as="button"
                         direction="row"
