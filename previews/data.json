@@ -6,14 +6,14 @@
   }
 ,
   "fix/wcs-navigator-mobile-layout-2747746958602070653": {
-    "commitTimestamp": 1792000393,
-    "deployTimestamp": 1792000393,
+    "commitTimestamp": 1792024225,
+    "deployTimestamp": 1792024225,
     "sha": "unknown"
   }
 ,
   "release-please--branches--main--components--tech-dancer": {
-    "commitTimestamp": 1792003446,
-    "deployTimestamp": 1792003446,
+    "commitTimestamp": 1792024225,
+    "deployTimestamp": 1792024225,
     "sha": "unknown"
   }
 }
