@@ -118,7 +118,7 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
     const link = affiliateManager.getLink(props.id);
     if (link) {
       return (
-        <Box marginY={4} width="full">
+        <Box marginY={4} width="full" className="max-w-xl">
           <AffiliateCard link={link} />
         </Box>
       );

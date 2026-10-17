@@ -47,7 +47,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npx vite preview',
+    command: 'npx vite preview --host 0.0.0.0 --port 4173',
     url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

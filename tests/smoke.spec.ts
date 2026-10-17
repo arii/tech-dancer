@@ -15,7 +15,6 @@ async function validateUrlNavigation(page: Page, href: string) {
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
       const mainLocator = page.locator('#main-content');
-      const count = await mainLocator.count();
       if (count > 0) {
         await expect(mainLocator.first()).toBeVisible({ timeout: 10000 });
       }

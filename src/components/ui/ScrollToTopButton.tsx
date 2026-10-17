@@ -46,6 +46,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
       {isVisible && (
         <Button
           as={motion.button}
+          type="button"
           onClick={scrollToTop}
           position="fixed"
           padding={3}
