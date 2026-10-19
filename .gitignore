@@ -80,6 +80,13 @@ pylint_*.txt
 !tests/**/*.png
 ai-slop-audit-*.md
 
+# Scratch & Temporary Workspaces
+.tmp-main/
+scratch/
+scratch_*/
+gbp-upload-assets/
+nandatown/
+
 # Python / ETL
 **/__pycache__/
 *.py[cod]
@@ -89,8 +96,12 @@ ai-slop-audit-*.md
 venv/
 ENV/
 .python-version
-etl/data/*.parquet
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+etl/data/*
 !etl/data/wcs_prelims.parquet
+!etl/data/event_queue.json
 
 # Package Manager Lockfiles
 # Since you use pnpm, we ignore other manager lockfiles
@@ -115,7 +126,6 @@ boomtick-pkg/cli/logs/audits/
 .pr_cache.pkl
 gh_2.54.0_linux_amd64/
 gh_2.54.0_linux_amd64.tar.gz
-.tmp-main
 amazon-link-audit-report.md
 boomtick-pkg/cli/logs/workflows/*.md
 
