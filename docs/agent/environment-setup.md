@@ -68,8 +68,8 @@ in `.agents/AGENTS.md`:
 
 1. **Tier 1: `boomtick-mcp`** — required first call; auto-injects
    submodule tracking and version context on every operation
-2. **Tier 2: `dev-tools/td-cli`** — fallback when MCP unavailable;
-   query `boomtick-pkg/cli/dev_tools/cli-schema.json` or `td-cli schema <path>` before calling
+2. **Tier 2: `td`** — fallback when MCP unavailable;
+   query dynamic command schema via `td schema <path>` or `repo.get_command_schema` before calling
 3. **Tier 3: raw bash / `gh`** — last resort only
 
 See `.agents/AGENTS.md` for the full tool mapping table.
@@ -81,7 +81,7 @@ See `.agents/AGENTS.md` for the full tool mapping table.
 ```bash
 node --version                          # must match .node-version
 pnpm --version                          # must be 10.28.2
-td-cli doctor      # runtime contract check & lockfile/config consistency
+td doctor      # runtime contract check & lockfile/config consistency
 gh auth status                          # GitHub CLI authentication
 cat .agent-context.json | python3 -c \
   "import json,sys; d=json.load(sys.stdin); print('Index OK:', list(d.keys()))"

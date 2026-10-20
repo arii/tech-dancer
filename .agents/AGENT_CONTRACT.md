@@ -17,8 +17,8 @@ Read the matching workflow before starting these task types:
   - For **Application** changes: Verify via live execution, unit tests, and screenshots.
   - For **Infrastructure/Bootstrap** changes (e.g. `scripts/`, `boomtick-pkg/cli/`, `setup-agent.sh`): If full live execution is risky or resource-constrained, you MAY satisfy verification via dry-runs, log analysis of partial runs, or static analysis (`bash -n`). Document why live verification was skipped.
 - **Startup Discovery**: You MUST read `.agent-context.json` (using Tier 1
-  `repo.read_agent_context`) upon startup to verify submodule tracking and version state, consult `project_config.json` for repository configuration, and query `boomtick-pkg/cli/dev_tools/cli-schema.json` or `repo.get_command_schema` for CLI subcommand schemas without guessing or using `--help`.
-- **Prioritize Index & Schema**: Always consult `.agent-context.json` for submodule/version state, `project_config.json` for repo configuration, and `boomtick-pkg/cli/dev_tools/cli-schema.json` / `repo.get_command_schema` for CLI authority before taking action.
+  `repo.read_agent_context`) upon startup to verify submodule tracking and version state, consult `project_config.json` for repository configuration, and query dynamic command schema via `td schema <path>` or `repo.get_command_schema` without guessing or using `--help`.
+- **Prioritize Index & Schema**: Always consult `.agent-context.json` for submodule/version state, `project_config.json` for repo configuration, and `td schema <path>` / `repo.get_command_schema` for CLI authority before taking action.
 - **Prioritize MCP Tools**: Consult the tool hierarchy in `.agents/AGENTS.md`
   before executing any repository or GitHub operation. `boomtick-mcp` is the
   required first call — not an optional convenience.
@@ -32,12 +32,12 @@ Read the matching workflow before starting these task types:
 
 - **Self-Correction Rule**: If you catch yourself about to run a raw shell
   command (like `gh issue list`, `gh issue edit`, or `git checkout`) that has
-  an MCP or `td-cli` equivalent, you MUST stop and use the pre-packaged tool
+  an MCP or `td` equivalent, you MUST stop and use the pre-packaged tool
   instead. Raw shell fallback for these tasks is a contract violation.
-- Call `td-cli` directly when an MCP tool covers the same operation.
+- Call `td` directly when an MCP tool covers the same operation.
 - Call raw bash (`gh`, `git`) when a Tier 1 or Tier 2 tool covers the operation.
-- Use `--help` or `-h` to discover CLI flags — query `boomtick-pkg/cli/dev_tools/cli-schema.json` or `repo.get_command_schema` instead.
-- Guess flags not listed in `boomtick-pkg/cli/dev_tools/cli-schema.json`.
+- Use `--help` or `-h` to discover CLI flags — query `td schema <path>` or `repo.get_command_schema` instead.
+- Guess flags not listed in command schemas.
 - Chain subcommands in a single shell call.
 - Use interactive menus.
 - Change the Node.js or pnpm runtime versions without explicit instruction.

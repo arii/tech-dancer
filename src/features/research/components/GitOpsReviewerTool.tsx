@@ -51,7 +51,7 @@ export function GitOpsReviewerTool() {
               </Text>
             </Stack>
             <Stack gap={3} padding={5} border radius="md" surface="surface">
-              <Text variant="display" size="md" weight="font-bold">Local Developer Tooling (td-cli)</Text>
+              <Text variant="display" size="md" weight="font-bold">Local Developer Tooling (td)</Text>
               <Text variant="body" size="sm" color="dim">
                 Our `cli/` module provides developers with command-line utilities to perform local PR audits, run static analysis checks, and fetch target repository states.
               </Text>
