@@ -40,11 +40,13 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Validate Quality
-        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          operation: 'validate-quality'
-          issue_number: ${{ github.event.issue.number }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   create-pr:
     name: Issue to Content PR
@@ -63,11 +65,13 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Create PR
-        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          operation: 'create-pr'
-          issue_number: ${{ github.event.issue.number }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   ai-review:
     name: AI Review
@@ -80,15 +84,13 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - AI Review
-        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          operation: 'ai-review'
-          issue_number: ${{ github.event.inputs.issue_number }}
-          comment_body: ${{ github.event.inputs.comment_body }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          google_jules_api_key: ${{ secrets.GOOGLE_JULES_API_KEY }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   resolve-conflicts:
     name: Resolve PR Conflicts
@@ -101,12 +103,13 @@ jobs:
           fetch-depth: 0
 
       - name: Run Issue Operations - Resolve Conflicts
-        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          operation: 'resolve-conflicts'
-          issue_number: ${{ github.event.inputs.issue_number }}
-          comment_body: ${{ github.event.inputs.comment_body }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   update-snapshots:
     name: Update Playwright Snapshots
@@ -119,9 +122,10 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Update Snapshots
-        uses: arii/boomtick/.github/actions/issue-operations@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          operation: 'update-snapshots'
-          issue_number: ${{ github.event.inputs.issue_number }}
-          comment_body: ${{ github.event.inputs.comment_body }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"

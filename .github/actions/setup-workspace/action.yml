@@ -25,10 +25,19 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ./boomtick-pkg/.github/actions/setup-workspace
+    - name: Setup Node.js
+      if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4
       with:
-        setup-node: ${{ inputs.setup-node }}
-        setup-python: ${{ inputs.setup-python }}
         node-version-file: ${{ inputs.node-version-file }}
-        pnpm-version: ${{ inputs.pnpm-version }}
-        force-node24: ${{ inputs.force-node24 }}
+
+    - name: Setup Python
+      if: inputs.setup-python == 'true'
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install boomtick-cli
+      if: inputs.setup-python == 'true'
+      run: pip install boomtick-cli
+      shell: bash

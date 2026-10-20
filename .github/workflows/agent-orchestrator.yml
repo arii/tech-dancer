@@ -90,8 +90,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install boomtick-cli
+        run: pip install boomtick-cli
 
       - name: Resolve Environment
         id: resolve_env
@@ -211,13 +221,13 @@ jobs:
         shell: bash
 
       - name: Run CI Repair
-        uses: arii/boomtick/.github/actions/ci-repair@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          mode: ${{ steps.determine_mode.outputs.mode }}
-          issue_number: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
-          comment_body: ${{ github.event.inputs.comment_body || github.event.client_payload.comment_body }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   dependabot:
     name: Dependabot Alert Handler Task
@@ -262,10 +272,18 @@ jobs:
           fi
         shell: bash
 
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          setup-python: 'true'
+          node-version-file: .node-version
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install boomtick-cli
+        run: pip install boomtick-cli
 
       - name: Generate Issue Body
         id: generate_body

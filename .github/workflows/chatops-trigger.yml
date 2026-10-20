@@ -21,9 +21,10 @@ jobs:
           fetch-depth: 1
 
       - name: BoomTick ChatOps Dispatcher
-        uses: arii/boomtick/.github/actions/chatops-trigger@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main
         with:
-          comment_body: '${{ github.event.comment.body }}'
-          author_association: '${{ github.event.comment.author_association }}'
-          issue_number: '${{ github.event.issue.number }}'
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"

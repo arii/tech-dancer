@@ -37,13 +37,18 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           lfs: true
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          setup-node: true
-          setup-python: true
           node-version-file: .node-version
-          pnpm-version: "10.28.2"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install boomtick-cli
+        run: pip install boomtick-cli
       - name: Check active runtime
         run: |
           pnpm run doctor
@@ -116,13 +121,10 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          setup-node: true
-          setup-python: false
           node-version-file: .node-version
-          pnpm-version: "10.28.2"
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
