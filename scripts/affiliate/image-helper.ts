@@ -7,6 +7,7 @@ export async function validateImageUrl(url: string): Promise<{ contentType: stri
   return new Promise((resolve, reject) => {
     const req = https.request(url, { method: 'HEAD' }, (res) => {
       if (res.statusCode !== 200) {
+        res.resume();
         reject(new Error(`Failed to validate image: HTTP ${res.statusCode}`));
         return;
       }
@@ -15,15 +16,18 @@ export async function validateImageUrl(url: string): Promise<{ contentType: stri
       const contentLength = parseInt(res.headers['content-length'] || '0', 10);
 
       if (!contentType.startsWith('image/')) {
+        res.resume();
         reject(new Error(`Invalid content type: ${contentType}`));
         return;
       }
 
       if (contentLength === 0) {
+        res.resume();
         reject(new Error('Image is empty (0 bytes)'));
         return;
       }
 
+      res.resume();
       resolve({ contentType, contentLength });
     });
 

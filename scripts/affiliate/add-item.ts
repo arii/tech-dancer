@@ -59,7 +59,7 @@ async function main() {
   }
 
   const normalizedUrl = normalizeAmazonUrl(amazonUrl, tag);
-  const isAmazon = amazonUrl.includes('amazon.');
+  const isAmazon = amazonUrl.includes('amazon.') || amazonUrl.includes('.amazon') || amazonUrl.includes('a.co');
 
   if (isAmazon && !normalizedUrl.includes('/dp/')) {
     if (!force) {
