@@ -387,7 +387,7 @@ export default defineConfig(({mode}) => {
     },
     server: {
       watch: {
-        ignored: ['**/.venv/**', '**/boomtick-pkg/**', '**/node_modules/**'],
+        ignored: ['**/.venv/**', '**/node_modules/**'],
       },
       hmr: process.env.DISABLE_HMR ? false : {
         protocol: 'ws',
