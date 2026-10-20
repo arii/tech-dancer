@@ -37,6 +37,8 @@ runs:
       if: inputs.setup-node == 'true'
       shell: bash
       run: |
+        NODE_BIN_DIR="$(dirname "$(which node)")"
+        echo "$NODE_BIN_DIR" >> "$GITHUB_PATH"
         echo "Active Node: $(which node) ($(node -v))"
         echo "Active pnpm: $(which pnpm) ($(pnpm -v))"
 

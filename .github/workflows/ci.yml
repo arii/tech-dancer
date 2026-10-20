@@ -285,12 +285,14 @@ jobs:
       - name: Oxlint Scan
         if: matrix.scanner == 'oxlint'
         run: pnpm run lint:ox
+        shell: bash
 
       - name: Semgrep Static Analysis
         if: matrix.scanner == 'semgrep'
         run: |
           python3 -m pip install --no-cache-dir --break-system-packages semgrep
           pnpm run audit:semgrep
+        shell: bash
 
       - name: Gitleaks Secret Detection
         if: matrix.scanner == 'gitleaks'
