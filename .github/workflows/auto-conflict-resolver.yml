@@ -94,16 +94,13 @@ jobs:
       - name: Checkout base repository
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          submodules: recursive
+          submodules: false
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: ./.github/actions/setup-workspace
         with:
-          setup-node: true
-          setup-python: false
-          node-version-file: .node-version
-          pnpm-version: "10.28.2"
+          setup-python: 'false'
 
       - name: Check active runtime
         run: |

@@ -1,5 +1,5 @@
-name: 'Setup Workspace (Legacy Wrapper)'
-description: 'Bootstraps the workspace (Wrapper for backward compatibility)'
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace by installing Node.js, pnpm, Python, and dev-tools'
 inputs:
   setup-node:
     description: "Install Node.js and pnpm"
@@ -17,18 +17,51 @@ inputs:
     description: "Version of pnpm to activate"
     required: false
     default: '10.28.2'
-  force-node24:
-    description: "Force JavaScript actions to run on Node 24"
-    required: false
-    default: 'false'
 
 runs:
   using: 'composite'
   steps:
-    - uses: ./boomtick-pkg/.github/actions/setup-workspace
+    - name: Setup Node.js
+      if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
-        setup-node: ${{ inputs.setup-node }}
-        setup-python: ${{ inputs.setup-python }}
         node-version-file: ${{ inputs.node-version-file }}
-        pnpm-version: ${{ inputs.pnpm-version }}
-        force-node24: ${{ inputs.force-node24 }}
+
+    - name: Setup pnpm
+      if: inputs.setup-node == 'true'
+      uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Ensure Python dev tooling and boomtick-cli are installed
+      if: inputs.setup-python == 'true'
+      shell: bash
+      run: |
+        PYTHON_CMD="python3"
+        if ! command -v python3 >/dev/null 2>&1 && command -v python >/dev/null 2>&1; then
+          PYTHON_CMD="python"
+        fi
+
+        echo "Ensuring boomtick-cli and dev tooling are installed..."
+        if [ -f "requirements-dev.txt" ]; then
+          $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages -r requirements-dev.txt
+        else
+          $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.12.1"
+        fi
+
+        mkdir -p "$HOME/.local/bin"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+        echo "Verifying installed tools..."
+        command -v td || echo "::warning::td not found on PATH"
+        command -v pylint || echo "::warning::pylint not found on PATH"
+        td --help >/dev/null || true
+
+    - name: Ensure Node.js and pnpm PATH precedence
+      if: inputs.setup-node == 'true'
+      shell: bash
+      run: |
+        NODE_BIN_DIR="$(dirname "$(which node)")"
+        echo "$NODE_BIN_DIR" >> "$GITHUB_PATH"
+        echo "Active Node: $(which node) ($(node -v))"
+        echo "Active pnpm: $(which pnpm) ($(pnpm -v))"

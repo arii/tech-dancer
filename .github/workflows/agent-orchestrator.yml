@@ -91,7 +91,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: ./.github/actions/setup-workspace
 
       - name: Resolve Environment
         id: resolve_env
@@ -153,7 +153,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: |
-          td-cli agent dispatch main "$AUDIT_PROMPT"
+          td agent dispatch main "$AUDIT_PROMPT"
         shell: bash
 
       - name: Run Local Orchestrator
@@ -165,10 +165,10 @@ jobs:
         run: |
           if [ -z "$PR_NUMBER" ]; then
             echo "No PR number provided. Running local orchestrator for all open PRs..."
-            td-cli agent run-local
+            td agent run-local
           else
             echo "Running local orchestrator for PR #$PR_NUMBER..."
-            td-cli agent run-local --pr "$PR_NUMBER"
+            td agent run-local --pr "$PR_NUMBER"
           fi
         shell: bash
 
@@ -211,13 +211,13 @@ jobs:
         shell: bash
 
       - name: Run CI Repair
-        uses: arii/boomtick/.github/actions/ci-repair@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          mode: ${{ steps.determine_mode.outputs.mode }}
-          issue_number: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
-          comment_body: ${{ github.event.inputs.comment_body || github.event.client_payload.comment_body }}
-          jules_api_key: ${{ secrets.JULES_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-app-id: ${{ secrets.APP_ID }}
+          github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          jules-api-key: ${{ secrets.JULES_API_KEY }}
+          send-to-jules: "true"
 
   dependabot:
     name: Dependabot Alert Handler Task
@@ -263,9 +263,7 @@ jobs:
         shell: bash
 
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@605eebb56880a5ab47330f1e1eb2f9b9bbb4fd92
-        with:
-          setup-python: 'true'
+        uses: ./.github/actions/setup-workspace
 
       - name: Generate Issue Body
         id: generate_body
@@ -457,5 +455,5 @@ jobs:
           ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
         run: |
           set -eo pipefail
-          td-cli jules dispatch main "Upgrade dependency to fix security vulnerability in issue #$ISSUE_NUMBER"
+          td jules dispatch main "Upgrade dependency to fix security vulnerability in issue #$ISSUE_NUMBER"
         shell: bash
