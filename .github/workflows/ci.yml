@@ -289,7 +289,7 @@ jobs:
       - name: Semgrep Static Analysis
         if: matrix.scanner == 'semgrep'
         run: |
-          pip install semgrep
+          python3 -m pip install --no-cache-dir --break-system-packages semgrep
           pnpm run audit:semgrep
 
       - name: Gitleaks Secret Detection

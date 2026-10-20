@@ -21,17 +21,24 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Setup Node.js
+      if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+
     - name: Setup pnpm
       if: inputs.setup-node == 'true'
       uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         version: ${{ inputs.pnpm-version }}
 
-    - name: Setup Node.js
+    - name: Verify active Node.js and pnpm
       if: inputs.setup-node == 'true'
-      uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-      with:
-        node-version-file: ${{ inputs.node-version-file }}
+      shell: bash
+      run: |
+        echo "Active Node: $(which node) ($(node -v))"
+        echo "Active pnpm: $(which pnpm) ($(pnpm -v))"
 
     - name: Ensure Python dev tooling and boomtick-cli are installed
       if: inputs.setup-python == 'true'
