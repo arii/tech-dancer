@@ -34,10 +34,10 @@ bash boomtick-pkg/install.sh
 
 ## 🛠 Entry Points
 
-### 1. `td-cli` CLI
+### 1. `td` CLI
 The primary tool for local automation. It automatically configures and syncs the dual Node/Python environment. After installation, you can run:
 ```bash
-td-cli doctor
+td doctor
 ```
 to verify your runtime consistency across Node, pnpm, and Python environments.
 
@@ -49,8 +49,8 @@ A TypeScript-based MCP server communicating via stdio.
 
 ### 🤖 Agent Coordination & .agent-context.json
 This repository uses a **Schema-Driven Contract Pipeline**. All AI agents MUST:
-1. **Consult `.agent-context.json`** upon startup to verify submodule synchronization and version state, `project_config.json` for repo configuration, and `boomtick-pkg/cli/dev_tools/cli-schema.json` (or `repo.get_command_schema`) for CLI subcommand schemas.
-2. **Follow the 'MCP-First' policy**: Prioritize Tier 1 (MCP) tools and Tier 2 (`td-cli`) subcommands over raw shell commands (Tier 3).
+1. **Consult `.agent-context.json`** upon startup to verify submodule synchronization and version state, `project_config.json` for repo configuration, and dynamic command schemas via `td schema <path>` or `repo.get_command_schema`.
+2. **Follow the 'MCP-First' policy**: Prioritize Tier 1 (MCP) tools and Tier 2 (`td`) subcommands over raw shell commands (Tier 3).
 3. **Practice Self-Correction**: If you catch yourself about to run a raw shell command that has a tool equivalent, stop and use the tool.
 
 ## 📖 Documentation

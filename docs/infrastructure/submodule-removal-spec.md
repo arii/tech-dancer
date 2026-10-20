@@ -56,7 +56,7 @@ Update references to local PYTHONPATH variables in `package.json` scripts:
   "audit:anti-patterns": "PYTHONPATH=dev_tools:dev_tools/dev_tools node scripts/detect-antipatterns.mjs"
 }
 ```
-*Note: Any scripts or linter rules must now run via the installed `td-cli` command.*
+*Note: Any scripts or linter rules must now run via the installed `td` command.*
 
 ### 3.2 Node.js & pnpm Workspace
 
@@ -126,6 +126,6 @@ Before merging the submodule removal, the following validation checks must pass 
 
 1. **Clean Installation:** Run `pnpm install` and verify `pnpm-lock.yaml` is clean and contains zero references to `boomtick-pkg`.
 2. **Local Lint & Build:** Run `pnpm run lint` and `pnpm run build` to ensure no workspace compile-time or static analysis errors exist.
-3. **CLI Doctor Check:** Execute the decoupled CLI doctor command `td-cli doctor` to verify environment consistency and confirm that all configuration variables are loaded successfully.
+3. **CLI Doctor Check:** Execute the decoupled CLI doctor command `td doctor` to verify environment consistency and confirm that all configuration variables are loaded successfully.
 4. **E2E Testing:** Execute `pnpm run test:e2e` to confirm that standard play-tests and visual regressions are passing successfully with zero failures.
-5. **Quality Review:** Run the validation command `td-cli gh validate-issue` on any open issues to ensure that no stale configuration rules are triggered.
+5. **Quality Review:** Run the validation command `td gh validate-issue` on any open issues to ensure that no stale configuration rules are triggered.

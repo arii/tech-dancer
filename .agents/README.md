@@ -8,7 +8,7 @@ workflows, and supporting scripts for automated operations in this repository.
 ## Core Standards
 
 - **`AGENTS.md`** — Primary Tooling and MCP Protocol. Defines the three-tier
-  tool hierarchy (MCP → `td-cli` → bash), the full tool mapping table, and
+  tool hierarchy (MCP → `td` → bash), the full tool mapping table, and
   enforcement rules. **Read this before any GitHub or repository operation.**
 - **`AGENT_CONTRACT.md`** — Invariant rules for agent behavior. Always wins
   over other instruction layers.

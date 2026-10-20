@@ -20,8 +20,8 @@ or a workflow file.
 
 - `.agent-context.json` tracks submodule commit sync and package versioning.
   Use `repo.read_agent_context` (Tier 1 MCP) to inspect context version state.
-- `boomtick-pkg/cli/dev_tools/cli-schema.json` is the canonical authority for CLI command flags and subcommands. Use `repo.get_command_schema` or `td-cli schema <path>` for targeted schema discovery.
-- `.agents/AGENTS.md` defines the MCP → `td-cli` → bash escalation path
+- Command schemas are the authority for CLI command flags and subcommands. Use `repo.get_command_schema` or `td schema <path>` for targeted schema discovery.
+- `.agents/AGENTS.md` defines the MCP → `td` → bash escalation path
   for every task category. Consult it before any GitHub or repo operation.
 - `CODEX.md` has been removed — its runtime contract is now in `AGENTS.md`
   section 22 and enforced by `dev-tools/setup-agent.sh`.
