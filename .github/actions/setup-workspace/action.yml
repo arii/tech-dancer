@@ -33,15 +33,6 @@ runs:
       with:
         version: ${{ inputs.pnpm-version }}
 
-    - name: Verify active Node.js and pnpm
-      if: inputs.setup-node == 'true'
-      shell: bash
-      run: |
-        NODE_BIN_DIR="$(dirname "$(which node)")"
-        echo "$NODE_BIN_DIR" >> "$GITHUB_PATH"
-        echo "Active Node: $(which node) ($(node -v))"
-        echo "Active pnpm: $(which pnpm) ($(pnpm -v))"
-
     - name: Ensure Python dev tooling and boomtick-cli are installed
       if: inputs.setup-python == 'true'
       shell: bash
@@ -58,11 +49,6 @@ runs:
           $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.12.1"
         fi
 
-        # Ensure python scripts directory is on PATH
-        SCRIPTS_DIR=$($PYTHON_CMD -c "import sysconfig; print(sysconfig.get_path('scripts'))" 2>/dev/null || true)
-        if [ -n "$SCRIPTS_DIR" ] && [ -d "$SCRIPTS_DIR" ]; then
-          echo "$SCRIPTS_DIR" >> "$GITHUB_PATH"
-        fi
         mkdir -p "$HOME/.local/bin"
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
@@ -70,3 +56,12 @@ runs:
         command -v td || echo "::warning::td not found on PATH"
         command -v pylint || echo "::warning::pylint not found on PATH"
         td --help >/dev/null || true
+
+    - name: Ensure Node.js and pnpm PATH precedence
+      if: inputs.setup-node == 'true'
+      shell: bash
+      run: |
+        NODE_BIN_DIR="$(dirname "$(which node)")"
+        echo "$NODE_BIN_DIR" >> "$GITHUB_PATH"
+        echo "Active Node: $(which node) ($(node -v))"
+        echo "Active pnpm: $(which pnpm) ($(pnpm -v))"
