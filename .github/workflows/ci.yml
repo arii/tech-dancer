@@ -245,6 +245,8 @@ jobs:
 
       - name: Deployment Impact Analysis
         uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}

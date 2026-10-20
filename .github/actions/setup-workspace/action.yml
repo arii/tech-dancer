@@ -33,13 +33,14 @@ runs:
       with:
         node-version-file: ${{ inputs.node-version-file }}
 
-    - name: Setup Python
+    - name: Ensure boomtick-cli is installed
       if: inputs.setup-python == 'true'
-      uses: actions/setup-python@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-      with:
-        python-version: '3.11'
-
-    - name: Install boomtick-cli
-      if: inputs.setup-python == 'true'
-      run: pip install --break-system-packages boomtick-cli
       shell: bash
+      run: |
+        if ! command -v td >/dev/null 2>&1; then
+          echo "Installing boomtick-cli..."
+          python3 -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.12.1"
+        else
+          echo "✅ td CLI already available: $(which td)"
+        fi
+        td --help >/dev/null || true
