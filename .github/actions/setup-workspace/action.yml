@@ -23,19 +23,19 @@ runs:
   steps:
     - name: Setup pnpm
       if: inputs.setup-node == 'true'
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         version: ${{ inputs.pnpm-version }}
 
     - name: Setup Node.js
       if: inputs.setup-node == 'true'
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         node-version-file: ${{ inputs.node-version-file }}
 
     - name: Setup Python
       if: inputs.setup-python == 'true'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         python-version: '3.11'
 

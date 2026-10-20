@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Validate Quality
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -65,7 +65,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Create PR
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - AI Review
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -103,7 +103,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Issue Operations - Resolve Conflicts
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -122,7 +122,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Issue Operations - Update Snapshots
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}

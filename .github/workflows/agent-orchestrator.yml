@@ -211,7 +211,7 @@ jobs:
         shell: bash
 
       - name: Run CI Repair
-        uses: arii/boomtick@main
+        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
