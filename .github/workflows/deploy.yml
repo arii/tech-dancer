@@ -34,7 +34,7 @@ jobs:
       - name: Checkout Branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          submodules: recursive
+          submodules: false
           fetch-depth: 0
           lfs: true
       - name: Setup Workspace
@@ -114,7 +114,7 @@ jobs:
       - name: Checkout Branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
-          submodules: recursive
+          submodules: false
           fetch-depth: 0
       - name: Setup Workspace
         uses: arii/boomtick/.github/actions/setup-workspace@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
