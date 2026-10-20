@@ -25,18 +25,8 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install boomtick-cli
-        run: pip install boomtick-cli
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Install Python Dependencies
         run: |

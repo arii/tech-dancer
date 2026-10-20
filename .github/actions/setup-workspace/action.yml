@@ -1,5 +1,5 @@
-name: 'Setup Workspace (Legacy Wrapper)'
-description: 'Bootstraps the workspace (Wrapper for backward compatibility)'
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace by installing Node.js, pnpm, Python, and dev-tools'
 inputs:
   setup-node:
     description: "Install Node.js and pnpm"
@@ -17,14 +17,16 @@ inputs:
     description: "Version of pnpm to activate"
     required: false
     default: '10.28.2'
-  force-node24:
-    description: "Force JavaScript actions to run on Node 24"
-    required: false
-    default: 'false'
 
 runs:
   using: 'composite'
   steps:
+    - name: Setup pnpm
+      if: inputs.setup-node == 'true'
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
     - name: Setup Node.js
       if: inputs.setup-node == 'true'
       uses: actions/setup-node@v4
@@ -39,5 +41,5 @@ runs:
 
     - name: Install boomtick-cli
       if: inputs.setup-python == 'true'
-      run: pip install boomtick-cli
+      run: pip install --break-system-packages boomtick-cli
       shell: bash

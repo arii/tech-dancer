@@ -97,10 +97,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
         with:
-          node-version-file: .node-version
+          setup-python: 'false'
 
       - name: Check active runtime
         run: |
