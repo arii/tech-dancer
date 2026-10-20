@@ -1,5 +1,5 @@
-name: 'Setup Workspace (Legacy Wrapper)'
-description: 'Bootstraps the workspace (Wrapper for backward compatibility)'
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace by installing Node.js, pnpm, Python, and dev-tools'
 inputs:
   setup-node:
     description: "Install Node.js and pnpm"
@@ -17,18 +17,30 @@ inputs:
     description: "Version of pnpm to activate"
     required: false
     default: '10.28.2'
-  force-node24:
-    description: "Force JavaScript actions to run on Node 24"
-    required: false
-    default: 'false'
 
 runs:
   using: 'composite'
   steps:
-    - uses: ./boomtick-pkg/.github/actions/setup-workspace
+    - name: Setup pnpm
+      if: inputs.setup-node == 'true'
+      uses: pnpm/action-setup@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
-        setup-node: ${{ inputs.setup-node }}
-        setup-python: ${{ inputs.setup-python }}
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Node.js
+      if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      with:
         node-version-file: ${{ inputs.node-version-file }}
-        pnpm-version: ${{ inputs.pnpm-version }}
-        force-node24: ${{ inputs.force-node24 }}
+
+    - name: Ensure boomtick-cli is installed
+      if: inputs.setup-python == 'true'
+      shell: bash
+      run: |
+        if ! command -v td >/dev/null 2>&1; then
+          echo "Installing boomtick-cli..."
+          python3 -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.12.1"
+        else
+          echo "✅ td CLI already available: $(which td)"
+        fi
+        td --help >/dev/null || true
