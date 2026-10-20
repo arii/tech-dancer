@@ -118,7 +118,7 @@ jobs:
       - name: Ratchet Any
         run: |
           export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh ratchet-any
+          td gh ratchet-any
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -154,7 +154,7 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           pnpm run audit:anti-patterns
-          td-cli gh audit-gate
+          td gh audit-gate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
