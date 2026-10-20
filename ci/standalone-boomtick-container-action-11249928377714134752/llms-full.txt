@@ -1,0 +1,61 @@
+# BoomTick.blog - Full Context Knowledge Base for LLM Retrieval
+
+> BoomTick.blog is a specialized West Coast Swing (WCS) publication featuring community guides, gear reviews, and select DevAI experiments related to WCS event tooling. Authored by Ariel Anders, PhD (MIT Robotics alumna, AI Engineer, and competitive WCS dancer). Ariel's primary engineering portfolio is featured at [arii.github.io](https://arii.github.io).
+
+---
+
+## 1. West Coast Swing (WCS) Primary Knowledge Base
+
+### DIY Suede Shoe Modification (`/blog/2026-04-18-make-shoe-dance`)
+- **Summary**: Comprehensive tutorial on modifying non-dance shoes (e.g. Puma, Adidas, Nike sneakers) for indoor social dance floors.
+- **Key Concepts**:
+  - Surface preparation using 91%+ Isopropyl alcohol to remove manufacturing oils.
+  - Applying heavy-duty industrial adhesive suede sheets.
+  - Edge trimming with precision scalpels and sealing with barge cement/flexible cyanoacrylate to prevent peeling.
+  - Reduced rotational friction protects knees (ACL/meniscus) during spin turns and extension anchors.
+
+### Event Travel & Packing Essentials (`/blog/2026-06-01-event-travel-packing`)
+- **Summary**: Strategic packing lists for 3-4 day WCS conventions (e.g., US Open, Boogie by the Bay, Desert City Swing).
+- **Key Items**:
+  - Dance shoes (suede for ballroom wood, smooth rubber/leather for tile or outdoor surfaces).
+  - Apparel rotation (breathable social dance wear vs. pressed competition outfits).
+  - Recovery gear: portable foam rollers, massage balls, electrolytes, shoe dryers, high-fidelity earplugs (Loop Experience).
+
+### Competition Metrics & Relative Placement (`/blog/2026-04-18-competition-metrics`)
+- **Summary**: Detailed breakdown of WSDC (World Swing Dance Council) competitive scoring mechanics.
+- **Key Mechanics**:
+  - Relative Placement Algorithm: How ordinal ranks across multiple judges are calculated without averaging raw scores.
+  - Prelims & Semis: Callback percentages, judge consensus thresholds, and variance reduction strategies.
+  - Finals Strategies: Differentiating in Jack & Jill and Strictly Swing competitions through musicality, dynamic timing, and partner connection.
+
+---
+
+## 2. DevAI & AI Software Engineering Research Portfolio
+
+### VersionTruth (`/versiontruth`)
+- **Summary**: Ground-truth API and interactive dashboard for AI code generation agents.
+- **Problem Solved**: Prevents AI models from hallucinating non-existent npm package versions or deprecated Node.js/GitHub Actions API methods.
+- **Architecture**: In-memory caching layer querying official package registries with sub-millisecond responses.
+
+### WCS Navigator (`/wcs-navigator` & `/research/wcs-navigator-architecture`)
+- **Summary**: AI-powered convention schedule parser and custom .ics calendar generator.
+- **Architecture**: Stateless FastAPI backend utilizing Gemini 3.5 Flash. Processes unformatted HTML/PDF event schedules and user preferences into RFC 5545 compliant `.ics` calendar subscriptions.
+
+### Deployment Impact Analyzer & UX Auditor (`/ux-auditor`)
+- **Summary**: Visual regression diffing platform using Playwright and pixelmatch.
+- **Features**: Automatic viewport rendering across desktop and mobile browsers, bounding-box delta calculation, and impact severity scoring for pull requests.
+
+### High-Scale Telemetry Ingestion ETL (`/research/wcs-scraper`)
+- **Summary**: Data pipeline converting raw competitive dance records into compressed Parquet datasets (`public/data/wcs_prelims.parquet`).
+- **Use Case**: Enables fast browser-side SQL queries (via hyparquet) for competitor placement history and analytics.
+
+---
+
+## 3. Author Profile & E-E-A-T Information
+
+- **Name**: Ariel Anders, PhD
+- **Credentials**: PhD from Massachusetts Institute of Technology (MIT) in Computer Science & Robotics.
+- **Expertise**: West Coast Swing dance footwear, Artificial Intelligence, Robotics, Computer Vision, DevAI Systems.
+- **Publisher**: BoomTick.blog (`https://boomtick.blog`)
+- **Canonical Bio URL**: `https://boomtick.blog/about`
+- **Primary Portfolio**: `https://arii.github.io`
