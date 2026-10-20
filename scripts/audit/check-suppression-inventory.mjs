@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const BASELINE_FILE = path.join(ROOT, 'audit-baseline.json');
 const SRC_DIR = path.join(ROOT, 'src');
 
