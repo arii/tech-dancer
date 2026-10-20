@@ -26,7 +26,7 @@ const config: KnipConfig = {
   rules: {
     duplicates: 'off',
   },
-  ignoreBinaries: ['python3', 'semgrep', 'pylint', 'mypy', 'td-cli'],
+  ignoreBinaries: ['python3', 'semgrep', 'pylint', 'mypy', 'td'],
   ignoreExportsUsedInFile: true,
 };
 
