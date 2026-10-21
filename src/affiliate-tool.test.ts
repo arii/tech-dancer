@@ -56,6 +56,14 @@ describe('Affiliate Tool Utilities', () => {
       const normalized = normalizeAmazonUrl(url, 'test-tag');
       expect(normalized).toBe('https://www.amazon.com/s?tag=test-tag');
     });
+
+    it('should handle link.amazon and a.co domain URLs by appending affiliate tag', () => {
+      const linkAmazonUrl = 'https://link.amazon/B08eIPVIf';
+      expect(normalizeAmazonUrl(linkAmazonUrl, 'test-tag')).toBe('https://link.amazon/B08eIPVIf?tag=test-tag');
+
+      const aCoUrl = 'https://a.co/d/abcdefg';
+      expect(normalizeAmazonUrl(aCoUrl, 'test-tag')).toBe('https://a.co/d/abcdefg?tag=test-tag');
+    });
   });
 
   describe('extractAsin', () => {

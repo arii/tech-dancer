@@ -36,7 +36,7 @@ export function writeAffiliates(data: Record<string, AffiliateItem>) {
 export function normalizeAmazonUrl(url: string, tag: string = getAffiliateTag()): string {
   try {
     const urlObj = new URL(url);
-    if (!urlObj.hostname.includes('amazon.')) {
+    if (!urlObj.hostname.includes('amazon.') && !urlObj.hostname.endsWith('.amazon') && urlObj.hostname !== 'a.co') {
       return url;
     }
 

@@ -664,5 +664,25 @@
     "description": "Renter-friendly, shatterproof mirror panels perfect for home practice spaces.",
     "image": "/images/gear/sketches/stick-on-mirrors.jpeg",
     "imageMode": "contain"
+  },
+  "glitter-gel": {
+    "id": "glitter-gel",
+    "name": "Chunky Body Glitter Gel",
+    "url": "https://link.amazon/B08eIPVIf?tag=onasafari0a-20",
+    "category": "gear",
+    "description": "12-color chunky body glitter gel set. Perfect for festival makeup and filling in temporary tattoo gaps.",
+    "draft": false,
+    "image": "/images/gear/amazon/glitter-gel.jpg",
+    "imageMode": "contain"
+  },
+  "glitter-freckles": {
+    "id": "glitter-freckles",
+    "name": "Glitter Makeup Patches (Silver Freckles)",
+    "url": "https://link.amazon/B09nEOIv4?tag=onasafari0a-20",
+    "category": "gear",
+    "description": "Silver glitter freckles makeup patches (30-pack). Quick-apply faux glitter freckles, great paired with glitter gel to fill in tattoo gaps.",
+    "draft": false,
+    "image": "/images/gear/amazon/glitter-freckles.jpg",
+    "imageMode": "contain"
   }
 }
