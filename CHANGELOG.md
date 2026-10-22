@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.9.0...tech-dancer-v0.9.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* improve mobile layout for WCS Navigator modals ([#4712](https://github.com/arii/tech-dancer/issues/4712)) ([1701b3f](https://github.com/arii/tech-dancer/commit/1701b3fa1e50f3d7e819825b96032b8ae6911182))
+
 ## [0.9.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.8.0...tech-dancer-v0.9.0) (2026-10-21)
 
 
