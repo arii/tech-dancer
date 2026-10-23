@@ -1,541 +1,541 @@
 {
   "feat/blog-post-hyatt-credit-cards": {
-    "commitTimestamp": 1792757802,
-    "deployTimestamp": 1792757802,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-power-charging": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-15-ultimate-wcs-event-survival-guide": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-16-wsdc-points-tier-calculation": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-06-20-ultimate-wcs-home-practice-space": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog/2026-10-22-my-favorite-credit-cards-for-hyatt-hosted-west-coast-swing-events": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2023-10-01-loop-earplugs": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2023-11-01-travel-steamer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-01-01-portable-speaker": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-alien-mask": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-charging-cables": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-compression-cubes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-crop-tops": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-fishnet-tights": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-foam-roller": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-green-bodysuit": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-light-up-suspenders": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-love-neon-follow-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-love-neon-lead-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-love-neon-switch-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-love-unisex-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-mesh-fishnet-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-nerd-set": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-bear-tank": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-bestcal-tshirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-crop-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-gate-crop-hoodie": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-pride-bear-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-norcal-pride-gate-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-pumpkin-headbands": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-pumpkin-stickers": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-rave-fan": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-reflective-crop-tops": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-running-belt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-shoe-dryer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-sunscreen": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-travel-bottles": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-tripod": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-visor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2024-06-01-war-eagle-shirt": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2026-04-12-suede-shoe-diy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/2026-06-20-stick-on-mirrors": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/relavel-travel-bag": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/slot-era-mug": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/slot-era-tank-top": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/gear/slot-era-tote-bag": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/memes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/privacy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/2026-07-10-latest-version-check-skill": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/ai-devops-pipeline": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/blog-drafter": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/boomtick-blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/confidently-incorrect-v4": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/deployment-impact-analyzer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/ecommerce-automation": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/gitops-pr-reviewer": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/hrm-flagship": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/repo-auditor-ai": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/wcs-navigator-architecture": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/wcs-navigator": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/research/wcs-scraper": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/return-policy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/services": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/shipping": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/terms": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/ux-auditor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/versiontruth": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 ,
   "fix-hyatt-blog-post-bloat-6666093640804237933/wcs-navigator": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1792773538,
+    "deployTimestamp": 1792773538,
     "sha": "unknown"
   }
 }
