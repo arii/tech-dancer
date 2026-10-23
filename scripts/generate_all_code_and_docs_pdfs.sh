@@ -25,7 +25,7 @@ enscript -q --highlight --color -p - \
 
 echo "==> [4/4] Generating Group 4: Data Models & Test Suites PDF..."
 enscript -q --highlight --color -p - \
-  src/features/wcs-navigator/data/californiaEvents.ts src/features/wcs-navigator/data/goldenTraces.ts \
+  src/features/wcs-navigator/data/californiaEvents.ts \
   src/features/wcs-navigator/data/mockResults.ts src/features/wcs-navigator/data/personas.ts \
   $(find src/features/wcs-navigator/__tests__ -type f -name "*.tsx" | sort) \
   | ps2pdf - pdf_docs/code-groups/04_data_and_test_suites.pdf
