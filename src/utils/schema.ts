@@ -446,7 +446,7 @@ export interface SchemaHowTo {
   "step": SchemaHowToStep[];
 }
 
-export function generateHowToSchema(params: {
+function generateHowToSchema(params: {
   name: string;
   description: string;
   image?: string;
@@ -489,7 +489,7 @@ export interface ParsedMarkdownStep {
  * Utility to parse step headings and step text blocks from Markdown content.
  * Isolates step header matching and formatting cleanup into a clean, testable function.
  */
-export function parseMarkdownSteps(content: string, slug: string): ParsedMarkdownStep[] {
+function parseMarkdownSteps(content: string, slug: string): ParsedMarkdownStep[] {
   if (!content) return [];
 
   const stepRegex = /###\s+(?:(\d+)[.:]\s*)?([^\n]+)\n+([\s\S]*?)(?=\n###|\n##|$)/g;
@@ -579,7 +579,7 @@ export interface SchemaFAQPage {
   "mainEntity": SchemaQuestion[];
 }
 
-export function generateFAQPageSchema(faqs: Array<{ question: string; answer: string }>): SchemaFAQPage {
+function generateFAQPageSchema(faqs: Array<{ question: string; answer: string }>): SchemaFAQPage {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",

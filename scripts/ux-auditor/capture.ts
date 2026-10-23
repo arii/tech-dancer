@@ -6,7 +6,7 @@ import { spawn, type ChildProcess } from 'child_process';
 import { pruneHtmlDom } from './domPruner';
 import type { ViewportScanResult, AxeViolationSummary } from './types';
 
-export const VIEWPORT_DEFINITIONS: Record<string, { width: number; height: number; isMobile?: boolean }> = {
+const VIEWPORT_DEFINITIONS: Record<string, { width: number; height: number; isMobile?: boolean }> = {
   desktop: { width: 1440, height: 900, isMobile: false },
   laptop: { width: 1024, height: 768, isMobile: false },
   tablet: { width: 768, height: 1024, isMobile: true },
@@ -22,7 +22,7 @@ export interface CaptureOptions {
 
 let previewProcess: ChildProcess | null = null;
 
-export async function ensureServerRunning(customBaseUrl?: string, skipServer = false): Promise<string> {
+async function ensureServerRunning(customBaseUrl?: string, skipServer = false): Promise<string> {
   if (customBaseUrl) return customBaseUrl;
   const preferredPorts = [3000, 4173, 4174];
 
