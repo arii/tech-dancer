@@ -2,8 +2,9 @@ import { ReactNode } from 'react';
 import { Box, Stack, Grid } from '../../layouts/Primitives';
 import { Skeleton } from './Skeleton';
 import { motionTokens } from '@/styles/motion';
+import { SkeletonVariant } from '@/lib/types/skeleton';
 
-export type SkeletonVariant = 'grid' | 'post' | 'simple';
+export type { SkeletonVariant };
 
 interface PageSkeletonProps {
   className?: string;

@@ -1,20 +1,8 @@
-import { DiscoveryResponse, FormQuestion } from '../types/navigator';
+import { DiscoveryResponse, FormQuestion, DynamicQuestionOption, DynamicQuestionStep } from '../types/navigator';
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { evaluateScheduleRules, NormalizedSession } from './scheduleRuleEngine';
 
-export interface DynamicQuestionOption {
-  id: string;
-  title: string;
-  desc: string;
-  icon: string;
-}
-
-export interface DynamicQuestionStep {
-  id: string;
-  question: string;
-  subtitle?: string;
-  options: DynamicQuestionOption[];
-}
+export type { DynamicQuestionOption, DynamicQuestionStep };
 
 /**
  * Converts backend/AI FormQuestions into DynamicQuestionSteps with icons and subtitles.
