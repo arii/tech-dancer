@@ -88,7 +88,7 @@ export const FullScheduleModal: React.FC<FullScheduleModalProps> = ({
       aria-labelledby="full-schedule-title"
       position="fixed"
       inset
-      zIndex={50}
+      zIndex="search"
       display="flex"
       align="center"
       justify="center"
