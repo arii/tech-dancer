@@ -1,16 +1,22 @@
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+const fallowResults = path.join(os.tmpdir(), `fallow_results_${process.pid}.json`);
+const eslintResults = path.join(os.tmpdir(), `eslint_results_${process.pid}.json`);
+const tscResults = path.join(os.tmpdir(), `tsc_results_${process.pid}.txt`);
 
 console.log('Running fallow...');
 try {
-  execSync('pnpm exec fallow --format json > fallow_results.json', { stdio: 'pipe' });
+  execSync(`pnpm exec fallow --format json > ${fallowResults}`, { stdio: 'pipe' });
 } catch {
   // fallow might exit with non-zero if issues are found
 }
 
 let data = {};
 try {
-  const fallowContent = fs.readFileSync('fallow_results.json', 'utf8');
+  const fallowContent = fs.readFileSync(fallowResults, 'utf8');
   // Find where JSON actually starts in case of pnpm headers
   const jsonStart = fallowContent.indexOf('{');
   if (jsonStart !== -1) {
@@ -22,14 +28,14 @@ try {
 
 console.log('Running eslint...');
 try {
-  execSync('pnpm run lint:eslint --format json > eslint_results.json', { stdio: 'pipe' });
+  execSync(`pnpm run lint:eslint --format json > ${eslintResults}`, { stdio: 'pipe' });
 } catch {
   // eslint exits with 1 if there are errors
 }
 
 console.log('Running tsc...');
 try {
-  execSync('pnpm run lint:types > tsc_results.txt', { stdio: 'pipe' });
+  execSync(`pnpm run lint:types > ${tscResults}`, { stdio: 'pipe' });
 } catch {
   // tsc exits with 1 if there are errors
 }
@@ -85,7 +91,7 @@ if (data.health && data.health.targets) {
 // 5. ESLint Errors
 let eslintData = [];
 try {
-  const fileContent = fs.readFileSync('eslint_results.json', 'utf8');
+  const fileContent = fs.readFileSync(eslintResults, 'utf8');
   // Handle potential pnpm headers before JSON
   const jsonStart = fileContent.indexOf('[');
   if (jsonStart !== -1) {
@@ -109,7 +115,7 @@ if (eslintErrors.length > 0) {
 // 6. TypeScript Errors
 let tscData = '';
 try {
-  tscData = fs.readFileSync('tsc_results.txt', 'utf8');
+  tscData = fs.readFileSync(tscResults, 'utf8');
 } catch (e) {
   console.warn('Failed to read TSC output', e);
 }
@@ -124,10 +130,10 @@ if (tscData && (tscData.includes('error TS') || tscData.includes('Error:'))) {
 }
 
 issuesToCreate.forEach((issue, index) => {
-  const bodyFile = `issue_body_${index}.md`;
+  const bodyFile = path.join(os.tmpdir(), `issue_body_${process.pid}_${index}.md`);
   fs.writeFileSync(bodyFile, issue.body);
   try {
-    execSync(`td gh create-issue --title "${issue.title}" --file "${bodyFile}"`, { stdio: 'inherit' });
+    execFileSync('td', ['gh', 'create-issue', '--title', issue.title, '--file', bodyFile], { stdio: 'inherit' });
   } catch (e) {
     console.error('Failed to create issue:', issue.title, e);
   }
@@ -139,9 +145,9 @@ issuesToCreate.forEach((issue, index) => {
 });
 
 try {
-  if (fs.existsSync('fallow_results.json')) fs.unlinkSync('fallow_results.json');
-  if (fs.existsSync('eslint_results.json')) fs.unlinkSync('eslint_results.json');
-  if (fs.existsSync('tsc_results.txt')) fs.unlinkSync('tsc_results.txt');
+  if (fs.existsSync(fallowResults)) fs.unlinkSync(fallowResults);
+  if (fs.existsSync(eslintResults)) fs.unlinkSync(eslintResults);
+  if (fs.existsSync(tscResults)) fs.unlinkSync(tscResults);
 } catch {
   // Ignore cleanup errors
 }
