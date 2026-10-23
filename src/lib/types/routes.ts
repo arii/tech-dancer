@@ -1,6 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 import { RouteObject } from 'react-router-dom';
-import { SkeletonVariant } from '@/components/ui/PageSkeleton';
+import { SkeletonVariant } from '@/lib/types/skeleton';
 
 export interface RouteConfig extends Omit<RouteObject, 'children'> {
   path: string;
