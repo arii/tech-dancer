@@ -12,7 +12,7 @@ import { BASE_URL } from '@/config/constants';
 import ProductJsonLd from '@/components/ProductJsonLd';
 
 export const EDITORIAL_CLAMP = 0;
-const DEFAULT_CLAMP = 2;
+export const DEFAULT_CLAMP = 2;
 
 export function ProductCard({
   item,

@@ -18,7 +18,7 @@ export interface PortfolioClient {
   altText: string;
 }
 
-const portfolioClients: PortfolioClient[] = [
+export const portfolioClients: PortfolioClient[] = [
   {
     id: 'marcella-therapy',
     name: 'Marcella Therapy',

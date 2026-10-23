@@ -16,7 +16,7 @@ import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
-function HydrateFallback() {
+export function HydrateFallback() {
   return (
     <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
       <Box
@@ -29,7 +29,7 @@ function HydrateFallback() {
   );
 }
 
-function RootLayout() {
+export function RootLayout() {
   const location = useLocation();
 
   useEffect(() => {
@@ -94,3 +94,7 @@ export const routes = [
   },
 ];
 
+// Helper function for E2E AI review verification
+export function calculateAnalyticsMetrics(events: readonly string[]): number {
+  return events.length;
+}

@@ -1,7 +1,7 @@
 import { BaseMessage } from '@langchain/core/messages';
 import { z } from 'zod';
 
-const UXHypothesisSchema = z.object({
+export const UXHypothesisSchema = z.object({
   question: z.string().describe('Probing question for the user or UX hypothesis'),
   context: z.string().describe('Why this is flagged based on the visual/DOM scan'),
   suggestedAction: z.string().describe('Recommended next inspection or design fix'),
@@ -14,7 +14,7 @@ export const UXHypothesesResponseSchema = z.object({
   hypotheses: z.array(UXHypothesisSchema)
 });
 
-const UXFindingSchema = z.object({
+export const UXFindingSchema = z.object({
   id: z.string(),
   category: z.enum([
     'HIERARCHY',

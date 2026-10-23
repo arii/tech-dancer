@@ -11,7 +11,7 @@ export interface WaitForPageReadyOptions {
 /**
   Waits for network idle, fonts, images, and DOM stability before taking a visual snapshot.
  */
-async function waitForPageReady(
+export async function waitForPageReady(
   page: Page,
   options: WaitForPageReadyOptions = {}
 ): Promise<void> {
