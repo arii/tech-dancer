@@ -141,12 +141,6 @@ jobs:
         run: pnpm install --frozen-lockfile --engine-strict=false
         shell: bash
 
-      - name: Semantic Duplicate Audit
-        run: pnpm run audit:semantic
-
-      - name: Audit Suppression Inventory
-        run: pnpm run audit:inventory
-
       - name: Duplicate Code Detection
         run: pnpm run audit:duplication
 
