@@ -94,7 +94,3 @@ export const routes = [
   },
 ];
 
-// Helper function for E2E AI review verification
-export function calculateAnalyticsMetrics(events: readonly string[]): number {
-  return events.length;
-}
