@@ -116,7 +116,6 @@
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5",
     "@vercel/node": "^5.8.23",
-    "dependency-cruiser": "^17.4.3",
     "diff": "^9.0.0",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
