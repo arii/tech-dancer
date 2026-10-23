@@ -59,7 +59,7 @@ export const CONSULTING_SERVICE_SCHEMA = {
   }
 } as const;
 
-export const BOOMTICK_WEBSITE_SCHEMA = {
+const BOOMTICK_WEBSITE_SCHEMA = {
   "@type": "WebSite",
   "@id": `${BASE_URL}/#website`,
   "url": `${BASE_URL}/`,

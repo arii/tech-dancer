@@ -16,7 +16,7 @@ import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
-export function HydrateFallback() {
+function HydrateFallback() {
   return (
     <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
       <Box
@@ -29,7 +29,7 @@ export function HydrateFallback() {
   );
 }
 
-export function RootLayout() {
+function RootLayout() {
   const location = useLocation();
 
   useEffect(() => {

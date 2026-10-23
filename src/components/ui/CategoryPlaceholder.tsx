@@ -15,7 +15,7 @@ import {
 import { Box } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 
-export function getCategoryIcon(category: string): LucideIcon {
+function getCategoryIcon(category: string): LucideIcon {
   const norm = (category || '').toLowerCase();
   if (norm.includes('tech')) return Cpu;
   if (norm.includes('travel')) return Globe;
