@@ -127,26 +127,3 @@ export async function pickGeminiModel(
   return selected.id;
 }
 
-/**
- * Returns the pricing per 1 million tokens for the given Gemini model.
- * Values are based on Gemini 3.x estimates.
- */
-export function getGeminiPricing(modelId: string): { inputCostPerM: number; outputCostPerM: number } {
-  if (modelId.includes('gemini-3.5-flash')) {
-    return { inputCostPerM: 1.50, outputCostPerM: 9.00 };
-  }
-  if (modelId.includes('gemini-3.1-flash-lite')) {
-    return { inputCostPerM: 0.25, outputCostPerM: 1.50 };
-  }
-  if (modelId.includes('gemini-2.5-flash-lite')) {
-    return { inputCostPerM: 0.10, outputCostPerM: 0.40 };
-  }
-  if (modelId.includes('gemini-2.5-flash')) {
-    return { inputCostPerM: 0.30, outputCostPerM: 2.50 };
-  }
-  if (modelId.includes('pro')) {
-    return { inputCostPerM: 2.00, outputCostPerM: 12.00 };
-  }
-  // Default fallback
-  return { inputCostPerM: 0.10, outputCostPerM: 0.40 };
-}
