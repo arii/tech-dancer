@@ -29,7 +29,12 @@ async function runLighthouse() {
     console.log(`Running Lighthouse for ${url}...`);
     try {
       // Sanitize and validate inputs against CodeQL command/argument injection
-      if (!/^https?:\/\/[a-zA-Z0-9][-a-zA-Z0-9@:%._+~#=]{1,256}(\.[a-zA-Z0-9()]{1,6})?\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(url)) {
+      try {
+        const parsedUrl = new URL(url);
+        if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+          throw new Error(`Invalid URL protocol: ${url}`);
+        }
+      } catch (err) {
         throw new Error(`Invalid URL format: ${url}`);
       }
       if (!/^[\w\-/:\\.]+$/.test(reportPath)) {
@@ -39,8 +44,8 @@ async function runLighthouse() {
       // Using lhci if available, otherwise fallback to lighthouse CLI if installed globally/locally
       // Here we assume lhci autorun might be overkill for a specific route runner,
       // but let's use the lighthouse CLI directly.
-      execFileSync('npx', [
-        'lighthouse',
+      execFileSync('node', [
+        path.join(process.cwd(), 'node_modules/lighthouse/cli/index.js'),
         url,
         '--output=json',
         '--output=html',
