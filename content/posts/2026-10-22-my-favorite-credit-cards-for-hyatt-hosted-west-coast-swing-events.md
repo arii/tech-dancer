@@ -19,10 +19,6 @@ tags:
   - "hotel-rewards"
 ---
 
-> **Disclosure:** This post contains credit card referral links. The World of Hyatt link below links to the issuer until a referral link is active. If you apply through a live link, I may earn bonus points or a referral credit at no extra cost to you. A referral offer can differ from the best public offer, so compare terms on the issuer's page before applying. This is my personal experience, not financial advice. Card terms change; confirm current details with the issuer.
-
-> **Visuals:** Every image in this post is a screenshot of an event or hotel page, a real product shot of a card mentioned, or a graphic composed from those sources. No AI-generated people — ever.
-
 ## The short version
 
 This post is about one cost: the hotel at Hyatt-hosted West Coast Swing events. For everything else — transit, competitions, event registration, workshops — I use a different favorite, the Wells Fargo Attune, which has its own post in this series.
@@ -49,9 +45,9 @@ Event hotels do change, and a few long-running events have moved away from Hyatt
 
 ## Card 1: The World of Hyatt Card — the $95 card that covers itself
 
-![World of Hyatt Credit Card and Chase Sapphire Reserve — real card product shots, composed side by side](/assets/blog/hyatt-and-sapphire-reserve-cards.jpg)
+![World of Hyatt Credit Card and Chase Sapphire Reserve](/assets/blog/hyatt-and-sapphire-reserve-cards.jpg)
 
-*The two cards in this post. Composed from real product shots of the World of Hyatt Credit Card and Chase Sapphire Reserve. The name on the Hyatt card art is the issuer's sample cardholder name.*
+*The World of Hyatt Credit Card and Chase Sapphire Reserve.*
 
 - **Annual fee:** $95.
 - **Anniversary free night:** one free night a year at any Category 1–4 Hyatt.
@@ -122,4 +118,4 @@ The follow-up runs the real numbers: what the Hyatt card's qualifying credits ac
 - [Amex Platinum vs. Sapphire Reserve — side-by-side, verified October 5, 2026](https://pointfam.com/articles/platinum-vs-reserve/)
 - [Amex Platinum vs. Sapphire Reserve — fees and earning, October 2026](https://thepointsking.com/blog/amex-platinum-points-vs-chase-sapphire-reserve/)
 
-*Card terms change frequently. Confirm the current annual fee, welcome offer, and transfer rate on Chase's and Hyatt's official pages before applying. This article reflects the author's personal use and terms as reported in October 2026; it is not financial advice.*
+*Disclosure: This post contains credit card referral links. If you apply through these links, I may earn bonus points or a referral credit at no extra cost to you. Card terms, fees, welcome offers, and transfer rates change frequently; confirm current details directly with Chase and Hyatt before applying. This article reflects the author's personal use and terms as of October 2026; it is not financial advice.*
