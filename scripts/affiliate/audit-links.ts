@@ -25,6 +25,62 @@ interface LinkItem {
   source: string;
 }
 
+function checkBotDetection(body: string, item: LinkItem, retries: number, issues: LinkIssue[]): boolean {
+  if (body.includes('Robot Check') || body.includes('automated access') || body.includes('CAPTCHA')) {
+    if (retries <= 0) {
+      issues.push({
+        url: item.url,
+        source: item.source,
+        reason: 'Amazon Bot Detection (CAPTCHA) triggered',
+        isWarning: true
+      });
+    }
+    return true;
+  }
+  return false;
+}
+
+function checkRedirectTarget(item: LinkItem, responseUrl: string, issues: LinkIssue[]) {
+  const finalUrl = new URL(responseUrl);
+  const finalHostname = finalUrl.hostname.toLowerCase();
+  const isAmazon = finalHostname === 'amazon.com' || finalHostname.endsWith('.amazon.com');
+
+  try {
+    const originalUrl = new URL(item.url);
+    const originalHostname = originalUrl.hostname.toLowerCase();
+    const isShortLink = originalHostname === 'a.co' || originalHostname.endsWith('.a.co');
+
+    if (isShortLink && !isAmazon) {
+      issues.push({
+        url: item.url,
+        source: item.source,
+        reason: `Redirected to non-Amazon URL: ${responseUrl}`,
+        isWarning: true
+      });
+    }
+  } catch {
+    // Original URL was already verified to be valid
+  }
+}
+
+function checkContentErrors(body: string, item: LinkItem, issues: LinkIssue[]) {
+  if (body.includes('Page Not Found') || body.includes('sorry.png') || body.includes('api-services-404')) {
+    issues.push({
+      url: item.url,
+      source: item.source,
+      reason: 'Amazon Page Not Found (404 in content)',
+      status: 404
+    });
+  } else if (body.includes('Currently unavailable')) {
+    issues.push({
+      url: item.url,
+      source: item.source,
+      reason: 'Product currently unavailable',
+      isWarning: true
+    });
+  }
+}
+
 async function verifyLink(item: LinkItem, issues: LinkIssue[]) {
   console.log(`Checking: ${item.url} (from ${item.source})`);
   let retries = 2;
@@ -56,61 +112,18 @@ async function verifyLink(item: LinkItem, issues: LinkIssue[]) {
 
       const body = await response.text();
 
-      // Check for Amazon's bot detection / CAPTCHA pages
-      if (body.includes('Robot Check') || body.includes('automated access') || body.includes('CAPTCHA')) {
+      if (checkBotDetection(body, item, retries, issues)) {
         if (retries > 0) {
           console.warn(`  [RETRY] Bot detection triggered for ${item.url}. Retrying...`);
           retries--;
           await new Promise(resolve => setTimeout(resolve, 5000));
           continue;
         }
-        issues.push({
-          url: item.url,
-          source: item.source,
-          reason: 'Amazon Bot Detection (CAPTCHA) triggered',
-          isWarning: true
-        });
         break;
       }
 
-      // Final URL after redirects validation
-      const finalUrl = new URL(response.url);
-      const finalHostname = finalUrl.hostname.toLowerCase();
-      const isAmazon = finalHostname === 'amazon.com' || finalHostname.endsWith('.amazon.com');
-
-      try {
-        const originalUrl = new URL(item.url);
-        const originalHostname = originalUrl.hostname.toLowerCase();
-        const isShortLink = originalHostname === 'a.co' || originalHostname.endsWith('.a.co');
-
-        if (isShortLink && !isAmazon) {
-          issues.push({
-            url: item.url,
-            source: item.source,
-            reason: `Redirected to non-Amazon URL: ${response.url}`,
-            isWarning: true
-          });
-        }
-      } catch {
-        // Original URL was already verified to be valid
-      }
-
-      // Check for specific Amazon "Page Not Found" indicators
-      if (body.includes('Page Not Found') || body.includes('sorry.png') || body.includes('api-services-404')) {
-        issues.push({
-          url: item.url,
-          source: item.source,
-          reason: 'Amazon Page Not Found (404 in content)',
-          status: 404
-        });
-      } else if (body.includes('Currently unavailable')) {
-        issues.push({
-          url: item.url,
-          source: item.source,
-          reason: 'Product currently unavailable',
-          isWarning: true
-        });
-      }
+      checkRedirectTarget(item, response.url, issues);
+      checkContentErrors(body, item, issues);
 
       success = true;
     } catch (err) {
@@ -133,12 +146,7 @@ async function verifyLink(item: LinkItem, issues: LinkIssue[]) {
   await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
 }
 
-async function main() {
-  console.log('Starting Amazon Link Audit...');
-  const issues: LinkIssue[] = [];
-  const linksToVerify: LinkItem[] = [];
-
-  // 1. Extract from affiliates.json
+function extractAffiliateJsonLinks(linksToVerify: LinkItem[], issues: LinkIssue[]) {
   const affiliatesPath = 'src/data/affiliates.json';
   if (fs.existsSync(affiliatesPath)) {
     try {
@@ -161,8 +169,9 @@ async function main() {
       issues.push({ url: affiliatesPath, source: 'system', reason: `Failed to parse JSON: ${err instanceof Error ? err.message : String(err)}` });
     }
   }
+}
 
-  // 2. Extract from markdown files using AST traversal
+function extractMarkdownAmazonLinks(linksToVerify: LinkItem[]) {
   const mdFiles = globSync('content/**/*.md');
   const processor = unified().use(remarkParse);
 
@@ -201,14 +210,21 @@ async function main() {
       console.error(`Error processing ${file}:`, err);
     }
   }
+}
+
+async function main() {
+  console.log('Starting Amazon Link Audit...');
+  const issues: LinkIssue[] = [];
+  const linksToVerify: LinkItem[] = [];
+
+  extractAffiliateJsonLinks(linksToVerify, issues);
+  extractMarkdownAmazonLinks(linksToVerify);
 
   console.log(`Extracted ${linksToVerify.length} Amazon links to verify.`);
 
-  // Deduplicate links
   const uniqueLinks = Array.from(new Map(linksToVerify.map(item => [item.url, item])).values());
   console.log(`Verifying ${uniqueLinks.length} unique Amazon links with concurrency ${CONCURRENCY}...`);
 
-  // 3. Verify links with concurrency
   let currentIndex = 0;
   const workers = Array.from({ length: CONCURRENCY }).map(async () => {
     while (currentIndex < uniqueLinks.length) {
