@@ -1,26 +1,37 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
-import path from 'path';
 
 console.log('Running fallow...');
 try {
   execSync('pnpm exec fallow --format json > fallow_results.json', { stdio: 'pipe' });
-} catch (e) {
+} catch {
   // fallow might exit with non-zero if issues are found
 }
 
-const data = JSON.parse(fs.readFileSync('fallow_results.json', 'utf8'));
+let data = {};
+try {
+  const fallowContent = fs.readFileSync('fallow_results.json', 'utf8');
+  // Find where JSON actually starts in case of pnpm headers
+  const jsonStart = fallowContent.indexOf('{');
+  if (jsonStart !== -1) {
+    data = JSON.parse(fallowContent.substring(jsonStart));
+  }
+} catch (e) {
+  console.warn('Failed to parse fallow output', e);
+}
 
 console.log('Running eslint...');
 try {
   execSync('pnpm run lint:eslint --format json > eslint_results.json', { stdio: 'pipe' });
-} catch (e) {
+} catch {
+  // eslint exits with 1 if there are errors
 }
 
 console.log('Running tsc...');
 try {
   execSync('pnpm run lint:types > tsc_results.txt', { stdio: 'pipe' });
-} catch (e) {
+} catch {
+  // tsc exits with 1 if there are errors
 }
 
 // Now we parse results
@@ -75,10 +86,14 @@ if (data.health && data.health.targets) {
 let eslintData = [];
 try {
   const fileContent = fs.readFileSync('eslint_results.json', 'utf8');
-  if (fileContent.trim() !== '') {
-    eslintData = JSON.parse(fileContent);
+  // Handle potential pnpm headers before JSON
+  const jsonStart = fileContent.indexOf('[');
+  if (jsonStart !== -1) {
+    eslintData = JSON.parse(fileContent.substring(jsonStart));
   }
-} catch(e) {}
+} catch (e) {
+  console.warn('Failed to parse ESLint output', e);
+}
 
 const eslintErrors = eslintData.filter(f => f.errorCount > 0 || f.warningCount > 0);
 if (eslintErrors.length > 0) {
@@ -95,7 +110,9 @@ if (eslintErrors.length > 0) {
 let tscData = '';
 try {
   tscData = fs.readFileSync('tsc_results.txt', 'utf8');
-} catch(e) {}
+} catch (e) {
+  console.warn('Failed to read TSC output', e);
+}
 
 if (tscData && (tscData.includes('error TS') || tscData.includes('Error:'))) {
     issuesToCreate.push({
@@ -112,15 +129,21 @@ issuesToCreate.forEach((issue, index) => {
   try {
     execSync(`td gh create-issue --title "${issue.title}" --file "${bodyFile}"`, { stdio: 'inherit' });
   } catch (e) {
-    console.error('Failed to create issue:', issue.title);
+    console.error('Failed to create issue:', issue.title, e);
   }
-  try { fs.unlinkSync(bodyFile); } catch(e) {}
+  try {
+    fs.unlinkSync(bodyFile);
+  } catch {
+    // Ignore cleanup errors
+  }
 });
 
 try {
-  fs.unlinkSync('fallow_results.json');
-  fs.unlinkSync('eslint_results.json');
-  fs.unlinkSync('tsc_results.txt');
-} catch (e) {}
+  if (fs.existsSync('fallow_results.json')) fs.unlinkSync('fallow_results.json');
+  if (fs.existsSync('eslint_results.json')) fs.unlinkSync('eslint_results.json');
+  if (fs.existsSync('tsc_results.txt')) fs.unlinkSync('tsc_results.txt');
+} catch {
+  // Ignore cleanup errors
+}
 
 console.log('Done!');
