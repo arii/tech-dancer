@@ -56,7 +56,7 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
       return {
         index,
         tagName: el.tagName,
-        text: el.textContent?.trim().substring(0, 50) || inputEl.value || inputEl.placeholder || '', // Cut to 50 chars max
+        text: el.textContent?.trim().substring(0, 50) || inputEl.value || inputEl.placeholder || '',
         selector: `[data-crawler-index="${index}"]`,
         role: el.getAttribute('role'),
         location: { x: rect.left, y: rect.top, width: rect.width, height: rect.height }
@@ -88,10 +88,97 @@ async function cleanupSnapshots() {
   }
 }
 
-async function runCrawler() {
-  let apiKey: string;
+async function executeAction(page: Page, action: Action, elements: InteractiveElement[]) {
+  if ((action.type === 'click' || action.type === 'type') && action.selector) {
+    const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
+    const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
+
+    if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
+      console.warn(`Invalid index: ${elementIndex}.`);
+      return;
+    }
+
+    const targetElementMeta = elements[elementIndex];
+    const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
+      targetElementMeta.text.toLowerCase().includes(k) ||
+      (targetElementMeta.role || '').toLowerCase().includes(k)
+    );
+
+    if (isDestructive && action.type === 'click') {
+      console.warn(`Skipping destructive element "${targetElementMeta.text}"`);
+      return;
+    }
+
+    const element = await page.$(action.selector);
+    if (element && await element.isVisible()) {
+      if (action.type === 'click') {
+        await page.click(action.selector);
+      } else if (action.text) {
+        const isEditable = await element.evaluate(el => {
+          const tag = el.tagName.toLowerCase();
+          return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
+        });
+
+        if (isEditable) {
+          await page.fill(action.selector, action.text);
+          await page.press(action.selector, 'Enter');
+        }
+      }
+    }
+  } else if (action.type === 'back') {
+    await page.goBack();
+  } else if (action.type === 'scroll') {
+    await page.mouse.wheel(0, 500);
+  }
+}
+
+async function runCrawlerStep(
+  page: Page,
+  step: number,
+  visitedStates: Set<string>,
+  actionHistory: Action[],
+  capturedScreenshots: string[]
+) {
+  const url = page.url();
+  console.log(`\n--- Step ${step + 1}: ${url} ---`);
+
+  const elements = await getInteractiveElements(page);
+  const screenshotPath = path.join(SNAPSHOTS_DIR, `step-${step}.png`);
+  await page.screenshot({ path: screenshotPath });
+  capturedScreenshots.push(screenshotPath);
+
+  const stateHash = `${url}-${elements.length}`;
+  visitedStates.add(stateHash);
+
+  const modelName = await pickOptimalGeminiModel(0);
+  const action = await decideNextAction(modelName, url, elements, actionHistory, screenshotPath);
+  console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
+
+  actionHistory.push(action);
+
   try {
-    apiKey = getApiKey();
+    await executeAction(page, action, elements);
+  } catch (execError) {
+    console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
+  }
+
+  await page.waitForTimeout(2000);
+}
+
+async function generateAndSaveReport(capturedScreenshots: string[]) {
+  console.log('\nExploration complete. Generating final report...');
+  const estimatedReportTokens = capturedScreenshots.length * 1000;
+  const reportModelName = await pickOptimalGeminiModel(estimatedReportTokens);
+
+  const report = await generateVisualReview(reportModelName, capturedScreenshots);
+  const reportPath = path.join(TMP_DIR, 'report.md');
+  await fs.promises.writeFile(reportPath, report);
+  console.log(`✅ Visual review report saved to ${reportPath} (Model: ${reportModelName})`);
+}
+
+async function runCrawler() {
+  try {
+    const apiKey = getApiKey();
     if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
   } catch {
     console.error('Error: API Key missing.');
@@ -114,82 +201,10 @@ async function runCrawler() {
     await page.goto('http://localhost:4173', { waitUntil: 'networkidle' });
 
     for (let step = 0; step < MAX_STEPS; step++) {
-      const url = page.url();
-      console.log(`\n--- Step ${step + 1}: ${url} ---`);
-
-      const elements = await getInteractiveElements(page);
-      const screenshotPath = path.join(SNAPSHOTS_DIR, `step-${step}.png`);
-      await page.screenshot({ path: screenshotPath });
-      capturedScreenshots.push(screenshotPath);
-
-      const stateHash = `${url}-${elements.length}`;
-      visitedStates.add(stateHash);
-
-      const modelName = await pickOptimalGeminiModel(0);
-
-      const action = await decideNextAction(modelName, url, elements, actionHistory, screenshotPath);
-      console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
-
-      actionHistory.push(action);
-
-      try {
-        if ((action.type === 'click' || action.type === 'type') && action.selector) {
-          const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
-          const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
-
-          if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
-             console.warn(`Invalid index: ${elementIndex}.`);
-             continue;
-          }
-
-          const targetElementMeta = elements[elementIndex];
-          const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
-             targetElementMeta.text.toLowerCase().includes(k) ||
-             (targetElementMeta.role || '').toLowerCase().includes(k)
-          );
-
-          if (isDestructive && action.type === 'click') {
-            console.warn(`Skipping destructive element "${targetElementMeta.text}"`);
-            continue;
-          }
-
-          const element = await page.$(action.selector);
-          if (element && await element.isVisible()) {
-            if (action.type === 'click') {
-              await page.click(action.selector);
-            } else if (action.text) {
-              const isEditable = await element.evaluate(el => {
-                const tag = el.tagName.toLowerCase();
-                return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
-              });
-
-              if (isEditable) {
-                await page.fill(action.selector, action.text);
-                await page.press(action.selector, 'Enter');
-              }
-            }
-          }
-        } else if (action.type === 'back') {
-          await page.goBack();
-        } else if (action.type === 'scroll') {
-          await page.mouse.wheel(0, 500);
-        }
-      } catch (execError) {
-        console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
-      }
-
-      await page.waitForTimeout(2000);
+      await runCrawlerStep(page, step, visitedStates, actionHistory, capturedScreenshots);
     }
 
-    console.log('\nExploration complete. Generating final report...');
-    const estimatedReportTokens = capturedScreenshots.length * 1000;
-    const reportModelName = await pickOptimalGeminiModel(estimatedReportTokens);
-
-    const report = await generateVisualReview(reportModelName, capturedScreenshots);
-    const reportPath = path.join(TMP_DIR, 'report.md');
-    await fs.promises.writeFile(reportPath, report);
-    console.log(`✅ Visual review report saved to ${reportPath} (Model: ${reportModelName})`);
-
+    await generateAndSaveReport(capturedScreenshots);
   } catch (error) {
     console.error('Crawler failed:', error);
   } finally {
@@ -297,19 +312,15 @@ async function decideNextAction(
   history: Action[],
   screenshotPath: string
 ): Promise<Action> {
-
-  // OPTIMIZATION 1: Drastically slice text strings and exclude locations
   const elementsSummary = elements
     .map(e => `[${e.index}] <${e.tagName}> "${e.text}" ${e.role ? `(${e.role})` : ''}`)
     .join('\n');
 
-  // OPTIMIZATION 2: Only show the last 4 actions to prevent ballooning history tokens
   const historySummary = history
     .slice(-4)
     .map(a => `${a.type} ${a.selector || ''}`)
     .join('\n');
 
-  // OPTIMIZATION 3: Shortened systemic tone instruction since JSON mode handles structure constraints
   const prompt = `URL: ${url}
 Elements available:
 ${elementsSummary}
