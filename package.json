@@ -39,7 +39,6 @@
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit:inventory": "node scripts/audit/check-suppression-inventory.mjs",
     "review:ux:prep": "pnpm run setup:playwright && node scripts/detect-antipatterns.mjs",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
@@ -54,8 +53,7 @@
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
-    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
-    "audit:semantic": "node scripts/audit/detect-semantic-duplicates.mjs"
+    "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
@@ -118,7 +116,6 @@
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5",
     "@vercel/node": "^5.8.23",
-    "dependency-cruiser": "^17.4.3",
     "diff": "^9.0.0",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
