@@ -24,12 +24,12 @@ interface NodeEolCycle {
   eol: string;
 }
 
-export const GH_REPO_PATTERN = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
+const GH_REPO_PATTERN = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
 
 /** Maximum length for any version or name parameter before parsing. */
 export const MAX_PARAM_LENGTH = 64;
 
-export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
+async function fetchLatestNpm(pkgName: string): Promise<string | null> {
   try {
     const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkgName)}/latest`);
     if (!res.ok) {
@@ -44,7 +44,7 @@ export async function fetchLatestNpm(pkgName: string): Promise<string | null> {
   }
 }
 
-export async function fetchLatestNode(): Promise<string | null> {
+async function fetchLatestNode(): Promise<string | null> {
   try {
     const res = await fetch("https://nodejs.org/dist/index.json");
     if (!res.ok) {
@@ -60,7 +60,7 @@ export async function fetchLatestNode(): Promise<string | null> {
   }
 }
 
-export async function fetchLatestGhAction(repoPath: string): Promise<string | null> {
+async function fetchLatestGhAction(repoPath: string): Promise<string | null> {
   if (!GH_REPO_PATTERN.test(repoPath)) {
     console.error("Invalid GitHub repository path format:", repoPath);
     return null;
@@ -173,16 +173,3 @@ export async function checkNodeEol(version: string): Promise<boolean | null> {
   }
 }
 
-export async function checkDeprecationOrEol(
-  ecosystem: Ecosystem,
-  name: string | undefined,
-  candidate: string
-): Promise<boolean | null> {
-  if (ecosystem === "npm" && name) {
-    return checkNpmDeprecation(name, candidate);
-  }
-  if (ecosystem === "node") {
-    return checkNodeEol(candidate);
-  }
-  return false;
-}
