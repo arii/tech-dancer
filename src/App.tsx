@@ -14,7 +14,7 @@ import { routes as routeConfig } from './config/routes';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
-import { getSkeletonVariant } from './lib/utils';
+import { getSkeletonVariant } from './lib/skeletonUtils';
 
 function HydrateFallback() {
   return (
@@ -93,4 +93,3 @@ export const routes = [
     })),
   },
 ];
-

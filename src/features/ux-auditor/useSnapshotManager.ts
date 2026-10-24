@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { VIEWPORTS } from './useUXAuditor';
+import { VIEWPORTS } from '@/constants/visual-viewports';
 
 export function useSnapshotManager() {
   const [snapshotService, setSnapshotService] = useState(localStorage.getItem('ux-auditor-snapshot-service') || "");

@@ -27,3 +27,16 @@ export interface DiscoveryResponse {
   suggested_form_questions: FormQuestion[];
 }
 
+export interface DynamicQuestionOption {
+  id: string;
+  title: string;
+  desc: string;
+  icon: string;
+}
+
+export interface DynamicQuestionStep {
+  id: string;
+  question: string;
+  subtitle?: string;
+  options: DynamicQuestionOption[];
+}

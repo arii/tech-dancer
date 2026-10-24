@@ -1,4 +1,4 @@
-import { DynamicQuestionStep, DynamicQuestionOption } from './questionGenerator';
+import { DynamicQuestionStep, DynamicQuestionOption } from '../types/navigator';
 
 export interface NormalizedSession {
   id: string;
@@ -510,4 +510,3 @@ export function adaptTraceToUserPreferences(
     sessions: updatedSessions,
   };
 }
-
