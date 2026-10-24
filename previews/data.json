@@ -1,10 +1,4 @@
 {
-  "cleanup/resolve-circular-dependencies-12790877810893240159": {
-    "commitTimestamp": 1792801830,
-    "deployTimestamp": 1792801830,
-    "sha": "unknown"
-  }
-,
   "jules/cleanup-unused-files-11752386011568990411": {
     "commitTimestamp": 1792801830,
     "deployTimestamp": 1792801830,
