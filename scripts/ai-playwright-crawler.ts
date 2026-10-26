@@ -88,6 +88,88 @@ async function cleanupSnapshots() {
   }
 }
 
+async function performAction(page: Page, action: Action, elements: InteractiveElement[]): Promise<void> {
+  if ((action.type !== 'click' && action.type !== 'type') || !action.selector) {
+    if (action.type === 'back') {
+      await page.goBack();
+    } else if (action.type === 'scroll') {
+      await page.mouse.wheel(0, 500);
+    }
+    return;
+  }
+
+  const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
+  const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
+
+  if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
+    console.warn(`Invalid index: ${elementIndex}.`);
+    return;
+  }
+
+  const targetElementMeta = elements[elementIndex];
+  const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
+    targetElementMeta.text.toLowerCase().includes(k) ||
+    (targetElementMeta.role || '').toLowerCase().includes(k)
+  );
+
+  if (isDestructive && action.type === 'click') {
+    console.warn(`Skipping destructive element "${targetElementMeta.text}"`);
+    return;
+  }
+
+  const element = await page.$(action.selector);
+  if (!element || !(await element.isVisible())) {
+    return;
+  }
+
+  if (action.type === 'click') {
+    await page.click(action.selector);
+  } else if (action.text) {
+    const isEditable = await element.evaluate(el => {
+      const tag = el.tagName.toLowerCase();
+      return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
+    });
+
+    if (isEditable) {
+      await page.fill(action.selector, action.text);
+      await page.press(action.selector, 'Enter');
+    }
+  }
+}
+
+async function executeCrawlerStep(
+  page: Page,
+  step: number,
+  visitedStates: Set<string>,
+  actionHistory: Action[],
+  capturedScreenshots: string[]
+): Promise<void> {
+  const url = page.url();
+  console.log(`\n--- Step ${step + 1}: ${url} ---`);
+
+  const elements = await getInteractiveElements(page);
+  const screenshotPath = path.join(SNAPSHOTS_DIR, `step-${step}.png`);
+  await page.screenshot({ path: screenshotPath });
+  capturedScreenshots.push(screenshotPath);
+
+  const stateHash = `${url}-${elements.length}`;
+  visitedStates.add(stateHash);
+
+  const modelName = await pickOptimalGeminiModel(0);
+  const action = await decideNextAction(modelName, url, elements, actionHistory, screenshotPath);
+  console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
+
+  actionHistory.push(action);
+
+  try {
+    await performAction(page, action, elements);
+  } catch (execError) {
+    console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
+  }
+
+  await page.waitForTimeout(2000);
+}
+
 async function runCrawler() {
   let apiKey: string;
   try {
@@ -114,71 +196,7 @@ async function runCrawler() {
     await page.goto('http://localhost:4173', { waitUntil: 'networkidle' });
 
     for (let step = 0; step < MAX_STEPS; step++) {
-      const url = page.url();
-      console.log(`\n--- Step ${step + 1}: ${url} ---`);
-
-      const elements = await getInteractiveElements(page);
-      const screenshotPath = path.join(SNAPSHOTS_DIR, `step-${step}.png`);
-      await page.screenshot({ path: screenshotPath });
-      capturedScreenshots.push(screenshotPath);
-
-      const stateHash = `${url}-${elements.length}`;
-      visitedStates.add(stateHash);
-
-      const modelName = await pickOptimalGeminiModel(0);
-
-      const action = await decideNextAction(modelName, url, elements, actionHistory, screenshotPath);
-      console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
-
-      actionHistory.push(action);
-
-      try {
-        if ((action.type === 'click' || action.type === 'type') && action.selector) {
-          const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
-          const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
-
-          if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
-             console.warn(`Invalid index: ${elementIndex}.`);
-             continue;
-          }
-
-          const targetElementMeta = elements[elementIndex];
-          const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
-             targetElementMeta.text.toLowerCase().includes(k) ||
-             (targetElementMeta.role || '').toLowerCase().includes(k)
-          );
-
-          if (isDestructive && action.type === 'click') {
-            console.warn(`Skipping destructive element "${targetElementMeta.text}"`);
-            continue;
-          }
-
-          const element = await page.$(action.selector);
-          if (element && await element.isVisible()) {
-            if (action.type === 'click') {
-              await page.click(action.selector);
-            } else if (action.text) {
-              const isEditable = await element.evaluate(el => {
-                const tag = el.tagName.toLowerCase();
-                return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
-              });
-
-              if (isEditable) {
-                await page.fill(action.selector, action.text);
-                await page.press(action.selector, 'Enter');
-              }
-            }
-          }
-        } else if (action.type === 'back') {
-          await page.goBack();
-        } else if (action.type === 'scroll') {
-          await page.mouse.wheel(0, 500);
-        }
-      } catch (execError) {
-        console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
-      }
-
-      await page.waitForTimeout(2000);
+      await executeCrawlerStep(page, step, visitedStates, actionHistory, capturedScreenshots);
     }
 
     console.log('\nExploration complete. Generating final report...');

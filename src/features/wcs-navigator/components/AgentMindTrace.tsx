@@ -89,6 +89,153 @@ function buildDynamicIcs(
   ].join('\r\n');
 }
 
+function getSessionCategory(session: AuditSession) {
+  const title = session.title.toLowerCase();
+  if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
+    return {
+      badge: '🏆 Competition',
+      style: 'bg-amber-950/20 border-amber-500/35 text-amber-300',
+    };
+  }
+  if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
+    return {
+      badge: '🌙 Social Dancing',
+      style: 'bg-purple-950/20 border-purple-500/35 text-purple-300',
+    };
+  }
+  if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
+    return {
+      badge: '🍽️ Meal / Rest Break',
+      style: 'bg-emerald-950/20 border-emerald-500/35 text-emerald-300',
+    };
+  }
+  return {
+    badge: '🧠 Workshop',
+    style: 'bg-cyan-950/20 border-cyan-500/35 text-cyan-300',
+  };
+}
+
+function toTitleCase(str: string) {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function SessionCard({ session, onToggleSession }: { session: AuditSession; onToggleSession: (id: string) => void }) {
+  const { badge, style } = getSessionCategory(session);
+
+  return (
+    <Box
+      key={session.id}
+      padding={{ default: 4, sm: 5 }}
+      radius="xl"
+      border
+      className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
+    >
+      <Stack
+        direction={{ base: 'row', sm: 'col' }}
+        align={{ base: 'center', sm: 'start' }}
+        justify={{ base: 'between', sm: 'center' }}
+        gap={2}
+        paddingBottom={{ base: 2.5, sm: 0 }}
+        paddingRight={{ base: 0, sm: 4 }}
+        className="sm:w-60 md:w-64 shrink-0 min-w-0 border-b sm:border-b-0 sm:border-r border-line"
+      >
+        <Stack direction="row" align="center" gap={2} className="min-w-0">
+          <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
+          <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="break-words">
+            {session.time}
+          </Text>
+        </Stack>
+        <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit shrink-0">
+          {badge}
+        </Text>
+      </Stack>
+
+      <Stack gap={1.5} justify="center" flex={1} minWidth={0} className="min-w-0">
+        <Text as="h4" weight="font-bold" size="base" color="main" leading="snug" className="break-words">
+          {session.title}
+        </Text>
+        <Stack direction="col" gap={1} className="text-xs text-text-dim">
+          <Stack direction="row" align="center" gap={1.5}>
+            <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+            <Text as="span" size="xs" color="main" weight="font-medium" className="break-words">{session.location}</Text>
+          </Stack>
+          {session.justification && (
+            <Text as="span" size="xs" color="dim" className="leading-relaxed break-words text-text-dim/80">
+              {session.justification}
+            </Text>
+          )}
+        </Stack>
+      </Stack>
+
+      <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} className="shrink-0 border-t sm:border-t-0 border-line">
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3.5}
+          paddingY={2}
+          radius="lg"
+          type="button"
+          onClick={() => onToggleSession(session.id)}
+          aria-label={`Remove ${session.title}`}
+          title="Remove from my schedule"
+          className="min-h-11 text-xs font-mono text-text-dim hover:text-error hover:bg-error/10 bg-surface/50 border border-line/60 hover:border-error/40 transition-colors cursor-pointer font-medium"
+        >
+          <Icon icon={X} size="xs" />
+          <span>Remove</span>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+}
+
+function ThemeCard({ theme }: { theme?: ThemeDressCode }) {
+  if (!theme) return null;
+
+  return (
+    <Box
+      display="flex"
+      flex="col"
+      align="start"
+      gap={2.5}
+      padding={3.5}
+      radius="xl"
+      marginY={1}
+      width="full"
+      className="bg-surface-alt/70 border border-white/10 text-xs"
+    >
+      <Stack direction="row" align="center" gap={2} flexWrap="wrap">
+        <Shirt className="w-4 h-4 text-brand-cyan shrink-0" />
+        <span className="font-semibold text-xs sm:text-sm text-white">
+          {theme.day} Theme: {theme.themeTitle}
+        </span>
+        <Text as="span" size="xs" color="dim">
+          ({theme.vibe})
+        </Text>
+      </Stack>
+      <Box display="flex" wrap gap={1.5} align="center">
+        {theme.recommendedAttire.map((attire, i) => (
+          <Text
+            as="span"
+            key={i}
+            size="xs"
+            color="main"
+            weight="font-medium"
+            paddingX={3}
+            paddingY={1}
+            radius="full"
+            border
+            className="bg-surface border-line/60 shadow-sm"
+          >
+            {toTitleCase(attire)}
+          </Text>
+        ))}
+      </Box>
+    </Box>
+  );
+}
+
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   trace,
   visualScheduleMarkdown: _visualScheduleMarkdown,
@@ -108,7 +255,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
 
-  // Maintain custom session inclusions with localStorage persistence without setState in useEffect
   const [customOverrides, setCustomOverrides] = useState<Record<string, 'included' | 'filtered'>>({});
 
   const allSessions = useMemo(() => {
@@ -150,7 +296,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     }, 4500);
   };
 
-  // Toggle session inclusion in custom schedule
   const handleToggleSession = useCallback(
     (sessionId: string) => {
       const currentSession = allSessions.find((s) => s.id === sessionId);
@@ -188,7 +333,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     );
   }, [activeEventName, clearCustomSchedule]);
 
-  // Active included sessions
   const includedSessions = useMemo(() => {
     return allSessions.filter((s) => s.status === 'included');
   }, [allSessions]);
@@ -247,7 +391,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     );
   };
 
-  // Group sessions by day
   const sessionsByDay = useMemo(() => {
     const thursday = includedSessions.filter((s) => s.time.toLowerCase().includes('thu'));
     const friday = includedSessions.filter((s) => s.time.toLowerCase().includes('fri'));
@@ -270,155 +413,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
 
     return { thursday, friday, saturday, sunday };
   }, [trace?.themeDressCodes]);
-
-  const getSessionCategory = (session: AuditSession) => {
-    const title = session.title.toLowerCase();
-    if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
-      return {
-        badge: '🏆 Competition',
-        style: 'bg-amber-950/20 border-amber-500/35 text-amber-300',
-      };
-    }
-    if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
-      return {
-        badge: '🌙 Social Dancing',
-        style: 'bg-purple-950/20 border-purple-500/35 text-purple-300',
-      };
-    }
-    if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
-      return {
-        badge: '🍽️ Meal / Rest Break',
-        style: 'bg-emerald-950/20 border-emerald-500/35 text-emerald-300',
-      };
-    }
-    return {
-      badge: '🧠 Workshop',
-      style: 'bg-cyan-950/20 border-cyan-500/35 text-cyan-300',
-    };
-  };
-
-  const toTitleCase = (str: string) =>
-    str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-
-  const renderSessionCard = (session: AuditSession) => {
-    const { badge, style } = getSessionCategory(session);
-
-    return (
-      <Box
-        key={session.id}
-        padding={{ default: 4, sm: 5 }}
-        radius="xl"
-        border
-        className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
-      >
-        {/* Dedicated Left Time & Category Column */}
-        <Stack
-          direction={{ base: 'row', sm: 'col' }}
-          align={{ base: 'center', sm: 'start' }}
-          justify={{ base: 'between', sm: 'center' }}
-          gap={2}
-          paddingBottom={{ base: 2.5, sm: 0 }}
-          paddingRight={{ base: 0, sm: 4 }}
-          className="sm:w-60 md:w-64 shrink-0 min-w-0 border-b sm:border-b-0 sm:border-r border-line"
-        >
-          <Stack direction="row" align="center" gap={2} className="min-w-0">
-            <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
-            <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="break-words">
-              {session.time}
-            </Text>
-          </Stack>
-          <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit shrink-0">
-            {badge}
-          </Text>
-        </Stack>
-
-        {/* Center: Title & High-Contrast Details */}
-        <Stack gap={1.5} justify="center" flex={1} minWidth={0} className="min-w-0">
-          <Text as="h4" weight="font-bold" size="base" color="main" leading="snug" className="break-words">
-            {session.title}
-          </Text>
-          <Stack direction="col" gap={1} className="text-xs text-text-dim">
-            <Stack direction="row" align="center" gap={1.5}>
-              <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
-              <Text as="span" size="xs" color="main" weight="font-medium" className="break-words">{session.location}</Text>
-            </Stack>
-            {session.justification && (
-              <Text as="span" size="xs" color="dim" className="leading-relaxed break-words text-text-dim/80">
-                {session.justification}
-              </Text>
-            )}
-          </Stack>
-        </Stack>
-
-        {/* Right: Quick Remove Action Button */}
-        <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} className="shrink-0 border-t sm:border-t-0 border-line">
-          <Stack
-            as="button"
-            direction="row"
-            align="center"
-            gap={1.5}
-            paddingX={3.5}
-            paddingY={2}
-            radius="lg"
-            type="button"
-            onClick={() => handleToggleSession(session.id)}
-            aria-label={`Remove ${session.title}`}
-            title="Remove from my schedule"
-            className="min-h-11 text-xs font-mono text-text-dim hover:text-error hover:bg-error/10 bg-surface/50 border border-line/60 hover:border-error/40 transition-colors cursor-pointer font-medium"
-          >
-            <Icon icon={X} size="xs" />
-            <span>Remove</span>
-          </Stack>
-        </Stack>
-      </Box>
-    );
-  };
-
-  const renderThemeCard = (theme?: ThemeDressCode) => {
-    if (!theme) return null;
-
-    return (
-      <Box
-        display="flex"
-        flex="col"
-        align="start"
-        gap={2.5}
-        padding={3.5}
-        radius="xl"
-        marginY={1}
-        width="full"
-        className="bg-surface-alt/70 border border-white/10 text-xs"
-      >
-        <Stack direction="row" align="center" gap={2} flexWrap="wrap">
-          <Shirt className="w-4 h-4 text-brand-cyan shrink-0" />
-          <span className="font-semibold text-xs sm:text-sm text-white">
-            {theme.day} Theme: {theme.themeTitle}
-          </span>
-          <Text as="span" size="xs" color="dim">
-            ({theme.vibe})
-          </Text>
-        </Stack>
-        <Box display="flex" wrap gap={1.5} align="center">
-          {theme.recommendedAttire.map((attire, i) => (
-            <Text
-              as="span"
-              key={i}
-              size="xs"
-              color="main"
-              weight="font-medium"
-              paddingX={3}
-              paddingY={1}
-              radius="full"
-              border
-              className="bg-surface border-line/60 shadow-sm"
-            >
-              {toTitleCase(attire)}
-            </Text>
-          ))}
-        </Box>
-      </Box>
-    );
-  };
 
   return (
     <Stack gap={6} className={className} width="full">
@@ -460,7 +454,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Box>
       )}
 
-      {/* Clean Context Header & Action Bar */}
+      {/* Context Header & Action Bar */}
       <Box
         display="flex"
         flexWrap="wrap"
@@ -483,9 +477,7 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
           <Text size="xs" color="dim">📋 Active: <Text as="strong" color="main">{includedSessions.length} sessions</Text></Text>
         </Stack>
 
-        {/* Action Buttons with 44px (min-h-11) Ergonomics */}
         <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="w-full sm:w-auto">
-          {/* Decision Logic & Debug Inspector Trigger */}
           <Stack
             as="button"
             direction="row"
@@ -506,7 +498,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <span>Decision Logic &amp; Debug ({telemetry?.durationMs || 0}ms)</span>
           </Stack>
 
-          {/* Full Schedule Browser Trigger */}
           <Stack
             as="button"
             direction="row"
@@ -523,7 +514,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <span>View All Schedule ({allSessions.length})</span>
           </Stack>
 
-          {/* Reset Customizations */}
           <Stack
             as="button"
             direction="row"
@@ -541,7 +531,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <span>Reset</span>
           </Stack>
 
-          {/* Download Calendar (.ics) */}
           <Stack
             as="button"
             direction="row"
@@ -557,7 +546,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <span>Add to Calendar (.ics)</span>
           </Stack>
 
-          {/* Markdown (.md) */}
           <Stack
             as="button"
             direction="row"
@@ -576,7 +564,6 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         </Stack>
       </Box>
 
-      {/* Expandable Decision Logic & Taskmaker Debug Inspector */}
       {isDebugInspectorOpen && (
         <DecisionDebugInspector
           eventName={activeEventName}
@@ -590,9 +577,8 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
         />
       )}
 
-      {/* UNIFIED CHRONOLOGICAL DAY-BY-DAY FEED */}
+      {/* Unified Day-By-Day Feed */}
       <Stack gap={6} width="full">
-        {/* THURSDAY SECTION (Conditional) */}
         {(sessionsByDay.thursday.length > 0 || themesByDay.thursday) && (
           <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
             <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
@@ -605,19 +591,18 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               <Text size="xs" color="dim">Day 0</Text>
             </Stack>
 
-            {/* Thursday Sessions */}
             {sessionsByDay.thursday.length > 0 && (
               <Stack gap={2.5} width="full">
-                {sessionsByDay.thursday.map(renderSessionCard)}
+                {sessionsByDay.thursday.map((s) => (
+                  <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+                ))}
               </Stack>
             )}
 
-            {/* Thursday Night Theme */}
-            {renderThemeCard(themesByDay.thursday)}
+            <ThemeCard theme={themesByDay.thursday} />
           </Stack>
         )}
 
-        {/* FRIDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
@@ -629,13 +614,13 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <Text size="xs" color="dim">Day 1</Text>
           </Stack>
 
-          {/* Event-Based Local Transit & Logistics */}
           <FlightBufferTimeline activeEventName={activeEventName} />
 
-          {/* Friday Sessions */}
           {sessionsByDay.friday.length > 0 ? (
             <Stack gap={2.5} width="full">
-              {sessionsByDay.friday.map(renderSessionCard)}
+              {sessionsByDay.friday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
             </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
@@ -643,11 +628,9 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             </Box>
           )}
 
-          {/* Friday Night Theme */}
-          {renderThemeCard(themesByDay.friday)}
+          <ThemeCard theme={themesByDay.friday} />
         </Stack>
 
-        {/* SATURDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
@@ -659,10 +642,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <Text size="xs" color="dim">Day 2</Text>
           </Stack>
 
-          {/* Saturday Sessions */}
           {sessionsByDay.saturday.length > 0 ? (
             <Stack gap={2.5} width="full">
-              {sessionsByDay.saturday.map(renderSessionCard)}
+              {sessionsByDay.saturday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
             </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
@@ -670,11 +654,9 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             </Box>
           )}
 
-          {/* Saturday Evening Theme */}
-          {renderThemeCard(themesByDay.saturday)}
+          <ThemeCard theme={themesByDay.saturday} />
         </Stack>
 
-        {/* SUNDAY SECTION */}
         <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
           <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
             <Stack direction="row" align="center" gap={2}>
@@ -686,10 +668,11 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             <Text size="xs" color="dim">Day 3</Text>
           </Stack>
 
-          {/* Sunday Sessions */}
           {sessionsByDay.sunday.length > 0 ? (
             <Stack gap={2.5} width="full">
-              {sessionsByDay.sunday.map(renderSessionCard)}
+              {sessionsByDay.sunday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
             </Stack>
           ) : (
             <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
@@ -697,11 +680,9 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
             </Box>
           )}
 
-          {/* Sunday Night Theme */}
-          {renderThemeCard(themesByDay.sunday)}
+          <ThemeCard theme={themesByDay.sunday} />
         </Stack>
 
-        {/* OTHER / UNKNOWN SESSIONS SECTION (Conditional) */}
         {sessionsByDay.other.length > 0 && (
           <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
             <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
@@ -714,15 +695,15 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
               <Text size="xs" color="dim">Additional</Text>
             </Stack>
 
-            {/* Other Sessions */}
             <Stack gap={2.5} width="full">
-              {sessionsByDay.other.map(renderSessionCard)}
+              {sessionsByDay.other.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
             </Stack>
           </Stack>
         )}
       </Stack>
 
-      {/* Full Schedule Browser Modal */}
       <FullScheduleModal
         isOpen={isFullScheduleOpen}
         onClose={() => setIsFullScheduleOpen(false)}
@@ -733,6 +714,3 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
     </Stack>
   );
 };
-
-
-

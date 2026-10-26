@@ -27,134 +27,73 @@ export interface ScheduleRuleEngineResult {
   lateNightClosingHour: string;
 }
 
-/**
- * Deterministically evaluates an array of session objects to formulate
- * 100% relevant, schedule-grounded dynamic questions.
- */
-export function evaluateScheduleRules(
-  sessions: NormalizedSession[],
-  eventName: string = 'Boogie by the Bay 2026',
-  venueAirport: string = 'SFO'
-): ScheduleRuleEngineResult {
-  const steps: DynamicQuestionStep[] = [];
+function buildIntensiveStep(intensives: NormalizedSession[], eventName: string): DynamicQuestionStep {
+  const intensiveOptions: DynamicQuestionOption[] = intensives.slice(0, 3).map((it, idx) => ({
+    id: `intensive_${idx + 1}`,
+    title: `${it.title} (${it.day} ${it.time.split('-')[0].trim()})`,
+    desc: `Takes place in ${it.location}. Requires arrival by ${Math.max(6, it.start_hour - 2)}:00 AM.`,
+    icon: '🧠'
+  }));
 
-  // 1. Detect Pre-Convention Intensives
-  const intensives = sessions.filter(
-    (s) =>
-      s.category === 'intensive' ||
-      s.title.toLowerCase().includes('intensive') ||
-      s.title.toLowerCase().includes('bootcamp') ||
-      (s.day === 'Friday' && s.start_hour < 17 && s.title.toLowerCase().includes('masterclass'))
-  );
-
-  // 2. Detect Competition Divisions & Earliest Prelim
-  const competitions = sessions.filter(
-    (s) =>
-      s.category === 'competition' ||
-      s.title.toLowerCase().includes('strictly') ||
-      s.title.toLowerCase().includes('jack & jill') ||
-      s.title.toLowerCase().includes('prelim')
-  );
-
-  const fridayComps = competitions.filter((s) => s.day === 'Friday');
-  fridayComps.sort((a, b) => a.start_hour * 60 + a.start_minute - (b.start_hour * 60 + b.start_minute));
-  const earliestFridayPrelim = fridayComps.length > 0 ? fridayComps[0] : undefined;
-
-  // 3. Detect Parallel Room Streams
-  const roomSet = new Set<string>();
-  sessions.forEach((s) => {
-    if (s.location) roomSet.add(s.location);
+  intensiveOptions.push({
+    id: 'no_intensives',
+    title: 'No — Not attending any special intensives or bootcamps',
+    desc: 'Standard arrival for regular workshops, competitions, or social dancing kickoff.',
+    icon: '✈️'
   });
-  const parallelRooms = Array.from(roomSet);
 
-  // 4. Detect Unique Instructors
-  const talentSet = new Set<string>();
-  sessions.forEach((s) => {
-    if (s.instructors) {
-      s.instructors.forEach((inst) => talentSet.add(inst));
+  return {
+    id: 'intensive',
+    question: `Are you attending any pre-convention intensives at ${eventName}?`,
+    subtitle: 'Schedule features specialized masterclasses on Friday before main evening events.',
+    options: intensiveOptions
+  };
+}
+
+function buildDivisionStep(earliestFridayPrelim?: NormalizedSession): DynamicQuestionStep {
+  const compOptions: DynamicQuestionOption[] = [
+    {
+      id: 'novice',
+      title: 'Novice Competitor Track',
+      desc: 'Friday 6:30 PM Strictly Prelims + Saturday 12:30 PM J&J Prelims',
+      icon: '🏆'
+    },
+    {
+      id: 'intermediate',
+      title: 'Intermediate Competitor Track',
+      desc: 'Friday 6:30 PM Strictly Prelims + Saturday 2:15 PM J&J Prelims',
+      icon: '⚡'
+    },
+    {
+      id: 'advanced_allstar',
+      title: 'Advanced / All-Star Competitor',
+      desc: 'Friday 8:00 PM Strictly + Saturday 4:00 PM J&J Prelims',
+      icon: '👑'
+    },
+    {
+      id: 'social_only',
+      title: 'Social Dancer / Non-Competitor',
+      desc: 'Pure focus on workshops, shows, and late-night social dancing without contest staging calls',
+      icon: '🕺'
     }
-  });
-  const instructors = Array.from(talentSet);
+  ];
 
-  // 5. Detect Late-Night Socials
-  const socials = sessions.filter((s) => s.category === 'social' || s.title.toLowerCase().includes('late night'));
-  const hasLateNight = socials.some((s) => s.end_hour >= 4 || s.start_hour >= 23 || s.title.toLowerCase().includes('late night'));
+  return {
+    id: 'division',
+    question: `Which competition divisions are you entering this weekend?`,
+    subtitle: earliestFridayPrelim
+      ? `Earliest preliminary calls start at ${earliestFridayPrelim.time} on Friday (${earliestFridayPrelim.title}).`
+      : 'Aligns your calendar with competition marshalling calls.',
+    options: compOptions
+  };
+}
 
-  // ==========================================
-  // RULE 1: Pre-Convention Friday Intensives
-  // ==========================================
-  if (intensives.length > 0) {
-    const intensiveOptions: DynamicQuestionOption[] = intensives.slice(0, 3).map((it, idx) => ({
-      id: `intensive_${idx + 1}`,
-      title: `${it.title} (${it.day} ${it.time.split('-')[0].trim()})`,
-      desc: `Takes place in ${it.location}. Requires arrival by ${Math.max(6, it.start_hour - 2)}:00 AM.`,
-      icon: '🧠'
-    }));
-
-    intensiveOptions.push({
-      id: 'no_intensives',
-      title: 'No — Not attending any special intensives or bootcamps',
-      desc: 'Standard arrival for regular workshops, competitions, or social dancing kickoff.',
-      icon: '✈️'
-    });
-
-    steps.push({
-      id: 'intensive',
-      question: `Are you attending any pre-convention intensives at ${eventName}?`,
-      subtitle: 'Schedule features specialized masterclasses on Friday before main evening events.',
-      options: intensiveOptions
-    });
-  }
-
-  // ==========================================
-  // RULE 2: Competition Division & Prelims Staging
-  // ==========================================
-  if (competitions.length > 0) {
-    const compOptions: DynamicQuestionOption[] = [
-      {
-        id: 'novice',
-        title: 'Novice Competitor Track',
-        desc: 'Friday 6:30 PM Strictly Prelims + Saturday 12:30 PM J&J Prelims',
-        icon: '🏆'
-      },
-      {
-        id: 'intermediate',
-        title: 'Intermediate Competitor Track',
-        desc: 'Friday 6:30 PM Strictly Prelims + Saturday 2:15 PM J&J Prelims',
-        icon: '⚡'
-      },
-      {
-        id: 'advanced_allstar',
-        title: 'Advanced / All-Star Competitor',
-        desc: 'Friday 8:00 PM Strictly + Saturday 4:00 PM J&J Prelims',
-        icon: '👑'
-      },
-      {
-        id: 'social_only',
-        title: 'Social Dancer / Non-Competitor',
-        desc: 'Pure focus on workshops, shows, and late-night social dancing without contest staging calls',
-        icon: '🕺'
-      }
-    ];
-
-    steps.push({
-      id: 'division',
-      question: `Which competition divisions are you entering this weekend?`,
-      subtitle: earliestFridayPrelim
-        ? `Earliest preliminary calls start at ${earliestFridayPrelim.time} on Friday (${earliestFridayPrelim.title}).`
-        : 'Aligns your calendar with competition marshalling calls.',
-      options: compOptions
-    });
-  }
-
-  // ==========================================
-  // RULE 3: Airport Arrival & Staging Buffer
-  // ==========================================
+function buildArrivalStep(earliestFridayPrelim: NormalizedSession | undefined, eventName: string, venueAirport: string): DynamicQuestionStep {
   const prelimTimeStr = earliestFridayPrelim ? earliestFridayPrelim.time.split('-')[0].trim() : '6:30 PM';
   const prelimHour = earliestFridayPrelim ? earliestFridayPrelim.start_hour : 18;
   const targetFlightLanding = `${Math.max(10, prelimHour - 4)}:00 PM`;
 
-  steps.push({
+  return {
     id: 'arrival',
     question: `When is your Friday arrival target for ${eventName}?`,
     subtitle: `Target airport: ${venueAirport}. Earliest Friday prelim staging is ${prelimTimeStr}.`,
@@ -178,74 +117,135 @@ export function evaluateScheduleRules(
         icon: '🚗'
       }
     ]
-  });
+  };
+}
 
-  // ==========================================
-  // RULE 4: Multi-Room Track Prioritization
-  // ==========================================
-  if (parallelRooms.length > 1) {
-    steps.push({
-      id: 'track',
-      question: `${eventName} runs simultaneous sessions across multiple rooms. Which stream should we prioritize?`,
-      subtitle: `Concurrent ballrooms: ${parallelRooms.slice(0, 3).join(', ')}.`,
-      options: [
-        {
-          id: 'all_workshops',
-          title: 'All Workshops & Masterclasses',
-          desc: 'Include full daytime workshop schedule across all ballrooms (no theme filtering)',
-          icon: '🌟'
-        },
-        {
-          id: 'competitor_workshops',
-          title: 'Competitor Leveled Workshops',
-          desc: 'Division-targeted technique & strategy classes',
-          icon: '⚙️'
-        },
-        {
-          id: 'all_levels_ballroom',
-          title: 'Main Ballroom Masterclasses',
-          desc: 'Musicality, phrasing & partner connection classes in Grand Ballroom',
-          icon: '🎵'
-        },
-        {
-          id: 'balanced_mix',
-          title: 'Curated All-Around Mix',
-          desc: 'Optimal balance across all rooms and instructors',
-          icon: '🎯'
-        }
-      ]
-    });
+function buildTrackStep(parallelRooms: string[], eventName: string): DynamicQuestionStep {
+  return {
+    id: 'track',
+    question: `${eventName} runs simultaneous sessions across multiple rooms. Which stream should we prioritize?`,
+    subtitle: `Concurrent ballrooms: ${parallelRooms.slice(0, 3).join(', ')}.`,
+    options: [
+      {
+        id: 'all_workshops',
+        title: 'All Workshops & Masterclasses',
+        desc: 'Include full daytime workshop schedule across all ballrooms (no theme filtering)',
+        icon: '🌟'
+      },
+      {
+        id: 'competitor_workshops',
+        title: 'Competitor Leveled Workshops',
+        desc: 'Division-targeted technique & strategy classes',
+        icon: '⚙️'
+      },
+      {
+        id: 'all_levels_ballroom',
+        title: 'Main Ballroom Masterclasses',
+        desc: 'Musicality, phrasing & partner connection classes in Grand Ballroom',
+        icon: '🎵'
+      },
+      {
+        id: 'balanced_mix',
+        title: 'Curated All-Around Mix',
+        desc: 'Optimal balance across all rooms and instructors',
+        icon: '🎯'
+      }
+    ]
+  };
+}
+
+function buildStaminaStep(): DynamicQuestionStep {
+  return {
+    id: 'stamina',
+    question: `Social dancing runs until 5:00 AM+ with dedicated late-night rooms. How should we balance your schedule?`,
+    subtitle: 'Includes Grand Ballroom Late Night + Soul Room / House of Blues after-hours.',
+    options: [
+      {
+        id: 'night_owl',
+        title: 'Night Owl / Social Marathoner',
+        desc: 'Prioritize 12 AM - 5 AM late-night socials; filter early morning 9 AM classes',
+        icon: '🦉'
+      },
+      {
+        id: 'morning_learner',
+        title: 'Daytime Workshop Enthusiast',
+        desc: 'Prioritize 9:00 AM - 1:00 PM masterclasses; wrap up dancing by 1:30 AM',
+        icon: '☀️'
+      },
+      {
+        id: 'balanced_warrior',
+        title: 'Saturday Showcase Gala & Balanced Socials',
+        desc: 'Dress to Impress Saturday night gala + balanced afternoon masterclasses',
+        icon: '✨'
+      }
+    ]
+  };
+}
+
+/**
+ * Deterministically evaluates an array of session objects to formulate
+ * 100% relevant, schedule-grounded dynamic questions.
+ */
+export function evaluateScheduleRules(
+  sessions: NormalizedSession[],
+  eventName: string = 'Boogie by the Bay 2026',
+  venueAirport: string = 'SFO'
+): ScheduleRuleEngineResult {
+  const steps: DynamicQuestionStep[] = [];
+
+  const intensives = sessions.filter(
+    (s) =>
+      s.category === 'intensive' ||
+      s.title.toLowerCase().includes('intensive') ||
+      s.title.toLowerCase().includes('bootcamp') ||
+      (s.day === 'Friday' && s.start_hour < 17 && s.title.toLowerCase().includes('masterclass'))
+  );
+
+  const competitions = sessions.filter(
+    (s) =>
+      s.category === 'competition' ||
+      s.title.toLowerCase().includes('strictly') ||
+      s.title.toLowerCase().includes('jack & jill') ||
+      s.title.toLowerCase().includes('prelim')
+  );
+
+  const fridayComps = competitions.filter((s) => s.day === 'Friday');
+  fridayComps.sort((a, b) => a.start_hour * 60 + a.start_minute - (b.start_hour * 60 + b.start_minute));
+  const earliestFridayPrelim = fridayComps.length > 0 ? fridayComps[0] : undefined;
+
+  const roomSet = new Set<string>();
+  sessions.forEach((s) => {
+    if (s.location) roomSet.add(s.location);
+  });
+  const parallelRooms = Array.from(roomSet);
+
+  const talentSet = new Set<string>();
+  sessions.forEach((s) => {
+    if (s.instructors) {
+      s.instructors.forEach((inst) => talentSet.add(inst));
+    }
+  });
+  const instructors = Array.from(talentSet);
+
+  const socials = sessions.filter((s) => s.category === 'social' || s.title.toLowerCase().includes('late night'));
+  const hasLateNight = socials.some((s) => s.end_hour >= 4 || s.start_hour >= 23 || s.title.toLowerCase().includes('late night'));
+
+  if (intensives.length > 0) {
+    steps.push(buildIntensiveStep(intensives, eventName));
   }
 
-  // ==========================================
-  // RULE 5: Late-Night Socials & Stamina Curve
-  // ==========================================
+  if (competitions.length > 0) {
+    steps.push(buildDivisionStep(earliestFridayPrelim));
+  }
+
+  steps.push(buildArrivalStep(earliestFridayPrelim, eventName, venueAirport));
+
+  if (parallelRooms.length > 1) {
+    steps.push(buildTrackStep(parallelRooms, eventName));
+  }
+
   if (hasLateNight) {
-    steps.push({
-      id: 'stamina',
-      question: `Social dancing runs until 5:00 AM+ with dedicated late-night rooms. How should we balance your schedule?`,
-      subtitle: 'Includes Grand Ballroom Late Night + Soul Room / House of Blues after-hours.',
-      options: [
-        {
-          id: 'night_owl',
-          title: 'Night Owl / Social Marathoner',
-          desc: 'Prioritize 12 AM - 5 AM late-night socials; filter early morning 9 AM classes',
-          icon: '🦉'
-        },
-        {
-          id: 'morning_learner',
-          title: 'Daytime Workshop Enthusiast',
-          desc: 'Prioritize 9:00 AM - 1:00 PM masterclasses; wrap up dancing by 1:30 AM',
-          icon: '☀️'
-        },
-        {
-          id: 'balanced_warrior',
-          title: 'Saturday Showcase Gala & Balanced Socials',
-          desc: 'Dress to Impress Saturday night gala + balanced afternoon masterclasses',
-          icon: '✨'
-        }
-      ]
-    });
+    steps.push(buildStaminaStep());
   }
 
   return {
@@ -258,6 +258,17 @@ export function evaluateScheduleRules(
     hasLateNightSocials: hasLateNight,
     lateNightClosingHour: '5:00 AM'
   };
+}
+
+function matchDivisionString(str: string): string | null {
+  if (str.includes('intermediate')) return 'intermediate';
+  if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
+  if (str.includes('novice') || str.includes('newcomer')) return 'novice';
+  if (str.includes('masters')) return 'masters';
+  if (str.includes('champion')) return 'champions';
+  if (str.includes('social')) return 'social_only';
+  if (str.includes('pro_am')) return 'pro_am';
+  return null;
 }
 
 /**
@@ -278,22 +289,15 @@ export function extractUserDivision(answers: Record<string, import('../types/nav
   for (const candidate of candidates) {
     if (!candidate) continue;
     const str = (Array.isArray(candidate) ? candidate.join(' ') : String(candidate)).toLowerCase();
-    if (str.includes('intermediate')) return 'intermediate';
-    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
-    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
-    if (str.includes('masters')) return 'masters';
-    if (str.includes('champion')) return 'champions';
-    if (str.includes('social')) return 'social_only';
-    if (str.includes('pro_am')) return 'pro_am';
+    const match = matchDivisionString(str);
+    if (match) return match;
   }
 
   for (const val of Object.values(answers)) {
     if (!val) continue;
     const str = (Array.isArray(val) ? val.join(' ') : String(val)).toLowerCase();
-    if (str.includes('intermediate')) return 'intermediate';
-    if (str.includes('advanced') || str.includes('allstar') || str.includes('all_star')) return 'advanced_allstar';
-    if (str.includes('novice') || str.includes('newcomer')) return 'novice';
-    if (str.includes('social')) return 'social_only';
+    const match = matchDivisionString(str);
+    if (match) return match;
   }
 
   return 'novice';
@@ -321,18 +325,7 @@ export function extractUserRole(answers: Record<string, import('../types/navigat
   return '';
 }
 
-/**
- * Dynamically adjusts a Decision Trace (buffer timeline, session titles, and justifications)
- * to match the user's specific answers from the questionnaire.
- */
-export function adaptTraceToUserPreferences(
-  baseTrace: import('../types').AgentDecisionTrace,
-  answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
-  _eventName: string = 'WCS Event'
-): import('../types').AgentDecisionTrace {
-  const divisionKey = extractUserDivision(answers).toLowerCase();
-
-  // Format division label
+function getDivisionLabel(divisionKey: string): { label: string; isSocialOnly: boolean } {
   let divisionLabel = 'Novice';
   if (divisionKey.includes('intermediate')) divisionLabel = 'Intermediate';
   else if (divisionKey.includes('advanced') || divisionKey.includes('allstar')) divisionLabel = 'Advanced / All-Star';
@@ -343,15 +336,10 @@ export function adaptTraceToUserPreferences(
   else if (divisionKey.includes('champion')) divisionLabel = 'Champions';
 
   const isSocialOnly = divisionKey.includes('social') || divisionKey === 'social_only';
-  const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');
+  return { label: divisionLabel, isSocialOnly };
+}
 
-  // Detect Arrival Mode & Intensive Registration
-  const arrivalVal = String(answers.arrival || answers.arrival_target || answers.arrival_time || '').toLowerCase();
-  const intensiveVal = String(answers.intensive || answers.intensives || answers.masterclass || '').toLowerCase();
-  const hasIntensive = intensiveVal.includes('yes') || intensiveVal === 'yes_masterclass' || intensiveVal === 'intensive_registered';
-  const isLocalCommute = arrivalVal.includes('local') || arrivalVal === 'drive' || arrivalVal === 'commute';
-  const isEveningArrival = arrivalVal.includes('evening') || arrivalVal.includes('after_work') || arrivalVal === 'friday_evening';
-
+function calculateBufferTimes(isLocalCommute: boolean, hasIntensive: boolean, isEveningArrival: boolean) {
   let calculatedArrivalDeadline = '2:15 PM Friday';
   let calculatedStagingTime = '5:15 PM Friday';
 
@@ -366,7 +354,31 @@ export function adaptTraceToUserPreferences(
     calculatedStagingTime = '8:00 PM Friday';
   }
 
-  // Adapt Buffer Timeline Steps
+  return { calculatedArrivalDeadline, calculatedStagingTime };
+}
+
+/**
+ * Dynamically adjusts a Decision Trace (buffer timeline, session titles, and justifications)
+ * to match the user's specific answers from the questionnaire.
+ */
+export function adaptTraceToUserPreferences(
+  baseTrace: import('../types').AgentDecisionTrace,
+  answers: Record<string, import('../types/navigator').QuestionAnswerValue>,
+  _eventName: string = 'WCS Event'
+): import('../types').AgentDecisionTrace {
+  const divisionKey = extractUserDivision(answers).toLowerCase();
+  const { label: divisionLabel, isSocialOnly } = getDivisionLabel(divisionKey);
+
+  const isAllWorkshops = String(answers.track || answers.workshop_focus || '').includes('all_workshops');
+
+  const arrivalVal = String(answers.arrival || answers.arrival_target || answers.arrival_time || '').toLowerCase();
+  const intensiveVal = String(answers.intensive || answers.intensives || answers.masterclass || '').toLowerCase();
+  const hasIntensive = intensiveVal.includes('yes') || intensiveVal === 'yes_masterclass' || intensiveVal === 'intensive_registered';
+  const isLocalCommute = arrivalVal.includes('local') || arrivalVal === 'drive' || arrivalVal === 'commute';
+  const isEveningArrival = arrivalVal.includes('evening') || arrivalVal.includes('after_work') || arrivalVal === 'friday_evening';
+
+  const { calculatedArrivalDeadline, calculatedStagingTime } = calculateBufferTimes(isLocalCommute, hasIntensive, isEveningArrival);
+
   const updatedSteps = (baseTrace.bufferTimeline?.steps || []).map((step) => {
     if (step.type === 'transit' || step.label.toLowerCase().includes('flight') || step.label.toLowerCase().includes('touchdown')) {
       if (isLocalCommute) {
@@ -414,7 +426,6 @@ export function adaptTraceToUserPreferences(
     return step;
   });
 
-  // Adapt Sessions
   const updatedSessions = (baseTrace.sessions || []).map((session) => {
     const isComp =
       session.decisionBadge === 'Competition Call' ||

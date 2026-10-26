@@ -10,10 +10,8 @@ export interface BaseDraftData {
   excerpt: string;
   author: string;
   date: string;
-  // Common fields that were moved to Base in some versions
   affiliateLink?: string;
   commentary?: string;
-  // Extended fields for Resource and Event support across types
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
@@ -103,6 +101,83 @@ const DEFAULT_DATA: DraftData = {
   content: ''
 };
 
+function cleanAndParseJSON(str: string): Record<string, unknown> | null {
+  try {
+    let clean = str.trim();
+    clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
+    clean = clean.trim();
+    return JSON.parse(clean);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeDraftValue(val: unknown, depth = 0): unknown {
+  if (depth > 5) return val;
+  if (typeof val === 'string') return val.replace(/\\n/g, '\n');
+  if (Array.isArray(val)) return val.map(v => normalizeDraftValue(v, depth + 1));
+  if (val !== null && typeof val === 'object') {
+    return Object.fromEntries(
+      Object.entries(val).map(([k, v]) => [k, normalizeDraftValue(v, depth + 1)])
+    );
+  }
+  return val;
+}
+
+function normalizeParsedDraftData(parsed: Record<string, unknown>, prev: DraftData): DraftData {
+  const type = (parsed.type as ContentType) || prev.type;
+  const base = {
+    title: (normalizeDraftValue(parsed.title) as string) || prev.title,
+    category: (normalizeDraftValue(parsed.category) as string) || prev.category,
+    excerpt: (normalizeDraftValue(parsed.excerpt || parsed.description) as string) || prev.excerpt,
+    affiliateLink: (parsed.affiliateLink as string) || (prev.type === 'post' ? prev.affiliateLink : ''),
+    commentary: (normalizeDraftValue(parsed.commentary) as string) || (prev.type === 'post' ? prev.commentary : ''),
+    author: (normalizeDraftValue(parsed.author) as string) || prev.author,
+    date: (parsed.date as string) || prev.date
+  };
+
+  if (type === 'resource') {
+    const pResource = prev.type === 'resource' ? prev : {} as Partial<ResourceDraftData>;
+    return {
+      ...base,
+      type: 'resource',
+      durability: (parsed.durability as number) ?? pResource.durability ?? 0,
+      value: (parsed.value as number) ?? pResource.value ?? 0,
+      priceCategory: (parsed.priceCategory as string) || pResource.priceCategory || '$$',
+      verdict: (normalizeDraftValue(parsed.verdict) as string) || pResource.verdict || '',
+      specs: (normalizeDraftValue(parsed.specs) as Record<string, string>) || pResource.specs || {},
+      affiliateIds: (parsed.affiliateIds as string[]) || pResource.affiliateIds || [],
+      tags: (parsed.tags as string[]) || pResource.tags || [],
+      updatedDate: (parsed.updatedDate as string) || pResource.updatedDate || '',
+      heading: (parsed.heading as string) || pResource.heading || '',
+      content: (parsed.content as string) || pResource.content || '',
+    } as ResourceDraftData;
+  }
+
+  if (type === 'event') {
+    const pEvent = prev.type === 'event' ? prev : {} as Partial<EventDraftData>;
+    return {
+      ...base,
+      type: 'event',
+      location: (normalizeDraftValue(parsed.location) as string) || pEvent.location || '',
+      startDate: (parsed.startDate as string) || pEvent.startDate || '',
+      earlyBirdDate: (parsed.earlyBirdDate as string) || pEvent.earlyBirdDate || '',
+      hotelCutoffDate: (parsed.hotelCutoffDate as string) || pEvent.hotelCutoffDate || '',
+      url: (parsed.url as string) || pEvent.url || '',
+      city: (parsed.city as string) || pEvent.city || '',
+      schedule: (parsed.schedule as string) || pEvent.schedule || '',
+      description: (parsed.description as string) || pEvent.description || '',
+    } as EventDraftData;
+  }
+
+  return {
+    ...base,
+    type: 'post',
+    affiliateLink: base.affiliateLink,
+    commentary: base.commentary
+  } as PostDraftData;
+}
+
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
     try {
@@ -112,7 +187,7 @@ export function useBlogDrafter() {
         return { ...DEFAULT_DATA, ...parsed };
       }
     } catch {
-      // Silent fail per audit recommendation
+      // Silent fail
     }
     return DEFAULT_DATA;
   });
@@ -124,12 +199,11 @@ export function useBlogDrafter() {
         return JSON.parse(saved);
       }
     } catch {
-      // Silent fail per audit recommendation
+      // Silent fail
     }
     return [];
   });
 
-  // Debounced persistence for manual edits
   const saveTimer = useRef<NodeJS.Timeout | null>(null);
 
   const debouncedSave = useCallback((nextData: DraftData) => {
@@ -149,7 +223,6 @@ export function useBlogDrafter() {
     debouncedSave(data);
   }, [data, debouncedSave]);
 
-  // History persistence
   useEffect(() => {
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
@@ -241,86 +314,10 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   };
 
   const applyAIResponse = (jsonString: string) => {
-    const cleanAndParseJSON = (str: string) => {
-      try {
-        let clean = str.trim();
-        // Remove markdown code blocks if present
-        clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
-        clean = clean.trim();
-        return JSON.parse(clean);
-      } catch {
-        return null;
-      }
-    };
-
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (val: unknown, depth = 0): unknown => {
-      if (depth > 5) return val; // Safety limit
-      if (typeof val === 'string') return val.replace(/\\n/g, '\n');
-      if (Array.isArray(val)) return val.map(v => normalize(v, depth + 1));
-      if (val !== null && typeof val === 'object') {
-        return Object.fromEntries(
-          Object.entries(val).map(([k, v]) => [k, normalize(v, depth + 1)])
-        );
-      }
-      return val;
-    };
-
-    setData((prev: DraftData) => {
-      const type = parsed.type || prev.type;
-      const base = {
-        title: (normalize(parsed.title) as string) || prev.title,
-        category: (normalize(parsed.category) as string) || prev.category,
-        excerpt: (normalize(parsed.excerpt || parsed.description) as string) || prev.excerpt,
-        affiliateLink: (parsed.affiliateLink as string) || (prev.type === 'post' ? prev.affiliateLink : ''),
-        commentary: (normalize(parsed.commentary) as string) || (prev.type === 'post' ? prev.commentary : ''),
-        author: (normalize(parsed.author) as string) || prev.author,
-        date: parsed.date || prev.date
-      };
-
-      if (type === 'resource') {
-        const pResource = prev.type === 'resource' ? prev : {} as Partial<ResourceDraftData>;
-        return {
-          ...base,
-          type: 'resource',
-          durability: parsed.durability ?? pResource.durability ?? 0,
-          value: parsed.value ?? pResource.value ?? 0,
-          priceCategory: parsed.priceCategory || pResource.priceCategory || '$$',
-          verdict: (normalize(parsed.verdict) as string) || pResource.verdict || '',
-          specs: (normalize(parsed.specs) as Record<string, string>) || pResource.specs || {},
-          affiliateIds: parsed.affiliateIds || pResource.affiliateIds || [],
-          tags: parsed.tags || pResource.tags || [],
-          updatedDate: parsed.updatedDate || pResource.updatedDate || '',
-          heading: parsed.heading || pResource.heading || '',
-          content: parsed.content || pResource.content || '',
-        } as ResourceDraftData;
-      }
-
-      if (type === 'event') {
-        const pEvent = prev.type === 'event' ? prev : {} as Partial<EventDraftData>;
-        return {
-          ...base,
-          type: 'event',
-          location: (normalize(parsed.location) as string) || pEvent.location || '',
-          startDate: parsed.startDate || pEvent.startDate || '',
-          earlyBirdDate: parsed.earlyBirdDate || pEvent.earlyBirdDate || '',
-          hotelCutoffDate: parsed.hotelCutoffDate || pEvent.hotelCutoffDate || '',
-          url: parsed.url || pEvent.url || '',
-          city: parsed.city || pEvent.city || '',
-          schedule: parsed.schedule || pEvent.schedule || '',
-          description: parsed.description || pEvent.description || '',
-        } as EventDraftData;
-      }
-
-      return {
-        ...base,
-        type: 'post',
-        affiliateLink: base.affiliateLink,
-        commentary: base.commentary
-      } as PostDraftData;
-    });
+    setData((prev: DraftData) => normalizeParsedDraftData(parsed, prev));
     return true;
   };
 

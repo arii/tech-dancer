@@ -77,6 +77,32 @@ const GEMINI_SYNTHESIS_SCHEMA = {
   required: ['overallScore', 'summaryMarkdown', 'findings']
 };
 
+const VALID_CATEGORIES = new Set(['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM', 'AI_SLOP_PRUNING']);
+const VALID_SEVERITIES = new Set(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'POLISH']);
+
+function normalizeHypothesisItem(hItem: unknown, idx: number) {
+  const h = (hItem && typeof hItem === 'object') ? (hItem as Record<string, unknown>) : {};
+  const question = typeof h.question === 'string' ? h.question : typeof h.query === 'string' ? h.query : typeof h.title === 'string' ? h.title : `UX Hypothesis ${idx + 1}`;
+  const context = typeof h.context === 'string' ? h.context : typeof h.description === 'string' ? h.description : typeof h.reason === 'string' ? h.reason : 'Flagged during visual scan.';
+  const suggestedAction = typeof h.suggestedAction === 'string' ? h.suggestedAction : typeof h.action === 'string' ? h.action : typeof h.recommendation === 'string' ? h.recommendation : 'Inspect on mobile breakpoint.';
+  const rawVps = Array.isArray(h.recommendedViewportsToInspect)
+    ? h.recommendedViewportsToInspect
+    : Array.isArray(h.viewports)
+    ? h.viewports
+    : ['mobile'];
+
+  const validVps = rawVps
+    .map((v: unknown) => String(v).toLowerCase())
+    .filter((v: string) => ['mobile', 'tablet', 'laptop', 'ultrawide'].includes(v));
+
+  return {
+    question,
+    context,
+    suggestedAction,
+    recommendedViewportsToInspect: validVps.length > 0 ? validVps : ['mobile']
+  };
+}
+
 function normalizeHypothesesData(raw: unknown): UXHypothesesResponse {
   if (!raw || typeof raw !== 'object') {
     return {
@@ -116,33 +142,39 @@ function normalizeHypothesesData(raw: unknown): UXHypothesesResponse {
     ? rawObj.questions
     : [];
 
-  const hypotheses = rawHypotheses.map((hItem: unknown, idx: number) => {
-    const h = (hItem && typeof hItem === 'object') ? (hItem as Record<string, unknown>) : {};
-    const question = typeof h.question === 'string' ? h.question : typeof h.query === 'string' ? h.query : typeof h.title === 'string' ? h.title : `UX Hypothesis ${idx + 1}`;
-    const context = typeof h.context === 'string' ? h.context : typeof h.description === 'string' ? h.description : typeof h.reason === 'string' ? h.reason : 'Flagged during visual scan.';
-    const suggestedAction = typeof h.suggestedAction === 'string' ? h.suggestedAction : typeof h.action === 'string' ? h.action : typeof h.recommendation === 'string' ? h.recommendation : 'Inspect on mobile breakpoint.';
-    const rawVps = Array.isArray(h.recommendedViewportsToInspect)
-      ? h.recommendedViewportsToInspect
-      : Array.isArray(h.viewports)
-      ? h.viewports
-      : ['mobile'];
-
-    const validVps = rawVps
-      .map((v: unknown) => String(v).toLowerCase())
-      .filter((v: string) => ['mobile', 'tablet', 'laptop', 'ultrawide'].includes(v));
-
-    return {
-      question,
-      context,
-      suggestedAction,
-      recommendedViewportsToInspect: validVps.length > 0 ? validVps : ['mobile']
-    };
-  });
+  const hypotheses = rawHypotheses.map(normalizeHypothesisItem);
 
   return {
     visualHierarchySummary,
     primaryConversionGoal,
     hypotheses
+  };
+}
+
+function normalizeFindingItem(fItem: unknown, idx: number): UXFinding {
+  const f = (fItem && typeof fItem === 'object') ? (fItem as Record<string, unknown>) : {};
+  const id = typeof f.id === 'string' ? f.id : `UX-${idx + 1}`;
+  const categoryCandidate = typeof f.category === 'string' ? f.category.toUpperCase() : 'HIERARCHY';
+  const category = VALID_CATEGORIES.has(categoryCandidate) ? categoryCandidate : 'HIERARCHY';
+  const severityCandidate = typeof f.severity === 'string' ? f.severity.toUpperCase() : 'MEDIUM';
+  const severity = VALID_SEVERITIES.has(severityCandidate) ? severityCandidate : 'MEDIUM';
+  const title = typeof f.title === 'string' ? f.title : typeof f.name === 'string' ? f.name : `UX Finding ${idx + 1}`;
+  const description = typeof f.description === 'string' ? f.description : typeof f.issue === 'string' ? f.issue : typeof f.problem === 'string' ? f.problem : 'UX issue identified.';
+  const affectedViewport = typeof f.affectedViewport === 'string' ? f.affectedViewport : typeof f.viewport === 'string' ? f.viewport : undefined;
+  const elementSelector = typeof f.elementSelector === 'string' ? f.elementSelector : typeof f.selector === 'string' ? f.selector : undefined;
+  const recommendedFix = typeof f.recommendedFix === 'string' ? f.recommendedFix : typeof f.fix === 'string' ? f.fix : typeof f.recommendation === 'string' ? f.recommendation : 'Refine layout styling.';
+  const suggestedTailwindSnippet = typeof f.suggestedTailwindSnippet === 'string' ? f.suggestedTailwindSnippet : typeof f.tailwind === 'string' ? f.tailwind : typeof f.codeSnippet === 'string' ? f.codeSnippet : undefined;
+
+  return {
+    id,
+    category: category as UXFinding['category'],
+    severity: severity as UXFinding['severity'],
+    title,
+    description,
+    affectedViewport,
+    elementSelector,
+    recommendedFix,
+    suggestedTailwindSnippet
   };
 }
 
@@ -175,35 +207,7 @@ function normalizeSynthesisData(raw: unknown): UXAuditSynthesis {
     ? rawObj.issues
     : [];
 
-  const validCategories = new Set(['HIERARCHY', 'CTA_CONVERSION', 'RESPONSIVE_LAYOUT', 'ACCESSIBILITY', 'CONTENT_DENSITY', 'DESIGN_SYSTEM', 'AI_SLOP_PRUNING']);
-  const validSeverities = new Set(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'POLISH']);
-
-  const findings: UXFinding[] = rawFindings.map((fItem: unknown, idx: number) => {
-    const f = (fItem && typeof fItem === 'object') ? (fItem as Record<string, unknown>) : {};
-    const id = typeof f.id === 'string' ? f.id : `UX-${idx + 1}`;
-    const categoryCandidate = typeof f.category === 'string' ? f.category.toUpperCase() : 'HIERARCHY';
-    const category = validCategories.has(categoryCandidate) ? categoryCandidate : 'HIERARCHY';
-    const severityCandidate = typeof f.severity === 'string' ? f.severity.toUpperCase() : 'MEDIUM';
-    const severity = validSeverities.has(severityCandidate) ? severityCandidate : 'MEDIUM';
-    const title = typeof f.title === 'string' ? f.title : typeof f.name === 'string' ? f.name : `UX Finding ${idx + 1}`;
-    const description = typeof f.description === 'string' ? f.description : typeof f.issue === 'string' ? f.issue : typeof f.problem === 'string' ? f.problem : 'UX issue identified.';
-    const affectedViewport = typeof f.affectedViewport === 'string' ? f.affectedViewport : typeof f.viewport === 'string' ? f.viewport : undefined;
-    const elementSelector = typeof f.elementSelector === 'string' ? f.elementSelector : typeof f.selector === 'string' ? f.selector : undefined;
-    const recommendedFix = typeof f.recommendedFix === 'string' ? f.recommendedFix : typeof f.fix === 'string' ? f.fix : typeof f.recommendation === 'string' ? f.recommendation : 'Refine layout styling.';
-    const suggestedTailwindSnippet = typeof f.suggestedTailwindSnippet === 'string' ? f.suggestedTailwindSnippet : typeof f.tailwind === 'string' ? f.tailwind : typeof f.codeSnippet === 'string' ? f.codeSnippet : undefined;
-
-    return {
-      id,
-      category: category as UXFinding['category'],
-      severity: severity as UXFinding['severity'],
-      title,
-      description,
-      affectedViewport,
-      elementSelector,
-      recommendedFix,
-      suggestedTailwindSnippet
-    };
-  });
+  const findings: UXFinding[] = rawFindings.map(normalizeFindingItem);
 
   return {
     overallScore,
