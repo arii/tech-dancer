@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '../../layouts/Box';
+import { Box, BoxProps } from '@/layouts/Box';
 import { motionTokens } from '@/styles/motion';
 import { cn } from '@/lib/utils';
 
