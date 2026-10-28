@@ -28,6 +28,38 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   [key: string]: unknown
 }
 
+function getTextColorClass(color: TextProps['color'], intent?: TextProps['intent']): string {
+  if (intent) return ""
+  switch (color) {
+    case "main": return "text-text-main"
+    case "body": return "text-text-body"
+    case "dim": return "text-text-dim"
+    case "accent": return "text-accent"
+    case "brand": return "text-accent-navy font-bold"
+    case "white": return "text-white"
+    case "bg": return "text-bg"
+    case "error": return "text-error"
+    default: return ""
+  }
+}
+
+function getHoverColorClass(hoverColor?: TextProps['hoverColor']): string {
+  switch (hoverColor) {
+    case "accent": return "transition-colors group-hover:text-accent"
+    case "main": return "transition-colors group-hover:text-text-main"
+    case "body": return "transition-colors group-hover:text-text-body"
+    case "dim": return "transition-colors group-hover:text-text-dim"
+    default: return ""
+  }
+}
+
+function formatClampValue(v: ResponsiveProp<number | boolean> | undefined): string {
+  if (typeof v === "number") {
+    return v === 0 ? "line-clamp-none" : `line-clamp-${v}`
+  }
+  return v ? "line-clamp-none" : ""
+}
+
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
@@ -46,14 +78,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         className={cn(
           variant && typography[variant],
           intent && variants.intent[intent],
-          !intent && color === "main" && "text-text-main",
-          !intent && color === "body" && "text-text-body",
-          !intent && color === "dim" && "text-text-dim",
-          !intent && color === "accent" && "text-accent",
-          !intent && color === "brand" && "text-accent-navy font-bold",
-          !intent && color === "white" && "text-white",
-          !intent && color === "bg" && "text-bg",
-          !intent && color === "error" && "text-error",
+          getTextColorClass(color, intent),
           applyResponsive(size, (s) => typeSizes[s as keyof typeof typeSizes] || ""),
           applyResponsive(weight, (v) => v || ""),
           applyResponsive(align, (v) => resolveJIT(v, "text")),
@@ -61,14 +86,11 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           applyResponsive(uppercase, (v) => v ? "uppercase" : "normal-case"),
           applyResponsive(lowercase, (v) => v ? "lowercase" : "normal-case"),
           applyResponsive(capitalize, (v) => v ? "capitalize" : "normal-case"),
-          applyResponsive(clamp, (v) => (typeof v === "number" ? (v === 0 ? "line-clamp-none" : `line-clamp-${v}`) : (v ? "line-clamp-none" : ""))),
+          applyResponsive(clamp, formatClampValue),
           applyResponsive(truncate, (v) => v ? "truncate" : ""),
           applyResponsive(leading, (v) => resolveJIT(v as string | number, "leading")),
           italic && "italic",
-          hoverColor === "accent" && "transition-colors group-hover:text-accent",
-          hoverColor === "main" && "transition-colors group-hover:text-text-main",
-          hoverColor === "body" && "transition-colors group-hover:text-text-body",
-          hoverColor === "dim" && "transition-colors group-hover:text-text-dim",
+          getHoverColorClass(hoverColor),
           opacityVariant && resolveJIT(opacityTokens[opacityVariant], "opacity"),
           className
         )}

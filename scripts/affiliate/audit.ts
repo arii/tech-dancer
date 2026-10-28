@@ -6,27 +6,29 @@ import {
   readAffiliates,
   writeAffiliates,
   normalizeAmazonUrl,
+  AffiliateItem,
 } from './utils';
 
-async function main() {
-  const { values } = parseArgs({
-    options: {
-      'fix-safe': { type: 'boolean', default: false },
+function findMarkdownFiles(dir: string): string[] {
+  let results: string[] = [];
+  const list = fs.readdirSync(dir);
+  list.forEach(file => {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(findMarkdownFiles(fullPath));
+    } else if (fullPath.endsWith('.md')) {
+      results.push(fullPath);
     }
   });
+  return results;
+}
 
-  const fixSafe = !!values['fix-safe'];
-  const affiliates = readAffiliates();
-  const ids = Object.keys(affiliates);
-
-  let errors = 0;
-  let warnings = 0;
-  let fixedCount = 0;
-
-  console.log(`Auditing ${ids.length} affiliate items...\n`);
-
+function checkContentFilesUsage(affiliates: Record<string, AffiliateItem>): { usedIds: Set<string>; errors: number } {
   const usedIds = new Set<string>();
+  let errors = 0;
   const contentFiles = findMarkdownFiles('content');
+
   for (const file of contentFiles) {
     const content = fs.readFileSync(file, 'utf-8');
 
@@ -73,45 +75,93 @@ async function main() {
     }
   }
 
+  return { usedIds, errors };
+}
+
+function checkAffiliateUrl(
+  item: AffiliateItem,
+  fixSafe: boolean
+): { errors: number; warnings: number; fixed: boolean } {
+  let errors = 0;
+  let warnings = 0;
+  let fixed = false;
+
+  if (!item.url) {
+    console.error(`  [ERROR] Missing URL`);
+    errors++;
+  } else if (item.url.includes('amazon.')) {
+    const normalized = normalizeAmazonUrl(item.url);
+    if (item.url !== normalized) {
+      if (fixSafe) {
+        console.log(`  [FIX] Normalizing Amazon URL and applying tag`);
+        item.url = normalized;
+        fixed = true;
+      } else {
+        console.warn(`  [WARN] Amazon URL not normalized or missing tag. Expected: ${normalized}`);
+        warnings++;
+      }
+    }
+  }
+
+  return { errors, warnings, fixed };
+}
+
+function checkAffiliateImage(item: AffiliateItem): { errors: number; warnings: number } {
+  let errors = 0;
+  let warnings = 0;
+
+  if (item.image) {
+    const imagePath = path.join(process.cwd(), 'public', item.image);
+    if (!fs.existsSync(imagePath) && !item.image.startsWith('http')) {
+      console.error(`  [ERROR] Image not found: ${item.image}`);
+      errors++;
+    } else if (fs.existsSync(imagePath)) {
+      const stats = fs.statSync(imagePath);
+      if (stats.size === 0) {
+        console.error(`  [ERROR] Image is 0 bytes: ${item.image}`);
+        errors++;
+      }
+    }
+  } else if (!item.draft) {
+    console.warn(`  [WARN] Missing image for non-draft item`);
+    warnings++;
+  }
+
+  return { errors, warnings };
+}
+
+async function main() {
+  const { values } = parseArgs({
+    options: {
+      'fix-safe': { type: 'boolean', default: false },
+    }
+  });
+
+  const fixSafe = !!values['fix-safe'];
+  const affiliates = readAffiliates();
+  const ids = Object.keys(affiliates);
+
+  let errors = 0;
+  let warnings = 0;
+  let fixedCount = 0;
+
+  console.log(`Auditing ${ids.length} affiliate items...\n`);
+
+  const { usedIds, errors: contentErrors } = checkContentFilesUsage(affiliates);
+  errors += contentErrors;
+
   for (const id of ids) {
     const item = affiliates[id];
     console.log(`Checking [${id}] - ${item.name}`);
 
-    // URL Checks
-    if (!item.url) {
-      console.error(`  [ERROR] Missing URL`);
-      errors++;
-    } else if (item.url.includes('amazon.')) {
-      const normalized = normalizeAmazonUrl(item.url);
-      if (item.url !== normalized) {
-        if (fixSafe) {
-          console.log(`  [FIX] Normalizing Amazon URL and applying tag`);
-          item.url = normalized;
-          fixedCount++;
-        } else {
-          console.warn(`  [WARN] Amazon URL not normalized or missing tag. Expected: ${normalized}`);
-          warnings++;
-        }
-      }
-    }
+    const urlRes = checkAffiliateUrl(item, fixSafe);
+    errors += urlRes.errors;
+    warnings += urlRes.warnings;
+    if (urlRes.fixed) fixedCount++;
 
-    // Image Checks
-    if (item.image) {
-      const imagePath = path.join(process.cwd(), 'public', item.image);
-      if (!fs.existsSync(imagePath) && !item.image.startsWith('http')) {
-        console.error(`  [ERROR] Image not found: ${item.image}`);
-        errors++;
-      } else if (fs.existsSync(imagePath)) {
-        const stats = fs.statSync(imagePath);
-        if (stats.size === 0) {
-          console.error(`  [ERROR] Image is 0 bytes: ${item.image}`);
-          errors++;
-        }
-      }
-    } else if (!item.draft) {
-      console.warn(`  [WARN] Missing image for non-draft item`);
-      warnings++;
-    }
+    const imgRes = checkAffiliateImage(item);
+    errors += imgRes.errors;
+    warnings += imgRes.warnings;
 
     // Metadata Checks
     if (item.name === id) {
@@ -134,21 +184,6 @@ async function main() {
   if (errors > 0) {
     process.exit(1);
   }
-}
-
-function findMarkdownFiles(dir: string): string[] {
-  let results: string[] = [];
-  const list = fs.readdirSync(dir);
-  list.forEach(file => {
-    file = path.join(dir, file);
-    const stat = fs.statSync(file);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(findMarkdownFiles(file));
-    } else if (file.endsWith('.md')) {
-      results.push(file);
-    }
-  });
-  return results;
 }
 
 main().catch(error => {
