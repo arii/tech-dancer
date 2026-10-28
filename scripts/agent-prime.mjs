@@ -31,11 +31,28 @@ export function generateAgentContext(cwd = rootDir) {
     }
   }
 
+  let projectConfig = {};
+  const configPath = resolve(cwd, 'project_config.json');
+  if (existsSync(configPath)) {
+    try {
+      const parsedConfig = JSON.parse(readFileSync(configPath, 'utf8'));
+      if (parsedConfig && typeof parsedConfig === 'object') {
+        projectConfig = parsedConfig;
+        if (typeof parsedConfig.packageName === 'string') {
+          pkgName = parsedConfig.packageName;
+        }
+      }
+    } catch (error) {
+      console.warn(`[agent:prime] Failed to parse project_config.json. Error: ${error.message}`);
+    }
+  }
+
   return {
     packageName: pkgName,
     updatedAt: new Date().toISOString(),
     gitCommit: gitSha,
-    version: '1.0.0'
+    version: '1.0.0',
+    config: projectConfig
   };
 }
 
