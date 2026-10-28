@@ -60,10 +60,15 @@ export function useWCSData() {
           const file = await asyncBufferFromUrl({ url: parquetUrl });
           objects = await parquetReadObjects({ file });
         } catch (lazyErr) {
-          console.warn("Lazy load failed or invalid Parquet footer, falling back to full fetch:", lazyErr);
-
           // Attempt 2: Full Fetch Fallback
           const res = await fetch(parquetUrl);
+          if (res.status === 404) {
+            // Dataset has been decommissioned / placed on hold
+            setData([]);
+            setLatency(performance.now() - startTime);
+            setIsLoading(false);
+            return;
+          }
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: lazyErr });
           const buffer = await res.arrayBuffer();
           objects = await parquetReadObjects({ file: buffer });
@@ -84,6 +89,14 @@ export function useWCSData() {
         setLatency(performance.now() - startTime);
         setIsLoading(false);
       } catch (err) {
+        // If file not found or network fetch failed, treat as decommissioned/on hold gracefully
+        const isNotFound = err instanceof Error && (err.message.includes('404') || err.message.includes('Failed to fetch'));
+        if (isNotFound) {
+          setData([]);
+          setLatency(performance.now() - startTime);
+          setIsLoading(false);
+          return;
+        }
         console.warn("Failed to load WCS data:", err);
         setError("Failed to load dataset. Please ensure the data source is available.");
         setIsLoading(false);

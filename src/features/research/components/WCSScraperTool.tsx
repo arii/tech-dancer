@@ -187,7 +187,7 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
         <Stack gap={4}>
           <Box display="flex" justify="between" align="center" paddingBottom={2} className="border-b border-line/20">
             <Text variant="body" size="xs" color="dim">Status</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-bold">ON HOLD</Text>
           </Box>
           <Box display="flex" justify="between" align="center" paddingBottom={2} className="border-b border-line/20">
             <Text variant="body" size="xs" color="dim">Latency</Text>
@@ -201,7 +201,7 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
           </Box>
           <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Safe Access</Text>
-            <StatusBadge label="ACTIVE" />
+            <StatusBadge label="ON HOLD" />
           </Box>
         </Stack>
       </Stack>
@@ -268,17 +268,34 @@ export function WCSScraperTool() {
       <Box paddingBottom={8} className="border-b">
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scoring Tool</Text>
-            <StatusBadge label="active" />
+            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Scoring Tool</Text>
+            <StatusBadge label="ON HOLD" />
           </Box>
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-              A tool for extracting and analyzing public West Coast Swing competition results.
-              Provides transparency on scoring patterns and promotion trends through data analysis.
+              A data engineering showcase for extracting and analyzing public West Coast Swing competition results.
+              Automated ingestion workflows and Git LFS Parquet datasets have been decommissioned and placed on hold.
             </Text>
           </Stack>
         </Stack>
+      </Box>
+
+      {/* On-Hold Decommission Notice Banner */}
+      <Box border radius="xl" surface="muted" padding="card" className="border-line/60" data-testid="wcs-decommission-banner">
+        <Box display="flex" align="start" gap={4}>
+          <Box className="shrink-0" paddingTop={0.5}>
+            <AlertCircle className="w-5 h-5 text-accent opacity-80" />
+          </Box>
+          <Stack gap={1}>
+            <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
+              Experiment On Hold — Ingestion Pipeline Decommissioned
+            </Text>
+            <Text variant="body" size="xs" color="dim">
+              The weekly automated scraping workflow and Git LFS Parquet dataset have been decommissioned to eliminate storage overhead and avoid Git LFS bandwidth quotas. Architecture, schema specifications, and historical benchmarks remain accessible below for reference.
+            </Text>
+          </Stack>
+        </Box>
       </Box>
 
       {/* Prominent KPI Callout Cards */}

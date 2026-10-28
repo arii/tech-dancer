@@ -81,6 +81,18 @@ describe('WCSScraperTool', () => {
     expect(screen.getAllByText('Safe Access').length).toBeGreaterThan(0);
   });
 
+  it('renders decommission notice banner and on-hold status badge', () => {
+    render(
+      <MemoryRouter>
+        <WCSScraperTool />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId('wcs-decommission-banner')).toBeDefined();
+    expect(screen.getByText(/Experiment On Hold — Ingestion Pipeline Decommissioned/i)).toBeDefined();
+    expect(screen.getAllByText('ON HOLD').length).toBeGreaterThan(0);
+  });
+
   it('toggles the methodology drawer when header button is clicked', () => {
     render(
       <MemoryRouter>
