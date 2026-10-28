@@ -2,7 +2,7 @@ import { DiscoveryResponse, FormQuestion, DynamicQuestionOption, DynamicQuestion
 import { CALIFORNIA_2026_EVENTS, WCSCaliforniaEvent } from '../data/californiaEvents';
 import { evaluateScheduleRules, NormalizedSession } from './scheduleRuleEngine';
 
-export type { DynamicQuestionOption, DynamicQuestionStep };
+export type { DynamicQuestionStep };
 
 /**
  * Converts backend/AI FormQuestions into DynamicQuestionSteps with icons and subtitles.

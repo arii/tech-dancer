@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+  "entry": [
+    "src/main.tsx",
+    "src/index.tsx",
+    "src/App.tsx",
+    "scripts/*.ts",
+    "scripts/**/*.ts",
+    "scripts/**/*.mjs",
+    "public/previews/dashboard.js",
+    "knip.ts"
+  ],
+  "ignorePatterns": [
+    "src/components/Equalizer.tsx",
+    "src/config/impact-interactions.ts",
+    "src/features/home/DevLabCallout.tsx",
+    "src/features/wcs-navigator/components/FormFields/**",
+    "src/features/wcs-navigator/data/goldenTraces.ts",
+    ".dependency-cruiser.config.mjs"
+  ],
+  "ignoreDependencies": [
+    "tw-animate-css",
+    "vite-plugin-pwa",
+    "workbox-window",
+    "dependency-cruiser",
+    "diff",
+    "fallow",
+    "openai",
+    "pixelmatch",
+    "pngjs",
+    "@google/genai",
+    "@langchain/google-genai",
+    "@vercel/node"
+  ],
+  "duplicates": {
+    "ignoreSymlinks": true
+  }
+}

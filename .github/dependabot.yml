@@ -7,22 +7,8 @@ updates:
       interval: "weekly"
       day: "monday"
 
-  - package-ecosystem: "npm"
-    directory: "/boomtick-pkg/mcp"
-    open-pull-requests-limit: 0
-    schedule:
-      interval: "weekly"
-      day: "monday"
-
   - package-ecosystem: "pip"
     directory: "/etl"
-    open-pull-requests-limit: 0
-    schedule:
-      interval: "weekly"
-      day: "wednesday"
-
-  - package-ecosystem: "pip"
-    directory: "/boomtick-pkg/cli"
     open-pull-requests-limit: 0
     schedule:
       interval: "weekly"

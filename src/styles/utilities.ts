@@ -23,7 +23,7 @@ export const interaction = {
   journalCard: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
 } as const;
 
-export const typography = {
+export const typographyUtils = {
   labelSmall: "text-tiny font-mono font-bold uppercase tracking-widest",
   h1: "font-display font-black tracking-tighter leading-tightest",
   h2: "font-display font-bold tracking-tight leading-tight",

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { QuestionAnswerValue } from '../types/navigator';
 
-export interface NavigatorDraftState {
+interface NavigatorDraftState {
   eventId: string;
   eventName: string;
   division: string;
@@ -10,7 +10,7 @@ export interface NavigatorDraftState {
   timestamp: number;
 }
 
-export interface SavedScheduleCustomization {
+interface SavedScheduleCustomization {
   eventId: string;
   includedSessionIds: string[];
   lastModified: number;

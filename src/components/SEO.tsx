@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION, ASSET_PREFIX } from '@/config/constants';
 
-export type SchemaType = Record<string, unknown> | unknown;
+type SchemaType = Record<string, unknown> | unknown;
 
 interface SEOProps {
   title: string;
