@@ -1,4 +1,5 @@
 {
+  "packageName": "tech-dancer",
   "github_repo": "arii/tech-dancer",
   "vite_base_path": "/tech-dancer/"
 }

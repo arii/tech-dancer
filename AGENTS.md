@@ -232,7 +232,7 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in .githooks/ so .agent-context.json stays fresh automatically by calling
-boomtick-pkg/cli/dev_tools/resources/build-repo-context.py.
+scripts/agent-prime.mjs (`pnpm run agent:prime`).
 
 ```bash
 ./setup-agent.sh

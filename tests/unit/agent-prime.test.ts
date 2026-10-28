@@ -50,6 +50,27 @@ describe('agent-prime.mjs', () => {
       expect(context).not.toHaveProperty('submodules');
     });
 
+    it('prioritizes packageName and merges config from project_config.json', () => {
+      fs.writeFileSync(path.join(tmpDir, 'package.json'), JSON.stringify({ name: 'mocked-pkg-name' }));
+      fs.writeFileSync(path.join(tmpDir, 'project_config.json'), JSON.stringify({
+        packageName: 'config-pkg-name',
+        github_repo: 'arii/tech-dancer',
+        vite_base_path: '/tech-dancer/'
+      }));
+
+      vi.mocked(child_process.execSync).mockImplementation((_cmd: unknown) => {
+        return 'mocked-git-sha\n';
+      });
+
+      const context = generateAgentContext(tmpDir);
+      expect(context.packageName).toBe('config-pkg-name');
+      expect(context.config).toEqual({
+        packageName: 'config-pkg-name',
+        github_repo: 'arii/tech-dancer',
+        vite_base_path: '/tech-dancer/'
+      });
+    });
+
     it('handles git failure gracefully and logs fallback', () => {
       vi.mocked(child_process.execSync).mockImplementation(() => {
         throw new Error('git error');
