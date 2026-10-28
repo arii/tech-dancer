@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BoomTick</title>
+    <script type="text/javascript">
+      // SPA redirect for GitHub Pages.
+      // This script handles redirects for both the main deployment (/tech-dancer/)
+      // and branch preview deployments (/tech-dancer/<branch>/).
+      // It probes the path hierarchy to find the deepest index.html.
+      (function () {
+        var l = window.location;
+        
+        // Prevent infinite redirect loops
+        // Do not redirect for .json files
+        if (l.pathname.endsWith(".json")) {
+          return;
+        }
+
+        if (l.search.includes('?/')) {
+          return;
+        }
+        
+        var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
+
+        function redirect(baseDepth) {
+          var basePath = baseDepth > 0 ? '/' + pathParts.slice(0, baseDepth).join('/') + '/' : '/';
+          var routePath = pathParts.slice(baseDepth).join('/');
+          
+          try {
+            sessionStorage.setItem('ghpages_redirect', '/' + routePath);
+          } catch (e) {}
+
+          l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            basePath + '?/' + encodeURIComponent(routePath) +
+            (l.search ? '&' + encodeURIComponent(l.search.slice(1)) : '') +
+            l.hash
+          );
+        }
+
+        // Probing depths to find where the app is actually hosted
+        var checks = pathParts.map(function (_, i) {
+          var depth = i + 1;
+          return fetch(
+            '/' + pathParts.slice(0, depth).join('/') + '/index.html',
+            { method: 'HEAD', cache: 'no-store' }
+          )
+            .then(function (r) { return r.ok ? depth : 0; })
+            .catch(function () { return 0; });
+        });
+
+        Promise.all(checks).then(function (depths) {
+          var best = 0;
+          for (var i = 0; i < depths.length; i++) {
+            if (depths[i] > best) best = depths[i];
+          }
+
+          if (best > 0) {
+            redirect(best);
+          } else {
+            // Fallback: if path starts with tech-dancer, use depth 1. Otherwise, root (depth 0)
+            var hasTechDancer = pathParts[0] === 'tech-dancer';
+            redirect(hasTechDancer ? 1 : 0);
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
