@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
-import { Box, Stack, Grid } from '../../layouts/Primitives';
+import { Box } from '@/layouts/Box';
+import { Stack } from '@/layouts/Stack';
+import { Grid } from '@/layouts/Grid';
 import { Skeleton } from './Skeleton';
 import { motionTokens } from '@/styles/motion';
 import { SkeletonVariant } from '@/lib/types/skeleton';
