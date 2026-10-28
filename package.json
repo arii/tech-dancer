@@ -147,7 +147,7 @@
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^5.0.4",
-    "zod": "^3.24.2"
+    "zod": "^4.6.6"
   },
   "packageManager": "pnpm@10.28.2",
   "knip": {
