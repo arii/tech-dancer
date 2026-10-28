@@ -36,7 +36,6 @@ jobs:
         with:
           submodules: false
           fetch-depth: 0
-          lfs: true
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
       - name: Check active runtime

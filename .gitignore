@@ -97,8 +97,8 @@ ENV/
 .pytest_cache/
 .ruff_cache/
 etl/data/*
-!etl/data/wcs_prelims.parquet
 !etl/data/event_queue.json
+*.parquet
 
 # Package Manager Lockfiles
 # Since you use pnpm, we ignore other manager lockfiles
