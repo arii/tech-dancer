@@ -138,11 +138,8 @@ Agents can run targeted visual diffs and Gemini AI visual reviews for specific r
 Use the `--route` and `--force` flags (or environment variables) to capture visual snapshots and diffs against `main`:
 
 ```bash
-# Target a specific route directly
-pnpm exec tsx boomtick-pkg/scripts/impact-visual-diff.ts --route /blog/2026-06-01-event-travel-packing --force
-
-# Or pass via environment variable
-TARGET_ROUTE=/blog/2026-06-01-event-travel-packing pnpm exec tsx boomtick-pkg/scripts/impact-visual-diff.ts --force
+# Target a specific route directly via td CLI or MCP
+td repo run-playwright --route /blog/2026-06-01-event-travel-packing
 ```
 
 Generated visual artifacts are stored in `artifacts/visual-review/<route-slug>/` with before/after comparisons and composite diff sheets.
@@ -152,11 +149,8 @@ Generated visual artifacts are stored in `artifacts/visual-review/<route-slug>/`
 To run the Gemini multimodal visual review orchestrator on targeted routes:
 
 ```bash
-# Run visual review orchestrator for a single route
-pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts --route /blog/2026-06-01-event-travel-packing --force
-
-# Or via environment variable
-TARGET_ROUTE=/blog/2026-06-01-event-travel-packing pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts
+# Run visual review via Python impact script
+python3 scripts/send-jules-impact.py --route /blog/2026-06-01-event-travel-packing
 ```
 
 This analyzes:
@@ -192,19 +186,15 @@ If calling Tier 2 directly, query dynamic schema resolution tools (`td schema <p
 td schema "gh/pr-diff"
 ```
 
-This is what `boomtick-mcp` handles automatically on tool invocation.
+This is what `@arii/boomtick-mcp` handles automatically on tool invocation.
 
 ### 🔄 MCP Tool Schema Synchronization
 
-To prevent schema drift (e.g., outdated parameters or case mismatches), MCP tool schemas are automatically synchronized from `boomtick-pkg/mcp/src/mcp/definitions.ts` to:
-1. **Global Config**: `~/.gemini/antigravity-cli/mcp/boomtick-mcp/`
-2. **Project Local**: `boomtick-pkg/mcp/.mcp/schemas/`
+To prevent schema drift (e.g., outdated parameters or case mismatches), MCP tool schemas are automatically resolved directly by the standalone `@arii/boomtick-mcp` package or `td` CLI tools (`td schema <path>` / `repo.get_command_schema`).
 
-Synchronization occurs automatically during:
+Synchronization and verification occur automatically during:
 - `pnpm run verify:schemas` (pre-build gate)
-- `.githooks/update-env.sh` (triggered by git pull/checkout if MCP code changes)
-
-**Best Practice**: If your agent environment supports project-level tool configuration, configure it to prefer the schemas in `boomtick-pkg/mcp/.mcp/schemas/`. This ensures you are always using the most up-to-date tool definitions for the current branch.
+- `td mcp install` (registered across agent hosts)
 
 ## 🧠 Repository Agnosticism & Config Enforcement
 

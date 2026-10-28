@@ -26,5 +26,11 @@ fi
 
 td --help >/dev/null
 
+echo "⚙️ Registering MCP tools across agent hosts..."
+td mcp install || echo "::warning::td mcp install returned non-zero exit code"
+
 echo "🩺 Running 'td doctor'..."
 td doctor
+
+echo "🧠 Priming agent context..."
+pnpm run agent:prime
