@@ -46,7 +46,7 @@ runs:
         if [ -f "requirements-dev.txt" ]; then
           $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages -r requirements-dev.txt
         else
-          $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.12.1"
+          $PYTHON_CMD -m pip install --no-cache-dir --break-system-packages --upgrade "boomtick-cli>=0.14.0"
         fi
 
         mkdir -p "$HOME/.local/bin"

@@ -44,7 +44,6 @@ MCP tools — do not invoke directly unless a workflow explicitly instructs it.
 - `packageName` — root package name
 - `updatedAt` — ISO timestamp of context generation
 - `gitCommit` — current HEAD commit SHA
-- `submodules` — active submodule commit pointers (e.g. `boomtick-pkg`)
 - `version` — context schema version
 
 It is rebuilt automatically by:

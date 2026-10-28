@@ -3,7 +3,7 @@
 | File | Use For | Never Use For |
 | -------------------------------- | ------------------------------- | ----------------------- |
 | `.agents/AGENT_CONTRACT.md` | Invariant rules (always wins) | Specify CLI flags |
-| `boomtick-pkg/cli/dev_tools/cli-schema.json` | Canonical CLI authority | Define UI style rules |
+| `td schema <path>` / `repo.get_command_schema` | Canonical CLI authority | Define UI style rules |
 | `AGENTS.md` | TSX, PR lifecycle, runtime rules | Duplicate CLI schema |
 | `.agents/AGENTS.md` | MCP tool hierarchy, tool mapping | Redefine contract rules |
 | `.agents/workflows/` | Task-specific protocols | Redefine core rules |

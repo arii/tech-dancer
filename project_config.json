@@ -1,5 +1,20 @@
 {
   "packageName": "tech-dancer",
   "github_repo": "arii/tech-dancer",
-  "vite_base_path": "/tech-dancer/"
+  "vite_base_path": "/tech-dancer/",
+  "triage_chain": {
+    "primary": "gpt-4o-mini",
+    "fallbacks": [
+      "gemini-1.5-flash"
+    ],
+    "max_retries": 2
+  },
+  "code_review_chain": {
+    "primary": "gpt-4o",
+    "fallbacks": [
+      "deepseek-r1",
+      "llama-3.3-70b-instruct"
+    ],
+    "max_retries": 3
+  }
 }

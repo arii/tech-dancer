@@ -15,7 +15,7 @@ Read the matching workflow before starting these task types:
 - Read all referenced files before taking any action.
 - **Plan Verification (Tiered)**:
   - For **Application** changes: Verify via live execution, unit tests, and screenshots.
-  - For **Infrastructure/Bootstrap** changes (e.g. `scripts/`, `boomtick-pkg/cli/`, `setup-agent.sh`): If full live execution is risky or resource-constrained, you MAY satisfy verification via dry-runs, log analysis of partial runs, or static analysis (`bash -n`). Document why live verification was skipped.
+  - For **Infrastructure/Bootstrap** changes (e.g. `scripts/`, `setup-agent.sh`): If full live execution is risky or resource-constrained, you MAY satisfy verification via dry-runs, log analysis of partial runs, or static analysis (`bash -n`). Document why live verification was skipped.
 - **Startup Discovery**: You MUST read `.agent-context.json` (using Tier 1
   `repo.read_agent_context`) upon startup to verify submodule tracking and version state, consult `project_config.json` for repository configuration, and query dynamic command schema via `td schema <path>` or `repo.get_command_schema` without guessing or using `--help`.
 - **Prioritize Index & Schema**: Always consult `.agent-context.json` for submodule/version state, `project_config.json` for repo configuration, and `td schema <path>` / `repo.get_command_schema` for CLI authority before taking action.
