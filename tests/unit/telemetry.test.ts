@@ -2,10 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { reportError, initTelemetry } from '@/utils/telemetry';
 
 describe('telemetry utils', () => {
-  const originalWindow = globalThis.window;
-  const originalNavigator = globalThis.navigator;
-  const originalFetch = globalThis.fetch;
-
   beforeEach(() => {
     vi.restoreAllMocks();
     vi.stubGlobal('navigator', {
@@ -21,9 +17,6 @@ describe('telemetry utils', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    if (originalWindow) globalThis.window = originalWindow;
-    if (originalNavigator) globalThis.navigator = originalNavigator;
-    if (originalFetch) globalThis.fetch = originalFetch;
   });
 
   describe('reportError', () => {

@@ -52,7 +52,7 @@ Prevent configuration and schema drift:
    ```
 2. Verify MCP tool schemas and TypeScript contract alignment by running:
    ```bash
-   cd boomtick-pkg && node scripts/verify-schemas.mjs
+   pnpm run verify:schemas
    ```
 3. Run project build and tests to verify that no layout, component, or config files were broken by cleanups:
    ```bash

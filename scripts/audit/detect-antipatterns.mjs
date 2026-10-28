@@ -375,7 +375,7 @@ export { checkContent, collectAuditFiles, checkFile };
 
 async function runAudit() {
   // Prevent running the main logic when imported as a module in tests
-  if (process.argv[1] !== fileURLToPath(import.meta.url)) return;
+  if (fs.realpathSync(process.argv[1]) !== fileURLToPath(import.meta.url)) return;
 
   if (!isJson && !isCountOnly) {
     console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');

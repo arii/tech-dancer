@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
+import { transitions, interaction, typographyUtils, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
@@ -202,7 +202,7 @@ export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = createTransitionVariants(
-  `${layouts.inlineFlexCenter} ${layouts.tagBase} ${typography.utility}`,
+  `${layouts.inlineFlexCenter} ${layouts.tagBase} ${typographyUtils.utility}`,
   {
     variants: {
       variant: {

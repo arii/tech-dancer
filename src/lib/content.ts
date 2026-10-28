@@ -7,7 +7,7 @@
 import { ASSET_PREFIX } from '@/config/constants';
 import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, ContentItem, ContentStatus };
+export type { Post, Resource, ContentItem };
 
 function getLineBreakLength(str: string): number {
   if (str.startsWith('\r\n')) return 2;

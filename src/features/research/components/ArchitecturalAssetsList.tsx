@@ -1,7 +1,7 @@
 import { Box, Text, Stack } from '@/layouts/Primitives';
 import { FileCode, Terminal, LucideIcon } from 'lucide-react';
 
-export interface ArchitecturalAsset {
+interface ArchitecturalAsset {
   path: string;
   label: string;
   description?: string;

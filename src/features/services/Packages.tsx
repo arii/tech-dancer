@@ -1,7 +1,7 @@
 import { Check, Calendar, ShoppingBag, Sparkles, TrendingUp, Cpu, Server } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
-export interface CapabilityCategory {
+interface CapabilityCategory {
   id: string;
   pillar: 'Connect' | 'Grow' | 'Automate';
   title: string;

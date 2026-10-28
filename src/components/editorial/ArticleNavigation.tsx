@@ -5,7 +5,7 @@ import { Stack, Text } from '@/layouts/Primitives';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-export interface ArticleNavItem {
+interface ArticleNavItem {
   title: string;
   href: string;
   category?: string;

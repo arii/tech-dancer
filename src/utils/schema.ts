@@ -478,7 +478,7 @@ function generateHowToSchema(params: {
   };
 }
 
-export interface ParsedMarkdownStep {
+interface ParsedMarkdownStep {
   name: string;
   text: string;
   image?: string;

@@ -3,7 +3,7 @@ import { ArrowUpRight, Sparkles, HeartPulse, CheckCircle2 } from 'lucide-react';
 import { ASSET_PREFIX } from '@/config/constants';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 
-export interface PortfolioClient {
+interface PortfolioClient {
   id: string;
   name: string;
   category: string;

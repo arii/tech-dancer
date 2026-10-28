@@ -4,15 +4,11 @@ import re
 import time
 from datetime import datetime
 
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../boomtick-pkg/cli')))
 from dev_tools.utils import run_command
 
 
 def run_cli(args):
-    res = run_command(["td-cli"] + args)
+    res = run_command(["td"] + args)
     return res if isinstance(res, str) else ""
 
 

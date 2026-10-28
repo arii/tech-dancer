@@ -5,11 +5,10 @@ import {
   DEFAULT_PRINTFUL_RETURN_POLICY,
   generateBreadcrumbSchema,
   type SchemaBrand,
-  type SchemaShippingDetails,
-  type SchemaMerchantReturnPolicy,
+  type SchemaOffer,
 } from '@/utils/schema';
 
-export { generateBreadcrumbSchema };
+export { generateBreadcrumbSchema, type SchemaOffer };
 
 export interface ProductItem {
   id: string;
@@ -24,16 +23,6 @@ export interface ProductItem {
   reviewCount?: number;
 }
 
-export interface SchemaOffer {
-  '@type': 'Offer';
-  price: string;
-  priceCurrency: string;
-  availability: string;
-  itemCondition: string;
-  url: string;
-  shippingDetails?: SchemaShippingDetails;
-  hasMerchantReturnPolicy?: SchemaMerchantReturnPolicy;
-}
 
 export interface SchemaAggregateRating {
   '@type': 'AggregateRating';

@@ -6,7 +6,6 @@ import { Skeleton } from './Skeleton';
 import { motionTokens } from '@/styles/motion';
 import { SkeletonVariant } from '@/lib/types/skeleton';
 
-export type { SkeletonVariant };
 
 interface PageSkeletonProps {
   className?: string;
