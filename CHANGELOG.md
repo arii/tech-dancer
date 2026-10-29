@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.0...tech-dancer-v0.10.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* **perf:** eliminate homepage below-the-fold suspense layout shift ([#4832](https://github.com/arii/tech-dancer/issues/4832)) ([cf4ab71](https://github.com/arii/tech-dancer/commit/cf4ab7176ae20227bf2fc9cd6b8b89f7a0691d97))
+
 ## [0.10.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.9.1...tech-dancer-v0.10.0) (2026-10-29)
 
 
