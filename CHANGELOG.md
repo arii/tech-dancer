@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.9.1...tech-dancer-v0.10.0) (2026-10-29)
+
+
+### Features
+
+* **blog:** add Hyatt credit cards post for WCS dance events ([#4796](https://github.com/arii/tech-dancer/issues/4796)) ([4b140cf](https://github.com/arii/tech-dancer/commit/4b140cf39cfb51a40864239984f78c09720ea168))
+
 ## [0.9.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.9.0...tech-dancer-v0.9.1) (2026-10-22)
 
 
