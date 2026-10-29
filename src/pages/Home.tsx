@@ -1,17 +1,15 @@
-import React, { Suspense } from 'react';
 import { SEO } from '@/components/SEO';
-import { Box, Stack, Grid } from '@/layouts/Primitives';
-import { STATIC_SCHEMAS } from '@/config/constants';
-import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { PromoStrip } from '@/components/ui/PromoStrip';
+import { STATIC_SCHEMAS } from '@/config/constants';
+import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
+import { GearCallout } from '@/features/home/GearCallout';
+import { GearShelf } from '@/features/home/GearShelf';
+import { LatestPosts } from '@/features/home/LatestPosts';
+import { TopicGrid } from '@/features/home/TopicGrid';
+import { Box, Grid, Stack } from '@/layouts/Primitives';
 
-const TopicGrid = React.lazy(() => import('@/features/home/TopicGrid').then(module => ({ default: module.TopicGrid })));
-const GearShelf = React.lazy(() => import('@/features/home/GearShelf').then(module => ({ default: module.GearShelf })));
-const LatestPosts = React.lazy(() => import('@/features/home/LatestPosts').then(module => ({ default: module.LatestPosts })));
-const GearCallout = React.lazy(() => import('@/features/home/GearCallout').then(module => ({ default: module.GearCallout })));
-
-export default function Home() {
+const Home = () => {
   return (
     <Box
       as="section"
@@ -58,33 +56,33 @@ export default function Home() {
         />
       </Box>
 
-      <Suspense fallback={<Box minHeight={300} />}>
-        <Stack
-          gap={{ base: 12, lg: 'section-spacing' }}
-          marginTop={{ base: 12, lg: 'section-spacing' }}
+      <Stack
+        gap={{ base: 12, lg: 'section-spacing' }}
+        marginTop={{ base: 12, lg: 'section-spacing' }}
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+      >
+        <GearShelf />
+
+        <Grid
+          cols={{ base: 1, lg: 12 }}
+          gap={8}
           width="full"
           maxWidth="full"
           minWidth={0}
         >
-          <GearShelf />
-
-          <Grid
-            cols={{ base: 1, lg: 12 }}
-            gap={8}
-            width="full"
-            maxWidth="full"
-            minWidth={0}
-          >
-            <Box span={{ base: 12, lg: 8 }}>
-              <LatestPosts />
-            </Box>
-            <Box span={{ base: 12, lg: 4 }}>
-              <GearCallout />
-            </Box>
-          </Grid>
-          <TopicGrid />
-        </Stack>
-      </Suspense>
+          <Box span={{ base: 12, lg: 8 }}>
+            <LatestPosts />
+          </Box>
+          <Box span={{ base: 12, lg: 4 }}>
+            <GearCallout />
+          </Box>
+        </Grid>
+        <TopicGrid />
+      </Stack>
     </Box>
   );
-}
+};
+
+export default Home;
