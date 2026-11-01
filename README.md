@@ -16,48 +16,36 @@ The core of this repository is a Vite-powered React application that serves as t
   pnpm build
   ```
 
-## 📦 Developer Toolkit (`boomtick-pkg`)
+## 📦 Developer Toolkit & Agents
 
-The repository also includes a self-contained developer unit under the `boomtick-pkg/` directory:
+This repository integrates with the standalone **BoomTick** developer automation ecosystem:
 
-- **`boomtick-pkg/cli/`**: A Python-based CLI (`td`) that serves as the unified entry point for repository automation, GitHub operations, and agent coordination.
-- **`boomtick-pkg/mcp/`**: A Model Context Protocol (MCP) server that provides a structured interface for AI agents to interact with the repository.
-- **`boomtick-pkg/mcp/actions/`**: Modular, composite GitHub Actions for the toolkit (migrated from root `.github/actions/`).
+- **`td` CLI**: Installed via `boomtick-cli` (`pip install --upgrade boomtick-cli`). Serves as the unified entry point for repository automation, preflight checks, conflict detection, and agent coordination.
+- **BoomTick MCP Server**: Provided by `@arii/boomtick-mcp`. Exposes structured MCP tools for autonomous AI agents.
 
-## 🚀 Quick Start
+### 🛠 Entry Points
 
-To bootstrap the developer environment, install all dependencies, and initialize the toolkit, run:
-
-```bash
-bash boomtick-pkg/install.sh
-```
-
-## 🛠 Entry Points
-
-### 1. `td` CLI
-The primary tool for local automation. It automatically configures and syncs the dual Node/Python environment. After installation, you can run:
+#### 1. `td` CLI
+The primary tool for local automation and environment health. Verify runtime consistency across Node, pnpm, and Python:
 ```bash
 td doctor
 ```
-to verify your runtime consistency across Node, pnpm, and Python environments.
 
-### 2. BoomTick MCP Server
-A TypeScript-based MCP server communicating via stdio.
-- **Location**: `boomtick-pkg/mcp/`
-- **Build**: `pnpm --filter ./boomtick-pkg/mcp build`
-- **Run**: `node boomtick-pkg/mcp/dist/index.js`
+#### 2. Preflight & Audits
+Run automated preflight verification:
+```bash
+td preflight
+```
 
-### 🤖 Agent Coordination & .agent-context.json
+### 🤖 Agent Coordination
 This repository uses a **Schema-Driven Contract Pipeline**. All AI agents MUST:
-1. **Consult `.agent-context.json`** upon startup to verify submodule synchronization and version state, `project_config.json` for repo configuration, and dynamic command schemas via `td schema <path>` or `repo.get_command_schema`.
-2. **Follow the 'MCP-First' policy**: Prioritize Tier 1 (MCP) tools and Tier 2 (`td`) subcommands over raw shell commands (Tier 3).
-3. **Practice Self-Correction**: If you catch yourself about to run a raw shell command that has a tool equivalent, stop and use the tool.
+1. **Follow the 'MCP-First' policy**: Prioritize Tier 1 (MCP) tools and Tier 2 (`td`) subcommands over raw shell commands (Tier 3).
+2. **Practice Self-Correction**: If you catch yourself about to run a raw shell command that has a tool equivalent, stop and use the tool.
 
 ## 📖 Documentation
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and developer protocols.
 - **[AGENTS.md](AGENTS.md)**: Rules and context for AI agents working in this repository.
-- **[boomtick-pkg/README.md](boomtick-pkg/README.md)**: Detailed package-level documentation.
 
 ## ⚖️ License
 
