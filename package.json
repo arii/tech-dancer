@@ -61,12 +61,12 @@
     "@google/genai": "^2.8.0",
     "@langchain/core": "^1.2.2",
     "@langchain/google-genai": "^2.2.0",
-    "@tailwindcss/vite": "^4.2.2",
+    "@langchain/langgraph": "^1.4.16",
+    "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-query": "^5.99.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "@vitejs/plugin-react": "^5.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^12.12.1",
@@ -96,7 +96,8 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "zod": "^4.6.6"
   },
   "engines": {
     "node": "24.x",
@@ -105,10 +106,9 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
-    "@langchain/langgraph": "^1.4.16",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.61.1",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.2.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/jsdom": "^28.0.3",
@@ -118,6 +118,7 @@
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5",
     "@vercel/node": "^5.8.23",
+    "@vitejs/plugin-react": "^5.0.4",
     "dependency-cruiser": "^17.4.3",
     "diff": "^9.0.0",
     "eslint": "^10.2.1",
@@ -146,8 +147,7 @@
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-sitemap": "^0.8.2",
-    "vitest": "^5.0.4",
-    "zod": "^4.6.6"
+    "vitest": "^5.0.4"
   },
   "packageManager": "pnpm@10.28.2",
   "knip": {
