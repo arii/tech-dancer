@@ -8,7 +8,7 @@ describe('Services Page Component', () => {
     cleanup();
   });
 
-  it('renders services hero, consultation form, and modular packages', () => {
+  it('renders services hero and booking CTAs without the consultation form', () => {
     render(
       <BrowserRouter>
         <Services />
@@ -18,7 +18,24 @@ describe('Services Page Component', () => {
     expect(screen.getByText(/Digital business systems for independent creatives/i)).toBeTruthy();
     expect(screen.getByText('Request Consultation →')).toBeTruthy();
     expect(screen.getByRole('button', { name: /Book Discovery Call/i })).toBeTruthy();
-    expect(screen.getByText('Request a Consultation')).toBeTruthy();
+    // Consultation intake form is hidden while the Apps Script backend is down
+    expect(screen.queryByText('Request a Consultation')).toBeNull();
+    expect(screen.queryByLabelText(/Full Name/i)).toBeNull();
+    expect(screen.queryByRole('button', { name: /Send Message/i })).toBeNull();
+  });
+
+  it('opens BookingModal when clicking Request Consultation', () => {
+    render(
+      <BrowserRouter>
+        <Services />
+      </BrowserRouter>
+    );
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    fireEvent.click(screen.getByText('Request Consultation →'));
+
+    expect(screen.getByRole('dialog')).toBeTruthy();
   });
 
   it('opens and closes BookingModal when clicking Book Discovery Call button', () => {

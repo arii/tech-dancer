@@ -3,7 +3,6 @@ import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { BookingModal } from '@/features/services/BookingModal';
 import { ClientSpotlight } from '@/features/services/ClientSpotlight';
-import { IntakeForm } from '@/features/services/IntakeForm';
 import { ModularPackages } from '@/features/services/Packages';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { CONSULTING_SERVICE_SCHEMA, FOUNDER_PERSON_SCHEMA } from '@/config/constants';
@@ -80,8 +79,8 @@ const Services = () => {
 
         <Stack direction={{ base: 'col', sm: 'row' }} gap={3} justify="center" align="center" paddingTop={2}>
           <Button
-            as="a"
-            href="#consultation"
+            type="button"
+            onClick={() => setIsBookingModalOpen(true)}
             variant="primary"
             size="lg"
             className="shadow-md font-semibold"
@@ -114,10 +113,8 @@ const Services = () => {
           <ClientSpotlight />
         </Box>
 
-        {/* 4. Dedicated Next Steps Consultation & Ongoing Management Intake */}
-        <Box id="consultation" paddingTop={4}>
-          <IntakeForm onOpenBookingModal={() => setIsBookingModalOpen(true)} />
-        </Box>
+        {/* 4. Consultation intake form hidden while the Apps Script backend is down.
+            Consultation requests go through the Cal.com discovery-call modal above. */}
       </Stack>
 
       <BookingModal
