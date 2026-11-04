@@ -19,7 +19,7 @@ imageFit: contain
 
 ## Functional Theming for Halloween Social Dancing
 
-Need a Halloween costume in two minutes that won't restrict your movement or make you overheat on the dance floor? This DIY pumpkin costume formula is the ultimate quick-assembly solution. No bulky layers, no hot masks, and no sewing required. It's lightweight, breathable, and lets you focus on social dancing while looking festive.
+This DIY pumpkin costume goes on in two minutes, moves with you, and breathes on a crowded floor. This DIY pumpkin costume formula assembles in two minutes. Just an orange base, a headband, and stickers. It's lightweight, breathable, and lets you focus on social dancing while looking festive.
 
 ### The 2-Minute Costume Formula
 
@@ -31,8 +31,6 @@ Need a Halloween costume in two minutes that won't restrict your movement or mak
 
 ![A bright orange, moisture-wicking athletic jumpsuit that provides full range of motion and breathability for crowded social dance floors.](/images/gear/sketches/assembly-guide.webp)
 
-**Bring Your Own Orange Base**
-
 Start with a comfortable orange dress, shirt, jumpsuit, or matching athletic set. Choose a breathable fabric like cotton or moisture-wicking tech wear that handles sweat well on the social floor.
 
 </stack>
@@ -43,8 +41,6 @@ Start with a comfortable orange dress, shirt, jumpsuit, or matching athletic set
 
 ![A lightweight, plush pumpkin hat headband with a green stem and a friendly jack-o'-lantern face, designed to stay secure and comfortable during high-energy spins.](/images/gear/sketches/pumpkin-headbands.webp)
 
-**Add Pumpkin Headband**
-
 A lightweight headband or small pumpkin hat gives you the pumpkin silhouette instantly. Secure it with bobby pins to keep it in place during high-speed spins and double turns.
 
 </stack>
@@ -54,8 +50,6 @@ A lightweight headband or small pumpkin hat gives you the pumpkin silhouette ins
 **3. Felt Face Stickers**
 
 ![A set of pre-cut, matte black felt adhesive stickers in various geometric eye, nose, and mouth shapes to create a custom jack-o'-lantern face.](/images/gear/sketches/pumpkin-stickers.webp)
-
-**Apply Jack-O'-Lantern Stickers**
 
 Use large, pre-cut adhesive felt stickers to assemble a jack-o’-lantern face on your torso in seconds. Start with the eyes, add the nose, and place the mouth last.
 
@@ -72,7 +66,7 @@ Use large, pre-cut adhesive felt stickers to assemble a jack-o’-lantern face o
 
 * **Breathable Fabric:** Choose an orange base that handles sweat well, like cotton or moisture-wicking tech wear.
 * **Secure Headband:** Use bobby pins if necessary to keep the hat/headband in place during high-speed spins.
-* **Sticker Security:** Press firmly on the felt stickers. For rib-knit or heavily textured fabrics, a tiny dab of fabric glue can provide extra insurance.
+* **Sticker Security:** Press firmly on the felt stickers.
 * **Unrestricted Frame:** Ensure you can raise your arms into a dance frame without the outfit pulling or the stickers popping off.
 * **Clear Visibility:** Keeping the "face" on your torso ensures you don't have anything obstructing your vision while navigating a crowded social dance floor.
 

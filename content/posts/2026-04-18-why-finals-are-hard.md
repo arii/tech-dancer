@@ -2,7 +2,7 @@
 type: post
 draft: false
 status: published
-title: "Why Most Above-Average Dancers Don't Make Finals"
+title: "Why the Tier System Decides WCS Finals"
 date: "2026-04-18"
 author: "Ariel Anders"
 category: "WCS"
@@ -76,4 +76,4 @@ graph LR
 
 I'm building tools in the [DevAI Portfolio](/research) to normalize these results. By tracking whether you are consistently making Semis in Tier 4 or placing in Tier 3, we can see a much more reliable picture of your improvement than a single "No Recall" at a major event.
 
-Don't let the math discourage you—let it inform your expectations. If you made the Semis at a Tier 4 event, you are likely an "above-average" dancer who just got caught in the survival math.
+Let the math inform your expectations. If you made the Semis at a Tier 4 event, you are likely an "above-average" dancer who just got caught in the survival math.

@@ -23,7 +23,7 @@ A reliable, portable Bluetooth speaker is essential for hotel room practices or 
 
 
 ### Record Your Progress
-You can't fix what you can't see. A compact travel tripod allows you to easily film your practice sessions or competition heats for later review.
+Record your sessions so you can see what to fix. A compact travel tripod allows you to easily film your practice sessions or competition heats for later review.
 
 <notice type="affiliate" id="tripod" />
 

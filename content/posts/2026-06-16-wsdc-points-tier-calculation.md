@@ -16,7 +16,7 @@ tags:
 
 For competitive West Coast Swing dancers, understanding the World Swing Dance Council (WSDC) points system is a crucial part of navigating Jack & Jill competitions.
 
-How do WSDC points work? The WSDC system awards points to dancers who make the finals of registered Jack & Jill competitions. The number of points awarded is calculated based on your final placement and the tier size (total number of competitors) in your specific division.
+The WSDC system awards points to dancers who make the finals of registered Jack & Jill competitions. The number of points awarded is calculated based on your final placement and the tier size (total number of competitors) in your specific division.
 
 ### How Scoring Works in Prelims
 
@@ -34,11 +34,11 @@ Accumulating these points is how you level up. If you feel you are consistently 
 ## Frequently Asked Questions
 
 ### How are WSDC points calculated?
-WSDC points are calculated using relative placement in the finals. The exact number of points awarded is determined by your final standing and the event's tier size, which is based on the total number of competitors in your division.
+Your finals placement plus the event's tier size determine your points — see the breakdown above.
 
 ### Do Strictly Swing points count toward Jack & Jill advancement?
-No. Points earned in Strictly Swing or Pro-Am divisions are tracked separately in the registry and do not count toward your Jack & Jill advancement or division leveling.
+No — they don't count toward Jack & Jill advancement.
 
 <Notice type="related">
-Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+Chasing points at your next event? Read the [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide) before you go.
 </Notice>

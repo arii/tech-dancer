@@ -6,7 +6,7 @@ title: "Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
 author: "Ariel Anders"
 category: "Travel"
-excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle."
+excerpt: "Financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle."
 image: ""
 tags:
   - financial-literacy
@@ -31,11 +31,11 @@ This guide will move beyond basic "saving tips" and look at the dance journey as
 
 #### Budget Planning
 
-How to forecast your yearly dance expenses and set aside a "Dance Fund" that doesn't compromise your long-term financial health.
+How to forecast your yearly dance expenses and set aside a “Dance Fund” that protects your long-term financial health.
 
 #### Credit Card Strategy
 
-A deep dive into status-stacking with travel cards. I'll explain why I use the Amex Platinum and Hyatt cards to secure late checkouts and airport lounge access.
+How I stack status with travel cards. I'll explain why I use the Amex Platinum and Hyatt cards to secure late checkouts and airport lounge access.
 
 #### Cost Saving Tips
 
@@ -46,6 +46,5 @@ Strategies for finding the best flight deals, managing group housing, and making
 The full guide is undergoing final review and will be available in the coming weeks. My goal is to help you build a sustainable financial foundation that allows for more dancing and less stress.
 
 <Notice type="info">
-**Sustainability is Key**
-The best way to improve your dance is to stay in the game. Financial stability is the foundation of that longevity.
+Staying in the game is how your dancing improves. Financial stability is the foundation of that longevity.
 </Notice>

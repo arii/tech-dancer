@@ -26,7 +26,7 @@ imageFit: contain
 
 </Notice>
 
-Theme nights are a staple of West Coast Swing conventions. From "Galactic" to "Glow Night," having the right accessories can make your outfit stand out without breaking the bank.
+Theme nights are a staple of West Coast Swing conventions. From "Galactic" to "Glow Night," having the right accessories makes your outfit stand out on a budget.
 
 ### Galactic & Space Themes
 

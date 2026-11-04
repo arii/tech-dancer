@@ -23,7 +23,7 @@ Dancing outdoors brings its own set of challenges, from sun exposure to keeping 
 
 ### Keep Your Valuables Safe
 
-A slim fanny pack or running belt is perfect for keeping your phone, keys, and cash secure without adding bulk or restricting your movement.
+A slim fanny pack or running belt keeps your phone, keys, and cash secure and stays out of your way while you dance.
 
 ![Ultra-light, bounce-free slim running belt designed for keys and phone, featuring a low-profile silhouette that stays secure on the social floor and fits discreetly under clothing.](/images/gear/amazon/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpg)
 

@@ -60,15 +60,15 @@ Beat: | 1 | 2 | 3 & 4 | 5 | 6 | 7 & 8 |
 UUS:  | • | • | •   • | • | • | •   • |
 ```
 
-These simple dots (•) and slashes (/)—if we were to substitute a touch for a step—give dancers a clear, visual map of weight transfer without needing to read complex musical sheet notation.
+These simple dots (•) and slashes (/)—if we were to substitute a touch for a step—give dancers a clear, visual map of weight transfer that reads at a glance.
 
-This intersection of technical structure and creative expression is why I dance, and it is the foundation of BoomTick.blog. Learn more about [author Ariel Anders' dance and engineering background](/about), explore our [personalized WCS Navigator schedule planner](/wcs-navigator), or browse our [West Coast Swing apparel and gear collection](/gear).
+This intersection of technical structure and creative expression is why I dance. Learn more about [author Ariel Anders' dance and engineering background](/about), explore our [personalized WCS Navigator schedule planner](/wcs-navigator), or browse our [West Coast Swing apparel and gear collection](/gear).
 
 ## Visual Identity: The Accessible Victorian
 
 The aesthetic of BoomTick.blog is as intentional as a well-timed anchor. We’ve developed the **"Accessible Victorian"** design language—a blend of San Francisco’s architectural heritage and modern accessibility standards.
 
-This design uses a palette of high-contrast teals, corals, and plums, ensuring that every insight is easy to read regardless of your device. We believe that professional-grade research shouldn’t just be accurate; it should be beautiful and inclusive.
+This design uses a palette of high-contrast teals, corals, and plums, ensuring that every insight is easy to read regardless of your device. Professional-grade research should be accurate, beautiful, and inclusive.
 
 ## Sources
 

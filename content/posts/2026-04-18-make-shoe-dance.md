@@ -15,9 +15,9 @@ tags:
 
 ## Why I Modify My Own Dance Shoes
 
-Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. If you're looking for the best sneakers for West Coast Swing, my preferred solution is to build them yourself. Upgrading high-comfort athletic shoes with industrial-strength adhesive suede gives you ultimate control over comfort, aesthetics, and floor feel.
+Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. If you're looking for the best sneakers for West Coast Swing, my preferred solution is to build them yourself. Upgrading high-comfort athletic shoes with industrial-strength adhesive suede gives you control over comfort, aesthetics, and floor feel.
 
-The key to a successful conversion is understanding floor friction. Standard athletic soles grip the wood, which can wreak havoc on your knees during multiple spins. By applying chrome leather—the industry standard for dance suede—directly to the pivot points of your sneakers, you get the perfect balance of slip and grip. Proper sole prep is crucial here. If you don't rough up the rubber surface and use an industrial adhesive like contact cement, the suede will peel off halfway through your first Jack & Jill.
+The key to a successful conversion is understanding floor friction. Standard athletic soles grip the wood, which can wreak havoc on your knees during multiple spins. By applying chrome leather—the industry standard for dance suede—directly to the pivot points of your sneakers, you get the perfect balance of slip and grip. Proper sole prep is crucial here. Rough up the rubber surface and use an industrial adhesive like contact cement, or the suede peels off halfway through your first Jack & Jill.
 
 Predictable traction is the foundation of safe social dancing. The goal is not maximum grip, but a controlled balance between friction and glide. If you're dancing indoors, you need a shoe that allows controlled rotation. Too much grip can be just as dangerous as too little, especially during spins and turns.
 
@@ -36,9 +36,9 @@ Hotel ballroom floors, convention centers, and social dance venues rarely offer 
 
 ## Why Suede Works: The Physics of Traction
 
-Ballroom and social dance shoes have used suede soles for decades because they provide a consistent balance between grip and glide. Unlike athletic rubber, which grips aggressively and causes joint strain during spins, suede creates controlled slip for predictable rotation and reduced torque on your knees.
+Ballroom and social dance shoes have used suede soles for decades because they provide a consistent balance between grip and glide. Athletic rubber grips aggressively and strains joints during spins; suede creates controlled slip for predictable rotation and reduced torque on your knees.
 
-## Why I Don't Use Spot Stickers
+## Why I Skip Spot Stickers
 
 ### The Problem With Ball-Only Traction Patches
 
@@ -103,7 +103,7 @@ Wait 24 hours for the adhesive to fully bond. Avoid testing the shoes early, as 
 
 ## Long-Term Performance: Real-World Results
 
-This DIY modification has been tested extensively in high-demand environments. In my experience:
+I tested this modification extensively in high-demand environments. In my experience:
 - **Survived Major Conventions:** Successfully navigated 4-day events with continuous dancing.
 - **8+ Hour Socials:** Maintained consistent traction without edge lifting during all-night sets.
 - **Multiple Years of Use:** With occasional maintenance, a single application can last through several seasons of regular dancing.
@@ -121,22 +121,20 @@ Instead of replacing the entire sheet, apply a drop of Shoe Goo or superglue to 
 
 If you already own a comfortable pair of sneakers or flats, adding adhesive suede is often a better solution than purchasing dedicated dance shoes. The modification is inexpensive, durable, and provides a predictable friction profile across a wide range of ballroom and social dance floors.
 
-### FAQs
-
-**How durable are adhesive suede sheets?**
-Suede sheets typically last for several months of regular dancing, depending on the floor type. They perform best on smooth wooden or dedicated dance floors. **Never** wear suede on concrete, wet floors, or outside the ballroom. It is highly recommended to change out of your dance shoes before using the restroom or taking the elevator (you never know what is on the floor!).
-
-**How do I remove them?**
-If you need to replace the sheets or return the shoes to everyday use, peel them off slowly. Any residual adhesive can usually be removed with rubbing alcohol or an adhesive remover like Goo Gone.
-
 ## Frequently Asked Questions
+
+### How durable are adhesive suede sheets?
+Suede sheets typically last for several months of regular dancing, depending on the floor type. They perform best on smooth wooden or dedicated dance floors. Save suede for the dance floor — concrete, wet floors, and anything outside the ballroom destroy it. Change out of your dance shoes before using the restroom or taking the elevator (you never know what is on the floor).
+
+### How do I remove them?
+If you need to replace the sheets or return the shoes to everyday use, peel them off slowly. Rubbing alcohol or an adhesive remover like Goo Gone removes any residual adhesive.
 
 ### What is the best material for DIY dance shoe soles?
 Chrome leather, also known as industrial-strength adhesive suede, is the industry standard for dance shoe modification. It provides the ideal balance of slip and grip on wooden ballroom floors to protect your joints during spins.
 
 ### What kind of glue is used for dance shoe soles?
-For DIY conversions, use industrial contact cement or high-grade adhesive backing that comes pre-applied to suede sheets. The rubber sole of the sneaker must be sanded and roughed up first to ensure the adhesive bonds permanently.
+For DIY conversions, use industrial contact cement or high-grade adhesive backing that comes pre-applied to suede sheets. Sand and rough up the rubber sole first so the adhesive bonds permanently.
 
 <Notice type="related">
-Planning for your next convention? Check out our complete [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide).
+Breaking in a new pair for your next convention? The [Ultimate West Coast Swing Event Survival Guide](/blog/2026-06-15-ultimate-wcs-event-survival-guide) covers everything else on your packing list.
 </Notice>

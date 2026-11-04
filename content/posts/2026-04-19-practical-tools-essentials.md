@@ -19,6 +19,8 @@ affiliateIds:
 
 > Here is a practical packing checklist for a smoother West Coast Swing weekend, based on common dancer pain points: sore feet, loud ballrooms, sweaty workshops, cold hotel spaces, and late-night social dancing.
 
+For organization strategy once the bag is packed — bundle methods, wrinkle-free outfits, travel-sized essentials — see [Event Travel & Packing](/blog/2026-06-01-event-travel-packing), or generate a custom list with the [WCS competition travel checklist](/wcs-navigator).
+
 ### Footwear & Shoe Care
 - **At least two pairs of dance shoes:** Rotating your shoes once or twice a day gives your feet a "change of scenery" and prevents intense soreness from pressure points. Suede-soled shoes (like Latin practice heels or practice sandals) are standard.
 - **Suede shoe brush:** Helpful for cleaning off dirt and restoring grip if the ballroom floor gets slick or dusty.
@@ -32,7 +34,7 @@ affiliateIds:
 
 ### Apparel (The Sweat & Temperature Strategy)
 - **10 to 15 shirts:** Many dancers find they sweat much more than expected. Plan on bringing extra t-shirts for classes and workshops, and changing into fresh, nice shirts for social dancing. Darker or busy patterned shirts are often helpful because they hide underarm sweat patches.
-- **Synthetic pants/trousers:** Stretchy slacks or synthetic dress pants drape nicely, don't restrict your leg movement, and pack easily. Avoid heavy denim jeans—they can trap heat, restrict motion, and take too long to dry if you need to wash them.
+- **Synthetic pants/trousers:** Stretchy slacks or synthetic dress pants drape nicely, free your leg movement, and pack easily. Avoid heavy denim jeans—they can trap heat, restrict motion, and take too long to dry if you need to wash them.
 - **A warm hoodie or light jacket:** Ballrooms are often heavily air-conditioned and can be cold during workshops, competitions, or whenever you are sitting still.
 - **Double your socks and underwear:** Plan on showering and changing 2 to 3 times a day (after daytime workshops, before evening social dancing, etc.).
 - **Travel laundry detergent sheets:** Synthetic activewear can easily be washed in your hotel sink and will dry overnight if you run low on clean clothes.
@@ -43,7 +45,7 @@ affiliateIds:
 <notice type="affiliate" id="portable-steamer"></notice>
 
 ### Ballroom Bag (On-the-Floor Essentials)
-Keep a small backpack or messenger bag with you in the ballroom so you don't have to keep walking back to your room for essentials:
+Keep a small backpack or messenger bag with you in the ballroom to keep essentials within reach:
 - **A small sweat towel:** Useful for wiping down your face and arms between dances.
 - **A handheld fan:** A battery-powered fan or a manual folding fan is helpful for cooling down on the sidelines.
 - **High-fidelity earplugs:** Ballroom sound systems can be loud. Dampening earplugs (like Loop Experience 2) protect your hearing while still letting you hear the music and talk to your partners.

@@ -17,8 +17,8 @@ tags:
 
 Long days at conventions mean your devices will likely run out of juice before the social dancing even starts. Keep your phone and speakers powered up with these charging essentials.
 
-### Never Run Out of Battery
-A high-capacity portable power bank from Anker is a lifesaver when you're away from a wall outlet for 12+ hours.
+### Stay Charged All Weekend
+A high-capacity portable power bank from Anker keeps you going when you're away from a wall outlet for 12+ hours.
 
 
 ### Fast and Flexible Charging

@@ -2,11 +2,11 @@
 type: post
 title: "My Favorite Credit Cards for Hyatt-Hosted West Coast Swing Events"
 seoTitle: "Best Credit Cards for Hyatt Dance Weekends | BoomTick"
-seoDescription: "How two Chase cards — one $95, one $550 — cover hotel bills at Hyatt-hosted West Coast Swing dance weekends."
+seoDescription: "How two Chase cards — one $95, one $795 — cover hotel bills at Hyatt-hosted West Coast Swing dance weekends."
 date: "2026-10-22"
 author: "Ariel Anders"
 category: "Travel"
-excerpt: "How two Chase cards — one $95, one $550 — cover the hotel bill at Hyatt-hosted dance weekends."
+excerpt: "How two Chase cards — one $95, one $795 — cover the hotel bill at Hyatt-hosted dance weekends."
 image: "/assets/blog/hyatt-regency-orange-county.jpg"
 imageAlt: "Hyatt Regency Orange County at dusk — the Jack & Jill O'Rama event hotel in Garden Grove"
 imageFit: "cover"
@@ -22,7 +22,7 @@ tags:
 This post is about one cost: the hotel at Hyatt-hosted West Coast Swing events. The event pass is rarely the expensive part of a dance weekend. The three or four hotel nights are — and you want to be in the event hotel, not driving across town at 3 a.m. after social dancing. Two cards cover the Hyatt nights:
 
 - **World of Hyatt Credit Card ($95/year).** An anniversary free night at a Category 1–4 Hyatt, every year. Used at an event hotel, that night is usually worth more than the fee.
-- **Chase Sapphire Reserve ($550/year).** The premium card that earns flexible points which transfer 1:1 to World of Hyatt.
+- **Chase Sapphire Reserve ($795/year).** The premium card that earns flexible points which transfer 1:1 to World of Hyatt.
 
 ## WCS Events Hosted at Hyatts
 
@@ -52,13 +52,13 @@ Always confirm the current hotel on the event's own page before counting on poin
 - **Earning at Hyatt:** up to 9 points per $1 — 4 bonus points from the card on top of member base points — plus bonus categories like dining and transit.
 - **No foreign transaction fees.**
 
-**How I use it:** Hyatt stays go on this card, and I time the anniversary night to an event weekend. Make sure you have an event to use the certificate on so it doesn't expire.
+**How I use it:** Hyatt stays go on this card, and I time the anniversary night to an event weekend. Line up an event for the certificate before it expires.
 
 **[World of Hyatt Credit Card — Official Application & Terms](https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card)**
 
-## Chase Sapphire Reserve ($550/yr)
+## Chase Sapphire Reserve ($795/yr)
 
-The Reserve's standard annual fee is $550. I keep it for Hyatt, because its points transfer 1:1 to the World of Hyatt program.
+The Reserve's standard annual fee is $795. I keep it for Hyatt, because its points transfer 1:1 to the World of Hyatt program.
 
 - **$300 annual travel credit**, applied automatically to a broad range of travel purchases — no portal booking, no activation. Event travel triggers it on its own.
 - **Earning:** 10 points per $1 on hotels and car rentals purchased through Chase Travel, 3 per $1 on other travel and dining — the categories a dance weekend actually runs through.
@@ -71,7 +71,7 @@ The Reserve's standard annual fee is $550. I keep it for Hyatt, because its poin
 - **Book on points when cash rates spike.** Event weekends compress demand into one property, so cash rates jump — exactly when a category-based award chart favors you.
 - **Anchor with the free night.** Use the Hyatt card's anniversary certificate for one night and points for the rest; a four-night weekend can drop to a fraction of its cash price.
 - **Pay cash costs with the right card.** Paid Hyatt stays go on the Hyatt card for its bonus earning; flights, dining, and other travel go on the Reserve, earning the points that become next event's Hyatt points.
-- **Events move.** The Hyatt advantage lasts only while your events stay in Hyatts. Verify the venue each year; don't stockpile points for a hotel an event no longer uses.
+- **Events move.** The Hyatt advantage lasts only while your events stay in Hyatts. Verify the venue each year; spend points on hotels your events still use.
 - **Award space isn't guaranteed.** Certificates cover Category 1–4 only, and event blocks sell out. Book early.
 - *Coming next: Is Hyatt Globalist status actually worth it? I held Globalist for a few years, initially qualifying through a work promotion that granted it for 20 nights. The follow-up post runs the real numbers to see if it's worth it for dancers.*
 
