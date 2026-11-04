@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.1...tech-dancer-v0.10.2) (2026-11-03)
+
+
+### Bug Fixes
+
+* **services:** hide consultation intake form while Apps Script backend is down ([bb68de8](https://github.com/arii/tech-dancer/commit/bb68de86dca6a8d972619d9fa3652ba26529baaf))
+
 ## [0.10.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.0...tech-dancer-v0.10.1) (2026-10-29)
 
 
