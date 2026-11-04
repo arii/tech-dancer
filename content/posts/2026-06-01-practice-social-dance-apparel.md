@@ -31,10 +31,9 @@ Crop tops are a favorite for a reason—they're lightweight and keep you cool du
 <notice type="affiliate" id="reflective-crop-tops" />
 
 ### Layering with Style
-Mesh and fishnet tops are great for adding texture to your outfit without adding heat, while fishnet tights provide a classic dance look.
+Mesh and fishnet tops add texture to your outfit while letting heat escape, while fishnet tights provide a classic dance look.
 
 <notice type="affiliate" id="mesh-fishnet-top" />
 <notice type="affiliate" id="fishnet-tights" />
 
-### Layering Logic
-> **Layering Logic:** Convention ballrooms are notoriously temperature-variable. Always start with a breathable base layer (like a crop top) and bring a light, easily removable over-layer (like a mesh top or light jacket) to adjust as you warm up.
+> Convention ballrooms are notoriously temperature-variable. Always start with a breathable base layer (like a crop top) and bring a light, easily removable over-layer (like a mesh top or light jacket) to adjust as you warm up.

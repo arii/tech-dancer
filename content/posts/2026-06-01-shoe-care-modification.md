@@ -1,6 +1,6 @@
 ---
 type: post
-title: "The Most Effective Way to Combat Smelly Dance Shoes"
+title: "How to Combat Smelly Dance Shoes"
 date: "2026-06-01"
 author: "Ariel Anders"
 category: "Gear"
@@ -23,23 +23,23 @@ While some of these provided temporary relief, none addressed the root cause: de
 
 
 ### The Science of the Stink
-The odor isn't actually the sweat itself—it's the bacteria that thrive in the warm, damp environment inside your shoes. When you dance for hours, your shoes become a petri dish. If you don't remove that moisture completely before the next session, the bacteria continue to multiply, and the smell becomes increasingly difficult to manage.
+The odor is the bacteria that thrive in the warm, damp environment inside your shoes — not the sweat itself. When you dance for hours, your shoes become a petri dish. Dry them completely before the next session — the bacteria keep multiplying in trapped moisture, and the smell gets harder to manage.
 
 ![A pair of black strappy ballroom dance shoes, which can trap moisture and bacteria during long social dancing sessions.](/images/gear/amazon/hxyoo-ballroom-dance-shoes-boots-for-women-salsa-latin-wedding-party-2.jpg)
 <Text variant="mono" size="micro" color="dim" uppercase textAlign="center" display="block" marginTop={-6} marginBottom={12}>Equipment Hygiene</Text>
 
 ### Why the Electric Shoe Dryer is My Top Choice
-After experimenting with so many different methods, I found that an electric shoe dryer and deodorizer is the most effective way to combat this. Unlike passive drying, which can take days (especially in humid hotel rooms), an electric dryer uses gentle heat and airflow to pull moisture out of the deep foam and fabric layers of your dance shoes.
+After experimenting with many different methods, an electric shoe dryer and deodorizer worked best. Passive drying can take days (especially in humid hotel rooms); an electric dryer uses gentle heat and airflow to pull moisture out of the deep foam and fabric layers of your dance shoes.
 
 ![Portable electric shoe dryer showing the two heating elements and the wired timer control unit.](/images/gear/amazon/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpg)
 <Text variant="mono" size="micro" color="dim" uppercase textAlign="center" display="block" marginTop={-6} marginBottom={12}>Portable Maintenance Gear</Text>
 
 In my experience, using a dryer for just 30-60 minutes after a dance session makes a world of difference:
 
-- **Complete Moisture Removal:** It reaches the areas air-drying can't, ensuring the shoes are bone-dry by morning.
+- **Complete Moisture Removal:** It reaches areas air-drying misses, ensuring the shoes are bone-dry by morning.
 - **Bacterial Prevention:** By eliminating the damp environment, you address the root cause of the odor before it can start.
 - **Preserving Your Investment:** Constant moisture breaks down the materials of your shoes faster. Keeping them dry significantly extends their lifespan.
-- **Freshness for Multi-Day Events:** There is nothing worse than putting on damp, smelly shoes for a morning workshop. A dryer ensures every day starts with a fresh pair.
+- **Freshness for Multi-Day Events:** A dryer ensures every day starts with a fresh pair.
 
 
 If you are looking for a reliable way to maintain your gear and your hygiene during long dance weekends, these have been the best investments I've made for my gear bag. Check out our [curated West Coast Swing gear directory](/gear) for more recommendations.
@@ -54,4 +54,4 @@ For additional footwear maintenance, use a [dance shoe suede sole brush](/gear/2
 The most effective method is using a portable electric shoe dryer immediately after dancing. This eliminates the deep-seated moisture in the footbed and stops microbial growth before it starts, rather than just masking the odor with powders or sprays.
 
 ### Can you wash suede sole dance shoes?
-You should never submerge suede soles in water. To clean them, use a wire suede brush to remove dirt and restore the nap of the leather. Keep moisture restricted to the interior lining.
+Keep suede soles out of water. To clean them, use a wire suede brush to remove dirt and restore the nap of the leather. Keep moisture restricted to the interior lining.

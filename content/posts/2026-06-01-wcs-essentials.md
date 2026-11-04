@@ -21,12 +21,12 @@ Whether you're heading to a local social or traveling across the country for a c
 ![A hand-drawn sketch of a large holographic rave fan with black bamboo ribs, shown both folded and fully open with a vibrant rainbow pattern, alongside its blue carrying pouch.](/images/gear/sketches/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.webp)
 
 ### Stay Cool on the Floor
-Crowded dance floors can get incredibly hot. A large folding fan is the most effective way to cool yourself down (and your partners!) between songs.
+Crowded dance floors can get incredibly hot. A large folding fan cools you down (and your partners) between songs.
 
 <notice type="affiliate" id="rave-fan" />
 
 ### Protect Your Hearing
-Ballroom sound systems are often cranked up to high volumes. To enjoy the music without the ringing in your ears the next morning, high-fidelity earplugs are a must. They lower the decibels while preserving the clarity of the music and conversation.
+Ballroom sound systems are often cranked up to high volumes. High-fidelity earplugs let you enjoy the music at full volume and wake up without ringing ears. They lower the decibels while preserving the clarity of the music and conversation.
 
 <notice type="affiliate" id="loop-experience" />
 

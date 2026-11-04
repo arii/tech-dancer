@@ -20,7 +20,7 @@ Automating the "Impeccable" audit gate and bundle size checks to maintain high d
 
 ## Reliable Deployments for BoomTick.blog
 
-Building a "living portfolio" requires a way to handle the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform. This ensures that every update, from a new gear review to a deep-dive research study, is verified before it goes live.
+Building a "living portfolio" requires a way to handle the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform. This ensures that every update, from a new gear review to a research study, is verified before it goes live.
 
 ### The CI/CD Setup
 
@@ -68,7 +68,7 @@ audit:
 
 #### 3. Build & E2E Testing
 
-Before deployment, the application is subjected to end-to-end (E2E) tests.
+I run end-to-end (E2E) tests before deployment.
 
 ```yaml
 test-build:

@@ -24,15 +24,15 @@ A careful, respectful way to use public scoring data to analyze progression and 
 
 In West Coast Swing, we are judged by humans. Humans are great, but results can vary from heat to heat. While one event result only tells part of the story, looking at scores across multiple events can reveal helpful patterns about how you're progressing and how different panels see your dancing.
 
-I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand.
+I'm building the **WCS Competition Data Scraper**, a tool that makes competition results easier to understand.
 
 ### Core Philosophy
 
 The goal of this project isn't to rank dancers, but to provide tools for self-improvement and to understand how competition scoring works.
 
 - **Anonymous data collection:** The tool focuses on trends and overall patterns. No individual dancer names are stored in our public datasets.
-- **Respectful approach:** We only use public competition data that has already been published. Our tool is built to be a good citizen of the web.
-- **Privacy focus:** All raw data is processed securely and we don't keep individual records after we've looked at the big picture.
+- **Respectful approach:** We use public competition data that has already been published. Our tool is built to be a good citizen of the web.
+- **Privacy focus:** All raw data is processed securely and we discard individual records once we've extracted the big picture.
 
 ### What the tool will show
 
