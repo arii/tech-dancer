@@ -17,14 +17,26 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       >
         Technical Specs
       </Text>
-      <dl className="grid grid-cols-1 gap-2.5 font-mono text-xs">
+      <Stack as="dl" gap={2.5}>
         {Object.entries(specs).map(([key, value]) => (
-          <div key={key} className="flex flex-col sm:flex-row sm:justify-between py-1.5 border-b border-line/10 gap-1 sm:gap-4">
-            <dt className="text-text-dim text-xs uppercase tracking-wider">{key}</dt>
-            <dd className="font-bold text-text-main text-right">{value}</dd>
-          </div>
+          <Stack
+            as="div"
+            key={key}
+            direction={{ base: 'col', sm: 'row' }}
+            justify="between"
+            paddingY={1.5}
+            gap={{ base: 1, sm: 4 }}
+            className="border-b border-line/10"
+          >
+            <Text as="dt" variant="mono" size="xs" color="dim" uppercase tracking="wider">
+              {key}
+            </Text>
+            <Text as="dd" variant="mono" size="xs" weight="font-bold" color="main" className="sm:text-right">
+              {value}
+            </Text>
+          </Stack>
         ))}
-      </dl>
+      </Stack>
     </Stack>
   );
 }
