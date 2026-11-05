@@ -7,6 +7,7 @@ author: "Ariel Anders"
 date: "2026-11-04"
 affiliateIds: ["magene-h64"]
 affiliateProvider: "amazon"
+tags: ["health", "practice"]
 image: "/images/gear/amazon/magene-h64-heart-rate-monitor.jpg"
 verdict: "Affordable Chest-Strap Heart Rate Monitor"
 description: "Magene H64 chest-strap heart rate monitor with Bluetooth and ANT+. Speaks the standard Bluetooth Heart Rate Profile, so it pairs with the HRM dashboard and any compliant app."
