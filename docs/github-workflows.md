@@ -72,5 +72,6 @@ If Playwright browser downloads fail in your environment (e.g., due to 403 Forbi
 
 ### CI (`ci.yml`)
 
+- **Code Change Gate (`verify-changes`)**: Runs on all pull requests to inspect the git diff against code paths. On content-only PRs (e.g., blog posts in `content/` and static assets in `public/`), code-only quality checks (`Build & E2E`, `Anti-Pattern Audit`, linting, and security scans) are conditionally skipped, reporting a successful skipped check status so that repository rulesets are satisfied while saving CI runner minutes. When code paths are changed, the full gate suite executes.
 - **Audit Gate**: Compares current anti-pattern violations against `origin/main`. It fails if violations _increase_.
 - **Ratchet**: Enforces that `any` count and bundle size do not exceed the baseline variables.

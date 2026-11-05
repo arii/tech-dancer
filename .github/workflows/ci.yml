@@ -28,29 +28,6 @@ on:
       - '.npmrc'
   pull_request:
     branches: ['**']
-    paths:
-      - 'src/**'
-      - 'etl/**'
-      - '.gitmodules'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/**'
-      - '.github/actions/**'
-      - 'AGENTS.md'
-      - 'docs/github-workflows.md'
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
-      - '**.mjs'
-      - '**.json'
-      - '**.yaml'
-      - '**.yml'
-      - '**.ini'
-      - '**.html'
-      - '.npmrc'
   workflow_dispatch:
   schedule:
     - cron: '45 4 * * 6'
@@ -76,8 +53,91 @@ env:
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
 jobs:
+  verify-changes:
+    name: Verify Code Changes
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      has_code_changes: ${{ steps.check_diff.outputs.has_code_changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 0
+      - name: Verify Code Modifications
+        id: check_diff
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF"
+            if git rev-parse --verify "origin/$BASE_REF" >/dev/null 2>&1; then
+              RANGE="origin/$BASE_REF...HEAD"
+            else
+              RANGE="FETCH_HEAD...HEAD"
+            fi
+          else
+            RANGE="$BEFORE_SHA"
+            if [ -z "$RANGE" ] || [ "$RANGE" = "0000000000000000000000000000000000000000" ]; then
+              RANGE="HEAD~1"
+              if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then RANGE=""; fi
+            fi
+          fi
+
+          CODE_PATHS=(
+            'src/'
+            'etl/'
+            '.gitmodules'
+            'tests/'
+            'scripts/'
+            'package.json'
+            'pnpm-lock.yaml'
+            'pnpm-workspace.yaml'
+            '.github/workflows/'
+            '.github/actions/'
+            'AGENTS.md'
+            'docs/github-workflows.md'
+            '.npmrc'
+            ':(glob)**/*.ts'
+            ':(glob)**/*.tsx'
+            ':(glob)**/*.js'
+            ':(glob)**/*.mjs'
+            ':(glob)**/*.json'
+            ':(glob)**/*.yaml'
+            ':(glob)**/*.yml'
+            ':(glob)**/*.ini'
+            ':(glob)**/*.html'
+          )
+
+          if [ -n "$RANGE" ]; then
+            if [[ "$RANGE" == *...* ]]; then
+              DIFF_CMD=(git diff --quiet "$RANGE" -- "${CODE_PATHS[@]}")
+            else
+              DIFF_CMD=(git diff --quiet "$RANGE" HEAD -- "${CODE_PATHS[@]}")
+            fi
+
+            if "${DIFF_CMD[@]}"; then
+              echo "No code changes detected in diff range $RANGE."
+              echo "has_code_changes=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "Code changes detected in diff range $RANGE."
+              echo "has_code_changes=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "No diff range found; assuming code changes."
+            echo "has_code_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
   lint-typecheck:
     name: Lint & Type Check
+    needs: [verify-changes]
+    if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -125,6 +185,8 @@ jobs:
 
   audit:
     name: Anti-Pattern Audit
+    needs: [verify-changes]
+    if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -161,6 +223,8 @@ jobs:
 
   test-build:
     name: Build & E2E
+    needs: [verify-changes]
+    if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
@@ -256,6 +320,8 @@ jobs:
 
   security-scan:
     name: Security Scan (${{ matrix.scanner }})
+    needs: [verify-changes]
+    if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -309,6 +375,8 @@ jobs:
 
   validate-workflows:
     name: Validate all workflow files
+    needs: [verify-changes]
+    if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
