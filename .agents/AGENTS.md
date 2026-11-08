@@ -148,10 +148,10 @@ Generated visual artifacts are stored in `artifacts/visual-review/<route-slug>/`
 
 To run the Gemini multimodal visual review orchestrator on targeted routes:
 
-```bash
-# Run visual review via Python impact script
-python3 scripts/send-jules-impact.py --route /blog/2026-06-01-event-travel-packing
-```
+> Retired: `scripts/send-jules-impact.py` was removed — `boomtick-cli`
+> dropped its Jules client and the Jules integration is retired.
+> Capture snapshots per section 1, then review through the current
+> Gemini review flow.
 
 This analyzes:
 - Multi-viewport layout shifts and breakpoint alignment
