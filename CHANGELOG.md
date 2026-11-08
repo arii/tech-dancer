@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.2...tech-dancer-v0.11.0) (2026-11-08)
+
+
+### Features
+
+* **content:** add heart rate monitor blog post and gear ([#4849](https://github.com/arii/tech-dancer/issues/4849)) ([1973b19](https://github.com/arii/tech-dancer/commit/1973b190d8565291ea80cfd46ee611050e90ec98))
+
 ## [0.10.2](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.1...tech-dancer-v0.10.2) (2026-11-03)
 
 
