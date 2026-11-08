@@ -255,15 +255,33 @@ function EditorialPostDetail({ post, onBack, backLabel }: EditorialPostDetailPro
                   <Stack direction={{ base: 'col', md: 'row' }} gap={{ base: 4, md: 3 }} width="full">
                     <Stack gap={2} flex={1} width="full">
                       <Text variant="mono" size="xs" weight="font-bold" color="dim">Front View</Text>
-                      <EditorialHero src={post.image} alt={`${post.title} - front`} />
+                      <EditorialHero
+                        src={post.image}
+                        alt={post.imageAlt || `${post.title} - front`}
+                        aspectRatio="square"
+                        objectFit={post.imageFit || 'cover'}
+                        objectPosition={post.imagePosition || 'top'}
+                      />
                     </Stack>
                     <Stack gap={2} flex={1} width="full">
                       <Text variant="mono" size="xs" weight="font-bold" color="dim">Back View</Text>
-                      <EditorialHero src={post.imageBack} alt={`${post.title} - back`} />
+                      <EditorialHero
+                        src={post.imageBack}
+                        alt={`${post.title} - back`}
+                        aspectRatio="square"
+                        objectFit={post.imageFit || 'cover'}
+                        objectPosition={post.imagePosition || 'top'}
+                      />
                     </Stack>
                   </Stack>
                 ) : (
-                  <EditorialHero src={post.image} alt={post.title} />
+                  <EditorialHero
+                    src={post.image}
+                    alt={post.imageAlt || post.title}
+                    aspectRatio={{ base: "square", md: "video" }}
+                    objectFit={post.imageFit || 'cover'}
+                    objectPosition={post.imagePosition || 'top'}
+                  />
                 )}
                 {post.image?.includes('/sketches/') && (
                   <Text variant="mono" size="xs" color="dim" className="italic">

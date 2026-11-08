@@ -17,11 +17,23 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       >
         Technical Specs
       </Text>
-      <Stack gap={3}>
+      <Stack as="dl" gap={2.5}>
         {Object.entries(specs).map(([key, value]) => (
-          <Stack key={key} gap={1}>
-            <Text variant="mono" size="xs" color="dim">{key}</Text>
-            <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
+          <Stack
+            as="div"
+            key={key}
+            direction={{ base: 'col', sm: 'row' }}
+            justify="between"
+            paddingY={1.5}
+            gap={{ base: 1, sm: 4 }}
+            className="border-b border-line/10"
+          >
+            <Text as="dt" variant="mono" size="xs" color="dim" uppercase tracking="wider">
+              {key}
+            </Text>
+            <Text as="dd" variant="mono" size="xs" weight="font-bold" color="main" className="sm:text-right">
+              {value}
+            </Text>
           </Stack>
         ))}
       </Stack>
@@ -39,7 +51,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
              <Text variant="display" size="2xl" weight="font-black" color="accent">The Verdict</Text>
           </Stack>
           <Text variant="body" size="lg" italic leading="relaxed" weight="font-medium" color="main">
-            "{verdict}"
+            {verdict}
           </Text>
        </Stack>
     </Box>
