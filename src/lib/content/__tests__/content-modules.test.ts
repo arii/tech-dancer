@@ -41,7 +41,9 @@ describe('src/lib/content/utils', () => {
     const text400 = Array(400).fill('word').join(' ');
     expect(readingTime(text400)).toBe(2);
 
-    expect(readingTime('', 'word '.repeat(40))).toBe(2);
+    // 'word '.repeat(40) splits to 41 tokens (trailing space) -> 41/20 = 2.05 -> Math.ceil = 3,
+    // matching the audited Math.ceil excerpt proxy in src/lib/content/utils.ts.
+    expect(readingTime('', 'word '.repeat(40))).toBe(3);
     expect(readingTime('', '')).toBe(1);
     expect(readingTime(undefined, undefined)).toBe(1);
   });
