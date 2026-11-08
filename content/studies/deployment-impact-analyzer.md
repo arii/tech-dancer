@@ -97,8 +97,8 @@ jobs:
         run: pnpm run impact:analysis
       - name: Visual Diffing
         run: pnpm run impact:visual-diff
-      - name: Post Report
-        run: python scripts/send-jules-impact.py
+      # Post Report step retired with scripts/send-jules-impact.py
+      # (removed: boomtick-cli dropped its Jules client)
 ```
 
 ### Example Report Output
