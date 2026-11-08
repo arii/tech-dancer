@@ -1,11 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { parse } from 'yaml';
 import { JSDOM } from 'jsdom';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 import { routes as ROUTE_CONFIGS } from '../src/config/routes.ts';
 import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
+import { parseFrontmatter } from '../src/lib/content/frontmatter.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,30 +13,6 @@ const __dirname = path.dirname(__filename);
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 const BASE_URL = 'https://boomtick.blog';
-
-function parseFrontmatter(content) {
-  if (!content || typeof content !== 'string' || !content.startsWith('---')) {
-    return { data: {}, content: content || '' };
-  }
-
-  const lineBreakLen = content.slice(3).startsWith('\r\n') ? 2 : (content.slice(3).startsWith('\n') ? 1 : 0);
-  if (lineBreakLen === 0) return { data: {}, content };
-
-  const startOffset = 3 + lineBreakLen;
-  const match = content.slice(startOffset).match(/(?:^|\r?\n)---(?:\r?\n|$)/);
-  if (!match || match.index === undefined) return { data: {}, content };
-
-  const yamlEndIndex = startOffset + match.index;
-  const yamlStr = content.slice(startOffset, yamlEndIndex).trim();
-  const body = content.slice(yamlEndIndex + match[0].length);
-
-  try {
-    const data = parse(yamlStr);
-    return { data: (data && typeof data === 'object') ? data : {}, content: body };
-  } catch {
-    return { data: {}, content: body };
-  }
-}
 
 // Automatically discover all routes
 const { stubs: STUB_ROUTES } = getAllRoutes();
