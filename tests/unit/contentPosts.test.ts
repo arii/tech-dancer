@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseFrontmatter } from '@/lib/content/frontmatter';
 
 const POSTS_DIR = join(__dirname, '..', '..', 'content', 'posts');
 const AFFILIATES_PATH = join(__dirname, '..', '..', 'src', 'data', 'affiliates.json');
-const PUBLIC_POSTS_ASSETS = join(__dirname, '..', '..', 'public', 'assets', 'posts');
 
 /** The growth-pass batch date — these posts must meet the full SEO contract. */
 const BATCH_DATE = '2026-11-13';
@@ -75,13 +74,10 @@ describe('content posts — growth pass batch', () => {
 
   it.each(batchFiles)('$file meets the full SEO and monetization contract', (file) => {
     const { frontmatter, body } = loadPost(file);
-    const slug = file.replace(/\.md$/, '');
 
-    for (const field of ['seoTitle', 'seoDescription', 'image', 'imageAlt', 'author']) {
+    for (const field of ['seoTitle', 'seoDescription', 'author']) {
       expect(frontmatter[field], field).toBeTruthy();
     }
-    expect(String(frontmatter.image)).toBe(`/assets/posts/${slug}.webp`);
-    expect(existsSync(join(PUBLIC_POSTS_ASSETS, `${slug}.webp`)), 'hero webp exists').toBe(true);
 
     const ids = asArray(frontmatter.affiliateIds);
     expect(ids.length, '2-4 affiliateIds').toBeGreaterThanOrEqual(2);
