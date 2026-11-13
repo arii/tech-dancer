@@ -118,13 +118,13 @@
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
   .glass-panel {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.65);
     backdrop-filter: blur(1.5rem);
-    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0.5rem 2rem 0 rgba(0, 0, 0, 0.2);
+    border: 0.0625rem solid rgba(32, 29, 26, 0.08);
+    box-shadow: 0 0.5rem 2rem 0 rgba(32, 29, 26, 0.08);
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
-  .text-glow { text-shadow: 0 0 1.25rem rgba(8, 145, 178, 0.4); }
+  .text-glow { text-shadow: 0 0 1.25rem rgba(166, 61, 30, 0.25); }
   .gold-accent {
     border-color: var(--raw-color-line);
     transition: border-color 200ms;
@@ -149,8 +149,8 @@
   }
   .grid-pattern {
     background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.02) 0.0625rem, transparent 0.0625rem),
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 0.0625rem, transparent 0.0625rem);
+      linear-gradient(to right, rgba(32,29,26,0.04) 0.0625rem, transparent 0.0625rem),
+      linear-gradient(to bottom, rgba(32,29,26,0.04) 0.0625rem, transparent 0.0625rem);
     background-size: 1.25rem 1.25rem;
   }
 

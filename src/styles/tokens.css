@@ -1,29 +1,29 @@
 /* Design Token Registry for BoomTick UI */
 :root {
-  /* Colors - High-Tech Dark Theme Refined */
-  --raw-color-bg: #020617; /* impeccable-ignore */
-  --raw-color-surface: #0f172a; /* impeccable-ignore */
-  --raw-color-surface-alt: #1e293b; /* impeccable-ignore */
-  --raw-color-line: #334155; /* impeccable-ignore */
-  --raw-color-accent: #22d3ee; /* impeccable-ignore */
-  --raw-color-accent-sky: #38bdf8; /* impeccable-ignore */
-  --raw-color-accent-purple: #a78bfa; /* impeccable-ignore */
-  --raw-color-accent-magenta: #e879f9; /* impeccable-ignore */
-  --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
-  --raw-color-accent-navy: #f1f5f9; /* impeccable-ignore */
-  --raw-color-accent-brand: #22d3ee; /* impeccable-ignore */
-  --raw-color-text-main: #f1f5f9; /* impeccable-ignore */
-  --raw-color-text-body: #e2e8f0; /* impeccable-ignore */
-  --raw-color-text-dim: #cbd5e1; /* impeccable-ignore */
-  --raw-color-error: #ef4444; /* impeccable-ignore */
-  --raw-color-error-bg: #1a0a0a; /* impeccable-ignore */
+  /* Colors - Light Editorial Theme (warm paper, ink text, terracotta accent) */
+  --raw-color-bg: #faf7f2; /* impeccable-ignore */
+  --raw-color-surface: #ffffff; /* impeccable-ignore */
+  --raw-color-surface-alt: #f3eee4; /* impeccable-ignore */
+  --raw-color-line: #ddd3c4; /* impeccable-ignore */
+  --raw-color-accent: #a63d1e; /* impeccable-ignore */
+  --raw-color-accent-sky: #22677a; /* impeccable-ignore */
+  --raw-color-accent-purple: #5e4c7a; /* impeccable-ignore */
+  --raw-color-accent-magenta: #a1435e; /* impeccable-ignore */
+  --raw-color-accent-shadow: rgba(166, 61, 30, 0.15);
+  --raw-color-accent-navy: #201d1a; /* impeccable-ignore */
+  --raw-color-accent-brand: #a63d1e; /* impeccable-ignore */
+  --raw-color-text-main: #201d1a; /* impeccable-ignore */
+  --raw-color-text-body: #3a352e; /* impeccable-ignore */
+  --raw-color-text-dim: #5f594e; /* impeccable-ignore */
+  --raw-color-error: #b3261e; /* impeccable-ignore */
+  --raw-color-error-bg: #fbeeec; /* impeccable-ignore */
 
   /* Brand Palette Extension */
-  --raw-color-brand-green: #34d399; /* impeccable-ignore */
-  --raw-color-brand-amber: #fbbf24; /* impeccable-ignore */
-  --raw-color-brand-terminal-red: #ff5f56; /* impeccable-ignore */
-  --raw-color-brand-terminal-yellow: #ffbd2e; /* impeccable-ignore */
-  --raw-color-brand-terminal-green: #27c93f; /* impeccable-ignore */
+  --raw-color-brand-green: #1e7a4a; /* impeccable-ignore */
+  --raw-color-brand-amber: #8a5a0a; /* impeccable-ignore */
+  --raw-color-brand-terminal-red: #c73a30; /* impeccable-ignore */
+  --raw-color-brand-terminal-yellow: #d9a416; /* impeccable-ignore */
+  --raw-color-brand-terminal-green: #2e9e4a; /* impeccable-ignore */
 
   /* Banner Support */
   --color-background-secondary: var(--raw-color-surface-alt);
@@ -32,9 +32,9 @@
   --color-text-tertiary: var(--raw-color-text-dim);
   --border-radius-md: var(--raw-radius-md);
 
-  /* Typography */
+  /* Typography - editorial serif display, sans body, mono meta */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --raw-font-display: "Bricolage Grotesque", "Albert Sans", sans-serif;
+  --raw-font-display: "Playfair Display", Georgia, serif;
   --raw-font-serif: "Playfair Display", Georgia, serif;
   --raw-font-mono: "Space Mono", monospace;
 
@@ -93,7 +93,7 @@
   --raw-z-search: 200;
 
   /* Shadows */
-  --raw-shadow-top-overlay: 0 -0.625rem 2.5rem rgba(0,0,0,0.3);
+  --raw-shadow-top-overlay: 0 -0.625rem 2.5rem rgba(32, 29, 26, 0.08);
 
   /* Brand Logo */
   --brand-logo-size-text: 3.25rem;
@@ -105,7 +105,7 @@
   --hero-bg: var(--raw-color-bg);
   --hero-accent: var(--raw-color-accent-brand);
   --hero-slash-gradient: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
-  --hero-slash-glow: 0 0 2rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 4rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent);
+  --hero-slash-glow: 0 0 2rem color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent), 0 0 4rem color-mix(in srgb, var(--raw-color-accent-purple) 10%, transparent);
   --hero-accent-shadow: color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent);
   --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 60%, transparent);
   --brand-gradient-main: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
@@ -113,8 +113,8 @@
 }
 
 @keyframes glowPulse {
-  from { box-shadow: 0 0 1.25rem color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 2.5rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent); }
-  to   { box-shadow: 0 0 3rem color-mix(in srgb, var(--raw-color-accent-brand) 70%, transparent), 0 0 6rem color-mix(in srgb, var(--raw-color-accent-purple) 40%, transparent); }
+  from { box-shadow: 0 0 1.25rem color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent), 0 0 2.5rem color-mix(in srgb, var(--raw-color-accent-purple) 10%, transparent); }
+  to   { box-shadow: 0 0 3rem color-mix(in srgb, var(--raw-color-accent-brand) 35%, transparent), 0 0 6rem color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent); }
 }
 @keyframes bounce {
   from { transform: scaleY(0.15); }
@@ -133,25 +133,25 @@
   font-size: 0.6875rem !important;
   padding: 0.125rem 0.5rem !important;
   border-radius: 0.25rem !important;
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(32, 29, 26, 0.04) !important;
   color: var(--color-text-secondary) !important;
-  border: 0.03125rem solid rgba(255, 255, 255, 0.1) !important;
+  border: 0.03125rem solid rgba(32, 29, 26, 0.1) !important;
   display: inline-flex !important;
   align-items: center !important;
 }
 
-.card-border { border: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
-.card-border-t { border-top: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
-.card-border-b { border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
-.card-border-l { border-left: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
-.card-border-r { border-right: 0.03125rem solid rgba(255, 255, 255, 0.08) !important; }
+.card-border { border: 0.03125rem solid var(--raw-color-line) !important; }
+.card-border-t { border-top: 0.03125rem solid var(--raw-color-line) !important; }
+.card-border-b { border-bottom: 0.03125rem solid var(--raw-color-line) !important; }
+.card-border-l { border-left: 0.03125rem solid var(--raw-color-line) !important; }
+.card-border-r { border-right: 0.03125rem solid var(--raw-color-line) !important; }
 .card-border-x {
-  border-left: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
-  border-right: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 0.03125rem solid var(--raw-color-line) !important;
+  border-right: 0.03125rem solid var(--raw-color-line) !important;
 }
 .card-border-y {
-  border-top: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
-  border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 0.03125rem solid var(--raw-color-line) !important;
+  border-bottom: 0.03125rem solid var(--raw-color-line) !important;
 }
 
 .cv-auto-card { content-visibility: auto; contain-intrinsic-size: 0 23.75rem; }
