@@ -2,7 +2,7 @@
 type: post
 title: "WCS Timing Explained: the Slot, the Anchor, and the '&'-Count"
 seoTitle: "West Coast Swing Timing Explained: Slot, Anchor, and Counts | BoomTick"
-seoDescription: "How West Coast Swing timing actually works: the 6- and 8-count patterns, the slot, why the anchor is 'the &' of the count, and how to stop dancing early."
+seoDescription: "How West Coast Swing timing actually works: the 6- and 8-count patterns, the slot, why the anchor ends the pattern, and how to stop dancing early."
 date: "2026-11-13"
 author: "Ariel Anders"
 category: "WCS"
@@ -24,7 +24,7 @@ West Coast Swing is the social dance that refuses to sit still — it borrows ti
 
 ## First, the Counts
 
-Most WCS patterns are six counts or eight counts long. A six-count basic is "walk, walk, triple, triple" — counted **1, 2, 3-& 5, 6-&** in most classes. Those "&" beats are not decoration: they are where the triple steps live, and they are where timing goes to die. Dancers who rush are almost always early on the "&", compressing the triple and arriving at the end of the pattern before the music does.
+Most WCS patterns are six counts or eight counts long. A six-count basic is "walk, walk, triple, triple" — counted **1, 2, 3&4, 5&6** in most classes. Those "&" beats are not decoration: they are where the triple steps live, and they are where timing goes to die. Dancers who rush are almost always early on the "&", compressing the triple and arriving at the end of the pattern before the music does.
 
 If you internalize one thing: **the "&" is a real beat.** It gets its own weight transfer. Practice deliberately late — put your "&" on the music's "&" — and your dancing will instantly look calmer than half the room. We cover the practice method for this in [How to Film Your Own WCS Practice](/blog/2026-11-13-film-your-own-wcs-practice).
 
@@ -32,11 +32,11 @@ If you internalize one thing: **the "&" is a real beat.** It gets its own weight
 
 The slot — the long, narrow lane WCS dancers travel along — is usually explained as spatial etiquette: lead stays in place, follower travels, everyone's lane stays clear. But the slot is also a *timing* structure. The follower's trips to the end of the slot are the pulse of the dance; the anchor at the end of each pattern is the checkpoint where both partners reset their clocks.
 
-That is why the anchor is "the & of the count": it belongs slightly *after* the pattern's last full beat, a controlled landing rather than a stop. Anchor early and the connection dies before the next pattern; anchor late and you are behind for the entire next eight counts.
+That is why the anchor completes the pattern: it is the final triple step — counts **5&6** on the six-count basic — a controlled landing rather than a stop. Anchor early and the connection dies before the next pattern; anchor late and you are behind for the entire next eight counts.
 
 ## Why WCS Feels Looser Than Other Dances
 
-In most social dances, the pattern *is* the timing. In WCS, the pattern rides on top of the music's groove — the "one" of your pattern rarely lines up with the "one" of the song for long. This is intentional. It is what lets the same six-count basic fit a blues shuffle and a 128- BPM pop track. The practical takeaway: stop trying to align your count with the song's count, and start listening for the pulse and the phrase.
+In most social dances, the pattern *is* the timing. In WCS, the pattern rides on top of the music's groove — the "one" of your pattern rarely lines up with the "one" of the song for long. This is intentional. It is what lets the same six-count basic fit a blues shuffle and a 128 BPM pop track. The practical takeaway: stop trying to align your count with the song's count, and start listening for the pulse and the phrase.
 
 ## A Five-Step Drill for Better Timing
 
