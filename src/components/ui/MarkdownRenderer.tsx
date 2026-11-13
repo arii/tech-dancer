@@ -45,7 +45,6 @@ import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
 import { ResponsiveDiagram } from './ResponsiveDiagram';
-import { AdSlot } from '@/components/ads/AdSlot';
 
 const ALLOWED_PROPS = new Set([
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
@@ -126,15 +125,6 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
     }
   }
   return <Notice type={props.type as 'info' | 'warning' | 'related'}>{props.children}</Notice>;
-};
-
-/**
- * In-article ad slot from markdown. Defaults to the in-article placement;
- * unknown values fall back to it rather than crashing a post render.
- */
-const RenderAdSlot = (props: { placement?: string }) => {
-  const placement = props.placement === 'sidebar' || props.placement === 'listing' ? props.placement : 'in-article';
-  return <AdSlot placement={placement} />;
 };
 
 /**
@@ -439,9 +429,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           code: RenderCode,
           notice: RenderNotice,
-          Notice: RenderNotice,
-          adslot: RenderAdSlot,
-          AdSlot: RenderAdSlot
+          Notice: RenderNotice
         }}
       >
         {processedContent}
