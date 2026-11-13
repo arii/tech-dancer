@@ -63,7 +63,7 @@ export function HeroSection() {
           <Text
             as="span"
             variant="hero"
-            color="white"
+            color="main"
             size={{ base: "3xl", md: "5xl", lg: "6xl" }}
             display="block"
           >
@@ -91,7 +91,7 @@ export function HeroSection() {
         >
           <Box
             width="0.5"
-            className="bg-white/20 shrink-0"
+            className="bg-text-main/20 shrink-0"
             aria-hidden="true"
           />
           <Text

@@ -52,7 +52,7 @@ export function EditorialPostView({
       sidebar={sidebar}
       footer={footer}
     >
-      <Box className="prose-editorial prose prose-invert max-w-none">
+      <Box className="prose-editorial prose max-w-none">
         <MarkdownRenderer content={post.content} />
       </Box>
       {children}

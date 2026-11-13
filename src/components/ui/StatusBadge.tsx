@@ -17,7 +17,7 @@ export const StatusBadge = ({ label, className }: { label?: string; className?: 
       paddingY={0.5}
       radius="full"
       surface={surface}
-      className={cn("border border-white/5", className)}
+      className={cn("border border-line/20", className)}
     >
       <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" color={isSuccess ? "accent" : "dim"}>
         {label}

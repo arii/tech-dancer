@@ -79,7 +79,7 @@ export function Footer() {
               <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
                 © 2026 BOOMTICK.BLOG
               </Text>
-              <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
+              <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-text-main/10" />
               <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>
                 <Text variant="mono" tracking="wider" uppercase>
                   {isDev ? 'dev' : `v${appVersion}`} (

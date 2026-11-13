@@ -58,7 +58,7 @@ export function HeroParticleCanvas({
         vy: (((i * seeds.PARTICLE_VY) % 1) - 0.5) * velocityFactor,
         alpha,
         hue,
-        fillStyle: `hsla(${hue}, 100%, 70%, ${alpha})`,
+        fillStyle: `hsla(${hue}, 85%, 45%, ${alpha})`,
       };
     });
 

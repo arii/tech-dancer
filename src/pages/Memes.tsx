@@ -171,7 +171,7 @@ const Memes = () => {
             top={4}
             right={4}
             padding={2}
-            className="text-white hover:text-accent cursor-pointer"
+            className="text-text-main hover:text-accent cursor-pointer"
             onClick={() => setLightboxImage(null)}
             aria-label="Close enlarged meme view"
             data-testid="lightbox-close-button"
@@ -181,7 +181,7 @@ const Memes = () => {
           <img
             src={lightboxImage}
             alt="Expanded meme preview"
-            className="w-full h-full object-contain rounded-lg border border-white/10 shadow-2xl cursor-default"
+            className="w-full h-full object-contain rounded-lg border border-line/30 shadow-2xl cursor-default"
             onClick={(e) => e.stopPropagation()}
             data-testid="lightbox-image"
           />

@@ -35,7 +35,7 @@ export function PromoStrip({
       border="line"
       bg="surface"
       display="block"
-      className="group transition-all hover:bg-white/5"
+      className="group transition-all hover:bg-line/10"
     >
       <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
         <Box
@@ -43,7 +43,7 @@ export function PromoStrip({
           height={{ base: 10, sm: 12 }}
           radius="md"
           overflow="hidden"
-          className="shrink-0 bg-white/10"
+          className="shrink-0 bg-text-main/10"
         >
           <img
             loading="lazy"
