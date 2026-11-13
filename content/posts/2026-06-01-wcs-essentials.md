@@ -16,7 +16,7 @@ tags:
   - "wcs"
 ---
 
-Whether you're heading to a local social or traveling across the country for a convention, these items are high-priority essentials for any West Coast Swing dancer. Browse our [essential West Coast Swing gear collection](/gear).
+Whether you're heading to a local social or traveling across the country for a convention, these items are high-priority essentials for any West Coast Swing dancer. For event planning, try our [interactive WCS Navigator event planner](/wcs-navigator) and browse our [essential West Coast Swing gear collection](/gear).
 
 ![A hand-drawn sketch of a large holographic rave fan with black bamboo ribs, shown both folded and fully open with a vibrant rainbow pattern, alongside its blue carrying pouch.](/images/gear/sketches/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.webp)
 

@@ -4,7 +4,7 @@
  */
 
 // Re-export types
-export type { Post, Resource, ContentItem, ContentStatus } from './types/content';
+export type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
 
 // Re-export frontmatter parsing
 export { parseFrontmatter } from './content/frontmatter';
@@ -15,9 +15,10 @@ export { normalizeAsset, normalizeStatus } from './content/assets';
 // Re-export utilities
 export { readingTime, normalizeReadTime } from './content/utils';
 
-// Re-export posts and resources query methods
+// Re-export posts, studies, and resources query methods
 export {
   getPosts,
+  getStudies,
   getPostBySlug,
   getResources,
   getResourceBySlug,

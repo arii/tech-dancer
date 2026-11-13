@@ -1,0 +1,716 @@
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { AgentDecisionTrace, AuditSession, ThemeDressCode, FlightBuffer } from '../types';
+import { DiscoveryResponse, QuestionAnswerValue } from '../types/navigator';
+import { ServiceTelemetry } from '../services/wcsApiClient';
+import { FlightBufferTimeline } from './FlightBufferTimeline';
+import { FullScheduleModal } from './FullScheduleModal';
+import { DecisionDebugInspector } from './DecisionDebugInspector';
+import { downloadIcsFile } from '../utils/icsDownloader';
+import { useNavigatorStorage } from '../hooks/useNavigatorStorage';
+import {
+  Download,
+  CheckCircle2,
+  X,
+  FileText,
+  Clock,
+  MapPin,
+  Calendar,
+  Sparkles,
+  Shirt,
+  ListFilter,
+  RotateCcw,
+  Cpu,
+} from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
+export interface AgentMindTraceProps {
+  trace?: Partial<AgentDecisionTrace>;
+  visualScheduleMarkdown?: string;
+  className?: string;
+  activeEventName?: string;
+  selectedDivision?: string;
+  selectedRole?: string;
+  telemetry?: ServiceTelemetry;
+  answers?: Record<string, QuestionAnswerValue>;
+  discoveryData?: DiscoveryResponse;
+}
+
+function buildDynamicIcs(
+  eventName: string,
+  sessions: AuditSession[],
+  buffer?: FlightBuffer
+): string {
+  const stagingTime = buffer?.earliestStagingTime || '5:15 PM';
+
+  const events = [
+    [
+      'BEGIN:VEVENT',
+      `UID:flight-landing-${Date.now()}@wcs-navigator.boomtick.blog`,
+      'SUMMARY:✈️ Target Flight Landing Deadline',
+      `DESCRIPTION:Recommended latest flight touchdown before ${stagingTime}. Computed by WCS Navigator.`,
+      'DTSTART:20261009T212500Z',
+      'DTEND:20261009T215500Z',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Reminder: Flight landing deadline for WCS convention',
+      'END:VALARM',
+      'END:VEVENT',
+    ].join('\r\n'),
+    ...sessions.map((s, i) =>
+      [
+        'BEGIN:VEVENT',
+        `UID:session-${i}-${Date.now()}@wcs-navigator.boomtick.blog`,
+        `SUMMARY:${s.title}`,
+        `DESCRIPTION:Scheduled at ${s.time} in ${s.location}. ${s.justification}`,
+        `LOCATION:${s.location}`,
+        'DTSTART:20261010T170000Z',
+        'DTEND:20261010T181500Z',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:Reminder: ${s.title}`,
+        'END:VALARM',
+        'END:VEVENT',
+      ].join('\r\n')
+    ),
+  ];
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//WCS Navigator//Event Calendar Generator//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${eventName} Custom Schedule`,
+    ...events,
+    'END:VCALENDAR',
+  ].join('\r\n');
+}
+
+function getSessionCategory(session: AuditSession) {
+  const title = session.title.toLowerCase();
+  if (title.includes('prelim') || title.includes('strictly') || title.includes('competition') || title.includes('jack & jill')) {
+    return {
+      badge: '🏆 Competition',
+      style: 'bg-amber-950/20 border-amber-500/35 text-amber-300',
+    };
+  }
+  if (title.includes('social') || title.includes('party') || title.includes('glow') || title.includes('gala') || title.includes('survivor')) {
+    return {
+      badge: '🌙 Social Dancing',
+      style: 'bg-purple-950/20 border-purple-500/35 text-purple-300',
+    };
+  }
+  if (title.includes('break') || title.includes('lunch') || title.includes('dinner')) {
+    return {
+      badge: '🍽️ Meal / Rest Break',
+      style: 'bg-emerald-950/20 border-emerald-500/35 text-emerald-300',
+    };
+  }
+  return {
+    badge: '🧠 Workshop',
+    style: 'bg-cyan-950/20 border-cyan-500/35 text-cyan-300',
+  };
+}
+
+function toTitleCase(str: string) {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function SessionCard({ session, onToggleSession }: { session: AuditSession; onToggleSession: (id: string) => void }) {
+  const { badge, style } = getSessionCategory(session);
+
+  return (
+    <Box
+      key={session.id}
+      padding={{ default: 4, sm: 5 }}
+      radius="xl"
+      border
+      className={`transition-all ${style} hover:border-white/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6`}
+    >
+      <Stack
+        direction={{ base: 'row', sm: 'col' }}
+        align={{ base: 'center', sm: 'start' }}
+        justify={{ base: 'between', sm: 'center' }}
+        gap={2}
+        paddingBottom={{ base: 2.5, sm: 0 }}
+        paddingRight={{ base: 0, sm: 4 }}
+        className="sm:w-60 md:w-64 shrink-0 min-w-0 border-b sm:border-b-0 sm:border-r border-line"
+      >
+        <Stack direction="row" align="center" gap={2} className="min-w-0">
+          <Clock className="w-4 h-4 text-brand-cyan shrink-0" />
+          <Text variant="mono" size="sm" weight="font-bold" color="main" tracking="wide" className="break-words">
+            {session.time}
+          </Text>
+        </Stack>
+        <Text variant="mono" size="xs" weight="font-semibold" paddingX={2.5} paddingY={1} radius="md" className="bg-white/10 w-fit shrink-0">
+          {badge}
+        </Text>
+      </Stack>
+
+      <Stack gap={1.5} justify="center" flex={1} minWidth={0} className="min-w-0">
+        <Text as="h4" weight="font-bold" size="base" color="main" leading="snug" className="break-words">
+          {session.title}
+        </Text>
+        <Stack direction="col" gap={1} className="text-xs text-text-dim">
+          <Stack direction="row" align="center" gap={1.5}>
+            <MapPin className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+            <Text as="span" size="xs" color="main" weight="font-medium" className="break-words">{session.location}</Text>
+          </Stack>
+          {session.justification && (
+            <Text as="span" size="xs" color="dim" className="leading-relaxed break-words text-text-dim/80">
+              {session.justification}
+            </Text>
+          )}
+        </Stack>
+      </Stack>
+
+      <Stack direction="row" align="center" justify="end" paddingTop={{ base: 2, sm: 0 }} className="shrink-0 border-t sm:border-t-0 border-line">
+        <Stack
+          as="button"
+          direction="row"
+          align="center"
+          gap={1.5}
+          paddingX={3.5}
+          paddingY={2}
+          radius="lg"
+          type="button"
+          onClick={() => onToggleSession(session.id)}
+          aria-label={`Remove ${session.title}`}
+          title="Remove from my schedule"
+          className="min-h-11 text-xs font-mono text-text-dim hover:text-error hover:bg-error/10 bg-surface/50 border border-line/60 hover:border-error/40 transition-colors cursor-pointer font-medium"
+        >
+          <Icon icon={X} size="xs" />
+          <span>Remove</span>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+}
+
+function ThemeCard({ theme }: { theme?: ThemeDressCode }) {
+  if (!theme) return null;
+
+  return (
+    <Box
+      display="flex"
+      flex="col"
+      align="start"
+      gap={2.5}
+      padding={3.5}
+      radius="xl"
+      marginY={1}
+      width="full"
+      className="bg-surface-alt/70 border border-white/10 text-xs"
+    >
+      <Stack direction="row" align="center" gap={2} flexWrap="wrap">
+        <Shirt className="w-4 h-4 text-brand-cyan shrink-0" />
+        <span className="font-semibold text-xs sm:text-sm text-white">
+          {theme.day} Theme: {theme.themeTitle}
+        </span>
+        <Text as="span" size="xs" color="dim">
+          ({theme.vibe})
+        </Text>
+      </Stack>
+      <Box display="flex" wrap gap={1.5} align="center">
+        {theme.recommendedAttire.map((attire, i) => (
+          <Text
+            as="span"
+            key={i}
+            size="xs"
+            color="main"
+            weight="font-medium"
+            paddingX={3}
+            paddingY={1}
+            radius="full"
+            border
+            className="bg-surface border-line/60 shadow-sm"
+          >
+            {toTitleCase(attire)}
+          </Text>
+        ))}
+      </Box>
+    </Box>
+  );
+}
+
+export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
+  trace,
+  visualScheduleMarkdown: _visualScheduleMarkdown,
+  className,
+  activeEventName = 'South Bay Dance Fling 2026',
+  selectedDivision = 'novice',
+  selectedRole,
+  telemetry,
+  answers = {},
+  discoveryData,
+}) => {
+  const { getSavedSchedule, saveCustomSchedule, clearCustomSchedule } =
+    useNavigatorStorage(activeEventName);
+
+  const [isFullScheduleOpen, setIsFullScheduleOpen] = useState(false);
+  const [isDebugInspectorOpen, setIsDebugInspectorOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ title: '', message: '', file: '' });
+
+  const [customOverrides, setCustomOverrides] = useState<Record<string, 'included' | 'filtered'>>({});
+
+  const allSessions = useMemo(() => {
+    const raw = trace?.sessions || [];
+    const savedIncludedIds = getSavedSchedule(activeEventName);
+
+    return raw.map((s) => {
+      if (customOverrides[s.id]) {
+        return { ...s, status: customOverrides[s.id] };
+      }
+      if (savedIncludedIds && savedIncludedIds.length > 0) {
+        return {
+          ...s,
+          status: savedIncludedIds.includes(s.id) ? ('included' as const) : ('filtered' as const),
+        };
+      }
+      return s;
+    });
+  }, [trace?.sessions, customOverrides, activeEventName, getSavedSchedule]);
+
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const showFeedbackToast = (title: string, message: string, file: string) => {
+    setToastMessage({ title, message, file });
+    setShowToast(true);
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = setTimeout(() => {
+      setShowToast(false);
+    }, 4500);
+  };
+
+  const handleToggleSession = useCallback(
+    (sessionId: string) => {
+      const currentSession = allSessions.find((s) => s.id === sessionId);
+      const nextStatus = currentSession?.status === 'included' ? ('filtered' as const) : ('included' as const);
+
+      setCustomOverrides((prev) => ({
+        ...prev,
+        [sessionId]: nextStatus,
+      }));
+
+      const updatedIncludedIds = allSessions
+        .map((s) => (s.id === sessionId ? { ...s, status: nextStatus } : s))
+        .filter((s) => s.status === 'included')
+        .map((s) => s.id);
+
+      saveCustomSchedule(activeEventName, updatedIncludedIds);
+
+      const actionLabel = nextStatus === 'included' ? 'Added to' : 'Removed from';
+      showFeedbackToast(
+        'Itinerary Updated',
+        `${actionLabel} your schedule: ${currentSession?.title || 'Session'}`,
+        'schedule.ics'
+      );
+    },
+    [activeEventName, allSessions, saveCustomSchedule]
+  );
+
+  const handleResetToAiPlan = useCallback(() => {
+    clearCustomSchedule(activeEventName);
+    setCustomOverrides({});
+    showFeedbackToast(
+      'Schedule Reset',
+      'Restored original AI recommended schedule.',
+      'wcs-schedule.ics'
+    );
+  }, [activeEventName, clearCustomSchedule]);
+
+  const includedSessions = useMemo(() => {
+    return allSessions.filter((s) => s.status === 'included');
+  }, [allSessions]);
+
+  const handleDownloadCalendar = () => {
+    const icsString = buildDynamicIcs(activeEventName, includedSessions, trace?.bufferTimeline);
+    downloadIcsFile(
+      icsString,
+      `${activeEventName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-schedule.ics`
+    );
+    showFeedbackToast(
+      'Calendar Downloaded (.ics)',
+      'is ready to import into Apple Calendar, Google Calendar, or Outlook.',
+      'wcs-schedule.ics'
+    );
+  };
+
+  const handleDownloadVisualSchedule = () => {
+    const themes = trace?.themeDressCodes || [];
+    const buffer = trace?.bufferTimeline;
+
+    const dynamicMarkdown = [
+      `# 🕺 Custom Weekend Itinerary: ${activeEventName}`,
+      `> Generated by WCS Navigator for **${selectedDivision.toUpperCase()} ${selectedRole.toUpperCase()}**`,
+      '',
+      '## ✈️ Travel & Arrival Buffer Target',
+      `- **Earliest Event Staging Call:** ${buffer?.earliestStagingTime || '5:15 PM Friday'}`,
+      `- **Recommended Flight Touchdown:** ${buffer?.latestFlightArrivalDeadline || '2:15 PM Friday'}`,
+      `- **Buffer Breakdown:** ${buffer?.transitMinutes || 30}m Transit + ${buffer?.hotelSettleMinutes || 90}m Hotel Settle + ${buffer?.warmupMinutes || 60}m Warmup`,
+      '',
+      '## 📅 Customized Schedule & Sessions',
+      ...includedSessions.map(
+        (s) => `### ✅ ${s.title}\n- **Time:** ${s.time}\n- **Location:** ${s.location}\n- **Note:** ${s.justification}\n`
+      ),
+      '',
+      '## 🎭 Party Themes & Dress Codes',
+      ...themes.map(
+        (t) => `### 🌟 ${t.day}: ${t.themeTitle}\n- **Atmosphere:** ${t.vibe}\n- **Outfits:** ${t.recommendedAttire.join(', ')}\n`
+      ),
+    ].join('\n');
+
+    const content = dynamicMarkdown;
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'wcs-visual-schedule.md');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showFeedbackToast(
+      'Mobile Schedule Downloaded (.md)',
+      'is ready to view on your device.',
+      'wcs-visual-schedule.md'
+    );
+  };
+
+  const sessionsByDay = useMemo(() => {
+    const thursday = includedSessions.filter((s) => s.time.toLowerCase().includes('thu'));
+    const friday = includedSessions.filter((s) => s.time.toLowerCase().includes('fri'));
+    const saturday = includedSessions.filter((s) => s.time.toLowerCase().includes('sat'));
+    const sunday = includedSessions.filter((s) => s.time.toLowerCase().includes('sun'));
+    const other = includedSessions.filter((s) => {
+      const t = s.time.toLowerCase();
+      return !t.includes('thu') && !t.includes('fri') && !t.includes('sat') && !t.includes('sun');
+    });
+
+    return { thursday, friday, saturday, sunday, other };
+  }, [includedSessions]);
+
+  const themesByDay = useMemo(() => {
+    const rawThemes = trace?.themeDressCodes || [];
+    const thursday = rawThemes.find((t) => t.day.toLowerCase().includes('thu'));
+    const friday = rawThemes.find((t) => t.day.toLowerCase().includes('fri'));
+    const saturday = rawThemes.find((t) => t.day.toLowerCase().includes('sat'));
+    const sunday = rawThemes.find((t) => t.day.toLowerCase().includes('sun'));
+
+    return { thursday, friday, saturday, sunday };
+  }, [trace?.themeDressCodes]);
+
+  return (
+    <Stack gap={6} className={className} width="full">
+      {/* Toast Notification */}
+      {showToast && (
+        <Box
+          role="status"
+          aria-live="polite"
+          padding={4}
+          radius="xl"
+          border
+          shadow="2xl"
+          className="fixed bottom-6 right-4 sm:right-6 md:right-8 z-50 max-w-sm w-full bg-surface-alt/95 backdrop-blur-xl border-brand-cyan/40 motion-safe:transition-all"
+        >
+          <Box display="flex" align="start" justify="between" gap={3}>
+            <Box display="flex" align="start" gap={3}>
+              <Box padding={1.5} radius="full" className="bg-brand-cyan/20 text-brand-cyan shrink-0">
+                <Icon icon={CheckCircle2} size="sm" color="accent" />
+              </Box>
+              <Stack gap={0.5}>
+                <Text weight="font-bold" size="sm" color="main">
+                  {toastMessage.title}
+                </Text>
+                <Text size="xs" color="dim" leading="relaxed">
+                  <span className="text-white font-mono font-semibold">{toastMessage.file}</span> {toastMessage.message}
+                </Text>
+              </Stack>
+            </Box>
+            <Box
+              as="button"
+              type="button"
+              aria-label="Dismiss notification"
+              onClick={() => setShowToast(false)}
+              className="text-text-dim hover:text-white cursor-pointer"
+            >
+              <Icon icon={X} size="xs" />
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* Context Header & Action Bar */}
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        align="center"
+        justify="between"
+        gap={4}
+        padding={4}
+        radius="xl"
+        border
+        className="bg-surface-alt/80 border-line/70 backdrop-blur-md"
+      >
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="text-xs">
+          <Stack as="span" direction="row" align="center" gap={1.5} paddingX={3} paddingY={1} radius="full" border className="bg-brand-cyan/15 text-brand-cyan font-bold border-brand-cyan/30">
+            <Sparkles className="w-3.5 h-3.5" />
+            <Text as="span" size="xs" weight="font-bold">Profile: {selectedRole ? `${toTitleCase(selectedDivision)} • ${toTitleCase(selectedRole)}` : toTitleCase(selectedDivision)}</Text>
+          </Stack>
+          <Text size="xs" color="dim">•</Text>
+          <Text size="xs" color="dim">✈️ Landing Target: <Text as="strong" color="main">{trace?.bufferTimeline?.latestFlightArrivalDeadline || '2:15 PM Fri'}</Text></Text>
+          <Text size="xs" color="dim">•</Text>
+          <Text size="xs" color="dim">📋 Active: <Text as="strong" color="main">{includedSessions.length} sessions</Text></Text>
+        </Stack>
+
+        <Stack direction="row" align="center" gap={2} flexWrap="wrap" className="w-full sm:w-auto">
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3.5}
+            radius="lg"
+            border
+            type="button"
+            onClick={() => setIsDebugInspectorOpen(!isDebugInspectorOpen)}
+            className={`min-h-11 h-11 text-xs font-mono transition-all cursor-pointer shrink-0 ${
+              isDebugInspectorOpen
+                ? 'bg-brand-cyan text-slate-950 border-brand-cyan shadow-sm font-bold'
+                : 'bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-brand-amber" />
+            <span>Decision Logic &amp; Debug ({telemetry?.durationMs || 0}ms)</span>
+          </Stack>
+
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3.5}
+            radius="lg"
+            border
+            type="button"
+            onClick={() => setIsFullScheduleOpen(true)}
+            className="min-h-11 h-11 bg-surface hover:bg-surface-alt border-line/70 text-text-main hover:text-brand-cyan text-xs font-mono transition-colors cursor-pointer shrink-0"
+          >
+            <ListFilter className="w-3.5 h-3.5 text-brand-cyan" />
+            <span>View All Schedule ({allSessions.length})</span>
+          </Stack>
+
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1}
+            paddingX={2.5}
+            radius="lg"
+            border
+            type="button"
+            onClick={handleResetToAiPlan}
+            title="Reset to AI Recommended Plan"
+            className="min-h-11 h-11 bg-surface-alt/60 hover:bg-surface-alt border-line/50 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer shrink-0"
+          >
+            <RotateCcw className="w-3 h-3" />
+            <span>Reset</span>
+          </Stack>
+
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={2}
+            paddingX={4}
+            radius="lg"
+            type="button"
+            onClick={handleDownloadCalendar}
+            className="min-h-11 h-11 bg-brand-cyan hover:bg-brand-cyan/90 text-black font-bold text-xs font-mono shadow-glow hover:opacity-90 transition-all cursor-pointer shrink-0"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Add to Calendar (.ics)</span>
+          </Stack>
+
+          <Stack
+            as="button"
+            direction="row"
+            align="center"
+            gap={1.5}
+            paddingX={3}
+            radius="lg"
+            border
+            type="button"
+            onClick={handleDownloadVisualSchedule}
+            className="min-h-11 h-11 bg-surface-alt hover:bg-surface border-line/70 text-text-dim hover:text-white text-xs font-mono transition-colors cursor-pointer shrink-0"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>.md</span>
+          </Stack>
+        </Stack>
+      </Box>
+
+      {isDebugInspectorOpen && (
+        <DecisionDebugInspector
+          eventName={activeEventName}
+          confirmedDivision={selectedDivision}
+          confirmedRole={selectedRole}
+          answers={answers}
+          telemetry={telemetry}
+          discoveryData={discoveryData}
+          decisionTrace={trace as AgentDecisionTrace}
+          bufferTimeline={trace?.bufferTimeline}
+        />
+      )}
+
+      {/* Unified Day-By-Day Feed */}
+      <Stack gap={6} width="full">
+        {(sessionsByDay.thursday.length > 0 || themesByDay.thursday) && (
+          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+              <Stack direction="row" align="center" gap={2}>
+                <Calendar className="w-4 h-4 text-brand-cyan" />
+                <Text as="h3" weight="font-bold" size="base" color="main">
+                  Thursday — Early Arrivals &amp; Pre-Party
+                </Text>
+              </Stack>
+              <Text size="xs" color="dim">Day 0</Text>
+            </Stack>
+
+            {sessionsByDay.thursday.length > 0 && (
+              <Stack gap={2.5} width="full">
+                {sessionsByDay.thursday.map((s) => (
+                  <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+                ))}
+              </Stack>
+            )}
+
+            <ThemeCard theme={themesByDay.thursday} />
+          </Stack>
+        )}
+
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
+              <Calendar className="w-4 h-4 text-brand-cyan" />
+              <Text as="h3" weight="font-bold" size="base" color="main">
+                Friday — Arrival, Warmup &amp; Prelims
+              </Text>
+            </Stack>
+            <Text size="xs" color="dim">Day 1</Text>
+          </Stack>
+
+          <FlightBufferTimeline activeEventName={activeEventName} />
+
+          {sessionsByDay.friday.length > 0 ? (
+            <Stack gap={2.5} width="full">
+              {sessionsByDay.friday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
+            </Stack>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
+          )}
+
+          <ThemeCard theme={themesByDay.friday} />
+        </Stack>
+
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
+              <Calendar className="w-4 h-4 text-brand-cyan" />
+              <Text as="h3" weight="font-bold" size="base" color="main">
+                Saturday — Daytime Workshops &amp; Champions Gala
+              </Text>
+            </Stack>
+            <Text size="xs" color="dim">Day 2</Text>
+          </Stack>
+
+          {sessionsByDay.saturday.length > 0 ? (
+            <Stack gap={2.5} width="full">
+              {sessionsByDay.saturday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
+            </Stack>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
+          )}
+
+          <ThemeCard theme={themesByDay.saturday} />
+        </Stack>
+
+        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+            <Stack direction="row" align="center" gap={2}>
+              <Calendar className="w-4 h-4 text-brand-cyan" />
+              <Text as="h3" weight="font-bold" size="base" color="main">
+                Sunday — Intensive Masterclasses &amp; Survivor Social
+              </Text>
+            </Stack>
+            <Text size="xs" color="dim">Day 3</Text>
+          </Stack>
+
+          {sessionsByDay.sunday.length > 0 ? (
+            <Stack gap={2.5} width="full">
+              {sessionsByDay.sunday.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
+            </Stack>
+          ) : (
+            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+              <Text size="xs" color="dim">No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
+            </Box>
+          )}
+
+          <ThemeCard theme={themesByDay.sunday} />
+        </Stack>
+
+        {sessionsByDay.other.length > 0 && (
+          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+              <Stack direction="row" align="center" gap={2}>
+                <Calendar className="w-4 h-4 text-brand-cyan" />
+                <Text as="h3" weight="font-bold" size="base" color="main">
+                  Other Scheduled Sessions
+                </Text>
+              </Stack>
+              <Text size="xs" color="dim">Additional</Text>
+            </Stack>
+
+            <Stack gap={2.5} width="full">
+              {sessionsByDay.other.map((s) => (
+                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
+              ))}
+            </Stack>
+          </Stack>
+        )}
+      </Stack>
+
+      <FullScheduleModal
+        isOpen={isFullScheduleOpen}
+        onClose={() => setIsFullScheduleOpen(false)}
+        sessions={allSessions}
+        onToggleSession={handleToggleSession}
+        eventName={activeEventName}
+      />
+    </Stack>
+  );
+};

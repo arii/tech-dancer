@@ -10,6 +10,7 @@ import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
+import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
 import { sanitizeUrlForDisplay } from '@/utils/url';
@@ -402,6 +403,8 @@ function CondensedReportMatrix({ report }: { report: UXReport }) {
 }
 
 export default function UXAuditor() {
+  const toolConfig = RESEARCH_TOOLS.find(t => t.id === 'ux-auditor');
+
   const {
     reports,
     isAnalyzing,
@@ -431,7 +434,7 @@ export default function UXAuditor() {
       <SEO
         title="Visual UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
-        canonical={`${BASE_URL}/ux-auditor`}
+        canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
       />
       <Stack
           direction={{ base: 'col', xl: 'row' }}

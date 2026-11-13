@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { CONTENT_DIR_MAP, getContentSlugs } from '../../scripts/content-loader.ts';
 import { routes } from '../config/routes.ts';
+import { RESEARCH_TOOLS } from '../config/research-tools.ts';
 
 /**
  * Resolves the canonical path for a route or tool.
@@ -87,9 +88,18 @@ export function getAllRoutes() {
       };
     });
 
-  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true, stub: true }));
+  // 2. Dynamic research tool routes
+  // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
+  const toolRoutes = RESEARCH_TOOLS.map(tool => ({
+    path: resolveCanonical(`/research/${tool.id}`, tool),
+    lastmod: getFileLastMod('src/config/research-tools.ts'),
+    sitemap: true
+  }));
 
-  const allRoutesRaw = [...allStaticRoutes, ...contentRoutesMapped];
+  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true, stub: true }));
+  const toolRoutesMapped = toolRoutes.map(r => ({ ...r, stub: true }));
+
+  const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
   // The `stub` property indicates whether a dummy `index.html` file (a SPA stub) should be generated for this route
@@ -112,6 +122,7 @@ export function getAllRoutes() {
 
   return {
     static: allStaticRoutes.filter(r => r.sitemap).map(r => r.path),
+    tools: toolRoutes.map(r => r.path),
     content: contentRoutes.map(r => r.path),
     stubs: uniqueRoutes.filter(r => r.stub).map(r => r.path),
     sitemap: sitemapRoutes.map(r => r.path),

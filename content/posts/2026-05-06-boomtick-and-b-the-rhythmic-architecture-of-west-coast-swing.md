@@ -62,7 +62,7 @@ UUS:  | • | • | •   • | • | • | •   • |
 
 These simple dots (•) and slashes (/)—if we were to substitute a touch for a step—give dancers a clear, visual map of weight transfer that reads at a glance.
 
-This intersection of technical structure and creative expression is why I dance. Learn more about [author Ariel Anders' dance and engineering background](/about), or browse our [West Coast Swing apparel and gear collection](/gear).
+This intersection of technical structure and creative expression is why I dance. Learn more about [author Ariel Anders' dance and engineering background](/about), explore our [personalized WCS Navigator schedule planner](/wcs-navigator), or browse our [West Coast Swing apparel and gear collection](/gear).
 
 ## Visual Identity: The Accessible Victorian
 

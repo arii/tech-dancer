@@ -74,17 +74,17 @@ test.describe('Navigation Smoke Tests', () => {
 
   test('specific complex markdown post loads without errors', async ({ page, pageErrors }) => {
     // This post contains various markdown features including code blocks which use SyntaxHighlighter and Stack
-    await validateUrlNavigation(page, './blog/2026-04-19-practical-tools-essentials');
+    await validateUrlNavigation(page, './research/ai-devops-pipeline');
 
     // Give it a moment to render the markdown
     await page.waitForTimeout(500);
 
     const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
-    expect(filteredErrors, `Errors at ./blog/2026-04-19-practical-tools-essentials: ${filteredErrors.join(', ')}`).toHaveLength(0);
+    expect(filteredErrors, `Errors at ./research/ai-devops-pipeline: ${filteredErrors.join(', ')}`).toHaveLength(0);
   });
 
   test('all post/content pages load without errors', async ({ page, pageErrors }) => {
-    const contentIndexes = ['./blog', './gear'];
+    const contentIndexes = ['./blog', './gear', './research'];
 
     for (const index of contentIndexes) {
       await page.goto(index, { waitUntil: 'domcontentloaded', timeout: 30000 });

@@ -20,7 +20,7 @@ tags:
 
 ## The Convention Packing Checklist
 
-Travel conventions can be stressful, but an organized bag makes a world of difference. These packing essentials help you maximize suitcase space and keep your dance clothes looking their best. Before heading to the airport, browse our [curated gear essentials](/gear).
+Travel conventions can be stressful, but an organized bag makes a world of difference. These packing essentials help you maximize suitcase space and keep your dance clothes looking their best. Before heading to the airport, generate your [WCS competition travel checklist](/wcs-navigator) and browse our [curated gear essentials](/gear).
 
 ## Smart Packing Strategies
 

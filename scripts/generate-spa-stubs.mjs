@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 import { routes as ROUTE_CONFIGS } from '../src/config/routes.ts';
+import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
 import { parseFrontmatter } from '../src/lib/content/frontmatter.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,10 +34,20 @@ ROUTE_CONFIGS.forEach(r => {
           : (r.label ? `${r.label} | BoomTick.blog` : 'BoomTick.blog - West Coast Swing & AI Engineering')),
       description: isServices
         ? 'Digital business systems and web design for San Francisco creatives, artists, and independent studios. Fast websites, booking systems, ecommerce, and workflow automation.'
-        : 'West Coast Swing dance resources, custom apparel, gear guides, and creator digital operations.',
+        : 'West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations.',
       image: `${BASE_URL}/assets/home/wcs-travel-pack.webp`
     });
   }
+});
+
+// Build map for research tool metadata
+RESEARCH_TOOLS.forEach(tool => {
+  const toolRoute = tool.canonicalPath || `/research/${tool.id}`;
+  staticRouteMetaMap.set(toolRoute, {
+    title: `${tool.title} | BoomTick Research`,
+    description: tool.description,
+    image: tool.image ? (tool.image.startsWith('http') ? tool.image : `${BASE_URL}${tool.image.startsWith('/') ? '' : '/'}${tool.image}`) : `${BASE_URL}/assets/home/wcs-travel-pack.webp`
+  });
 });
 
 // Load markdown metadata
@@ -90,6 +101,7 @@ function loadMarkdownMeta(dirPath, routePrefix) {
 
 loadMarkdownMeta('content/posts', '/blog');
 loadMarkdownMeta('content/resources', '/gear');
+loadMarkdownMeta('content/studies', '/research');
 
 function getRouteMetadata(route) {
   if (markdownMetaMap.has(route)) {

@@ -76,4 +76,19 @@ export interface Resource {
 
 export type ContentStatus = 'published' | 'draft' | 'planned';
 
-export type ContentItem = Post | Resource;
+export interface Study {
+  type: 'study';
+  draft?: boolean;
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  tags?: string[];
+  author: string;
+  status?: ContentStatus;
+  readTime?: number;
+}
+
+export type ContentItem = Post | Resource | Study;

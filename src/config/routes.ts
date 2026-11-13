@@ -1,4 +1,4 @@
-import { Home, BookOpen, User, Tag, ShieldCheck, Shirt, Laugh, Briefcase } from 'lucide-react';
+import { Home, BookOpen, Database, User, Tag, ShieldCheck, Shirt, Laugh, Compass, Briefcase } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -109,6 +109,35 @@ export const routes: RouteConfig[] = [
     icon: Laugh,
     skeleton: 'grid',
     sitemap: false
+  },
+  {
+    path: '/research',
+    lazy: lazyWithRetry(() => import('@/pages/Research').then(m => ({ Component: m.default }))),
+    label: 'Experiments',
+    icon: Database,
+    skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
+  },
+  {
+    path: '/research/wcs-navigator',
+    lazy: lazyWithRetry(() => import('@/pages/WCSNavigator').then(m => ({ Component: m.default }))),
+    label: 'WCS Navigator',
+    icon: Compass,
+    skeleton: 'grid',
+    isTopNav: false,
+    sitemap: true
+  },
+  {
+    path: '/wcs-navigator',
+    lazy: lazyWithRetry(() => import('@/pages/WCSNavigator').then(m => ({ Component: m.default }))),
+    skeleton: 'grid',
+    sitemap: false
+  },
+  {
+    path: '/research/:id',
+    lazy: lazyWithRetry(() => import('@/pages/ResearchDetail').then(m => ({ Component: m.default }))),
+    skeleton: 'post'
   },
   {
     path: '/versiontruth',
