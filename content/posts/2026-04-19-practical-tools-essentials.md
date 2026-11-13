@@ -19,7 +19,7 @@ affiliateIds:
 
 > Here is a practical packing checklist for a smoother West Coast Swing weekend, based on common dancer pain points: sore feet, loud ballrooms, sweaty workshops, cold hotel spaces, and late-night social dancing.
 
-For organization strategy once the bag is packed — bundle methods, wrinkle-free outfits, travel-sized essentials — see [Event Travel & Packing](/blog/2026-06-01-event-travel-packing), or generate a custom list with the [WCS competition travel checklist](/wcs-navigator).
+For organization strategy once the bag is packed — bundle methods, wrinkle-free outfits, travel-sized essentials — see [Event Travel & Packing](/blog/2026-06-01-event-travel-packing).
 
 ### Footwear & Shoe Care
 - **At least two pairs of dance shoes:** Rotating your shoes once or twice a day gives your feet a "change of scenery" and prevents intense soreness from pressure points. Suede-soled shoes (like Latin practice heels or practice sandals) are standard.

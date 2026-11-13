@@ -7,7 +7,6 @@ import { JSDOM } from 'jsdom';
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 const ABOUT_INDEX_HTML = path.join(DIST_DIR, 'about', 'index.html');
-const RESEARCH_INDEX_HTML = path.join(DIST_DIR, 'research', 'index.html');
 
 function findIndexHtmlFiles(dir: string): string[] {
   let results: string[] = [];
@@ -40,10 +39,10 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
     const indexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
 
     expect(indexContent).toContain('<title data-rh="true" data-prerendered="true">BoomTick.blog - West Coast Swing & AI Engineering</title>');
-    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="description" content="West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations." />');
+    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="description" content="West Coast Swing dance resources, custom apparel, gear guides, and creator digital operations." />');
     expect(indexContent).toContain('<link data-rh="true" data-prerendered="true" rel="canonical" href="https://boomtick.blog/" />');
     expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:title" content="BoomTick.blog - West Coast Swing & AI Engineering" />');
-    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:description" content="West Coast Swing dance resources, custom apparel, gear guides, WCS Navigator event scheduling, and creator digital operations." />');
+    expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" property="og:description" content="West Coast Swing dance resources, custom apparel, gear guides, and creator digital operations." />');
     expect(indexContent).toContain('<meta data-rh="true" data-prerendered="true" name="twitter:title" content="BoomTick.blog - West Coast Swing & AI Engineering" />');
   });
 
@@ -54,13 +53,6 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
     expect(aboutContent).toContain('<title data-rh="true" data-prerendered="true">About | BoomTick.blog</title>');
     expect(aboutContent).toContain('<link data-rh="true" data-prerendered="true" rel="canonical" href="https://boomtick.blog/about" />');
     expect(aboutContent).not.toContain('<link rel="canonical" href="https://boomtick.blog/" />');
-
-    expect(fs.existsSync(RESEARCH_INDEX_HTML)).toBe(true);
-    const researchContent = fs.readFileSync(RESEARCH_INDEX_HTML, 'utf-8');
-
-    expect(researchContent).toContain('<title data-rh="true" data-prerendered="true">Experiments | BoomTick.blog</title>');
-    expect(researchContent).toContain('<link data-rh="true" data-prerendered="true" rel="canonical" href="https://boomtick.blog/research" />');
-    expect(researchContent).not.toContain('<link rel="canonical" href="https://boomtick.blog/" />');
   });
 
   it('verifies strictly single title, meta description, and canonical tags before and after hydration across generated stubs', () => {

@@ -47,6 +47,18 @@ export function Footer() {
                   ari@boomtick.blog
                 </Box>
               </Text>
+              <Text variant="body" size="xs" color="dim">
+                More tech at{' '}
+                <Box
+                  as="a"
+                  href="https://arii.github.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-cyan hover:underline font-semibold"
+                >
+                  arii.github.io
+                </Box>
+              </Text>
             </Stack>
 
             {/* Mandated Standalone Footer Policy Pages */}

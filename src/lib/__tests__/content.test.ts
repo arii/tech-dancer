@@ -9,13 +9,11 @@ import * as content from '../content';
 describe('Content loading', () => {
   it('should return arrays for content types', () => {
     expect(Array.isArray(content.getPosts())).toBe(true);
-    expect(Array.isArray(content.getStudies())).toBe(true);
   });
 
   it('should have slugs for all items', () => {
     const allItems = [
       ...content.getPosts(),
-      ...content.getStudies(),
     ];
 
     allItems.forEach(item => {

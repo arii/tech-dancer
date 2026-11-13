@@ -117,7 +117,6 @@ if (fs.existsSync(targetPath)) {
 
   processContentDirectory(path.resolve(process.cwd(), 'content/posts'), '/blog');
   processContentDirectory(path.resolve(process.cwd(), 'content/resources'), '/gear');
-  processContentDirectory(path.resolve(process.cwd(), 'content/studies'), '/research');
 
   // Inject <image:image> blocks into each <url>...</url> node
   content = content.replace(/<url>([\s\S]*?)<\/url>/g, (match, urlInner) => {

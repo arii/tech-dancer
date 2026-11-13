@@ -23,13 +23,20 @@ describe('getAllRoutes', () => {
   it('should use canonical path for UX Auditor', () => {
     const { sitemap } = getAllRoutes();
     expect(sitemap).toContain('/ux-auditor');
-    expect(sitemap).not.toContain('/research/ux-auditor');
   });
 
-  it('should handle tool routes correctly', () => {
-    const { tools } = getAllRoutes();
-    expect(tools).toContain('/research/wcs-scraper');
-    expect(tools).toContain('/ux-auditor');
+  it('should exclude retired research routes', () => {
+    const { all, sitemap, stubs } = getAllRoutes();
+    // WCS Navigator tooling is retired; its routes must not appear anywhere.
+    const forbidden = (path: string) =>
+      path === '/research' ||
+      path === '/wcs-navigator' ||
+      path.startsWith('/research/') ||
+      path.startsWith('/research/wcs-navigator');
+
+    expect(all.some(forbidden)).toBe(false);
+    expect(sitemap.some(forbidden)).toBe(false);
+    expect(stubs.some(forbidden)).toBe(false);
   });
 
   it('should return detailed route information with lastmod', () => {

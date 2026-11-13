@@ -7,7 +7,7 @@
 import { parseFrontmatter } from './frontmatter';
 import { normalizeAsset, normalizeStatus } from './assets';
 import { normalizeReadTime } from './utils';
-import type { Post, Resource, Study } from '../types/content';
+import type { Post, Resource } from '../types/content';
 
 interface ContentModule {
   default: string;
@@ -16,7 +16,6 @@ interface ContentModule {
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   blogs: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
 };
 
@@ -72,10 +71,9 @@ function transform<T extends { date?: string; draft?: boolean }>(
         return false;
       }
 
-      // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
-      // on the Research page without being indexed as full articles.
-      if (item.draft) {
-        return item.type === 'study' && (item.status === 'planned' || item.status === 'draft');
+      // Hide drafts: retired-study "Planned" cards no longer exist.
+      if (typeof item === 'object' && item !== null && 'draft' in item && item.draft === true) {
+        return false;
       }
       return true;
     })
@@ -90,14 +88,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
     });
 }
 
-let _itemsCache: { posts: Post[]; studies: Study[]; resources: Resource[] } | null = null;
-let _mapsCache: { posts: Map<string, Post>; studies: Map<string, Study>; resources: Map<string, Resource> } | null = null;
+let _itemsCache: { posts: Post[]; resources: Resource[] } | null = null;
+let _mapsCache: { posts: Map<string, Post>; resources: Map<string, Resource> } | null = null;
 
 function getItemsCache() {
   if (!_itemsCache) {
     _itemsCache = {
       posts: transform<Post>({ ...contentModules.posts, ...contentModules.blogs } as Record<string, string | ContentModule>, 'post'),
-      studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
       resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
     };
   }
@@ -109,7 +106,6 @@ function getMapsCache() {
     const items = getItemsCache();
     _mapsCache = {
       posts: new Map(items.posts.map(i => [i.slug, i])),
-      studies: new Map(items.studies.map(i => [i.slug, i])),
       resources: new Map(items.resources.map(i => [i.slug, i])),
     };
   }
@@ -117,7 +113,6 @@ function getMapsCache() {
 }
 
 export const getPosts = () => getItemsCache().posts;
-export const getStudies = () => getItemsCache().studies;
 
 export const getPostBySlug = (slug: string) => getMapsCache().posts.get(slug);
 
