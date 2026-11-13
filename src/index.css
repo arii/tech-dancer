@@ -83,16 +83,29 @@
   --leading-tightest: var(--raw-leading-tightest);
 
   /* Static Defaults */
-  --container-blog: 68.75rem;
+  /* Editorial shell width: reserved target for the blog listing shell (consumed via
+     max-w-blog as editorial placements adopt it). Widened to host denser 4-up card grids. */
+  --container-blog: 72rem;
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
-  --section-spacing: clamp(3rem, 10vw, 8rem);
+  --section-spacing: clamp(3.5rem, 11vw, 9rem);
 
   /* Font Sizes */
   --text-micro: 0.5625rem;
   --text-tiny: 0.625rem;
+
+  /* Display type scale — raised top tiers for larger display/body contrast,
+     with correspondingly tighter leading (stricter scale, D1 refresh). */
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.25rem;
+  --text-5xl--line-height: 1.05;
+  --text-6xl: 4rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 4.75rem;
+  --text-7xl--line-height: 0.95;
 }
 
 @layer utilities {
