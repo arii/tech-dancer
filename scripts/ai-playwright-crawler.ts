@@ -241,7 +241,7 @@ interface GeminiResponse {
 }
 
 function getApiKey(): string {
-  const key = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
+  const key = process.env.GEMINI_API_KEY || '';
   if (!key) {
     throw new Error('GEMINI_API_KEY is not set');
   }

@@ -27,7 +27,6 @@ This script installs and configures:
 | :--- | :--- | :--- |
 | `GITHUB_TOKEN` | **Required** | Auth for GitHub CLI and PR audits. |
 | `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g. `owner/repo`). |
-| `JULES_API_KEY` | Optional | Enables Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
 
 ---
