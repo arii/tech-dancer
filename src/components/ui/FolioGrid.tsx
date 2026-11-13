@@ -74,7 +74,7 @@ export default function FolioGrid({
         </Box>
       </Box>
 
-      <Box marginTop={8}>
+      <Box marginTop={6}>
         {filteredItems.length === 0 ? (
           <EmptyState
             icon={<Search className="w-12 h-12" />}
@@ -82,7 +82,7 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={6}>
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={5}>
             {filteredItems.map((item) => (
               renderItem ? (
                 <Box key={item.slug} height="full">

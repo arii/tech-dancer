@@ -49,9 +49,9 @@ export function EditorialLayout({
       maxWidth={sidebar ? "screen-xl" : "3xl"}
       marginX="auto"
       paddingX={{ base: 5, md: 8, lg: 12 }}
-      paddingY={{ base: 4, md: 8 }}
+      paddingY={{ base: 6, md: 10 }}
     >
-      <Stack gap={{ base: 8, md: 12 }}>
+      <Stack gap={{ base: 10, md: 14 }}>
         {/* Navigation */}
         <Stack
           as="button"
@@ -99,6 +99,7 @@ export function EditorialLayout({
               as="article"
               span={{ base: 1, lg: 8 }}
               width="full"
+              maxWidth="2xl"
               className="article-content-wrapper order-2 lg:order-1"
             >
               {children}
@@ -117,7 +118,7 @@ export function EditorialLayout({
             )}
           </Grid>
         ) : (
-          <Stack gap={{ base: 8, md: 12 }} width="full" marginX="auto" maxWidth="3xl">
+          <Stack gap={{ base: 10, md: 14 }} width="full" marginX="auto" maxWidth="2xl">
             <Box as="article" className="article-content-wrapper" width="full">
               {children}
             </Box>
