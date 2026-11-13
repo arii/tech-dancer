@@ -11,20 +11,16 @@ describe('Home and List Accessibility Images', () => {
     cleanup();
   });
 
-  it('renders post rows in LatestPosts with meaningful alt text on any thumbnails', () => {
+  it('renders meaningful alt text for post thumbnails in LatestPosts without aria-hidden', () => {
     render(
       <MemoryRouter>
         <LatestPosts />
       </MemoryRouter>
     );
 
-    // Rows render even when posts have no cover image (the fallback is a
-    // category icon, not an img), so the row links must stay accessible.
-    const rows = screen.getAllByRole('link');
-    expect(rows.length).toBeGreaterThan(0);
+    const images = screen.getAllByRole('img', { hidden: false });
+    expect(images.length).toBeGreaterThan(0);
 
-    // Every rendered thumbnail, present or absent, carries meaningful alt text.
-    const images = screen.queryAllByRole('img', { hidden: false });
     images.forEach((img) => {
       const alt = img.getAttribute('alt');
       expect(alt).toBeTruthy();

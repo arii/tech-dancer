@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
 import { getAllRoutes } from '../src/lib/routes-discovery.ts';
-import { routes as ROUTE_CONFIGS, TOP_NAV_ROUTES } from '../src/config/routes.ts';
+import { routes as ROUTE_CONFIGS } from '../src/config/routes.ts';
 import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
 import { parseFrontmatter } from '../src/lib/content/frontmatter.ts';
 
@@ -13,10 +13,6 @@ const __dirname = path.dirname(__filename);
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 const BASE_URL = 'https://boomtick.blog';
-
-// Shared sr-only treatment (visually hidden, accessible to screen readers) so
-// the stub markup is zero-impact pre-hydration: no layout shift, no CLS.
-const SR_ONLY_ATTRS = `class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;"`;
 
 // Automatically discover all routes
 const { stubs: STUB_ROUTES } = getAllRoutes();
@@ -141,7 +137,7 @@ function getRouteMetadata(route) {
   };
 }
 
-export function cleanInjectedHtml(html) {
+function cleanInjectedHtml(html) {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
@@ -152,45 +148,11 @@ export function cleanInjectedHtml(html) {
 
   const rootEl = doc.getElementById('root');
   if (rootEl) {
-    // Reset to the pristine build placeholder so stub generation is
-    // idempotent: a rerun must not inherit a previously injected skeleton.
-    rootEl.innerHTML = '';
+    const h1 = rootEl.querySelector('h1.sr-only');
+    if (h1) h1.remove();
   }
 
   return dom.serialize();
-}
-
-// Landmark skeleton mirroring the hydrated MainLayout shell so crawlers and
-// no-JS visitors see the same nav/main/skip-link structure the SPA renders.
-// Head-script handling is untouched: only the `#root` body changes, so any
-// non-injected head script (e.g. a future AdSense loader) survives stub generation.
-export function buildStubNavHtml() {
-  const items = [
-    { path: '/', label: 'Home' },
-    ...TOP_NAV_ROUTES.map((route) => ({ path: route.path, label: route.label })),
-  ];
-  const links = items
-    .map((item) => `<li><a href="${escapeHtml(item.path)}">${escapeHtml(item.label)}</a></li>`)
-    .join('');
-  return `<nav aria-label="Main Navigation" ${SR_ONLY_ATTRS}><ul>${links}</ul></nav>`;
-}
-
-export function buildStubRootHtml(headingText) {
-  return `<div id="root">`
-    + `<a href="#main-content" ${SR_ONLY_ATTRS}>Skip to Content</a>`
-    + buildStubNavHtml()
-    + `<main id="main-content"><h1 ${SR_ONLY_ATTRS}>${headingText}</h1></main>`
-    + `</div>`;
-}
-
-export function buildStubHtml(cleanedIndexContent, route, meta) {
-  const metaTags = generateMetadataTags(route, meta);
-  const headingText = getPreRenderHeading(meta);
-
-  // Inject meta tags into <head> and the landmark skeleton into <div id="root">
-  let stubContent = cleanedIndexContent.replace('</head>', `    ${metaTags}\n  </head>`);
-  stubContent = stubContent.replace('<div id="root"></div>', buildStubRootHtml(headingText));
-  return stubContent;
 }
 
 function escapeHtml(str) {
@@ -355,7 +317,14 @@ async function generateStubs() {
     }
 
     const meta = getRouteMetadata(route);
-    const stubContent = buildStubHtml(indexContent, route, meta);
+    const metaTags = generateMetadataTags(route, meta);
+
+    const headingText = getPreRenderHeading(meta);
+    const rootHtml = `<div id="root"><h1 class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;">${headingText}</h1></div>`;
+
+    // Inject meta tags into <head> and fallback h1 into <div id="root">
+    let stubContent = indexContent.replace('</head>', `    ${metaTags}\n  </head>`);
+    stubContent = stubContent.replace('<div id="root"></div>', rootHtml);
 
     const targetFile = path.join(dirPath, 'index.html');
     fs.writeFileSync(targetFile, stubContent);
@@ -364,18 +333,19 @@ async function generateStubs() {
 
   // Inject metadata for root route ('/') into dist/index.html
   const rootMeta = getRouteMetadata('/');
-  fs.writeFileSync(INDEX_HTML, buildStubHtml(indexContent, '/', rootMeta));
+  const rootMetaTags = generateMetadataTags('/', rootMeta);
+  const rootHeadingText = getPreRenderHeading(rootMeta);
+  const rootRootHtml = `<div id="root"><h1 class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;">${rootHeadingText}</h1></div>`;
+
+  let rootContent = indexContent.replace('</head>', `    ${rootMetaTags}\n  </head>`);
+  rootContent = rootContent.replace('<div id="root"></div>', rootRootHtml);
+  fs.writeFileSync(INDEX_HTML, rootContent);
   console.log(`Injected root route metadata into ${INDEX_HTML}`);
 
   console.log('SPA stubs generated successfully.');
 }
 
-// Run only when invoked directly (postbuild), so tests can import the builders.
-const invokedPath = process.argv[1] ? fs.realpathSync(process.argv[1]) : '';
-const modulePath = fs.realpathSync(fileURLToPath(import.meta.url));
-if (invokedPath === modulePath) {
-  generateStubs().catch(err => {
-    console.error('Failed to generate SPA stubs:', err);
-    process.exit(1);
-  });
-}
+generateStubs().catch(err => {
+  console.error('Failed to generate SPA stubs:', err);
+  process.exit(1);
+});
