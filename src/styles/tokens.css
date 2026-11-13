@@ -59,14 +59,14 @@
   --raw-spacing-email-bar-x-md: 3rem;
   --raw-spacing-hero: 5rem;
   --raw-spacing-comfort: 3rem;
-  --raw-spacing-end-pad: 8rem;
+  --raw-spacing-end-pad: 9rem;
 
   /* Animation */
   --raw-duration-fast: 150ms;
   --raw-duration-normal: 300ms;
   --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --raw-reveal-distance: 1.25rem;
-  --raw-leading-tightest: 0.95;
+  --raw-leading-tightest: 0.92;
 
   /* Icon Sizes */
   --raw-icon-xs: 0.75rem;
