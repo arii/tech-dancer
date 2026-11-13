@@ -9,6 +9,9 @@ import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 import { EditorialPostView } from '@/components/editorial/EditorialPostView';
+import { AdSlot } from '@/components/ads/AdSlot';
+import { isAdSenseEnabled } from '@/lib/ads/adSenseConfig';
+import { useAdConsent } from '@/hooks/useAdConsent';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -85,20 +88,29 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     </Stack>
   ) : undefined;
 
-  const sidebar = affiliateLinks.length > 0 ? (
+  const consent = useAdConsent();
+  const hasSidebarContent = affiliateLinks.length > 0 || (isAdSenseEnabled() && consent !== null);
+
+  const sidebar = hasSidebarContent ? (
     <Box width="full">
       <Stack gap={6} width="full">
-        <AffiliateDisclosure compact={true} />
-        <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim">
-          Shop selected items
-        </Text>
-        <Stack gap={3} width="full">
-          {affiliateLinks.map(link => (
-            <Box key={link.id} width="full">
-              <AffiliateCard link={link} />
-            </Box>
-          ))}
-        </Stack>
+        {affiliateLinks.length > 0 && (
+          <>
+            <AffiliateDisclosure compact={true} />
+            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim">
+              Shop selected items
+            </Text>
+            <Stack gap={3} width="full">
+              {affiliateLinks.map(link => (
+                <Box key={link.id} width="full">
+                  <AffiliateCard link={link} />
+                </Box>
+              ))}
+            </Stack>
+          </>
+        )}
+        {/* Ads sit under the affiliate cards so the revenue hierarchy favors the higher-intent unit. */}
+        <AdSlot placement="sidebar" />
       </Stack>
     </Box>
   ) : undefined;

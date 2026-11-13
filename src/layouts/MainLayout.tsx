@@ -1,5 +1,4 @@
-import { useRef, lazy, Suspense } from 'react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef, lazy, Suspense } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
@@ -7,7 +6,9 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
+import { useAdSenseLoader } from '@/hooks/useAdSenseLoader';
 import { lazyWithRetry } from '@/lib/lazyWithRetry';
+import { ConsentBanner } from '@/components/ads/ConsentBanner';
 
 const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch }))));
 
@@ -16,12 +17,19 @@ const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch'
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const { isOpen: isSearchOpen, open: openSearch } = useGlobalSearch();
+  const { isOpen: isSearchOpen, open: openSearch, query } = useGlobalSearch();
+  useAdSenseLoader();
 
   useCommandKey('k', (e) => {
     e.preventDefault();
     openSearch();
   }, [openSearch]);
+
+  // A /blog?q= entry (the SearchAction target in the site JSON-LD) should land
+  // in open search with results, not the unfiltered feed.
+  useEffect(() => {
+    if (query) openSearch();
+  }, [query, openSearch]);
 
   const { handleTouchStart, handleTouchEnd } = useScrollManagement(scrollRef, touchStartRef);
 
@@ -103,6 +111,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <GlobalSearch />
         </Suspense>
       )}
+      <ConsentBanner />
     </Box>
   );
 }
