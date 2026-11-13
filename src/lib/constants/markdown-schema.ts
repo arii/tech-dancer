@@ -23,11 +23,13 @@ export const MARKDOWN_SANITIZATION_SCHEMA = {
   tagNames: [
     ...(defaultSchema.tagNames || []),
     'notice', 'input',
-    'grid', 'stack', 'text', 'box'
+    'grid', 'stack', 'text', 'box',
+    'adslot'
   ],
   attributes: {
     ...defaultSchema.attributes,
     notice: ['type', 'id'],
+    adslot: ['placement'],
     input: ['type', 'checked', 'disabled'],
     grid: [...LAYOUT_ATTRIBUTES],
     stack: [...LAYOUT_ATTRIBUTES],
