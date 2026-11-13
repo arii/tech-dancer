@@ -14,6 +14,56 @@
       ],
       "destination": "https://boomtick.blog/$1",
       "statusCode": 301
+    },
+    {
+      "source": "/wcs-navigator",
+      "destination": "https://arii.github.io/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/wcs-navigator",
+      "destination": "https://arii.github.io/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/2026-07-10-latest-version-check-skill",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/ai-devops-pipeline",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/confidently-incorrect-v4",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/deployment-impact-analyzer",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/wcs-navigator-architecture",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/wcs-scraper-initial-sync",
+      "destination": "/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research",
+      "destination": "https://arii.github.io/",
+      "statusCode": 308
+    },
+    {
+      "source": "/research/:path*",
+      "destination": "https://arii.github.io/",
+      "statusCode": 308
     }
   ]
 }

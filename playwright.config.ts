@@ -46,14 +46,26 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: 'npx vite preview',
-    url: `http://localhost:${PORT}${BASE_PATH}`,
-    reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
-    timeout: 60 * 1000,
-    env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
-  },
+  webServer: [
+    {
+      command: 'npx vite preview',
+      url: `http://localhost:${PORT}${BASE_PATH}`,
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      timeout: 60 * 1000,
+      env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
+    },
+    {
+      // Serves dist/ while applying vercel.json redirect rules, so the
+      // retired-paths e2e can assert the permanent redirects locally.
+      command: 'node scripts/redirect-test-server.mjs',
+      url: 'http://localhost:4174/',
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      timeout: 60 * 1000,
+    },
+  ],
   timeout: 30 * 1000,
 });
