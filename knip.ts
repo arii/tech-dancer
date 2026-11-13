@@ -3,7 +3,7 @@ import type { KnipConfig } from 'knip';
 const config: KnipConfig = {
   workspaces: {
     ".": {
-      entry: ['scripts/*.ts', 'scripts/**/*.mjs'],
+      entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'tests/unit/**/*.{test,spec}.ts'],
       project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}'],
       ignore: [
         'src/components/Equalizer.tsx',
