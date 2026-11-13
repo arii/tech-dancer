@@ -194,7 +194,7 @@ pnpm exec tsx boomtick-pkg/scripts/impact-ai-review.ts --route /blog/2026-06-01-
 ### Issue Lifecycle
 
 Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always
-validate issues against the Spec-Driven Issue Template before dispatching Jules.
+validate issues against the Spec-Driven Issue Template.
 
 ```bash
 # Validate a single issue (dry-run by default)

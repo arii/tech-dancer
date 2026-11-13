@@ -50,7 +50,7 @@ assignees: ''
 If any box above is checked, explain the blast radius:
 
 <!-- e.g. "Adds a field to EnrichedPullRequest, which is consumed by
-     PullRequests.tsx, CodeReview.tsx, and JulesManagement.tsx" -->
+     PullRequests.tsx and CodeReview.tsx" -->
 
 ---
 

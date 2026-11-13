@@ -23,16 +23,11 @@ check_run() {
 if check_run "^(pnpm-lock\.yaml|package\.json)$"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "📦 Node dependencies changed. Running pnpm install..."
-        # Bypass engine checks for agents running on v22 (v24 required by engines.node)
-        engine_flags=""
-        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
-            engine_flags="--engine-strict=false"
-        fi
 
         if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile $engine_flags || echo "❌ ERROR: pnpm install --frozen-lockfile failed. Please run 'pnpm install' manually to sync dependencies."
+            pnpm install --frozen-lockfile || echo "❌ ERROR: pnpm install --frozen-lockfile failed. Please run 'pnpm install' manually to sync dependencies."
         else
-            pnpm install $engine_flags || echo "❌ ERROR: pnpm install failed. Please run 'pnpm install' manually."
+            pnpm install || echo "❌ ERROR: pnpm install failed. Please run 'pnpm install' manually."
         fi
     else
         echo "⚠️  WARNING: pnpm not found. Skipping dependency update."

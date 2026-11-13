@@ -41,7 +41,7 @@ def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
         time.sleep(poll_interval)
 
 
-JULES_SYSTEM_PROMPT = """You are Jules, an autonomous software engineering agent. You execute actions on demand when given a task payload. You do not manage loops, and you do not schedule your own future executions. However, you are strictly responsible for verifying that you do not perform actions on the same asset too frequently.
+AGENT_SYSTEM_PROMPT = """You are an an autonomous software engineering agent. You execute actions on demand when given a task payload. You do not manage loops, and you do not schedule your own future executions. However, you are strictly responsible for verifying that you do not perform actions on the same asset too frequently.
 
 Current Time Reference: Whenever you are invoked, the Orchestrator will provide the current timestamp. Time-Aware Throttling Rule:
 Look at the interaction_history provided in your input payload. Find the most recent timestamp for the matching target_id. If less than 1 hour has elapsed between that past timestamp and the current time, you must ABORT the execution.
@@ -58,7 +58,7 @@ Initial Task Payload:
 
 
 def execute_orchestrator_loop(existing_session_id=None):
-    """Main execution flow for Agent 2 orchestrating Agent 1 (Jules)."""
+    """Main execution flow for Agent 2 orchestrating Agent 1."""
     target_branch = "main"
     session_id = existing_session_id
 
@@ -71,7 +71,7 @@ def execute_orchestrator_loop(existing_session_id=None):
             "interaction_history": [],
         }
 
-        full_dispatch_task = f"{JULES_SYSTEM_PROMPT}\n{json.dumps(initial_payload)}"
+        full_dispatch_task = f"{AGENT_SYSTEM_PROMPT}\n{json.dumps(initial_payload)}"
         print("Dispatching new task with system prompt...")
         run_cli(["agent", "dispatch", target_branch, full_dispatch_task])
 
@@ -103,9 +103,9 @@ def execute_orchestrator_loop(existing_session_id=None):
 
     print("\n--- Agent 1 Output ---")
     try:
-        jules_response = json.loads(final_output)
-        print(f"Jules Findings: {jules_response.get('findings')}")
-        print(f"Utility: {jules_response.get('utility_evaluation')}")
+        agent_response = json.loads(final_output)
+        print(f"Agent Findings: {agent_response.get('findings')}")
+        print(f"Utility: {agent_response.get('utility_evaluation')}")
     except json.JSONDecodeError:
         print(final_output)
 

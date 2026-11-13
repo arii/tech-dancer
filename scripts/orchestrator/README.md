@@ -1,10 +1,10 @@
 Agent 2 Orchestrator
 
-This directory contains the deployment and experimental scripts for the "Agent 2" Orchestrator system, which drives the autonomous engineering agent (Jules).
+This directory contains the deployment and experimental scripts for the "Agent 2" Orchestrator system, which drives the autonomous engineering agent (Agent 1).
 
 Directory Structure
 
-agent_2_orchestrator.py: The primary Orchestrator implementation. This handles initializing new Jules sessions, storing session IDs, and polling message state before dispatching tasks.
+agent_2_orchestrator.py: The primary Orchestrator implementation. This handles initializing new Agent 1 sessions, storing session IDs, and polling message state before dispatching tasks.
 
 experiments/genai_orchestrator.py: Explores using a fast LLM (gpt-4o-mini) to read CLI outputs (gh status-board) and dynamically generate tasks for Agent 1.
 
@@ -29,11 +29,11 @@ python3 scripts/orchestrator/experiments/continuous_dev_loop.py
 
 Agent 2 (Orchestrator) Routing Experiments
 
-These experiments explore two different ways Agent 2 can decide what task to dispatch to Agent 1 (Jules).
+These experiments explore two different ways Agent 2 can decide what task to dispatch to Agent 1.
 
 Experiment 1: Lightweight GenAI Orchestrator
 
-Instead of hardcoding targets, Agent 2 uses a fast, cheap model (like gpt-4o-mini from your project_config.json) to read the current repository status and dynamically formulate the task_objective for Jules.
+Instead of hardcoding targets, Agent 2 uses a fast, cheap model (like gpt-4o-mini from your project_config.json) to read the current repository status and dynamically formulate the task_objective for Agent 1.
 
 Concept
 
@@ -41,7 +41,7 @@ Run td gh status-board.
 
 Pass the status board text to a lightweight LLM.
 
-The LLM outputs a formatted JSON payload for Jules based on what needs the most attention (e.g., stale PRs, active conflicts).
+The LLM outputs a formatted JSON payload for Agent 1 based on what needs the most attention (e.g., stale PRs, active conflicts).
 
 Implementation Snippet (genai_orchestrator.py)
 
@@ -77,7 +77,7 @@ def generate_dynamic_payload():
     llm_response = generate_text(model="gpt-4o-mini", prompt=prompt)
     return json.loads(llm_response)
 
-# Dispatch to Jules
+# Dispatch to Agent 1
 # payload = generate_dynamic_payload()
 # run_cli(["agent", "dispatch", payload["target_id"], json.dumps(payload)])
 
@@ -139,23 +139,23 @@ def dispatch_payload(task_type, target_id):
 
 Experiment 3: Continuous Issue Resolution Loop (End-to-End)
 
-Agent 2 manages a backlog of issues and creates a continuous development pipeline. It establishes a develop branch, spins up a primary Jules session, and feeds it issues one by one, waiting for each to be resolved, approved, and merged before sending the next.
+Agent 2 manages a backlog of issues and creates a continuous development pipeline. It establishes a develop branch, spins up a primary Agent 1 session, and feeds it issues one by one, waiting for each to be resolved, approved, and merged before sending the next.
 
-Note on Hierarchical Agents: In this model, Agent 1 acts as a "Lead Engineer." When instructed to solve an issue, Agent 1 can autonomously use its own MCP tools to spin up sub-sessions (temporary Jules workers) to parallelize tasks or test specific PRs, reporting back to Agent 2 only when the entire issue lifecycle is complete.
+Note on Hierarchical Agents: In this model, Agent 1 acts as a "Lead Engineer." When instructed to solve an issue, Agent 1 can autonomously use its own MCP tools to spin up sub-sessions (temporary Agent 1 workers) to parallelize tasks or test specific PRs, reporting back to Agent 2 only when the entire issue lifecycle is complete.
 
 Concept
 
 Identify or check out a base develop branch.
 
-Initialize the primary Agent 1 (Jules) session on the develop branch.
+Initialize the primary Agent 1 session on the develop branch.
 
 Retrieve a list of open issues from the backlog.
 
 Iterate through the issues:
 
-Dispatch a payload instructing Jules to fix the issue, open a PR, and get it merged into develop.
+Dispatch a payload instructing Agent 1 to fix the issue, open a PR, and get it merged into develop.
 
-Poll the session until Jules signals SUCCESS (meaning the PR is merged).
+Poll the session until Agent 1 signals SUCCESS (meaning the PR is merged).
 
 Feed the next issue in the queue.
 
@@ -176,8 +176,8 @@ def execute_continuous_dev_loop(issue_queue):
     """
     base_branch = "develop"
     
-    # 1. Pre-flight: Ensure develop branch exists or instruct Jules to create it
-    # We will assume Agent 2 uses system git or Jules's repo.create_branch MCP to handle this locally.
+    # 1. Pre-flight: Ensure develop branch exists or instruct Agent 1 to create it
+    # We will assume Agent 2 uses system git or Agent 1's repo.create_branch MCP to handle this locally.
     
     # 2. Create the primary Agent 1 session
     print(f"Initializing primary Agent 1 session on {base_branch}...")
@@ -220,19 +220,19 @@ def execute_continuous_dev_loop(issue_queue):
     print("Issue queue exhausted. Continuous development loop complete.")
 
 
-Two-Agent System Architecture: Jules & The Orchestrator
+Two-Agent System Architecture: Agent 1 & The Orchestrator
 
 Overview
 
 A continuous, dual-agent system leveraging the td CLI.
 
-Agent 1 (Jules): An autonomous software engineering agent that executes tasks on demand via MCP tools.
+Agent 1: An autonomous software engineering agent that executes tasks on demand via MCP tools.
 
-Agent 2 (The Orchestrator): A deterministic, scheduled Python script that evaluates repository state and dispatches tasks to Jules.
+Agent 2 (The Orchestrator): A deterministic, scheduled Python script that evaluates repository state and dispatches tasks to Agent 1.
 
-Agent 1: Jules (Engineering Agent)
+Agent 1: The Engineering Agent
 
-Jules is stateless between executions but maintains context via an Orchestrator-provided interaction_history. It is fully autonomous and relies on its own knowledge to select the correct MCP tools for tasks like reviewing PRs, resolving conflicts, and creating issues.
+Agent 1 is stateless between executions but maintains context via an Orchestrator-provided interaction_history. It is fully autonomous and relies on its own knowledge to select the correct MCP tools for tasks like reviewing PRs, resolving conflicts, and creating issues.
 
 Core Constraints (System Prompt)
 
@@ -250,11 +250,11 @@ The Orchestrator is a deterministic script that can run on a cron job or CI pipe
 
 Responsibilities
 
-Initialize/Attach: Creates a new Jules session or attaches to an existing one via --session-id.
+Initialize/Attach: Creates a new Agent 1 session or attaches to an existing one via --session-id.
 
-Poll State: Uses agent messages to block execution while Jules is actively processing a task.
+Poll State: Uses agent messages to block execution while Agent 1 is actively processing a task.
 
-Dispatch Intent: Sends high-level JSON payloads, allowing Jules to autonomously determine how to accomplish the goal.
+Dispatch Intent: Sends high-level JSON payloads, allowing Agent 1 to autonomously determine how to accomplish the goal.
 
 Orchestrator Script (agent_2_orchestrator.py)
 
@@ -266,7 +266,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from utils import run_cli, get_session_id, wait_for_agent
 
-JULES_SYSTEM_PROMPT = """You are Jules, an autonomous software engineering agent. You execute actions on demand when given a task payload. You do not manage loops, and you do not schedule your own future executions. However, you are strictly responsible for verifying that you do not perform actions on the same asset too frequently.
+AGENT_SYSTEM_PROMPT = """You are an an autonomous software engineering agent. You execute actions on demand when given a task payload. You do not manage loops, and you do not schedule your own future executions. However, you are strictly responsible for verifying that you do not perform actions on the same asset too frequently.
 
 Current Time Reference: Whenever you are invoked, the Orchestrator will provide the current timestamp. Time-Aware Throttling Rule:
 Look at the interaction_history provided in your input payload. Find the most recent timestamp for the matching target_id. If less than 1 hour has elapsed between that past timestamp and the current time, you must ABORT the execution.
@@ -282,7 +282,7 @@ Initial Task Payload:
 """
 
 def execute_orchestrator_loop(existing_session_id=None):
-    """Main execution flow for Agent 2 orchestrating Agent 1 (Jules)."""
+    """Main execution flow for Agent 2 orchestrating Agent 1."""
     target_branch = "main"
     session_id = existing_session_id
 
@@ -295,7 +295,7 @@ def execute_orchestrator_loop(existing_session_id=None):
             "interaction_history": []
         }
 
-        full_dispatch_task = f"{JULES_SYSTEM_PROMPT}\n{json.dumps(initial_payload)}"
+        full_dispatch_task = f"{AGENT_SYSTEM_PROMPT}\n{json.dumps(initial_payload)}"
         print("Dispatching new task with system prompt...")
         run_cli(["agent", "dispatch", target_branch, full_dispatch_task])
 
@@ -327,9 +327,9 @@ def execute_orchestrator_loop(existing_session_id=None):
 
     print("\n--- Agent 1 Output ---")
     try:
-        jules_response = json.loads(final_output)
-        print(f"Jules Findings: {jules_response.get('findings')}")
-        print(f"Utility: {jules_response.get('utility_evaluation')}")
+        agent_response = json.loads(final_output)
+        print(f"Agent Findings: {agent_response.get('findings')}")
+        print(f"Utility: {agent_response.get('utility_evaluation')}")
     except json.JSONDecodeError:
         print(final_output)
 

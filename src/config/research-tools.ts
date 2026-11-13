@@ -153,7 +153,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'repo-auditor-ai',
     taxonomyBucket: 'migrated',
     title: 'RepoAuditor AI',
-    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. Migrated to primary portfolio.',
+    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline. Migrated to primary portfolio.',
     category: 'DevAI Tooling',
     status: 'Migrated',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent'],

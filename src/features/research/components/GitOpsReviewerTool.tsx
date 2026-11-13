@@ -47,7 +47,7 @@ export function GitOpsReviewerTool() {
             <Stack gap={3} padding={5} border radius="md" surface="surface">
               <Text variant="display" size="md" weight="font-bold">Model Context Protocol (MCP)</Text>
               <Text variant="body" size="sm" color="dim">
-                Our `mcp/` server grants autonomous agents structured access to pull requests, files, and CI logs, and orchestrates seamless integration with macro-agents such as Jules.
+                Our `mcp/` server grants autonomous agents structured access to pull requests, files, and CI logs.
               </Text>
             </Stack>
             <Stack gap={3} padding={5} border radius="md" surface="surface">

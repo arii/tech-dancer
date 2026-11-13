@@ -76,7 +76,7 @@ def generate_dynamic_payload():
     {repo_status}
     
     Decide the single most important task for an engineering agent. 
-    Output ONLY a JSON payload matching the expected Jules schema.
+    Output ONLY a JSON payload matching the expected payload schema.
     """
 
     model = get_ai_synthesis_model()

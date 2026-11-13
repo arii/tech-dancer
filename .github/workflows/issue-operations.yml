@@ -45,8 +45,6 @@ jobs:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          jules-api-key: ${{ secrets.JULES_API_KEY }}
-          send-to-jules: "true"
 
   create-pr:
     name: Issue to Content PR
@@ -70,8 +68,6 @@ jobs:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          jules-api-key: ${{ secrets.JULES_API_KEY }}
-          send-to-jules: "true"
 
   ai-review:
     name: AI Review
@@ -89,8 +85,6 @@ jobs:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          jules-api-key: ${{ secrets.JULES_API_KEY }}
-          send-to-jules: "true"
 
   resolve-conflicts:
     name: Resolve PR Conflicts
@@ -108,8 +102,6 @@ jobs:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          jules-api-key: ${{ secrets.JULES_API_KEY }}
-          send-to-jules: "true"
 
   update-snapshots:
     name: Update Playwright Snapshots
@@ -127,5 +119,3 @@ jobs:
           github-app-id: ${{ secrets.APP_ID }}
           github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          jules-api-key: ${{ secrets.JULES_API_KEY }}
-          send-to-jules: "true"
