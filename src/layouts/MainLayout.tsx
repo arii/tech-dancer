@@ -6,7 +6,9 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
+import { useAdSenseLoader } from '@/hooks/useAdSenseLoader';
 import { lazyWithRetry } from '@/lib/lazyWithRetry';
+import { ConsentBanner } from '@/components/ads/ConsentBanner';
 
 const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch }))));
 
@@ -16,6 +18,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const { isOpen: isSearchOpen, open: openSearch, query } = useGlobalSearch();
+  useAdSenseLoader();
 
   useCommandKey('k', (e) => {
     e.preventDefault();
@@ -108,6 +111,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <GlobalSearch />
         </Suspense>
       )}
+      <ConsentBanner />
     </Box>
   );
 }
