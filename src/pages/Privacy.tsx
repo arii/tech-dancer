@@ -2,6 +2,7 @@ import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { generateBreadcrumbSchema } from '@/utils/schema';
+import { AdvertisingDisclosure } from '@/components/privacy/AdvertisingDisclosure';
 import { ShieldCheck, Database, Share2, Lock, Mail } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -95,6 +96,9 @@ export default function Privacy() {
             </Stack>
           </Box>
         </Grid>
+
+        {/* Advertising (Google AdSense) */}
+        <AdvertisingDisclosure />
 
         {/* Developer Contact */}
         <Box padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full">
