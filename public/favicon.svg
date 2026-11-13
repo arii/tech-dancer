@@ -1,15 +1,15 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #a78bfa; }
-    .brand-text-accent { fill: #22d3ee; }
+    .brand-stop-accent { stop-color: #a63d1e; }
+    .brand-stop-purple { stop-color: #5e4c7a; }
+    .brand-text-accent { fill: #a63d1e; }
     .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
     }
   </style>
-  <rect width="512" height="512" rx="108" fill="#020617"/>
+  <rect width="512" height="512" rx="108" fill="#faf7f2"/>
   <text
     x="50%"
     y="53%"
@@ -19,6 +19,6 @@
     letter-spacing="-38"
     class="brand-wordmark"
   >
-    <tspan fill="#ffffff">b</tspan><tspan class="brand-text-accent" fill="#22d3ee">t</tspan>
+    <tspan fill="#ffffff">b</tspan><tspan class="brand-text-accent" fill="#a63d1e">t</tspan>
   </text>
 </svg>
