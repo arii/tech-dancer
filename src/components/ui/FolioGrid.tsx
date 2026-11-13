@@ -46,10 +46,6 @@ export default function FolioGrid({
 
   const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
 
-  // One listing ad after the first card row (2xl grid = 4 columns), only
-  // once ads are configured and the visitor's consent has resolved.
-  const showListingAd = isAdSenseEnabled() && consent !== null && view === 'card' && filteredItems.length > 4;
-
   const filteredItems = items.filter(item => {
     const tags = 'tags' in item ? item.tags : [];
     return (
@@ -59,6 +55,10 @@ export default function FolioGrid({
       safeSearch(item.excerpt, search)
     );
   });
+
+  // One listing ad after the first card row (2xl grid = 4 columns), only
+  // once ads are configured and the visitor's consent has resolved.
+  const showListingAd = isAdSenseEnabled() && consent !== null && view === 'card' && filteredItems.length > 4;
 
   return (
     <Box as="section" height="full">
