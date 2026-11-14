@@ -71,7 +71,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} flex={1} minWidth={0}>
+            <Stack gap={1} flex={1} className="min-w-0">
               <Text variant="mono" size="xs" color="dim">
                 {post.date}
               </Text>
