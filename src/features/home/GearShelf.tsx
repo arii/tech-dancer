@@ -14,8 +14,8 @@ export function GearShelf() {
   return (
     <Box as="section" className="w-full max-w-full min-w-0">
       {/* Header — no card wrapper, just section heading */}
-      <Box display="flex" align="center" justify="between" marginBottom={3}>
-        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+      <Box display="flex" align="center" justify="between" gap={2} marginBottom={3}>
+        <Text as="h2" variant="headline" size="2xl" weight="font-black" className="min-w-0">
           Gear for the Weekend
         </Text>
         <Text
@@ -80,7 +80,8 @@ export function GearShelf() {
         ))}
       </Grid>
 
-      {/* Mobile: horizontal scroll of compact tiles */}
+      {/* Mobile: horizontal scroll of compact tiles — fade mask signals
+          scrollability; snap keeps resting positions on full tiles. */}
       <Box
         display={{ base: "flex", lg: "none" }}
         gap={3}
@@ -91,13 +92,14 @@ export function GearShelf() {
         paddingBottom={3}
         paddingRight={4}
         noScrollbar
+        className="scroll-mask-fade snap-x snap-mandatory"
       >
         {PICKS.map(({ label, image, imageText, href }) => (
           <Box
             key={`mobile-${label}`}
             as={NavLink}
             to={href}
-            className="group w-28 shrink-0 min-w-0"
+            className="group w-28 shrink-0 min-w-0 snap-start"
           >
             <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
               {image ? (

@@ -39,7 +39,7 @@ export function ProductImageFrame({
         loading="lazy"
         className={cn(
           "w-full h-full transition-opacity duration-300",
-          objectFit === 'contain' ? "object-contain p-4" : "object-cover",
+          objectFit === 'contain' ? "object-contain" : "object-cover",
           objectPosition === 'top' ? "object-top" : objectPosition === 'bottom' ? "object-bottom" : "object-center"
         )}
       />

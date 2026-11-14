@@ -80,7 +80,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           position="relative"
           zIndex={0}
           isolation="isolate"
-          paddingTop={{ base: 16, lg: 16 }}
+          paddingTop={{ base: 20, lg: 16 }}
           maxWidth="full"
           width="full"
           minWidth={0}

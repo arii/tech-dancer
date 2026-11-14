@@ -355,14 +355,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={10} className="prose-section group">
+            <Box marginTop={{ base: 10, md: 16 }} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
                 marginBottom={1}
                 className="editorial-section-number"
               />
-              <Text as="h2" variant="h2" size="3xl" color="main" margin={0} leading="tight" {...props} />
+              <Text as="h2" variant="h2" size="3xl" color="main" margin={{ base: 0 }} leading="tight" {...props} />
               <Box height={0.5} width={12} marginTop={6} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),

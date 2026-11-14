@@ -11,7 +11,7 @@ export function LatestPosts() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
-        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+        <Text as="h2" variant="headline" size="2xl" weight="font-black" className="min-w-0">
           Latest from BoomTick
         </Text>
         <Text
@@ -22,7 +22,6 @@ export function LatestPosts() {
           color="dim"
           weight="font-bold"
           paddingY={{ base: 4, sm: 0 }}
-          paddingX={{ base: 4, sm: 0 }}
           shrink={0}
           uppercase
           tracking="widest"
@@ -50,12 +49,12 @@ export function LatestPosts() {
             minWidth={0}
             className="group transition-colors hover:bg-surface/50"
           >
-            {/* Thumbnail — rectangular, 72×56 desktop feel */}
+            {/* Thumbnail — square-ish preview; smaller on mobile so titles keep width */}
             <Box
               radius="md"
               overflow="hidden"
               height={14}
-              width={18}
+              width={{ base: 14, sm: 18 }}
               shrink={0}
               marginTop={0.5}
               surface="alt"
@@ -72,7 +71,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} flex={1} minWidth={0}>
+            <Stack gap={1} flex={1} className="min-w-0">
               <Text variant="mono" size="xs" color="dim">
                 {post.date}
               </Text>
@@ -84,7 +83,7 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <Box marginTop={1} shrink={0}>
+            <Box marginTop={1} shrink={0} display={{ base: 'none', sm: 'flex' }}>
               <ArrowRight className="h-4 w-4 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
             </Box>
           </Box>
