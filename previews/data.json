@@ -1,109 +1,13 @@
 {
   "dependabot/npm_and_yarn/npm_and_yarn-2206af26d8": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/about": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/blog": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/gear": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
+    "commitTimestamp": 1794613831,
+    "deployTimestamp": 1794613831,
     "sha": "unknown"
   }
 ,
   "fix/mobile-ux-360": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/memes": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/merch": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/preview": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/previews": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/privacy": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/research": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/return-policy": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/services": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/shipping": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/terms": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/ux-auditor": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/versiontruth": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
-    "sha": "unknown"
-  }
-,
-  "fix/mobile-ux-360/wcs-navigator": {
-    "commitTimestamp": 1794627849,
-    "deployTimestamp": 1794627849,
+    "commitTimestamp": 1794628672,
+    "deployTimestamp": 1794628672,
     "sha": "unknown"
   }
 }
