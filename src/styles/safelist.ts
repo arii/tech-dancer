@@ -25,6 +25,7 @@ export const tailwindSafelist = Array.from(new Set([
   'lg:px-12',
   'lg:px-20',
   'mb-0',
+  'm-0',
   'mb-8',
   'mb-12',
   'mb-16',
