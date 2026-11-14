@@ -37,10 +37,10 @@ const Home = () => {
         minWidth={0}
         align="center"
       >
-        <Box span={{ base: 12, lg: 7 }}>
+        <Box span={{ base: 1, lg: 7 }} className="min-w-0">
           <HeroSection />
         </Box>
-        <Box span={{ base: 12, lg: 5 }}>
+        <Box span={{ base: 1, lg: 5 }} className="min-w-0">
           <FeaturedGuidePanel />
         </Box>
       </Grid>

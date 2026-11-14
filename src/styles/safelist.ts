@@ -96,6 +96,7 @@ export const tailwindSafelist = Array.from(new Set([
   'px-6',
   'px-8',
   'py-0.5',
+  'w-0.5',
   'py-1',
   'py-12',
   'py-2',
