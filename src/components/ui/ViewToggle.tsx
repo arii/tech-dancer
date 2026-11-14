@@ -11,7 +11,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
-    <Box display="flex" border radius="none" overflow="hidden">
+    <Box display="flex" border radius="md" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
         <Box
           as="button"
@@ -34,9 +34,9 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           aria-pressed={view === v}
         >
           {v === 'card' ? (
-            <Box as={LayoutGrid} width={5} height={5} />
+            <Box as={LayoutGrid} width={6} height={6} />
           ) : (
-            <Box as={List} width={5} height={5} />
+            <Box as={List} width={6} height={6} />
           )}
         </Box>
       ))}

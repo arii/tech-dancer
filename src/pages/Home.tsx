@@ -72,7 +72,7 @@ const Home = () => {
           maxWidth="full"
           minWidth={0}
         >
-          <Box span={{ base: 12, lg: 8 }}>
+          <Box span={{ base: 12, lg: 8 }} minWidth={0}>
             <LatestPosts />
           </Box>
           <Box span={{ base: 12, lg: 4 }}>

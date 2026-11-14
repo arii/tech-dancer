@@ -355,7 +355,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={10} className="prose-section group">
+            <Box marginTop={{ base: 10, md: 16 }} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"

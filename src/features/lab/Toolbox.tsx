@@ -37,7 +37,7 @@ export default function Toolbox() {
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
 
-      <Stack gap={12} width="full" maxWidth="screen-xl">
+      <Stack gap={{ base: 6, md: 12 }} width="full" maxWidth="screen-xl">
         <PageHeader
           label="GEAR & REVIEWS"
           title="Gear Reviews"
@@ -58,7 +58,10 @@ export default function Toolbox() {
           </Box>
         </Stack>
 
-        <Box display="flex" justify="center" marginBottom={4} className="overflow-x-auto">
+        {/* Left-aligned (not centered): justify-center on a scroll container
+            makes left-side overflow unreachable — the strip must scroll from
+            scrollLeft=0 with the fade mask as the affordance. */}
+        <Box overflowX="auto" noScrollbar className="scroll-mask-fade">
           <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">
             <FilterButton
               label={ALL_GEAR_FILTER.label}
