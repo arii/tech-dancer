@@ -1,18 +1,8 @@
-import { Shirt, Plane, VenetianMask as Mask, Heart } from 'lucide-react';
+import { Plane, VenetianMask as Mask, Heart } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
 const TOPICS = [
-  {
-    id: "gear",
-    label: "Gear & apparel",
-    icon: Shirt,
-    href: "/gear",
-    iconColorClass: "text-accent-sky",
-    iconBgClass: "bg-accent-sky/10",
-    iconHoverBgClass: "group-hover:bg-accent-sky/20",
-    iconAnimClass: "group-hover:scale-110",
-  },
   {
     id: "travel",
     label: "Travel & packing",
