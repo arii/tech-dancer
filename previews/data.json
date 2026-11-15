@@ -1,115 +1,19 @@
 {
   "dependabot/npm_and_yarn/npm_and_yarn-2206af26d8": {
-    "commitTimestamp": 1794734933,
-    "deployTimestamp": 1794734933,
+    "commitTimestamp": 1794613831,
+    "deployTimestamp": 1794613831,
     "sha": "unknown"
   }
 ,
   "fix/mobile-ux-360": {
-    "commitTimestamp": 1794734933,
-    "deployTimestamp": 1794734933,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/gear": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1794702141,
+    "deployTimestamp": 1794702141,
     "sha": "unknown"
   }
 ,
   "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS": {
-    "commitTimestamp": 1794734933,
-    "deployTimestamp": 1794734933,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/memes": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/privacy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/return-policy": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/services": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/shipping": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/terms": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/ux-auditor": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/versiontruth": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
-    "sha": "unknown"
-  }
-,
-  "task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/wcs-navigator": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1794735663,
+    "deployTimestamp": 1794735663,
     "sha": "unknown"
   }
 }
