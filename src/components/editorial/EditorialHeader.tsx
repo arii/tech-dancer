@@ -38,8 +38,8 @@ export function EditorialHeader({
           as="h1"
           variant="h1"
           weight="font-black"
-          leading="none"
-          tracking="tighter"
+          leading="tight"
+          tracking="tight"
           className="break-words font-fluid-h1"
         >
           {title}
@@ -58,7 +58,7 @@ export function EditorialHeader({
              <AuthorAvatar src={authorAvatarSrc} name={author} />
              <Stack gap={0.5}>
                <Text variant="mono" size="xs" weight="font-black" tracking="wide">BY {author.toUpperCase()}</Text>
-               <Text variant="mono" size="micro" color="dim" weight="font-bold">
+               <Text variant="mono" size="xs" color="dim" weight="font-bold">
                  <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {readTime}
                </Text>
                {onShare && (
@@ -73,7 +73,7 @@ export function EditorialHeader({
                    aria-label={isShared ? "URL copied to clipboard" : "Share article"}
                  >
                    <Share2 className="w-3.5 h-3.5" />
-                   <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
+                   <Text variant="mono" size="xs" weight="font-black" color={isShared ? "accent" : "inherit"}>
                      {isShared ? "COPIED!" : "SHARE"}
                    </Text>
                  </Stack>
@@ -83,12 +83,12 @@ export function EditorialHeader({
 
           {tags && tags.length > 0 && (
             <Stack direction="row" align="center" gap={1.5} wrap="wrap" className="max-w-full">
-              <Text variant="mono" size="micro" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
               {tags.map((tag) => (
                 <Box
                   key={tag}
-                  paddingX={2}
-                  paddingY={0.5}
+                  paddingX={3}
+                  paddingY={1}
                   display="inline-flex"
                   align="center"
                   justify="center"
@@ -99,7 +99,7 @@ export function EditorialHeader({
                 >
                   <Text
                     variant="mono"
-                    size="micro"
+                    size="xs"
                     color="dim"
                     weight="font-medium"
                     className="whitespace-nowrap"

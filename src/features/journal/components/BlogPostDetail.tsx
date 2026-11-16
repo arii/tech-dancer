@@ -54,7 +54,8 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     .map(p => ({
       title: p.title,
       href: `/blog/${p.slug}`,
-      category: p.category
+      category: p.category,
+      image: p.image
     }));
 
   const affiliateLinks = (post.affiliateIds || [])
@@ -78,7 +79,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Stack>
       ) : (
-        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
+        <EditorialHero src={post.image} alt={post.imageAlt || post.title} objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
       )}
       {post.image?.includes('/sketches/') && (
         <Text variant="mono" size="xs" color="dim" className="italic">
@@ -116,7 +117,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   ) : undefined;
 
   const footer = (
-    <Stack gap={12}>
+    <Stack gap={{ base: 0, md: 12 }}>
       <ArticleNavigation previous={previous} next={next} />
       <EditorialRelated items={relatedItems} />
     </Stack>

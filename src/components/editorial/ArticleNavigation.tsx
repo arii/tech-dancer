@@ -29,7 +29,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
   const hasBoth = Boolean(previous && next);
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
+    <Box paddingY={{ base: 8, md: 12 }} border="t" borderColor="line" className="border-opacity-medium">
       <Grid cols={{ base: 1, md: hasBoth ? 2 : 1 }} gap={6}>
         <Box height="full">
           {previous && (

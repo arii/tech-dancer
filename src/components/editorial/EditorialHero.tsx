@@ -17,11 +17,11 @@ interface EditorialHeroProps {
 export function EditorialHero({
   src,
   alt,
-  aspectRatio = { base: "square", md: "video" },
+  aspectRatio,
   objectFit = 'cover',
   objectPosition = 'top'
 }: EditorialHeroProps) {
-  const isContain = objectFit === 'contain';
+  const fitsImage = objectFit === 'contain' || !aspectRatio;
 
   return (
     <Box
@@ -29,8 +29,8 @@ export function EditorialHero({
       radius="md"
       overflow="hidden"
       border
-      className={cn(!isContain && 'h-hero-mobile md:h-auto', journalVariants.card({ variant: 'hero' }))}
-      aspect={isContain ? undefined : aspectRatio}
+      className={cn(!fitsImage && 'h-hero-mobile md:h-auto', journalVariants.card({ variant: 'hero' }))}
+      aspect={fitsImage ? undefined : aspectRatio}
     >
       <ProductImageFrame
         src={src}
@@ -40,7 +40,7 @@ export function EditorialHero({
         border={false}
         radius="none"
         aspect="auto"
-        className={isContain ? "w-full *:h-auto *:h-hero-mobile" : "w-full h-full"}
+        className={fitsImage ? "w-full *:h-auto *:h-hero-mobile" : "w-full h-full"}
       />
     </Box>
   );
