@@ -46,7 +46,7 @@ export function AdSlot({ placement }: AdSlotProps) {
       surface="card"
       border
       radius="sm"
-      className="overflow-hidden has-[ins[data-ad-status=unfilled]]:hidden"
+      className="overflow-hidden hide-when-ad-unfilled"
     >
       <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" marginBottom={2} display="block">
         ADVERTISEMENT
