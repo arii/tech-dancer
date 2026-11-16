@@ -59,7 +59,7 @@ export function EditorialHeader({
              <Stack gap={0.5}>
                <Text variant="mono" size="xs" weight="font-black" tracking="wide">BY {author.toUpperCase()}</Text>
                <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                 <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> {readTime}
+                 <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> <Text as="span" className="whitespace-nowrap">{date}</Text> <Text as="span" marginX={1.5} color="line" opacityVariant="subtle">•</Text> <Text as="span" className="whitespace-nowrap">{readTime}</Text>
                </Text>
                {onShare && (
                  <Stack
