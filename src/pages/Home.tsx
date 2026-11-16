@@ -19,7 +19,6 @@ const Home = () => {
       maxWidth="7xl"
       minWidth={0}
       overflowX="hidden"
-      paddingX={{ base: 4, sm: 6, lg: 8 }}
     >
       <SEO
         title="West Coast Swing Dance Guides & Gear"

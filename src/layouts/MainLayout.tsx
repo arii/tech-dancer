@@ -8,7 +8,6 @@ import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
 import { useAdSenseLoader } from '@/hooks/useAdSenseLoader';
 import { lazyWithRetry } from '@/lib/lazyWithRetry';
-import { ConsentBanner } from '@/components/ads/ConsentBanner';
 
 const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch }))));
 
@@ -111,7 +110,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <GlobalSearch />
         </Suspense>
       )}
-      <ConsentBanner />
     </Box>
   );
 }

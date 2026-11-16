@@ -281,6 +281,13 @@
   z-index: 100;
 }
 
+/* AdSense marks units it could not fill; drop the empty frame. */
+@utility hide-when-ad-unfilled {
+  &:has(ins[data-ad-status='unfilled']) {
+    display: none;
+  }
+}
+
 @layer base {
   /* Dark Theme WebKit Scrollbars */
   ::-webkit-scrollbar {

@@ -278,7 +278,6 @@ function EditorialPostDetail({ post, onBack, backLabel }: EditorialPostDetailPro
                   <EditorialHero
                     src={post.image}
                     alt={post.imageAlt || post.title}
-                    aspectRatio={{ base: "square", md: "video" }}
                     objectFit={post.imageFit || 'cover'}
                     objectPosition={post.imagePosition || 'top'}
                   />

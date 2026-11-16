@@ -29,7 +29,7 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
+      <Box paddingTop={{ base: 8, md: 12 }} paddingBottom={{ base: 8, md: 16 }} surface="bg" border="t" opacityVariant="heavy">
         <Stack gap={6}>
           {/* Contact & Business Info */}
           <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
@@ -50,15 +50,15 @@ export function Footer() {
             </Stack>
 
             {/* Mandated Standalone Footer Policy Pages */}
-            <Stack direction="row" gap={2} align="center" wrap>
+            <Stack direction="row" gap={{ base: 1, md: 2 }} align="center" wrap>
               {policyLinks.map((link) => (
                 <ActionButton
                   key={link.label}
                   as={NavLink}
                   to={link.to}
                   variant="ghost"
-                  paddingX={{ base: 3, md: 3 }}
-                  paddingY={{ base: 4, md: 2 }}
+                  paddingX={{ base: 2, md: 3 }}
+                  paddingY={2}
                 >
                   <Text
                     variant="mono"
@@ -89,7 +89,6 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     display="inline-block"
-                    paddingY={{ base: 4, sm: 0 }}
                     className="hover:text-accent transition-colors underline decoration-line/40"
                   >
                     {commitSha.substring(0, 7)}
