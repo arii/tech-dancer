@@ -48,7 +48,7 @@ const TOPICS = [
 export function TopicGrid() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
-      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} uppercase tracking="wider">
+      <Text as="h2" variant="headline" size="xl" weight="font-bold" marginBottom={4} uppercase tracking="wider">
         Explore by topic
       </Text>
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>

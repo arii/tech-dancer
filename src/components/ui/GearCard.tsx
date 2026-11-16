@@ -179,7 +179,7 @@ export function GearCard(props: GearCardProps) {
               className="outline-none focus-visible:ring-2 focus-visible:ring-accent hover:underline"
             >
               <Text
-                variant="body"
+                variant="headline"
                 size="lg"
                 weight="font-bold"
                 color="main"
@@ -193,7 +193,7 @@ export function GearCard(props: GearCardProps) {
         ) : (
           <Text
             as="h2"
-            variant="body"
+            variant="headline"
             size="lg"
             weight="font-bold"
             color="main"

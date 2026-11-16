@@ -71,7 +71,7 @@ export function AffiliateCard({ link, layout = 'compact' }: AffiliateCardProps) 
 
           <Text
             as="h3"
-            variant="body"
+            variant="headline"
             size="sm"
             weight="font-bold"
             leading="snug"
