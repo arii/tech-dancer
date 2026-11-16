@@ -1,4 +1,5 @@
 import { Box } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { journalVariants } from '@/lib/variants';
 
@@ -20,14 +21,16 @@ export function EditorialHero({
   objectFit = 'cover',
   objectPosition = 'top'
 }: EditorialHeroProps) {
+  const isContain = objectFit === 'contain';
+
   return (
     <Box
       width="full"
       radius="md"
       overflow="hidden"
       border
-      className={`h-hero-mobile md:h-auto ${journalVariants.card({ variant: 'hero' })}`}
-      aspect={aspectRatio}
+      className={cn(!isContain && 'h-hero-mobile md:h-auto', journalVariants.card({ variant: 'hero' }))}
+      aspect={isContain ? undefined : aspectRatio}
     >
       <ProductImageFrame
         src={src}
@@ -37,7 +40,7 @@ export function EditorialHero({
         border={false}
         radius="none"
         aspect="auto"
-        className={`w-full h-auto object-${objectFit}`}
+        className={isContain ? "w-full *:h-auto *:h-hero-mobile" : "w-full h-full"}
       />
     </Box>
   );
