@@ -1,40 +1,46 @@
 /**
- * External store for the visitor's ad-personalization consent.
- * Kept outside React so AdSlot, the consent banner, and the loader hook share
- * one source of truth without a provider.
+ * Ad-personalization consent, read from the site's CookieYes CMP (loaded via GTM).
+ * Kept outside React so AdSlot, the listing grid, and the loader hook share one
+ * source of truth without a provider.
  */
 
 export type AdConsent = 'granted' | 'denied';
 
 type Listener = (value: AdConsent | null) => void;
 
-const STORAGE_KEY = 'bt-ad-consent';
+export interface CookieYesConsent {
+  activeLaw: string;
+  isUserActionCompleted: boolean;
+  categories: { advertisement: boolean };
+}
 
-const readStoredConsent = (): AdConsent | null => {
-  // localStorage is unavailable in some privacy modes; consent then lives
-  // in memory for the session only, which is a safe degradation.
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    return stored === 'granted' || stored === 'denied' ? stored : null;
-  } catch {
-    return null;
+declare global {
+  interface Window {
+    getCkyConsent?: () => CookieYesConsent;
   }
+}
+
+/**
+ * GDPR needs an explicit choice before any ad script loads. Other CookieYes laws
+ * (e.g. CCPA) are opt-out, so their advertisement default applies immediately.
+ */
+export const resolveCookieYesConsent = (cky: CookieYesConsent): AdConsent | null => {
+  if (cky.activeLaw === 'gdpr' && !cky.isUserActionCompleted) return null;
+  return cky.categories.advertisement ? 'granted' : 'denied';
 };
 
-let current: AdConsent | null = readStoredConsent();
+let current: AdConsent | null = null;
 const listeners = new Set<Listener>();
 
-export const getAdConsent = (): AdConsent | null => current;
-
-export const setAdConsent = (value: AdConsent): void => {
-  current = value;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, value);
-  } catch {
-    // Storage write failed (privacy mode); in-memory consent still applies.
-  }
+const syncFromCookieYes = (): void => {
+  if (typeof window.getCkyConsent !== 'function') return;
+  const next = resolveCookieYesConsent(window.getCkyConsent());
+  if (next === current) return;
+  current = next;
   listeners.forEach(listener => listener(current));
 };
+
+export const getAdConsent = (): AdConsent | null => current;
 
 export const subscribeAdConsent = (listener: Listener): (() => void) => {
   listeners.add(listener);
@@ -43,13 +49,8 @@ export const subscribeAdConsent = (listener: Listener): (() => void) => {
   };
 };
 
-/** Clears the in-memory consent (and stored value) — test isolation only. */
-export const resetAdConsent = (): void => {
-  current = null;
-  try {
-    window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // Storage unavailable; in-memory reset still applies.
-  }
-  listeners.forEach(listener => listener(null));
-};
+// CookieYes fires banner_load on every page load (including returning visitors)
+// and consent_update on each choice; getCkyConsent() is current inside both.
+document.addEventListener('cookieyes_banner_load', syncFromCookieYes);
+document.addEventListener('cookieyes_consent_update', syncFromCookieYes);
+syncFromCookieYes();

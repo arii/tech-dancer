@@ -10,7 +10,7 @@ import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 import { EditorialPostView } from '@/components/editorial/EditorialPostView';
 import { AdSlot } from '@/components/ads/AdSlot';
-import { isAdSenseEnabled } from '@/lib/ads/adSenseConfig';
+import { getAdUnit } from '@/lib/ads/adSenseConfig';
 import { useAdConsent } from '@/hooks/useAdConsent';
 
 interface BlogPostDetailProps {
@@ -89,7 +89,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   ) : undefined;
 
   const consent = useAdConsent();
-  const hasSidebarContent = affiliateLinks.length > 0 || (isAdSenseEnabled() && consent !== null);
+  const hasSidebarContent = affiliateLinks.length > 0 || (getAdUnit('sidebar') !== undefined && consent !== null);
 
   const sidebar = hasSidebarContent ? (
     <Box width="full">

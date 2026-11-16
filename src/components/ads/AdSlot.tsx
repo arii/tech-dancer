@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Box, Text } from '@/layouts/Primitives';
-import { getAdSenseClient, type AdPlacement } from '@/lib/ads/adSenseConfig';
+import { getAdUnit, type AdPlacement } from '@/lib/ads/adSenseConfig';
 import { useAdConsent } from '@/hooks/useAdConsent';
 
 interface AdSlotProps {
@@ -19,22 +19,23 @@ const SLOT_HEIGHT: Record<AdPlacement, string> = {
 
 /**
  * Renders an AdSense ad unit for the given placement.
- * Renders nothing (no script, no markup, no reserved space) while
- * VITE_ADSENSE_CLIENT is unset or consent has not resolved.
+ * Renders nothing (no script, no markup, no reserved space) while the
+ * placement's ad unit is unconfigured or consent has not resolved, and
+ * collapses once AdSense reports the unit unfilled.
  */
 export function AdSlot({ placement }: AdSlotProps) {
-  const client = getAdSenseClient();
+  const unit = getAdUnit(placement);
   const consent = useAdConsent();
   const pushedRef = useRef(false);
 
   useEffect(() => {
-    if (!client || consent === null || pushedRef.current) return;
+    if (!unit || consent === null || pushedRef.current) return;
     pushedRef.current = true;
     const queue = (window.adsbygoogle = window.adsbygoogle || []);
     queue.push({});
-  }, [client, consent]);
+  }, [unit, consent]);
 
-  if (!client || consent === null) return null;
+  if (!unit || consent === null) return null;
 
   return (
     <Box
@@ -45,14 +46,15 @@ export function AdSlot({ placement }: AdSlotProps) {
       surface="card"
       border
       radius="sm"
-      className="overflow-hidden"
+      className="overflow-hidden has-[ins[data-ad-status=unfilled]]:hidden"
     >
       <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" marginBottom={2} display="block">
         ADVERTISEMENT
       </Text>
       <ins
         className={`adsbygoogle block w-full ${SLOT_HEIGHT[placement]}`}
-        data-ad-client={client}
+        data-ad-client={unit.client}
+        data-ad-slot={unit.slot}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />

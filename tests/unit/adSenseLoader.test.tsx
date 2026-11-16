@@ -1,7 +1,7 @@
 import { render, cleanup } from '@testing-library/react';
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import { useAdSenseLoader } from '@/hooks/useAdSenseLoader';
-import { setAdConsent, resetAdConsent } from '@/lib/ads/adConsentStore';
+import { acceptAds, rejectAds, resetCookieYes } from '../utils/cookieYes';
 
 const TEST_CLIENT = 'ca-pub-2398582836159289';
 
@@ -12,7 +12,7 @@ const Harness = () => {
 
 describe('useAdSenseLoader consent gate', () => {
   beforeEach(() => {
-    resetAdConsent();
+    resetCookieYes();
     document.head.innerHTML = '';
     delete window.adsbygoogle;
   });
@@ -39,7 +39,7 @@ describe('useAdSenseLoader consent gate', () => {
   it('loads the personalized script after consent is granted', () => {
     vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
     render(<Harness />);
-    setAdConsent('granted');
+    acceptAds();
     const script = document.head.querySelector('script#adsbygoogle-loader');
     expect(script?.getAttribute('src')).toContain(`client=${TEST_CLIENT}`);
     expect(window.adsbygoogle?.requestNonPersonalizedAds).toBeUndefined();
@@ -48,7 +48,7 @@ describe('useAdSenseLoader consent gate', () => {
   it('flags non-personalized ads before loading the script after consent is declined', () => {
     vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
     render(<Harness />);
-    setAdConsent('denied');
+    rejectAds();
     const script = document.head.querySelector('script#adsbygoogle-loader');
     expect(script).not.toBeNull();
     expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(1);
@@ -56,14 +56,14 @@ describe('useAdSenseLoader consent gate', () => {
 
   it('loads immediately for a returning visitor with a stored preference', () => {
     vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
-    setAdConsent('granted');
+    acceptAds();
     render(<Harness />);
     expect(document.head.querySelector('script#adsbygoogle-loader')).not.toBeNull();
   });
 
   it('injects the loader script only once across re-renders', () => {
     vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
-    setAdConsent('granted');
+    acceptAds();
     const { rerender } = render(<Harness />);
     rerender(<Harness />);
     expect(document.head.querySelectorAll('script#adsbygoogle-loader').length).toBe(1);

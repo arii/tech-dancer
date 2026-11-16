@@ -10,7 +10,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { AdSlot } from '@/components/ads/AdSlot';
-import { isAdSenseEnabled } from '@/lib/ads/adSenseConfig';
+import { getAdUnit } from '@/lib/ads/adSenseConfig';
 import { useAdConsent } from '@/hooks/useAdConsent';
 import { Search } from 'lucide-react';
 
@@ -56,9 +56,9 @@ export default function FolioGrid({
     );
   });
 
-  // One listing ad after the first card row (2xl grid = 4 columns), only
-  // once ads are configured and the visitor's consent has resolved.
-  const showListingAd = isAdSenseEnabled() && consent !== null && view === 'card' && filteredItems.length > 4;
+  // One full-width listing ad after the cards, only once the listing ad unit
+  // is configured and the visitor's consent has resolved.
+  const showListingAd = getAdUnit('listing') !== undefined && consent !== null && view === 'card' && filteredItems.length > 4;
 
   return (
     <Box as="section" height="full">

@@ -40,8 +40,8 @@ const injectLoaderScript = (client: string, personalized: boolean): void => {
 
 /**
  * Injects the AdSense account-verification meta tag as soon as ads are
- * configured, but defers the loader script until consent resolves — declined
- * visitors still get ads, only non-personalized ones.
+ * configured, but defers the loader script until CookieYes consent resolves.
+ * Visitors who reject the Advertisement category get non-personalized ads.
  */
 export function useAdSenseLoader(): void {
   const client = getAdSenseClient();

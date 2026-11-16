@@ -1,35 +1,51 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { getAdConsent, setAdConsent, subscribeAdConsent } from '@/lib/ads/adConsentStore';
+import { describe, it, expect, afterEach } from 'vitest';
+import { getAdConsent, subscribeAdConsent } from '@/lib/ads/adConsentStore';
+import { acceptAds, rejectAds, resetCookieYes, setCookieYesConsent } from '../utils/cookieYes';
 
-describe('ad consent store', () => {
-  beforeEach(() => {
-    window.localStorage.clear();
-  });
+afterEach(() => resetCookieYes());
 
-  it('starts unresolved and reports null', () => {
+describe('ad consent store (CookieYes bridge)', () => {
+  it('stays unresolved until CookieYes loads', () => {
+    document.dispatchEvent(new Event('cookieyes_consent_update'));
     expect(getAdConsent()).toBeNull();
   });
 
-  it('persists the choice to localStorage and notifies subscribers', () => {
-    const seen: Array<ReturnType<typeof getAdConsent>> = [];
-    const unsubscribe = subscribeAdConsent(() => seen.push(getAdConsent()));
-
-    setAdConsent('denied');
-    expect(getAdConsent()).toBe('denied');
-    expect(window.localStorage.getItem('bt-ad-consent')).toBe('denied');
-    expect(seen).toEqual(['denied']);
-
-    unsubscribe();
-    setAdConsent('granted');
-    expect(seen).toEqual(['denied']);
+  it('stays unresolved under GDPR until the visitor makes a choice', () => {
+    setCookieYesConsent({ activeLaw: 'gdpr', isUserActionCompleted: false, categories: { advertisement: false } });
+    expect(getAdConsent()).toBeNull();
   });
 
-  it('survives unavailable localStorage', () => {
-    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
-      throw new Error('quota exceeded');
-    });
-    expect(() => setAdConsent('granted')).not.toThrow();
+  it('maps the Advertisement category to granted or denied', () => {
+    acceptAds();
     expect(getAdConsent()).toBe('granted');
-    vi.restoreAllMocks();
+    rejectAds();
+    expect(getAdConsent()).toBe('denied');
+  });
+
+  it('applies the opt-out default immediately outside GDPR', () => {
+    setCookieYesConsent({ activeLaw: 'ccpa', isUserActionCompleted: false, categories: { advertisement: true } });
+    expect(getAdConsent()).toBe('granted');
+  });
+
+  it('resolves a returning visitor from banner_load', () => {
+    setCookieYesConsent(
+      { activeLaw: 'gdpr', isUserActionCompleted: true, categories: { advertisement: false } },
+      'cookieyes_banner_load'
+    );
+    expect(getAdConsent()).toBe('denied');
+  });
+
+  it('notifies subscribers only when the value changes', () => {
+    const seen: Array<ReturnType<typeof getAdConsent>> = [];
+    const unsubscribe = subscribeAdConsent(value => seen.push(value));
+
+    acceptAds();
+    acceptAds();
+    rejectAds();
+    expect(seen).toEqual(['granted', 'denied']);
+
+    unsubscribe();
+    acceptAds();
+    expect(seen).toEqual(['granted', 'denied']);
   });
 });
