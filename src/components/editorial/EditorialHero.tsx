@@ -1,4 +1,5 @@
 import { Box } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { journalVariants } from '@/lib/variants';
 
@@ -16,18 +17,20 @@ interface EditorialHeroProps {
 export function EditorialHero({
   src,
   alt,
-  aspectRatio = { base: "square", md: "video" },
+  aspectRatio,
   objectFit = 'cover',
   objectPosition = 'top'
 }: EditorialHeroProps) {
+  const fitsImage = objectFit === 'contain' || !aspectRatio;
+
   return (
     <Box
       width="full"
       radius="md"
       overflow="hidden"
       border
-      className={`h-hero-mobile md:h-auto ${journalVariants.card({ variant: 'hero' })}`}
-      aspect={aspectRatio}
+      className={cn(!fitsImage && 'h-hero-mobile md:h-auto', journalVariants.card({ variant: 'hero' }))}
+      aspect={fitsImage ? undefined : aspectRatio}
     >
       <ProductImageFrame
         src={src}
@@ -37,7 +40,7 @@ export function EditorialHero({
         border={false}
         radius="none"
         aspect="auto"
-        className={`w-full h-auto object-${objectFit}`}
+        className={fitsImage ? "w-full *:h-auto *:h-hero-mobile" : "w-full h-full"}
       />
     </Box>
   );
