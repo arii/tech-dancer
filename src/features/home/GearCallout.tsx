@@ -9,7 +9,7 @@ export function GearCallout() {
         WCS Collection
       </Text>
 
-      <Text variant="body" color="body" size="sm" leading="relaxed" marginBottom={4}>
+      <Text variant="body" color="body" size="sm" leading="normal" marginBottom={3}>
         I put together these gear guides around what I actually use on the social floor: DIY shoe modifications, packing checklists, and partner dance tees and accessories that hold up to a full weekend of social dancing.
       </Text>
 

@@ -452,9 +452,6 @@
   .hero-section {
     background: var(--hero-bg);
     min-height: auto;
-    @media (min-width: 48rem) {
-      min-height: 34vh;
-    }
   }
   .hero-bottom-gradient {
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
