@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { adsenseLoaderUrl, getAdSenseClient } from '@/lib/ads/adSenseConfig';
-import { getAdConsent, subscribeAdConsent } from '@/lib/ads/adConsentStore';
+import { getAdConsent, subscribeAdConsent, type AdConsent } from '@/lib/ads/adConsentStore';
 
 declare global {
   interface Window {
@@ -23,13 +23,15 @@ const injectAccountMeta = (client: string): void => {
   document.head.appendChild(meta);
 };
 
-const injectLoaderScript = (client: string, personalized: boolean): void => {
+// AdSense reads this flag on every ad request, so it must follow consent changes
+// made after the loader is already on the page.
+const applyPersonalization = (personalized: boolean): void => {
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adsbygoogle.requestNonPersonalizedAds = personalized ? 0 : 1;
+};
+
+const injectLoaderScript = (client: string): void => {
   if (document.head.querySelector(`script#${LOADER_ID}`)) return;
-  if (!personalized) {
-    // Non-personalized mode must be declared before the loader runs.
-    window.adsbygoogle = window.adsbygoogle || [];
-    window.adsbygoogle.requestNonPersonalizedAds = 1;
-  }
   const script = document.createElement('script');
   script.id = LOADER_ID;
   script.async = true;
@@ -38,10 +40,17 @@ const injectLoaderScript = (client: string, personalized: boolean): void => {
   document.head.appendChild(script);
 };
 
+const applyConsent = (client: string, consent: AdConsent | null): void => {
+  if (consent === null) return;
+  applyPersonalization(consent === 'granted');
+  injectLoaderScript(client);
+};
+
 /**
  * Injects the AdSense account-verification meta tag as soon as ads are
  * configured, but defers the loader script until CookieYes consent resolves.
- * Visitors who reject the Advertisement category get non-personalized ads.
+ * Visitors who reject the Advertisement category get non-personalized ads, and
+ * later consent changes apply to subsequent ad requests.
  */
 export function useAdSenseLoader(): void {
   const client = getAdSenseClient();
@@ -50,13 +59,7 @@ export function useAdSenseLoader(): void {
     if (!client) return;
     injectAccountMeta(client);
 
-    const existing = getAdConsent();
-    if (existing !== null) {
-      injectLoaderScript(client, existing === 'granted');
-      return;
-    }
-    return subscribeAdConsent(next => {
-      if (next !== null) injectLoaderScript(client, next === 'granted');
-    });
+    applyConsent(client, getAdConsent());
+    return subscribeAdConsent(next => applyConsent(client, next));
   }, [client]);
 }

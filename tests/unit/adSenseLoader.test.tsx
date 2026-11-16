@@ -42,7 +42,7 @@ describe('useAdSenseLoader consent gate', () => {
     acceptAds();
     const script = document.head.querySelector('script#adsbygoogle-loader');
     expect(script?.getAttribute('src')).toContain(`client=${TEST_CLIENT}`);
-    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBeUndefined();
+    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(0);
   });
 
   it('flags non-personalized ads before loading the script after consent is declined', () => {
@@ -59,6 +59,18 @@ describe('useAdSenseLoader consent gate', () => {
     acceptAds();
     render(<Harness />);
     expect(document.head.querySelector('script#adsbygoogle-loader')).not.toBeNull();
+  });
+
+  it('follows consent changes made after the loader is on the page', () => {
+    vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
+    render(<Harness />);
+    acceptAds();
+    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(0);
+    rejectAds();
+    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(1);
+    acceptAds();
+    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(0);
+    expect(document.head.querySelectorAll('script#adsbygoogle-loader').length).toBe(1);
   });
 
   it('injects the loader script only once across re-renders', () => {
