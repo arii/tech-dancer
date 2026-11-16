@@ -38,7 +38,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
                       {item.category}
                     </Text>
                   )}
-                  <Text variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
+                  <Text variant="headline" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
                     {item.title}
                   </Text>
                 </Stack>

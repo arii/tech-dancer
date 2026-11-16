@@ -38,7 +38,7 @@ export function PageHeader({
             {label}
           </Text>
         )}
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">
+        <Text as={as} variant="headline" size={titleSize} weight="font-bold" leading="tight" tracking="tight">
           {title}
         </Text>
         {description && (

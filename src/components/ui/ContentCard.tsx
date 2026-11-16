@@ -100,7 +100,7 @@ export function ContentCard(props: ContentCardProps) {
         <Stack gap={2}>
           <Text
             as="h2"
-            variant="body"
+            variant="headline"
             size="lg"
             weight="font-bold"
             color="main"

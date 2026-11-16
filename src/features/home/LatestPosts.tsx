@@ -11,7 +11,7 @@ export function LatestPosts() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
-        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+        <Text as="h2" variant="headline" size="2xl" weight="font-bold">
           Latest from BoomTick
         </Text>
         <Text
@@ -76,7 +76,7 @@ export function LatestPosts() {
               <Text variant="mono" size="xs" color="dim">
                 {post.date}
               </Text>
-              <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
+              <Text variant="headline" size="base" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
                 {post.title}
               </Text>
               <Text variant="body" size="xs" color="dim" className="line-clamp-1">

@@ -15,7 +15,7 @@ export function GearShelf() {
     <Box as="section" className="w-full max-w-full min-w-0">
       {/* Header — no card wrapper, just section heading */}
       <Box display="flex" align="center" justify="between" marginBottom={3}>
-        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+        <Text as="h2" variant="headline" size="2xl" weight="font-bold">
           Gear for the Weekend
         </Text>
         <Text

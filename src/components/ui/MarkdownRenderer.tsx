@@ -379,6 +379,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               />
             </Box>
           ),
+          h4: ({node: _node, ...props}) => (
+            <Text as="h4" variant="h4" size="lg" color="main" marginTop={8} marginBottom={4} {...props} />
+          ),
           table: ({node: _node, ...props}) => (
             <Box width="full" overflowX="auto" marginY={6} radius="lg" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
