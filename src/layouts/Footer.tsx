@@ -2,6 +2,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
+import { SITE_METADATA } from '@/config/content';
 import { formatRelativeTime } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
@@ -34,8 +35,11 @@ export function Footer() {
           {/* Contact & Business Info */}
           <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
             <Stack gap={1}>
-              <Text variant="mono" size="xs" color="main" weight="font-bold" tracking="wider">
+              <Text as="p" size="2xl" color="main" weight="font-bold" className="font-serif">
                 BoomTick
+              </Text>
+              <Text variant="body" size="sm" color="dim" display={{ base: 'none', md: 'block' }} className="italic">
+                {SITE_METADATA.description}
               </Text>
               <Text variant="body" size="xs" color="dim">
                 San Francisco, CA, USA · Official Support:{' '}

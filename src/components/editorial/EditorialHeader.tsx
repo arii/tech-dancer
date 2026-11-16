@@ -37,10 +37,10 @@ export function EditorialHeader({
         <Text
           as="h1"
           variant="h1"
-          weight="font-black"
+          weight="font-bold"
           leading="tight"
           tracking="tight"
-          className="break-words font-fluid-h1"
+          className="break-words fluid-h1"
         >
           {title}
         </Text>

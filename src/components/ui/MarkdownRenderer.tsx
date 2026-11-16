@@ -24,8 +24,9 @@ async function loadSyntaxHighlighter() {
             margin: 0,
             borderRadius: 0,
             background: 'var(--color-surface)',
-            fontSize: '0.8rem',
-            lineHeight: '1.6',
+            padding: '1rem 1.25rem',
+            fontSize: '0.875rem',
+            lineHeight: '1.7',
           }}
           {...props}
         >
@@ -218,7 +219,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
 
   if (isBlock) {
     return (
-      <Box marginY={12} radius="lg" border className="overflow-hidden">
+      <Box marginY={8} radius="md" border className="overflow-hidden">
         {language && (
           <Stack
             direction="row"
@@ -230,7 +231,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             border="b"
             borderColor="line"
           >
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+            <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
               {language}
             </Text>
           </Stack>
@@ -258,14 +259,14 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
     <Text
       as="code"
       variant="mono"
-      size="xs"
-      paddingX={3}
+      size="sm"
+      paddingX={2}
       paddingY={0.5}
       radius="sm"
       surface="surface"
       border
       borderColor="line"
-      color="accent"
+      color="main"
       className="normal-case"
       {...props}
     >
@@ -355,7 +356,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={10} className="prose-section group">
+            <Box marginTop={14} marginBottom={8} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -423,7 +424,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           p: ({node: _node, children, ...props}) => {
             // Always render as div to safely contain any children (block or inline)
             // while preserving paragraph-like styling. This prevents hydration errors.
-            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
+            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size={{ base: "lg", md: "xl" }} className="markdown-paragraph" {...props}>{children}</Text>;
           },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
@@ -432,7 +433,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="ol" marginY={4} paddingLeft={6} className="list-decimal space-y-1.5" {...props} />
           ),
           li: ({node: _node, ...props}) => (
-            <Box as="li" className="text-text-dim leading-relaxed" {...props} />
+            <Box as="li" className="text-text-dim text-lg md:text-xl leading-relaxed" {...props} />
           ),
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />

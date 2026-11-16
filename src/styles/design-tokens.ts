@@ -90,10 +90,10 @@ export const tracking = {
 } as const;
 
 export const typography = {
-  h1: "font-display font-black tracking-tighter leading-none",
+  h1: "font-display font-bold tracking-tight leading-tight",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
-  headline: "font-display font-bold tracking-tighter leading-none",
+  headline: "font-display font-bold tracking-tight leading-tight",
   display: "font-display font-bold tracking-tight leading-none",
   hero: "font-serif font-black tracking-tight leading-tight break-words",
   body: "font-sans leading-relaxed text-text-body break-words",

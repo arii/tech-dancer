@@ -36,7 +36,7 @@ export default function Navigation() {
                 <Box as="li" key={item.path}>
                   <NavLink
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent px-3 py-2 inline-block', isActive ? 'text-accent' : 'text-text-dim')}
+                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent px-3 py-2 inline-block border-b-2', isActive ? 'text-accent border-accent' : 'text-text-dim border-transparent')}
                   >
                     {item.label}
                   </NavLink>

@@ -19,13 +19,13 @@ export const interaction = {
   hoverAccent: "hover:border-accent hover:bg-accent/5",
   hoverOpacity: "hover:opacity-90",
   card: "group relative bg-surface",
-  cardHover: "hover:border-accent/40",
-  journalCard: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
+  cardHover: "hover:border-accent/40 motion-safe:hover:-translate-y-1",
+  journalCard: "hover:border-accent/50 hover:bg-surface/50 motion-safe:hover:-translate-y-0.5 group cursor-pointer",
 } as const;
 
 export const typographyUtils = {
   labelSmall: "text-tiny font-mono font-bold uppercase tracking-widest",
-  h1: "font-display font-black tracking-tighter leading-tightest",
+  h1: "font-display font-bold tracking-tight leading-tight",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
   body: "font-sans leading-relaxed text-text-body",
