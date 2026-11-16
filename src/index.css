@@ -678,8 +678,8 @@
 }
 
 @utility scroll-mask-fade {
-  mask-image: linear-gradient(to right, transparent, black 0.9375rem, black calc(100% - 0.9375rem), transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 0.9375rem, black calc(100% - 0.9375rem), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
 }
 
 .scroll-anchor {
