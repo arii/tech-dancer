@@ -1,6 +1,8 @@
 import { SPACING_MAP } from "@/layouts/layout-maps"
 
-export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
+export type ResponsiveProp<T> = T | { base?: T, default?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
+
+const BASE_BREAKPOINTS = new Set(["base", "default"])
 
 /**
  * Resolves a value for use in a Tailwind class.
@@ -66,7 +68,7 @@ export function applyResponsive<T>(
   return Object.entries(prop)
     .map(([bp, val]) => {
       const className = mapFn(val as T)
-      return className ? (bp === "base" ? className : `${bp}:${className}`) : ""
+      return className ? (BASE_BREAKPOINTS.has(bp) ? className : `${bp}:${className}`) : ""
     })
     .filter(Boolean)
     .join(" ")

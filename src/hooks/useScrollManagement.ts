@@ -1,23 +1,11 @@
-import { useEffect, MutableRefObject, useRef } from 'react';
-import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
-
-const SWIPE_THRESHOLD = 50;
-const MAIN_ROUTES = ['/', '/blog', '/gear', '/research', '/merch'];
+import { useEffect, MutableRefObject } from 'react';
+import { useLocation, useNavigationType } from 'react-router-dom';
 
 export function useScrollManagement(
-  scrollRef: MutableRefObject<HTMLElement | null>,
-  touchStartRef: MutableRefObject<{ x: number; y: number } | null>
+  scrollRef: MutableRefObject<HTMLElement | null>
 ) {
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
-  const navigate = useNavigate();
-  const isNavigating = useRef(false);
-
-  // Reset navigation throttle on route change
-  useEffect(() => {
-    isNavigating.current = false;
-  }, [pathname]);
-
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
     const container = scrollRef.current;
@@ -109,82 +97,4 @@ export function useScrollManagement(
     };
   }, [pathname, key, hash, navType, scrollRef]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartRef.current = {
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    };
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartRef.current) return;
-
-    const touchEnd = {
-      x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY,
-    };
-
-    const deltaX = touchEnd.x - touchStartRef.current.x;
-    const deltaY = touchEnd.y - touchStartRef.current.y;
-
-    // Horizontal swipe check
-    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
-      // Ignore swipe if it originates from a horizontally scrollable element
-      const target = e.target as HTMLElement;
-
-      const isScrollable = (el: HTMLElement | null): boolean => {
-        if (!el || el === e.currentTarget) return false;
-
-        const style = window.getComputedStyle(el);
-
-        // Respect touch-action: pan-y or none which explicitly disable horizontal panning for the browser
-        const touchAction = style.getPropertyValue('touch-action');
-        if (touchAction.includes('pan-y') || touchAction.includes('none')) return true;
-
-        // Respect explicit data attribute opt-outs for global swipe navigation
-        if (el.dataset.gestureHandled === 'true') return true;
-
-        const overflowX = style.getPropertyValue('overflow-x');
-        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
-
-        if (isScrollableX) {
-          // Check if we are at a boundary to allow swiping to the next page
-          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
-          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
-          if (deltaX > 0 && el.scrollLeft > 0) return true;
-          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
-          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
-        }
-
-        return isScrollable(el.parentElement);
-      };
-
-      if (isScrollable(target)) return;
-
-      const currentIndex = MAIN_ROUTES.indexOf(pathname);
-      if (currentIndex !== -1) {
-        let targetRoute = '';
-        if (deltaX > 0 && currentIndex > 0) {
-          // Swipe right -> Previous page
-          targetRoute = MAIN_ROUTES[currentIndex - 1];
-        } else if (deltaX < 0 && currentIndex < MAIN_ROUTES.length - 1) {
-          // Swipe left -> Next page
-          targetRoute = MAIN_ROUTES[currentIndex + 1];
-        }
-
-        if (targetRoute && !isNavigating.current) {
-          isNavigating.current = true;
-          navigate(targetRoute);
-          // Optional: announce to screen readers
-          const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
-          const announcer = document.getElementById('route-announcer');
-          if (announcer) announcer.textContent = msg;
-        }
-      }
-    }
-
-    touchStartRef.current = null;
-  };
-
-  return { handleTouchStart, handleTouchEnd };
 }

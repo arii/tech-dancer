@@ -87,7 +87,7 @@ const ResearchAnalytics = () => {
               <BaseCard key={tool.id} padding={0} gap={0} surface="surface" overflow="hidden">
                 <Grid cols={{ base: 1, lg: 12 }}>
                   <Box
-                    span={{ base: 12, lg: 8 }}
+                    span={{ base: 1, lg: 8 }}
                     cursor="pointer"
                     onClick={() => setLightboxImage(tool.image?.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image || '')}
                   >
@@ -99,7 +99,7 @@ const ResearchAnalytics = () => {
                       />
                     )}
                   </Box>
-                  <Box span={{ base: 12, lg: 4 }} padding={6}>
+                  <Box span={{ base: 1, lg: 4 }} padding={6}>
                     <Stack gap={0} height="full">
                       <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
                         <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">

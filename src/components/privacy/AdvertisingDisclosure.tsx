@@ -24,9 +24,10 @@ export function AdvertisingDisclosure() {
           </Text>
           <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
             Ads on BoomTick are non-personalized by default. Personalized ads are served only after you
-            accept them in the on-site consent banner; declining keeps ads non-personalized. You can
-            change your choice at any time by clearing the site&apos;s local storage in your browser, and
-            you can opt out of personalized advertising entirely via Google&apos;s Ads Settings.
+            accept the Advertisement category in the cookie banner; rejecting it keeps ads
+            non-personalized. You can change your choice at any time by clearing this site&apos;s cookies
+            in your browser, and you can opt out of personalized advertising entirely via Google&apos;s
+            Ads Settings.
           </Text>
           <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
             Third-party vendors, including Google, also use cookies to serve ads based on your visits.

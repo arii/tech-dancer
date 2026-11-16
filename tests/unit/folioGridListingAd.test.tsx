@@ -2,9 +2,10 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import FolioGrid from '@/components/ui/FolioGrid';
-import { setAdConsent, resetAdConsent } from '@/lib/ads/adConsentStore';
+import { acceptAds, resetCookieYes } from '../utils/cookieYes';
 
 vi.stubEnv('VITE_ADSENSE_CLIENT', 'ca-pub-2398582836159289');
+vi.stubEnv('VITE_ADSENSE_SLOT_LISTING', '1234567890');
 
 const makeItems = (n: number) =>
   Array.from({ length: n }, (_, i) => ({
@@ -25,13 +26,13 @@ const renderGrid = (items: ReturnType<typeof makeItems>) =>
   );
 
 afterEach(() => {
-  resetAdConsent();
+  resetCookieYes();
   cleanup();
 });
 
 describe('FolioGrid listing ad placement', () => {
   it('does not throw when consent resolves with ads configured (TDZ regression)', () => {
-    setAdConsent('granted');
+    acceptAds();
     expect(() => renderGrid(makeItems(6))).not.toThrow();
     expect(document.querySelector('ins.adsbygoogle')).not.toBeNull();
   });
@@ -42,7 +43,7 @@ describe('FolioGrid listing ad placement', () => {
   });
 
   it('renders no listing ad with too few items', () => {
-    setAdConsent('granted');
+    acceptAds();
     renderGrid(makeItems(3));
     expect(document.querySelector('ins.adsbygoogle')).toBeNull();
   });

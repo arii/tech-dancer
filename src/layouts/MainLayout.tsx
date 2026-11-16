@@ -8,7 +8,6 @@ import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useCommandKey } from '@/hooks/useHotkeys';
 import { useAdSenseLoader } from '@/hooks/useAdSenseLoader';
 import { lazyWithRetry } from '@/lib/lazyWithRetry';
-import { ConsentBanner } from '@/components/ads/ConsentBanner';
 
 const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch }))));
 
@@ -16,7 +15,6 @@ const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch'
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const { isOpen: isSearchOpen, open: openSearch, query } = useGlobalSearch();
   useAdSenseLoader();
 
@@ -31,7 +29,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     if (query) openSearch();
   }, [query, openSearch]);
 
-  const { handleTouchStart, handleTouchEnd } = useScrollManagement(scrollRef, touchStartRef);
+  useScrollManagement(scrollRef);
 
 
 
@@ -44,9 +42,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
       maxWidth="full"
       minWidth={0}
       minHeight="screen"
-      className="touch-pan-y"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <Box
         as="a"
@@ -111,7 +106,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <GlobalSearch />
         </Suspense>
       )}
-      <ConsentBanner />
     </Box>
   );
 }

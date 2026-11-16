@@ -16,6 +16,9 @@ declare global {
     readonly VITE_SIMULATE_LOADING?: string;
     readonly VITE_MAILING_LIST_DEPLOYMENT_ID?: string;
     readonly VITE_ADSENSE_CLIENT?: string;
+    readonly VITE_ADSENSE_SLOT_IN_ARTICLE?: string;
+    readonly VITE_ADSENSE_SLOT_SIDEBAR?: string;
+    readonly VITE_ADSENSE_SLOT_LISTING?: string;
   }
 
   interface ImportMeta {
