@@ -62,8 +62,8 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
         </Box>
         <Box height="full">
           {next && (
-            <Stack gap={2} align="end" height="full">
-              <Stack direction="row" align="center" gap={2} minHeight={11}>
+            <Stack gap={2} height="full">
+              <Stack direction="row" align="center" justify="end" gap={2} minHeight={11}>
                 <Text variant="mono" size="xs" color="dim" weight="font-bold">
                   Next Article
                 </Text>

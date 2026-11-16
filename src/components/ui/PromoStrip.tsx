@@ -32,7 +32,8 @@ export function PromoStrip({
       width="full"
       padding={{ base: 3, sm: 4 }}
       radius="md"
-      border="line"
+      border
+      borderColor="line"
       bg="surface"
       display="block"
       className="group transition-all hover:bg-white/5"
@@ -64,7 +65,7 @@ export function PromoStrip({
           />
         </Box>
 
-        <Stack gap={0} grow={1} className="min-w-0">
+        <Stack gap={0} flex className="min-w-0">
           <Text weight="font-bold" size={{ base: 'sm', sm: 'base' }} className="leading-tight">{title}</Text>
           <Text size={{ base: 'tiny', sm: 'sm' }} color="text-dim" className="leading-snug line-clamp-2">{subtitle}</Text>
         </Stack>
