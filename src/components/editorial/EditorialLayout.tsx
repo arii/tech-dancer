@@ -48,7 +48,6 @@ export function EditorialLayout({
       width="full"
       maxWidth={sidebar ? "screen-xl" : "3xl"}
       marginX="auto"
-      paddingX={{ base: 5, md: 8, lg: 12 }}
       paddingY={{ base: 6, md: 10 }}
     >
       <Stack gap={{ base: 10, md: 14 }}>
