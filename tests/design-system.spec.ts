@@ -3,8 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, expect, type Page } from '@playwright/test';
 
-// Ratchet for docs/design-system.md: every rendered text style must be on spec or already listed
-// in the baseline. Shrink the baseline as UI PRs land: UPDATE_DESIGN_BASELINE=1 pnpm exec playwright test design-system
+// Ratchet for docs/design-system.md: the off-spec text styles rendered must match the baseline exactly,
+// so new ones fail and removed ones can't come back. Shrink the baseline as UI PRs land: UPDATE_DESIGN_BASELINE=1 pnpm exec playwright test design-system
 const BASELINE_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), 'design-system-baseline.json');
 const PAGES = ['./', './blog', './blog/2026-06-01-event-travel-packing', './gear', './about'];
 const VIEWPORTS = [
@@ -73,6 +73,10 @@ test.describe('design system: typefaces, weights and sizes', () => {
       expect.soft(seen.families.filter((f) => !baseline.families.includes(f)), 'new off-spec font families').toEqual([]);
       expect.soft(seen.weights.filter((w) => !baseline.weights.includes(w)), 'new off-spec font weights').toEqual([]);
       expect.soft(seen.sizes.filter((s) => !baseline.sizes.includes(s)), 'new off-scale font sizes').toEqual([]);
+      // Stale entries would let a removed violation come back, so the baseline must match exactly.
+      expect.soft(baseline.families.filter((f) => !seen.families.includes(f)), 'stale baseline families (rerun with UPDATE_DESIGN_BASELINE=1)').toEqual([]);
+      expect.soft(baseline.weights.filter((w) => !seen.weights.includes(w)), 'stale baseline weights (rerun with UPDATE_DESIGN_BASELINE=1)').toEqual([]);
+      expect.soft(baseline.sizes.filter((s) => !seen.sizes.includes(s)), 'stale baseline sizes (rerun with UPDATE_DESIGN_BASELINE=1)').toEqual([]);
     });
   }
 });
