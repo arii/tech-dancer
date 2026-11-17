@@ -3,18 +3,8 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 import { SITE_METADATA } from '@/config/content';
-import { formatRelativeTime } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 
 export function Footer() {
-  const [lastUpdated, setLastUpdated] = useState<string>('');
-
-  useEffect(() => {
-    // Only set on client to avoid hydration mismatch
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
-  }, []);
-
   const policyLinks = [
     { label: 'Home', to: '/' },
     { label: 'Shipping', to: '/shipping' },
@@ -24,9 +14,6 @@ export function Footer() {
     { label: 'Contact', to: '/about#contact' },
   ];
 
-  const appVersion = import.meta.env.VITE_APP_VERSION || '0.0.0';
-  const commitSha = import.meta.env.VITE_COMMIT_SHA || 'dev';
-  const isDev = import.meta.env.DEV;
 
   return (
     <Box as="footer" marginTop="auto" width="full">
@@ -82,24 +69,6 @@ export function Footer() {
             <Stack direction="row" align="center" gap={3} wrap>
               <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
                 © 2026 BOOMTICK.BLOG
-              </Text>
-              <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
-              <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>
-                <Text variant="mono" tracking="wider" uppercase>
-                  {isDev ? 'dev' : `v${appVersion}`} (
-                  <Box
-                    as="a"
-                    href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    display="inline-block"
-                    className="hover:text-accent transition-colors underline decoration-line/40"
-                  >
-                    {commitSha.substring(0, 7)}
-                  </Box>
-                  )
-                </Text>
-                {lastUpdated && ` · Last updated ${lastUpdated}`}
               </Text>
             </Stack>
 
