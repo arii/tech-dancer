@@ -254,6 +254,7 @@ export const WCSNavigatorPage: React.FC = () => {
         description="Google Search-style AI agent for West Coast Swing conventions. Pre-scans multi-room schedules, computes backward flight buffer math, and streams calendar files."
         keywords="West Coast Swing, WCS Navigator, AI dance optimizer, California 2026 WCS events, flight buffer engine, schedule parser"
         schema={navigatorSchema}
+        noindex
       />
 
       <Stack gap={6} width="full">
