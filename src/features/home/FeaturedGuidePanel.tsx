@@ -47,7 +47,7 @@ export function FeaturedGuidePanel() {
       />
       {/* Content pinned to bottom */}
       <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
-        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
+        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-bold" color="main" leading="tight">
           {FEATURED.title}
         </Text>
         <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">

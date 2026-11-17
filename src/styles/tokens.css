@@ -37,7 +37,8 @@
   --raw-font-serif: "Playfair Display", Georgia, serif;
   --raw-font-display: var(--raw-font-serif);
   --raw-font-brand: "Bricolage Grotesque", "Albert Sans", sans-serif;
-  --raw-font-mono: "Space Mono", monospace;
+  --raw-font-code: "Space Mono", ui-monospace, monospace;
+  --raw-font-mono: var(--raw-font-sans);
 
   /* Radius */
   --raw-radius-none: 0rem;

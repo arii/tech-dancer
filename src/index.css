@@ -428,7 +428,7 @@
   border-radius: 0;
 }
 .tech-specs-code {
-  font-family: var(--raw-font-mono);
+  font-family: var(--raw-font-code);
   font-size: 0.75rem;
   background-color: var(--raw-color-bg);
   padding: 1rem;
@@ -698,3 +698,9 @@
 @utility stroke-thin { stroke-width: 0.5; }
 @utility stroke-thick { stroke-width: 1.5; }
 @utility content-tag-delimiter { &:after { content: var(--tag-delimiter, ","); } }
+
+/* Two-face system: "mono" label utilities resolve to the sans face; only real
+   code keeps a monospace face. Unlayered so it wins over font-* utilities. */
+code, pre, kbd, samp {
+  font-family: var(--raw-font-code);
+}
