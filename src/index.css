@@ -701,6 +701,6 @@
 
 /* Two-face system: "mono" label utilities resolve to the sans face; only real
    code keeps a monospace face. Unlayered so it wins over font-* utilities. */
-code, pre, kbd, samp {
+code, kbd, samp {
   font-family: var(--raw-font-code);
 }
