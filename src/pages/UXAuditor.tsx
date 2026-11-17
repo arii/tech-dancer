@@ -435,6 +435,7 @@ export default function UXAuditor() {
         title="Visual UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
         canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
+        noindex
       />
       <Stack
           direction={{ base: 'col', xl: 'row' }}

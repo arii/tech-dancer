@@ -87,6 +87,17 @@ describe('SPA stub landmark skeleton', () => {
     }
   );
 
+  it('adds a prerendered robots noindex tag only for noindex routes', () => {
+    const base = SAMPLE_ROUTES[1].meta;
+    const indexed = parse(buildStubHtml(FIXTURE_INDEX, '/blog', base));
+    expect(indexed.querySelector('meta[name="robots"]')).toBeNull();
+
+    const hidden = parse(buildStubHtml(FIXTURE_INDEX, '/gear/sample', { ...base, noindex: true }));
+    const robots = hidden.querySelectorAll('meta[name="robots"][data-prerendered="true"]');
+    expect(robots.length).toBe(1);
+    expect(robots[0].getAttribute('content')).toBe('noindex, nofollow');
+  });
+
   it('cleanInjectedHtml strips injected head tags but keeps third-party scripts', () => {
     const dirty = FIXTURE_INDEX.replace(
       '</head>',

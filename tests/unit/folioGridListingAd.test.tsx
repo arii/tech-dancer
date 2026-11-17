@@ -37,9 +37,9 @@ describe('FolioGrid listing ad placement', () => {
     expect(document.querySelector('ins.adsbygoogle')).not.toBeNull();
   });
 
-  it('renders no listing ad before consent resolves', () => {
+  it('renders the listing ad before the visitor chooses (non-personalized default)', () => {
     renderGrid(makeItems(6));
-    expect(document.querySelector('ins.adsbygoogle')).toBeNull();
+    expect(document.querySelector('ins.adsbygoogle')).not.toBeNull();
   });
 
   it('renders no listing ad with too few items', () => {

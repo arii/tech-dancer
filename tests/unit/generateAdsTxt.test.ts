@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { renderAdsTxt, publisherIdFromClient, assertNoAdScript } from '../../scripts/generate-ads-txt.mjs';
 

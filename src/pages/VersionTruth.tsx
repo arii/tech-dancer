@@ -17,6 +17,7 @@ const VersionTruth = () => {
       <SEO
         title="VersionTruth - Real-time Version Oracle"
         description="The antidote to version hallucinations: real-time ground-truth for npm, Node, and GitHub Actions."
+        noindex
       />
 
       <Stack gap={8} width="full" maxWidth="full">

@@ -193,6 +193,7 @@ export default function GearPost() {
         type="article"
         image={resource.image}
         schema={structuredData}
+        noindex
       />
       <GearPostDetail
         post={resource}

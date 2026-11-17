@@ -296,6 +296,7 @@ export default function ResearchDetail() {
         <SEO
           title={`${migratedTitle} - Migrated`}
           description="This project has been migrated to Ariel Anders' primary portfolio at arii.github.io."
+          noindex
         />
         <Stack gap={8} align="center">
           <Box width={16} height={16} surface="muted" radius="full" display="flex" align="center" justify="center">
@@ -333,6 +334,7 @@ export default function ResearchDetail() {
         type="website"
         schema={structuredData}
         canonical={tool.canonicalPath ? `${BASE_URL}${tool.canonicalPath}` : undefined}
+        noindex
       />
       <Stack gap={12}>
         <Box 
