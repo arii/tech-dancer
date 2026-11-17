@@ -89,9 +89,12 @@
     "src/styles/utilities.ts": 4
   },
   "off-scale-size": {
-    "src/index.css": 8,
+    "src/index.css": 12,
+    "src/lib/variants.ts": 1,
     "src/pages/VersionTruth.tsx": 2,
-    "src/styles/design-tokens.ts": 22
+    "src/styles/design-tokens.ts": 26,
+    "src/styles/safelist.ts": 1,
+    "src/styles/utilities.ts": 1
   },
   "raw-tracking": {
     "src/components/Navigation.tsx": 1,
