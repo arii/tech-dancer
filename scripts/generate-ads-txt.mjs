@@ -8,6 +8,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { loadEnv } from 'vite';
 
 const distDir = path.resolve(process.cwd(), 'dist');
 
@@ -30,7 +31,8 @@ export const assertNoAdScript = html => {
   }
 };
 
-const client = process.env.VITE_ADSENSE_CLIENT;
+// Same sources as the Vite build (shell env plus .env files), so the gate and the built HTML agree.
+const client = loadEnv(process.env.MODE || 'production', process.cwd(), 'VITE_').VITE_ADSENSE_CLIENT;
 
 if (client) {
   const adsTxt = renderAdsTxt(publisherIdFromClient(client));
