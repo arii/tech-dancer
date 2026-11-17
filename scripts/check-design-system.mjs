@@ -9,8 +9,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASELINE_PATH = path.join(ROOT, 'scripts/design-system-baseline.json');
 
 export const RULES = [
-  { id: 'raw-font-family', pattern: /\bfont-(?:mono|serif|display|sans)\b/g, exts: ['.ts', '.tsx'] },
-  { id: 'off-spec-weight', pattern: /\bfont-(?:thin|extralight|light|medium|semibold|extrabold|black)\b/g, exts: ['.ts', '.tsx'] },
+  { id: 'raw-font-family', pattern: /\bfont-(?:(?:mono|serif|display|sans)\b|\[(?!\d)[^\]\s]+\])/g, exts: ['.ts', '.tsx'] },
+  { id: 'off-spec-weight', pattern: /\bfont-(?:(?:thin|extralight|light|medium|semibold|extrabold|black)\b|\[\d+\])/g, exts: ['.ts', '.tsx'] },
   // Spec sizes are text-xs/sm/base/lg/xl/2xl. Arbitrary text-[...] values count unless they are colours.
   {
     id: 'off-scale-size',
