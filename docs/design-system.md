@@ -75,6 +75,7 @@ Components choose a role, never a font, size or weight.
    - more than 2 font families (code blocks excluded);
    - any weight other than 400 or 700;
    - any size off the scale.
+   - Both run in ratchet mode against committed baselines (`scripts/design-system-baseline.json`, `tests/design-system-baseline.json`). Anything new fails; when a PR removes violations, update the baseline in the same PR (`pnpm run audit:design-system -- --update`, `UPDATE_DESIGN_BASELINE=1 pnpm exec playwright test design-system`).
 3. **One PR at a time, on one base.** Each UI PR starts from current `main` after the previous one lands, and includes before/after screenshots at 390px and 1280px from that same base.
 
 ## Definition of done for any UI PR
