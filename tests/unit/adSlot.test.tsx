@@ -54,11 +54,11 @@ describe('AdSlot env gating', () => {
     expect(window.adsbygoogle).toBeUndefined();
   });
 
-  it('renders nothing before consent resolves, even when configured', () => {
+  it('renders the ad unit before the visitor chooses (non-personalized default)', () => {
     configureAds();
     const { container } = render(<AdSlot placement="listing" />);
-    expect(container.querySelector('ins.adsbygoogle')).toBeNull();
-    expect(window.adsbygoogle).toBeUndefined();
+    expect(container.querySelector('ins.adsbygoogle')).not.toBeNull();
+    expect(window.adsbygoogle?.length).toBe(1);
   });
 
   it('renders an ad unit with its slot ID and queues a push once consent is granted', () => {

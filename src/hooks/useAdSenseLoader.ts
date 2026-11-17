@@ -40,17 +40,15 @@ const injectLoaderScript = (client: string): void => {
   document.head.appendChild(script);
 };
 
-const applyConsent = (client: string, consent: AdConsent | null): void => {
-  if (consent === null) return;
+const applyConsent = (client: string, consent: AdConsent): void => {
   applyPersonalization(consent === 'granted');
   injectLoaderScript(client);
 };
 
 /**
- * Injects the AdSense account-verification meta tag as soon as ads are
- * configured, but defers the loader script until CookieYes consent resolves.
- * Visitors who reject the Advertisement category get non-personalized ads, and
- * later consent changes apply to subsequent ad requests.
+ * Injects the AdSense account meta tag and loader script as soon as ads are
+ * configured. Ads stay non-personalized until the visitor accepts the
+ * Advertisement category, and later consent changes apply to subsequent ad requests.
  */
 export function useAdSenseLoader(): void {
   const client = getAdSenseClient();

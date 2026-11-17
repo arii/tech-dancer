@@ -93,10 +93,17 @@ export function getAllRoutes() {
   const toolRoutes = RESEARCH_TOOLS.map(tool => ({
     path: resolveCanonical(`/research/${tool.id}`, tool),
     lastmod: getFileLastMod('src/config/research-tools.ts'),
-    sitemap: true
+    sitemap: false
   }));
 
-  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true, stub: true }));
+  // Gear item pages are short product notes and tool pages are interactive apps;
+  // both are kept out of search so indexed pages are the long-form articles.
+  const noindexPaths = new Set([
+    ...contentRoutes.filter(r => r.path.startsWith('/gear/')).map(r => r.path),
+    ...toolRoutes.map(r => r.path)
+  ]);
+
+  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: !noindexPaths.has(r.path), stub: true }));
   const toolRoutesMapped = toolRoutes.map(r => ({ ...r, stub: true }));
 
   const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
@@ -109,7 +116,11 @@ export function getAllRoutes() {
   allRoutesRaw.forEach(r => {
     const existing = uniqueRoutesMap.get(r.path);
     if (!existing || r.lastmod > existing.lastmod) {
-      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap, stub: (r as { stub?: boolean }).stub !== false });
+      uniqueRoutesMap.set(r.path, {
+        lastmod: r.lastmod,
+        sitemap: r.sitemap && !noindexPaths.has(r.path),
+        stub: (r as { stub?: boolean }).stub !== false
+      });
     }
   });
 
@@ -126,6 +137,7 @@ export function getAllRoutes() {
     content: contentRoutes.map(r => r.path),
     stubs: uniqueRoutes.filter(r => r.stub).map(r => r.path),
     sitemap: sitemapRoutes.map(r => r.path),
+    noindex: Array.from(noindexPaths),
     all: sitemapRoutes.map(r => r.path),
     detailed: sitemapRoutes
   };

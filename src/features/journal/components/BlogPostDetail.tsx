@@ -11,7 +11,6 @@ import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 import { EditorialPostView } from '@/components/editorial/EditorialPostView';
 import { AdSlot } from '@/components/ads/AdSlot';
 import { getAdUnit } from '@/lib/ads/adSenseConfig';
-import { useAdConsent } from '@/hooks/useAdConsent';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -89,8 +88,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     </Stack>
   ) : undefined;
 
-  const consent = useAdConsent();
-  const hasSidebarContent = affiliateLinks.length > 0 || (getAdUnit('sidebar') !== undefined && consent !== null);
+  const hasSidebarContent = affiliateLinks.length > 0 || getAdUnit('sidebar') !== undefined;
 
   const sidebar = hasSidebarContent ? (
     <Box width="full">

@@ -20,10 +20,18 @@ describe('getAllRoutes', () => {
     expect(stubs).not.toContain('*');
   });
 
-  it('should use canonical path for UX Auditor', () => {
-    const { sitemap } = getAllRoutes();
-    expect(sitemap).toContain('/ux-auditor');
+  it('should keep tool and gear item pages out of the sitemap and mark them noindex', () => {
+    const { sitemap, noindex, stubs } = getAllRoutes();
+    expect(sitemap).not.toContain('/ux-auditor');
     expect(sitemap).not.toContain('/research/ux-auditor');
+    expect(sitemap).not.toContain('/versiontruth');
+    expect(sitemap.some(path => path.startsWith('/gear/'))).toBe(false);
+    expect(sitemap).toContain('/gear');
+    expect(sitemap).toContain('/blog/2026-04-19-practical-tools-essentials');
+    expect(noindex).toContain('/ux-auditor');
+    expect(noindex.some(path => path.startsWith('/gear/'))).toBe(true);
+    expect(noindex.some(path => path.startsWith('/blog/'))).toBe(false);
+    expect(stubs).toContain('/ux-auditor');
   });
 
   it('should handle tool routes correctly', () => {

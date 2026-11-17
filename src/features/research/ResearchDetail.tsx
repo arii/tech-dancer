@@ -333,6 +333,7 @@ export default function ResearchDetail() {
         type="website"
         schema={structuredData}
         canonical={tool.canonicalPath ? `${BASE_URL}${tool.canonicalPath}` : undefined}
+        noindex
       />
       <Stack gap={12}>
         <Box 
