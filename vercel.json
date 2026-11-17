@@ -59,6 +59,21 @@
       "source": "/tag/ai/page/:page",
       "destination": "/research",
       "permanent": true
+    },
+    {
+      "source": "/tag/:path*",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/:path*",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/page/:page",
+      "destination": "/blog",
+      "permanent": true
     }
   ]
 }
