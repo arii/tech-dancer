@@ -31,6 +31,8 @@ describe('getAllRoutes', () => {
     expect(noindex).toContain('/ux-auditor');
     expect(noindex.some(path => path.startsWith('/gear/'))).toBe(true);
     expect(noindex.some(path => path.startsWith('/blog/'))).toBe(false);
+    expect(sitemap).toContain('/research/deployment-impact-analyzer');
+    expect(noindex).not.toContain('/research/deployment-impact-analyzer');
     expect(stubs).toContain('/ux-auditor');
   });
 

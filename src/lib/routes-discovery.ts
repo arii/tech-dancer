@@ -98,15 +98,18 @@ export function getAllRoutes() {
 
   // Gear item pages are short product notes and tool pages are interactive apps;
   // both are kept out of search so indexed pages are the long-form articles.
+  // A tool path that is also a published study renders the article, so it stays indexed.
+  const contentPaths = new Set(contentRoutes.map(r => r.path));
   const noindexPaths = new Set([
     ...contentRoutes.filter(r => r.path.startsWith('/gear/')).map(r => r.path),
-    ...toolRoutes.map(r => r.path)
+    ...toolRoutes.map(r => r.path).filter(path => !contentPaths.has(path))
   ]);
 
   const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: !noindexPaths.has(r.path), stub: true }));
   const toolRoutesMapped = toolRoutes.map(r => ({ ...r, stub: true }));
 
   const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
+  const sitemapPaths = new Set(allRoutesRaw.filter(r => r.sitemap && !noindexPaths.has(r.path)).map(r => r.path));
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
   // The `stub` property indicates whether a dummy `index.html` file (a SPA stub) should be generated for this route
@@ -118,7 +121,7 @@ export function getAllRoutes() {
     if (!existing || r.lastmod > existing.lastmod) {
       uniqueRoutesMap.set(r.path, {
         lastmod: r.lastmod,
-        sitemap: r.sitemap && !noindexPaths.has(r.path),
+        sitemap: sitemapPaths.has(r.path),
         stub: (r as { stub?: boolean }).stub !== false
       });
     }
