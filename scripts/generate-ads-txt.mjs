@@ -8,6 +8,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { loadEnv } from 'vite';
 
 const distDir = path.resolve(process.cwd(), 'dist');
@@ -31,22 +32,25 @@ export const assertNoAdScript = html => {
   }
 };
 
-// Same sources as the Vite build (shell env plus .env files), so the gate and the built HTML agree.
-const client = loadEnv(process.env.MODE || 'production', process.cwd(), 'VITE_').VITE_ADSENSE_CLIENT;
+// Run only as the postbuild script, so tests can import the helpers without side effects.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // Same sources as the Vite build (shell env plus .env files), so the gate and the built HTML agree.
+  const client = loadEnv(process.env.MODE || 'production', process.cwd(), 'VITE_').VITE_ADSENSE_CLIENT;
 
-if (client) {
-  const adsTxt = renderAdsTxt(publisherIdFromClient(client));
-  fs.writeFileSync(path.join(distDir, 'ads.txt'), `${adsTxt}\n`);
-  console.log('✅ Generated dist/ads.txt');
-} else {
-  const adsTxtPath = path.join(distDir, 'ads.txt');
-  if (fs.existsSync(adsTxtPath)) {
-    fs.rmSync(adsTxtPath);
-    console.log('🧹 Removed stale dist/ads.txt');
-  }
-  const indexHtml = path.join(distDir, 'index.html');
-  if (fs.existsSync(indexHtml)) {
-    assertNoAdScript(fs.readFileSync(indexHtml, 'utf8'));
-    console.log('✅ Verified no AdSense scripts in built HTML (env unset)');
+  if (client) {
+    const adsTxt = renderAdsTxt(publisherIdFromClient(client));
+    fs.writeFileSync(path.join(distDir, 'ads.txt'), `${adsTxt}\n`);
+    console.log('✅ Generated dist/ads.txt');
+  } else {
+    const adsTxtPath = path.join(distDir, 'ads.txt');
+    if (fs.existsSync(adsTxtPath)) {
+      fs.rmSync(adsTxtPath);
+      console.log('🧹 Removed stale dist/ads.txt');
+    }
+    const indexHtml = path.join(distDir, 'index.html');
+    if (fs.existsSync(indexHtml)) {
+      assertNoAdScript(fs.readFileSync(indexHtml, 'utf8'));
+      console.log('✅ Verified no AdSense scripts in built HTML (env unset)');
+    }
   }
 }
