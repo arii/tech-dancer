@@ -279,7 +279,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const processedContent = useMemo(() => preprocessMarkdown(content), [content]);
 
   return (
-    <Box className="prose-counters">
+    <Box>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[
@@ -356,15 +356,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={14} marginBottom={8} className="prose-section group">
-              <Text
-                variant="mono"
-                display="block"
-                marginBottom={1}
-                className="editorial-section-number"
-              />
+            <Box marginTop={14} marginBottom={6}>
               <Text as="h2" variant="h2" size="3xl" color="main" margin={0} leading="tight" {...props} />
-              <Box height={0.5} width={12} marginTop={6} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (

@@ -167,31 +167,6 @@
     background-size: 1.25rem 1.25rem;
   }
 
-  /* Editorial Counters */
-  .prose-counters { counter-reset: section; }
-  .prose-section { counter-increment: section; }
-  .prose-section-number::before {
-    content: "STEP " counter(section, decimal-leading-zero) " ——";
-    letter-spacing: 0.15em;
-    font-size: 0.65rem;
-    opacity: 0.5;
-  }
-  .editorial-section-number::before {
-    content: counter(section, decimal-leading-zero);
-    color: var(--raw-color-accent);
-    font-weight: 900;
-    font-size: 0.75rem;
-    letter-spacing: -0.025em;
-  }
-  .editorial-section-number::after {
-    content: " / SECTION";
-    opacity: 0.4;
-    margin-left: 0.5rem;
-    font-size: var(--text-micro);
-    font-weight: bold;
-    letter-spacing: 0.1em;
-  }
-
   /* Brand SVG Utilities */
   .brand-wordmark {
     font-family: var(--raw-font-brand);

@@ -39,7 +39,6 @@ export default function Toolbox() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="GEAR & REVIEWS"
           title="Gear Reviews"
           description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
         />

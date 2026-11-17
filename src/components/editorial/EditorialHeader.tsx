@@ -83,7 +83,6 @@ export function EditorialHeader({
 
           {tags && tags.length > 0 && (
             <Stack direction="row" align="center" gap={1.5} wrap="wrap" className="max-w-full">
-              <Text variant="mono" size="xs" color="dim" weight="font-bold" marginRight={1}>TAGS:</Text>
               {tags.map((tag) => (
                 <Box
                   key={tag}

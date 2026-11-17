@@ -21,7 +21,6 @@ export default function ShippingPolicy() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="STORE POLICIES"
           title="Shipping & Fulfillment Policy"
           description="BoomTick merchandise is produced on-demand using Printful. Clear delivery expectations, fulfillment timelines, and shipping calculation details are provided below."
         />

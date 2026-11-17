@@ -67,7 +67,6 @@ const ResearchAnalytics = () => {
         {/* Full-width Hero Section */}
         <Stack gap={4} width="full">
           <PageHeader
-            label="LABORATORY"
             title="Experiments"
             description="An active sandbox and live testing environment for AI-assisted engineering tools, RAG pipelines, and automated developer workflows. Explore live testbeds, visual regression engines, and high-scale data telemetry systems."
             as="h1"

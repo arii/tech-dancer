@@ -21,7 +21,6 @@ export default function ReturnPolicy() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="STORE POLICIES"
           title="Return & Refund Policy"
           description="Because BoomTick items are custom made to order via Printful, specific policies apply for damaged items, size exchanges, and quality claims."
         />

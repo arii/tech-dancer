@@ -48,7 +48,6 @@ const Memes = () => {
 
       <Stack gap={10} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="COMMUNITY & HUMOR"
           title="West Coast Swing Memes"
           description="A centralized collection of relatable West Coast Swing memes. From slotted dance debates to the drama of trying a new pattern on the social floor, we have you covered."
         />

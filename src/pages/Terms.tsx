@@ -21,7 +21,6 @@ export default function Terms() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="COMPLIANCE & LEGAL"
           title="Terms of Service"
           description="Welcome to BoomTick (boomtick.blog). Please read these Terms of Service carefully before accessing our application, digital products, or consulting services."
         />

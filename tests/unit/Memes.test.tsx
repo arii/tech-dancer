@@ -22,7 +22,7 @@ describe('Memes Page Component', () => {
     // Check SEO & Page Headers
     expect(screen.getByTestId('memes-page')).toBeDefined();
     expect(screen.getByText('West Coast Swing Memes')).toBeDefined();
-    expect(screen.getByText('COMMUNITY & HUMOR')).toBeDefined();
+    expect(screen.queryByText('COMMUNITY & HUMOR')).toBeNull();
 
     // Check Under Construction banner notice and exact required text
     expect(screen.getByTestId('under-construction-banner')).toBeDefined();

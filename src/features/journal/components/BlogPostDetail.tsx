@@ -81,11 +81,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       ) : (
         <EditorialHero src={post.image} alt={post.imageAlt || post.title} objectFit={post.imageFit || 'cover'} objectPosition={post.imagePosition || 'top'} />
       )}
-      {post.image?.includes('/sketches/') && (
-        <Text variant="mono" size="xs" color="dim" className="italic">
-          Illustration
-        </Text>
-      )}
     </Stack>
   ) : undefined;
 

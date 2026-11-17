@@ -235,7 +235,6 @@ export default function ResearchDetail() {
                     <Stack gap={12}>
                       <Stack gap={4}>
                         <PageHeader
-                          label={`PROJECT // ${tool.taxonomyBucket || 'RESEARCH'}`}
                           title={tool.title}
                           as="h2"
                           paddingBottom={0}
@@ -366,7 +365,6 @@ export default function ResearchDetail() {
               <Stack gap={12}>
                 <Stack gap={4}>
                     <PageHeader
-                      label={`PROJECT // ${tool.category}`}
                       title={tool.title}
                       paddingBottom={0}
                       border="none"

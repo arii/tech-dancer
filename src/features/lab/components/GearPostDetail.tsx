@@ -282,11 +282,6 @@ function EditorialPostDetail({ post, onBack, backLabel }: EditorialPostDetailPro
                     objectPosition={post.imagePosition || 'top'}
                   />
                 )}
-                {post.image?.includes('/sketches/') && (
-                  <Text variant="mono" size="xs" color="dim" className="italic">
-                    Illustration
-                  </Text>
-                )}
               </Stack>
             ) : undefined
           }

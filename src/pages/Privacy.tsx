@@ -22,7 +22,6 @@ export default function Privacy() {
 
       <Stack gap={12} width="full" maxWidth="screen-xl">
         <PageHeader
-          label="COMPLIANCE & PRIVACY"
           title="Privacy Policy"
           description="At BoomTick (boomtick.blog), we are committed to respecting your privacy and protecting your personal data. Below is a comprehensive explanation of how we handle authentication details, data security, and communication."
         />

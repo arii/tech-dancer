@@ -20,7 +20,7 @@ describe('ArielProfile Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('BIOGRAPHY')).toBeTruthy();
+    expect(screen.queryByText('BIOGRAPHY')).toBeNull();
     expect(screen.getByText('Ariel Anders, PhD')).toBeTruthy();
     expect(screen.getByText(/West Coast Swing dancer and roboticist/i)).toBeTruthy();
   });

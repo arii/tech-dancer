@@ -54,7 +54,6 @@ const ArielProfile = () => {
 
       {/* 1. Standardized Page Header (Consistent with Blog, Gear, Merch, Research) */}
       <PageHeader
-        label="BIOGRAPHY"
         title={bio.name}
         description={bio.role}
       />
