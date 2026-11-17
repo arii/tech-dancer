@@ -20,9 +20,9 @@ describe('check-design-system ratchet', () => {
 
   it('counts named, oversized and arbitrary off-scale values but not colours', () => {
     const counts = countViolations({
-      'src/d.tsx': 'text-tiny text-10xl text-[clamp(1rem,2vw,2rem)] text-[#fff] text-[rgb(0,0,0)] text-2xl font-[500] font-[Inter] text-accent',
+      'src/d.tsx': 'text-tiny text-10xl text-[clamp(1rem,2vw,2rem)] text-[#fff] text-[rgb(0,0,0)] text-2xl font-[500] font-[Inter] text-accent text-[var(--color-accent)] text-[length:var(--size)]',
     });
-    expect(counts['off-scale-size']).toEqual({ 'src/d.tsx': 3 });
+    expect(counts['off-scale-size']).toEqual({ 'src/d.tsx': 4 });
     expect(counts['off-spec-weight']).toEqual({ 'src/d.tsx': 1 });
     expect(counts['raw-font-family']).toEqual({ 'src/d.tsx': 1 });
   });

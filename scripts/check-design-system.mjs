@@ -11,10 +11,11 @@ const BASELINE_PATH = path.join(ROOT, 'scripts/design-system-baseline.json');
 export const RULES = [
   { id: 'raw-font-family', pattern: /\bfont-(?:(?:mono|serif|display|sans)\b|\[(?!\d)[^\]\s]+\])/g, exts: ['.ts', '.tsx'] },
   { id: 'off-spec-weight', pattern: /\bfont-(?:(?:thin|extralight|light|medium|semibold|extrabold|black)\b|\[\d+\])/g, exts: ['.ts', '.tsx'] },
-  // Spec sizes are text-xs/sm/base/lg/xl/2xl. Arbitrary text-[...] values count unless they are colours.
+  // Spec sizes are text-xs/sm/base/lg/xl/2xl. Arbitrary text-[...] values count unless they are colours;
+  // Tailwind reads an untyped text-[var(--x)] as a colour, so only text-[length:var(--x)] counts.
   {
     id: 'off-scale-size',
-    pattern: /\btext-(?:(?:[3-9]|\d{2,})xl\b|(?:tiny|micro|xxs|[2-9]xs)\b|fluid-[\w-]+|\[(?!#|(?:rgb|hsl|oklch)a?\(|color:)[^\]\s]+\])/g,
+    pattern: /\btext-(?:(?:[3-9]|\d{2,})xl\b|(?:tiny|micro|xxs|[2-9]xs)\b|fluid-[\w-]+|\[(?!#|(?:rgb|hsl|oklch)a?\(|color:|var\()[^\]\s]+\])/g,
     exts: ['.ts', '.tsx', '.css'],
   },
   { id: 'raw-tracking', pattern: /\btracking-[\w[\].-]+/g, exts: ['.ts', '.tsx'] },
