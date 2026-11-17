@@ -18,6 +18,15 @@ describe('check-design-system ratchet', () => {
     expect(counts['inline-font-family']).toEqual({ 'index.html': 1 });
   });
 
+  it('counts named, oversized and arbitrary off-scale values but not colours', () => {
+    const counts = countViolations({
+      'src/d.tsx': 'text-tiny text-10xl text-[clamp(1rem,2vw,2rem)] text-[#fff] text-[rgb(0,0,0)] text-2xl font-[500] font-[Inter] text-accent',
+    });
+    expect(counts['off-scale-size']).toEqual({ 'src/d.tsx': 3 });
+    expect(counts['off-spec-weight']).toEqual({ 'src/d.tsx': 1 });
+    expect(counts['raw-font-family']).toEqual({ 'src/d.tsx': 1 });
+  });
+
   it('flags increases and stale (decreased) baseline entries', () => {
     const baseline = { 'raw-font-family': { 'src/a.tsx': 2, 'src/gone.tsx': 1 } };
     const { increased, decreased } = compareToBaseline({ 'raw-font-family': { 'src/a.tsx': 3 } }, baseline);
