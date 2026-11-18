@@ -1,18 +1,22 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSearchParam } from './useSearchParam';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useSearchParam('q');
   const [searchState, setSearchState] = useSearchParam('modal');
   
-  const isOpen = searchState === 'true';
+  const isOpen = searchState === 'true' || (searchState === '' && Boolean(query));
+
+  useEffect(() => {
+    if (searchState === '' && query) setSearchState('true');
+  }, [searchState, query, setSearchState]);
 
   const open = useCallback(() => {
     setSearchState('true');
   }, [setSearchState]);
 
   const close = useCallback(() => {
-    setSearchState('');
+    setSearchState('false');
   }, [setSearchState]);
 
   return {
@@ -23,4 +27,3 @@ export function useGlobalSearch() {
     close
   };
 }
-
