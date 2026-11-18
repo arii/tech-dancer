@@ -6,10 +6,11 @@ import yaml from 'yaml';
 describe('GitHub Actions Setup Workspace Reference Check', () => {
   const workflowsDir = path.resolve('.github/workflows');
 
-  it('should reference arii/boomtick/.github/actions/setup-workspace@main in all setup steps', () => {
+  it('should reference the pinned shared setup action in all setup steps', () => {
     const files = fs.readdirSync(workflowsDir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml'));
 
     expect(files.length).toBeGreaterThan(0);
+    let setupCount = 0;
 
     for (const file of files) {
       const filePath = path.join(workflowsDir, file);
@@ -23,12 +24,15 @@ describe('GitHub Actions Setup Workspace Reference Check', () => {
 
         for (const step of job.steps as Record<string, unknown>[]) {
           if (step?.name === 'Setup Workspace') {
-            expect(step.uses, `File ${file} job ${jobKey} uses invalid setup-workspace action ref`).toMatch(
-              /^(\.\/\.github\/actions\/setup-workspace|arii\/boomtick\/\.github\/actions\/setup-workspace@(main|[a-f0-9]{40}))$/
+            setupCount += 1;
+            expect(step.uses, `File ${file} job ${jobKey} uses invalid setup-workspace action ref`).toBe(
+              'arii/boomtick/.github/actions/setup-workspace@c8e6a3fe0697db1f3cc0272202dcecc4b0e06586'
             );
           }
         }
       }
     }
+    expect(setupCount).toBeGreaterThan(0);
+    expect(fs.existsSync('.github/actions/setup-workspace/action.yml')).toBe(false);
   });
 });

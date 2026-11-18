@@ -37,7 +37,7 @@ jobs:
           submodules: false
           fetch-depth: 0
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@c8e6a3fe0697db1f3cc0272202dcecc4b0e06586 # boomtick main (includes container-safe setup-workspace)
       - name: Check active runtime
         run: |
           pnpm run doctor
@@ -111,7 +111,7 @@ jobs:
           submodules: false
           fetch-depth: 0
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: arii/boomtick/.github/actions/setup-workspace@c8e6a3fe0697db1f3cc0272202dcecc4b0e06586 # boomtick main (includes container-safe setup-workspace)
         with:
           setup-python: 'false'
 
