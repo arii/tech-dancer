@@ -98,7 +98,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Workspace
-        uses: arii/boomtick/.github/actions/setup-workspace@3e970a570aee0a550ec6409de769c201c9a5b900 # boomtick main (cli-v0.20.2 + unreleased fixes)
+        uses: arii/boomtick/.github/actions/setup-workspace@c8e6a3fe0697db1f3cc0272202dcecc4b0e06586 # boomtick main (includes container-safe setup-workspace)
         with:
           setup-python: 'false'
 

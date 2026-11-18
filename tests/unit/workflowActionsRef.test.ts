@@ -26,7 +26,7 @@ describe('GitHub Actions Setup Workspace Reference Check', () => {
           if (step?.name === 'Setup Workspace') {
             setupCount += 1;
             expect(step.uses, `File ${file} job ${jobKey} uses invalid setup-workspace action ref`).toBe(
-              'arii/boomtick/.github/actions/setup-workspace@3e970a570aee0a550ec6409de769c201c9a5b900'
+              'arii/boomtick/.github/actions/setup-workspace@c8e6a3fe0697db1f3cc0272202dcecc4b0e06586'
             );
           }
         }
