@@ -26,7 +26,8 @@ for (const viewport of [
     const item = label.locator('..');
     await expect(item).toContainText('Powdered mixes (like Liquid I.V.)');
     await expect(page.locator('main')).not.toContainText('- **Reusable water bottle');
-    const earplugs = page.getByRole('link', { name: 'Open Loop Experience 2 Ear Plugs', exact: true });
+    const earplugs = page.getByRole('article').filter({ hasText: 'Reusable water bottle & electrolyte packets:' })
+      .getByRole('link', { name: 'Open Loop Experience 2 Ear Plugs', exact: true });
     await expect(earplugs).toHaveAttribute('href', /^https:\/\//);
     await earplugs.scrollIntoViewIfNeeded();
     await expect(earplugs).toBeVisible();
