@@ -49,7 +49,9 @@ Keep a small backpack or messenger bag with you in the ballroom to keep essentia
 - **A small sweat towel:** Useful for wiping down your face and arms between dances.
 - **A handheld fan:** A battery-powered fan or a manual folding fan is helpful for cooling down on the sidelines.
 - **High-fidelity earplugs:** Ballroom sound systems can be loud. Dampening earplugs (like Loop Experience 2) protect your hearing while still letting you hear the music and talk to your partners.
+
 <notice type="affiliate" id="loop-experience"></notice>
+
 - **Reusable water bottle & electrolyte packets:** Powdered mixes (like Liquid I.V.) help prevent muscle cramps and dehydration from hours of active sweating.
 
 ![A slim, black bounce-free running belt with a zippered expandable pouch, designed to discreetly hold a phone, keys, and cash under a dance shirt.](/images/gear/sketches/fanny-pack.webp)
