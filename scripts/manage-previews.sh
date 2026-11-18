@@ -7,8 +7,17 @@ set -e
 # Configuration
 GRACE_PERIOD_SECONDS=${GRACE_PERIOD_SECONDS:-7200} # 2 hours
 MAX_AGE_SECONDS=${MAX_AGE_SECONDS:-2592000} # 30 days
-PROTECTED_PATHS=("assets" "previews" "tech-dancer" "css" "js" "img" "images" "public")
 # Root files are implicitly protected by find -mindepth 2
+
+is_protected_path() {
+    local top_level="${1%%/*}"
+    case "$top_level" in
+        assets|previews|tech-dancer|css|js|img|images|public) return 0 ;;
+    esac
+
+    # Main is also published under tech-dancer/; the mirror identifies production routes.
+    [[ -f "tech-dancer/$1/index.html" ]]
+}
 
 # Arguments
 OPEN_PR_BRANCHES_FILE=$1
@@ -36,16 +45,7 @@ echo "Scanning for stale previews..."
 while IFS= read -r index_file; do
     dir=$(dirname "$index_file" | sed 's|^\./||')
 
-    # Skip protected top-level directories
-    top_level="${dir%%/*}"
-    is_protected=false
-    for p in "${PROTECTED_PATHS[@]}"; do
-        if [ "$top_level" = "$p" ]; then
-            is_protected=true
-            break
-        fi
-    done
-    if [ "$is_protected" = true ]; then
+    if is_protected_path "$dir"; then
         echo "Skipping protected path: $dir"
         continue
     fi
@@ -134,16 +134,7 @@ while IFS= read -r index_file; do
     # Skip root
     if [ "$dir" = "." ]; then continue; fi
 
-    # Skip protected paths
-    top_level="${dir%%/*}"
-    is_protected=false
-    for p in "${PROTECTED_PATHS[@]}"; do
-        if [ "$top_level" = "$p" ]; then
-            is_protected=true
-            break
-        fi
-    done
-    if [ "$is_protected" = true ]; then continue; fi
+    if is_protected_path "$dir"; then continue; fi
 
     # Read metadata
     COMMIT_TS=$(cat "$dir/.commit-timestamp" 2>/dev/null || cat "$dir/.timestamp" 2>/dev/null || echo 0)
