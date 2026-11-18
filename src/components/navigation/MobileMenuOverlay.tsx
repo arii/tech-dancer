@@ -1,11 +1,11 @@
-
+import { useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useIsPresent } from 'motion/react';
 import { Box, Text, Stack } from '@/layouts/Primitives';
+import { useHotkeys } from '@/hooks/useHotkeys';
 import { stroke } from '@/styles/design-tokens';
 import { transitions } from '@/styles/utilities';
 import { TOP_NAV_ROUTES } from '@/config/routes';
-import { useEffect, useRef } from 'react';
 import { NavItem } from './NavItem';
 
 interface MobileMenuOverlayProps {
@@ -16,9 +16,17 @@ interface MobileMenuOverlayProps {
 
 export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenuOverlayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isPresent = useIsPresent();
+
+  useHotkeys('Escape', (event) => {
+    if (isOpen && isPresent) {
+      event.preventDefault();
+      onClose();
+    }
+  }, [isOpen, isPresent, onClose]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !isPresent) return;
 
     const container = containerRef.current;
     if (!container) return;
@@ -51,9 +59,12 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      originalActiveElement?.focus();
+      if (originalActiveElement?.isConnected &&
+        (document.activeElement === document.body || container.contains(document.activeElement))) {
+        originalActiveElement.focus();
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, isPresent]);
 
   if (!isOpen) return null;
 
