@@ -206,11 +206,14 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       !process.env.VITEST && Sitemap({
-        hostname: resolveHostname().replace(/\/$/, ''),
+        hostname,
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.filter(route => route !== '/').map(route => route.replace(/\/$/, '') || '/'),
-        // Exclude infrastructure pages that are not real app routes
-        exclude: ['/404', '/previews', '/previews/'],
+        // The production Pages deploy replaces /blog with a redirect.
+        exclude: [
+          '/404', '/previews', '/previews/',
+          ...(hostname === 'https://arii.github.io/tech-dancer' ? ['/blog'] : []),
+        ],
         generateRobotsTxt: false,
         xmlns: {
           news: false,
