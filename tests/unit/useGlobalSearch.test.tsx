@@ -36,6 +36,16 @@ describe('global search URL state', () => {
     expect(result.current.isOpen).toBe(false);
   });
 
+  it('keeps a direct-link search open when the query is cleared', () => {
+    const { result } = renderSearch('/blog?q=shoes&category=Travel');
+    act(() => result.current.setQuery(''));
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.query).toBe('');
+    const params = new URLSearchParams(result.current.location.search);
+    expect(params.get('modal')).toBe('true');
+    expect(params.get('category')).toBe('Travel');
+  });
+
   it('opens a blank search only when requested', () => {
     const { result } = renderSearch('/');
     expect(result.current.isOpen).toBe(false);

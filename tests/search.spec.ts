@@ -106,6 +106,18 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(page).toHaveURL(/\/blog\/[^?]+$/);
   });
 
+  test('clearing a direct-link query keeps the dialog open for another search', async ({ page }) => {
+    await page.goto('./blog?q=travel');
+    const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+    await expect(input).toBeFocused();
+    await input.fill('');
+    await expect(page).not.toHaveURL(/[?&]q=/);
+    await expect(input).toBeFocused();
+    await input.fill('shoes');
+    await expect(page).toHaveURL(/q=shoes/);
+    await expect(input).toBeVisible();
+  });
+
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 844, height: 390 }]) {
     test(`search fits and scrolls at ${viewport.width}x${viewport.height}`, async ({ page }) => {
       await page.setViewportSize(viewport);
