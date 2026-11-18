@@ -6,7 +6,7 @@ import yaml from 'yaml';
 describe('GitHub Actions Setup Workspace Reference Check', () => {
   const workflowsDir = path.resolve('.github/workflows');
 
-  it('should reference the released shared setup action in all setup steps', () => {
+  it('should reference the pinned shared setup action in all setup steps', () => {
     const files = fs.readdirSync(workflowsDir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml'));
 
     expect(files.length).toBeGreaterThan(0);
@@ -26,7 +26,7 @@ describe('GitHub Actions Setup Workspace Reference Check', () => {
           if (step?.name === 'Setup Workspace') {
             setupCount += 1;
             expect(step.uses, `File ${file} job ${jobKey} uses invalid setup-workspace action ref`).toBe(
-              'arii/boomtick/.github/actions/setup-workspace@cli-v0.20.2'
+              'arii/boomtick/.github/actions/setup-workspace@3e970a570aee0a550ec6409de769c201c9a5b900'
             );
           }
         }
