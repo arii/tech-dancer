@@ -67,6 +67,8 @@ jobs:
 
           # 3. SEO Aggregation (Only on Main)
           if [ "$REF_NAME" = "main" ]; then
+            cp scripts/pages-blog-redirect.html dist/blog/index.html
+
             # Generate robots.txt pointing at canonical sitemap location
             {
               echo "User-agent: *"
