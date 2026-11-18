@@ -5,14 +5,14 @@ export function useGlobalSearch() {
   const [query, setQuery] = useSearchParam('q');
   const [searchState, setSearchState] = useSearchParam('modal');
   
-  const isOpen = searchState === 'true';
+  const isOpen = searchState === 'true' || (searchState === '' && Boolean(query));
 
   const open = useCallback(() => {
     setSearchState('true');
   }, [setSearchState]);
 
   const close = useCallback(() => {
-    setSearchState('');
+    setSearchState('false');
   }, [setSearchState]);
 
   return {
@@ -23,4 +23,3 @@ export function useGlobalSearch() {
     close
   };
 }
-

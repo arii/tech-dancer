@@ -58,6 +58,72 @@ test.describe('Global Search Modal', () => {
 
 test.describe('Search and Filter URL Persistence', () => {
 
+  for (const dismiss of ['Escape', 'Close search', 'backdrop']) {
+    test(`populated direct-link search stays dismissed via ${dismiss}`, async ({ page }) => {
+      await page.goto('./blog?q=travel');
+      const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+      await expect(input).toBeFocused();
+      if (dismiss === 'Escape') await page.keyboard.press('Escape');
+      else if (dismiss === 'backdrop') await page.getByTestId('search-backdrop').click({ position: { x: 2, y: 2 } });
+      else await page.getByLabel('Close search').click();
+      await expect(input).not.toBeVisible();
+      await expect(page).toHaveURL(/modal=false/);
+      await page.reload();
+      await expect(page.locator('main')).toBeVisible();
+      await expect(input).not.toBeVisible();
+      await page.keyboard.press('Control+k');
+      await expect(input).toBeVisible();
+      await expect(input).toHaveValue('travel');
+    });
+  }
+
+  test('dismissal restores focus and cancels a pending query update', async ({ page }) => {
+    await page.goto('./');
+    const opener = page.getByRole('button', { name: 'Open search', exact: true });
+    await opener.click();
+    const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+    await expect(input).toBeFocused();
+    await input.fill('pending-query');
+    await page.keyboard.press('Escape');
+    await expect(opener).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(input).toBeFocused();
+    await expect(input).toHaveValue('');
+  });
+
+  test('Tab to a result then Enter follows the keyboard hint', async ({ page }) => {
+    await page.goto('./blog?q=travel+pack');
+    const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+    const firstResult = page.getByTestId('search-result').first();
+    await expect(firstResult).toBeVisible();
+    await expect(input).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.getByLabel('Close search')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(firstResult).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(input).not.toBeVisible();
+    await expect(page).toHaveURL(/\/blog\/[^?]+$/);
+  });
+
+  for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 844, height: 390 }]) {
+    test(`search fits and scrolls at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto('./blog?q=travel+pack');
+      const results = page.getByTestId('search-result');
+      await expect(results.first()).toBeVisible();
+      const footer = page.getByTestId('search-results-count');
+      const bounds = await footer.boundingBox();
+      expect(bounds).not.toBeNull();
+      expect(bounds!.y + bounds!.height).toBeLessThan(viewport.height);
+      await results.last().scrollIntoViewIfNeeded();
+      await expect(results.last()).toBeInViewport();
+      await expect(page.getByLabel('Close search')).toBeInViewport();
+      await page.keyboard.press('Escape');
+      await expect(page.getByTestId('search-dialog')).not.toBeVisible();
+    });
+  }
+
   test('Global Search parameter should persist after reload', async ({ page }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
