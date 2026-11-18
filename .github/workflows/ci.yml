@@ -308,7 +308,7 @@ jobs:
         shell: bash
 
       - name: Deployment Impact Analysis
-        uses: arii/boomtick@main # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        uses: arii/boomtick@cli-v0.20.2 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         with:
