@@ -86,6 +86,7 @@ export const WCSNavigatorPage: React.FC = () => {
   );
 
   const handleSelectEventPreset = (event: WCSCaliforniaEvent, prefs?: Partial<UserPreferences>) => {
+    setDiscoveryFailed(false);
     setActiveEventName(event.name);
     setActiveEventId(event.id);
     setUploadedPayload(null);
