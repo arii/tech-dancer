@@ -29,7 +29,7 @@
     "lint": "run-p lint:*",
     "lint:ox": "oxlint --deny-warnings src/ tests/ scripts/",
     "lint:eslint": "eslint . --max-warnings 0",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "node scripts/check-types.mjs",
     "lint:python": "if [ -f .venv/bin/pylint ]; then .venv/bin/pylint etl/ scripts/ tests/; else pylint etl/ scripts/ tests/; fi",
     "type-check:python": "mypy .",
     "audit:semgrep": "semgrep scan --config auto --error",
@@ -39,7 +39,7 @@
     "audit:duplication": "jscpd .",
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep audit:duplication",
     "knip": "knip",
-    "type-check": "tsc --noEmit",
+    "type-check": "node scripts/check-types.mjs",
     "audit:inventory": "node scripts/audit/check-suppression-inventory.mjs",
     "review:ux:prep": "pnpm run setup:playwright && node scripts/detect-antipatterns.mjs",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
@@ -56,7 +56,8 @@
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
     "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
-    "audit:semantic": "node scripts/audit/detect-semantic-duplicates.mjs"
+    "audit:semantic": "node scripts/audit/detect-semantic-duplicates.mjs",
+    "type-check:full": "tsc --noEmit --pretty false -p tsconfig.app.json; tsc --noEmit --pretty false -p tsconfig.node.json"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
