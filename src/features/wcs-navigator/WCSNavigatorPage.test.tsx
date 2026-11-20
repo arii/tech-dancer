@@ -3,13 +3,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WCSNavigatorPage } from './WCSNavigatorPage';
 import { discoverSchedule } from './services/wcsApiClient';
 import { MOCK_EVENT_RESULTS } from './data/mockResults';
+import { CALIFORNIA_2026_EVENTS } from './data/californiaEvents';
 
 vi.mock('./services/wcsApiClient', () => ({ discoverSchedule: vi.fn(), generateSchedule: vi.fn() }));
 vi.mock('@/components/SEO', () => ({ SEO: () => null }));
 vi.mock('./hooks/useNavigatorStorage', () => ({ useNavigatorStorage: () => ({ saveDraftDebounced: vi.fn() }) }));
 vi.mock('./components/EventSearchHero', () => ({
-  EventSearchHero: ({ onDiscoverUrl }: { onDiscoverUrl: (url: string) => void }) => (
-    <button onClick={() => onDiscoverUrl('https://example.com/my-event')}>Upload schedule URL</button>
+  EventSearchHero: ({ onDiscoverUrl, onDiscoverPreset }: {
+    onDiscoverUrl: (url: string) => void;
+    onDiscoverPreset: (event: typeof CALIFORNIA_2026_EVENTS[number]) => void;
+  }) => (
+    <div>
+      <button onClick={() => onDiscoverUrl('https://example.com/my-event')}>Upload schedule URL</button>
+      <button onClick={() => onDiscoverPreset(CALIFORNIA_2026_EVENTS[0])}>Choose sample preset</button>
+    </div>
   ),
 }));
 vi.mock('./components/AgentDiscoveryTransition', () => ({
@@ -71,6 +78,10 @@ describe('custom schedule fallback choice', () => {
     expect(screen.queryByText('Preference questions')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Try another schedule' }));
     expect(screen.getByText('Upload schedule URL')).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Choose sample preset' }));
+    fireEvent.click(screen.getByText('Finish discovery'));
+    expect(screen.getByText('Preference questions')).toBeDefined();
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 
   it('does not require fallback approval for a live discovery response', async () => {
