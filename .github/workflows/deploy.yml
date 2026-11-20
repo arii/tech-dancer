@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - '**'
+      - main
   workflow_dispatch:
 
 
@@ -22,14 +22,14 @@ jobs:
       contents: write
 
   build:
+    timeout-minutes: 45
     needs: verify-changes
     if: ${{ needs.verify-changes.outputs.has_changes == 'true' && !startsWith(github.ref_name, 'automation/update-submodule-') }}
     runs-on: ubuntu-latest
     concurrency:
-      # Build jobs for the same branch can be cancelled if a newer push arrives
-      # to save CI minutes, as only the latest build for a branch is relevant.
+      # Keep an active build running when a newer main push arrives.
       group: build-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -100,12 +100,13 @@ jobs:
           retention-days: 1
 
   deploy:
+    timeout-minutes: 20
     needs: build
     runs-on: ubuntu-latest
     concurrency:
       # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
       group: deploy-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag

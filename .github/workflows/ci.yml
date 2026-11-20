@@ -42,7 +42,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CI: true
@@ -321,6 +321,7 @@ jobs:
     needs: [verify-changes]
     if: ${{ needs.verify-changes.outputs.has_code_changes == 'true' || github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       security-events: write
       contents: read
