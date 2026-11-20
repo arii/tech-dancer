@@ -63,12 +63,6 @@ function runTsc(project) {
 }
 
 /**
- * Normalize tsc --pretty false output into stable entries.
- * Input line: src/foo.tsx(12,34): error TS2322: Type 'x' is not...
- * Normalized:  src/foo.tsx|TS2322|Type 'x' is not...
- * Related-information lines (indented, no "error TS") are ignored.
- */
-/**
  * Reduce absolute paths inside a message to repo-relative tails, so the same
  * error produced under different checkout roots normalizes identically.
  * tsc quotes these paths: '/tmp/td/src/x.ts', '/__w/tech-dancer/tech-dancer/src/x.ts'.
@@ -80,6 +74,12 @@ function stripAbsPaths(msg) {
   );
 }
 
+/**
+ * Normalize tsc --pretty false output into stable entries.
+ * Input line: src/foo.tsx(12,34): error TS2322: Type 'x' is not...
+ * Normalized:  src/foo.tsx|TS2322|Type 'x' is not...
+ * Related-information lines (indented, no "error TS") are ignored.
+ */
 function normalize(output, project) {
   const entries = [];
   for (const rawLine of output.split('\n')) {
