@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/task/structural-de-slop-pr-copy-draft-for-sig-A9kvHrWS/sitemap.xml
