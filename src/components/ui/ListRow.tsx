@@ -78,15 +78,17 @@ export function ListRow(props: ListRowProps) {
         )}
       </Box>
       <Stack gap={1} flex paddingY={3} className="min-w-0">
-        <Box display="flex" align="center" gap={3}>
-          <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
-          <Text variant="mono" size="micro" color="dim">{date}</Text>
+        <Box display="flex" align="center" gap={3} className="min-w-0">
+          <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0 whitespace-nowrap">{category}</Text>
+          <Text variant="mono" size="micro" color="dim" className="whitespace-nowrap shrink-0">{date}</Text>
         </Box>
-        <Text variant="display" size="sm" weight="font-bold" className="line-clamp-1">{title}</Text>
+        <Text variant="display" size="sm" weight="font-bold" className="line-clamp-2 sm:line-clamp-1">{title}</Text>
         <Text variant="body" size="xs" color="dim" className="truncate">{excerpt}</Text>
       </Stack>
-      <Box display="flex" align="center" gap={3} padding={4} shrink={0}>
-        <Text variant="mono" size="micro" color="dim">{rt} min</Text>
+      {/* Top-aligned to the title line: centering against the whole row let
+          the reading time drift whenever the meta row grew taller. */}
+      <Box display="flex" align="start" gap={3} paddingX={4} paddingTop={8.5} paddingBottom={4} self="start" shrink={0}>
+        <Text variant="mono" size="micro" color="dim" className="whitespace-nowrap">{rt} min</Text>
         <Box as={ChevronRight} width={3.5} height={3.5} className="opacity-medium group-hover:opacity-full transition-opacity text-text-dim" />
       </Box>
     </Box>

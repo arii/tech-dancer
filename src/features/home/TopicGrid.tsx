@@ -1,18 +1,8 @@
-import { Shirt, Plane, VenetianMask as Mask, Heart } from 'lucide-react';
+import { Plane, VenetianMask as Mask, Heart } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
 const TOPICS = [
-  {
-    id: "gear",
-    label: "Gear & apparel",
-    icon: Shirt,
-    href: "/gear",
-    iconColorClass: "text-accent-sky",
-    iconBgClass: "bg-accent-sky/10",
-    iconHoverBgClass: "group-hover:bg-accent-sky/20",
-    iconAnimClass: "group-hover:scale-110",
-  },
   {
     id: "travel",
     label: "Travel & packing",
@@ -48,10 +38,10 @@ const TOPICS = [
 export function TopicGrid() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
-      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} uppercase tracking="wider">
+      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={3}>
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 1, sm: 4 }}>
         {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconBgClass, iconHoverBgClass, iconAnimClass }) => (
           <Stack
             key={label}
@@ -60,7 +50,8 @@ export function TopicGrid() {
             direction="row"
             align="center"
             gap={4}
-            padding={4}
+            paddingX={4}
+            paddingY={{ base: 2.5, sm: 4 }}
             radius="md"
             className={`group cursor-pointer border border-line bg-surface hover:bg-surface-alt transition-colors topic-card-${id}`}
           >

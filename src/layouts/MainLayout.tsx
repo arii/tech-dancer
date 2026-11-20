@@ -15,7 +15,6 @@ const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch'
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const { isOpen: isSearchOpen, open: openSearch } = useGlobalSearch();
   useAdSenseLoader();
 
@@ -24,7 +23,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     openSearch();
   }, [openSearch]);
 
-  const { handleTouchStart, handleTouchEnd } = useScrollManagement(scrollRef, touchStartRef);
+  useScrollManagement(scrollRef);
 
 
 
@@ -37,9 +36,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
       maxWidth="full"
       minWidth={0}
       minHeight="screen"
-      className="touch-pan-y"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <Box
         as="a"
@@ -73,7 +69,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           position="relative"
           zIndex={0}
           isolation="isolate"
-          paddingTop={{ base: 16, lg: 16 }}
+          paddingTop={{ base: 20, lg: 16 }}
           maxWidth="full"
           width="full"
           minWidth={0}

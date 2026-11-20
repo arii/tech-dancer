@@ -36,10 +36,10 @@ const Home = () => {
         minWidth={0}
         align="center"
       >
-        <Box span={{ base: 1, lg: 7 }}>
+        <Box span={{ base: 1, lg: 7 }} className="min-w-0">
           <HeroSection />
         </Box>
-        <Box span={{ base: 1, lg: 5 }}>
+        <Box span={{ base: 1, lg: 5 }} className="min-w-0">
           <FeaturedGuidePanel />
         </Box>
       </Grid>
@@ -71,7 +71,7 @@ const Home = () => {
           maxWidth="full"
           minWidth={0}
         >
-          <Box span={{ base: 1, lg: 8 }}>
+          <Box span={{ base: 1, lg: 8 }} className="min-w-0">
             <LatestPosts />
           </Box>
           <Box span={{ base: 1, lg: 4 }}>

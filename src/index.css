@@ -53,7 +53,6 @@
   --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
   --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
   --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
-  --spacing-wordmark-offset: -0.1875rem;
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
@@ -209,18 +208,6 @@
     display: flex;
     align-items: center;
     letter-spacing: 0.05em;
-  }
-  .wordmark-hero {
-    font-family: var(--raw-font-display);
-    margin-top: 0.75rem;
-    opacity: 0;
-    margin-left: 0;
-    @media (min-width: 48rem) {
-      margin-left: var(--spacing-wordmark-offset);
-    }
-    transform: translateY(0.625rem);
-    font-size: clamp(1.125rem, 4vw, 1.75rem);
-    animation: fadeUp 0.7s ease forwards 0.4s;
   }
   .wordmark-nav {
     font-family: var(--raw-font-sans);
@@ -465,16 +452,9 @@
   .hero-section {
     background: var(--hero-bg);
     min-height: auto;
-    @media (min-width: 48rem) {
-      min-height: 34vh;
-    }
   }
   .hero-bottom-gradient {
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
-  }
-  .hero-logo-anim {
-    height: clamp(3.75rem, 10vw, 7.5rem);
-    animation: fadeUp 0.6s ease forwards 0.05s;
   }
   .hero-headline-anim {
     animation: fadeUp 0.6s ease forwards 0.2s;
@@ -678,13 +658,20 @@
 }
 
 @utility scroll-mask-fade {
-  mask-image: linear-gradient(to right, transparent, black 0.9375rem, black calc(100% - 0.9375rem), transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 0.9375rem, black calc(100% - 0.9375rem), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
 }
 
 .scroll-anchor {
   scroll-margin-top: 6rem;
 }
+
+/* Fixed-header scroll safety: the nav is 4rem tall; give scroll
+   restoration / anchor jumps 1rem of clearance below it. */
+html {
+  scroll-padding-top: 5rem;
+}
+
 
 @utility font-fluid-h1 {
   font-size: clamp(1.75rem, 5vw, 2.5rem);

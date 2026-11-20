@@ -19,7 +19,7 @@ export function SearchBox({
     <Box
       display="flex"
       align="center"
-      position="relative"
+      gap={2}
       surface="default"
       border
       paddingX={4}
@@ -30,12 +30,13 @@ export function SearchBox({
       radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
+      {/* Icon lives in the flex flow so the input's text always clears it by
+          the gap — no independent padding/left magic numbers to drift apart. */}
       <Box
         as={Search}
         width={4.5}
         height={4.5}
-        position="absolute"
-        left={4}
+        shrink={0}
         pointerEvents="none"
         className="text-text-dim"
       />
@@ -45,7 +46,6 @@ export function SearchBox({
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        paddingLeft={10}
         width="full"
         className="bg-transparent border-none outline-none focus:ring-0"
         value={value}

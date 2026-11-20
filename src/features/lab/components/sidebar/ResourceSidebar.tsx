@@ -180,7 +180,9 @@ export function ResourceSidebar({ slug, affiliateIds, affiliateLink, shopUrl, pr
                   return false;
                 }
               })();
-              const buttonText = isAmazon ? 'Check Price on Amazon' : link.name || 'View on Store';
+              // Fixed action copy only: link.name is an inventory name, not an
+              // action, and must never leak into a purchase button.
+              const buttonText = isAmazon ? 'Check Price on Amazon' : 'View on Store';
               return (
                 <Box
                   key={link.id}

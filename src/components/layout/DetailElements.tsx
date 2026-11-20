@@ -44,7 +44,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
 export function VerdictCallout({ verdict }: { verdict: string }) {
   return (
-    <Box border padding={8} surface="accent" marginBottom={12} radius="lg" className="border-accent/30">
+    <Box border padding={{ base: 5, md: 8 }} surface="accent" marginBottom={{ base: 8, md: 12 }} radius="lg" className="border-accent/30">
        <Stack gap={3}>
           <Stack direction="row" align="center" gap={3}>
              <Icon icon={Shield} size="lg" color="accent" />

@@ -76,7 +76,7 @@
     "src/features/wcs-navigator/components/FullScheduleModal.tsx": 4,
     "src/features/wcs-navigator/components/GatewayFallbackBanner.tsx": 2,
     "src/features/wcs-navigator/components/ThemeDressCodeCard.tsx": 2,
-    "src/layouts/Footer.tsx": 4,
+    "src/layouts/Footer.tsx": 3,
     "src/lib/variants.ts": 1,
     "src/pages/Merch.tsx": 1,
     "src/pages/Privacy.tsx": 2,
@@ -117,6 +117,6 @@
   },
   "inline-font-family": {
     "index.html": 1,
-    "src/index.css": 11
+    "src/index.css": 10
   }
 }
