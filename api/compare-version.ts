@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { resolveLatest, compareVersions, checkNpmDeprecation, checkNodeEol, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
+import { resolveComparison, Ecosystem, MAX_PARAM_LENGTH } from "./_lib/versions.js";
 
 const VALID: Ecosystem[] = ["npm", "node", "gh-action"];
 
@@ -31,32 +31,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: `name is required for ecosystem=${ecosystem}` });
   }
 
-  const latest = await resolveLatest(ecosystem, name);
-  if (latest === null) {
+  const comparison = await resolveComparison(ecosystem, candidate, name);
+  if (comparison === null) {
     return res.status(502).json({ error: "upstream lookup failed", ecosystem, name: name ?? null });
   }
 
-  const cmp = compareVersions(candidate, latest);
-  
-  let isDeprecated: boolean | null = null;
-  let isEOL: boolean | null = null;
-
-  if (ecosystem === "npm" && name) {
-    isDeprecated = await checkNpmDeprecation(name, candidate);
-  } else if (ecosystem === "node") {
-    isEOL = await checkNodeEol(candidate);
-  }
-
   return res.status(200).json({
-    ecosystem,
-    name: name ?? "node",
-    candidate,
-    latest,
-    isOutdated: cmp < 0,
-    isCurrent: cmp === 0,
-    isAheadOfLatest: cmp > 0,
-    isDeprecated,
-    isEOL,
+    ...comparison,
     checkedAt: new Date().toISOString(),
   });
 }
