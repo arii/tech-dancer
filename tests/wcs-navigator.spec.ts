@@ -26,6 +26,8 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
   });
 
   test('Step 1.5: Custom Schedule PDF Ingestion Drawer Toggle & URL Search Ingestion', async ({ page }) => {
+    // Exercise offline fallback deterministically, without calling the live gateway.
+    await page.route('**/api/v1/discover', (route) => route.abort());
     const uploadToggleBtn = page.getByRole('button', { name: /Or upload custom schedule PDF/i });
     await expect(uploadToggleBtn).toBeVisible();
     await uploadToggleBtn.click();
@@ -37,6 +39,10 @@ test.describe('WCS Navigator E2E Journeys & Accessibility Audit', () => {
     await searchInput.fill('https://boogiebythebay.org/schedule.pdf');
     await searchInput.press('Enter');
 
+    const acceptDraft = page.getByRole('button', { name: 'Use unverified synthesized draft', exact: true });
+    await expect(acceptDraft).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/Step 1/i)).not.toBeVisible();
+    await acceptDraft.click();
     await expect(page.getByText(/Step 1/i)).toBeVisible({ timeout: 15000 });
   });
 

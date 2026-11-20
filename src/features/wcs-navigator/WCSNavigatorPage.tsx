@@ -21,7 +21,7 @@ import { discoverSchedule, generateSchedule, ServiceTelemetry } from './services
 import { useNavigatorStorage } from './hooks/useNavigatorStorage';
 import { adaptTraceToUserPreferences, extractUserDivision, extractUserRole } from './utils/scheduleRuleEngine';
 
-type WizardStep = 'search' | 'discovering' | 'questionnaire' | 'generating' | 'results';
+type WizardStep = 'search' | 'discovering' | 'fallback-choice' | 'discovery-error' | 'questionnaire' | 'generating' | 'results';
 
 function buildVisualScheduleMarkdownDoc(
   eventTitle: string,
@@ -69,6 +69,7 @@ export const WCSNavigatorPage: React.FC = () => {
   // Custom Upload & Live Gateway State
   const [uploadedPayload, setUploadedPayload] = useState<File | string | null>(null);
   const [uploadType, setUploadType] = useState<'pdf' | 'url'>('pdf');
+  const [discoveryFailed, setDiscoveryFailed] = useState(false);
   const [isDiscoveryLoading, setIsDiscoveryLoading] = useState<boolean>(false);
   const [customTrace, setCustomTrace] = useState<AgentDecisionTrace | null>(null);
   const [discoverySource, setDiscoverySource] = useState<'live_api' | 'client_heuristic'>('live_api');
@@ -85,6 +86,7 @@ export const WCSNavigatorPage: React.FC = () => {
   );
 
   const handleSelectEventPreset = (event: WCSCaliforniaEvent, prefs?: Partial<UserPreferences>) => {
+    setDiscoveryFailed(false);
     setActiveEventName(event.name);
     setActiveEventId(event.id);
     setUploadedPayload(null);
@@ -122,6 +124,10 @@ export const WCSNavigatorPage: React.FC = () => {
     setUploadedPayload(target);
     setUploadType(isUrl ? 'url' : 'pdf');
     setIsDiscoveryLoading(true);
+    setDiscoveryFailed(false);
+    setCustomTrace(null);
+    setDiscoverySource('live_api');
+    setDiscoveryErrorReason(undefined);
 
     setStep('discovering');
 
@@ -137,12 +143,17 @@ export const WCSNavigatorPage: React.FC = () => {
       }
     } catch (err) {
       console.error('[WCS Navigator] Custom discovery error:', err);
+      setDiscoveryFailed(true);
     } finally {
       setIsDiscoveryLoading(false);
     }
   };
 
   const handleDiscoveryComplete = () => {
+    if (discoveryFailed) {
+      setStep('discovery-error');
+      return;
+    }
     if (activeEventId && MOCK_EVENT_RESULTS[activeEventId]) {
       const mockData: EventMockData = MOCK_EVENT_RESULTS[activeEventId];
       setDiscoveryData(mockData.discovery);
@@ -150,7 +161,7 @@ export const WCSNavigatorPage: React.FC = () => {
     } else if (customTrace) {
       setDecisionTrace(customTrace);
     }
-    setStep('questionnaire');
+    setStep(uploadedPayload && discoverySource === 'client_heuristic' ? 'fallback-choice' : 'questionnaire');
   };
 
   const resolveActiveTrace = async (answers: Record<string, QuestionAnswerValue>): Promise<AgentDecisionTrace> => {
@@ -381,6 +392,26 @@ export const WCSNavigatorPage: React.FC = () => {
             isAsyncLoading={isDiscoveryLoading}
             onComplete={handleDiscoveryComplete}
           />
+        )}
+
+        {step === 'discovery-error' && (
+          <Stack gap={3} role="alert">
+            <Text>We could not prepare a schedule. Try another file, URL or California preset.</Text>
+            <button type="button" onClick={() => setStep('search')} className="min-h-11 underline">Try another schedule</button>
+          </Stack>
+        )}
+
+        {step === 'fallback-choice' && (
+          <Stack gap={6} width="full" maxWidth="3xl" marginX="auto">
+            <GatewayFallbackBanner
+              eventName={activeEventName}
+              source={discoverySource}
+              errorReason={discoveryErrorReason}
+              onSelectPreset={handleSelectEventPreset}
+              onRetryUpload={() => setStep('search')}
+              onAcceptDraft={() => setStep('questionnaire')}
+            />
+          </Stack>
         )}
 
         {step === 'questionnaire' && (
