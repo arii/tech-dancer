@@ -236,6 +236,43 @@ function ThemeCard({ theme }: { theme?: ThemeDressCode }) {
   );
 }
 
+interface DayPanelProps {
+  title: string;
+  label: string;
+  sessions: AuditSession[];
+  onToggleSession: (id: string) => void;
+  theme?: ThemeDressCode;
+  emptyMessage?: string;
+  children?: React.ReactNode;
+}
+
+const DayPanel = ({ title, label, sessions, onToggleSession, theme, emptyMessage, children }: DayPanelProps) => (
+  <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
+    <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
+      <Stack direction="row" align="center" gap={2}>
+        <Calendar className="w-4 h-4 text-brand-cyan" />
+        <Text as="h3" weight="font-bold" size="base" color="main">
+          {title}
+        </Text>
+      </Stack>
+      <Text size="xs" color="dim">{label}</Text>
+    </Stack>
+    {children}
+    {sessions.length > 0 ? (
+      <Stack gap={2.5} width="full">
+        {sessions.map((session) => (
+          <SessionCard key={session.id} session={session} onToggleSession={onToggleSession} />
+        ))}
+      </Stack>
+    ) : emptyMessage ? (
+      <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
+        <Text size="xs" color="dim">{emptyMessage}</Text>
+      </Box>
+    ) : null}
+    <ThemeCard theme={theme} />
+  </Stack>
+);
+
 export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
   trace,
   visualScheduleMarkdown: _visualScheduleMarkdown,
@@ -580,127 +617,47 @@ export const AgentMindTrace: React.FC<AgentMindTraceProps> = ({
       {/* Unified Day-By-Day Feed */}
       <Stack gap={6} width="full">
         {(sessionsByDay.thursday.length > 0 || themesByDay.thursday) && (
-          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
-              <Stack direction="row" align="center" gap={2}>
-                <Calendar className="w-4 h-4 text-brand-cyan" />
-                <Text as="h3" weight="font-bold" size="base" color="main">
-                  Thursday — Early Arrivals &amp; Pre-Party
-                </Text>
-              </Stack>
-              <Text size="xs" color="dim">Day 0</Text>
-            </Stack>
-
-            {sessionsByDay.thursday.length > 0 && (
-              <Stack gap={2.5} width="full">
-                {sessionsByDay.thursday.map((s) => (
-                  <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
-                ))}
-              </Stack>
-            )}
-
-            <ThemeCard theme={themesByDay.thursday} />
-          </Stack>
+          <DayPanel
+            title="Thursday — Early Arrivals &amp; Pre-Party"
+            label="Day 0"
+            sessions={sessionsByDay.thursday}
+            theme={themesByDay.thursday}
+            onToggleSession={handleToggleSession}
+          />
         )}
-
-        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
-            <Stack direction="row" align="center" gap={2}>
-              <Calendar className="w-4 h-4 text-brand-cyan" />
-              <Text as="h3" weight="font-bold" size="base" color="main">
-                Friday — Arrival, Warmup &amp; Prelims
-              </Text>
-            </Stack>
-            <Text size="xs" color="dim">Day 1</Text>
-          </Stack>
-
+        <DayPanel
+          title="Friday — Arrival, Warmup &amp; Prelims"
+          label="Day 1"
+          sessions={sessionsByDay.friday}
+          theme={themesByDay.friday}
+          onToggleSession={handleToggleSession}
+          emptyMessage={'No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.'}
+        >
           <FlightBufferTimeline activeEventName={activeEventName} />
-
-          {sessionsByDay.friday.length > 0 ? (
-            <Stack gap={2.5} width="full">
-              {sessionsByDay.friday.map((s) => (
-                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
-              ))}
-            </Stack>
-          ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
-              <Text size="xs" color="dim">No Friday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
-            </Box>
-          )}
-
-          <ThemeCard theme={themesByDay.friday} />
-        </Stack>
-
-        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
-            <Stack direction="row" align="center" gap={2}>
-              <Calendar className="w-4 h-4 text-brand-cyan" />
-              <Text as="h3" weight="font-bold" size="base" color="main">
-                Saturday — Daytime Workshops &amp; Champions Gala
-              </Text>
-            </Stack>
-            <Text size="xs" color="dim">Day 2</Text>
-          </Stack>
-
-          {sessionsByDay.saturday.length > 0 ? (
-            <Stack gap={2.5} width="full">
-              {sessionsByDay.saturday.map((s) => (
-                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
-              ))}
-            </Stack>
-          ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
-              <Text size="xs" color="dim">No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
-            </Box>
-          )}
-
-          <ThemeCard theme={themesByDay.saturday} />
-        </Stack>
-
-        <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-          <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
-            <Stack direction="row" align="center" gap={2}>
-              <Calendar className="w-4 h-4 text-brand-cyan" />
-              <Text as="h3" weight="font-bold" size="base" color="main">
-                Sunday — Intensive Masterclasses &amp; Survivor Social
-              </Text>
-            </Stack>
-            <Text size="xs" color="dim">Day 3</Text>
-          </Stack>
-
-          {sessionsByDay.sunday.length > 0 ? (
-            <Stack gap={2.5} width="full">
-              {sessionsByDay.sunday.map((s) => (
-                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
-              ))}
-            </Stack>
-          ) : (
-            <Box padding={4} className="text-center bg-surface/30 rounded-xl border border-line/30">
-              <Text size="xs" color="dim">No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.</Text>
-            </Box>
-          )}
-
-          <ThemeCard theme={themesByDay.sunday} />
-        </Stack>
-
+        </DayPanel>
+        <DayPanel
+          title="Saturday — Daytime Workshops &amp; Champions Gala"
+          label="Day 2"
+          sessions={sessionsByDay.saturday}
+          theme={themesByDay.saturday}
+          onToggleSession={handleToggleSession}
+          emptyMessage={'No Saturday sessions currently in your itinerary. Use "View All Schedule" to add sessions.'}
+        />
+        <DayPanel
+          title="Sunday — Intensive Masterclasses &amp; Survivor Social"
+          label="Day 3"
+          sessions={sessionsByDay.sunday}
+          theme={themesByDay.sunday}
+          onToggleSession={handleToggleSession}
+          emptyMessage={'No Sunday sessions currently in your itinerary. Use "View All Schedule" to add sessions.'}
+        />
         {sessionsByDay.other.length > 0 && (
-          <Stack gap={4} width="full" padding={5} radius="xl" border className="bg-surface-alt/30 border-line/40">
-            <Stack direction="row" align="center" justify="between" paddingBottom={2} className="border-b border-line/30">
-              <Stack direction="row" align="center" gap={2}>
-                <Calendar className="w-4 h-4 text-brand-cyan" />
-                <Text as="h3" weight="font-bold" size="base" color="main">
-                  Other Scheduled Sessions
-                </Text>
-              </Stack>
-              <Text size="xs" color="dim">Additional</Text>
-            </Stack>
-
-            <Stack gap={2.5} width="full">
-              {sessionsByDay.other.map((s) => (
-                <SessionCard key={s.id} session={s} onToggleSession={handleToggleSession} />
-              ))}
-            </Stack>
-          </Stack>
+          <DayPanel
+            title="Other Scheduled Sessions"
+            label="Additional"
+            sessions={sessionsByDay.other}
+            onToggleSession={handleToggleSession}
+          />
         )}
       </Stack>
 
