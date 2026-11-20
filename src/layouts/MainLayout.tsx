@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useEffect, lazy, Suspense } from 'react';
+import { ReactNode, useRef, lazy, Suspense } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
@@ -15,19 +15,13 @@ const GlobalSearch = lazy(lazyWithRetry(() => import('@/components/GlobalSearch'
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
-  const { isOpen: isSearchOpen, open: openSearch, query } = useGlobalSearch();
+  const { isOpen: isSearchOpen, open: openSearch } = useGlobalSearch();
   useAdSenseLoader();
 
   useCommandKey('k', (e) => {
     e.preventDefault();
     openSearch();
   }, [openSearch]);
-
-  // A /blog?q= entry (the SearchAction target in the site JSON-LD) should land
-  // in open search with results, not the unfiltered feed.
-  useEffect(() => {
-    if (query) openSearch();
-  }, [query, openSearch]);
 
   useScrollManagement(scrollRef);
 
