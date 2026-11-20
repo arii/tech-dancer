@@ -9,6 +9,7 @@ export interface GatewayFallbackBannerProps {
   errorReason?: string;
   onSelectPreset: (event: WCSCaliforniaEvent) => void;
   onRetryUpload: () => void;
+  onAcceptDraft?: () => void;
 }
 
 export const GatewayFallbackBanner = ({
@@ -17,6 +18,7 @@ export const GatewayFallbackBanner = ({
   errorReason,
   onSelectPreset,
   onRetryUpload,
+  onAcceptDraft,
 }: GatewayFallbackBannerProps) => {
   if (source === 'live_api') return null;
 
@@ -37,10 +39,10 @@ export const GatewayFallbackBanner = ({
             </Box>
             <Stack gap={0.5}>
               <Text weight="font-bold" size="sm" className="text-brand-amber">
-                Live AI Parsing Offline • Using Baseline AI Extractor for &ldquo;{eventName}&rdquo;
+                Live parsing unavailable for &ldquo;{eventName}&rdquo;
               </Text>
               <Text size="xs" className="text-brand-amber/80 leading-relaxed">
-                {errorReason || 'We could not reach the live cloud extraction gateway.'} We synthesized a baseline schedule draft tailored to your uploaded file. You can continue with this draft, or switch to one of our fully-verified 2026 convention schedules.
+                {errorReason || 'We could not reach the live cloud extraction gateway.'} The draft is synthesized from the file name or URL, not verified against your uploaded schedule. Times, sessions and event details may be wrong. Choose whether to use this unverified draft or switch to a California sample preset.
               </Text>
             </Stack>
           </Box>
@@ -58,7 +60,13 @@ export const GatewayFallbackBanner = ({
           </Button>
         </Box>
 
-        {/* 1-Click Verified Presets Alternative */}
+        {onAcceptDraft && (
+          <Button type="button" onClick={onAcceptDraft}>
+            Use unverified synthesized draft
+          </Button>
+        )}
+
+        {/* Explicit preset alternative */}
         <Box
           paddingTop={2}
           border="t"
@@ -72,7 +80,7 @@ export const GatewayFallbackBanner = ({
         >
           <Stack direction="row" align="center" gap={1.5} className="text-xs font-mono text-brand-amber font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-brand-amber shrink-0" />
-            <Text size="xs" weight="font-semibold" className="text-brand-amber">Or try a verified 2026 schedule:</Text>
+            <Text size="xs" weight="font-semibold" className="text-brand-amber">Or switch to a 2026 California sample preset:</Text>
           </Stack>
 
           <Box display="flex" wrap gap={1.5} align="center">
@@ -101,4 +109,3 @@ export const GatewayFallbackBanner = ({
     </Box>
   );
 };
-
