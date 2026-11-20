@@ -52,7 +52,6 @@
       "src/components/ui/ResponsiveDiagram.tsx|TS7006|Parameter 'e' implicitly has an 'any' type.",
       "src/components/ui/ResponsiveDiagram.tsx|TS7016|Could not find a declaration file for module 'react-dom'. 'node_modules/react-dom/index.js' implicitly has an 'any' type.",
       "src/components/ui/ScrollToTopButton.tsx|TS2322|Type '{ children: Element; as: ForwardRefComponent<HTMLButtonElement, HTMLMotionProps<\"button\">>; onClick: () => void; ... 13 more ...; \"data-testid\": string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.",
-      "src/components/ui/Wordmark.tsx|TS2345|Argument of type 'unknown' is not assignable to parameter of type 'ClassValue'.",
       "src/config/routes.ts|TS2322|Type '{ path: string; lazy: () => Promise<{ Component: () => Element; }>; skeleton: \"simple\"; sitemap: boolean; } | { path: string; lazy: () => Promise<(Omit<BaseRouteObject, UnsupportedLazyRouteFunctionKey> & Partial<...>) | { ...; }>; ... 4 more ...; isTopNav: true; } | ... 15 more ... | { ...; }' is not assignable to type 'RouteConfig'.",
       "src/config/routes.ts|TS2353|Object literal may only specify known properties, and 'stub' does not exist in type 'RouteConfig'.",
       "src/features/home/GearShelf.tsx|TS2339|Property 'imageText' does not exist on type '{ label: string; image: string; href: string; }'.",
