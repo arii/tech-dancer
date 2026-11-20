@@ -1,4 +1,4 @@
-import { ReactNode, useRef, lazy, Suspense } from 'react';
+import { ReactNode, useRef, useEffect, lazy, Suspense } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
