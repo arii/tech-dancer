@@ -17,7 +17,6 @@ const config: KnipConfig = {
         'vite-plugin-pwa',
         'workbox-window',
         'dependency-cruiser',
-        '@types/pixelmatch',
         '@google/genai',
         '@vercel/node'
       ],
