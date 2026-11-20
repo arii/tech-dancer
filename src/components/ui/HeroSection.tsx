@@ -1,6 +1,4 @@
-import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { Wordmark } from './Wordmark';
 
 export function HeroSection() {
   return (
@@ -17,8 +15,6 @@ export function HeroSection() {
       className="hero-section"
       aria-label="Site hero"
     >
-      <HeroParticleCanvas />
-
       {/* Bottom Fade Gradient for better contrast with the site background */}
       <Box
         position="absolute"
@@ -29,7 +25,7 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* All content sits above the canvas via z-index. Set pointer-events-none on decorative branding to prevent interception of Global Search clicks in tests. */}
+      {/* Content sits above the bottom gradient via z-index. Set pointer-events-none on decorative elements to prevent interception of Global Search clicks in tests. */}
       <Stack
         position="relative"
         zIndex={10}
@@ -40,13 +36,6 @@ export function HeroSection() {
         maxWidth="screen-xl"
         marginX={{ base: 0, xl: "auto" }}
       >
-        <Wordmark
-          variant="hero"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-logo-anim"
-        />
-
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"

@@ -34,7 +34,7 @@ export function PromoStrip({
       radius="md"
       border
       borderColor="line"
-      bg="surface"
+      surface="surface"
       display="block"
       className="group transition-all hover:bg-white/5"
     >

@@ -2,11 +2,11 @@
 type: post
 title: "My Favorite Credit Cards for Hyatt-Hosted West Coast Swing Events"
 seoTitle: "Best Credit Cards for Hyatt Dance Weekends | BoomTick"
-seoDescription: "How two Chase cards — one $95, one $795 — cover hotel bills at Hyatt-hosted West Coast Swing dance weekends."
+seoDescription: "How two Chase cards, one $95 and one $795, cover hotel bills at Hyatt-hosted West Coast Swing dance weekends."
 date: "2026-10-22"
 author: "Ariel Anders"
 category: "Travel"
-excerpt: "How two Chase cards — one $95, one $795 — cover the hotel bill at Hyatt-hosted dance weekends."
+excerpt: "How two Chase cards, one $95 and one $795, cover the hotel bill at Hyatt-hosted dance weekends."
 image: "/assets/blog/hyatt-regency-orange-county.jpg"
 imageAlt: "Hyatt Regency Orange County at dusk — the Jack & Jill O'Rama event hotel in Garden Grove"
 imageFit: "cover"

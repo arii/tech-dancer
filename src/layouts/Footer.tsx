@@ -15,7 +15,6 @@ export function Footer() {
   }, []);
 
   const policyLinks = [
-    { label: 'Home', to: '/' },
     { label: 'Shipping', to: '/shipping' },
     { label: 'Returns', to: '/return-policy' },
     { label: 'Privacy', to: '/privacy' },
@@ -34,18 +33,12 @@ export function Footer() {
           {/* Contact & Business Info */}
           <Stack direction={{ base: 'col', md: 'row' }} justify="between" align={{ base: 'start', md: 'center' }} gap={4} id="footer-contact" scrollMarginTop={24}>
             <Stack gap={1}>
-              <Text variant="mono" size="xs" color="main" weight="font-bold" tracking="wider">
-                BoomTick
+              <Text size="xs" color="main" weight="font-bold" tracking="wider" className="font-mono">
+                boomtick.blog
               </Text>
               <Text variant="body" size="xs" color="dim">
                 San Francisco, CA, USA · Official Support:{' '}
-                <Box
-                  as="a"
-                  href="mailto:ari@boomtick.blog"
-                  className="text-brand-cyan hover:underline font-semibold"
-                >
-                  ari@boomtick.blog
-                </Box>
+                ari@boomtick.blog
               </Text>
             </Stack>
 
@@ -76,8 +69,8 @@ export function Footer() {
 
           <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
             <Stack direction="row" align="center" gap={3} wrap>
-              <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
-                © 2026 BOOMTICK.BLOG
+              <Text size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} className="font-mono" data-testid="footer-copyright">
+                © 2026 boomtick.blog
               </Text>
               <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
               <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap" data-testid="footer-version-info" data-visual-mask>

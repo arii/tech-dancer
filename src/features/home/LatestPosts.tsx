@@ -78,9 +78,11 @@ export function LatestPosts() {
               <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
                 {post.title}
               </Text>
-              <Text variant="body" size="xs" color="dim" className="line-clamp-1">
-                {post.excerpt}
-              </Text>
+              <Box display={{ base: "none", sm: "block" }}>
+                <Text variant="body" size="xs" color="dim" className="line-clamp-1">
+                  {post.excerpt}
+                </Text>
+              </Box>
             </Stack>
 
             <Box marginTop={1} shrink={0} display={{ base: 'none', sm: 'flex' }}>

@@ -33,7 +33,7 @@ export function GearShelf() {
         </Text>
       </Box>
       <Text variant="body" size="sm" color="dim" marginBottom={5}>
-        Small things that make a dance weekend easier.
+        Small things I pack now without thinking.
       </Text>
 
       {/* Desktop: square image tile grid — visual shelf, not list cards */}
