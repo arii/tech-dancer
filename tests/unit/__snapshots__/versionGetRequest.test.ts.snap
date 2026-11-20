@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`compare GET endpoint contract > keeps successful payload and timestamp unchanged 1`] = `
+{
+  "candidate": "1.0.0",
+  "checkedAt": "2026-11-20T22:00:00.000Z",
+  "ecosystem": "npm",
+  "isAheadOfLatest": false,
+  "isCurrent": false,
+  "isDeprecated": false,
+  "isEOL": null,
+  "isOutdated": true,
+  "latest": "2.0.0",
+  "name": "example",
+}
+`;
+
+exports[`latest GET endpoint contract > keeps successful payload and timestamp unchanged 1`] = `
+{
+  "checkedAt": "2026-11-20T22:00:00.000Z",
+  "ecosystem": "npm",
+  "latest": "2.0.0",
+  "name": "example",
+}
+`;
