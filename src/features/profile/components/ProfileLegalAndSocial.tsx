@@ -90,7 +90,7 @@ const ProfileLegalAndSocial = () => {
                 tracking="wider"
                 className="text-text-main"
               >
-                Contact Signal
+                Contact
               </Text>
               <Text variant="body" size="xs" className="leading-relaxed text-text-dim">
                 Official Merchant Support: <Box as="a" href="mailto:ari@boomtick.blog" className="text-brand-cyan hover:underline font-semibold">ari@boomtick.blog</Box>

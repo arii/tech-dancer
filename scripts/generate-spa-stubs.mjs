@@ -19,7 +19,8 @@ const BASE_URL = 'https://boomtick.blog';
 const SR_ONLY_ATTRS = `class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;"`;
 
 // Automatically discover all routes
-const { stubs: STUB_ROUTES } = getAllRoutes();
+const { stubs: STUB_ROUTES, noindex: NOINDEX_ROUTES } = getAllRoutes();
+const NOINDEX_ROUTE_SET = new Set(NOINDEX_ROUTES);
 
 // Filter out root path as it already has index.html
 const filteredRoutes = STUB_ROUTES.filter(route => route !== '/');
@@ -146,7 +147,7 @@ export function cleanInjectedHtml(html) {
   const doc = dom.window.document;
 
   const toRemove = doc.head.querySelectorAll(
-    'title, meta[name="description"], link[rel="canonical"], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"], link[rel="preload"][as="image"]'
+    'title, meta[name="description"], meta[name="robots"], link[rel="canonical"], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"], link[rel="preload"][as="image"]'
   );
   toRemove.forEach(el => el.remove());
 
@@ -331,6 +332,10 @@ function generateMetadataTags(route, meta) {
     schemaJson
   ];
 
+  if (meta.noindex) {
+    tags.unshift('<meta data-rh="true" data-prerendered="true" name="robots" content="noindex, nofollow" />');
+  }
+
   if (route === '/') {
     tags.unshift('<link rel="preload" as="image" href="/assets/home/wcs-travel-pack-400w.webp" imagesrcset="/assets/home/wcs-travel-pack-400w.webp 400w, /assets/home/wcs-travel-pack.webp 800w" imagesizes="(max-width: 640px) 100vw, 420px" fetchpriority="high" />');
   }
@@ -354,7 +359,7 @@ async function generateStubs() {
       fs.mkdirSync(dirPath, { recursive: true });
     }
 
-    const meta = getRouteMetadata(route);
+    const meta = { ...getRouteMetadata(route), noindex: NOINDEX_ROUTE_SET.has(route) };
     const stubContent = buildStubHtml(indexContent, route, meta);
 
     const targetFile = path.join(dirPath, 'index.html');

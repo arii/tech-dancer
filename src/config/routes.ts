@@ -144,12 +144,14 @@ export const routes: RouteConfig[] = [
     lazy: lazyWithRetry(() => import('@/pages/VersionTruth').then(m => ({ Component: m.default }))),
     label: 'VersionTruth',
     icon: ShieldCheck,
-    skeleton: 'simple'
+    skeleton: 'simple',
+    sitemap: false
   },
   {
     path: '/ux-auditor',
     lazy: lazyWithRetry(() => import('@/pages/UXAuditor').then(m => ({ Component: m.default }))),
-    skeleton: 'grid'
+    skeleton: 'grid',
+    sitemap: false
   },
   {
     path: '/preview',

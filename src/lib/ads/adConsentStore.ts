@@ -6,7 +6,7 @@
 
 export type AdConsent = 'granted' | 'denied';
 
-type Listener = (value: AdConsent | null) => void;
+type Listener = (value: AdConsent) => void;
 
 export interface CookieYesConsent {
   activeLaw: string;
@@ -21,15 +21,17 @@ declare global {
 }
 
 /**
- * GDPR needs an explicit choice before any ad script loads. Other CookieYes laws
- * (e.g. CCPA) are opt-out, so their advertisement default applies immediately.
+ * Ads are non-personalized until the visitor accepts the Advertisement category.
+ * The CookieYes free plan applies its opt-in banner worldwide, so an undecided
+ * visitor is treated as denied rather than blocking ads; EEA/UK consent is
+ * collected by Google's TCF consent message, which AdSense reads directly.
  */
-export const resolveCookieYesConsent = (cky: CookieYesConsent): AdConsent | null => {
-  if (cky.activeLaw === 'gdpr' && !cky.isUserActionCompleted) return null;
+export const resolveCookieYesConsent = (cky: CookieYesConsent): AdConsent => {
+  if (cky.activeLaw === 'gdpr' && !cky.isUserActionCompleted) return 'denied';
   return cky.categories.advertisement ? 'granted' : 'denied';
 };
 
-let current: AdConsent | null = null;
+let current: AdConsent = 'denied';
 const listeners = new Set<Listener>();
 
 const syncFromCookieYes = (): void => {
@@ -40,7 +42,7 @@ const syncFromCookieYes = (): void => {
   listeners.forEach(listener => listener(current));
 };
 
-export const getAdConsent = (): AdConsent | null => current;
+export const getAdConsent = (): AdConsent => current;
 
 export const subscribeAdConsent = (listener: Listener): (() => void) => {
   listeners.add(listener);

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Box, Text } from '@/layouts/Primitives';
 import { getAdUnit, type AdPlacement } from '@/lib/ads/adSenseConfig';
-import { useAdConsent } from '@/hooks/useAdConsent';
 
 interface AdSlotProps {
   placement: AdPlacement;
@@ -20,22 +19,21 @@ const SLOT_HEIGHT: Record<AdPlacement, string> = {
 /**
  * Renders an AdSense ad unit for the given placement.
  * Renders nothing (no script, no markup, no reserved space) while the
- * placement's ad unit is unconfigured or consent has not resolved, and
- * collapses once AdSense reports the unit unfilled.
+ * placement's ad unit is unconfigured, and collapses once AdSense reports
+ * the unit unfilled.
  */
 export function AdSlot({ placement }: AdSlotProps) {
   const unit = getAdUnit(placement);
-  const consent = useAdConsent();
   const pushedRef = useRef(false);
 
   useEffect(() => {
-    if (!unit || consent === null || pushedRef.current) return;
+    if (!unit || pushedRef.current) return;
     pushedRef.current = true;
     const queue = (window.adsbygoogle = window.adsbygoogle || []);
     queue.push({});
-  }, [unit, consent]);
+  }, [unit]);
 
-  if (!unit || consent === null) return null;
+  if (!unit) return null;
 
   return (
     <Box

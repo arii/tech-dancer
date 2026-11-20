@@ -100,6 +100,11 @@ export default defineConfig(({mode}) => {
     }
   }
 
+  // AdSense site-ownership tag, present in the static HTML (no cookies, so not consent-gated).
+  // Stays env-gated like ads.txt: scripts/generate-ads-txt.mjs fails the build if it ships without a client.
+  const adsenseClient = process.env.VITE_ADSENSE_CLIENT || env.VITE_ADSENSE_CLIENT || '';
+  const adsenseAccountMeta = /^ca-pub-\d{10,}$/.test(adsenseClient) ? adsenseClient : undefined;
+
   // Automatically discover dynamic routes
   const { sitemap: dynamicRoutes, detailed: routeDetails } = getAllRoutes();
 
@@ -192,14 +197,23 @@ export default defineConfig(({mode}) => {
       ),
     },
     plugins: [
+      {
+        name: 'adsense-account-meta',
+        transformIndexHtml: () => adsenseAccountMeta
+          ? [{ tag: 'meta', attrs: { name: 'google-adsense-account', content: adsenseAccountMeta }, injectTo: 'head' }]
+          : [],
+      },
       react(),
       tailwindcss(),
       !process.env.VITEST && Sitemap({
-        hostname: resolveHostname().replace(/\/$/, ''),
+        hostname,
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.filter(route => route !== '/').map(route => route.replace(/\/$/, '') || '/'),
-        // Exclude infrastructure pages that are not real app routes
-        exclude: ['/404', '/previews', '/previews/'],
+        // The production Pages deploy replaces /blog with a redirect.
+        exclude: [
+          '/404', '/previews', '/previews/',
+          ...(hostname === 'https://arii.github.io/tech-dancer' ? ['/blog'] : []),
+        ],
         generateRobotsTxt: false,
         xmlns: {
           news: false,

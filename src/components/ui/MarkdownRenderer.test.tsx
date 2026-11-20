@@ -25,6 +25,25 @@ This is a paragraph of content.
     expect(screen.getByText('This is a paragraph of content.')).toBeDefined();
   });
 
+  it('renders the travel pack recommendation after an affiliate notice as a bold list item', () => {
+    const article = fs.readFileSync(
+      path.resolve(__dirname, '../../../content/posts/2026-04-19-practical-tools-essentials.md'),
+      'utf-8'
+    ).replace(/^---\n[\s\S]*?\n---\n/, '');
+    const { container } = render(
+      <MemoryRouter>
+        <MarkdownRenderer content={article} />
+      </MemoryRouter>
+    );
+
+    const label = screen.getByText('Reusable water bottle & electrolyte packets:');
+    expect(label.tagName).toBe('STRONG');
+    expect(label.closest('li')?.textContent).toContain('Powdered mixes (like Liquid I.V.)');
+    expect(container.textContent).not.toContain('- **Reusable water bottle');
+    expect(screen.getByRole('link', { name: 'Open Loop Experience 2 Ear Plugs' }).getAttribute('href'))
+      .toMatch(/^https:\/\//);
+  });
+
   it('renders a top-level blockquote as a styled NOTE callout box', () => {
     const markdown = `
 > This is an important observation.

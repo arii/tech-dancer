@@ -5,14 +5,14 @@ import { acceptAds, rejectAds, resetCookieYes, setCookieYesConsent } from '../ut
 afterEach(() => resetCookieYes());
 
 describe('ad consent store (CookieYes bridge)', () => {
-  it('stays unresolved until CookieYes loads', () => {
+  it('defaults to non-personalized until CookieYes loads', () => {
     document.dispatchEvent(new Event('cookieyes_consent_update'));
-    expect(getAdConsent()).toBeNull();
+    expect(getAdConsent()).toBe('denied');
   });
 
-  it('stays unresolved under GDPR until the visitor makes a choice', () => {
-    setCookieYesConsent({ activeLaw: 'gdpr', isUserActionCompleted: false, categories: { advertisement: false } });
-    expect(getAdConsent()).toBeNull();
+  it('stays non-personalized under GDPR until the visitor makes a choice', () => {
+    setCookieYesConsent({ activeLaw: 'gdpr', isUserActionCompleted: false, categories: { advertisement: true } });
+    expect(getAdConsent()).toBe('denied');
   });
 
   it('maps the Advertisement category to granted or denied', () => {

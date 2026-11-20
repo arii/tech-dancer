@@ -29,11 +29,12 @@ describe('useAdSenseLoader consent gate', () => {
     expect(document.head.querySelector('meta[name="google-adsense-account"]')).toBeNull();
   });
 
-  it('injects the verification meta tag immediately but blocks the script until consent resolves', () => {
+  it('loads the meta tag and a non-personalized script before the visitor chooses', () => {
     vi.stubEnv('VITE_ADSENSE_CLIENT', TEST_CLIENT);
     render(<Harness />);
     expect(document.head.querySelector('meta[name="google-adsense-account"]')?.getAttribute('content')).toBe(TEST_CLIENT);
-    expect(document.head.querySelector('script#adsbygoogle-loader')).toBeNull();
+    expect(document.head.querySelector('script#adsbygoogle-loader')).not.toBeNull();
+    expect(window.adsbygoogle?.requestNonPersonalizedAds).toBe(1);
   });
 
   it('loads the personalized script after consent is granted', () => {

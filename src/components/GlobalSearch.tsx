@@ -1,12 +1,12 @@
-import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
+import { useRef, useMemo, useCallback, useEffect, ChangeEvent } from 'react';
+import Fuse from 'fuse.js';
+import { Search, X, CornerDownLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useQueries } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent } from "react";
-import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from '@/hooks/useHotkeys';
-import Fuse from 'fuse.js';
-import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 
@@ -59,16 +59,25 @@ export function GlobalSearch() {
 
   useEffect(() => {
     if (isOpen) {
+      const previousFocus = document.activeElement;
       const timer = setTimeout(() => {
         inputRef.current?.focus();
       }, 0);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+          previousFocus.focus();
+        }
+      };
     }
   }, [isOpen]);
 
   // Debounced URL sync to avoid excessive navigation and re-renders
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => () => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+  }, []);
 
   const debouncedSetQuery = useMemo(
     () => (q: string) => {
@@ -149,9 +158,10 @@ export function GlobalSearch() {
         width="full"
         height="full"
         paddingTop={{ base: 4, lg: 20 }}
+        paddingBottom={4}
         paddingX={4}
       >
-        <Box
+        <Stack
           as="section"
           role="dialog"
           data-testid="search-dialog"
@@ -160,7 +170,10 @@ export function GlobalSearch() {
           width="full"
           maxWidth="3xl"
           height="fit"
-          maxHeight="85vh"
+          maxHeight="full"
+          minHeight={0}
+          direction="col"
+          gap={0}
           overflow="hidden"
           radius="md"
           border
@@ -198,7 +211,7 @@ export function GlobalSearch() {
             }
           }}
         >
-          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
+          <Box border="b" padding={5} display="flex" align="center" gap={4} shrink={false} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
             <Box as={Search} width={5} height={5} shrink={0} className="text-accent" aria-hidden="true" />
             <Text
               as="input"
@@ -230,7 +243,7 @@ export function GlobalSearch() {
             </Box>
           </Box>
 
-          <Box padding={2} overflow="y-auto" maxHeight="60vh">
+          <Box padding={2} overflow="y-auto" maxHeight="60vh" minHeight={0}>
             {results.length > 0 ? (
               <Stack gap={1}>
                 {results.map((res: SearchResult) => (
@@ -264,20 +277,19 @@ export function GlobalSearch() {
                 ))}
               </Stack>
             ) : (
-              <Box padding={20} display="flex" align="center" justify="center">
-                <Stack align="center" gap={4} opacityVariant="dim">
-                  <Box as={Sparkles} width={10} height={10} className="text-accent animate-pulse" />
-                  <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No results found" : "Search gear, guides, and posts"}
-                  </Text>
-                </Stack>
+              <Box paddingX={4} paddingY={8}>
+                <Text variant="body" color="dim" role="status">
+                  {postsQuery.isPending || resourcesQuery.isPending || studiesQuery.isPending
+                    ? 'Loading search results'
+                    : query ? 'No results found. Try a different search term.' : 'Search gear, guides, and posts'}
+                </Text>
               </Box>
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center">
-            <Box display="flex" align="center" gap={6}>
-              {[ { key: 'ESC', label: 'CLOSE' }, { key: '↵', label: 'SELECT', bold: true } ].map(hint => (
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" shrink={false} wrap gap={3}>
+            <Box display="flex" align="center" gap={4}>
+              {[ { key: 'ESC', label: 'CLOSE' }, { key: 'TAB', label: 'RESULTS' }, { key: '↵', label: 'OPEN', bold: true } ].map(hint => (
                 <Box key={hint.key} display="flex" align="center" gap={2}>
                   <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
                     <Text variant="mono" size="tiny" color="dim" className={`leading-none ${hint.bold ? 'font-bold' : ''}`}>{hint.key}</Text>
@@ -299,7 +311,7 @@ export function GlobalSearch() {
               {results.length} RESULTS FOUND
             </Text>
           </Box>
-        </Box>
+        </Stack>
       </Box>
     </Box>
     );

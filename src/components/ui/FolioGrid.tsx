@@ -11,7 +11,6 @@ import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { AdSlot } from '@/components/ads/AdSlot';
 import { getAdUnit } from '@/lib/ads/adSenseConfig';
-import { useAdConsent } from '@/hooks/useAdConsent';
 import { Search } from 'lucide-react';
 
 interface FolioGridProps {
@@ -42,7 +41,6 @@ export default function FolioGrid({
   searchPlaceholder: propsSearchPlaceholder
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
-  const consent = useAdConsent();
 
   const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
 
@@ -57,8 +55,8 @@ export default function FolioGrid({
   });
 
   // One full-width listing ad after the cards, only once the listing ad unit
-  // is configured and the visitor's consent has resolved.
-  const showListingAd = getAdUnit('listing') !== undefined && consent !== null && view === 'card' && filteredItems.length > 4;
+  // is configured.
+  const showListingAd = getAdUnit('listing') !== undefined && view === 'card' && filteredItems.length > 4;
 
   return (
     <Box as="section" height="full">
