@@ -19,7 +19,10 @@
  *   node scripts/check-types.mjs --update-baseline
  *
  * Errors are normalized to `path|TScode|message` (line/column numbers are
- * dropped) so unrelated edits above an error do not cause false failures.
+ * dropped, and absolute path prefixes inside messages are reduced to their
+ * repo-relative tail) so unrelated edits above an error - or a different
+ * checkout location, e.g. /tmp/td locally vs /__w/tech-dancer/tech-dancer in
+ * CI - do not cause false failures.
  */
 import { execFileSync } from 'child_process';
 import fs from 'fs';
@@ -34,6 +37,17 @@ const PROJECTS = ['tsconfig.app.json', 'tsconfig.node.json'];
 const UPDATE = process.argv.includes('--update-baseline');
 
 function runTsc(project) {
+  // Determinism: composite projects imply incremental checking via
+  // tsBuildInfoFile, and a warm cache can skip re-emitting errors from
+  // unchanged files - which would make the baseline depend on cache state.
+  // Delete the buildinfo file so every run is a full, cold check.
+  try {
+    const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, project), 'utf8'));
+    const info = cfg.compilerOptions && cfg.compilerOptions.tsBuildInfoFile;
+    if (info) fs.rmSync(path.resolve(ROOT, project, '..', info), { force: true });
+  } catch {
+    // Missing config or buildinfo is fine; tsc will report real problems.
+  }
   try {
     const out = execFileSync(
       'npx',
@@ -54,6 +68,18 @@ function runTsc(project) {
  * Normalized:  src/foo.tsx|TS2322|Type 'x' is not...
  * Related-information lines (indented, no "error TS") are ignored.
  */
+/**
+ * Reduce absolute paths inside a message to repo-relative tails, so the same
+ * error produced under different checkout roots normalizes identically.
+ * tsc quotes these paths: '/tmp/td/src/x.ts', '/__w/tech-dancer/tech-dancer/src/x.ts'.
+ */
+function stripAbsPaths(msg) {
+  return msg.replace(
+    /'[^']*\/((?:src|scripts|tests|node_modules|public|etl)\/[^']*|tsconfig[^']*)'/g,
+    "'$1'"
+  );
+}
+
 function normalize(output, project) {
   const entries = [];
   for (const rawLine of output.split('\n')) {
@@ -61,11 +87,11 @@ function normalize(output, project) {
     if (!line) continue;
     const m = line.match(/^(.+?)\(\d+,\d+\): error (TS\d+): (.*)$/);
     if (m) {
-      entries.push(`${m[1]}|${m[2]}|${m[3]}`);
+      entries.push(`${m[1]}|${m[2]}|${stripAbsPaths(m[3])}`);
     } else if (/ error TS\d+: /.test(line)) {
       // Errors without a file position (e.g. config-level TS6307/TS5097).
       const g = line.match(/error (TS\d+): (.*)$/);
-      entries.push(`<global>|${g[1]}|${g[2]}`);
+      entries.push(`<global>|${g[1]}|${stripAbsPaths(g[2])}`);
     }
   }
   entries.sort();
