@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.11.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.11.0...tech-dancer-v0.11.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* **ads:** AdSense readiness: static account meta, non-personalized ads before consent, noindex thin pages ([#4888](https://github.com/arii/tech-dancer/issues/4888)) ([3827c0b](https://github.com/arii/tech-dancer/commit/3827c0bcf9de5eaf1ff04f4b1ba9ad2809e592b1))
+* **ads:** drop duplicate consent banner, use CookieYes consent and per-placement AdSense slot IDs ([#4881](https://github.com/arii/tech-dancer/issues/4881)) ([0873bcb](https://github.com/arii/tech-dancer/commit/0873bcb84cca34678e3e60e6a4933c285bcdbfab))
+* **images:** remove source filenames from shoe hero collage ([#4917](https://github.com/arii/tech-dancer/issues/4917)) ([ce490b4](https://github.com/arii/tech-dancer/commit/ce490b419af996b10861a5cc9e08f01c175b12f1))
+* **mobile:** repair 13 measured mobile UX defects on gear listing, gear detail, and home ([#4878](https://github.com/arii/tech-dancer/issues/4878)) ([67f8902](https://github.com/arii/tech-dancer/commit/67f89026e79561325790a931ee003b15861271b7))
+* **navigation:** close mobile menu with Escape and preserve search focus ([#4899](https://github.com/arii/tech-dancer/issues/4899)) ([bd23b52](https://github.com/arii/tech-dancer/commit/bd23b52185abff6e910627b857b13895155e5364))
+* **reading:** render travel-pack recommendation as Markdown after affiliate notice ([#4900](https://github.com/arii/tech-dancer/issues/4900)) ([5d6d53e](https://github.com/arii/tech-dancer/commit/5d6d53e331ad81fbefe50578281de46703a2724f))
+* **search:** keep dismissal, keyboard navigation, and landscape layout usable ([#4898](https://github.com/arii/tech-dancer/issues/4898)) ([ae427c3](https://github.com/arii/tech-dancer/commit/ae427c3391e2cccaaf0163b4c981fbdd7e321e88))
+* **seo:** permanent redirects for legacy WordPress and 404 URLs from Search Console ([#4891](https://github.com/arii/tech-dancer/issues/4891)) ([ba8d7ed](https://github.com/arii/tech-dancer/commit/ba8d7ed8e74d6c327a2035b504aa930637613757))
+* **ui:** generate CSS for runtime-composed primitive utilities ([#4883](https://github.com/arii/tech-dancer/issues/4883)) ([bc64de3](https://github.com/arii/tech-dancer/commit/bc64de397e178307d7ce585fe92a5de4f88ae5c4))
+* **ui:** mobile post page: fit hero images, readable meta/pills, related thumbnails, shorter footer ([#4886](https://github.com/arii/tech-dancer/issues/4886)) ([57dc16d](https://github.com/arii/tech-dancer/commit/57dc16d32fc0689f1c758796d5ef54c6384b238e))
+* **ui:** remove duplicate mobile gutters and fix one-column grid spans ([#4885](https://github.com/arii/tech-dancer/issues/4885)) ([2e76c83](https://github.com/arii/tech-dancer/commit/2e76c83471b4c0cd90796d96120db72093cba220))
+
 ## [0.11.0](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.10.2...tech-dancer-v0.11.0) (2026-11-08)
 
 
