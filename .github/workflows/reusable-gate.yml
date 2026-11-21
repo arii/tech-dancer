@@ -11,6 +11,7 @@ jobs:
   verify-changes:
     name: "FOUNDATIONAL GATE: Checks for actual code modifications"
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       pull-requests: write
       contents: write
