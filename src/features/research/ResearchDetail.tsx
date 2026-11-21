@@ -17,6 +17,7 @@ import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { RoboticsPortfolioCard } from '@/components/ui/RoboticsPortfolioCard';
+import type { ResearchTool } from '@/config/research-tools';
 import { lazyWithRetry } from '@/lib/lazyWithRetry';
 
 // Lazy load tool components to help with bundle size
@@ -33,6 +34,73 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'deployment-impact-analyzer': DeploymentImpactAnalyzerTool,
   'ecommerce-automation': EcommerceAutomationTool,
 };
+
+interface ResearchToolContentProps {
+  tool: ResearchTool;
+  id: string | null;
+  embedded?: boolean;
+}
+
+const ResearchToolContent = ({ tool, id, embedded = false }: ResearchToolContentProps) => (
+  tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
+    <Suspense fallback={
+      <Box padding={20} display="flex" align="center" justify="center">
+        <Activity className="animate-spin text-accent" />
+      </Box>
+    }>
+      {(() => {
+        const ToolComponent = TOOL_REGISTRY[id];
+        return <ToolComponent />;
+      })()}
+    </Suspense>
+  ) : (
+    <Stack gap={12}>
+      <Stack gap={4}>
+        <PageHeader
+          label={`PROJECT // ${embedded ? tool.taxonomyBucket || 'RESEARCH' : tool.category}`}
+          title={tool.title}
+          as={embedded ? 'h2' : undefined}
+          paddingBottom={0}
+          border="none"
+        />
+        <Box border radius="md" surface="default" padding="compact">
+          <Text variant="body" size="lg" color="dim">{tool.description}</Text>
+        </Box>
+      </Stack>
+
+      <Grid cols={{ base: 1, md: 2 }} gap={12}>
+        <Stack gap={4}>
+          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
+          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
+            <Activity className="w-4 h-4 text-accent" />
+            <StatusBadge label={tool.status} />
+          </Box>
+        </Stack>
+        <Stack gap={4}>
+          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
+          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
+            <Database className="w-4 h-4 text-accent" />
+            <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
+          </Box>
+        </Stack>
+      </Grid>
+
+      {tool.status === 'Coming Soon' && (
+        <Box border radius="md" padding="card" {...(embedded ? {surface: 'muted' as const, borderStyle: 'dashed'} : {className: 'bg-surface/50 border-dashed'})}>
+          <Stack gap={4} align="center" textAlign="center">
+            <Search className="w-8 h-8 text-accent opacity-muted" />
+            <Stack gap={2}>
+              <Text variant="display" size="xl">Work in Progress</Text>
+              <Text variant="body" size="sm" color="dim" maxWidth="md">
+                This tool is currently being built. We are finishing the data analysis and layout.
+              </Text>
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+    </Stack>
+  )
+);
 
 export default function ResearchDetail() {
   const navigate = useNavigate();
@@ -220,64 +288,7 @@ export default function ResearchDetail() {
               <Stack gap={12} marginTop={12}>
                 <Box height={0.5} width="full" surface="muted" opacityVariant="low" />
                 <Stack gap={12}>
-                  {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
-                    <Suspense fallback={
-                      <Box padding={20} display="flex" align="center" justify="center">
-                        <Activity className="animate-spin text-accent" />
-                      </Box>
-                    }>
-                      {(() => {
-                        const ToolComponent = TOOL_REGISTRY[id];
-                        return <ToolComponent />;
-                      })()}
-                    </Suspense>
-                  ) : (
-                    <Stack gap={12}>
-                      <Stack gap={4}>
-                        <PageHeader
-                          label={`PROJECT // ${tool.taxonomyBucket || 'RESEARCH'}`}
-                          title={tool.title}
-                          as="h2"
-                          paddingBottom={0}
-                          border="none"
-                        />
-                        <Box border radius="md" surface="default" padding="compact">
-                          <Text variant="body" size="lg" color="dim">{tool.description}</Text>
-                        </Box>
-                      </Stack>
-
-                      <Grid cols={{ base: 1, md: 2 }} gap={12}>
-                        <Stack gap={4}>
-                          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
-                          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                            <Activity className="w-4 h-4 text-accent" />
-                            <StatusBadge label={tool.status} />
-                          </Box>
-                        </Stack>
-                        <Stack gap={4}>
-                          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
-                          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                            <Database className="w-4 h-4 text-accent" />
-                            <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
-                          </Box>
-                        </Stack>
-                      </Grid>
-
-                      {tool.status === 'Coming Soon' && (
-                        <Box border radius="md" padding="card" surface="muted" borderStyle="dashed">
-                          <Stack gap={4} align="center" textAlign="center">
-                            <Search className="w-8 h-8 text-accent opacity-muted" />
-                            <Stack gap={2}>
-                              <Text variant="display" size="xl">Work in Progress</Text>
-                              <Text variant="body" size="sm" color="dim" maxWidth="md">
-                                This tool is currently being built. We are finishing the data analysis and layout.
-                              </Text>
-                            </Stack>
-                          </Stack>
-                        </Box>
-                      )}
-                    </Stack>
-                  )}
+                  <ResearchToolContent tool={tool} id={id} embedded />
                 </Stack>
               </Stack>
             )}
@@ -353,63 +364,7 @@ export default function ResearchDetail() {
 
         <Box border surface="surface" radius="md" padding={{ base: 4, md: 12 }}>
           <Stack gap={12}>
-            {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
-              <Suspense fallback={
-                <Box padding={20} display="flex" align="center" justify="center">
-                  <Activity className="animate-spin text-accent" />
-                </Box>
-              }>
-                {(() => {
-                  const ToolComponent = TOOL_REGISTRY[id];
-                  return <ToolComponent />;
-                })()}
-              </Suspense>
-            ) : (
-              <Stack gap={12}>
-                <Stack gap={4}>
-                    <PageHeader
-                      label={`PROJECT // ${tool.category}`}
-                      title={tool.title}
-                      paddingBottom={0}
-                      border="none"
-                    />
-                  <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
-                  </Box>
-                </Stack>
-
-                <Grid cols={{ base: 1, md: 2 }} gap={12}>
-                  <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Activity className="w-4 h-4 text-accent" />
-                      <StatusBadge label={tool.status} />
-                    </Box>
-                  </Stack>
-                  <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Database className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
-                    </Box>
-                  </Stack>
-                </Grid>
-
-                {tool.status === 'Coming Soon' && (
-                  <Box border radius="md" padding="card" className="bg-surface/50 border-dashed">
-                    <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent opacity-muted" />
-                      <Stack gap={2}>
-                        <Text variant="display" size="xl">Work in Progress</Text>
-                        <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This tool is currently being built. We are finishing the data analysis and layout.
-                        </Text>
-                      </Stack>
-                    </Stack>
-                  </Box>
-                )}
-              </Stack>
-            )}
+            <ResearchToolContent tool={tool} id={id} />
           </Stack>
         </Box>
       </Stack>
