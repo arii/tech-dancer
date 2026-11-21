@@ -1,64 +1,63 @@
 # WCS Data ETL Pipeline
 
-This directory contains the tools and data for scraping, processing, and maintaining West Coast Swing (WCS) competition results from `scoring.dance`.
+Tools for collecting and processing West Coast Swing competition results
+from scoring.dance. `scraper.py` contains `ScoringDanceCrawler`,
+`ScoringDanceParser`, `OutputManager` and `ETLPipeline`; `processor.py`
+transforms parsed results for the Parquet ledger.
 
-## Tool Architecture
+## Setup and use
 
-The scraper is built with a modular architecture following the Single Responsibility Principle:
-
-- **`ScoringDanceCrawler`**: Handles navigation and link extraction. It supports paginated crawling of recent events and filtering by date.
-- **`ScoringDanceParser`**: Parses individual result pages using BeautifulSoup and Playwright, extracting competitor names, bib numbers, and marks.
-- **`DataProcessor`**: Transforms raw HTML data into structured DataFrames and calculates WSDC points.
-- **`OutputManager`**: Manages data persistence. It exports competition "studies" as Markdown files for the frontend and maintains a central Parquet ledger.
-- **`ETLPipeline`**: Orchestrates the components to perform either single-URL extractions or comprehensive historical crawls.
-
-## Usage
-
-### Prerequisites
-
-Install dependencies:
+From the repository root, use a Python environment and install the scraper
+and Chromium dependencies:
 
 ```bash
-pip install -r etl/requirements.txt
-playwright install chromium
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r etl/requirements.txt
+python -m playwright install chromium
 ```
 
-### Run a Historical Crawl
-
-By default, the scraper crawls the last 5 years of data:
+The following commands make network requests and can update local data;
+they are not read-only verification commands:
 
 ```bash
-python etl/scraper.py
+# Historical crawl, default five years
+PYTHONPATH=. python etl/scraper.py
+
+# Limit the history and number of new events
+PYTHONPATH=. python etl/scraper.py --years 2 --limit 10
+
+# A single result URL
+PYTHONPATH=. python etl/scraper.py https://scoring.dance/enUS/events/338/results/5415.html
 ```
 
-To crawl a specific number of years:
+The CLI also accepts `--queue`, `--ledger` and `--studies` paths. Historical
+runs exit 100 when no new events were processed; that is distinct from a
+successful batch that processed events. The optional
+[`scripts/run-etl.sh`](../scripts/run-etl.sh) wrapper activates `.venv` or
+`venv` and defaults to a one-year, ten-event batch. It is not a scheduler.
 
-```bash
-python etl/scraper.py --years 2
-```
+## Data contracts
 
-### Scrape a Single URL
+The default ledger path is `etl/data/wcs_prelims.parquet`. `OutputManager`
+validates the required columns and deduplicates on the pair
+`Dancer_ID`, `result_id`, keeping the newest row for that pair. Record counts
+change as data is collected; this README does not promise a fixed total.
 
-```bash
-python etl/scraper.py https://scoring.dance/enUS/events/338/results/5415.html
-```
+The frontend's `useWCSData.ts` fetches `data/wcs_prelims.parquet` under the
+site base URL and reads it with `hyparquet`. The root build creates
+`public/data/`, but the checked-in asset-generation scripts do not establish
+an automatic copy of the ETL ledger there. Verify the intended dataset and
+publish/copy step separately before claiming a rebuilt site has new data.
+The `--studies` directory argument alone is not proof that Markdown study
+files are generated.
 
-## Data Management
+## Automation status
 
-### Central Ledger
+The former `.github/workflows/wcs_etl.yml` referenced by older instructions
+is absent from the current checkout. Do not assume a weekly crawl is
+scheduled. Review the current `.github/workflows/` and the environment's
+actual scheduler before relying on unattended refreshes.
 
-The primary data artifact is `etl/data/wcs_prelims.parquet`.
-
-- **Entries**: 1,652 unique dancer-competition records.
-- **Unique Identifier**: `REF_ID: {bib_number}-{result_id}`, ensuring stability across different events.
-
-### Frontend Integration
-
-The frontend application directly consumes the Parquet ledger using `hyparquet`.
-
-- During the build process, `wcs_prelims.parquet` is copied to the `public/data/` directory.
-- This approach eliminates intermediate JSON or Markdown files and ensures the frontend has immediate, zero-overhead access to the full historical dataset.
-
-## Automated Workflow
-
-A GitHub Action (`.github/workflows/wcs_etl.yml`) runs weekly to perform a rolling 1-year crawl, keeping the ledger up to date with the latest results.
+Source references checked November 21, 2026. No crawl, dataset publication
+or production scheduler verification was performed for this docs check.

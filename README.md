@@ -64,9 +64,12 @@ See the [Boomtick onboarding guide](https://github.com/arii/boomtick/blob/main/d
 
 - [CONTRIBUTING.md](CONTRIBUTING.md): contribution notes. References to the former `boomtick-pkg` layout belong to the standalone repository, not this checkout.
 - [AGENTS.md](AGENTS.md): project coding conventions and runtime notes.
+- [WCS Navigator API](wcs_navigator_api/README.md): actual routes, local API/frontend configuration and image-versus-deployment limits.
+- [ETL tools](etl/README.md): scraper commands, ledger contract and refresh/publication limits.
+- [Orchestrator experiments](scripts/orchestrator/README.md): experimental session scripts, not a verified active work loop.
 - [.env.example](.env.example): optional integration settings.
 
-Setup and command references verified against repository source on November 20, 2026. This date records a documentation check, not a claim that every integration or CI job is healthy.
+Root setup references rechecked against repository source on November 21, 2026; API, ETL and orchestrator README corrections are linked above. This records a documentation check, not a claim that every integration, deployment or CI job is healthy.
 
 ## License
 

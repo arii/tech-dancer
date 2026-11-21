@@ -1,106 +1,99 @@
 # WCS Navigator API
 
-Backend service for WCS Navigator, built with FastAPI. It handles parsing event URLs, communicating with the Gemini API to discover schedule data, and generating an 'Explainability First' flight buffer timeline and personalized `.ics` schedule.
+FastAPI service for schedule discovery and calendar generation. The React
+client is in `src/features/wcs-navigator/` in the repository root.
 
-## Features & Services
+## Current routes
 
-The WCS Navigator API consists of two primary services (endpoints):
+- `POST /api/v1/discover`: discover schedule information from a URL or
+  uploaded document and return questionnaire data.
+- `POST /api/v1/generate`: combine the document and questionnaire responses
+  into a schedule, decision trace and calendar output.
+- `GET /health`, `/ready` and `/api/v1/health`: service health responses.
 
-- **Stage 1: Discover (`/api/v1/wcs/discover`)**: Pre-scans a given event URL to determine available tracks and generate a dynamic context-aware questionnaire.
-- **Stage 2: Generate (`/api/v1/wcs/generate`)**: Processes the event URL and user's questionnaire responses to extract schedule data, compute flight buffer timelines, audit sessions, and output a personalized `.ics` file along with an agent decision trace.
-- **Explainability First**: The agent decision trace details why every session was included or filtered, and breaks down flight buffer mathematical formulas step-by-step.
+Compatibility aliases are defined in `routes/discover.py` and
+`routes/generate.py`. There is no `/api/v1/wcs/` prefix in those routers.
+The request/response models live in `models/`; frontend contracts live in
+`src/features/wcs-navigator/types.ts` and `types/`.
 
-We utilize Google's **Gemini 3.5+ models** (specifically `gemini-3.5-flash` by default) to perform the intelligent extraction and reasoning required for schedule parsing and analysis.
+## Local API
 
-## Local Development & Configuration
-
-To run the API locally along with the frontend using `vite preview`:
-
-### Environment Variables
-
-Create a `.env` file in the `wcs_navigator_api` directory (you can use `.env.example` as a template):
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-ALLOWED_ORIGINS=["http://localhost:5173", "http://localhost:4173", "http://127.0.0.1:4173", "https://boomtick.blog"]
-PORT=8080
-```
-
-### Running the Services
-
-**Backend (API):**
+From the repository root:
 
 ```bash
-# Navigate to the API directory
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r wcs_navigator_api/requirements.txt
+cp wcs_navigator_api/.env.example wcs_navigator_api/.env
+```
+
+Set credentials in that untracked environment file or your shell, never in
+Git. `config.py` reads `.env` relative to the process working directory.
+Run from the API directory to use the file above:
+
+```bash
 cd wcs_navigator_api
-
-# Install dependencies
-pip install -r requirements.txt
-pip install -r requirements-dev.txt # Optional, for testing
-
-# Run the API locally (Ensure you are in the wcs_navigator_api directory)
-PYTHONPATH=.. uvicorn wcs_navigator_api.main:app --host 0.0.0.0 --port 8080 --reload
+PYTHONPATH=.. python -m uvicorn wcs_navigator_api.main:app --host 127.0.0.1 --port 8080 --reload
 ```
 
-**Frontend (Vite Preview):**
+`GEMINI_API_KEY` supplies an explicit Gemini key. Without it, the code asks
+the Google client to use its ambient configuration; that does not prove
+credentials are available. `GEMINI_MODEL` defaults in source to
+`gemini-3.5-flash`. This is a configured identifier, not a claim that the
+model is currently available to your account. Extraction requests can incur
+provider charges. `ALLOWED_ORIGINS` accepts a JSON list; localhost origins
+are also allowed by the CORS middleware. The command's `--port`, not the
+settings field alone, selects the listening port.
 
-From the root of the repository, build and start the frontend using `vite preview`. Ensure the base path is set:
+There is no separate `requirements-dev.txt` in this directory; the checked-in
+requirements already include pytest and pytest-asyncio.
+
+## Local frontend
+
+Use the root README's Node/pnpm setup. Vite embeds `VITE_*` values at build
+time, so set the API URL before building, not only before previewing:
 
 ```bash
-# Build the frontend
-pnpm run build
-
-# Start the preview server pointing to the local API
-VITE_BASE_PATH=/ pnpm run preview
+VITE_WCS_API_URL=http://localhost:8080 pnpm build
+pnpm preview
 ```
 
-*Note: Ensure your frontend is configured to make requests to `http://localhost:8080` or wherever your API is running.*
+Alternatively, set `VITE_WCS_API_URL` in the root `.env.local` before
+`pnpm dev`. Set only the service origin, without `/api/v1`; the client adds
+`/api/v1/discover` or `/api/v1/generate`. Never put a provider secret in a
+`VITE_*` variable. Failed live discovery can return client heuristics;
+that fallback is not evidence of a successful API extraction.
 
-## Running with Docker
+## Container and deployment
 
-You can easily run the WCS Navigator API using Docker. The multi-stage Dockerfile ensures a lightweight runtime container.
+From the repository root, build with the API directory as context:
 
 ```bash
-# Build the Docker image
 docker build -t wcs-navigator-api wcs_navigator_api/
-
-# Run the Docker container
-docker run -p 8080:8080 \
-  -e GEMINI_API_KEY="your_gemini_api_key_here" \
-  -e ALLOWED_ORIGINS='["http://localhost:5173", "http://127.0.0.1:4173"]' \
-  wcs-navigator-api
+docker run --rm -p 127.0.0.1:8080:8080 --env-file wcs_navigator_api/.env wcs-navigator-api
 ```
 
-## Deployment via Google Cloud Run
+The Dockerfile runs Uvicorn on port 8080. The
+[image workflow](../.github/workflows/deploy-image.yml) builds/pushes GHCR
+images on matching main changes or manual dispatch. It does not contain a
+Cloud Run rollout step. Image publication alone is not proof that Cloud Run
+has deployed the image.
 
-We have configured the application to work seamlessly with **Google Cloud Run**, as it provides an easy and serverless way to run Docker containers.
+`deploy.sh` is a separate manual Cloud Run deployment path using `gcloud run
+deploy --source .`. It changes cloud resources, allows unauthenticated
+access and passes configured provider credentials. Review the script,
+project, region and service settings before any authorized deployment.
+No deployment, live provider call or credential test was performed for this
+documentation check.
 
-Our GitHub Actions CI/CD pipeline automatically builds the Docker container and releases it. Cloud Run is then configured to pull and deploy the container using the latest tag.
+## Tests
 
-If you wish to deploy it yourself using the provided deployment script:
+From the repository root in the Python environment:
 
 ```bash
-cd wcs_navigator_api
-
-# Ensure you are authenticated and have gcloud installed
-gcloud auth login
-
-# Set your Gemini API key in your shell environment
-export GEMINI_API_KEY="your_gemini_api_key_here"
-
-# Deploy using the script
-./deploy.sh
+python -m pytest wcs_navigator_api/tests
 ```
 
-## Testing
-
-To run the backend Pytest suite, validating contract schemas, buffer math, and event fixtures:
-
-```bash
-# From the repository root
-python3 -m pytest wcs_navigator_api/tests
-```
-
-## Contract Consistency
-
-The API strictly adheres to type parity with the frontend TypeScript contracts in `src/features/wcs-navigator/types.ts`.
+Source/command references checked November 21, 2026. This records a source
+check, not a fresh installation, successful provider extraction or live
+service-health check.
