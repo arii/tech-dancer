@@ -87,3 +87,30 @@ describe('MarkdownRenderer - Mermaid Diagrams', () => {
     expect(standardLink.getAttribute('rel')).toBe('noopener noreferrer');
   });
 });
+
+describe('MarkdownRenderer - mixed HTML and Markdown images', () => {
+  it('renders markdown images nested in indented HTML containers as img elements', () => {
+    const content = [
+      '<Grid cols="{{ base: 1, md: 2 }}" gap="6">',
+      '  <Stack gap="3">',
+      '    <Text variant="mono">Before</Text>',
+      '    ![Baseline](/assets/home/example-before.png)',
+      '  </Stack>',
+      '  <Stack gap="3">',
+      '    <Text variant="mono">After</Text>',
+      '    ![Current](/assets/home/example-after.png)',
+      '  </Stack>',
+      '</Grid>',
+    ].join('\n');
+
+    const { container } = render(
+      <MemoryRouter>
+        <MarkdownRenderer content={content} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByAltText('Baseline').getAttribute('src')).toBe('/assets/home/example-before.png');
+    expect(screen.getByAltText('Current').getAttribute('src')).toBe('/assets/home/example-after.png');
+    expect(container.textContent).not.toContain('![');
+  });
+});

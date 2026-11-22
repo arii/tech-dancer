@@ -65,14 +65,17 @@ const BlockquoteDepthContext = React.createContext<number>(0);
  * Preprocesses markdown content to fix rendering issues.
  * 1. Strips any accidental git merge conflict markers (e.g. <<<<<<< HEAD, =======, >>>>>>> branch)
  * 2. Ensures blank lines around Notice tag inner content so that markdown inside the tags is parsed correctly by rehype-raw.
+ * 3. Lifts standalone image lines out of indented HTML containers so they render as images instead of literal text.
  */
 const preprocessMarkdown = (content: string): string => {
   const cleaned = content.replace(/^(?:<{7}[^\n]*|={7}|>{7}[^\n]*)\n?/gm, '');
 
-  return cleaned.replace(
-    /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
-    (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
-  );
+  return cleaned
+    .replace(
+      /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
+      (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
+    )
+    .replace(/^[ \t]+(!\[[^\]\n]*\]\([^)\n]+\))[ \t]*$/gm, '\n$1\n');
 };
 
 /**
