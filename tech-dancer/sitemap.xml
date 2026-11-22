@@ -1,63 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-11-21T21:33:47.326Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/</loc><lastmod>2026-11-22T07:50:57.061Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/gear</loc><lastmod>2026-11-04T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/merch</loc><lastmod>2026-11-22T07:48:31.961Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/services</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/services</loc><lastmod>2026-11-22T07:48:31.961Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/about</loc><lastmod>2026-11-22T07:48:31.960Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/shipping</loc><lastmod>2026-11-21T21:33:47.326Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/shipping</loc><lastmod>2026-11-22T07:50:57.061Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/privacy</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/privacy</loc><lastmod>2026-11-22T07:48:31.961Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/terms</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/terms</loc><lastmod>2026-11-22T07:48:31.961Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/return-policy</loc><lastmod>2026-11-21T21:31:10.227Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/return-policy</loc><lastmod>2026-11-22T07:48:31.961Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/research</loc><lastmod>2026-08-28T00:00:00.000Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-11-21T21:33:47.326Z</lastmod>
+  <url><loc>https://arii.github.io/tech-dancer/research/wcs-navigator</loc><lastmod>2026-11-22T07:50:57.061Z</lastmod>
   </url>
-  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-11-21T21:31:10.217Z</lastmod>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/before.png</image:loc>
-      <image:title>Baseline</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/after.png</image:loc>
-      <image:title>Current</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/diff.png</image:loc>
-      <image:title>Visual Delta</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/before-mobile.png</image:loc>
-      <image:title>404 Error</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/diff-mobile.png</image:loc>
-      <image:title>Regression Delta</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://arii.github.io/tech-dancer/assets/studies/deployment-impact-analyzer/after-mobile.png</image:loc>
-      <image:title>Resolution</image:title>
-      <image:caption>How we built a semantic visual impact analysis pipeline using dependency-cruiser, Playwright screenshot diffing, and automated severity scoring.</image:caption>
-      <image:license>https://arii.github.io/tech-dancer/about#terms</image:license>
-    </image:image>
+  <url><loc>https://arii.github.io/tech-dancer/research/deployment-impact-analyzer</loc><lastmod>2026-11-22T07:48:31.952Z</lastmod>
   </url>
   <url><loc>https://arii.github.io/tech-dancer/blog/2026-04-18-halloween-costumes</loc><lastmod>2026-04-18T00:00:00.000Z</lastmod>
     <image:image>
