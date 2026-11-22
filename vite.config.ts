@@ -212,6 +212,8 @@ export default defineConfig(({mode}) => {
         // The production Pages deploy replaces /blog with a redirect.
         exclude: [
           '/404', '/previews', '/previews/',
+          '/blog/2026-06-01-power-charging',
+          '/blog/2026-06-01-practice-review-tech',
           ...(hostname === 'https://arii.github.io/tech-dancer' ? ['/blog'] : []),
         ],
         generateRobotsTxt: false,
