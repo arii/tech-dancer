@@ -7,8 +7,8 @@ import { useResearch } from './useResearch';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { AUTHOR_ARIEL_ANDERS, formatIsoDate, generateBreadcrumbSchema } from '@/utils/schema';
+import { BASE_URL } from '@/config/constants';
+import { AUTHOR_ARIEL_ANDERS, formatIsoDate, generateArticleMediaSchema, generateBreadcrumbSchema } from '@/utils/schema';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -150,37 +150,7 @@ export default function ResearchDetail() {
         "author": authorSchema,
         "datePublished": formatIsoDate(study.date),
         "dateModified": formatIsoDate(study.date),
-        "image": [
-          studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
-          {
-            "@type": "ImageObject",
-            "name": study.title,
-            "url": studyImageUrl.startsWith('http') ? studyImageUrl : `${BASE_URL}${studyImageUrl}`,
-            "caption": study.title,
-            "creditText": authorName,
-            "creator": {
-              "@type": "Person",
-              "name": authorName
-            },
-            "copyrightHolder": {
-              "@type": "Person",
-              "name": authorName
-            },
-            "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
-            "license": `${BASE_URL}/terms`,
-            "acquireLicensePage": `${BASE_URL}/about`
-          }
-        ],
-        "publisher": {
-          "@type": "Organization",
-          "name": SITE_NAME,
-          "url": BASE_URL,
-          "logo": {
-            "@type": "ImageObject",
-            "name": `${SITE_NAME} Logo`,
-            "url": `${BASE_URL}/favicon.ico`
-          }
-        },
+        ...generateArticleMediaSchema({ imageUrl: studyImageUrl, imageName: study.title, authorName }),
         "mainEntityOfPage": {
           "@type": "WebPage",
           "name": study.title,

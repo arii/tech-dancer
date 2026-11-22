@@ -1,3 +1,4 @@
+import { PolicyContactText } from '@/components/legal/PolicyContactText';
 import { PolicySection } from '@/components/legal/PolicySection';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -66,25 +67,7 @@ export default function Terms() {
 
         {/* Developer Contact */}
         <PolicySection title="Contact &amp; Legal Inquiries" icon={<Mail className="w-5 h-5" />} fullWidth>
-          <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
-            For any questions regarding these Terms of Service, please reach out to developer support at{' '}
-            <Box
-              as="a"
-              href="mailto:anders.ariel@gmail.com"
-              className="text-brand-cyan hover:underline font-semibold"
-            >
-              anders.ariel@gmail.com
-            </Box>{' '}
-            or official site support at{' '}
-            <Box
-              as="a"
-              href="mailto:ari@boomtick.blog"
-              className="text-brand-cyan hover:underline font-semibold"
-            >
-              ari@boomtick.blog
-            </Box>
-            .
-          </Text>
+          <PolicyContactText intro="For any questions regarding these Terms of Service, please reach out to developer support at" />
         </PolicySection>
       </Stack>
     </Box>

@@ -1,3 +1,4 @@
+import { PolicyContactText } from '@/components/legal/PolicyContactText';
 import { PolicySection } from '@/components/legal/PolicySection';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -63,25 +64,7 @@ export default function Privacy() {
 
         {/* Developer Contact */}
         <PolicySection title="Developer &amp; Privacy Contact" icon={<Mail className="w-5 h-5" />} fullWidth>
-          <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
-            If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact developer support directly at{' '}
-            <Box
-              as="a"
-              href="mailto:anders.ariel@gmail.com"
-              className="text-brand-cyan hover:underline font-semibold"
-            >
-              anders.ariel@gmail.com
-            </Box>{' '}
-            or official site support at{' '}
-            <Box
-              as="a"
-              href="mailto:ari@boomtick.blog"
-              className="text-brand-cyan hover:underline font-semibold"
-            >
-              ari@boomtick.blog
-            </Box>
-            .
-          </Text>
+          <PolicyContactText intro="If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact developer support directly at" />
         </PolicySection>
       </Stack>
     </Box>

@@ -78,11 +78,9 @@
     "src/layouts/Footer.tsx": 3,
     "src/lib/variants.ts": 1,
     "src/pages/Merch.tsx": 1,
-    "src/pages/Privacy.tsx": 2,
     "src/pages/ReturnPolicy.tsx": 3,
     "src/pages/Services.tsx": 4,
     "src/pages/ShippingPolicy.tsx": 4,
-    "src/pages/Terms.tsx": 2,
     "src/pages/UXAuditor.tsx": 7,
     "src/styles/design-tokens.ts": 3,
     "src/styles/utilities.ts": 4
