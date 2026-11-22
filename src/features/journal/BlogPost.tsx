@@ -4,10 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug, readingTime } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { BASE_URL } from '@/config/constants';
 import {
   AUTHOR_ARIEL_ANDERS,
   formatIsoDate,
+  generateArticleMediaSchema,
   generateBreadcrumbSchema,
   extractHowToFromMarkdown,
   extractFaqFromMarkdown,
@@ -55,37 +56,7 @@ export default function BlogPost() {
       "author": authorSchema,
       "datePublished": formatIsoDate(post.date),
       "dateModified": formatIsoDate(post.updated || post.date),
-      "image": [
-        postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
-        {
-          "@type": "ImageObject",
-          "name": post.imageAlt || post.title,
-          "url": postImageUrl.startsWith('http') ? postImageUrl : `${BASE_URL}${postImageUrl}`,
-          "caption": post.imageAlt || post.title,
-          "creditText": authorName,
-          "creator": {
-            "@type": "Person",
-            "name": authorName
-          },
-          "copyrightHolder": {
-            "@type": "Person",
-            "name": authorName
-          },
-          "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
-          "license": `${BASE_URL}/terms`,
-          "acquireLicensePage": `${BASE_URL}/about`
-        }
-      ],
-      "publisher": {
-        "@type": "Organization",
-        "name": SITE_NAME,
-        "url": BASE_URL,
-        "logo": {
-          "@type": "ImageObject",
-          "name": `${SITE_NAME} Logo`,
-          "url": `${BASE_URL}/favicon.ico`
-        }
-      },
+      ...generateArticleMediaSchema({ imageUrl: postImageUrl, imageName: post.imageAlt || post.title, authorName }),
       "mainEntityOfPage": {
         "@type": "WebPage",
         "name": post.title,

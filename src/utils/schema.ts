@@ -1,6 +1,6 @@
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import type { Resource } from '@/lib/types/content';
-import { ASSET_PREFIX, BASE_URL } from '@/config/constants';
+import { ASSET_PREFIX, BASE_URL, SITE_NAME } from '@/config/constants';
 
 export interface SchemaBrand {
   "@type": "Brand";
@@ -687,4 +687,41 @@ export function generateProfileGallerySchema(sections: Array<{
   });
 
   return imageObjects;
+}
+
+export function generateArticleMediaSchema(params: {
+  imageUrl: string;
+  imageName: string;
+  authorName: string;
+}) {
+  const { imageUrl, imageName, authorName } = params;
+  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}${imageUrl}`;
+  const person = { "@type": "Person", "name": authorName };
+  return {
+    "image": [
+      absoluteImageUrl,
+      {
+        "@type": "ImageObject",
+        "name": imageName,
+        "url": absoluteImageUrl,
+        "caption": imageName,
+        "creditText": authorName,
+        "creator": person,
+        "copyrightHolder": person,
+        "copyrightNotice": `© ${new Date().getFullYear()} ${authorName}. All rights reserved.`,
+        "license": `${BASE_URL}/terms`,
+        "acquireLicensePage": `${BASE_URL}/about`
+      }
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": SITE_NAME,
+      "url": BASE_URL,
+      "logo": {
+        "@type": "ImageObject",
+        "name": `${SITE_NAME} Logo`,
+        "url": `${BASE_URL}/favicon.ico`
+      }
+    }
+  };
 }
