@@ -54,36 +54,34 @@ describe('CI Workflow Gate and Required Status Checks', () => {
     expect(gateJob?.outputs?.has_code_changes).toBeDefined();
   });
 
-  it('should require verify-changes and check has_code_changes on Build & E2E and Anti-Pattern Audit', () => {
+  it('keeps lint and build fail-closed unless the classifier explicitly proves prose-only changes', () => {
     const content = fs.readFileSync(ciWorkflowPath, 'utf8');
     const parsed = yaml.parse(content) as WorkflowConfig;
 
-    const auditJob = parsed.jobs?.audit;
-    const testBuildJob = parsed.jobs?.['test-build'];
-
-    expect(auditJob).toBeDefined();
-    expect(auditJob?.name).toBe('Anti-Pattern Audit');
-    const auditNeeds = Array.isArray(auditJob?.needs) ? auditJob?.needs : [auditJob?.needs];
-    expect(auditNeeds).toContain('verify-changes');
-    expect(auditJob?.if).toContain('has_code_changes');
-
-    expect(testBuildJob).toBeDefined();
-    expect(testBuildJob?.name).toBe('Build & E2E');
-    const testBuildNeeds = Array.isArray(testBuildJob?.needs) ? testBuildJob?.needs : [testBuildJob?.needs];
-    expect(testBuildNeeds).toContain('verify-changes');
-    expect(testBuildJob?.if).toContain('has_code_changes');
-  });
-
-  it('should gate lint-typecheck, security-scan, and validate-workflows on code changes', () => {
-    const content = fs.readFileSync(ciWorkflowPath, 'utf8');
-    const parsed = yaml.parse(content) as WorkflowConfig;
-
-    for (const jobKey of ['lint-typecheck', 'security-scan', 'validate-workflows']) {
+    for (const [jobKey, name] of [
+      ['lint-typecheck', 'Lint & Type Check'],
+      ['test-build', 'Build & E2E'],
+    ] as const) {
       const job = parsed.jobs?.[jobKey];
       expect(job).toBeDefined();
-      const needs = Array.isArray(job?.needs) ? job?.needs : [job?.needs];
+      expect(job?.name).toBe(name);
+      const needs = Array.isArray(job?.needs) ? job.needs : [job?.needs];
       expect(needs).toContain('verify-changes');
-      expect(job?.if).toContain('has_code_changes');
+      expect(job?.if).toContain('always()');
+      expect(job?.if).toContain("needs.verify-changes.outputs.has_code_changes != 'false'");
+    }
+  });
+
+  it('keeps audit, security and workflow validation independent of the prose-only gate', () => {
+    const content = fs.readFileSync(ciWorkflowPath, 'utf8');
+    const parsed = yaml.parse(content) as WorkflowConfig;
+
+    expect(parsed.jobs?.audit?.name).toBe('Anti-Pattern Audit');
+    for (const jobKey of ['audit', 'security-scan', 'validate-workflows']) {
+      const job = parsed.jobs?.[jobKey];
+      expect(job).toBeDefined();
+      expect(job?.needs).toBeUndefined();
+      expect(job?.if).toBeUndefined();
     }
   });
 });
