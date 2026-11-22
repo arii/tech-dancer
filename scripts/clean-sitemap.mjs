@@ -33,6 +33,14 @@ if (fs.existsSync(targetPath)) {
 
   function addRouteImage(routePath, imgLoc, title, caption) {
     if (!imgLoc) return;
+    // Local images must exist under public/ so the sitemap never advertises 404s.
+    if (!/^https?:\/\//.test(imgLoc)) {
+      const localFile = path.join(process.cwd(), 'public', imgLoc.replace(/^\/+/, '').split(/[?#]/)[0]);
+      if (!fs.existsSync(localFile)) {
+        console.warn(`Skipping sitemap image with missing local file: ${imgLoc}`);
+        return;
+      }
+    }
     const fullImgUrl = imgLoc.startsWith('http')
       ? imgLoc
       : `${canonicalDomain}/${imgLoc.replace(/^\/+/, '')}`;
