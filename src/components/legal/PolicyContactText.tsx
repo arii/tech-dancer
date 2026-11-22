@@ -1,6 +1,6 @@
 import { Box, Text } from '@/layouts/Primitives';
 
-const LINK_CLASS = 'text-brand-cyan hover:underline font-semibold';
+const LINK_CLASS = 'text-brand-cyan hover:underline font-bold';
 
 export const PolicyContactText = ({ intro }: { intro: string }) => (
   <Text variant="body" size="base" color="dim" leading="relaxed" className="text-pretty">
