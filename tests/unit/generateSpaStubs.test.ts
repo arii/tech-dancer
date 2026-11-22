@@ -9,6 +9,27 @@ const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 const ABOUT_INDEX_HTML = path.join(DIST_DIR, 'about', 'index.html');
 const RESEARCH_INDEX_HTML = path.join(DIST_DIR, 'research', 'index.html');
 
+function generatedPageKind(doc: Document): 'redirect' | 'app' {
+  return doc.querySelector('meta[http-equiv="refresh" i]') ? 'redirect' : 'app';
+}
+
+function expectStaticRedirect(doc: Document, relativePath: string) {
+  const canonicals = doc.querySelectorAll('link[rel="canonical"]');
+  const refreshes = doc.querySelectorAll('meta[http-equiv="refresh" i]');
+  expect(canonicals.length, `Canonical count in redirect ${relativePath}`).toBe(1);
+  expect(refreshes.length, `Refresh count in redirect ${relativePath}`).toBe(1);
+
+  const destination = canonicals[0].getAttribute('href') || '';
+  expect(new URL(destination).protocol).toBe('https:');
+  expect(refreshes[0].getAttribute('content')).toBe(`0; url=${destination}`);
+  expect(doc.querySelector('main a')?.getAttribute('href')).toBe(destination);
+  expect(doc.querySelectorAll('title').length).toBe(1);
+  expect(doc.querySelectorAll('meta[name="description"]').length).toBeLessThanOrEqual(1);
+  // A redirect has its own navigation contract, not SPA hydration metadata.
+  expect(doc.querySelector('#root')).toBeNull();
+  expect(doc.querySelector('script')).toBeNull();
+}
+
 function findIndexHtmlFiles(dir: string): string[] {
   let results: string[] = [];
   if (!fs.existsSync(dir)) return results;
@@ -34,6 +55,47 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
       execSync('pnpm exec tsx scripts/generate-spa-stubs.mjs', { stdio: 'inherit' });
     }
   }, 120000);
+
+  it.each(['2026-06-01-power-charging', '2026-06-01-practice-review-tech'])(
+    'classifies %s as a static redirect with matching navigation targets', slug => {
+      for (const filePath of [
+        `public/blog/${slug}/index.html`,
+        path.join(DIST_DIR, 'blog', slug, 'index.html'),
+      ]) {
+        const doc = new JSDOM(fs.readFileSync(filePath, 'utf-8')).window.document;
+        expect(generatedPageKind(doc)).toBe('redirect');
+        expectStaticRedirect(doc, filePath);
+      }
+    }
+  );
+
+  it('does not classify an app missing metadata as a redirect', () => {
+    const doc = new JSDOM('<div id="root"></div>').window.document;
+    expect(generatedPageKind(doc)).toBe('app');
+  });
+
+  it.each(['canonical mismatch', 'delayed refresh', 'missing fallback link', 'app root', 'script'])(
+    'rejects a redirect with %s rather than bypassing app checks', defect => {
+      const content = fs.readFileSync('public/blog/2026-06-01-power-charging/index.html', 'utf-8');
+      const doc = new JSDOM(content).window.document;
+      if (defect === 'canonical mismatch') {
+        doc.querySelector('link[rel="canonical"]')!.setAttribute('href', 'https://boomtick.blog/wrong');
+      } else if (defect === 'delayed refresh') {
+        const refresh = doc.querySelector('meta[http-equiv="refresh"]')!;
+        refresh.setAttribute('content', refresh.getAttribute('content')!.replace(/^0;/, '10;'));
+      } else if (defect === 'missing fallback link') {
+        doc.querySelector('main a')!.remove();
+      } else if (defect === 'app root') {
+        const root = doc.createElement('div');
+        root.id = 'root';
+        doc.body.appendChild(root);
+      } else {
+        doc.body.appendChild(doc.createElement('script'));
+      }
+      expect(generatedPageKind(doc)).toBe('redirect');
+      expect(() => expectStaticRedirect(doc, defect)).toThrow();
+    }
+  );
 
   it('injects route-specific metadata for the root route in dist/index.html', () => {
     expect(fs.existsSync(INDEX_HTML)).toBe(true);
@@ -63,7 +125,7 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
     expect(researchContent).not.toContain('<link rel="canonical" href="https://boomtick.blog/" />');
   });
 
-  it('verifies strictly single title, meta description, and canonical tags before and after hydration across generated stubs', () => {
+  it('checks redirect navigation separately from app metadata and hydration across generated pages', () => {
     const indexFiles = findIndexHtmlFiles(DIST_DIR).filter(p => !p.includes('previews/index.html'));
     expect(indexFiles.length).toBeGreaterThan(10);
 
@@ -74,6 +136,10 @@ describe('SPA Stubs & Root Meta Tag Generation', () => {
       // Check pre-rendered HTML DOM (before client-side hydration)
       const dom = new JSDOM(content);
       const doc = dom.window.document;
+      if (generatedPageKind(doc) === 'redirect') {
+        expectStaticRedirect(doc, relativePath);
+        continue;
+      }
 
       const titles = doc.querySelectorAll('title');
       const descriptions = doc.querySelectorAll('meta[name="description"]');
