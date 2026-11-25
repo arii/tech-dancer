@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.11.1...tech-dancer-v0.11.2) (2026-11-22)
+
+
+### Bug Fixes
+
+* **research:** remove missing impact-analyzer screenshots ([#4925](https://github.com/arii/tech-dancer/issues/4925)) ([#4928](https://github.com/arii/tech-dancer/issues/4928)) ([d14135d](https://github.com/arii/tech-dancer/commit/d14135d6c7c4728cfbbd02d8710b99a975a9ab6f))
+
 ## [0.11.1](https://github.com/arii/tech-dancer/compare/tech-dancer-v0.11.0...tech-dancer-v0.11.1) (2026-11-20)
 
 
