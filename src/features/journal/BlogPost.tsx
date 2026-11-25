@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug, readingTime } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -18,10 +18,11 @@ import { BlogPostDetail } from './components/BlogPostDetail';
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const isConsolidated = slug === '2026-06-01-power-charging' || slug === '2026-06-01-practice-review-tech';
   const { data: post } = useQuery({
     queryKey: ['posts', slug],
     queryFn: () => slug ? getPostBySlug(slug) : undefined,
-    enabled: !!slug,
+    enabled: !!slug && !isConsolidated,
     initialData: () => slug ? getPostBySlug(slug) : undefined,
   });
 
@@ -84,6 +85,10 @@ export default function BlogPost() {
 
     return schemas;
   }, [post]);
+
+  if (isConsolidated) {
+    return <Navigate to="/blog/2026-04-19-practical-tools-essentials" replace />;
+  }
 
   if (!post) {
     return (

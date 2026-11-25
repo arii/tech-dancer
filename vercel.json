@@ -16,6 +16,16 @@
       "statusCode": 301
     },
     {
+      "source": "/blog/2026-06-01-power-charging",
+      "destination": "/blog/2026-04-19-practical-tools-essentials",
+      "permanent": true
+    },
+    {
+      "source": "/blog/2026-06-01-practice-review-tech",
+      "destination": "/blog/2026-04-19-practical-tools-essentials",
+      "permanent": true
+    },
+    {
       "source": "/consulting",
       "destination": "/services",
       "permanent": true

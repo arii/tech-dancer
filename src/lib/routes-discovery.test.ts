@@ -1,4 +1,6 @@
+import fs from 'node:fs';
 import { describe, it, expect } from 'vitest';
+import { JSDOM } from 'jsdom';
 import { getAllRoutes } from './routes-discovery';
 
 describe('getAllRoutes', () => {
@@ -52,10 +54,10 @@ describe('getAllRoutes', () => {
 
   it('should prioritize updated date over date in frontmatter for content routes lastmod', () => {
     const { detailed } = getAllRoutes();
-    // 2026-04-19-practical-tools-essentials.md has updated: "2026-06-24" and date: "2026-04-19"
+    // 2026-04-19-practical-tools-essentials.md has updated: "2026-11-21" and date: "2026-04-19"
     const target = detailed.find(r => r.path === '/blog/2026-04-19-practical-tools-essentials');
     expect(target).toBeDefined();
-    expect(target?.lastmod).toContain('2026-06-24');
+    expect(target?.lastmod).toContain('2026-11-21');
   });
 
   it('should exclude /events routes', () => {
@@ -67,5 +69,42 @@ describe('getAllRoutes', () => {
     expect(all.some(forbidden)).toBe(false);
     expect(sitemap.some(forbidden)).toBe(false);
     expect(content.some(forbidden)).toBe(false);
+  });
+});
+
+
+describe('consolidated travel-tech guides', () => {
+  const destination = '/blog/2026-04-19-practical-tools-essentials';
+  const retiredSlugs = ['2026-06-01-power-charging', '2026-06-01-practice-review-tech'];
+
+  it('keeps the combined guide, not the retired posts, in discovery', () => {
+    const { content, sitemap } = getAllRoutes();
+    expect(content).toContain(destination);
+    expect(sitemap).toContain(destination);
+    for (const slug of retiredSlugs) {
+      expect(content).not.toContain(`/blog/${slug}`);
+      expect(sitemap).not.toContain(`/blog/${slug}`);
+      expect(fs.existsSync(`content/posts/${slug}.md`)).toBe(false);
+    }
+  });
+
+  it.each(retiredSlugs)('preserves %s on the server and static hosts', slug => {
+    const config = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+    expect(config.redirects).toContainEqual({ source: `/blog/${slug}`, destination, permanent: true });
+    const doc = new JSDOM(fs.readFileSync(`public/blog/${slug}/index.html`, 'utf8')).window.document;
+    const canonical = `https://boomtick.blog${destination}`;
+    expect(doc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(canonical);
+    expect(doc.querySelector('meta[http-equiv="refresh"]')?.getAttribute('content')).toBe(`0; url=${canonical}`);
+    expect(doc.querySelector('main a')?.getAttribute('href')).toBe(canonical);
+    expect(doc.querySelector('script')).toBeNull();
+  });
+
+  it('keeps useful recording and power advice without the generic cable affiliate card', () => {
+    const guide = fs.readFileSync('content/posts/2026-04-19-practical-tools-essentials.md', 'utf8');
+    expect(guide).toContain('### Travel Tech & Practice');
+    expect(guide).toContain('#### Power and Cables');
+    expect(guide).toContain('#### Music and Recording');
+    expect(guide).toContain('Phone and compact tripod');
+    expect(guide).not.toContain('id="charging-cables"');
   });
 });

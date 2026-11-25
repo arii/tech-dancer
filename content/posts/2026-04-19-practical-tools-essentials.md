@@ -2,7 +2,7 @@
 type: post
 title: "The WCS Travel Pack"
 date: "2026-04-19"
-updated: "2026-06-24"
+updated: "2026-11-21"
 excerpt: "A practical packing checklist for West Coast Swing weekends, covering shoes, earplugs, layers, recovery, hygiene, and travel tech."
 category: "Travel"
 tags: ["guide", "travel", "gear"]
@@ -79,12 +79,20 @@ Because social dancing often runs until 4:00 AM or 5:00 AM, many dancers find th
 - **Silencing earplugs:** To block out daytime hotel hallway noise and roommates moving around.
 - **Clothes pins or binder clips:** A great travel hack to clamp the hotel's blackout curtains completely shut and block annoying light leaks.
 
-### Miscellaneous Tech & Tools
-- **High-capacity power bank:** Your phone battery can drain quickly from recording workshop recaps, taking videos of friends, and looking up late-night songs.
+### Travel Tech & Practice
+
+Pack around what you need to charge, listen to, and record. A smaller kit is easier to carry between the hotel room, workshops, and socials.
+
+#### Power and Cables
+- **Power bank:** Charge the bank and your devices before leaving the room. Check that its ports and output suit the phone or speaker you plan to charge. Capacity is only part of the choice; connector compatibility and charging speed matter too.
+- **Charging cables:** Bring a cable for each connector your devices actually use. A multi-connector cable can reduce clutter, but check whether it supports charging multiple devices at once rather than assuming every plug works simultaneously. Test the kit together before the trip.
 - **Emergency utility kit:** Pack a few safety pins, a travel sewing kit, and spare earring back stoppers in case of a wardrobe malfunction.
 
-![A three-in-one USB charging cable with USB-C, Lightning, and Micro-USB connectors, featuring a durable braided nylon jacket and reinforced stress points.](/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.webp)
-
-<notice type="affiliate" id="charging-cables"></notice>
-<notice type="affiliate" id="jbl-flip-6"></notice>
 <notice type="affiliate" id="portable-charger"></notice>
+
+#### Music and Recording
+- **Portable speaker:** Useful for small practice sessions away from the ballroom. Keep the volume appropriate for the space and respect hotel quiet hours. For solo video review, headphones may be all you need.
+- **Phone and compact tripod:** Record a practice run so you can review it later. Frame both dancers from head to foot, keep the tripod out of the dance path, and check the shot before starting. Ask your partner before recording and follow the event's recording rules.
+- **Review with a purpose:** Pick one part of the run to check, such as timing or whether both partners stay in frame, instead of collecting clips you never revisit.
+
+<notice type="affiliate" id="jbl-flip-6"></notice>
