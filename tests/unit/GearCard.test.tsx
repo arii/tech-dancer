@@ -21,7 +21,7 @@ describe('GearCard Component', () => {
   };
 
   test('renders product title as h2 for internal items and omits redundant Best for: pre-heading', () => {
-    render(
+    const { container } = render(
       <MemoryRouter>
         <GearCard {...sampleInternalGear} />
       </MemoryRouter>
@@ -31,10 +31,11 @@ describe('GearCard Component', () => {
     expect(heading).toBeDefined();
 
     expect(screen.queryByText(/Best for:/i)).toBeNull();
+    expect(container.querySelector('article .absolute.rounded-full')).toBeNull();
   });
 
   test('renders product title as h2 for external affiliate items and omits redundant Best for: pre-heading', () => {
-    render(
+    const { container } = render(
       <MemoryRouter>
         <GearCard {...sampleExternalGear} />
       </MemoryRouter>
@@ -44,5 +45,6 @@ describe('GearCard Component', () => {
     expect(heading).toBeDefined();
 
     expect(screen.queryByText(/Best for:/i)).toBeNull();
+    expect(container.querySelector('article .absolute.rounded-full')).toBeNull();
   });
 });

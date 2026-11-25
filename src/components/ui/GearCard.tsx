@@ -108,21 +108,6 @@ export function GearCard(props: GearCardProps) {
             className="bg-black/15 pointer-events-none"
             aria-hidden="true"
           />
-          {/* Category badge */}
-          <Box
-            position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacityVariant="heavy"
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold">
-              {category}
-            </Text>
-          </Box>
         </Box>
       ) : (
         <Box
@@ -146,21 +131,6 @@ export function GearCard(props: GearCardProps) {
             className="bg-black/15 pointer-events-none"
             aria-hidden="true"
           />
-          {/* Category badge */}
-          <Box
-            position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacityVariant="heavy"
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold">
-              {category}
-            </Text>
-          </Box>
         </Box>
       )}
 
